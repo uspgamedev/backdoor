@@ -44,5 +44,4 @@ func _input(event):
 		for diff in block:
 			var pos = bodies[0].pos + diff
 			if get_cell(pos.x, pos.y) == 1:
-				print("hide!")
 				set_cell(pos.x, pos.y, 2)
