@@ -48,13 +48,14 @@ func _fixed_process(delta):
 func move_body(body, new_pos):
 	if get_cell(new_pos.x, new_pos.y) == 0:
 		body.pos = new_pos
-		for tile in get_used_cells():	
-			if get_cell(tile.x, tile.y) == 2:
-				set_cell(tile.x, tile.y, 1)
-		for diff in block:
-			var pos = body.pos + diff
-			if get_cell(pos.x, pos.y) == 1:
-				set_cell(pos.x, pos.y, 2)
+		if body == actors[player]:
+			for tile in get_used_cells():	
+				if get_cell(tile.x, tile.y) == 2:
+					set_cell(tile.x, tile.y, 1)
+			for diff in block:
+				var pos = body.pos + diff
+				if get_cell(pos.x, pos.y) == 1:
+					set_cell(pos.x, pos.y, 2)
 
 func _input(event):
 	var move = Vector2(0,0)
