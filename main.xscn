@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="7" version="2.0" version_name="Godot Engine v2.0.alpha.custom_build">
+<resource_file type="PackedScene" subresource_count="8" version="2.0" version_name="Godot Engine v2.0.alpha.custom_build">
 	<ext_resource path="res://scripts/actor.gd" type="Script" index="3"></ext_resource>
 	<ext_resource path="res://scripts/map.gd" type="Script" index="1"></ext_resource>
 	<ext_resource path="res://assets/sprites.png" type="Texture" index="2"></ext_resource>
 	<ext_resource path="res://tileset.xml" type="TileSet" index="0"></ext_resource>
+	<ext_resource path="res://scripts/cooldownbar.gd" type="Script" index="5"></ext_resource>
 	<ext_resource path="res://card.xscn" type="PackedScene" index="4"></ext_resource>
 	<resource type="AtlasTexture" path="local://1">
 		<resource name="atlas" external="2">  </resource>
@@ -18,7 +19,7 @@
 			<string> "conns" </string>
 			<int_array  len="0"> 				 </int_array>
 			<string> "names" </string>
-			<string_array  len="51">
+			<string_array  len="68">
 				<string> "Node2D" </string>
 				<string> "__meta__" </string>
 				<string> "TileMap" </string>
@@ -70,13 +71,30 @@
 				<string> "_import_path" </string>
 				<string> "Card1" </string>
 				<string> "Card2" </string>
+				<string> "CooldownBar" </string>
+				<string> "ProgressBar" </string>
+				<string> "margin/left" </string>
+				<string> "margin/top" </string>
+				<string> "margin/right" </string>
+				<string> "margin/bottom" </string>
+				<string> "focus/ignore_mouse" </string>
+				<string> "focus/stop_mouse" </string>
+				<string> "size_flags/horizontal" </string>
+				<string> "range/min" </string>
+				<string> "range/max" </string>
+				<string> "range/step" </string>
+				<string> "range/page" </string>
+				<string> "range/value" </string>
+				<string> "range/exp_edit" </string>
+				<string> "rounded_values" </string>
+				<string> "percent/visible" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 9 </int>
+			<int> 10 </int>
 			<string> "nodes" </string>
-			<int_array  len="167"> 				-1, -1, 0, 0, -1, 1, 1, 0, 0, 0, 0, 2, 2, -1, 16, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 8, 6, 9, 7, 10, 8, 11, 9, 12, 10, 13, 11, 14, 12, 15, 2, 16, 2, 17, 13, 18, 14, 0, 1, 0, 20, 19, -1, 6, 3, 15, 21, 16, 22, 17, 23, 10, 24, 18, 18, 19, 0, 2, 0, 25, 25, -1, 15, 26, 2, 27, 10, 28, 9, 29, 12, 30, 20, 31, 21, 32, 21, 33, 22, 34, 22, 35, 9, 36, 9, 37, 23, 38, 23, 39, 23, 40, 23, 0, 0, 0, 42, 41, -1, 4, 43, 2, 24, 24, 44, 12, 45, 20, 0, 4, 0, 0, 46, -1, 1, 3, 25, 0, 5, 0, 0, 47, 26, 3, 48, 27, 3, 28, 1, 29, 0, 5, 0, 0, 49, 26, 3, 48, 27, 3, 30, 1, 29, 0, 5, 0, 0, 50, 26, 3, 48, 27, 3, 31, 1, 29, 0 </int_array>
+			<int_array  len="206"> 				-1, -1, 0, 0, -1, 1, 1, 0, 0, 0, 0, 2, 2, -1, 16, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 8, 6, 9, 7, 10, 8, 11, 9, 12, 10, 13, 11, 14, 12, 15, 2, 16, 2, 17, 13, 18, 14, 0, 1, 0, 20, 19, -1, 6, 3, 15, 21, 16, 22, 17, 23, 10, 24, 18, 18, 19, 0, 2, 0, 25, 25, -1, 15, 26, 2, 27, 10, 28, 9, 29, 12, 30, 20, 31, 21, 32, 21, 33, 22, 34, 22, 35, 9, 36, 9, 37, 23, 38, 23, 39, 23, 40, 23, 0, 0, 0, 42, 41, -1, 4, 43, 2, 24, 24, 44, 12, 45, 20, 0, 4, 0, 0, 46, -1, 1, 3, 25, 0, 5, 0, 0, 47, 26, 3, 48, 27, 3, 28, 1, 29, 0, 5, 0, 0, 49, 26, 3, 48, 27, 3, 30, 1, 29, 0, 5, 0, 0, 50, 26, 3, 48, 27, 3, 31, 1, 29, 0, 5, 0, 52, 51, -1, 16, 53, 32, 54, 33, 55, 34, 56, 35, 57, 10, 58, 9, 59, 7, 60, 12, 61, 36, 62, 11, 63, 12, 64, 11, 65, 10, 66, 10, 67, 9, 18, 37, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="32" shared="false">
+			<array  len="38" shared="false">
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
 					<string> "Script" </string>
@@ -85,7 +103,7 @@
 						<string> "2D" </string>
 						<dictionary  shared="false">
 							<string> "ofs" </string>
-							<vector2> -71.4547, -93.9457 </vector2>
+							<vector2> -27.0747, 80.4835 </vector2>
 							<string> "snap_grid" </string>
 							<bool> True </bool>
 							<string> "snap_offset" </string>
@@ -105,7 +123,7 @@
 							<string> "snap_step" </string>
 							<vector2> 64, 64 </vector2>
 							<string> "zoom" </string>
-							<real> 0.9025 </real>
+							<real> 1.360374 </real>
 						</dictionary>
 						<string> "3D" </string>
 						<dictionary  shared="false">
@@ -379,6 +397,12 @@
 				</dictionary>
 				<vector2> 192, 64 </vector2>
 				<vector2> 320, 64 </vector2>
+				<real> 32 </real>
+				<real> 160 </real>
+				<real> 512 </real>
+				<real> 176 </real>
+				<real> 100 </real>
+				<resource  external="5">  </resource>
 			</array>
 			<string> "version" </string>
 			<int> 1 </int>
