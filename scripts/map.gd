@@ -77,6 +77,7 @@ func manage_actors():
 	while true:
 		for actor in actors:
 			actor.step_time()
+			actor.check_draw()
 			if actor.is_ready():
 				if !actor.has_action():
 					yield(actor, "has_action")
