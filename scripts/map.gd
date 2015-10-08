@@ -18,23 +18,32 @@ class Body:
 class Action:
 	var type
 	var arg
+	func _init(the_type, the_arg):
+		type = the_type
+		arg = the_arg
 
 func _ready():
 	set_fixed_process(true)
 	set_process_input(true)
 	bodies = []
 	actors = {}
-	var hero = Body.new()
-	hero.pos = Vector2(5,5)
-	hero.node = get_node("Hero")
-	bodies.append(hero)
-	actors[hero.node] = hero
-	player = hero.node
+	var count = 0
+	for actor in get_children():
+		var body = Body.new()
+		body.pos = Vector2(5,3 + count)
+		body.node = actor
+		bodies.append(body)
+		actors[actor] = body
+		count += 1
+	player = get_node("Hero")
 	manage_actors()
 
 func _fixed_process(delta):
 	for body in bodies:
 		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
+	for actor in actors:
+		if actor != player and !actor.has_action():
+			actor.add_action(Action.new("move", actors[actor].pos + Vector2(0,-1)))
 
 func move_body(body, new_pos):
 	if get_cell(new_pos.x, new_pos.y) == 0:
@@ -57,10 +66,9 @@ func _input(event):
 		move.x += 1
 	elif event.is_action_pressed("ui_left"):
 		move.x -= 1
-	var move_action = Action.new()
-	move_action.type = "move"
-	move_action.arg = bodies[0].pos + move
-	player.add_action(move_action)
+	if move.length_squared() > 0:
+		var move_action = Action.new("move", bodies[0].pos + move)
+		player.add_action(move_action)
 
 func manage_actors():
 	while true:

@@ -5,7 +5,7 @@ var player
 
 func _ready():
 	player = get_node("/root/Node2D/TileMap/Hero")
-	player.connect("has_action", self, "_on_player_action")
+	player.connect("spent_action", self, "_on_player_action")
 	set_process(true)
 
 func _on_player_action():
