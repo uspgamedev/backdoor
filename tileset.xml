@@ -20,15 +20,15 @@
 		<rect2 name="margin"> 0, 0, 0, 0 </rect2>
 
 	</resource>
-	<resource type="AtlasTexture" path="local://5">
-		<resource name="atlas" external="1">  </resource>
-		<rect2 name="region"> 0, 256, 128, 128 </rect2>
-		<rect2 name="margin"> 0, 0, 0, 0 </rect2>
-
-	</resource>
 	<resource type="AtlasTexture" path="local://4">
 		<resource name="atlas" external="1">  </resource>
 		<rect2 name="region"> 128, 128, 128, 128 </rect2>
+		<rect2 name="margin"> 0, 0, 0, 0 </rect2>
+
+	</resource>
+	<resource type="AtlasTexture" path="local://5">
+		<resource name="atlas" external="1">  </resource>
+		<rect2 name="region"> 0, 256, 128, 128 </rect2>
 		<rect2 name="margin"> 0, 0, 0, 0 </rect2>
 
 	</resource>
@@ -75,8 +75,8 @@
 		<resource name="3/navigation"></resource>		<vector2 name="3/shape_offset"> 0, 0 </vector2>
 		<array name="3/shapes" len="0" shared="false">
 		</array>
-		<string name="4/name"> "ThinWall" </string>
-		<resource name="4/texture" resource_type="Texture" path="local://3">  </resource>
+		<string name="4/name"> "TransRightWall" </string>
+		<resource name="4/texture" resource_type="Texture" path="local://4">  </resource>
 		<vector2 name="4/tex_offset"> 0, -64 </vector2>
 		<resource name="4/material"></resource>		<rect2 name="4/region"> 0, 0, 0, 0 </rect2>
 		<vector2 name="4/occluder_offset"> 64, 64 </vector2>
@@ -84,8 +84,8 @@
 		<resource name="4/navigation"></resource>		<vector2 name="4/shape_offset"> 0, 0 </vector2>
 		<array name="4/shapes" len="0" shared="false">
 		</array>
-		<string name="5/name"> "RighTransWall" </string>
-		<resource name="5/texture" resource_type="Texture" path="local://3">  </resource>
+		<string name="5/name"> "LeftWall" </string>
+		<resource name="5/texture" resource_type="Texture" path="local://5">  </resource>
 		<vector2 name="5/tex_offset"> 0, -64 </vector2>
 		<resource name="5/material"></resource>		<rect2 name="5/region"> 0, 0, 0, 0 </rect2>
 		<vector2 name="5/occluder_offset"> 64, 64 </vector2>
@@ -93,32 +93,14 @@
 		<resource name="5/navigation"></resource>		<vector2 name="5/shape_offset"> 0, 0 </vector2>
 		<array name="5/shapes" len="0" shared="false">
 		</array>
-		<string name="6/name"> "LeftWall" </string>
-		<resource name="6/texture" resource_type="Texture" path="local://5">  </resource>
+		<string name="6/name"> "TransLeftWall" </string>
+		<resource name="6/texture" resource_type="Texture" path="local://6">  </resource>
 		<vector2 name="6/tex_offset"> 0, -64 </vector2>
 		<resource name="6/material"></resource>		<rect2 name="6/region"> 0, 0, 0, 0 </rect2>
 		<vector2 name="6/occluder_offset"> 64, 64 </vector2>
 		<resource name="6/occluder"></resource>		<vector2 name="6/navigation_offset"> 64, 64 </vector2>
 		<resource name="6/navigation"></resource>		<vector2 name="6/shape_offset"> 0, 0 </vector2>
 		<array name="6/shapes" len="0" shared="false">
-		</array>
-		<string name="7/name"> "TransRightWall" </string>
-		<resource name="7/texture" resource_type="Texture" path="local://4">  </resource>
-		<vector2 name="7/tex_offset"> 0, -64 </vector2>
-		<resource name="7/material"></resource>		<rect2 name="7/region"> 0, 0, 0, 0 </rect2>
-		<vector2 name="7/occluder_offset"> 64, 64 </vector2>
-		<resource name="7/occluder"></resource>		<vector2 name="7/navigation_offset"> 64, 64 </vector2>
-		<resource name="7/navigation"></resource>		<vector2 name="7/shape_offset"> 0, 0 </vector2>
-		<array name="7/shapes" len="0" shared="false">
-		</array>
-		<string name="8/name"> "TransLeftWall" </string>
-		<resource name="8/texture" resource_type="Texture" path="local://6">  </resource>
-		<vector2 name="8/tex_offset"> 0, -64 </vector2>
-		<resource name="8/material"></resource>		<rect2 name="8/region"> 0, 0, 0, 0 </rect2>
-		<vector2 name="8/occluder_offset"> 64, 64 </vector2>
-		<resource name="8/occluder"></resource>		<vector2 name="8/navigation_offset"> 64, 64 </vector2>
-		<resource name="8/navigation"></resource>		<vector2 name="8/shape_offset"> 0, 0 </vector2>
-		<array name="8/shapes" len="0" shared="false">
 		</array>
 
 	</main_resource>

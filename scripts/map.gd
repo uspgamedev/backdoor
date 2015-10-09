@@ -50,14 +50,16 @@ func move_body(body, new_pos):
 		if body == actors[player]:
 			for diff in block:
 				var pos = body.pos + diff
-				if get_cell(pos.x, pos.y) == 2:
-					set_cell(pos.x, pos.y, 1)
+				var cell = get_cell(pos.x, pos.y)
+				if cell > 0 && cell % 2 == 0:
+					set_cell(pos.x, pos.y, cell - 1)
 		body.pos = new_pos
 		if body == actors[player]:
 			for diff in block:
 				var pos = body.pos + diff
-				if get_cell(pos.x, pos.y) == 1:
-					set_cell(pos.x, pos.y, 2)
+				var cell = get_cell(pos.x, pos.y)
+				if cell % 2 == 1:
+					set_cell(pos.x, pos.y, cell + 1)
 
 func _input(event):
 	var move = Vector2(0,0)
