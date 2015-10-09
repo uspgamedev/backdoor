@@ -14,6 +14,7 @@ var deck
 export var speed = 10
 
 const DRAW_TIME = 40
+const MAX_HAND = 7
 
 const COSTS = {
 	"idle": 100,
@@ -32,13 +33,19 @@ func _ready():
 	deck.append(Card.new("Black Lotus"))
 	deck.append(Card.new("Dr. Boom"))
 	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
+	deck.append(Card.new("Exodia"))
 
 func step_time():
 	cooldown = max(0, cooldown - 1)
 	draw_cooldown = max(0, draw_cooldown - 1)
 
 func check_draw():
-	if draw_cooldown == 0 and deck.size() > 0:
+	if draw_cooldown == 0 and hand.size() < MAX_HAND and deck.size() > 0:
 		hand.append(deck[0])
 		deck.remove(0)
 		draw_cooldown = DRAW_TIME
