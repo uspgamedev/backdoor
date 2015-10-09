@@ -20,7 +20,7 @@ func _on_player_draw(card):
 
 func _process(delta):
 	var n = cards.size()
-	var angle = 60/(n+1)
+	var angle = 30/(n+1)
 	for i in range(n-1, -1, -1):
-		var transform = Matrix32(-deg2rad((i - (n-1)*.5)*angle), Vector2(0,0))
-		cards[i].set_transform(transform.translated(Vector2(0, -256)))
+		var transform = Matrix32(-deg2rad((i - (n-1)*.5)*angle), Vector2(0,1024))
+		cards[i].set_transform(transform.translated(Vector2(0, -1024)))

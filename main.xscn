@@ -102,13 +102,13 @@
 			<array  len="37" shared="false">
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
-					<string> "Script" </string>
+					<string> "2D" </string>
 					<string> "__editor_plugin_states__" </string>
 					<dictionary  shared="false">
 						<string> "2D" </string>
 						<dictionary  shared="false">
 							<string> "ofs" </string>
-							<vector2> -856.04, -366.977 </vector2>
+							<vector2> -1186.05, -727.347 </vector2>
 							<string> "snap_grid" </string>
 							<bool> True </bool>
 							<string> "snap_offset" </string>
@@ -128,7 +128,7 @@
 							<string> "snap_step" </string>
 							<vector2> 64, 64 </vector2>
 							<string> "zoom" </string>
-							<real> 0.440126 </real>
+							<real> 0.358486 </real>
 						</dictionary>
 						<string> "3D" </string>
 						<dictionary  shared="false">
@@ -264,7 +264,7 @@
 				<resource  resource_type="Texture" path="local://2">  </resource>
 				<vector2> 0, 0 </vector2>
 				<vector2> 32, 416 </vector2>
-				<vector2> 256, 320 </vector2>
+				<vector2> 256, 64 </vector2>
 				<resource  external="4">  </resource>
 				<real> 32 </real>
 				<real> 163 </real>
