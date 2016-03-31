@@ -8,19 +8,13 @@ const block = [
 	Vector2(1,1)
 ]
 
+var Action = preload("action.gd")
 var actors
 var player
 
 class Body:
 	var pos
 	var node
-	
-class Action:
-	var type
-	var arg
-	func _init(the_type, the_arg):
-		type = the_type
-		arg = the_arg
 
 func _ready():
 	set_fixed_process(true)
@@ -43,7 +37,10 @@ func _fixed_process(delta):
 		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
 	for actor in actors:
 		if actor != player and !actor.has_action():
-			actor.add_action(Action.new("move", actors[actor].pos + Vector2(0,-1)))
+			actor.add_action(Action.Move.new(actors[actor].pos + Vector2(0,-1)))
+
+func move_actor(actor, new_pos):
+	move_body(actors[actor], new_pos)
 
 func move_body(body, new_pos):
 	if get_cell(new_pos.x, new_pos.y) == 0:
@@ -72,7 +69,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_left"):
 		move.x -= 1
 	if move.length_squared() > 0:
-		var move_action = Action.new("move", bodies[0].pos + move)
+		var move_action = Action.Move.new(bodies[0].pos + move)
 		player.add_action(move_action)
 
 func manage_actors():
@@ -84,7 +81,9 @@ func manage_actors():
 				if !actor.has_action():
 					yield(actor, "has_action")
 				var action = actor.get_action()
-				if action.type == "move":
-					move_body(actors[actor], action.arg)
+				if action.can_be_used(actor):
+					action.use(actor)
+				#if action.type == "move":
+				#	move_body(actors[actor], action.arg)
 		yield(get_tree(), "fixed_frame" )
 

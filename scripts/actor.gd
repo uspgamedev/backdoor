@@ -59,7 +59,7 @@ func has_action():
 
 func get_action():
 	var the_action = action
-	cooldown += COSTS[action.type]/speed
+	cooldown += COSTS[action.type_]/speed
 	action = null
 	emit_signal("spent_action")
 	return the_action
