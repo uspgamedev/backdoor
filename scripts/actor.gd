@@ -14,7 +14,7 @@ var deck
 export var speed = 10
 
 const DRAW_TIME = 40
-const MAX_HAND = 7
+const MAX_HAND = 5
 
 const COSTS = {
 	"idle": 100,
