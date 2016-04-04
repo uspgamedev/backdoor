@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const CardSprite = preload("res://card.xscn")
+const CardSprite = preload("res://scenes/hud/card.xscn")
 const Action = preload("action.gd")
 var player
 var cards
