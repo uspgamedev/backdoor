@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="9" version="2.0" version_name="Godot Engine v2.0.stable.official">
+	<ext_resource path="res://scenes/hud/cooldownbar.gd" type="Script" index="5"></ext_resource>
+	<ext_resource path="res://scenes/hud/hand.gd" type="Script" index="4"></ext_resource>
 	<ext_resource path="res://resources/tileset.xml" type="TileSet" index="0"></ext_resource>
+	<ext_resource path="res://model/actor.gd" type="Script" index="3"></ext_resource>
 	<ext_resource path="res://assets/sprites.png" type="Texture" index="2"></ext_resource>
-	<ext_resource path="res://scripts/actor.gd" type="Script" index="3"></ext_resource>
-	<ext_resource path="res://scripts/hand.gd" type="Script" index="4"></ext_resource>
-	<ext_resource path="res://scripts/cooldownbar.gd" type="Script" index="5"></ext_resource>
-	<ext_resource path="res://scripts/map.gd" type="Script" index="1"></ext_resource>
+	<ext_resource path="res://scenes/map.gd" type="Script" index="1"></ext_resource>
 	<resource type="AtlasTexture" path="local://1">
 		<resource name="atlas" external="2">  </resource>
 		<rect2 name="region"> 64, 0, 32, 64 </rect2>
@@ -106,7 +106,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="205"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 21, 3, -1, 17, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 12, 16, 2, 17, 2, 18, 2, 19, 13, 20, 14, 0, 1, 0, 28, 22, -1, 7, 4, 15, 23, 16, 24, 17, 25, 10, 26, 18, 20, 19, 27, 20, 0, 2, 0, 29, 29, -1, 16, 30, 2, 31, 10, 0, 9, 32, 21, 33, 22, 34, 22, 35, 23, 36, 23, 37, 9, 38, 9, 39, 10, 40, 24, 41, 25, 42, 25, 43, 25, 44, 25, 0, 1, 0, 28, 45, -1, 7, 4, 26, 23, 16, 24, 27, 25, 10, 26, 18, 20, 19, 27, 7, 0, 0, 0, 50, 46, -1, 4, 47, 2, 26, 28, 48, 12, 49, 21, 0, 5, 0, 2, 51, -1, 1, 4, 29, 0, 6, 0, 2, 52, -1, 2, 4, 30, 20, 31, 0, 6, 0, 69, 53, -1, 16, 54, 32, 55, 33, 56, 34, 57, 35, 58, 10, 59, 9, 60, 7, 61, 12, 62, 36, 63, 11, 64, 12, 65, 11, 66, 10, 67, 10, 68, 10, 20, 37, 0 </int_array>
+			<int_array  len="205"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 21, 3, -1, 17, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 12, 16, 2, 17, 2, 18, 2, 19, 13, 20, 14, 0, 1, 0, 28, 22, -1, 7, 4, 15, 23, 16, 24, 17, 25, 10, 26, 18, 20, 19, 27, 20, 0, 2, 0, 29, 29, -1, 16, 30, 2, 31, 10, 0, 9, 32, 21, 33, 22, 34, 22, 35, 23, 36, 23, 37, 9, 38, 9, 39, 10, 40, 24, 41, 25, 42, 25, 43, 25, 44, 25, 0, 1, 0, 28, 45, -1, 7, 4, 26, 23, 16, 24, 27, 25, 10, 26, 18, 20, 19, 27, 20, 0, 0, 0, 50, 46, -1, 4, 47, 2, 26, 28, 48, 12, 49, 21, 0, 5, 0, 2, 51, -1, 1, 4, 29, 0, 6, 0, 2, 52, -1, 2, 4, 30, 20, 31, 0, 6, 0, 69, 53, -1, 16, 54, 32, 55, 33, 56, 34, 57, 35, 58, 10, 59, 9, 60, 7, 61, 12, 62, 36, 63, 11, 64, 12, 65, 11, 66, 10, 67, 10, 68, 10, 20, 37, 0 </int_array>
 			<string> "variants" </string>
 			<array  len="38" shared="false">
 				<dictionary  shared="false">

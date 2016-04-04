@@ -8,7 +8,7 @@ const block = [
 	Vector2(1,1)
 ]
 
-var Action = preload("action.gd")
+var Action = preload("res://model/action.gd")
 var actors
 var player
 

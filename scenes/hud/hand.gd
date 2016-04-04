@@ -2,7 +2,7 @@
 extends Node2D
 
 const CardSprite = preload("res://scenes/hud/card.xscn")
-const Action = preload("action.gd")
+const Action = preload("res://model/action.gd")
 var player
 var cards
 var focus
