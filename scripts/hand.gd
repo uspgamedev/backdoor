@@ -8,7 +8,7 @@ var cards
 var focus
 
 func _ready():
-	player = get_node("/root/Node2D/TileMap/Hero")
+	player = get_node("/root/current/map/Hero")
 	cards = []
 	set_process(true)
 	set_process_input(true)
@@ -30,7 +30,7 @@ func _input(event):
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+cards.size())%cards.size()
 		elif event.is_action_pressed("ui_select"):
-			player.add_action(Action.new("use_card", focus))
+			player.add_action(Action.Idle.new())
 
 func _process(delta):
 	var n = cards.size()
