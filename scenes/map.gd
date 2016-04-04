@@ -83,7 +83,5 @@ func manage_actors():
 				var action = actor.get_action()
 				if action.can_be_used(actor):
 					action.use(actor)
-				#if action.type == "move":
-				#	move_body(actors[actor], action.arg)
 		yield(get_tree(), "fixed_frame" )
 
