@@ -11,7 +11,7 @@ var draw_cooldown
 var action
 var hand
 var deck
-export var speed = 10
+export(int) var speed = 10
 
 const DRAW_TIME = 40
 const MAX_HAND = 5
@@ -21,7 +21,7 @@ signal spent_action
 signal draw_card(card)
 
 func _ready():
-	cooldown = 0
+	cooldown = 100
 	draw_cooldown = DRAW_TIME
 	hand = []
 	deck = []

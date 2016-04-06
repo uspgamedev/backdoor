@@ -36,8 +36,9 @@ func _fixed_process(delta):
 	for body in bodies:
 		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
 	for actor in actors:
-		if actor != player and !actor.has_action():
+		if actor != player and !actor.has_action() and actor.is_ready():
 			actor.add_action(Action.Move.new(actors[actor].pos + Vector2(0,1 - randi()%3)))
+			#actor.add_action(Action.Idle.new())
 
 func move_actor(actor, new_pos):
 	move_body(actors[actor], new_pos)
@@ -62,6 +63,7 @@ func move_body(body, new_pos):
 
 func get_body_at (pos):
 	for body in bodies:
+		print(body.pos, " ", pos)
 		if body.pos == pos:
 			return body
 	return null
@@ -76,7 +78,9 @@ func _input(event):
 		move.x += 1
 	elif event.is_action_pressed("ui_left"):
 		move.x -= 1
-	if move.length_squared() > 0:
+	if event.is_action_pressed("ui_idle"):
+		player.add_action(Action.Idle.new())
+	elif move.length_squared() > 0:
 		var target_pos = bodies[0].pos + move
 		var body = get_body_at(target_pos)
 		if body != null:

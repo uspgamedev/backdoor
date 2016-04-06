@@ -14,7 +14,7 @@ class BaseAction:
 
 class Idle:
 	extends BaseAction
-	func _init().("idle", null):
+	func _init().("idle"):
 		pass
 	func get_cost(actor):
 		return 100
@@ -27,8 +27,9 @@ class Move:
 	func _init(target).("move"):
 		target_ = target
 	func can_be_used(actor):
-		var result = actor.get_parent().is_empty_space(target_)
-		print(result)
+		var map = actor.get_parent()
+		var result = map.is_empty_space(target_) && map.get_body_at(target_) == null
+		print(actor.get_name(), "  ", result)
 		return result
 	func get_cost(actor):
 		return 50
