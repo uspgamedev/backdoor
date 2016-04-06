@@ -65,3 +65,15 @@ func use_action():
 	action.use(self)
 	action = null
 	emit_signal("spent_action")
+
+func pick_ai_module():
+	var total = 0
+	for module in get_children():
+		total += module.chance
+	var roll = total*randf()
+	var acc = 0
+	for module in get_children():
+		acc += module.chance
+		if acc >= roll:
+			return module
+	return get_child(0)

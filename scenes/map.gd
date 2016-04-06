@@ -37,7 +37,7 @@ func _fixed_process(delta):
 		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
 	for actor in actors:
 		if actor != player and !actor.has_action() and actor.is_ready():
-			actor.get_child(0).think()
+			actor.pick_ai_module().think()
 
 func move_actor(actor, new_pos):
 	move_body(actors[actor], new_pos)
