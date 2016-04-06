@@ -35,6 +35,9 @@ func _ready():
 	deck.append(Card.new("Exodia"))
 	deck.append(Card.new("Exodia"))
 
+func get_body_pos():
+	return get_parent().actors[self].pos
+
 func step_time():
 	cooldown = max(0, cooldown - 1)
 	draw_cooldown = max(0, draw_cooldown - 1)
