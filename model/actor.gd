@@ -21,7 +21,7 @@ signal spent_action
 signal draw_card(card)
 
 func _ready():
-	cooldown = 100
+	cooldown = 100/speed
 	draw_cooldown = DRAW_TIME
 	hand = []
 	deck = []

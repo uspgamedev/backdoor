@@ -43,7 +43,7 @@ func move_actor(actor, new_pos):
 	move_body(actors[actor], new_pos)
 
 func is_empty_space(pos):
-	return get_cell(pos.x, pos.y) == 0
+	return get_cell(pos.x, pos.y) == -1
 
 func move_body(body, new_pos):
 	if body == actors[player]:
@@ -67,24 +67,25 @@ func get_body_at (pos):
 	return null
 
 func _input(event):
-	var move = Vector2(0,0)
-	if event.is_action_pressed("ui_down"):
-		move.y += 1
-	elif event.is_action_pressed("ui_up"):
-		move.y -= 1
-	elif event.is_action_pressed("ui_right"):
-		move.x += 1
-	elif event.is_action_pressed("ui_left"):
-		move.x -= 1
-	if event.is_action_pressed("ui_idle"):
-		player.add_action(Action.Idle.new())
-	elif move.length_squared() > 0:
-		var target_pos = bodies[0].pos + move
-		var body = get_body_at(target_pos)
-		if body != null:
-			player.add_action(Action.MeleeAttack.new(body))
-		else:
-			player.add_action(Action.Move.new(target_pos))
+	if player.is_ready():
+		var move = Vector2(0,0)
+		if event.is_action_pressed("ui_down"):
+			move.y += 1
+		elif event.is_action_pressed("ui_up"):
+			move.y -= 1
+		elif event.is_action_pressed("ui_right"):
+			move.x += 1
+		elif event.is_action_pressed("ui_left"):
+			move.x -= 1
+		if event.is_action_pressed("ui_idle"):
+			player.add_action(Action.Idle.new())
+		elif move.length_squared() > 0:
+			var target_pos = bodies[0].pos + move
+			var body = get_body_at(target_pos)
+			if body != null:
+				player.add_action(Action.MeleeAttack.new(body))
+			else:
+				player.add_action(Action.Move.new(target_pos))
 
 func manage_actors():
 	while true:
