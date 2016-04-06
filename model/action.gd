@@ -27,11 +27,13 @@ class Move:
 	func _init(target).("move"):
 		target_ = target
 	func can_be_used(actor):
-		return true
+		var result = actor.get_parent().is_empty_space(target_)
+		print(result)
+		return result
 	func get_cost(actor):
 		return 50
 	func use(actor):
-		var map = actor.get_node("..")
+		var map = actor.get_parent()
 		map.move_actor(actor, target_)
 		pass
 

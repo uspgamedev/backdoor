@@ -52,14 +52,13 @@ func is_ready():
 func has_action():
 	return action != null
 
-func get_action():
-	var the_action = action
-	cooldown += action.get_cost(self)/speed
-	action = null
-	emit_signal("spent_action")
-	return the_action
-	
 func add_action(the_action):
-	if !has_action():
+	if !has_action() and the_action.can_be_used(self):
 		action = the_action
 		emit_signal("has_action")
+
+func use_action():
+	cooldown += action.get_cost(self)/speed
+	action.use(self)
+	action = null
+	emit_signal("spent_action")

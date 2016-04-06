@@ -37,26 +37,28 @@ func _fixed_process(delta):
 		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
 	for actor in actors:
 		if actor != player and !actor.has_action():
-			actor.add_action(Action.Move.new(actors[actor].pos + Vector2(0,-1)))
+			actor.add_action(Action.Move.new(actors[actor].pos + Vector2(0,1 - randi()%3)))
 
 func move_actor(actor, new_pos):
 	move_body(actors[actor], new_pos)
 
+func is_empty_space(pos):
+	return get_cell(pos.x, pos.y) == 0
+
 func move_body(body, new_pos):
-	if get_cell(new_pos.x, new_pos.y) == 0:
-		if body == actors[player]:
-			for diff in block:
-				var pos = body.pos + diff
-				var cell = get_cell(pos.x, pos.y)
-				if cell > 0 && cell % 2 == 0:
-					set_cell(pos.x, pos.y, cell - 1)
-		body.pos = new_pos
-		if body == actors[player]:
-			for diff in block:
-				var pos = body.pos + diff
-				var cell = get_cell(pos.x, pos.y)
-				if cell % 2 == 1:
-					set_cell(pos.x, pos.y, cell + 1)
+	if body == actors[player]:
+		for diff in block:
+			var pos = body.pos + diff
+			var cell = get_cell(pos.x, pos.y)
+			if cell > 0 && cell % 2 == 0:
+				set_cell(pos.x, pos.y, cell - 1)
+	body.pos = new_pos
+	if body == actors[player]:
+		for diff in block:
+			var pos = body.pos + diff
+			var cell = get_cell(pos.x, pos.y)
+			if cell % 2 == 1:
+				set_cell(pos.x, pos.y, cell + 1)
 
 func get_body_at (pos):
 	for body in bodies:
@@ -90,8 +92,6 @@ func manage_actors():
 			if actor.is_ready():
 				if !actor.has_action():
 					yield(actor, "has_action")
-				var action = actor.get_action()
-				if action.can_be_used(actor):
-					action.use(actor)
+				actor.use_action()
 		yield(get_tree(), "fixed_frame" )
 
