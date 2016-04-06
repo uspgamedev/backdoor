@@ -16,11 +16,6 @@ export var speed = 10
 const DRAW_TIME = 40
 const MAX_HAND = 5
 
-const COSTS = {
-	"idle": 100,
-	"move": 100
-}
-
 signal has_action
 signal spent_action
 signal draw_card(card)
@@ -59,7 +54,7 @@ func has_action():
 
 func get_action():
 	var the_action = action
-	cooldown += COSTS[action.type_]/speed
+	cooldown += action.get_cost(self)/speed
 	action = null
 	emit_signal("spent_action")
 	return the_action

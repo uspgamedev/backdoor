@@ -58,6 +58,12 @@ func move_body(body, new_pos):
 				if cell % 2 == 1:
 					set_cell(pos.x, pos.y, cell + 1)
 
+func get_body_at (pos):
+	for body in bodies:
+		if body.pos == pos:
+			return body
+	return null
+
 func _input(event):
 	var move = Vector2(0,0)
 	if event.is_action_pressed("ui_down"):
@@ -69,8 +75,12 @@ func _input(event):
 	elif event.is_action_pressed("ui_left"):
 		move.x -= 1
 	if move.length_squared() > 0:
-		var move_action = Action.Move.new(bodies[0].pos + move)
-		player.add_action(move_action)
+		var target_pos = bodies[0].pos + move
+		var body = get_body_at(target_pos)
+		if body != null:
+			player.add_action(Action.MeleeAttack.new(body))
+		else:
+			player.add_action(Action.Move.new(target_pos))
 
 func manage_actors():
 	while true:
