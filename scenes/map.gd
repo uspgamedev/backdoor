@@ -38,7 +38,6 @@ func _fixed_process(delta):
 	for actor in actors:
 		if actor != player and !actor.has_action() and actor.is_ready():
 			actor.add_action(Action.Move.new(actors[actor].pos + Vector2(0,1 - randi()%3)))
-			#actor.add_action(Action.Idle.new())
 
 func move_actor(actor, new_pos):
 	move_body(actors[actor], new_pos)
@@ -63,7 +62,6 @@ func move_body(body, new_pos):
 
 func get_body_at (pos):
 	for body in bodies:
-		print(body.pos, " ", pos)
 		if body.pos == pos:
 			return body
 	return null

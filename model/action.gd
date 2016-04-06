@@ -28,9 +28,7 @@ class Move:
 		target_ = target
 	func can_be_used(actor):
 		var map = actor.get_parent()
-		var result = map.is_empty_space(target_) && map.get_body_at(target_) == null
-		print(actor.get_name(), "  ", result)
-		return result
+		return map.is_empty_space(target_) && map.get_body_at(target_) == null
 	func get_cost(actor):
 		return 50
 	func use(actor):
