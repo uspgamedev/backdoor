@@ -8,13 +8,11 @@ const block = [
 	Vector2(1,1)
 ]
 
-var Action = preload("res://model/action.gd")
+const Action = preload("res://model/action.gd")
+const Body   = preload("res://model/body.gd")
+
 var actors
 var player
-
-class Body:
-	var pos
-	var node
 
 func _ready():
 	set_fixed_process(true)

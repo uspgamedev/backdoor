@@ -38,13 +38,12 @@ class Move:
 
 class MeleeAttack:
 	extends BaseAction
-	var target_
-	func _init(target).("melee_attack"):
-		target_ = target
+	var body_
+	func _init(body).("melee_attack"):
+		body_ = body
 	func can_be_used(actor):
 		return true
 	func get_cost(actor):
 		return 100
 	func use(actor):
-		print("HUE BACKSTAB")
-		pass
+		body_.take_damage(3)
