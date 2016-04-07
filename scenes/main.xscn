@@ -3,11 +3,11 @@
 	<ext_resource path="res://scenes/map.gd" type="Script" index="1"></ext_resource>
 	<ext_resource path="res://scenes/hud/hand.gd" type="Script" index="6"></ext_resource>
 	<ext_resource path="res://model/actor.gd" type="Script" index="3"></ext_resource>
+	<ext_resource path="res://model/ai/wander.gd" type="Script" index="4"></ext_resource>
+	<ext_resource path="res://model/ai/defensive.gd" type="Script" index="5"></ext_resource>
 	<ext_resource path="res://scenes/hud/cooldownbar.gd" type="Script" index="7"></ext_resource>
 	<ext_resource path="res://resources/tileset.xml" type="TileSet" index="0"></ext_resource>
 	<ext_resource path="res://assets/sprites.png" type="Texture" index="2"></ext_resource>
-	<ext_resource path="res://model/ai/wander.gd" type="Script" index="4"></ext_resource>
-	<ext_resource path="res://model/ai/defensive.gd" type="Script" index="5"></ext_resource>
 	<resource type="AtlasTexture" path="local://1">
 		<resource name="atlas" external="2">  </resource>
 		<rect2 name="region"> 64, 0, 32, 64 </rect2>
@@ -113,9 +113,9 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="266"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 20, 3, -1, 16, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 9, 14, 10, 15, 11, 16, 2, 17, 2, 18, 2, 19, 12, 0, 0, 0, 20, 21, -1, 17, 4, 13, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 14, 13, 9, 14, 10, 15, 11, 16, 2, 17, 2, 18, 2, 19, 15, 22, 16, 0, 2, 0, 29, 23, -1, 7, 4, 17, 24, 18, 25, 19, 26, 9, 27, 20, 22, 21, 28, 22, 0, 3, 0, 30, 30, -1, 16, 31, 2, 32, 9, 0, 14, 33, 23, 34, 24, 35, 24, 36, 25, 37, 25, 38, 14, 39, 14, 40, 9, 41, 26, 42, 27, 43, 27, 44, 27, 45, 27, 0, 2, 0, 29, 46, -1, 7, 4, 28, 24, 18, 25, 29, 26, 9, 27, 20, 22, 21, 28, 30, 0, 5, 0, 49, 47, -1, 2, 22, 31, 48, 32, 0, 5, 0, 49, 50, -1, 2, 22, 33, 48, 2, 0, 0, 0, 55, 51, -1, 4, 52, 2, 27, 34, 53, 11, 54, 23, 0, 8, 0, 2, 56, -1, 1, 4, 35, 0, 9, 0, 2, 57, -1, 2, 4, 36, 22, 37, 0, 9, 0, 74, 58, -1, 16, 59, 38, 60, 39, 61, 40, 62, 41, 63, 9, 64, 14, 65, 7, 66, 11, 67, 42, 68, 10, 69, 11, 70, 10, 71, 9, 72, 9, 73, 9, 22, 43, 0 </int_array>
+			<int_array  len="266"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 20, 3, -1, 16, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 9, 14, 10, 15, 11, 16, 2, 17, 2, 18, 2, 19, 12, 0, 0, 0, 20, 21, -1, 17, 4, 13, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 14, 13, 9, 14, 10, 15, 11, 16, 2, 17, 2, 18, 2, 19, 15, 22, 16, 0, 2, 0, 29, 23, -1, 7, 4, 17, 24, 18, 25, 19, 26, 9, 27, 20, 22, 21, 28, 22, 0, 3, 0, 30, 30, -1, 16, 31, 2, 32, 9, 0, 14, 33, 23, 34, 24, 35, 24, 36, 25, 37, 25, 38, 14, 39, 14, 40, 9, 41, 26, 42, 27, 43, 27, 44, 27, 45, 27, 0, 2, 0, 29, 46, -1, 7, 4, 28, 24, 18, 25, 29, 26, 9, 27, 20, 22, 21, 28, 30, 0, 5, 0, 49, 47, -1, 2, 22, 31, 48, 10, 0, 5, 0, 49, 50, -1, 2, 22, 32, 48, 2, 0, 0, 0, 55, 51, -1, 4, 52, 2, 27, 33, 53, 11, 54, 23, 0, 8, 0, 2, 56, -1, 1, 4, 34, 0, 9, 0, 2, 57, -1, 2, 4, 35, 22, 36, 0, 9, 0, 74, 58, -1, 16, 59, 37, 60, 38, 61, 39, 62, 40, 63, 9, 64, 14, 65, 7, 66, 11, 67, 41, 68, 10, 69, 11, 70, 10, 71, 9, 72, 9, 73, 9, 22, 42, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="44" shared="false">
+			<array  len="43" shared="false">
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
 					<string> "Script" </string>
@@ -151,7 +151,6 @@
 				<resource  resource_type="Texture" path="local://2">  </resource>
 				<int> 10 </int>
 				<resource  external="4">  </resource>
-				<real> 1 </real>
 				<resource  external="5">  </resource>
 				<vector2> 0, 0 </vector2>
 				<vector2> 32, 416 </vector2>
