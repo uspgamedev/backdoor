@@ -32,7 +32,7 @@ func _ready():
 
 func _fixed_process(delta):
 	for body in bodies:
-		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 48 - 1))
+		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 16 - 1))
 	for actor in actors:
 		if actor != player and !actor.has_action() and actor.is_ready():
 			actor.pick_ai_module().think()
