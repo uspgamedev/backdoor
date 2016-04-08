@@ -3,15 +3,13 @@ extends Node2D
 
 const CardSprite = preload("res://scenes/hud/card.xscn")
 const Action = preload("res://model/action.gd")
-const ANGLE = atan2(1,2)
+const ANGLE = -atan2(1,2)
 
-var player
-var cards
+onready var player = get_node("/root/current/map/Hero")
+onready var cards = []
 var focus
 
 func _ready():
-	player = get_node("/root/current/map/Hero")
-	cards = []
 	set_process(true)
 	set_process_input(true)
 	player.connect("draw_card", self, "_on_player_draw")
@@ -43,4 +41,4 @@ func _process(delta):
 			card.set_rot(0)
 		else:
 			card.set_pos(Vector2(i*48, 0))
-			card.set_rot(-ANGLE)
+			card.set_rot(ANGLE)
