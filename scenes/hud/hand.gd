@@ -37,9 +37,10 @@ func _input(event):
 func _process(delta):
 	var n = cards.size()
 	for i in range(n):
+		var card = cards[n-1-i]
 		if i == focus:
-			cards[n-i-1].set_pos(Vector2(i*48, -32))
-			cards[n-i-1].set_rot(0)
+			card.set_pos(Vector2(i*48, -32))
+			card.set_rot(0)
 		else:
-			cards[n-i-1].set_pos(Vector2(i*48, 0))
-			cards[n-i-1].set_rot(-ANGLE)
+			card.set_pos(Vector2(i*48, 0))
+			card.set_rot(-ANGLE)
