@@ -13,7 +13,7 @@
 		</array>
 		<string name="1/name"> "Wall Corner" </string>
 		<resource name="1/texture" external="0">  </resource>
-		<vector2 name="1/tex_offset"> 0, -34 </vector2>
+		<vector2 name="1/tex_offset"> 0, -32 </vector2>
 		<resource name="1/material"></resource>		<rect2 name="1/region"> 64, 0, 64, 64 </rect2>
 		<vector2 name="1/occluder_offset"> 32, 32 </vector2>
 		<resource name="1/occluder"></resource>		<vector2 name="1/navigation_offset"> 32, 32 </vector2>
