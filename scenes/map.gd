@@ -65,6 +65,8 @@ func get_body_at (pos):
 	return null
 
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().finish()
 	if player.is_ready():
 		var move = Vector2(0,0)
 		if event.is_action_pressed("ui_down"):

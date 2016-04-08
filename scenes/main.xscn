@@ -231,7 +231,7 @@
 				<resource  external="5">  </resource>
 				<vector2> 0, 0 </vector2>
 				<vector2> 32, 416 </vector2>
-				<vector2> 256, 64 </vector2>
+				<vector2> 64, 64 </vector2>
 				<resource  external="6">  </resource>
 				<real> 32 </real>
 				<real> 163 </real>
