@@ -11,9 +11,12 @@ onready var lifebar = get_node("LifeBar")
 var cooldown
 var draw_cooldown
 var action
+
 var hand
 var deck
+
 export(int) var speed = 10
+export(int) var draw_rate = 5
 
 const DRAW_TIME = 40
 const MAX_HAND = 5
@@ -49,16 +52,18 @@ func get_body():
 func get_body_pos():
 	return get_body().pos
 
+func can_draw():
+	return hand.size() < MAX_HAND and deck.size() > 0
+
 func step_time():
 	cooldown = max(0, cooldown - 1)
-	draw_cooldown = max(0, draw_cooldown - 1)
-
-func check_draw():
-	if draw_cooldown == 0 and hand.size() < MAX_HAND and deck.size() > 0:
+	while draw_cooldown <= 0 and can_draw():
 		hand.append(deck[0])
 		deck.remove(0)
-		draw_cooldown = DRAW_TIME
+		draw_cooldown += DRAW_TIME
 		emit_signal("draw_card", hand[hand.size() - 1])
+	if can_draw():
+		draw_cooldown -= draw_rate
 
 func is_ready():
 	return cooldown == 0
