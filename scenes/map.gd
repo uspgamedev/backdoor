@@ -22,7 +22,7 @@ func _ready():
 	var count = 0
 	for actor in get_children():
 		var body = Body.new()
-		body.pos = Vector2(5,3 + count)
+		body.pos = Vector2(22,6 + count)
 		body.node = actor
 		bodies.append(body)
 		actors[actor] = body
@@ -32,7 +32,7 @@ func _ready():
 
 func _fixed_process(delta):
 	for body in bodies:
-		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 32 - 1))
+		body.node.set_pos(map_to_world(body.pos) + Vector2(0, 16 - 1))
 	for actor in actors:
 		if actor != player and !actor.has_action() and actor.is_ready():
 			actor.pick_ai_module().think()
