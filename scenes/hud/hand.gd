@@ -3,6 +3,8 @@ extends Node2D
 
 const CardSprite = preload("res://scenes/hud/card.xscn")
 const Action = preload("res://model/action.gd")
+const ANGLE = atan2(1,2)
+
 var player
 var cards
 var focus
@@ -34,13 +36,6 @@ func _input(event):
 
 func _process(delta):
 	var n = cards.size()
-	var angle = 30/(n+1)
-	for i in range(cards.size()):
-		var card = cards[i]
-		if i != focus:
-			card.get_node("Border").set_modulate(Color(0,0,0))
-		else:
-			card.get_node("Border").set_modulate(Color(1,1,1))
-	for i in range(n-1, -1, -1):
-		var transform = Matrix32(-deg2rad((i - (n-1)*.5)*angle), Vector2(0,1024))
-		cards[i].set_transform(transform.translated(Vector2(0, -1024)))
+	for i in range(n):
+		cards[n-i-1].set_pos(Vector2(i*48, 0))
+		cards[n-i-1].set_rot(-ANGLE)
