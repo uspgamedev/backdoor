@@ -1,5 +1,5 @@
 
-extends Sprite
+extends Node
 
 class Card:
 	var name
@@ -39,7 +39,7 @@ func _ready():
 	deck.append(Card.new("Exodia"))
 
 func get_body():
-	return get_parent().actors[self]
+	return get_node("/root/current/map").actor_bodies[self]
 
 func get_body_pos():
 	return get_body().pos

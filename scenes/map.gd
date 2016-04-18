@@ -8,18 +8,19 @@ const block = [
 ]
 
 const Action   = preload("res://model/action.gd")
+const Actor    = preload("res://model/actor.gd")
 const Body     = preload("res://model/body.gd")
 const BodyView = preload("res://scenes/bodyview.gd")
 
-var preload_bodies = [
-	Body.new("hero", Vector2(22,8), 10),
-	Body.new("slime", Vector2(22,6), 10)
+onready var preload_bodies = [
+	[Body.new("hero", Vector2(22,8), 10), get_node("/root/player")],
+	[Body.new("slime", Vector2(22,6), 10), Actor.new()]
 ]
 
 var bodies
 var body_views
 var actor_bodies
-var player
+onready var player = get_node("/root/player")
 
 func _ready():
 	set_fixed_process(true)
@@ -27,16 +28,21 @@ func _ready():
 	bodies = []
 	body_views = []
 	actor_bodies = {}
-	for body in preload_bodies:
-		add_body(body)
-	#player = get_node("Hero")
+	for entry in preload_bodies:
+		add_body(entry[0])
+		add_actor(entry[0],entry[1])
 	manage_actors()
 
 func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
 	body_views.append(bodyview)
-	#actor_bodies[actor] = body
+
+func add_actor(body, actor):
+	get_node("../actors").add_child(actor)
+	actor_bodies[actor] = body
+	var module = preload("res://model/ai/wander.gd").new()
+	actor.add_child(module)
 
 func _fixed_process(delta):
 	for bodyview in body_views:

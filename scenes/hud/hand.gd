@@ -5,7 +5,7 @@ const CardSprite = preload("res://scenes/hud/card.xscn")
 const Action = preload("res://model/action.gd")
 const ANGLE = -atan2(1,2)
 
-onready var player = get_node("/root/current/map/Hero")
+onready var player = get_node("/root/player")
 onready var cards = []
 var focus
 

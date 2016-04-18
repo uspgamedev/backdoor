@@ -4,7 +4,7 @@ extends ProgressBar
 var player
 
 func _ready():
-	player = get_node("/root/current/map/Hero")
+	player = get_node("/root/player")
 	player.connect("spent_action", self, "_on_player_action")
 	set_process(true)
 
