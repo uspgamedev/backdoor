@@ -37,6 +37,7 @@ func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
 	body_views.append(bodyview)
+	add_child(bodyview)
 
 func add_actor(body, actor):
 	get_node("../actors").add_child(actor)
