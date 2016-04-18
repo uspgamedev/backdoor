@@ -1,12 +1,10 @@
 
-extends Sprite
+extends Node
 
 class Card:
 	var name
 	func _init(the_name):
 		name = the_name
-
-onready var lifebar = get_node("LifeBar")
 
 var cooldown
 var draw_cooldown
@@ -39,15 +37,9 @@ func _ready():
 	deck.append(Card.new("Exodia"))
 	deck.append(Card.new("Exodia"))
 	deck.append(Card.new("Exodia"))
-	if lifebar != null:
-		set_process(true)
-
-func _process(delta):
-	var body = get_body()
-	lifebar.set_value(100*(body.hp - body.damage)/body.hp)
 
 func get_body():
-	return get_parent().actors[self]
+	return get_node("/root/current/map").actor_bodies[self]
 
 func get_body_pos():
 	return get_body().pos
