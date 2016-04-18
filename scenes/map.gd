@@ -14,7 +14,10 @@ const BodyView = preload("res://scenes/bodyview.gd")
 
 onready var preload_bodies = [
 	[Body.new("hero", Vector2(22,8), 10), get_node("/root/player")],
-	[Body.new("slime", Vector2(22,6), 10), Actor.new()]
+	[Body.new("slime", Vector2(22,6), 10), Actor.new()],
+	[Body.new("slime", Vector2(24,6), 10), Actor.new()],
+	[Body.new("slime", Vector2(26,6), 10), Actor.new()],
+	[Body.new("slime", Vector2(28,6), 10), Actor.new()],
 ]
 
 var bodies
