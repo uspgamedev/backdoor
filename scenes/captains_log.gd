@@ -11,4 +11,5 @@ func _ready():
 
 func start():
 	var route = Route.load_from_file(null)
+	get_node("/root/sector/HUD/UI_hook/Hand").set_player(route.player)
 	get_parent().call_deferred("add_child", route)

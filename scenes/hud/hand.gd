@@ -5,13 +5,18 @@ const CardSprite = preload("res://scenes/hud/card.xscn")
 const Action = preload("res://model/action.gd")
 const ANGLE = -atan2(1,2)
 
-onready var player = get_node("/root/player")
 onready var cards = []
+var player
 var focus
 
 func _ready():
 	set_process(true)
 	set_process_input(true)
+
+func set_player(the_player):
+	if player != null:
+		player.disconnect("draw_card", self, "_on_player_draw")
+	player = the_player
 	player.connect("draw_card", self, "_on_player_draw")
 
 func _on_player_draw(card):
