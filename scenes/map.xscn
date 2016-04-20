@@ -17,7 +17,7 @@
 				<string> "script/script" </string>
 				<string> "__meta__" </string>
 				<string> "Node2D" </string>
-				<string> "smol floor" </string>
+				<string> "floors" </string>
 				<string> "mode" </string>
 				<string> "tile_set" </string>
 				<string> "cell/size" </string>

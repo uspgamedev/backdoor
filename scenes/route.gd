@@ -21,17 +21,56 @@ var player
 
 static func load_from_file(file):
 	var route = RouteScene.instance()
-	route.player = Node.new()
-	route.player.set_script(Actor)
-	var map = MapScene.instance()
-	route.get_node("sectors").add_child(map)
-	var player_body = Body.new("hero", Vector2(22,8), 10)
-	map.add_body(player_body)
-	map.add_actor(player_body, route.player)
-	for entry in preload_bodies:
-		var body = Body.new(entry[0], entry[1], entry[2])
-		map.add_body(body)
-		map.add_actor(body, Actor.new())
+	# Open file
+	var data = {}
+	# Parse to json
+	var text = file.get_as_text()
+	#var text = { "sectors": [] }.to_json()
+	print(text)
+	print(data.parse_json(text))
+	for key in data.keys():
+		print(key)
+	var sectors = data["sectors"]
+	for sector_data in sectors:
+		# Parse sector
+		var map = MapScene.instance()
+		route.get_node("sectors").add_child(map)
+		# General sector info
+		var width = sector_data["width"]
+		var height = sector_data["height"]
+		# Parse sector floor
+		var floors = map.get_node("floors")
+		floors.clear()
+		var floor_data = sector_data["floors"]
+		for j in range(floor_data.size()):
+			floors.set_cell(j / int(width), j % int(width), floor_data[j])
+		# Parse sector walls
+		var walls = map.get_node("walls")
+		walls.clear()
+		var wall_data = sector_data["walls"]
+		for j in range(wall_data.size()):
+			walls.set_cell(j / int(width), j % int(width), wall_data[j])
+		# Parse bodies
+		var bodies = sector_data["bodies"]
+		for body_data in bodies:
+			var body = Body.new(body_data["type"], Vector2(body_data["pos"][0], body_data["pos"][1]), body_data["hp"])
+			body.damage = body_data["damage"]
+			map.add_body(body)
+		# Parse actors
+		var actors = sector_data["actors"]
+		for actor_data in actors:
+			var actor = Actor.new()
+			actor.cooldown = actor_data["cooldown"]
+			actor.draw_cooldown = actor_data["drawcooldown"]
+			var hand = actor_data["hand"]
+			for card in hand:
+				actor.hand.append(Actor.Card.new(card))
+			var deck = actor_data["deck"]
+			for card in deck:
+				actor.deck.append(Actor.Card.new(card))
+			map.add_actor(map.bodies[actor_data["body_id"]], actor)
+	route.current_sector = route.get_node("sectors").get_child(data["current_sector"])
+	route.player = route.current_sector.get_node("actors").get_child(data["player_actor_id"])
 	return route
 
 func _init():
@@ -64,4 +103,7 @@ func open_sector(target):
 	sector.new_sector(player)
 
 func set_player(player):
+	pass
+
+func serialize():
 	pass

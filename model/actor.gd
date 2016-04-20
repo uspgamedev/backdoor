@@ -23,20 +23,13 @@ signal has_action
 signal spent_action
 signal draw_card(card)
 
+func _init():
+	hand = []
+	deck = []
+
 func _ready():
 	cooldown = 100/speed
 	draw_cooldown = DRAW_TIME
-	hand = []
-	deck = []
-	deck.append(Card.new("Black Lotus"))
-	deck.append(Card.new("Dr. Boom"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
 
 func get_body():
 	return get_node("/root/sector/map").get_actor_body(self)

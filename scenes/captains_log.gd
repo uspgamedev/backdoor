@@ -10,6 +10,11 @@ func _ready():
 	print("captain's log ready")
 
 func start():
-	var route = Route.load_from_file(null)
+	var file = File.new()
+	file.open("res://test.save", File.READ)
+	var route = Route.load_from_file(file)
+	file.close()
 	get_node("/root/sector/HUD/UI_hook/Hand").set_player(route.player)
 	get_parent().call_deferred("add_child", route)
+
+	
