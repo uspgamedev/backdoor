@@ -35,7 +35,7 @@ func add_body(body):
 	map.walls.add_child(bodyview)
 
 func add_actor(body, actor):
-	get_node("actors").add_child(actor)
+	get_node("map/actors").add_child(actor)
 	actor_bodies[actor] = body
 	var module = preload("res://model/ai/wander.gd").new()
 	actor.add_child(module)
