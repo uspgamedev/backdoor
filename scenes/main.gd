@@ -32,7 +32,7 @@ func _ready():
 func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
-	map.add_child(bodyview)
+	map.walls.add_child(bodyview)
 
 func add_actor(body, actor):
 	get_node("actors").add_child(actor)
