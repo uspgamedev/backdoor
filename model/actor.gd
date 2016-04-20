@@ -39,7 +39,7 @@ func _ready():
 	deck.append(Card.new("Exodia"))
 
 func get_body():
-	return get_node("/root/current/map").actor_bodies[self]
+	return get_node("/root/sector").get_actor_body(self)
 
 func get_body_pos():
 	return get_body().pos

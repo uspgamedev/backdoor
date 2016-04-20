@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="7" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://scenes/hud/hand.gd" type="Script" index="2"></ext_resource>
-	<ext_resource path="res://scenes/hud/cooldownbar.gd" type="Script" index="3"></ext_resource>
-	<ext_resource path="res://scenes/map.gd" type="Script" index="1"></ext_resource>
-	<ext_resource path="res://resources/smol_tileset.xml" type="TileSet" index="0"></ext_resource>
+<resource_file type="PackedScene" subresource_count="8" version="2.0" version_name="Godot Engine v2.0.stable.official">
+	<ext_resource path="res://scenes/hud/hand.gd" type="Script" index="3"></ext_resource>
+	<ext_resource path="res://scenes/hud/cooldownbar.gd" type="Script" index="4"></ext_resource>
+	<ext_resource path="res://scenes/map.gd" type="Script" index="2"></ext_resource>
+	<ext_resource path="res://scenes/main.gd" type="Script" index="0"></ext_resource>
+	<ext_resource path="res://resources/smol_tileset.xml" type="TileSet" index="1"></ext_resource>
 	<resource type="StyleBoxFlat" path="local://3">
 		<real name="content_margin/left"> -1 </real>
 		<real name="content_margin/right"> -1 </real>
@@ -41,7 +42,8 @@
 			</array>
 			<string> "names" </string>
 			<string_array  len="52">
-				<string> "current" </string>
+				<string> "sector" </string>
+				<string> "script/script" </string>
 				<string> "__meta__" </string>
 				<string> "Node2D" </string>
 				<string> "smol floor" </string>
@@ -62,7 +64,6 @@
 				<string> "tile_data" </string>
 				<string> "TileMap" </string>
 				<string> "map" </string>
-				<string> "script/script" </string>
 				<string> "HUD" </string>
 				<string> "layer" </string>
 				<string> "offset" </string>
@@ -100,15 +101,18 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="174"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 19, 3, -1, 16, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 1, 16, 1, 17, 1, 18, 12, 1, 13, 0, 0, 0, 19, 20, -1, 17, 4, 1, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 1, 16, 1, 17, 1, 18, 14, 21, 15, 1, 16, 0, 0, 0, 27, 22, -1, 4, 23, 1, 24, 17, 25, 11, 26, 18, 0, 3, 0, 2, 28, -1, 1, 29, 19, 0, 4, 0, 2, 30, -1, 2, 29, 20, 21, 21, 0, 4, 0, 49, 31, -1, 18, 32, 22, 33, 23, 34, 24, 35, 25, 36, 9, 37, 8, 38, 6, 39, 26, 40, 27, 41, 11, 42, 28, 43, 10, 44, 11, 45, 10, 46, 9, 47, 9, 48, 9, 21, 29, 0, 0, 0, 51, 50, -1, 0, 0 </int_array>
+			<int_array  len="176"> 				-1, -1, 3, 0, -1, 2, 1, 0, 2, 1, 0, 0, 0, 20, 4, -1, 16, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 12, 16, 2, 17, 2, 18, 2, 19, 13, 2, 14, 0, 0, 0, 20, 21, -1, 17, 5, 2, 6, 3, 7, 4, 8, 5, 9, 6, 10, 7, 11, 8, 12, 9, 13, 10, 14, 11, 15, 12, 16, 2, 17, 2, 18, 2, 19, 15, 1, 16, 2, 17, 0, 0, 0, 27, 22, -1, 4, 23, 2, 24, 18, 25, 12, 26, 19, 0, 3, 0, 3, 28, -1, 1, 29, 20, 0, 4, 0, 3, 30, -1, 2, 29, 21, 1, 22, 0, 4, 0, 49, 31, -1, 18, 32, 23, 33, 24, 34, 25, 35, 26, 36, 10, 37, 9, 38, 7, 39, 27, 40, 28, 41, 12, 42, 29, 43, 11, 44, 12, 45, 11, 46, 10, 47, 10, 48, 10, 1, 30, 0, 0, 0, 51, 50, -1, 0, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="30" shared="false">
+			<array  len="31" shared="false">
+				<resource  external="0">  </resource>
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
 					<string> "Script" </string>
+					<string> "_edit_lock_" </string>
+					<bool> True </bool>
 				</dictionary>
 				<int> 1 </int>
-				<resource  external="0">  </resource>
+				<resource  external="1">  </resource>
 				<vector2> 64, 32 </vector2>
 				<int> 16 </int>
 				<matrix32> 1, 0, 0, 1, 0, 0 </matrix32>
@@ -124,7 +128,7 @@
 					<bool> True </bool>
 				</dictionary>
 				<int_array  len="306"> 					-524283, 1, -524282, 5, -524281, 5, -524280, 5, -524279, 5, -524278, 5, -524277, 5, -524276, 1, -524275, 5, -524274, 5, -524273, 5, -524272, 5, -524271, 5, -524270, 5, -524269, 5, -524268, 5, -524267, 5, -524266, 5, -524265, 5, -524264, 5, -524263, 5, -524262, 5, -524261, 5, -524260, 5, -524259, 5, -524258, 5, -524257, 5, -524256, 1, -458747, 3, -458740, 3, -458720, 3, -393211, 3, -393204, 3, -393184, 3, -327675, 3, -327668, 3, -327648, 3, -262139, 3, -262132, 3, -262112, 3, -196603, 3, -196596, 1, -196576, 3, -131067, 3, -131040, 3, -65531, 3, -65504, 3, 5, 3, 32, 3, 65541, 3, 65548, 1, 65568, 3, 131077, 3, 131084, 3, 131104, 3, 196613, 3, 196620, 3, 196640, 3, 262149, 1, 262150, 5, 262151, 5, 262152, 5, 262153, 5, 262154, 5, 262155, 5, 262156, 1, 262176, 3, 327685, 3, 327712, 3, 393221, 3, 393248, 3, 458757, 3, 458784, 3, 524293, 3, 524320, 3, 589829, 3, 589856, 3, 655365, 3, 655392, 3, 720901, 3, 720928, 3, 786437, 3, 786464, 3, 851973, 1, 851974, 5, 851975, 5, 851976, 5, 851977, 5, 851978, 5, 851979, 5, 851980, 5, 851981, 5, 851982, 5, 851983, 1, 852000, 3, 917511, 10, 917512, 10, 917513, 10, 917514, 10, 917519, 3, 917530, 1, 917531, 5, 917532, 5, 917533, 5, 917534, 5, 917535, 5, 917536, 1, 983055, 3, 983066, 3, 1048591, 3, 1048602, 3, 1114127, 3, 1114138, 3, 1179663, 3, 1179674, 3, 1245199, 3, 1245210, 3, 1310735, 3, 1310746, 1, 1310747, 5, 1310748, 5, 1310749, 5, 1310750, 5, 1310751, 5, 1310752, 5, 1310753, 1, 1376271, 3, 1376289, 3, 1441807, 3, 1441825, 3, 1507343, 3, 1507361, 3, 1572879, 3, 1572897, 3, 1638415, 1, 1638416, 5, 1638417, 5, 1638418, 5, 1638419, 5, 1638420, 5, 1638421, 5, 1638422, 5, 1638423, 5, 1638424, 5, 1638425, 5, 1638426, 5, 1638427, 5, 1638428, 5, 1638429, 5, 1638430, 5, 1638431, 5, 1638432, 5, 1638433, 1 </int_array>
-				<resource  external="1">  </resource>
+				<resource  external="2">  </resource>
 				<dictionary  shared="false">
 					<string> "_edit_lock_" </string>
 					<bool> True </bool>
@@ -133,7 +137,7 @@
 				<vector2> 1, 1 </vector2>
 				<vector2> 32, 416 </vector2>
 				<vector2> 64, 64 </vector2>
-				<resource  external="2">  </resource>
+				<resource  external="3">  </resource>
 				<real> 32 </real>
 				<real> 163 </real>
 				<real> 512 </real>
@@ -141,7 +145,7 @@
 				<resource  resource_type="StyleBox" path="local://3">  </resource>
 				<resource  resource_type="StyleBox" path="local://4">  </resource>
 				<real> 100 </real>
-				<resource  external="3">  </resource>
+				<resource  external="4">  </resource>
 			</array>
 			<string> "version" </string>
 			<int> 2 </int>

@@ -26,16 +26,16 @@ class Move:
 	var target_
 	func _init(target).("move"):
 		target_ = target
+	func get_sector(actor):
+		return actor.get_node("/root/sector")
 	func get_map(actor):
-		return actor.get_node("/root/current/map")
+		return actor.get_node("/root/sector/map")
 	func can_be_used(actor):
-		var map = get_map(actor)
-		return map.is_empty_space(target_) && map.get_body_at(target_) == null
+		return get_map(actor).is_empty_space(target_) && get_sector(actor).get_body_at(target_) == null
 	func get_cost(actor):
 		return 50
 	func use(actor):
-		var map = get_map(actor)
-		map.move_actor(actor, target_)
+		get_sector(actor).move_actor(actor, target_)
 		pass
 
 class MeleeAttack:
