@@ -16,6 +16,7 @@ func _ready():
 func new_sector(the_player):
 	map = get_node("map")
 	player = the_player
+	get_node("HUD/UI_hook/CooldownBar").set_player(the_player)
 	set_fixed_process(true)
 	set_process_input(true)
 	print("start sector")
