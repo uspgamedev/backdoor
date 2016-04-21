@@ -25,9 +25,6 @@ static func load_from_file(file):
 	var data = {}
 	# Parse to json
 	var text = file.get_as_text()
-	#var text = { "sectors": [] }.to_json()
-	print(text)
-	print(data.parse_json(text))
 	for key in data.keys():
 		print(key)
 	var sectors = data["sectors"]
