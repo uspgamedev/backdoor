@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="3" version="2.0" version_name="Godot Engine v2.0.stable.official">
+<resource_file type="PackedScene" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://scenes/bodyview.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://assets/dummy.tex" type="Texture" index="1"></ext_resource>
+	<resource type="StyleBoxFlat" path="local://1">
+		<real name="content_margin/left"> -1 </real>
+		<real name="content_margin/right"> -1 </real>
+		<real name="content_margin/top"> -1 </real>
+		<real name="content_margin/bottom"> -1 </real>
+		<color name="bg_color"> 0.0884399, 0.539062, 0.391202, 1 </color>
+		<color name="light_color"> 0.258514, 0.769531, 0.541969, 1 </color>
+		<color name="dark_color"> 0.0714111, 0.40625, 0.257142, 1 </color>
+		<int name="border_size"> 0 </int>
+		<bool name="border_blend"> True </bool>
+		<bool name="draw_bg"> True </bool>
+
+	</resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -12,7 +25,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "names" </string>
-			<string_array  len="25">
+			<string_array  len="26">
 				<string> "BodyView" </string>
 				<string> "script/script" </string>
 				<string> "Node2D" </string>
@@ -29,6 +42,7 @@
 				<string> "focus/ignore_mouse" </string>
 				<string> "focus/stop_mouse" </string>
 				<string> "size_flags/horizontal" </string>
+				<string> "custom_styles/fg" </string>
 				<string> "range/min" </string>
 				<string> "range/max" </string>
 				<string> "range/step" </string>
@@ -45,9 +59,9 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="61"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 3, 3, -1, 3, 4, 1, 5, 2, 6, 3, 0, 0, 0, 24, 7, -1, 16, 8, 4, 9, 5, 10, 6, 11, 7, 12, 8, 13, 2, 14, 9, 15, 10, 16, 11, 17, 12, 18, 13, 19, 11, 20, 13, 21, 2, 22, 2, 23, 2, 0 </int_array>
+			<int_array  len="63"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 3, 3, -1, 3, 4, 1, 5, 2, 6, 3, 0, 0, 0, 25, 7, -1, 17, 8, 4, 9, 5, 10, 6, 11, 7, 12, 8, 13, 2, 14, 9, 15, 10, 16, 11, 17, 12, 18, 13, 19, 14, 20, 12, 21, 14, 22, 2, 23, 2, 24, 2, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="14" shared="false">
+			<array  len="15" shared="false">
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
 				<bool> False </bool>
@@ -59,6 +73,7 @@
 				<vector2> 0.25, 0.25 </vector2>
 				<bool> True </bool>
 				<int> 2 </int>
+				<resource  resource_type="StyleBox" path="local://1">  </resource>
 				<real> 0 </real>
 				<real> 100 </real>
 				<real> 1 </real>
