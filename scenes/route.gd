@@ -69,8 +69,12 @@ static func load_from_file(file):
 			for card in deck:
 				actor.deck.append(Actor.Card.new(card))
 			map.add_actor(map.bodies[actor_data["body_id"]], actor)
+	# Set current sector
 	route.current_sector = route.get_node("sectors").get_child(data["current_sector"])
+	# Store reference to player
 	route.player = route.current_sector.get_node("actors").get_child(data["player_actor_id"])
+	# Set up camera
+	route.current_sector.attach_camera(route.player)
 	return route
 
 func _init():

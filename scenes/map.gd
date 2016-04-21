@@ -36,6 +36,16 @@ func add_actor(body, actor):
 	var module = preload("res://model/ai/wander.gd").new()
 	actor.add_child(module)
 
+func attach_camera(actor):
+	var body = actor_bodies[actor]
+	for bodyview in get_node("walls").get_children():
+		if bodyview.body == body:
+			var camera = Camera2D.new()
+			camera.make_current()
+			camera.set_enable_follow_smoothing(true)
+			camera.set_follow_smoothing(5)
+			bodyview.add_child(camera)
+
 func move_actor(actor, new_pos):
 	move_body(actor_bodies[actor], new_pos)
 
