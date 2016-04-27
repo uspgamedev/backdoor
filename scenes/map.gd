@@ -9,6 +9,7 @@ const block = [
 	Vector2(1,1)
 ]
 
+var id
 var bodies
 var actor_bodies
 onready var walls = get_node("walls")
@@ -30,11 +31,20 @@ func add_body(body):
 	bodies.append(body)
 	get_node("walls").add_child(bodyview)
 
+func remove_body(body):
+	bodies.erase(body)
+	get_node("walls").remove_child(body)
+
 func add_actor(body, actor):
 	get_node("actors").add_child(actor)
 	actor_bodies[actor] = body
-	var module = preload("res://model/ai/wander.gd").new()
-	actor.add_child(module)
+	#var module = preload("res://model/ai/wander.gd").new()
+	#actor.add_child(module)
+
+func remove_actor(actor):
+	remove_body(actor_bodies[actor])
+	actor_bodies[actor] = null
+	get_node("actors").remove_child(actor)
 
 func attach_camera(actor):
 	var body = actor_bodies[actor]

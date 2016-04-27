@@ -47,3 +47,16 @@ class MeleeAttack:
 		return 100
 	func use(actor):
 		body_.take_damage(3)
+
+class ChangeSector:
+	extends BaseAction
+	var target_
+	func _init(target).("change_sector"):
+		target_ = target
+	func can_be_used(actor):
+		return true
+	func get_cost(actor):
+		return 50
+	func use(actor):
+		actor.get_node("/root/sector").active = false
+		actor.get_node("/root/route").change_sector(target_)

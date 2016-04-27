@@ -5,6 +5,7 @@ const Action   = preload("res://model/action.gd")
 
 var player
 var map
+var active
 
 func _init():
 	print("sector created")
@@ -20,10 +21,11 @@ func new_sector(the_player):
 	set_fixed_process(true)
 	set_process_input(true)
 	print("start sector")
+	active = true
 	manage_actors()
 
 func manage_actors():
-	while true:
+	while active:
 		for actor in map.actor_bodies:
 			actor.step_time()
 			if actor.is_ready():
@@ -50,6 +52,8 @@ func _input(event):
 			move.x += 1
 		elif event.is_action_pressed("ui_left"):
 			move.x -= 1
+		elif event.is_action_pressed("debug_next_sector"):
+			player.add_action(Action.ChangeSector.new(1))
 		if event.is_action_pressed("ui_idle"):
 			player.add_action(Action.Idle.new())
 		elif move.length_squared() > 0:

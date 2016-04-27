@@ -33,6 +33,7 @@ static func load_from_file(file):
 		map.hide()
 		route.get_node("sectors").add_child(map)
 		# General sector info
+		map.id = sector_data["id"]
 		var width = sector_data["width"]
 		var height = sector_data["height"]
 		# Parse sector floor
@@ -67,7 +68,7 @@ static func load_from_file(file):
 				actor.deck.append(Actor.Card.new(card))
 			map.add_actor(map.bodies[actor_data["body_id"]], actor)
 	# Set current sector
-	route.current_sector = route.get_node("sectors").get_child(data["current_sector"])
+	route.current_sector = route.find_sector(data["current_sector"])
 	route.current_sector.show()
 	# Store reference to player
 	route.player = route.current_sector.get_node("actors").get_child(data["player_actor_id"])
@@ -79,33 +80,42 @@ func _init():
 	print("route created")
 
 func _ready():
-	open_sector(null)
+	open_current_sector(null)
 	print("route ready")
 
-func change_sector(target):
-	player = get_player() # removes from subtree
-	close_current_sector()
-	open_sector(target)
-	set_player(player)
-
-func get_player():
+func find_sector(id):
+	for sector in get_node("sectors").get_children():
+		if sector.id == id:
+			return sector
+	if current_sector.id == id:
+		return current_sector
 	return null
 
+func change_sector(target):
+	var player_body = current_sector.get_actor_body(player)
+	close_current_sector()
+	current_sector = find_sector(target)
+	open_current_sector(player_body)
+
 func close_current_sector():
-	pass
+	var last = current_sector
+	last.set_fixed_process(false)
+	last.hide()
+	last.remove_actor(player)
+	get_node("/root/sector").remove_child(current_sector)
+	get_node("sectors").add_child(last)
 
-func open_sector(target):
-	var sectors = get_node("sectors")
+func open_current_sector(player_body):
 	var sector = get_node("/root/sector")
-	var map = sectors.get_child(0)
-	sectors.remove_child(map)
-	sector.add_child(map)
-	sector.move_child(map, 0)
-	map.set_fixed_process(true)
+	get_node("sectors").remove_child(current_sector)
+	sector.add_child(current_sector)
+	sector.move_child(current_sector, 0)
+	current_sector.set_name("map")
 	sector.new_sector(player)
+	current_sector.set_fixed_process(true)
+	current_sector.show()
+	if player_body != null:
+		current_sector.add_body(player_body)
+		current_sector.add_actor(player_body, player)
+		current_sector.move_actor(player, Vector2(0,0))
 
-func set_player(player):
-	pass
-
-func serialize():
-	pass
