@@ -11,7 +11,7 @@ func _ready():
 
 func start():
 	var file = File.new()
-	file.open("res://test.save", File.READ)
+	file.open("res://test2.save", File.READ)
 	var route = Route.load_from_file(file)
 	file.close()
 	get_node("/root/sector/HUD/UI_hook/Hand").set_player(route.player)

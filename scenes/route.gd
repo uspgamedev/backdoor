@@ -30,6 +30,7 @@ static func load_from_file(file):
 	for sector_data in sectors:
 		# Parse sector
 		var map = MapScene.instance()
+		map.hide()
 		route.get_node("sectors").add_child(map)
 		# General sector info
 		var width = sector_data["width"]
@@ -67,6 +68,7 @@ static func load_from_file(file):
 			map.add_actor(map.bodies[actor_data["body_id"]], actor)
 	# Set current sector
 	route.current_sector = route.get_node("sectors").get_child(data["current_sector"])
+	route.current_sector.show()
 	# Store reference to player
 	route.player = route.current_sector.get_node("actors").get_child(data["player_actor_id"])
 	# Set up camera
