@@ -111,11 +111,11 @@ func open_current_sector(player_body):
 	sector.add_child(current_sector)
 	sector.move_child(current_sector, 0)
 	current_sector.set_name("map")
-	sector.new_sector(player)
 	current_sector.set_fixed_process(true)
 	current_sector.show()
 	if player_body != null:
 		current_sector.add_body(player_body)
 		current_sector.add_actor(player_body, player)
 		current_sector.move_actor(player, Vector2(0,0))
+	sector.new_sector(player)
 

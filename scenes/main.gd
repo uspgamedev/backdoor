@@ -5,7 +5,8 @@ const Action   = preload("res://model/action.gd")
 
 var player
 var map
-var active
+var done
+var next_sector
 
 func _init():
 	print("sector created")
@@ -21,11 +22,16 @@ func new_sector(the_player):
 	set_fixed_process(true)
 	set_process_input(true)
 	print("start sector")
-	active = true
+	done = false
+	next_sector = null
 	manage_actors()
 
+func set_next_sector (target):
+	done = true
+	next_sector = target
+
 func manage_actors():
-	while active:
+	while not done:
 		for actor in map.actor_bodies:
 			actor.step_time()
 			if actor.is_ready():
@@ -33,6 +39,7 @@ func manage_actors():
 					yield(actor, "has_action")
 				actor.use_action()
 		yield(get_tree(), "fixed_frame" )
+	get_node("/root/route").change_sector(next_sector)
 
 func _fixed_process(delta):
 	for actor in map.actor_bodies:

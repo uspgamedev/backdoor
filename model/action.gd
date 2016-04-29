@@ -58,5 +58,4 @@ class ChangeSector:
 	func get_cost(actor):
 		return 50
 	func use(actor):
-		actor.get_node("/root/sector").active = false
-		actor.get_node("/root/route").change_sector(target_)
+		actor.get_node("/root/sector").set_next_sector(target_)

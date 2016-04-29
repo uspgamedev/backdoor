@@ -59,9 +59,11 @@ func has_action():
 func add_action(the_action):
 	if !has_action() and the_action.can_be_used(self):
 		action = the_action
+		print(get_name(), ": added action ", action.get_type())
 		emit_signal("has_action")
 
 func use_action():
+	print(get_name(), ": used action ", action.get_type())
 	cooldown += action.get_cost(self)/speed
 	action.use(self)
 	action = null
