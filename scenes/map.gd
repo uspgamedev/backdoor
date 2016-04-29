@@ -10,6 +10,8 @@ const block = [
 ]
 
 var id
+var width
+var height
 var bodies
 var actor_bodies
 onready var walls = get_node("walls")
@@ -49,7 +51,7 @@ func add_actor(body, actor):
 func remove_actor(actor):
 	if actor_bodies[actor] != null:
 		remove_body(actor_bodies[actor])
-		actor_bodies[actor] = null
+		actor_bodies.erase(actor)
 	get_node("actors").remove_child(actor)
 
 func attach_camera(actor):

@@ -6,8 +6,9 @@ const RouteScene = preload("res://scenes/route.xscn")
 const MapScene   = preload("res://scenes/map.xscn")
 
 # Classes
-const Body  = preload("res://model/body.gd")
-const Actor = preload("res://model/actor.gd")
+const Identifiable = preload("res://model/identifiable.gd")
+const Body         = preload("res://model/body.gd")
+const Actor        = preload("res://model/actor.gd")
 
 const preload_bodies = [
 	["slime", Vector2(22,6), 10],
@@ -34,24 +35,24 @@ static func load_from_file(file):
 		route.get_node("sectors").add_child(map)
 		# General sector info
 		map.id = sector_data["id"]
-		var width = sector_data["width"]
-		var height = sector_data["height"]
+		map.width = sector_data["width"]
+		map.height = sector_data["height"]
 		# Parse sector floor
 		var floors = map.get_node("floors")
 		floors.clear()
 		var floor_data = sector_data["floors"]
 		for j in range(floor_data.size()):
-			floors.set_cell(j / int(width), j % int(width), floor_data[j])
+			floors.set_cell(j / int(map.width), j % int(map.width), floor_data[j])
 		# Parse sector walls
 		var walls = map.get_node("walls")
 		walls.clear()
 		var wall_data = sector_data["walls"]
 		for j in range(wall_data.size()):
-			walls.set_cell(j / int(width), j % int(width), wall_data[j])
+			walls.set_cell(j / int(map.width), j % int(map.width), wall_data[j])
 		# Parse bodies
 		var bodies = sector_data["bodies"]
 		for body_data in bodies:
-			var body = Body.new(body_data["type"], Vector2(body_data["pos"][0], body_data["pos"][1]), body_data["hp"])
+			var body = Body.new(body_data["id"], body_data["type"], Vector2(body_data["pos"][0], body_data["pos"][1]), body_data["hp"])
 			body.damage = body_data["damage"]
 			map.add_body(body)
 		# Parse actors
@@ -66,7 +67,7 @@ static func load_from_file(file):
 			var deck = actor_data["deck"]
 			for card in deck:
 				actor.deck.append(Actor.Card.new(card))
-			map.add_actor(map.bodies[actor_data["body_id"]], actor)
+			map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
 	route.current_sector.show()
@@ -75,6 +76,76 @@ static func load_from_file(file):
 	# Set up camera
 	route.current_sector.attach_camera(route.player)
 	return route
+
+func save_to_file(file):
+	var data = {}
+	data["sectors"] = []
+	data["current_sector"] = current_sector.id
+	# Group sectors into a single array
+	var sectors = [current_sector]
+	for sector in get_node("sectors").get_children():
+		sectors.append(sector)
+	var sectors_data = []
+	var player_actor_id = -1
+	data["sectors"] = sectors_data
+	# Serialize sectors
+	for sector in sectors:
+		# Store sector general data
+		var sector_data = {}
+		sector_data["id"] = sector.id
+		sector_data["width"] = sector.width
+		sector_data["height"] = sector.height
+		# Store floor tiles
+		var floor_map = []
+		for i in range(sector.height):
+			for j in range(sector.width):
+				floor_map.append(-1)
+		var floors = sector.get_node("floors")
+		for tile_pos in floors.get_used_cells():
+			floor_map[tile_pos.x*sector.width + tile_pos.y] = floors.get_cellv(tile_pos)
+		sector_data["floors"] = floor_map
+		# Store wall tiles
+		var wall_map = []
+		for i in range(sector.height):
+			for j in range(sector.width):
+				wall_map.append(-1)
+		var walls = sector.get_node("walls")
+		for tile_pos in walls.get_used_cells():
+			wall_map[tile_pos.x*sector.width + tile_pos.y] = walls.get_cellv(tile_pos)
+		sector_data["walls"] = wall_map
+		# Store bodies
+		var bodies = []
+		for body in sector.bodies:
+			var body_data = {}
+			body_data["id"] = body.get_id()
+			body_data["type"] = body.type
+			body_data["pos"] = [body.pos.x, body.pos.y]
+			body_data["hp"] = body.hp
+			body_data["damage"] = body.damage
+			bodies.append(body_data)
+		sector_data["bodies"] = bodies
+		# Store actors
+		var actors = []
+		for actor in sector.actor_bodies:
+			var actor_data = {}
+			actor_data["cooldown"] = actor.cooldown
+			actor_data["drawcooldown"] = actor.draw_cooldown
+			var hand_data = []
+			for card in actor.hand:
+				hand_data.append(card.name)
+			actor_data["hand"] = hand_data
+			var deck_data = []
+			for card in actor.hand:
+				deck_data.append(card.name)
+			actor_data["deck"] = deck_data
+			actor_data["body_id"] = sector.get_actor_body(actor).get_id()
+			actors.append(actor_data)
+			if actor == player:
+				player_actor_id = actors.size()-1
+		sector_data["actors"] = actors
+		sectors_data.append(sector_data)
+	data["player_actor_id"] = player_actor_id
+	file.store_string(data.to_json())
 
 func _init():
 	print("route created")

@@ -1,12 +1,12 @@
 
-extends Object
+extends "identifiable.gd"
 
 var type
 var pos
 var hp
 var damage
 
-func _init(the_type, the_pos, the_hp):
+func _init(id, the_type, the_pos, the_hp).(id):
 	type = the_type
 	pos = the_pos
 	hp = the_hp
