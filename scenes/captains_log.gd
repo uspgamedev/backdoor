@@ -14,7 +14,7 @@ func start():
 	file.open("res://test2.save", File.READ)
 	var route = Route.load_from_file(file)
 	file.close()
-	get_node("/root/sector/HUD/UI_hook/Hand").set_player(route.player)
+	get_node("/root/sector").set_player(route.player)
 	get_parent().call_deferred("add_child", route)
 
 	

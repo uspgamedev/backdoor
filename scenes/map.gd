@@ -33,7 +33,12 @@ func add_body(body):
 
 func remove_body(body):
 	bodies.erase(body)
-	get_node("walls").remove_child(body)
+	get_node("walls").remove_child(find_body_view(body))
+
+func find_body_view(body):
+	for bodyview in get_node("walls").get_children():
+		if bodyview.body == body:
+			return bodyview
 
 func add_actor(body, actor):
 	get_node("actors").add_child(actor)
@@ -42,19 +47,18 @@ func add_actor(body, actor):
 	#actor.add_child(module)
 
 func remove_actor(actor):
-	remove_body(actor_bodies[actor])
-	actor_bodies[actor] = null
+	if actor_bodies[actor] != null:
+		remove_body(actor_bodies[actor])
+		actor_bodies[actor] = null
 	get_node("actors").remove_child(actor)
 
 func attach_camera(actor):
-	var body = actor_bodies[actor]
-	for bodyview in get_node("walls").get_children():
-		if bodyview.body == body:
-			var camera = Camera2D.new()
-			camera.make_current()
-			camera.set_enable_follow_smoothing(true)
-			camera.set_follow_smoothing(5)
-			bodyview.add_child(camera)
+	var bodyview = find_body_view(actor_bodies[actor])
+	var camera = Camera2D.new()
+	camera.make_current()
+	camera.set_enable_follow_smoothing(true)
+	camera.set_follow_smoothing(5)
+	bodyview.add_child(camera)
 
 func move_actor(actor, new_pos):
 	move_body(actor_bodies[actor], new_pos)
