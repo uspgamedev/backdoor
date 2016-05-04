@@ -12,7 +12,7 @@ func _init():
 	print("sector created")
 
 func _ready():
-	get_node("/root/captains_log").start()
+	#get_node("/root/captains_log").start()
 	print("sector ready")
 
 func set_player(the_player):

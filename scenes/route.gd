@@ -28,7 +28,11 @@ static func get_player_name_from_file(file):
 	var text = file.get_as_text()
 	data.parse_json(text)
 	file.close()
-	return data["sectors"][data["current_sector"]]["actors"][data["player_actor_id"]]["name"]
+	var sector_data
+	for sector in data["sectors"]:
+		if sector["id"] == data["current_sector"]:
+			sector_data = sector
+	return sector_data["actors"][int(data["player_actor_id"])]["name"]
 
 static func load_from_file(id, file):
 	var route = RouteScene.instance()
