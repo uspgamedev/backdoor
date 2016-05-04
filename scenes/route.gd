@@ -10,13 +10,6 @@ const Identifiable = preload("res://model/identifiable.gd")
 const Body         = preload("res://model/body.gd")
 const Actor        = preload("res://model/actor.gd")
 
-const preload_bodies = [
-	["slime", Vector2(22,6), 10],
-	["slime", Vector2(24,6), 10],
-	["slime", Vector2(26,6), 10],
-	["slime", Vector2(28,6), 10]
-]
-
 var current_sector
 var player
 var id
@@ -82,6 +75,13 @@ static func load_from_file(id, file):
 			var deck = actor_data["deck"]
 			for card in deck:
 				actor.deck.append(Actor.Card.new(card))
+			var ai_modules = actor_data["ai_modules"]
+			for module in ai_modules:
+				var ai = Node.new()
+				ai.set_script(load("res://model/ai/" + module["name"] + ".gd"))
+				ai.set_name(module["name"])
+				ai.chance = module["chance"]
+				actor.add_child(ai)
 			map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
@@ -155,6 +155,13 @@ func save_to_file(file):
 				deck_data.append(card.name)
 			actor_data["deck"] = deck_data
 			actor_data["body_id"] = sector.get_actor_body(actor).get_id()
+			var ai_modules_data = []
+			for module in actor.get_children():
+				var module_data = {}
+				module_data["name"] = module.get_name()
+				module_data["chance"] = module.chance
+				ai_modules_data.append(module_data)
+			actor_data["ai_modules"] = ai_modules_data 
 			actors.append(actor_data)
 			if actor == player:
 				player_actor_id = actors.size()-1
