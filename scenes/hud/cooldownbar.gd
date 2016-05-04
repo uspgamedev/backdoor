@@ -3,8 +3,8 @@ extends ProgressBar
 
 var player
 
-func _ready():
-	player = get_node("/root/player")
+func set_player(the_player):
+	player = the_player
 	player.connect("spent_action", self, "_on_player_action")
 	set_process(true)
 

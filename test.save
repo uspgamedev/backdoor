@@ -1,0 +1,11 @@
+{ "current_sector": 0,
+  "player_actor_id": 0,
+  "sectors": [{ "width": 2, "height": 2,
+                "floors": [0, 0, 0, 0],
+                "walls": [-1, -1, -1, 1],
+                "bodies": [{"id": 1, "type": "hero", "pos":[0,0], "hp":10,
+                            "damage":0 }],
+                "actors": [{"cooldown": 0, "drawcooldown": 0,
+                            "hand": ["Dr. Boom", "Black Lotus"],
+                            "deck": ["Exodia 1", "Exodia 2", "Exodia 3"],
+                            "body_id": 0}]}]}

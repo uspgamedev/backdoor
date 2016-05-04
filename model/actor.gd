@@ -9,6 +9,7 @@ class Card:
 var cooldown
 var draw_cooldown
 var action
+var char_name
 
 var hand
 var deck
@@ -23,20 +24,14 @@ signal has_action
 signal spent_action
 signal draw_card(card)
 
+func _init(name):
+	hand = []
+	deck = []
+	char_name = name
+
 func _ready():
 	cooldown = 100/speed
 	draw_cooldown = DRAW_TIME
-	hand = []
-	deck = []
-	deck.append(Card.new("Black Lotus"))
-	deck.append(Card.new("Dr. Boom"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
-	deck.append(Card.new("Exodia"))
 
 func get_body():
 	return get_node("/root/sector/map").get_actor_body(self)
@@ -66,9 +61,11 @@ func has_action():
 func add_action(the_action):
 	if !has_action() and the_action.can_be_used(self):
 		action = the_action
+		print(get_name(), ": added action ", action.get_type())
 		emit_signal("has_action")
 
 func use_action():
+	print(get_name(), ": used action ", action.get_type())
 	cooldown += action.get_cost(self)/speed
 	action.use(self)
 	action = null

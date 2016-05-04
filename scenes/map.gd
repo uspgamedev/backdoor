@@ -9,6 +9,9 @@ const block = [
 	Vector2(1,1)
 ]
 
+var id
+var width
+var height
 var bodies
 var actor_bodies
 onready var walls = get_node("walls")
@@ -30,11 +33,34 @@ func add_body(body):
 	bodies.append(body)
 	get_node("walls").add_child(bodyview)
 
+func remove_body(body):
+	bodies.erase(body)
+	get_node("walls").remove_child(find_body_view(body))
+
+func find_body_view(body):
+	for bodyview in get_node("walls").get_children():
+		if bodyview.body == body:
+			return bodyview
+
 func add_actor(body, actor):
 	get_node("actors").add_child(actor)
 	actor_bodies[actor] = body
-	var module = preload("res://model/ai/wander.gd").new()
-	actor.add_child(module)
+	#var module = preload("res://model/ai/wander.gd").new()
+	#actor.add_child(module)
+
+func remove_actor(actor):
+	if actor_bodies[actor] != null:
+		remove_body(actor_bodies[actor])
+		actor_bodies.erase(actor)
+	get_node("actors").remove_child(actor)
+
+func attach_camera(actor):
+	var bodyview = find_body_view(actor_bodies[actor])
+	var camera = Camera2D.new()
+	camera.make_current()
+	camera.set_enable_follow_smoothing(true)
+	camera.set_follow_smoothing(5)
+	bodyview.add_child(camera)
 
 func move_actor(actor, new_pos):
 	move_body(actor_bodies[actor], new_pos)
