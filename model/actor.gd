@@ -9,6 +9,7 @@ class Card:
 var cooldown
 var draw_cooldown
 var action
+var char_name
 
 var hand
 var deck
@@ -23,9 +24,10 @@ signal has_action
 signal spent_action
 signal draw_card(card)
 
-func _init():
+func _init(name):
 	hand = []
 	deck = []
+	char_name = name
 
 func _ready():
 	cooldown = 100/speed
