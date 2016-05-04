@@ -19,9 +19,20 @@ const preload_bodies = [
 
 var current_sector
 var player
+var id
 
-static func load_from_file(file):
+static func get_player_name_from_file(file):
+	# Open file
+	var data = {}
+	# Parse to json
+	var text = file.get_as_text()
+	data.parse_json(text)
+	text.close()
+	return data["sectors"][data["current_sector"]]["actors"][data["player_actor_id"]]["name"]
+
+static func load_from_file(id, file):
 	var route = RouteScene.instance()
+	route.id = id
 	# Open file
 	var data = {}
 	# Parse to json
@@ -58,7 +69,7 @@ static func load_from_file(file):
 		# Parse actors
 		var actors = sector_data["actors"]
 		for actor_data in actors:
-			var actor = Actor.new()
+			var actor = Actor.new(actor_data["name"])
 			actor.cooldown = actor_data["cooldown"]
 			actor.draw_cooldown = actor_data["drawcooldown"]
 			var hand = actor_data["hand"]
@@ -128,6 +139,7 @@ func save_to_file(file):
 		var actors = []
 		for actor in sector.actor_bodies:
 			var actor_data = {}
+			actor_data["name"] = actor.char_name
 			actor_data["cooldown"] = actor.cooldown
 			actor_data["drawcooldown"] = actor.draw_cooldown
 			var hand_data = []
