@@ -22,12 +22,11 @@ func _ready():
 
 func start():
 	var file = File.new()
-	file.open("res://save2.save", File.READ)
-	var route = Route.load_from_file("0001", file)
-	file.close()
-	#get_node("/root/sector").set_player(route.player)
-	#get_parent().call_deferred("add_child", route)
-	pass
+	if file.open("res://test2.save", File.READ) == 0:
+		var route = Route.load_from_file("0001", file)
+		file.close()
+		get_node("/root/sector").set_player(route.player)
+		get_parent().call_deferred("add_child", route)
 
 func finish():
 	var file = File.new()

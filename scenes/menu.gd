@@ -3,7 +3,7 @@ extends Node2D
 
 const Route = preload("res://scenes/route.gd")
 
-onready var saves = get_node("saves")
+onready var saves_node = get_node("saves")
 
 func _ready():
 	var saves = get_node("/root/captains_log").get_profile()["saves"]
@@ -13,7 +13,7 @@ func _ready():
 			var char_name = Route.get_player_name_from_file(file)
 			var button = Button.new()
 			button.set_text(char_name)
-			saves.add_child(button)
+			saves_node.add_child(button)
 		else:
 			print("Failed to load save file " + save)
 	set_process_input(true)

@@ -27,7 +27,7 @@ static func get_player_name_from_file(file):
 	# Parse to json
 	var text = file.get_as_text()
 	data.parse_json(text)
-	text.close()
+	file.close()
 	return data["sectors"][data["current_sector"]]["actors"][data["player_actor_id"]]["name"]
 
 static func load_from_file(id, file):
