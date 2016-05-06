@@ -1,6 +1,7 @@
 
 extends Node2D
 
+const Body = preload("res://model/body.gd")
 const BodyView = preload("res://scenes/bodyview.gd")
 
 const block = [
@@ -27,6 +28,12 @@ func _ready():
 	
 func is_empty_space(pos):
 	return walls.get_cell(pos.x, pos.y) == -1
+
+func find_free_body_id():
+	var id = 1
+	while Body.find(bodies, id):
+		id += 1
+	return id
 
 func add_body(body):
 	var bodyview = BodyView.create(body)

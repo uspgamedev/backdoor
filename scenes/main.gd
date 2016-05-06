@@ -64,6 +64,8 @@ func _input(event):
 			move.x -= 1
 		elif event.is_action_pressed("debug_next_sector"):
 			player.add_action(Action.ChangeSector.new(1))
+		elif event.is_action_pressed("debug_create_slime"):
+			get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
 		if event.is_action_pressed("ui_idle"):
 			player.add_action(Action.Idle.new())
 		elif move.length_squared() > 0:

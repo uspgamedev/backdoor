@@ -5,6 +5,7 @@ const BodyViewScene = preload("res://scenes/bodyview.xscn")
 
 var body
 
+onready var sprite = get_node("Sprite")
 onready var lifebar = get_node("LifeBar")
 
 static func create(body):
@@ -13,6 +14,7 @@ static func create(body):
 	return bodyview
 
 func _ready():
+	sprite.set_texture(load("res://assets/bodies/" + body.type + "/idle.tex"))
 	set_process(true)
 
 func _process(delta):
