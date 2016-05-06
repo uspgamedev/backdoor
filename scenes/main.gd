@@ -20,7 +20,7 @@ func set_player(the_player):
 	get_node("HUD/UI_hook/CooldownBar").set_player(the_player)
 	get_node("HUD/UI_hook/Hand").set_player(the_player)
 
-func new_sector(the_player):
+func new_sector():
 	map = get_node("map")
 	set_fixed_process(true)
 	set_process_input(true)

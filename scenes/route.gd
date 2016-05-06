@@ -211,5 +211,5 @@ func open_current_sector(player_body):
 		current_sector.add_body(player_body)
 		current_sector.add_actor(player_body, player)
 		current_sector.move_actor(player, Vector2(0,0))
-	sector.new_sector(player)
+	sector.new_sector()
 
