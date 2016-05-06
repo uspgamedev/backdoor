@@ -26,7 +26,8 @@ func _input(event):
 		get_node("/root/captains_log").finish()
 
 func _on_new_game():
-	pass
+	get_node("/root/captains_log").create_route()
+	hide()
 
 func _on_load_game(save):
 	get_node("/root/captains_log").load_route(save)

@@ -1,7 +1,13 @@
 
 extends Node
 
+const RouteScene = preload("res://scenes/route.xscn")
+
 const Route = preload("res://scenes/route.gd")
+const Actor = preload("res://model/actor.gd")
+const Body = preload("res://model/body.gd")
+
+onready var map_generator = get_node("map_generator")
 
 var profile_data = {}
 
@@ -19,6 +25,23 @@ func get_profile():
 
 func _ready():
 	print("captain's log ready")
+
+func create_route():
+	var route = RouteScene.instance()
+	route.id = "000" + var2str(profile_data["saves"].size() + 1)
+	profile_data["saves"].append(route.id)
+	var w = 20
+	var h = 20
+	var map_node = map_generator.generate_map(w,h)
+	route.get_node("sectors").add_child(map_node)
+	route.current_sector = map_node
+	var player = Actor.new("hero")
+	route.player = player
+	get_node("/root/sector").set_player(player)
+	var player_body = Body.new(1, "hero", Vector2(10,10), 10)
+	map_node.add_body(player_body)
+	map_node.add_actor(player_body, player)
+	get_parent().add_child(route)
 
 func load_route(id):
 	var file = File.new()
