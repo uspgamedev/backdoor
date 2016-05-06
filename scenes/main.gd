@@ -29,18 +29,22 @@ func new_sector():
 	next_sector = null
 	manage_actors()
 
-func set_next_sector (target):
+func set_next_sector(target):
 	done = true
 	next_sector = target
+
 
 func manage_actors():
 	while not done:
 		for actor in map.actor_bodies:
+			if map.get_actor_body(actor).is_dead():
+				continue
 			actor.step_time()
 			if actor.is_ready():
 				if !actor.has_action():
 					yield(actor, "has_action")
 				actor.use_action()
+		map.check_dead_bodies()
 		yield(get_tree(), "fixed_frame" )
 	get_node("/root/route").change_sector(next_sector)
 

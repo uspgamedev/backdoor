@@ -78,11 +78,21 @@ func move_body(body, new_pos):
 func get_actor_body(actor):
 	return actor_bodies[actor]
 
+func get_body_actor(body):
+	for actor in actor_bodies:
+		if actor_bodies[actor] == body:
+			return actor
+
 func get_body_at(pos):
 	for body in bodies:
 		if body.pos == pos:
 			return body
 	return null
+
+func check_dead_bodies():
+	for body in bodies:
+		if body.is_dead():
+			remove_actor(get_body_actor(body))
 
 func _fixed_process(delta):
 	var player_body = get_actor_body(get_parent().player)
