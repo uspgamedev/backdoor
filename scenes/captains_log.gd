@@ -26,9 +26,20 @@ func get_profile():
 func _ready():
 	print("captain's log ready")
 
+func route_id(id):
+	return "route-" + var2str(int(id))
+
+func find_free_route_id():
+	var id = 1
+	for route_id in profile_data["saves"]:
+		if route_id != id:
+			break
+		id += 1
+	return id
+
 func create_route():
 	var route = RouteScene.instance()
-	route.id = "000" + var2str(profile_data["saves"].size() + 1)
+	route.id = find_free_route_id()
 	profile_data["saves"].append(route.id)
 	var w = 20
 	var h = 20
@@ -45,7 +56,7 @@ func create_route():
 
 func load_route(id):
 	var file = File.new()
-	if file.open("user://" + id + ".save", File.READ) == 0:
+	if file.open("user://" + route_id(id) + ".save", File.READ) == 0:
 		var route = Route.load_from_file(id, file)
 		file.close()
 		get_node("/root/sector").set_player(route.player)
@@ -57,7 +68,7 @@ func finish():
 	var file = File.new()
 	if get_node("/root/").has_node("route"):
 		var route = get_node("/root/route")
-		file.open("user://" + route.id + ".save", File.WRITE)
+		file.open("user://" + route_id(route.id) + ".save", File.WRITE)
 		route.save_to_file(file)
 		file.close()
 	file.open("user://profile.meta", File.WRITE)

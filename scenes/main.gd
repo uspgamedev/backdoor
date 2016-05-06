@@ -33,7 +33,6 @@ func set_next_sector(target):
 	done = true
 	next_sector = target
 
-
 func manage_actors():
 	while not done:
 		for actor in map.actor_bodies:

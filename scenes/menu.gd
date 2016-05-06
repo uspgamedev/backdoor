@@ -6,19 +6,20 @@ const MenuButton = preload("res://scenes/ui/button.xscn")
 const Route = preload("res://scenes/route.gd")
 
 onready var saves_node = get_node("saves")
+onready var caplog = get_node("/root/captains_log")
 
 func _ready():
-	var saves = get_node("/root/captains_log").get_profile()["saves"]
+	var saves = caplog.get_profile()["saves"]
 	for save in saves:
 		var file = File.new()
-		if file.open("user://" + save + ".save", File.READ) == 0:
+		if file.open("user://" + caplog.route_id(save) + ".save", File.READ) == 0:
 			var char_name = Route.get_player_name_from_file(file)
 			var button = MenuButton.instance()
 			button.set_text(char_name)
 			button.connect("pressed", self, "_on_load_game", [save])
 			saves_node.add_child(button)
 		else:
-			print("Failed to load save file " + save)
+			print("Failed to load save file " + caplog.route_id(save))
 	set_process_input(true)
 
 func _input(event):
