@@ -20,6 +20,14 @@ func set_player(the_player):
 	get_node("HUD/UI_hook/CooldownBar").set_player(the_player)
 	get_node("HUD/UI_hook/Hand").set_player(the_player)
 
+func close():
+	get_node("HUD/UI_hook/CooldownBar").stop()
+	get_node("HUD/UI_hook/Hand").stop()
+	set_fixed_process(false)
+	set_process_input(false)
+	map.queue_free()
+	map = null
+
 func new_sector():
 	map = get_node("map")
 	set_fixed_process(true)
@@ -55,6 +63,8 @@ func _fixed_process(delta):
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		get_node("/root/captains_log").finish()
+	if event.is_action_pressed("debug_sudoku"):
+		get_node("/root/captains_log/scene_manager").destroy_route()
 	if player.is_ready():
 		var move = Vector2(0,0)
 		if event.is_action_pressed("ui_down"):

@@ -10,8 +10,18 @@ var player
 var focus
 
 func _ready():
+	start()
+
+func start():
 	set_process(true)
 	set_process_input(true)
+
+func stop():
+	set_process(false)
+	set_process_input(false)
+	player.disconnect("draw_card", self, "_on_player_draw")
+	for child in get_children():
+		child.queue_free()
 
 func set_player(the_player):
 	if player != null:

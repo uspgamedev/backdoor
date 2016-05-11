@@ -190,7 +190,8 @@ func close_current_sector():
 	last.set_fixed_process(false)
 	last.hide()
 	last.remove_actor(player)
-	get_node("/root/sector").remove_child(current_sector)
+	get_node("/root/sector").close()
+	# FIXME: Don't run line below when route is destroyed
 	get_node("sectors").add_child(last)
 
 func open_current_sector(player_body):

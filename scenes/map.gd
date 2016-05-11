@@ -19,7 +19,7 @@ var bodies
 var actor_bodies
 onready var walls = get_node("walls")
 
-static func create (id, width, height):
+static func create(id, width, height):
 	var map_node = MapScene.instance()
 	map_node.get_node("floors").clear()
 	map_node.get_node("walls").clear()

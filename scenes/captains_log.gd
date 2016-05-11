@@ -23,6 +23,17 @@ func _init():
 func get_profile():
 	return profile_data
 
+func erase_route(id):
+	var dir = Directory.new()
+	if dir.open("user://") == 0:
+		if dir.file_exists(route_id(id) + ".save"):
+			var error = dir.remove("user://" + route_id(id) + ".save")
+			if error != 0:
+				print("Failed to remove save: ", route_id(id) + ".save (error ", error, ")")
+		else:
+			print("Save does not exists: ", route_id(id) + ".save")
+		profile_data["saves"].erase(id)
+
 func _ready():
 	print("captain's log ready")
 

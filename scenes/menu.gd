@@ -9,6 +9,9 @@ onready var saves_node = get_node("saves")
 onready var caplog = get_node("/root/captains_log")
 
 func _ready():
+	start()
+
+func start():
 	var saves = caplog.get_profile()["saves"]
 	for save in saves:
 		var file = File.new()
@@ -21,6 +24,14 @@ func _ready():
 		else:
 			print("Failed to load save file " + caplog.route_id(save))
 	set_process_input(true)
+	show()
+
+func stop():
+	for button in saves_node.get_children():
+		if button.get_name() != "new_game":
+			button.queue_free()
+	set_process_input(false)
+	hide()
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -28,9 +39,9 @@ func _input(event):
 
 func _on_new_game():
 	get_node("/root/captains_log").create_route()
-	hide()
+	stop()
 
 func _on_load_game(save):
 	get_node("/root/captains_log").load_route(save)
-	hide()
+	stop()
 	get_tree().set_current_scene(get_node("/root/sector"))

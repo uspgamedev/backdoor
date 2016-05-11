@@ -8,6 +8,11 @@ func set_player(the_player):
 	player.connect("spent_action", self, "_on_player_action")
 	set_process(true)
 
+func stop():
+	player.disconnect("spent_action", self, "_on_player_action")
+	set_process(false)
+	player = null
+
 func _on_player_action():
 	set_max(player.cooldown)
 	set_min(0)
