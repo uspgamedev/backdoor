@@ -1,6 +1,8 @@
 
 extends Node2D
 
+const MapScene = preload("res://scenes/map.xscn")
+
 const Body = preload("res://model/body.gd")
 const BodyView = preload("res://scenes/bodyview.gd")
 
@@ -16,6 +18,16 @@ var height
 var bodies
 var actor_bodies
 onready var walls = get_node("walls")
+
+static func create (id, width, height):
+	var map_node = MapScene.instance()
+	map_node.get_node("floors").clear()
+	map_node.get_node("walls").clear()
+	map_node.width = width
+	map_node.height = height
+	map_node.id = id
+	map_node.hide()
+	return map_node
 
 func _init():
 	bodies = []

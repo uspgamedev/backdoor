@@ -3,12 +3,12 @@ extends Node
 
 # Scenes
 const RouteScene = preload("res://scenes/route.xscn")
-const MapScene   = preload("res://scenes/map.xscn")
 
 # Classes
 const Identifiable = preload("res://model/identifiable.gd")
 const Body         = preload("res://model/body.gd")
 const Actor        = preload("res://model/actor.gd")
+const Map          = preload("res://scenes/map.gd")
 
 var current_sector
 var player
@@ -38,13 +38,9 @@ static func load_from_file(id, file):
 	var sectors = data["sectors"]
 	for sector_data in sectors:
 		# Parse sector
-		var map = MapScene.instance()
-		map.hide()
+		var map = Map.create(sector_data["id"], sector_data["width"], sector_data["height"])
 		route.get_node("sectors").add_child(map)
 		# General sector info
-		map.id = sector_data["id"]
-		map.width = sector_data["width"]
-		map.height = sector_data["height"]
 		# Parse sector floor
 		var floors = map.get_node("floors")
 		floors.clear()

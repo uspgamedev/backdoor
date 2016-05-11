@@ -46,6 +46,7 @@ func create_route():
 	var map_node = map_generator.generate_map(1,w,h)
 	route.get_node("sectors").add_child(map_node)
 	route.current_sector = map_node
+	map_node.show()
 	var player = Actor.new("hero")
 	route.player = player
 	get_node("/root/sector").set_player(player)
