@@ -182,17 +182,15 @@ func find_sector(id):
 func change_sector(target):
 	var player_body = current_sector.get_actor_body(player)
 	close_current_sector()
+	get_node("sectors").add_child(current_sector)
 	current_sector = find_sector(target)
 	open_current_sector(player_body)
 
 func close_current_sector():
-	var last = current_sector
-	last.set_fixed_process(false)
-	last.hide()
-	last.remove_actor(player)
+	current_sector.set_fixed_process(false)
+	current_sector.hide()
+	current_sector.remove_actor(player)
 	get_node("/root/sector").close()
-	# FIXME: Don't run line below when route is destroyed
-	get_node("sectors").add_child(last)
 
 func open_current_sector(player_body):
 	var sector = get_node("/root/sector")

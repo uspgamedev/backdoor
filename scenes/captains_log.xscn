@@ -2,12 +2,12 @@
 <resource_file type="PackedScene" subresource_count="9" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://scenes/card_ref.xscn" type="PackedScene" index="3"></ext_resource>
 	<ext_resource path="res://model/ai/wander.gd" type="Script" index="4"></ext_resource>
-	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
 	<ext_resource path="res://scenes/captains_log.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://model/id_server.gd" type="Script" index="1"></ext_resource>
 	<ext_resource path="res://model/map_generator.gd" type="Script" index="5"></ext_resource>
 	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="6"></ext_resource>
 	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="7"></ext_resource>
+	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
