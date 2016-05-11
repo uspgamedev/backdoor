@@ -15,8 +15,10 @@ func _ready():
 func start():
 	set_process(true)
 	set_process_input(true)
+	show()
 
 func stop():
+	hide()
 	set_process(false)
 	set_process_input(false)
 	player.disconnect("draw_card", self, "_on_player_draw")
@@ -24,6 +26,7 @@ func stop():
 		child.queue_free()
 
 func set_player(the_player):
+	start()
 	if player != null:
 		player.disconnect("draw_card", self, "_on_player_draw")
 	player = the_player

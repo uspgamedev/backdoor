@@ -14,6 +14,14 @@ func _deferred_replace_scene(parent, oldscene, newscene):
 	# Add it to the active scene, as child of given parent
 	parent.add_child(newscene)
 
+func close_route():
+	caplog.save_route()
+	var route = get_node("/root/route")
+	route.close_current_sector()
+	route.queue_free()
+	get_tree().set_current_scene(menu)
+	menu.start()
+
 func destroy_route():
 	var route = get_node("/root/route")
 	route.close_current_sector()

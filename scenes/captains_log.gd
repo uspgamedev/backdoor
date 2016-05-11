@@ -76,13 +76,17 @@ func load_route(id):
 	else:
 		print("Could not load save: " + id)
 
+func save_route():
+	var route = get_node("/root/route")
+	var file = File.new()
+	file.open("user://" + route_id(route.id) + ".save", File.WRITE)
+	route.save_to_file(file)
+	file.close()
+
 func finish():
 	var file = File.new()
 	if get_node("/root/").has_node("route"):
-		var route = get_node("/root/route")
-		file.open("user://" + route_id(route.id) + ".save", File.WRITE)
-		route.save_to_file(file)
-		file.close()
+		save_route()
 	file.open("user://profile.meta", File.WRITE)
 	file.store_string(profile_data.to_json())
 	file.close()
