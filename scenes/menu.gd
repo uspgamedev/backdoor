@@ -7,13 +7,13 @@ const Route = preload("res://scenes/route.gd")
 
 onready var saves_node = get_node("saves")
 onready var caplog = get_node("/root/captains_log")
-onready var profile = caplog.get_node("profile")
+onready var profile = caplog.get_profile()
 
 func _ready():
 	start()
 
 func start():
-	var journals = caplog.get_profile()["saves"]
+	var journals = profile.get_journals()
 	for route_id in journals:
 		var char_name = profile.get_player_name(route_id)
 		var button = MenuButton.instance()
