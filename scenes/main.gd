@@ -26,6 +26,7 @@ func close():
 	set_fixed_process(false)
 	set_process_input(false)
 	map.queue_free()
+	done = true
 	map = null
 
 func new_sector():
@@ -53,7 +54,8 @@ func manage_actors():
 				actor.use_action()
 		map.check_dead_bodies()
 		yield(get_tree(), "fixed_frame" )
-	get_node("/root/route").change_sector(next_sector)
+	if next_sector != null:
+		get_node("/root/route").change_sector(next_sector)
 
 func _fixed_process(delta):
 	for actor in map.actor_bodies:
@@ -65,8 +67,6 @@ func _input(event):
 		get_node("/root/captains_log").finish()
 	if event.is_action_pressed("ui_save"):
 		get_node("/root/captains_log/scene_manager").close_route()
-	if event.is_action_pressed("debug_sudoku"):
-		get_node("/root/captains_log/scene_manager").destroy_route()
 	if player.is_ready():
 		var move = Vector2(0,0)
 		if event.is_action_pressed("ui_down"):

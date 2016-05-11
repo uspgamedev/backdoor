@@ -104,7 +104,11 @@ func get_body_at(pos):
 func check_dead_bodies():
 	for body in bodies:
 		if body.is_dead():
-			remove_actor(get_body_actor(body))
+			var actor = get_body_actor(body)
+			if actor == get_parent().player:
+				get_node("/root/captains_log/scene_manager").call_deferred("destroy_route")
+			else:
+				remove_actor(actor)
 
 func _fixed_process(delta):
 	var player_body = get_actor_body(get_parent().player)
