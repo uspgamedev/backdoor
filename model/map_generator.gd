@@ -10,7 +10,7 @@ const Wall = 2
 func _ready():
 	pass
 
-func generate_map(w,h):
+func generate_map(id,w,h):
 	var map = [];
 	map.resize(h)
 	for i in range(w):
@@ -24,6 +24,7 @@ func generate_map(w,h):
 	map_node.get_node("walls").clear()
 	map_node.width = w
 	map_node.height = h
+	map_node.id = id
 	var floors = map_node.get_node("floors")
 	for i in range(map.size()):
 		for j in range(map[i].size()):

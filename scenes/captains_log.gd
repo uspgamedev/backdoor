@@ -43,7 +43,7 @@ func create_route():
 	profile_data["saves"].append(route.id)
 	var w = 20
 	var h = 20
-	var map_node = map_generator.generate_map(w,h)
+	var map_node = map_generator.generate_map(1,w,h)
 	route.get_node("sectors").add_child(map_node)
 	route.current_sector = map_node
 	var player = Actor.new("hero")
