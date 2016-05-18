@@ -2,9 +2,11 @@
 extends Node
 
 class Card:
-	var name
-	func _init(the_name):
-		name = the_name
+	var card_ref
+	func _init(ref):
+		card_ref = ref
+	func get_name():
+		return card_ref.get_name()
 
 var cooldown
 var draw_cooldown
@@ -91,11 +93,11 @@ func serialize():
 	actor_data["drawcooldown"] = draw_cooldown
 	var hand_data = []
 	for card in hand:
-		hand_data.append(card.name)
+		hand_data.append(card.get_name())
 	actor_data["hand"] = hand_data
 	var deck_data = []
 	for card in deck:
-		deck_data.append(card.name)
+		deck_data.append(card.get_name())
 	actor_data["deck"] = deck_data
 	actor_data["body_id"] = sector.get_actor_body(self).get_id()
 	var ai_modules_data = []

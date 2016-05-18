@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="9" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://model/ai/wander.gd" type="Script" index="4"></ext_resource>
-	<ext_resource path="res://scenes/card_ref.xscn" type="PackedScene" index="3"></ext_resource>
-	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
 	<ext_resource path="res://scenes/captains_log.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://model/id_server.gd" type="Script" index="1"></ext_resource>
+	<ext_resource path="res://scenes/card_ref.xscn" type="PackedScene" index="3"></ext_resource>
 	<ext_resource path="res://model/map_generator.gd" type="Script" index="5"></ext_resource>
 	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="6"></ext_resource>
 	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="7"></ext_resource>
+	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -20,7 +20,7 @@
 				<node_path> "monsters/Orc" </node_path>
 			</array>
 			<string> "names" </string>
-			<string_array  len="18">
+			<string_array  len="21">
 				<string> "captains_log" </string>
 				<string> "script/script" </string>
 				<string> "Node" </string>
@@ -36,21 +36,24 @@
 				<string> "wander" </string>
 				<string> "chance" </string>
 				<string> "Orc" </string>
+				<string> "Sample Skill" </string>
+				<string> "Sample Upgrade" </string>
+				<string> "Sample Item" </string>
 				<string> "map_generator" </string>
 				<string> "scene_manager" </string>
 				<string> "profile" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 12 </int>
+			<int> 14 </int>
 			<string> "node_paths" </string>
 			<array  len="2" shared="false">
 				<node_path> "monsters/Slime/cards" </node_path>
 				<node_path> "monsters/Slime/ai_modules" </node_path>
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="108"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 1, 5, 2, 0, 2, 0, 2147483647, 6, 3, 1, 7, 4, 0, 1073741824, 0, 2147483647, 9, 5, 1, 10, 6, 0, 1073741825, 0, 2, 12, -1, 2, 1, 7, 13, 8, 0, 2, 0, 2147483647, 14, 3, 1, 7, 9, 0, 0, 0, 2, 8, -1, 1, 5, 10, 0, 7, 0, 2, 9, -1, 0, 0, 0, 0, 2, 15, -1, 1, 1, 11, 0, 0, 0, 2, 16, -1, 1, 1, 12, 0, 0, 0, 2, 17, -1, 1, 1, 13, 0 </int_array>
+			<int_array  len="120"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 1, 5, 2, 0, 2, 0, 2147483647, 6, 3, 1, 7, 4, 0, 1073741824, 0, 2147483647, 9, 5, 1, 10, 6, 0, 1073741825, 0, 2, 12, -1, 2, 1, 7, 13, 8, 0, 2, 0, 2147483647, 14, 3, 1, 7, 9, 0, 0, 0, 2, 8, -1, 0, 0, 7, 0, 2, 15, -1, 0, 0, 7, 0, 2, 16, -1, 0, 0, 7, 0, 2, 17, -1, 0, 0, 0, 0, 2, 18, -1, 1, 1, 10, 0, 0, 0, 2, 19, -1, 1, 1, 11, 0, 0, 0, 2, 20, -1, 1, 1, 12, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="14" shared="false">
+			<array  len="13" shared="false">
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
 				<dictionary  shared="false">
@@ -64,10 +67,6 @@
 				<resource  external="4">  </resource>
 				<int> 1 </int>
 				<string> "dummy" </string>
-				<dictionary  shared="false">
-					<string> "_editor_collapsed" </string>
-					<bool> True </bool>
-				</dictionary>
 				<resource  external="5">  </resource>
 				<resource  external="6">  </resource>
 				<resource  external="7">  </resource>

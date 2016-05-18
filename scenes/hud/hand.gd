@@ -31,9 +31,9 @@ func set_player(the_player):
 	player.connect("draw_card", self, "_on_player_draw")
 
 func _on_player_draw(card):
-	print("card added: ", card.name)
+	print("card added: ", card.get_name())
 	var card_sprite = CardSprite.instance()
-	card_sprite.get_node("Name").set_text(card.name)
+	card_sprite.get_node("Name").set_text(card.get_name())
 	cards.append(card_sprite)
 	add_child(card_sprite)
 	if focus == null:
