@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const CardSprite = preload("res://scenes/hud/card.xscn")
+const CardSprite = preload("res://scenes/hud/card_sprite.gd")
 const Action = preload("res://model/action.gd")
 const ANGLE = -atan2(1,2)
 
@@ -21,6 +21,7 @@ func stop():
 	set_process(false)
 	set_process_input(false)
 	player.disconnect("draw_card", self, "_on_player_draw")
+	player.disconnect("consumed_card", self, "_on_player_consume")
 	focus = null
 	for child in get_children():
 		child.queue_free()
@@ -29,16 +30,24 @@ func set_player(the_player):
 	start()
 	player = the_player
 	player.connect("draw_card", self, "_on_player_draw")
+	player.connect("consumed_card", self, "_on_player_consume")
 	for card in player.hand:
 		_on_player_draw(card)
 
 func _on_player_draw(card):
 	print("card added: ", card.get_name())
-	var card_sprite = CardSprite.instance()
-	card_sprite.get_node("Name").set_text(card.get_name())
+	var card_sprite = CardSprite.create(card)
 	add_child(card_sprite)
 	if focus == null:
 		focus = 0
+
+func _on_player_consume(card):
+	focus = min(focus, get_child_count()-2)
+	if focus < 0:
+		focus = null
+	for card_sprite in get_children():
+		if card_sprite.card == card:
+			card_sprite.queue_free()
 
 func _input(event):
 	if focus != null and get_child_count() > 0:
@@ -47,7 +56,7 @@ func _input(event):
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+get_child_count())%get_child_count()
 		elif event.is_action_pressed("ui_select"):
-			player.add_action(Action.Idle.new())
+			player.add_action(Action.EvokeCard.new(get_child(focus).card))
 
 func _process(delta):
 	var n = get_child_count()
