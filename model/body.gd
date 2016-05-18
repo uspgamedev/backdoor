@@ -22,3 +22,17 @@ func get_hp_percent():
 
 func is_dead():
 	return damage >= hp
+
+func serialize():
+	var body_data = {}
+	body_data["id"] = get_id()
+	body_data["type"] = type
+	body_data["pos"] = [pos.x, pos.y]
+	body_data["hp"] = hp
+	body_data["damage"] = damage
+	return body_data
+
+static func unserialize(data):
+	var body = new(data["id"], data["type"], Vector2(data["pos"][0], data["pos"][1]), data["hp"])
+	body.damage = data["damage"]
+	return body

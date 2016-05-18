@@ -56,9 +56,7 @@ static func load_from_file(id, file):
 		# Parse bodies
 		var bodies = sector_data["bodies"]
 		for body_data in bodies:
-			var body = Body.new(body_data["id"], body_data["type"], Vector2(body_data["pos"][0], body_data["pos"][1]), body_data["hp"])
-			body.damage = body_data["damage"]
-			map.add_body(body)
+			map.add_body(Body.unserialize(body_data))
 		# Parse actors
 		var actors = sector_data["actors"]
 		for actor_data in actors:
@@ -125,13 +123,7 @@ func save_to_file(file):
 		# Store bodies
 		var bodies = []
 		for body in sector.bodies:
-			var body_data = {}
-			body_data["id"] = body.get_id()
-			body_data["type"] = body.type
-			body_data["pos"] = [body.pos.x, body.pos.y]
-			body_data["hp"] = body.hp
-			body_data["damage"] = body.damage
-			bodies.append(body_data)
+			bodies.append(body.serialize())
 		sector_data["bodies"] = bodies
 		# Store actors
 		var actors = []
