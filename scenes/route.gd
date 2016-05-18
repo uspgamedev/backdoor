@@ -37,48 +37,7 @@ static func load_from_file(id, file):
 	data.parse_json(text)
 	var sectors = data["sectors"]
 	for sector_data in sectors:
-		# Parse sector
-		var map = Map.create(sector_data["id"], sector_data["width"], sector_data["height"])
-		route.get_node("sectors").add_child(map)
-		# General sector info
-		# Parse sector floor
-		var floors = map.get_node("floors")
-		floors.clear()
-		var floor_data = sector_data["floors"]
-		for j in range(floor_data.size()):
-			floors.set_cell(j / int(map.width), j % int(map.width), floor_data[j])
-		# Parse sector walls
-		var walls = map.get_node("walls")
-		walls.clear()
-		var wall_data = sector_data["walls"]
-		for j in range(wall_data.size()):
-			walls.set_cell(j / int(map.width), j % int(map.width), wall_data[j])
-		# Parse bodies
-		var bodies = sector_data["bodies"]
-		for body_data in bodies:
-			var body = Body.new(body_data["id"], body_data["type"], Vector2(body_data["pos"][0], body_data["pos"][1]), body_data["hp"])
-			body.damage = body_data["damage"]
-			map.add_body(body)
-		# Parse actors
-		var actors = sector_data["actors"]
-		for actor_data in actors:
-			var actor = Actor.new(actor_data["name"])
-			actor.cooldown = actor_data["cooldown"]
-			actor.draw_cooldown = actor_data["drawcooldown"]
-			var hand = actor_data["hand"]
-			for card in hand:
-				actor.hand.append(Actor.Card.new(card))
-			var deck = actor_data["deck"]
-			for card in deck:
-				actor.deck.append(Actor.Card.new(card))
-			var ai_modules = actor_data["ai_modules"]
-			for module in ai_modules:
-				var ai = Node.new()
-				ai.set_script(load("res://model/ai/" + module["name"] + ".gd"))
-				ai.set_name(module["name"])
-				ai.chance = module["chance"]
-				actor.add_child(ai)
-			map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
+		route.get_node("sectors").add_child(Map.unserialize(sector_data))
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
 	route.current_sector.show()
@@ -99,68 +58,14 @@ func save_to_file(file):
 	data["sectors"] = sectors_data
 	# Serialize sectors
 	for sector in sectors:
-		# Store sector general data
-		var sector_data = {}
-		sector_data["id"] = sector.id
-		sector_data["width"] = sector.width
-		sector_data["height"] = sector.height
-		# Store floor tiles
-		var floor_map = []
-		for i in range(sector.height):
-			for j in range(sector.width):
-				floor_map.append(-1)
-		var floors = sector.get_node("floors")
-		for tile_pos in floors.get_used_cells():
-			floor_map[tile_pos.x*sector.width + tile_pos.y] = floors.get_cellv(tile_pos)
-		sector_data["floors"] = floor_map
-		# Store wall tiles
-		var wall_map = []
-		for i in range(sector.height):
-			for j in range(sector.width):
-				wall_map.append(-1)
-		var walls = sector.get_node("walls")
-		for tile_pos in walls.get_used_cells():
-			wall_map[tile_pos.x*sector.width + tile_pos.y] = walls.get_cellv(tile_pos)
-		sector_data["walls"] = wall_map
-		# Store bodies
-		var bodies = []
-		for body in sector.bodies:
-			var body_data = {}
-			body_data["id"] = body.get_id()
-			body_data["type"] = body.type
-			body_data["pos"] = [body.pos.x, body.pos.y]
-			body_data["hp"] = body.hp
-			body_data["damage"] = body.damage
-			bodies.append(body_data)
-		sector_data["bodies"] = bodies
-		# Store actors
-		var actors = []
-		for actor in sector.actor_bodies:
-			var actor_data = {}
-			actor_data["name"] = actor.char_name
-			actor_data["cooldown"] = actor.cooldown
-			actor_data["drawcooldown"] = actor.draw_cooldown
-			var hand_data = []
-			for card in actor.hand:
-				hand_data.append(card.name)
-			actor_data["hand"] = hand_data
-			var deck_data = []
-			for card in actor.hand:
-				deck_data.append(card.name)
-			actor_data["deck"] = deck_data
-			actor_data["body_id"] = sector.get_actor_body(actor).get_id()
-			var ai_modules_data = []
-			for module in actor.get_children():
-				var module_data = {}
-				module_data["name"] = module.get_name()
-				module_data["chance"] = module.chance
-				ai_modules_data.append(module_data)
-			actor_data["ai_modules"] = ai_modules_data 
-			actors.append(actor_data)
-			if actor == player:
-				player_actor_id = actors.size()-1
-		sector_data["actors"] = actors
+		var sector_data = sector.serialize()
 		sectors_data.append(sector_data)
+		var i = 0
+		for actor_data in sector_data["actors"]:
+			if actor_data["name"] == player.char_name:
+				player_actor_id = i
+				break
+			i += 1
 	data["player_actor_id"] = player_actor_id
 	file.store_string(data.to_json())
 

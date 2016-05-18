@@ -3,8 +3,10 @@ extends Node2D
 
 const MapScene = preload("res://scenes/map.xscn")
 
-const Body = preload("res://model/body.gd")
-const BodyView = preload("res://scenes/bodyview.gd")
+const Actor        = preload("res://model/actor.gd")
+const Body         = preload("res://model/body.gd")
+const BodyView     = preload("res://scenes/bodyview.gd")
+const Identifiable = preload("res://model/identifiable.gd")
 
 const block = [
 	Vector2(1,0),
@@ -60,6 +62,7 @@ func find_body_view(body):
 	for bodyview in get_node("walls").get_children():
 		if bodyview.body == body:
 			return bodyview
+	assert(false)
 
 func add_actor(body, actor):
 	get_node("actors").add_child(actor)
@@ -74,7 +77,7 @@ func remove_actor(actor):
 	get_node("actors").remove_child(actor)
 
 func attach_camera(actor):
-	var bodyview = find_body_view(actor_bodies[actor])
+	var bodyview = find_body_view(get_actor_body(actor))
 	var camera = Camera2D.new()
 	camera.make_current()
 	camera.set_enable_follow_smoothing(true)
@@ -88,6 +91,7 @@ func move_body(body, new_pos):
 	body.pos = new_pos
 
 func get_actor_body(actor):
+	assert(actor_bodies.has(actor))
 	return actor_bodies[actor]
 
 func get_body_actor(body):
@@ -124,3 +128,65 @@ func _fixed_process(delta):
 		if cell % 2 == 1:
 			walls.set_cell(pos.x, pos.y, cell + 1)
 
+func serialize():
+	# Store sector general data
+	var sector_data = {}
+	sector_data["id"] = id
+	sector_data["width"] = width
+	sector_data["height"] = height
+	# Store floor tiles
+	var floor_map = []
+	for i in range(height):
+		for j in range(width):
+			floor_map.append(-1)
+	var floors = get_node("floors")
+	for tile_pos in floors.get_used_cells():
+		floor_map[tile_pos.x*width + tile_pos.y] = floors.get_cellv(tile_pos)
+	sector_data["floors"] = floor_map
+	# Store wall tiles
+	var wall_map = []
+	for i in range(height):
+		for j in range(width):
+			wall_map.append(-1)
+	var walls = get_node("walls")
+	for tile_pos in walls.get_used_cells():
+		wall_map[tile_pos.x*width + tile_pos.y] = walls.get_cellv(tile_pos)
+	sector_data["walls"] = wall_map
+	# Store bodies
+	var bodies = []
+	for body in self.bodies:
+		bodies.append(body.serialize())
+	sector_data["bodies"] = bodies
+	# Store actors
+	var actors = []
+	for actor in actor_bodies:
+		actors.append(actor.serialize())
+	sector_data["actors"] = actors
+	return sector_data
+
+static func unserialize(data):
+	# Parse sector
+	var map = create(data["id"], data["width"], data["height"])
+	# General sector info
+	# Parse sector floor
+	var floors = map.get_node("floors")
+	floors.clear()
+	var floor_data = data["floors"]
+	for j in range(floor_data.size()):
+		floors.set_cell(j / int(map.width), j % int(map.width), floor_data[j])
+	# Parse sector walls
+	var walls = map.get_node("walls")
+	walls.clear()
+	var wall_data = data["walls"]
+	for j in range(wall_data.size()):
+		walls.set_cell(j / int(map.width), j % int(map.width), wall_data[j])
+	# Parse bodies
+	var bodies = data["bodies"]
+	for body_data in bodies:
+		map.add_body(Body.unserialize(body_data))
+	# Parse actors
+	var actors = data["actors"]
+	for actor_data in actors:
+		var actor = Actor.unserialize(actor_data)
+		map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
+	return map

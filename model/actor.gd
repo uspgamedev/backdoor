@@ -82,3 +82,46 @@ func pick_ai_module():
 		if acc >= roll:
 			return module
 	return get_child(0)
+
+func serialize():
+	var sector = get_parent().get_parent()
+	var actor_data = {}
+	actor_data["name"] = char_name
+	actor_data["cooldown"] = cooldown
+	actor_data["drawcooldown"] = draw_cooldown
+	var hand_data = []
+	for card in hand:
+		hand_data.append(card.name)
+	actor_data["hand"] = hand_data
+	var deck_data = []
+	for card in deck:
+		deck_data.append(card.name)
+	actor_data["deck"] = deck_data
+	actor_data["body_id"] = sector.get_actor_body(self).get_id()
+	var ai_modules_data = []
+	for module in get_children():
+		var module_data = {}
+		module_data["name"] = module.get_name()
+		module_data["chance"] = module.chance
+		ai_modules_data.append(module_data)
+	actor_data["ai_modules"] = ai_modules_data 
+	return actor_data
+
+static func unserialize(data):
+	var actor = new(data["name"])
+	actor.cooldown = data["cooldown"]
+	actor.draw_cooldown = data["drawcooldown"]
+	var hand = data["hand"]
+	for card in hand:
+		actor.hand.append(Card.new(card))
+	var deck = data["deck"]
+	for card in deck:
+		actor.deck.append(Card.new(card))
+	var ai_modules = data["ai_modules"]
+	for module in ai_modules:
+		var ai = Node.new()
+		ai.set_script(load("res://model/ai/" + module["name"] + ".gd"))
+		ai.set_name(module["name"])
+		ai.chance = module["chance"]
+		actor.add_child(ai)
+	return actor
