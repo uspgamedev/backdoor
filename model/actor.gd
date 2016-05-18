@@ -21,12 +21,13 @@ var deck
 export(int) var speed = 10
 export(int) var draw_rate = 5
 
-const DRAW_TIME = 40
+const DRAW_TIME = 120
 const MAX_HAND = 5
 
 signal has_action
 signal spent_action
 signal draw_card(card)
+signal consumed_card(card)
 
 func _init(name):
 	hand = []
@@ -45,6 +46,10 @@ func get_body_pos():
 
 func can_draw():
 	return hand.size() < MAX_HAND and deck.size() > 0
+
+func consume_card(card):
+	hand.erase(card)
+	emit_signal("consumed_card", card)
 
 func step_time():
 	cooldown = max(0, cooldown - 1)

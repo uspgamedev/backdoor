@@ -70,4 +70,4 @@ class UseCard:
 	func can_be_used(actor):
 		return true
 	func use(actor):
-		pass
+		actor.consume_card(card_)

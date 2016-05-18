@@ -21,6 +21,7 @@ func stop():
 	set_process(false)
 	set_process_input(false)
 	player.disconnect("draw_card", self, "_on_player_draw")
+	player.disconnect("consumed_card", self, "_on_player_consume")
 	focus = null
 	for child in get_children():
 		child.queue_free()
@@ -29,6 +30,7 @@ func set_player(the_player):
 	start()
 	player = the_player
 	player.connect("draw_card", self, "_on_player_draw")
+	player.connect("consumed_card", self, "_on_player_consume")
 	for card in player.hand:
 		_on_player_draw(card)
 
@@ -38,6 +40,14 @@ func _on_player_draw(card):
 	add_child(card_sprite)
 	if focus == null:
 		focus = 0
+
+func _on_player_consume(card):
+	focus = min(focus, get_child_count()-2)
+	if focus < 0:
+		focus = null
+	for card_sprite in get_children():
+		if card_sprite.card == card:
+			card_sprite.queue_free()
 
 func _input(event):
 	if focus != null and get_child_count() > 0:
