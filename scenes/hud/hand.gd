@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const CardSprite = preload("res://scenes/hud/card.xscn")
+const CardSprite = preload("res://scenes/hud/card_sprite.gd")
 const Action = preload("res://model/action.gd")
 const ANGLE = -atan2(1,2)
 
@@ -34,8 +34,7 @@ func set_player(the_player):
 
 func _on_player_draw(card):
 	print("card added: ", card.get_name())
-	var card_sprite = CardSprite.instance()
-	card_sprite.get_node("Name").set_text(card.get_name())
+	var card_sprite = CardSprite.create(card)
 	add_child(card_sprite)
 	if focus == null:
 		focus = 0
@@ -47,7 +46,7 @@ func _input(event):
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+get_child_count())%get_child_count()
 		elif event.is_action_pressed("ui_select"):
-			player.add_action(Action.Idle.new())
+			player.add_action(Action.UseCard.new(get_child(focus).card))
 
 func _process(delta):
 	var n = get_child_count()
