@@ -27,7 +27,7 @@ static func get_player_name_from_file(file):
 			sector_data = sector
 	return sector_data["actors"][int(data["player_actor_id"])]["name"]
 
-static func load_from_file(id, file):
+static func load_from_file(id, file, root):
 	var route = RouteScene.instance()
 	route.id = id
 	# Open file
@@ -37,7 +37,7 @@ static func load_from_file(id, file):
 	data.parse_json(text)
 	var sectors = data["sectors"]
 	for sector_data in sectors:
-		route.get_node("sectors").add_child(Map.unserialize(sector_data))
+		route.get_node("sectors").add_child(Map.unserialize(sector_data, root))
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
 	route.current_sector.show()

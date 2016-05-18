@@ -7,6 +7,8 @@ class Card:
 		card_ref = ref
 	func get_name():
 		return card_ref.get_name()
+	func get_ref():
+		return card_ref
 
 var cooldown
 var draw_cooldown
@@ -92,12 +94,13 @@ func serialize():
 	actor_data["cooldown"] = cooldown
 	actor_data["drawcooldown"] = draw_cooldown
 	var hand_data = []
+	var cards_db = get_node("/root/captains_log/cards")
 	for card in hand:
-		hand_data.append(card.get_name())
+		hand_data.append(cards_db.get_card_id(card.get_ref()))
 	actor_data["hand"] = hand_data
 	var deck_data = []
 	for card in deck:
-		deck_data.append(card.get_name())
+		deck_data.append(cards_db.get_card_id(card.get_ref()))
 	actor_data["deck"] = deck_data
 	actor_data["body_id"] = sector.get_actor_body(self).get_id()
 	var ai_modules_data = []
@@ -109,16 +112,17 @@ func serialize():
 	actor_data["ai_modules"] = ai_modules_data 
 	return actor_data
 
-static func unserialize(data):
+static func unserialize(data, root):
 	var actor = new(data["name"])
 	actor.cooldown = data["cooldown"]
 	actor.draw_cooldown = data["drawcooldown"]
+	var cards_db = root.get_node("captains_log/cards")
 	var hand = data["hand"]
 	for card in hand:
-		actor.hand.append(Card.new(card))
+		actor.hand.append(Card.new(cards_db.get_child(card)))
 	var deck = data["deck"]
 	for card in deck:
-		actor.deck.append(Card.new(card))
+		actor.deck.append(Card.new(cards_db.get_child(card)))
 	var ai_modules = data["ai_modules"]
 	for module in ai_modules:
 		var ai = Node.new()
