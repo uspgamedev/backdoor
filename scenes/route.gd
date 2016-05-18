@@ -37,31 +37,7 @@ static func load_from_file(id, file):
 	data.parse_json(text)
 	var sectors = data["sectors"]
 	for sector_data in sectors:
-		# Parse sector
-		var map = Map.create(sector_data["id"], sector_data["width"], sector_data["height"])
-		route.get_node("sectors").add_child(map)
-		# General sector info
-		# Parse sector floor
-		var floors = map.get_node("floors")
-		floors.clear()
-		var floor_data = sector_data["floors"]
-		for j in range(floor_data.size()):
-			floors.set_cell(j / int(map.width), j % int(map.width), floor_data[j])
-		# Parse sector walls
-		var walls = map.get_node("walls")
-		walls.clear()
-		var wall_data = sector_data["walls"]
-		for j in range(wall_data.size()):
-			walls.set_cell(j / int(map.width), j % int(map.width), wall_data[j])
-		# Parse bodies
-		var bodies = sector_data["bodies"]
-		for body_data in bodies:
-			map.add_body(Body.unserialize(body_data))
-		# Parse actors
-		var actors = sector_data["actors"]
-		for actor_data in actors:
-			var actor = Actor.unserialize(actor_data)
-			map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
+		route.get_node("sectors").add_child(Map.unserialize(sector_data))
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
 	route.current_sector.show()
@@ -82,42 +58,14 @@ func save_to_file(file):
 	data["sectors"] = sectors_data
 	# Serialize sectors
 	for sector in sectors:
-		# Store sector general data
-		var sector_data = {}
-		sector_data["id"] = sector.id
-		sector_data["width"] = sector.width
-		sector_data["height"] = sector.height
-		# Store floor tiles
-		var floor_map = []
-		for i in range(sector.height):
-			for j in range(sector.width):
-				floor_map.append(-1)
-		var floors = sector.get_node("floors")
-		for tile_pos in floors.get_used_cells():
-			floor_map[tile_pos.x*sector.width + tile_pos.y] = floors.get_cellv(tile_pos)
-		sector_data["floors"] = floor_map
-		# Store wall tiles
-		var wall_map = []
-		for i in range(sector.height):
-			for j in range(sector.width):
-				wall_map.append(-1)
-		var walls = sector.get_node("walls")
-		for tile_pos in walls.get_used_cells():
-			wall_map[tile_pos.x*sector.width + tile_pos.y] = walls.get_cellv(tile_pos)
-		sector_data["walls"] = wall_map
-		# Store bodies
-		var bodies = []
-		for body in sector.bodies:
-			bodies.append(body.serialize())
-		sector_data["bodies"] = bodies
-		# Store actors
-		var actors = []
-		for actor in sector.actor_bodies:
-			actors.append(actor.serialize())
-			if actor == player:
-				player_actor_id = actors.size()-1
-		sector_data["actors"] = actors
+		var sector_data = sector.serialize()
 		sectors_data.append(sector_data)
+		var i = 0
+		for actor_data in sector_data["actors"]:
+			if actor_data["name"] == player.char_name:
+				player_actor_id = i
+				break
+			i += 1
 	data["player_actor_id"] = player_actor_id
 	file.store_string(data.to_json())
 
