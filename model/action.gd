@@ -60,7 +60,7 @@ class ChangeSector:
 	func use(actor):
 		actor.get_node("/root/sector").set_next_sector(target_)
 
-class UseCard:
+class EvokeCard:
 	extends BaseAction
 	var card_
 	func _init(card).("use_card"):
@@ -68,6 +68,7 @@ class UseCard:
 	func get_cost(actor):
 		return 100
 	func can_be_used(actor):
-		return true
+		return card_.card_ref.can_be_evoked(actor)
 	func use(actor):
 		actor.consume_card(card_)
+		card_.card_ref.evoke(actor)

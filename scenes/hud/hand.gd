@@ -56,7 +56,7 @@ func _input(event):
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+get_child_count())%get_child_count()
 		elif event.is_action_pressed("ui_select"):
-			player.add_action(Action.UseCard.new(get_child(focus).card))
+			player.add_action(Action.EvokeCard.new(get_child(focus).card))
 
 func _process(delta):
 	var n = get_child_count()
