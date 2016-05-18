@@ -18,7 +18,7 @@ func erase_route(id):
 
 func create_route():
 	var route = RouteScene.instance()
-	route.id = find_free_route_id()
+	route.id = profile.find_free_route_id()
 	profile.add_journal(route.id)
 	var w = 20
 	var h = 20

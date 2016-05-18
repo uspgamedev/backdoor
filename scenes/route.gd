@@ -60,22 +60,7 @@ static func load_from_file(id, file):
 		# Parse actors
 		var actors = sector_data["actors"]
 		for actor_data in actors:
-			var actor = Actor.new(actor_data["name"])
-			actor.cooldown = actor_data["cooldown"]
-			actor.draw_cooldown = actor_data["drawcooldown"]
-			var hand = actor_data["hand"]
-			for card in hand:
-				actor.hand.append(Actor.Card.new(card))
-			var deck = actor_data["deck"]
-			for card in deck:
-				actor.deck.append(Actor.Card.new(card))
-			var ai_modules = actor_data["ai_modules"]
-			for module in ai_modules:
-				var ai = Node.new()
-				ai.set_script(load("res://model/ai/" + module["name"] + ".gd"))
-				ai.set_name(module["name"])
-				ai.chance = module["chance"]
-				actor.add_child(ai)
+			var actor = Actor.unserialize(actor_data)
 			map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
 	# Set current sector
 	route.current_sector = route.find_sector(data["current_sector"])
@@ -128,27 +113,7 @@ func save_to_file(file):
 		# Store actors
 		var actors = []
 		for actor in sector.actor_bodies:
-			var actor_data = {}
-			actor_data["name"] = actor.char_name
-			actor_data["cooldown"] = actor.cooldown
-			actor_data["drawcooldown"] = actor.draw_cooldown
-			var hand_data = []
-			for card in actor.hand:
-				hand_data.append(card.name)
-			actor_data["hand"] = hand_data
-			var deck_data = []
-			for card in actor.hand:
-				deck_data.append(card.name)
-			actor_data["deck"] = deck_data
-			actor_data["body_id"] = sector.get_actor_body(actor).get_id()
-			var ai_modules_data = []
-			for module in actor.get_children():
-				var module_data = {}
-				module_data["name"] = module.get_name()
-				module_data["chance"] = module.chance
-				ai_modules_data.append(module_data)
-			actor_data["ai_modules"] = ai_modules_data 
-			actors.append(actor_data)
+			actors.append(actor.serialize())
 			if actor == player:
 				player_actor_id = actors.size()-1
 		sector_data["actors"] = actors
