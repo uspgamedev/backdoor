@@ -17,7 +17,7 @@ const moves = [
 func think():
 	for move in moves:
 		var target = actor.get_body_pos() + move
-		var body = get_node("/root/current/map").get_body_at(target)
+		var body = get_node("/root/sector/map").get_body_at(target)
 		if body != null:
 			actor.add_action(Action.MeleeAttack.new(body))
 			break

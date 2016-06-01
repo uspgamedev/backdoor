@@ -16,6 +16,8 @@ func take_damage(amount):
 	damage += amount
 	if is_dead():
 		pass
+func heal(amount):
+	damage = max(damage - amount, 0)
 
 func get_hp_percent():
 	return 100*(hp - damage)/hp

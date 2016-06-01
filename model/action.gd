@@ -66,9 +66,9 @@ class EvokeCard:
 	func _init(card).("use_card"):
 		card_ = card
 	func get_cost(actor):
-		return 100
+		return card_.card_ref.get_time_cost()
 	func can_be_used(actor):
 		return card_.card_ref.can_be_evoked(actor)
 	func use(actor):
 		actor.consume_card(card_)
-		card_.card_ref.evoke(actor)
+		card_.card_ref.evoke(actor,{})
