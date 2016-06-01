@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="12" version="2.0" version_name="Godot Engine v2.0.stable.official">
+<resource_file type="PackedScene" subresource_count="13" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://model/ai/wander.gd" type="Script" index="3"></ext_resource>
 	<ext_resource path="res://model/ai/defensive.gd" type="Script" index="4"></ext_resource>
 	<ext_resource path="res://scenes/captains_log.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://model/id_server.gd" type="Script" index="1"></ext_resource>
-	<ext_resource path="res://model/map_generator.gd" type="Script" index="8"></ext_resource>
-	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="9"></ext_resource>
+	<ext_resource path="res://model/map_generator.gd" type="Script" index="9"></ext_resource>
+	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="10"></ext_resource>
 	<ext_resource path="res://scenes/core/cards.gd" type="Script" index="5"></ext_resource>
-	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="10"></ext_resource>
-	<ext_resource path="res://model/card_ref.gd" type="Script" index="7"></ext_resource>
+	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="11"></ext_resource>
+	<ext_resource path="res://model/card_ref.gd" type="Script" index="8"></ext_resource>
+	<ext_resource path="res://model/cards/heal.gd" type="Script" index="6"></ext_resource>
+	<ext_resource path="res://model/cards/teleport.gd" type="Script" index="7"></ext_resource>
 	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
-	<ext_resource path="res://model/cards/sample_skill.gd" type="Script" index="6"></ext_resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -23,7 +24,7 @@
 				<node_path> "monsters/Orc" </node_path>
 			</array>
 			<string> "names" </string>
-			<string_array  len="19">
+			<string_array  len="20">
 				<string> "captains_log" </string>
 				<string> "script/script" </string>
 				<string> "Node" </string>
@@ -37,7 +38,8 @@
 				<string> "chance" </string>
 				<string> "defensive" </string>
 				<string> "Orc" </string>
-				<string> "Sample Skill" </string>
+				<string> "Heal" </string>
+				<string> "Teleport" </string>
 				<string> "Sample Upgrade" </string>
 				<string> "Sample Item" </string>
 				<string> "map_generator" </string>
@@ -45,15 +47,15 @@
 				<string> "profile" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 14 </int>
+			<int> 15 </int>
 			<string> "node_paths" </string>
 			<array  len="1" shared="false">
 				<node_path> "monsters/Slime/ai_modules" </node_path>
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="128"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 0, 0, 2, 0, 2147483647, 5, 2, 1, 6, 3, 0, 1073741824, 0, 2, 9, -1, 2, 1, 4, 10, 5, 0, 1073741824, 0, 2, 11, -1, 2, 1, 6, 10, 7, 0, 2, 0, 2147483647, 12, 2, 1, 6, 8, 0, 0, 0, 2, 7, -1, 1, 1, 9, 0, 7, 0, 2, 13, -1, 1, 1, 10, 0, 7, 0, 2, 14, -1, 1, 1, 11, 0, 7, 0, 2, 15, -1, 1, 1, 11, 0, 0, 0, 2, 16, -1, 1, 1, 12, 0, 0, 0, 2, 17, -1, 1, 1, 13, 0, 0, 0, 2, 18, -1, 1, 1, 14, 0 </int_array>
+			<int_array  len="137"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 0, 0, 2, 0, 2147483647, 5, 2, 1, 6, 3, 0, 1073741824, 0, 2, 9, -1, 2, 1, 4, 10, 5, 0, 1073741824, 0, 2, 11, -1, 2, 1, 6, 10, 7, 0, 2, 0, 2147483647, 12, 2, 1, 6, 8, 0, 0, 0, 2, 7, -1, 1, 1, 9, 0, 7, 0, 2, 13, -1, 1, 1, 10, 0, 7, 0, 2, 14, -1, 1, 1, 11, 0, 7, 0, 2, 15, -1, 1, 1, 12, 0, 7, 0, 2, 16, -1, 1, 1, 12, 0, 0, 0, 2, 17, -1, 1, 1, 13, 0, 0, 0, 2, 18, -1, 1, 1, 14, 0, 0, 0, 2, 19, -1, 1, 1, 15, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="15" shared="false">
+			<array  len="16" shared="false">
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
 				<resource  external="2">  </resource>
@@ -69,6 +71,7 @@
 				<resource  external="8">  </resource>
 				<resource  external="9">  </resource>
 				<resource  external="10">  </resource>
+				<resource  external="11">  </resource>
 			</array>
 			<string> "version" </string>
 			<int> 2 </int>
