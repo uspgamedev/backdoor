@@ -45,7 +45,7 @@ func add_journal(route_id):
 func erase_journal(route_id):
 	var dir = Directory.new()
 	if dir.open("user://") == 0:
-		assert(dir.remove(get_journal_filename(route_id)) == 0)
+		dir.remove(get_journal_filename(route_id))
 		profile_data["saves"].erase(route_id)
 
 func get_journals():
