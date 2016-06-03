@@ -46,7 +46,10 @@ func select(the_check):
 	main.set_process_input(false)
 	main.get_node("HUD/UI_hook/Hand").set_process_input(false)
 	set_process_input(true)
+	set_process(true)
 	show()
+	if target == null:
+		cancel()
 
 func confirm():
 	var main = get_node("/root/sector")
@@ -54,6 +57,7 @@ func confirm():
 	main.set_process_input(true)
 	main.get_node("HUD/UI_hook/Hand").set_process_input(true)
 	set_process_input(false)
+	set_process(false)
 	emit_signal("target_chosen")
 
 func cancel():
@@ -66,7 +70,7 @@ func inside(pos, dir):
 	var reach = abs(plus)
 	var p = relative.dot(Vector2(dir.y, dir.x))
 	var q = relative.dot(dir)
-	return q > 0 and p < reach and p > -reach
+	return q > 0 and q < 16 and p < reach and p > -reach
 
 func move_to(dir):
 	# bfs
@@ -88,10 +92,14 @@ func move_to(dir):
 			var candidate = next + dir
 			if not checked.has(candidate) and inside(candidate, dir):
 				queue.push(candidate)
-	var floors = map.get_node("floors")
-	set_pos(floors.map_to_world(target))
-	origin = target
+	if target != null:
+		origin = target
 	return found
+
+func _process(delta):
+	var floors = map.get_node("floors")
+	if target != null:
+		set_pos(floors.map_to_world(target))
 
 func _input(event):
 	var move = Vector2(0,0)
