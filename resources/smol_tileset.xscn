@@ -17,11 +17,11 @@
 				<string> "Floor" </string>
 				<string> "transform/pos" </string>
 				<string> "texture" </string>
+				<string> "offset" </string>
 				<string> "region" </string>
 				<string> "region_rect" </string>
 				<string> "Sprite" </string>
 				<string> "Wall Corner" </string>
-				<string> "offset" </string>
 				<string> "Wall Corner T" </string>
 				<string> "Wall Left" </string>
 				<string> "Wall Left T" </string>
@@ -34,30 +34,30 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="126"> 				-1, -1, 0, 0, -1, 1, 1, 0, 0, 0, 0, 7, 2, -1, 4, 3, 1, 4, 2, 5, 3, 6, 4, 0, 0, 0, 7, 8, -1, 5, 3, 5, 4, 2, 9, 6, 5, 3, 6, 7, 0, 0, 0, 7, 10, -1, 5, 3, 8, 4, 2, 9, 6, 5, 3, 6, 9, 0, 0, 0, 7, 11, -1, 5, 3, 10, 4, 2, 9, 6, 5, 3, 6, 11, 0, 0, 0, 7, 12, -1, 5, 3, 12, 4, 2, 9, 6, 5, 3, 6, 13, 0, 0, 0, 7, 13, -1, 5, 3, 14, 4, 2, 9, 6, 5, 3, 6, 15, 0, 0, 0, 7, 14, -1, 5, 3, 16, 4, 2, 9, 6, 5, 3, 6, 17, 0 </int_array>
+			<int_array  len="128"> 				-1, -1, 0, 0, -1, 1, 1, 0, 0, 0, 0, 8, 2, -1, 5, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 0, 0, 0, 8, 9, -1, 5, 3, 6, 4, 2, 5, 3, 6, 4, 7, 7, 0, 0, 0, 8, 10, -1, 5, 3, 8, 4, 2, 5, 3, 6, 4, 7, 9, 0, 0, 0, 8, 11, -1, 5, 3, 10, 4, 2, 5, 3, 6, 4, 7, 11, 0, 0, 0, 8, 12, -1, 5, 3, 12, 4, 2, 5, 3, 6, 4, 7, 13, 0, 0, 0, 8, 13, -1, 5, 3, 14, 4, 2, 5, 3, 6, 4, 7, 15, 0, 0, 0, 8, 14, -1, 5, 3, 16, 4, 2, 5, 3, 6, 4, 7, 17, 0 </int_array>
 			<string> "variants" </string>
 			<array  len="18" shared="false">
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
 					<string> "2D" </string>
 				</dictionary>
-				<vector2> 32, 48 </vector2>
+				<vector2> 32, 47.6028 </vector2>
 				<resource  external="0">  </resource>
-				<bool> True </bool>
-				<rect2> 0, 32, 64, 32 </rect2>
-				<vector2> 96, 65 </vector2>
 				<vector2> 0, -32 </vector2>
-				<rect2> 64, 0, 64, 64 </rect2>
+				<bool> True </bool>
+				<rect2> 0, 0, 64, 96 </rect2>
+				<vector2> 96, 65 </vector2>
+				<rect2> 64, 0, 64, 96 </rect2>
 				<vector2> 160, 65 </vector2>
-				<rect2> 128, 0, 64, 64 </rect2>
+				<rect2> 128, 0, 64, 96 </rect2>
 				<vector2> 224, 61 </vector2>
-				<rect2> 192, 0, 64, 64 </rect2>
+				<rect2> 192, 0, 64, 96 </rect2>
 				<vector2> 288, 61 </vector2>
-				<rect2> 256, 0, 64, 64 </rect2>
+				<rect2> 256, 0, 64, 96 </rect2>
 				<vector2> 352, 61 </vector2>
-				<rect2> 320, 0, 64, 64 </rect2>
+				<rect2> 320, 0, 64, 96 </rect2>
 				<vector2> 416, 61 </vector2>
-				<rect2> 384, 0, 64, 64 </rect2>
+				<rect2> 384, 0, 64, 96 </rect2>
 			</array>
 			<string> "version" </string>
 			<int> 2 </int>

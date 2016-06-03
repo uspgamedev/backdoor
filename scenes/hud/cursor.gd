@@ -35,11 +35,14 @@ var check
 signal target_chosen()
 
 func select(the_check):
+	target = null
 	map = get_node("/root/sector/map")
 	var main = get_node("/root/sector")
 	check = the_check
 	origin = main.player.get_body().pos
-	move_to(DIRS[0])
+	for dir in DIRS:
+		if move_to(dir):
+			break
 	main.set_process_input(false)
 	main.get_node("HUD/UI_hook/Hand").set_process_input(false)
 	set_process_input(true)
@@ -67,6 +70,7 @@ func inside(pos, dir):
 
 func move_to(dir):
 	# bfs
+	var found = false
 	var queue = Queue.new()
 	var checked = {}
 	checked[origin] = true
@@ -77,6 +81,7 @@ func move_to(dir):
 		# Choose next as target if it is valid
 		if check.call_func(map.get_parent().player, next):
 			target = next
+			found = true
 			break
 		# If not, expand the search
 		for dir in DIRS:
@@ -86,6 +91,7 @@ func move_to(dir):
 	var floors = map.get_node("floors")
 	set_pos(floors.map_to_world(target))
 	origin = target
+	return found
 
 func _input(event):
 	var move = Vector2(0,0)
