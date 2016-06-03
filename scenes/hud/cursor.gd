@@ -80,7 +80,7 @@ func move_to(dir):
 			if not checked[candidate] and inside(candidate, dir):
 				queue.push(candidate)
 	var floors = map.get_node("floors")
-	set_pos(floors.get_pos() + floors.map_to_world(target))
+	set_pos(floors.map_to_world(target))
 	origin = target
 
 func _input(event):
