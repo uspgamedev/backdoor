@@ -63,6 +63,8 @@ func _input(event):
 					var cursor = get_node("/root/sector/map/floors/cursor")
 					cursor.select(option["check"])
 					yield(cursor, "target_chosen")
+					if cursor.target == null:
+						return
 					action.add_option(cursor.target)
 			player.add_action(action)
 

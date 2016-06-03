@@ -32,7 +32,7 @@ var origin
 var target
 var check
 
-signal target_chosen(target)
+signal target_chosen()
 
 func select(the_check):
 	map = get_node("/root/sector/map")
@@ -51,7 +51,11 @@ func confirm():
 	main.set_process_input(true)
 	main.get_node("HUD/UI_hook/Hand").set_process_input(true)
 	set_process_input(false)
-	emit_signal("target_chosen", target)
+	emit_signal("target_chosen")
+
+func cancel():
+	target = null
+	confirm()
 
 func inside(pos, dir): 
 	var relative = pos - origin
@@ -96,3 +100,5 @@ func _input(event):
 	move_to(move)
 	if event.is_action_pressed("ui_select"):
 		confirm()
+	elif event.is_action_pressed("ui_cancel"):
+		cancel()
