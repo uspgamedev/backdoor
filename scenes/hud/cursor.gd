@@ -57,9 +57,9 @@ func inside(pos, dir):
 	var relative = pos - origin
 	var plus = relative.dot(dir)
 	var reach = abs(plus)
-	var p = relative.dot(Vector2(dir.y. dir.x))
+	var p = relative.dot(Vector2(dir.y, dir.x))
 	var q = relative.dot(dir)
-	return q > 0 and relative < reach and relative > -reach
+	return q > 0 and p < reach and p > -reach
 
 func move_to(dir):
 	# bfs
@@ -77,7 +77,7 @@ func move_to(dir):
 		# If not, expand the search
 		for dir in DIRS:
 			var candidate = next + dir
-			if not checked[candidate] and inside(candidate, dir):
+			if not checked.has(candidate) and inside(candidate, dir):
 				queue.push(candidate)
 	var floors = map.get_node("floors")
 	set_pos(floors.map_to_world(target))
