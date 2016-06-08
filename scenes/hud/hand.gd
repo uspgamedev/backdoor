@@ -56,7 +56,17 @@ func _input(event):
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+get_child_count())%get_child_count()
 		elif event.is_action_pressed("ui_select"):
-			player.add_action(Action.EvokeCard.new(get_child(focus).card))
+			var card = get_child(focus).card
+			var action = Action.EvokeCard.new(card)
+			for option in card.get_ref().get_options(player):
+				if option["type"] == "TARGET":
+					var cursor = get_node("/root/sector/map/floors/cursor")
+					cursor.select(option["check"])
+					yield(cursor, "target_chosen")
+					if cursor.target == null:
+						return
+					action.add_option(cursor.target)
+			player.add_action(action)
 
 func _process(delta):
 	var n = get_child_count()

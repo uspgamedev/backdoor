@@ -21,8 +21,10 @@ func generate_map(id,w,h):
 	# stuff
 	var map_node = Map.create(id,w,h)
 	var floors = map_node.get_node("floors")
+	var walls = map_node.get_node("walls")
 	for i in range(map.size()):
 		for j in range(map[i].size()):
-			if (i+j)%2 == 0:
-				floors.set_cell(j, i, 0)
+			floors.set_cell(j, i, 0)
+			if randf() > .9:
+				walls.set_cell(j, i, 1)
 	return map_node

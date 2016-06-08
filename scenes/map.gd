@@ -39,7 +39,7 @@ func _init():
 func _ready():
 	print("map ready")
 	pass
-	
+
 func is_empty_space(pos):
 	return walls.get_cell(pos.x, pos.y) == -1
 
