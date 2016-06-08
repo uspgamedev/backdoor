@@ -19,10 +19,12 @@ func set_player(the_player):
 	player = the_player
 	get_node("HUD/UI_hook/CooldownBar").set_player(the_player)
 	get_node("HUD/UI_hook/Hand").set_player(the_player)
+	get_node("HUD/UI_hook/Deck").set_player(the_player)
 
 func close():
 	get_node("HUD/UI_hook/CooldownBar").stop()
 	get_node("HUD/UI_hook/Hand").stop()
+	get_node("HUD/UI_hook/Deck").stop()
 	set_fixed_process(false)
 	set_process_input(false)
 	map.queue_free()
