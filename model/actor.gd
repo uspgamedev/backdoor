@@ -28,6 +28,7 @@ signal has_action
 signal spent_action
 signal draw_card(card)
 signal consumed_card(card)
+signal update_deck
 
 func _init(name):
 	hand = []
@@ -58,6 +59,7 @@ func step_time():
 		deck.remove(0)
 		draw_cooldown += DRAW_TIME
 		emit_signal("draw_card", hand[hand.size() - 1])
+		emit_signal("update_deck")
 	if can_draw():
 		draw_cooldown -= draw_rate
 

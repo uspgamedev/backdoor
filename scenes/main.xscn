@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="7" version="2.0" version_name="Godot Engine v2.0.stable.official">
+<resource_file type="PackedScene" subresource_count="8" version="2.0" version_name="Godot Engine v2.0.stable.official">
+	<ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" index="4"></ext_resource>
+	<ext_resource path="res://scenes/hud/deck.gd" type="Script" index="3"></ext_resource>
 	<ext_resource path="res://scenes/hud/hand.gd" type="Script" index="1"></ext_resource>
 	<ext_resource path="res://scenes/hud/cooldownbar.gd" type="Script" index="2"></ext_resource>
 	<ext_resource path="res://scenes/main.gd" type="Script" index="0"></ext_resource>
-	<ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" index="3"></ext_resource>
 	<resource type="StyleBoxFlat" path="local://3">
 		<real name="content_margin/left"> -1 </real>
 		<real name="content_margin/right"> -1 </real>
@@ -40,7 +41,7 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "names" </string>
-			<string_array  len="40">
+			<string_array  len="44">
 				<string> "sector" </string>
 				<string> "script/script" </string>
 				<string> "__meta__" </string>
@@ -74,6 +75,10 @@
 				<string> "range/rounded" </string>
 				<string> "percent/visible" </string>
 				<string> "ProgressBar" </string>
+				<string> "Deck" </string>
+				<string> "size_flags/vertical" </string>
+				<string> "Control" </string>
+				<string> "Deck1" </string>
 				<string> "Input Description" </string>
 				<string> "custom_fonts/font" </string>
 				<string> "text" </string>
@@ -83,14 +88,14 @@
 				<string> "Label" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 6 </int>
+			<int> 8 </int>
 			<string> "node_paths" </string>
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="120"> 				-1, -1, 3, 0, -1, 2, 1, 0, 2, 1, 0, 0, 0, 9, 4, -1, 4, 5, 2, 6, 3, 7, 4, 8, 5, 0, 1, 0, 3, 10, -1, 1, 11, 6, 0, 2, 0, 3, 12, -1, 3, 13, 7, 11, 8, 1, 9, 0, 2, 0, 32, 14, -1, 19, 13, 7, 15, 10, 16, 11, 17, 12, 18, 13, 19, 7, 20, 14, 21, 15, 22, 16, 23, 17, 24, 4, 25, 18, 26, 19, 27, 4, 28, 19, 29, 7, 30, 7, 31, 7, 1, 20, 0, 1, 0, 39, 33, -1, 10, 17, 21, 18, 22, 19, 14, 20, 14, 21, 15, 34, 23, 35, 24, 36, 19, 37, 25, 38, 26, 0 </int_array>
+			<int_array  len="170"> 				-1, -1, 3, 0, -1, 2, 1, 0, 2, 1, 0, 0, 0, 9, 4, -1, 4, 5, 2, 6, 3, 7, 4, 8, 5, 0, 1, 0, 3, 10, -1, 1, 11, 6, 0, 2, 0, 3, 12, -1, 3, 13, 7, 11, 8, 1, 9, 0, 2, 0, 32, 14, -1, 19, 13, 7, 15, 10, 16, 11, 17, 12, 18, 13, 19, 7, 20, 14, 21, 15, 22, 16, 23, 17, 24, 4, 25, 18, 26, 19, 27, 4, 28, 19, 29, 7, 30, 7, 31, 7, 1, 20, 0, 2, 0, 35, 33, -1, 9, 15, 21, 16, 22, 17, 23, 18, 24, 19, 7, 20, 14, 21, 15, 34, 15, 1, 25, 0, 2, 0, 35, 36, -1, 9, 15, 21, 16, 22, 17, 23, 18, 24, 19, 7, 20, 14, 21, 15, 34, 15, 1, 25, 0, 1, 0, 43, 37, -1, 10, 17, 26, 18, 27, 19, 14, 20, 14, 21, 15, 38, 28, 39, 29, 40, 19, 41, 30, 42, 31, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="27" shared="false">
+			<array  len="32" shared="false">
 				<resource  external="0">  </resource>
 				<dictionary  shared="false">
 					<string> "__editor_plugin_screen__" </string>
@@ -117,9 +122,14 @@
 				<real> 100 </real>
 				<real> 1 </real>
 				<resource  external="2">  </resource>
+				<real> 988 </real>
+				<real> 174 </real>
+				<real> 1218 </real>
+				<real> 270 </real>
+				<resource  external="3">  </resource>
 				<real> 197 </real>
 				<real> 78 </real>
-				<resource  external="3">  </resource>
+				<resource  external="4">  </resource>
 				<string> "Controls:&#000a;- arrow keys to move&#000a;- A/S to change card&#000a;- D to evoke card&#000a;- ESC to save &amp; quit&#000a;- SHIFT+S to save &amp; back to menu" </string>
 				<int> 0 </int>
 				<int> -1 </int>
