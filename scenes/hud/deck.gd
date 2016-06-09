@@ -1,16 +1,15 @@
 
 extends Control
 
+const MAX_DECK_SIZE = 20
+
 var deck_draw
 var player = null
 
 func set_player(the_player):
 	player = the_player
 	deck_draw.set_min(0)
-	if player != null:
-		deck_draw.set_max(player.deck.size())
-	else:
-		deck_draw.set_max(20)
+	deck_draw.set_max(MAX_DECK_SIZE)
 	print("max: ", str(deck_draw.get_max()))
 	self.show()
 	player.connect("update_deck", self, "update_deck")
