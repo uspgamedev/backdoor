@@ -7,6 +7,8 @@ class Card:
 		card_ref = ref
 	func get_name():
 		return card_ref.get_name()
+	func get_description():
+		return card_ref.get_description() 
 	func get_ref():
 		return card_ref
 

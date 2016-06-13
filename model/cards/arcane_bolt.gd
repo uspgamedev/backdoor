@@ -13,6 +13,9 @@ func get_options(actor):
 		{ "type": "TARGET", "check": funcref(self, "valid_target") }
 	]
 
+func get_description():
+	return "This skill unleashes a bolt of arcane power"
+
 func evoke(actor, options):
 	var target = options[0]
 	var map = get_node("/root/sector/map")
