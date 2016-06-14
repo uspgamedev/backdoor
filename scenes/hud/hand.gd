@@ -3,7 +3,6 @@ extends Node2D
 
 const CardSprite = preload("res://scenes/hud/card_sprite.gd")
 const Action = preload("res://model/action.gd")
-const ANGLE = -atan2(1,2)
 
 var player = null
 var focus
@@ -72,9 +71,8 @@ func _process(delta):
 	var n = get_child_count()
 	for i in range(n):
 		var card = get_child(n-1-i)
+		card.set_pos(Vector2(48*i, 0))
 		if i == focus:
-			card.set_pos(Vector2(i*48, -32))
-			card.set_rot(0)
+			card.select()
 		else:
-			card.set_pos(Vector2(i*48, 0))
-			card.set_rot(ANGLE)
+			card.deselect()

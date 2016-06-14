@@ -16,6 +16,9 @@ func get_options(actor):
 		{ "type": "TARGET", "check": funcref(self, "valid_target") }
 	]
 
+func get_description():
+	return "This skill teleport the player"
+
 func evoke(actor, options):
 	var target = options[0]
 	get_node("/root/sector/map").move_body(actor.get_body(), target)
