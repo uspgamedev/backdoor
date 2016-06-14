@@ -54,7 +54,7 @@ func _input(event):
 			focus = (focus+1)%get_child_count()
 		elif event.is_action_pressed("ui_focus_prev"):
 			focus = (focus-1+get_child_count())%get_child_count()
-		elif event.is_action_pressed("ui_select"):
+		elif event.is_action_pressed("ui_select") and get_node("/root/sector/HUD/CardDisplay").is_hidden():
 			var card = get_child(focus).card
 			var action = Action.EvokeCard.new(card)
 			for option in card.get_ref().get_options(player):
@@ -76,3 +76,8 @@ func _process(delta):
 			card.select()
 		else:
 			card.deselect()
+
+func get_selected_card():
+	if player.hand.size() <= 0:
+		return null;
+	return get_child(focus).card
