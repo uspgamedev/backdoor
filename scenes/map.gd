@@ -11,7 +11,12 @@ const Identifiable = preload("res://model/identifiable.gd")
 const block = [
 	Vector2(1,0),
 	Vector2(0,1),
-	Vector2(1,1)
+	Vector2(1,1),
+	Vector2(2,0),
+	Vector2(0,2),
+	Vector2(2,1),
+	Vector2(1,2),
+	Vector2(2,2)
 ]
 
 var id
@@ -116,8 +121,8 @@ func check_dead_bodies():
 
 func _fixed_process(delta):
 	var player_body = get_actor_body(get_parent().player)
-	for i in range(5):
-		for j in range(5):
+	for i in range(7):
+		for j in range(7):
 			var pos = player_body.pos + Vector2(-2 + i,-2 + j)
 			var cell = walls.get_cell(pos.x, pos.y)
 			if cell > 0 && cell % 2 == 0:
