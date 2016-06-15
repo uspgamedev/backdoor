@@ -7,6 +7,8 @@ func get_time_cost():
 func can_be_evoked(actor):
 	return true
 
+func get_description():
+	return "This skill heals the player"
+
 func evoke(actor, options):
 	actor.get_body().heal(5)
-
