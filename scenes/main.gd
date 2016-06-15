@@ -8,7 +8,7 @@ var map
 var done
 var next_sector
 var hand
-var displayPopup
+var display_popup
 
 func _init():
 	print("sector created")
@@ -23,7 +23,7 @@ func set_player(the_player):
 	get_node("HUD/UI_hook/Hand").set_player(the_player)
 	hand = get_node("HUD/UI_hook/Hand")
 	get_node("HUD/UI_hook/Deck").set_player(the_player)
-	displayPopup = get_node("HUD/CardDisplay")
+	display_popup = get_node("HUD/CardDisplay")
 
 func close():
 	get_node("HUD/UI_hook/CooldownBar").stop()
@@ -87,17 +87,17 @@ func _input(event):
 			player.add_action(Action.ChangeSector.new(1))
 		elif event.is_action_pressed("debug_create_slime"):
 			get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
-		elif event.is_action_released("ui_display_card") and not self.displayPopup.is_hidden():
-			self.displayPopup.hide()
-		elif event.is_action_released("ui_focus_next") and not self.displayPopup.is_hidden():
-			self.displayPopup.hide()
-		elif event.is_action_released("ui_focus_prev") and not self.displayPopup.is_hidden():
-			self.displayPopup.hide()
-		elif event.is_action_released("ui_select") and not self.displayPopup.is_hidden():
-			self.displayPopup.hide()
-		elif event.is_action_released("ui_display_card") and self.displayPopup.is_hidden() and hand.get_selected_card() != null:
+		elif event.is_action_released("ui_display_card") and not self.display_popup.is_hidden():
+			self.display_popup.hide()
+		elif event.is_action_released("ui_focus_next") and not self.display_popup.is_hidden():
+			self.display_popup.hide()
+		elif event.is_action_released("ui_focus_prev") and not self.display_popup.is_hidden():
+			self.display_popup.hide()
+		elif event.is_action_released("ui_select") and not self.display_popup.is_hidden():
+			self.display_popup.hide()
+		elif event.is_action_released("ui_display_card") and self.display_popup.is_hidden() and hand.get_selected_card() != null:
 			print("display ", hand.get_selected_card().get_name())
-			self.displayPopup.display(hand.get_selected_card())
+			self.display_popup.display(hand.get_selected_card())
 		if event.is_action_pressed("ui_idle"):
 			player.add_action(Action.Idle.new())
 		elif move.length_squared() > 0:
