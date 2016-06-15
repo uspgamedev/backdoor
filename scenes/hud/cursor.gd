@@ -70,7 +70,7 @@ func inside(pos, dir):
 	var reach = abs(plus)
 	var p = relative.dot(Vector2(dir.y, dir.x))
 	var q = relative.dot(dir)
-	return q > 0 and q < 16 and p < reach and p > -reach
+	return q >= 0 and q <= 16 and p < reach and p > -reach
 
 func move_to(dir):
 	# bfs
@@ -88,8 +88,8 @@ func move_to(dir):
 			found = true
 			break
 		# If not, expand the search
-		for dir in DIRS:
-			var candidate = next + dir
+		for next_dir in DIRS:
+			var candidate = next + next_dir
 			if not checked.has(candidate) and inside(candidate, dir):
 				queue.push(candidate)
 	if target != null:
