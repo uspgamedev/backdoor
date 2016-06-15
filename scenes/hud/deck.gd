@@ -20,8 +20,7 @@ func stop():
 	set_process(false)
 	set_process_input(false)
 	player.disconnect("update_deck", self, "update_deck")
-	for child in get_children():
-		child.queue_free()
+	deck_draw.hide()
 
 func _ready():
 	deck_draw = ProgressBar.new()
