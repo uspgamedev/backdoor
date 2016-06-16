@@ -70,7 +70,7 @@ func _input(event):
 func _process(delta):
 	var n = get_child_count()
 	for i in range(n):
-		var card = get_child(n-1-i)
+		var card = get_child(i)
 		card.set_pos(Vector2(48*i, 0))
 		if i == focus:
 			card.select()
