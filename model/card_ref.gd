@@ -7,12 +7,14 @@ class CARD_TYPE:
 	const ENGINEERING = 2
 
 export(int, "ARCANE", "ATHELITCS", "ENGINEERING") var card_type = 0
+export(String) var description = "a card"
+export(int) var time_cost = 50
+
+func get_time_cost():
+	return time_cost
 
 func get_card_type():
 	return card_type
-
-func get_time_cost():
-	return 100
 
 func can_be_evoked(actor):
 	return true
@@ -21,7 +23,7 @@ func get_options(actor):
 	return []
 
 func get_description():
-	return "A card"
+	return description
 
 func evoke(actor, options):
 	print("Card evoked")
