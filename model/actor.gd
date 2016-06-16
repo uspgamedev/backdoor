@@ -20,6 +20,10 @@ var char_name
 var hand
 var deck
 
+var weapon
+var armory
+var item
+
 export(int) var speed = 10
 export(int) var draw_rate = 5
 

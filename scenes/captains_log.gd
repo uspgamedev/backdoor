@@ -29,7 +29,9 @@ func create_route():
 	var player = Actor.new("hero")
 	var cards_db = get_node("/root/captains_log/cards")
 	for i in range(20):
-		player.deck.append(Actor.Card.new(cards_db.get_node("Arcane Bolt")))
+		var aux = i % cards_db.get_child_count()
+		var card = Actor.Card.new(cards_db.get_child(aux))
+		player.deck.append(card)
 	route.player = player
 	get_node("/root/sector").set_player(player)
 	var player_body = Body.new(1, "hero", Vector2(10,10), 10)

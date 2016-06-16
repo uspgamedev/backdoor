@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="14" version="2.0" version_name="Godot Engine v2.0.stable.official">
+<resource_file type="PackedScene" subresource_count="15" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://scenes/monster.xscn" type="PackedScene" index="2"></ext_resource>
+	<ext_resource path="res://model/card_upgrade.gd" type="Script" index="9"></ext_resource>
 	<ext_resource path="res://model/ai/defensive.gd" type="Script" index="4"></ext_resource>
 	<ext_resource path="res://model/cards/heal.gd" type="Script" index="6"></ext_resource>
-	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="11"></ext_resource>
-	<ext_resource path="res://scenes/core/cards.gd" type="Script" index="5"></ext_resource>
-	<ext_resource path="res://model/map_generator.gd" type="Script" index="10"></ext_resource>
-	<ext_resource path="res://scenes/captains_log.gd" type="Script" index="0"></ext_resource>
-	<ext_resource path="res://model/ai/wander.gd" type="Script" index="3"></ext_resource>
-	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="12"></ext_resource>
-	<ext_resource path="res://model/card_ref.gd" type="Script" index="9"></ext_resource>
-	<ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" index="8"></ext_resource>
 	<ext_resource path="res://model/cards/teleport.gd" type="Script" index="7"></ext_resource>
+	<ext_resource path="res://model/card_item.gd" type="Script" index="10"></ext_resource>
+	<ext_resource path="res://scenes/core/cards.gd" type="Script" index="5"></ext_resource>
+	<ext_resource path="res://scenes/captains_log.gd" type="Script" index="0"></ext_resource>
 	<ext_resource path="res://model/id_server.gd" type="Script" index="1"></ext_resource>
+	<ext_resource path="res://model/map_generator.gd" type="Script" index="11"></ext_resource>
+	<ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" index="8"></ext_resource>
+	<ext_resource path="res://scenes/core/profile.gd" type="Script" index="13"></ext_resource>
+	<ext_resource path="res://scenes/core/scene_manager.gd" type="Script" index="12"></ext_resource>
+	<ext_resource path="res://model/ai/wander.gd" type="Script" index="3"></ext_resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -25,7 +26,7 @@
 				<node_path> "monsters/Orc" </node_path>
 			</array>
 			<string> "names" </string>
-			<string_array  len="22">
+			<string_array  len="26">
 				<string> "captains_log" </string>
 				<string> "script/script" </string>
 				<string> "Node" </string>
@@ -41,10 +42,14 @@
 				<string> "Orc" </string>
 				<string> "Heal" </string>
 				<string> "card_type" </string>
+				<string> "description" </string>
+				<string> "time_cost" </string>
 				<string> "Teleport" </string>
 				<string> "Arcane Bolt" </string>
 				<string> "Sample Upgrade" </string>
+				<string> "bonus_amount" </string>
 				<string> "Sample Item" </string>
+				<string> "slot" </string>
 				<string> "map_generator" </string>
 				<string> "scene_manager" </string>
 				<string> "profile" </string>
@@ -56,9 +61,9 @@
 				<node_path> "monsters/Slime/ai_modules" </node_path>
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="156"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 0, 0, 2, 0, 2147483647, 5, 2, 1, 6, 3, 0, 1073741824, 0, 2, 9, -1, 2, 1, 4, 10, 5, 0, 1073741824, 0, 2, 11, -1, 2, 1, 6, 10, 7, 0, 2, 0, 2147483647, 12, 2, 1, 6, 8, 0, 0, 0, 2, 7, -1, 1, 1, 9, 0, 7, 0, 2, 13, -1, 2, 1, 10, 14, 11, 0, 7, 0, 2, 15, -1, 2, 1, 12, 14, 13, 0, 7, 0, 2, 16, -1, 2, 1, 14, 14, 15, 0, 7, 0, 2, 17, -1, 2, 1, 16, 14, 11, 0, 7, 0, 2, 18, -1, 2, 1, 16, 14, 11, 0, 0, 0, 2, 19, -1, 1, 1, 17, 0, 0, 0, 2, 20, -1, 1, 1, 18, 0, 0, 0, 2, 21, -1, 1, 1, 19, 0 </int_array>
+			<int_array  len="180"> 				-1, -1, 2, 0, -1, 1, 1, 0, 0, 0, 0, 2, 3, -1, 1, 1, 1, 0, 0, 0, 2, 4, -1, 0, 0, 2, 0, 2147483647, 5, 2, 1, 6, 3, 0, 1073741824, 0, 2, 9, -1, 2, 1, 4, 10, 5, 0, 1073741824, 0, 2, 11, -1, 2, 1, 6, 10, 7, 0, 2, 0, 2147483647, 12, 2, 1, 6, 8, 0, 0, 0, 2, 7, -1, 1, 1, 9, 0, 7, 0, 2, 13, -1, 4, 1, 10, 14, 11, 15, 12, 16, 13, 0, 7, 0, 2, 17, -1, 4, 1, 14, 14, 15, 15, 16, 16, 17, 0, 7, 0, 2, 18, -1, 4, 1, 18, 14, 19, 15, 20, 16, 17, 0, 7, 0, 2, 19, -1, 5, 1, 21, 14, 11, 15, 22, 16, 17, 20, 15, 0, 7, 0, 2, 21, -1, 5, 1, 23, 14, 19, 15, 22, 16, 17, 22, 19, 0, 0, 0, 2, 23, -1, 1, 1, 24, 0, 0, 0, 2, 24, -1, 1, 1, 25, 0, 0, 0, 2, 25, -1, 1, 1, 26, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="20" shared="false">
+			<array  len="27" shared="false">
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
 				<resource  external="2">  </resource>
@@ -71,14 +76,21 @@
 				<resource  external="5">  </resource>
 				<resource  external="6">  </resource>
 				<int> 1 </int>
+				<string> "This skill heals the player" </string>
+				<int> 20 </int>
 				<resource  external="7">  </resource>
 				<int> 2 </int>
+				<string> "This skill teleport the player" </string>
+				<int> 50 </int>
 				<resource  external="8">  </resource>
 				<int> 0 </int>
+				<string> "This skill unleashes a bolt of arcane power" </string>
 				<resource  external="9">  </resource>
+				<string> "a card" </string>
 				<resource  external="10">  </resource>
 				<resource  external="11">  </resource>
 				<resource  external="12">  </resource>
+				<resource  external="13">  </resource>
 			</array>
 			<string> "version" </string>
 			<int> 2 </int>
