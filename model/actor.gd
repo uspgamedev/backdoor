@@ -8,7 +8,7 @@ class Card:
 	func get_name():
 		return card_ref.get_name()
 	func get_description():
-		return card_ref.get_description() 
+		return card_ref.get_description()
 	func get_ref():
 		return card_ref
 
@@ -22,7 +22,7 @@ var deck
 
 var weapon
 var armory
-var item
+var accessory
 
 export(int) var speed = 10
 export(int) var draw_rate = 5
@@ -122,7 +122,7 @@ func serialize():
 		module_data["name"] = module.get_name()
 		module_data["chance"] = module.chance
 		ai_modules_data.append(module_data)
-	actor_data["ai_modules"] = ai_modules_data 
+	actor_data["ai_modules"] = ai_modules_data
 	return actor_data
 
 static func unserialize(data, root):

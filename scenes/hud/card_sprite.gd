@@ -3,6 +3,7 @@ extends Node2D
 
 const CardScene = preload("res://scenes/hud/card.xscn")
 const CARD_TYPE = preload("res://model/card_ref.gd").CARD_TYPE
+const Action = preload("res://model/action.gd")
 
 const Skill = preload("res://model/card_skill.gd")
 const Upgrade = preload("res://model/card_upgrade.gd")
@@ -47,6 +48,19 @@ func get_card_class(card):
 	elif card extends Item:
 		return "Item"
 	return ""
+
+func prepare_evocation(player):
+	var action = Action.EvokeCard.new(card)
+	for option in self.card.get_ref().get_options(player):
+		if option["type"] == "TARGET":
+			var cursor = get_node("/root/sector/map/floors/cursor")
+			cursor.select(option["check"])
+			yield(cursor, "target_chosen")
+			if cursor.target == null:
+				return false
+			action.add_option(cursor.target)
+	player.add_action(action)
+	return true
 
 func select():
 	self.set_pos(Vector2(self.get_pos().x, -32))
