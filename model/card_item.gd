@@ -27,13 +27,13 @@ func show_equips(actor):
 	var weapon = "none"
 	if actor.weapon != null:
 		weapon = actor.weapon.get_name()
-	var armory
+	var armory = "none"
 	if actor.armory != null:
 		armory = actor.armory.get_name()
-	var accessory
+	var accessory = "none"
 	if actor.accessory != null:
 		accessory = actor.accessory.get_name()
-	
+
 	print("equipments")
 	print("weapon=", weapon)
 	print("armory=", armory)
