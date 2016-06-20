@@ -77,7 +77,10 @@ func step_time():
 func set_upgrade(upgrade):
 	if upgrades.size() == upgrade_slot:
 		upgrades.pop_front();
-	upgrades.push_back(Card.new(upgrade))
+	if upgrade extends Card:
+		upgrades.push_back(upgrade)
+	else:
+		upgrades.push_back(Card.new(upgrade))
 	print("upgrade=[")
 	for card_aux in upgrades:
 		print(card_aux.get_name(), ",")
@@ -157,7 +160,7 @@ func serialize():
 		print("writing upg=", upg.get_name())
 
 	actor_data["upgrades"] = serialize_card_array(cards_db, upgrades)
-	
+
 	for upg in upgrades:
 		print("writing upg[]=", actor_data["upgrades"])
 
@@ -198,7 +201,7 @@ static func unserialize(data, root):
 	if data.has("upgrades"):
 		for card_id in data["upgrades"]:
 			var upg = load_card(cards_db, card_id)
-			print("loading upgrades=", card_id, ", ", upg.get_name())
+			print("loading upgrades=", card_id, ", ", upg.get_name(), ", ")
 			actor.set_upgrade(upg)
 
 	var ai_modules = data["ai_modules"]
