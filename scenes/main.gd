@@ -98,6 +98,8 @@ func _input(event):
 		elif event.is_action_released("ui_display_card") and self.display_popup.is_hidden() and hand.get_selected_card() != null:
 			print("display ", hand.get_selected_card().get_name())
 			self.display_popup.display(hand.get_selected_card())
+			
+
 		if event.is_action_pressed("ui_idle"):
 			player.add_action(Action.Idle.new())
 		elif move.length_squared() > 0:
@@ -107,5 +109,3 @@ func _input(event):
 				player.add_action(Action.MeleeAttack.new(body))
 			else:
 				player.add_action(Action.Move.new(target_pos))
-		
-

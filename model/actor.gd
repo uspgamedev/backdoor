@@ -1,6 +1,8 @@
 
 extends Node
 
+const SlotItem = preload("res://model/card_item.gd").SlotItem
+
 class Card:
 	var card_ref
 	func _init(ref):
@@ -8,7 +10,7 @@ class Card:
 	func get_name():
 		return card_ref.get_name()
 	func get_description():
-		return card_ref.get_description() 
+		return card_ref.get_description()
 	func get_ref():
 		return card_ref
 
@@ -22,7 +24,7 @@ var deck
 
 var weapon
 var armory
-var item
+var accessory
 
 export(int) var speed = 10
 export(int) var draw_rate = 5
@@ -69,6 +71,17 @@ func step_time():
 	if can_draw():
 		draw_cooldown -= draw_rate
 
+func equip_item(card):
+	if card.slot == SlotItem.WEAPON:
+		print("equip weapon ", card.get_name())
+		self.weapon = Card.new(card)
+	elif card.slot == SlotItem.ARMORY:
+		print("equip armory ", card.get_name())
+		self.armory = Card.new(card)
+	elif card.slot == SlotItem.ACCESSORY:
+		print("equip accessory ", card.get_name())
+		self.accessory = Card.new(card)
+
 func is_ready():
 	return cooldown == 0
 
@@ -100,21 +113,34 @@ func pick_ai_module():
 			return module
 	return get_child(0)
 
+static func get_card_id(cards_db, card):
+	return cards_db.get_card_id(card.get_ref())
+
+static func serialize_card_array(cards_db, card_array):
+	var array_data = []
+	for card in card_array:
+		array_data.append(get_card_id(cards_db, card))
+	return array_data
+
 func serialize():
 	var sector = get_parent().get_parent()
 	var actor_data = {}
 	actor_data["name"] = char_name
 	actor_data["cooldown"] = cooldown
 	actor_data["drawcooldown"] = draw_cooldown
-	var hand_data = []
+
 	var cards_db = get_node("/root/captains_log/cards")
-	for card in hand:
-		hand_data.append(cards_db.get_card_id(card.get_ref()))
-	actor_data["hand"] = hand_data
-	var deck_data = []
-	for card in deck:
-		deck_data.append(cards_db.get_card_id(card.get_ref()))
-	actor_data["deck"] = deck_data
+
+	if weapon != null:
+		actor_data["weapon"] = get_card_id(cards_db, weapon)
+	if armory != null:
+		actor_data["armory"] = get_card_id(cards_db, armory)
+	if accessory != null:
+		actor_data["accessory"] = get_card_id(cards_db, accessory)
+
+	actor_data["hand"] = serialize_card_array(cards_db, hand)
+	actor_data["deck"] = serialize_card_array(cards_db, deck)
+
 	actor_data["body_id"] = sector.get_actor_body(self).get_id()
 	var ai_modules_data = []
 	for module in get_children():
@@ -122,20 +148,33 @@ func serialize():
 		module_data["name"] = module.get_name()
 		module_data["chance"] = module.chance
 		ai_modules_data.append(module_data)
-	actor_data["ai_modules"] = ai_modules_data 
+	actor_data["ai_modules"] = ai_modules_data
 	return actor_data
+
+static func load_card(cards_db, card_id):
+	return Card.new(cards_db.get_child(card_id))
+
+static func unserialize_card_array(cards_db, actor_property, card_array):
+	for card_id in card_array:
+		actor_property.append(load_card(cards_db, card_id))
 
 static func unserialize(data, root):
 	var actor = new(data["name"])
 	actor.cooldown = data["cooldown"]
 	actor.draw_cooldown = data["drawcooldown"]
+
 	var cards_db = root.get_node("captains_log/cards")
-	var hand = data["hand"]
-	for card in hand:
-		actor.hand.append(Card.new(cards_db.get_child(card)))
-	var deck = data["deck"]
-	for card in deck:
-		actor.deck.append(Card.new(cards_db.get_child(card)))
+
+	if data.has("weapon"):
+		actor.weapon = load_card(cards_db, data["weapon"])
+	if data.has("armory"):
+		actor.armory = load_card(cards_db, data["armory"])
+	if data.has("accessory"):
+		actor.accessory = load_card(cards_db, data["accessory"])
+
+	unserialize_card_array(cards_db, actor.hand, data["hand"])
+	unserialize_card_array(cards_db, actor.deck, data["deck"])
+
 	var ai_modules = data["ai_modules"]
 	for module in ai_modules:
 		var ai = Node.new()
