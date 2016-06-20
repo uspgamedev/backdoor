@@ -12,15 +12,7 @@ func get_slot():
 	return slot
 
 func evoke(actor, options):
-	if slot == SlotItem.WEAPON:
-		print("equip weapon ", self.get_name())
-		actor.weapon = self
-	elif slot == SlotItem.ARMORY:
-		print("equip armory ", self.get_name())
-		actor.armory = self
-	elif slot == SlotItem.ACCESSORY:
-		print("equip accessory ", self.get_name())
-		actor.accessory = self
+	actor.equip_item(self)
 	show_equips(actor)
 
 func show_equips(actor):
