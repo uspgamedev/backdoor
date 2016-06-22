@@ -76,7 +76,7 @@ func step_time():
 
 func set_upgrade(upgrade):
 	if upgrades.size() == upgrade_slot:
-		upgrades.pop_front();
+		return
 	if upgrade extends Card:
 		upgrades.push_back(upgrade)
 	else:
