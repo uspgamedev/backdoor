@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resource_file type="PackedScene" subresource_count="3" version="2.0" version_name="Godot Engine v2.0.stable.custom_build">
+	<ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" index="1"></ext_resource>
+	<ext_resource path="res://scenes/hud/item_stats.gd" type="Script" index="0"></ext_resource>
+	<main_resource>
+		<dictionary name="_bundled" shared="false">
+			<string> "conn_count" </string>
+			<int> 0 </int>
+			<string> "conns" </string>
+			<int_array  len="0"> 				 </int_array>
+			<string> "editable_instances" </string>
+			<array  len="0" shared="false">
+			</array>
+			<string> "names" </string>
+			<string_array  len="23">
+				<string> "item_stats" </string>
+				<string> "anchor/left" </string>
+				<string> "anchor/right" </string>
+				<string> "margin/left" </string>
+				<string> "margin/bottom" </string>
+				<string> "focus/ignore_mouse" </string>
+				<string> "focus/stop_mouse" </string>
+				<string> "size_flags/horizontal" </string>
+				<string> "size_flags/vertical" </string>
+				<string> "script/script" </string>
+				<string> "Control" </string>
+				<string> "weapon" </string>
+				<string> "custom_fonts/font" </string>
+				<string> "text" </string>
+				<string> "valign" </string>
+				<string> "percent_visible" </string>
+				<string> "lines_skipped" </string>
+				<string> "max_lines_visible" </string>
+				<string> "Label" </string>
+				<string> "suit" </string>
+				<string> "margin/top" </string>
+				<string> "margin/right" </string>
+				<string> "accessory" </string>
+			</string_array>
+			<string> "node_count" </string>
+			<int> 4 </int>
+			<string> "node_paths" </string>
+			<array  len="0" shared="false">
+			</array>
+			<string> "nodes" </string>
+			<int_array  len="120"> 				-1, -1, 10, 0, -1, 9, 1, 0, 2, 0, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 8, 5, 9, 6, 0, 0, 0, 18, 11, -1, 11, 2, 0, 4, 7, 5, 4, 6, 4, 7, 5, 12, 8, 13, 9, 14, 0, 15, 10, 16, 11, 17, 12, 0, 0, 0, 18, 19, -1, 14, 2, 0, 3, 13, 20, 7, 21, 10, 4, 14, 5, 4, 6, 4, 7, 5, 12, 8, 13, 15, 14, 0, 15, 10, 16, 11, 17, 12, 0, 0, 0, 18, 22, -1, 12, 2, 0, 20, 14, 4, 16, 5, 4, 6, 4, 7, 5, 12, 8, 13, 17, 14, 0, 15, 10, 16, 11, 17, 12, 0 </int_array>
+			<string> "variants" </string>
+			<array  len="18" shared="false">
+				<int> 1 </int>
+				<real> 328 </real>
+				<real> 256 </real>
+				<bool> False </bool>
+				<bool> True </bool>
+				<int> 2 </int>
+				<resource  external="0">  </resource>
+				<real> 32 </real>
+				<resource  external="1">  </resource>
+				<string> "   weapon: none" </string>
+				<real> 1 </real>
+				<int> 0 </int>
+				<int> -1 </int>
+				<real> -1 </real>
+				<real> 64 </real>
+				<string> "     suit: none" </string>
+				<real> 96 </real>
+				<string> "accessory: none" </string>
+			</array>
+			<string> "version" </string>
+			<int> 2 </int>
+		</dictionary>
+
+	</main_resource>
+</resource_file>
