@@ -21,6 +21,7 @@ var char_name
 
 var hand
 var deck
+var upgrades
 
 var weapon
 var suit
@@ -28,6 +29,7 @@ var accessory
 
 export(int) var speed = 10
 export(int) var draw_rate = 5
+export(int) var upgrade_slot = 3
 
 const DRAW_TIME = 120
 const MAX_HAND = 5
@@ -42,6 +44,7 @@ signal equipped_item(item)
 func _init(name):
   hand = []
   deck = []
+  upgrades = []
   char_name = name
 
 func _ready():
@@ -71,6 +74,18 @@ func step_time():
     emit_signal("update_deck")
   if can_draw():
     draw_cooldown -= draw_rate
+
+func set_upgrade(upgrade):
+	if upgrades.size() == upgrade_slot:
+		return
+	if upgrade extends Card:
+		upgrades.push_back(upgrade)
+	else:
+		upgrades.push_back(Card.new(upgrade))
+	print("upgrade=[")
+	for card_aux in upgrades:
+		print(card_aux.get_name(), ",")
+	print("]")
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
@@ -139,6 +154,7 @@ func serialize():
 
   actor_data["hand"] = serialize_card_array(cards_db, hand)
   actor_data["deck"] = serialize_card_array(cards_db, deck)
+  actor_data["upgrades"] = serialize_card_array(cards_db, upgrades)
 
   actor_data["body_id"] = sector.get_actor_body(self).get_id()
   var ai_modules_data = []
@@ -173,6 +189,12 @@ static func unserialize(data, root):
 
   unserialize_card_array(cards_db, actor.hand, data["hand"])
   unserialize_card_array(cards_db, actor.deck, data["deck"])
+
+  if data.has("upgrades"):
+	  for card_id in data["upgrades"]:
+      var upg = load_card(cards_db, card_id)
+      print("loading upgrades=", card_id, ", ", upg.get_name(), ", ")
+      actor.set_upgrade(upg)
 
   var ai_modules = data["ai_modules"]
   for module in ai_modules:
