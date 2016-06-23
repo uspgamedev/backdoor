@@ -9,6 +9,7 @@ var done
 var next_sector
 var hand
 var display_popup
+var upgrades_popup
 
 func _init():
   print("sector created")
@@ -25,6 +26,7 @@ func set_player(the_player):
   get_node("HUD/UI_hook/Deck").set_player(the_player)
   player.connect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   display_popup = get_node("HUD/CardDisplay")
+  upgrades_popup = get_node("HUD/UpgradesDisplay")
 
 func close():
   get_node("HUD/UI_hook/CooldownBar").stop()
@@ -89,18 +91,26 @@ func _input(event):
       player.add_action(Action.ChangeSector.new(1))
     elif event.is_action_pressed("debug_create_slime"):
       get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
-    elif event.is_action_released("ui_display_card") and not self.display_popup.is_hidden():
-      self.display_popup.hide()
-    elif event.is_action_released("ui_focus_next") and not self.display_popup.is_hidden():
-      self.display_popup.hide()
-    elif event.is_action_released("ui_focus_prev") and not self.display_popup.is_hidden():
-      self.display_popup.hide()
-    elif event.is_action_released("ui_select") and not self.display_popup.is_hidden():
-      self.display_popup.hide()
+    elif ((event.is_action_released("ui_display_card")
+      or event.is_action_released("ui_focus_next")
+      or event.is_action_released("ui_focus_prev")
+      or event.is_action_released("ui_select")
+      or event.is_action_released("ui_show_upgrades"))
+      and not self.display_popup.is_hidden()):
+        self.display_popup.hide()
+    elif ((event.is_action_released("ui_display_card")
+      or event.is_action_released("ui_focus_next")
+      or event.is_action_released("ui_focus_prev")
+      or event.is_action_released("ui_select")
+      or event.is_action_released("ui_show_upgrades"))
+      and not self.upgrades_popup.is_hidden()):
+        self.upgrades_popup.hide()
     elif event.is_action_released("ui_display_card") and self.display_popup.is_hidden() and hand.get_selected_card() != null:
       print("display ", hand.get_selected_card().get_name())
       self.display_popup.display(hand.get_selected_card())
-
+    elif event.is_action_released("ui_show_upgrades") and self.upgrades_popup.is_hidden() and player != null:
+      print("display ", player.upgrades)
+      self.upgrades_popup.display(player.upgrades)
 
     if event.is_action_pressed("ui_idle"):
       player.add_action(Action.Idle.new())
