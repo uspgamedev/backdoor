@@ -50,6 +50,12 @@ func _init(name):
 func _ready():
   cooldown = 100/speed
   draw_cooldown = DRAW_TIME
+  if weapon != null:
+    emit_signal("equipped_item", weapon.get_ref())
+  if suit != null:
+    emit_signal("equipped_item", suit.get_ref())
+  if accessory != null:
+    emit_signal("equipped_item", accessory.get_ref())
 
 func get_body():
   return get_node("/root/sector/map").get_actor_body(self)
@@ -179,6 +185,8 @@ static func unserialize(data, root):
   actor.draw_cooldown = data["drawcooldown"]
 
   var cards_db = root.get_node("captains_log/cards")
+
+  print("data=", data)
 
   if data.has("weapon"):
     actor.weapon = load_card(cards_db, data["weapon"])
