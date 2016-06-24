@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="8" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" index="2"></ext_resource>
-	<ext_resource path="res://assets/card.tex" type="Texture" index="1"></ext_resource>
-	<ext_resource path="res://scenes/hud/card_sprite.gd" type="Script" index="0"></ext_resource>
+	<ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" index="2">
+	</ext_resource>
+	<ext_resource path="res://assets/card.tex" type="Texture" index="1">
+	</ext_resource>
+	<ext_resource path="res://components/ui/card_sprite.gd" type="Script" index="0">
+	</ext_resource>
 	<resource type="AtlasTexture" path="local://1">
+
 		<resource name="atlas" external="1">  </resource>
 		<rect2 name="region"> 0, 0, 64, 80 </rect2>
 		<rect2 name="margin"> 0, 0, 0, 0 </rect2>

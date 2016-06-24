@@ -1,7 +1,7 @@
 
 extends Node
 
-const SlotItem = preload("res://model/card_item.gd").SlotItem
+const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 
 class Card:
   var card_ref

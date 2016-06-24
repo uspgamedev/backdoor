@@ -1,9 +1,9 @@
 
 extends Node
 
-const RouteScene = preload("res://scenes/route.xscn")
+const RouteScene = preload("res://model/route.xscn")
 
-const Route = preload("res://scenes/route.gd")
+const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")
 const Body = preload("res://model/body.gd")
 

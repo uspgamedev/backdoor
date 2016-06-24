@@ -2,7 +2,7 @@
 extends Node
 
 # Scenes
-const RouteScene = preload("res://scenes/route.xscn")
+const RouteScene = preload("res://model/route.xscn")
 
 # Classes
 const Identifiable = preload("res://model/identifiable.gd")

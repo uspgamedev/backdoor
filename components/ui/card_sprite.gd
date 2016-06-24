@@ -1,13 +1,13 @@
 
 extends Node2D
 
-const CardScene = preload("res://scenes/hud/card.xscn")
-const CARD_TYPE = preload("res://model/card_ref.gd").CARD_TYPE
+const CardScene = preload("res://components/ui/card_sprite.xscn")
+const CARD_TYPE = preload("res://model/cards/card_entity.gd").CARD_TYPE
 const Action = preload("res://model/action.gd")
 
-const Skill = preload("res://model/card_skill.gd")
-const Upgrade = preload("res://model/card_upgrade.gd")
-const Item = preload("res://model/card_item.gd")
+const Skill = preload("res://model/cards/card_skill.gd")
+const Upgrade = preload("res://model/cards/card_upgrade.gd")
+const Item = preload("res://model/cards/card_item.gd")
 
 
 const ANGLE = -atan2(1,2)

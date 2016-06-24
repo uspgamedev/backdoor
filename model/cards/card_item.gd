@@ -1,5 +1,5 @@
 
-extends "res://model/card_ref.gd"
+extends "res://model/cards/card_entity.gd"
 
 class SlotItem:
 	const WEAPON = 0

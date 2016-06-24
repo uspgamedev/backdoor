@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://scenes/hud/cursor.xscn" type="PackedScene" index="2"></ext_resource>
-	<ext_resource path="res://scenes/map.gd" type="Script" index="0"></ext_resource>
-	<ext_resource path="res://resources/smol_tileset.xml" type="TileSet" index="1"></ext_resource>
+	<ext_resource path="res://components/ui/cursor.xscn" type="PackedScene" index="2">
+	</ext_resource>
+	<ext_resource path="res://scenes/map.gd" type="Script" index="0">
+	</ext_resource>
+	<ext_resource path="res://components/util/smol_tileset.xml" type="TileSet" index="1">
+	</ext_resource>
 	<main_resource>
+
+
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
 			<int> 0 </int>
