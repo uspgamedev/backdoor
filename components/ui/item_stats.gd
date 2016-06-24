@@ -11,5 +11,4 @@ onready var slots = [
 
 func change_item(item):
   var slot = slots[item.get_slot()]
-  print("change item=", item)
   slot.set_text(slot.get_name() + ": " + item.get_name())

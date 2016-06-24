@@ -88,10 +88,6 @@ func set_upgrade(upgrade):
 		upgrades.push_back(upgrade)
 	else:
 		upgrades.push_back(Card.new(upgrade))
-	print("upgrade=[")
-	for card_aux in upgrades:
-		print(card_aux.get_name(), ",")
-	print("]")
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
@@ -201,7 +197,6 @@ static func unserialize(data, root):
   if data.has("upgrades"):
 	  for card_id in data["upgrades"]:
       var upg = load_card(cards_db, card_id)
-      print("loading upgrades=", card_id, ", ", upg.get_name(), ", ")
       actor.set_upgrade(upg)
 
   var ai_modules = data["ai_modules"]
