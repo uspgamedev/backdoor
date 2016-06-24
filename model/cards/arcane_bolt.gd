@@ -1,5 +1,5 @@
 
-extends "res://model/card_skill.gd"
+extends "res://model/cards/card_skill.gd"
 
 func valid_target(actor, target):
 	var map = get_node("/root/sector/map")

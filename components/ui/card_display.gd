@@ -1,6 +1,6 @@
 extends Node2D
 
-const CardSprite = preload("res://scenes/hud/card_sprite.gd")
+const CardSprite = preload("res://components/ui/card_sprite.gd")
 const Actor = preload("res://model/actor.gd")
 
 func display(card):

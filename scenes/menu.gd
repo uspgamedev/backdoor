@@ -1,9 +1,9 @@
 
 extends Node2D
 
-const MenuButton = preload("res://scenes/ui/button.xscn")
+const MenuButton = preload("res://components/ui/save-button.xscn")
 
-const Route = preload("res://scenes/route.gd")
+const Route = preload("res://model/route.gd")
 
 onready var saves_node = get_node("saves")
 onready var caplog = get_node("/root/captains_log")

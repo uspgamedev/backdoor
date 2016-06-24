@@ -1,7 +1,7 @@
 
 extends Control
 
-const ItemCard = preload("res://model/card_item.gd")
+const ItemCard = preload("res://model/cards/card_item.gd")
 
 onready var slots = [
   get_node("weapon"),

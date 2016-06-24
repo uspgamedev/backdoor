@@ -5,7 +5,7 @@ const MapScene = preload("res://scenes/map.xscn")
 
 const Actor        = preload("res://model/actor.gd")
 const Body         = preload("res://model/body.gd")
-const BodyView     = preload("res://scenes/bodyview.gd")
+const BodyView     = preload("res://components/bodyview.gd")
 const Identifiable = preload("res://model/identifiable.gd")
 
 const block = [

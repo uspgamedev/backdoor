@@ -1,5 +1,5 @@
 
-extends "res://model/card_skill.gd"
+extends "res://model/cards/card_skill.gd"
 
 func can_be_evoked(actor):
 	return true

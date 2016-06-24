@@ -1,7 +1,7 @@
 
 extends Node
 
-const Card = preload("res://model/card_ref.gd")
+const Card = preload("res://model/cards/card_entity.gd")
 
 func get_card_id(card):
 	assert(card extends Card)
