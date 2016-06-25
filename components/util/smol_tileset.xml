@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="TileSet" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://assets/tiles-v2.tex" type="Texture" index="1"></ext_resource>
-	<ext_resource path="res://assets/floor-cobblestone.tex" type="Texture" index="0"></ext_resource>
 	<ext_resource path="res://assets/wall-stone-bricks.tex" type="Texture" index="2"></ext_resource>
+	<ext_resource path="res://assets/floor-cobblestone.tex" type="Texture" index="0"></ext_resource>
 	<main_resource>
 		<string name="0/name"> "Floor" </string>
 		<resource name="0/texture" external="0">  </resource>
