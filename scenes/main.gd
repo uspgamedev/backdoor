@@ -106,10 +106,8 @@ func _input(event):
       and not self.upgrades_popup.is_hidden()):
         self.upgrades_popup.hide()
     elif event.is_action_released("ui_display_card") and self.display_popup.is_hidden() and hand.get_selected_card() != null:
-      print("display ", hand.get_selected_card().get_name())
       self.display_popup.display(hand.get_selected_card())
     elif event.is_action_released("ui_show_upgrades") and self.upgrades_popup.is_hidden() and player != null:
-      print("display ", player.upgrades)
       self.upgrades_popup.display(player.upgrades)
 
     if event.is_action_pressed("ui_idle"):

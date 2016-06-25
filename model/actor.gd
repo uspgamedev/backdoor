@@ -50,6 +50,12 @@ func _init(name):
 func _ready():
   cooldown = 100/speed
   draw_cooldown = DRAW_TIME
+  if weapon != null:
+    emit_signal("equipped_item", weapon.get_ref())
+  if suit != null:
+    emit_signal("equipped_item", suit.get_ref())
+  if accessory != null:
+    emit_signal("equipped_item", accessory.get_ref())
 
 func get_body():
   return get_node("/root/sector/map").get_actor_body(self)
@@ -82,10 +88,6 @@ func set_upgrade(upgrade):
 		upgrades.push_back(upgrade)
 	else:
 		upgrades.push_back(Card.new(upgrade))
-	print("upgrade=[")
-	for card_aux in upgrades:
-		print(card_aux.get_name(), ",")
-	print("]")
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
@@ -180,6 +182,8 @@ static func unserialize(data, root):
 
   var cards_db = root.get_node("captains_log/cards")
 
+  print("data=", data)
+
   if data.has("weapon"):
     actor.weapon = load_card(cards_db, data["weapon"])
   if data.has("suit"):
@@ -193,7 +197,6 @@ static func unserialize(data, root):
   if data.has("upgrades"):
 	  for card_id in data["upgrades"]:
       var upg = load_card(cards_db, card_id)
-      print("loading upgrades=", card_id, ", ", upg.get_name(), ", ")
       actor.set_upgrade(upg)
 
   var ai_modules = data["ai_modules"]
