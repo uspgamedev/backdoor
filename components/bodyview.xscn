@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://components/bodyview.gd" type="Script" index="0">
-	</ext_resource>
-	<ext_resource path="res://assets/bodies/slime/idle.tex" type="Texture" index="1">
-	</ext_resource>
+	<ext_resource path="res://assets/bodies/slime/idle.tex" type="Texture" index="1"></ext_resource>
+	<ext_resource path="res://components/bodyview.gd" type="Script" index="0"></ext_resource>
 	<resource type="StyleBoxFlat" path="local://1">
-
 		<real name="content_margin/left"> -1 </real>
 		<real name="content_margin/right"> -1 </real>
 		<real name="content_margin/top"> -1 </real>
@@ -66,7 +63,7 @@
 			<array  len="15" shared="false">
 				<resource  external="0">  </resource>
 				<resource  external="1">  </resource>
-				<vector2> 0, -16 </vector2>
+				<vector2> 0, -32 </vector2>
 				<real> -16 </real>
 				<real> -54 </real>
 				<real> 112 </real>
