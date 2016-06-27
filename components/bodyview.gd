@@ -6,7 +6,7 @@ const BodyViewScene = preload("res://components/bodyview.xscn")
 var body
 
 onready var sprite = get_node("Sprite")
-onready var lifebar = get_node("LifeBar")
+onready var lifebar = get_node("Sprite/LifeBar")
 
 static func create(body):
 	var bodyview = BodyViewScene.instance()
