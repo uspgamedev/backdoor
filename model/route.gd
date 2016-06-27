@@ -43,6 +43,8 @@ static func load_from_file(id, file, root):
 	route.current_sector.show()
 	# Store reference to player
 	route.player = route.current_sector.get_node("actors").get_child(data["player_actor_id"])
+	var player_body = route.current_sector.get_actor_body(route.player)
+	route.current_sector.find_body_view(player_body).highlight()
 	return route
 
 func save_to_file(file):
@@ -112,4 +114,3 @@ func open_current_sector(player_body):
 		current_sector.add_actor(player_body, player)
 		current_sector.move_actor(player, Vector2(0,0))
 	sector.new_sector()
-
