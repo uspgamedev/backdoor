@@ -6,7 +6,10 @@ const BodyViewScene = preload("res://components/bodyview.xscn")
 var body
 
 onready var sprite = get_node("Sprite")
-onready var lifebar = get_node("LifeBar")
+onready var lifebar = get_node("Sprite/LifeBar")
+onready var hl_indicator = get_node("Highlight")
+
+export(bool) var highlight = false
 
 static func create(body):
 	var bodyview = BodyViewScene.instance()
@@ -16,6 +19,20 @@ static func create(body):
 func _ready():
 	sprite.set_texture(load("res://assets/bodies/" + body.type + "/idle.tex"))
 	set_process(true)
+
+func highlight():
+	highlight = true
+	update_hl()
+
+func unhighlight():
+	highlight = false
+	update_hl()
+
+func update_hl():
+	if highlight:
+		get_node("Highlight").show()
+	else:
+		get_node("Highlight").hide()
 
 func _process(delta):
 	set_pos(get_parent().map_to_world(body.pos) + Vector2(0, 16 - 1))
