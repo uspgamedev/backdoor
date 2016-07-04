@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="TileSet" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://assets/tiles-v2.tex" type="Texture" index="1"></ext_resource>
 	<ext_resource path="res://assets/wall-stone-bricks.tex" type="Texture" index="2"></ext_resource>
-	<ext_resource path="res://assets/floor-cobblestone.tex" type="Texture" index="0"></ext_resource>
+	<ext_resource path="res://assets/tiles-v2.tex" type="Texture" index="1"></ext_resource>
+	<ext_resource path="res://assets/floor-cobblestone_v3.tex" type="Texture" index="0"></ext_resource>
 	<main_resource>
 		<string name="0/name"> "Floor" </string>
 		<resource name="0/texture" external="0">  </resource>
@@ -69,7 +69,7 @@
 		</array>
 		<string name="7/name"> "Wall Stone0" </string>
 		<resource name="7/texture" external="2">  </resource>
-		<vector2 name="7/tex_offset"> 0, -32 </vector2>
+		<vector2 name="7/tex_offset"> -96, 16 </vector2>
 		<resource name="7/material"></resource>		<rect2 name="7/region"> 0, 0, 64, 96 </rect2>
 		<vector2 name="7/occluder_offset"> 32, 48 </vector2>
 		<resource name="7/occluder"></resource>		<vector2 name="7/navigation_offset"> 32, 48 </vector2>
