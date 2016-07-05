@@ -28,6 +28,9 @@ func unhighlight():
 	highlight = false
 	update_hl()
 
+func set_hl_colour(colour):
+	get_node("Highlight").set_modulate(colour)
+
 func update_hl():
 	if highlight:
 		get_node("Highlight").show()
