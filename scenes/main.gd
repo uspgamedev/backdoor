@@ -11,6 +11,8 @@ var hand
 var display_popup
 var upgrades_popup
 
+onready var deck_view = get_node("HUD/deck")
+
 func _init():
   print("sector created")
 
@@ -23,7 +25,7 @@ func set_player(the_player):
   get_node("HUD/UI_hook/CooldownBar").set_player(the_player)
   get_node("HUD/UI_hook/Hand").set_player(the_player)
   hand = get_node("HUD/UI_hook/Hand")
-  get_node("HUD/UI_hook/Deck").set_player(the_player)
+  deck_view.set_player(the_player)
   player.connect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   display_popup = get_node("HUD/CardDisplay")
   upgrades_popup = get_node("HUD/UpgradesDisplay")
@@ -31,7 +33,7 @@ func set_player(the_player):
 func close():
   get_node("HUD/UI_hook/CooldownBar").stop()
   get_node("HUD/UI_hook/Hand").stop()
-  get_node("HUD/UI_hook/Deck").stop()
+  deck_view.stop()
   player.disconnect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   set_fixed_process(false)
   set_process_input(false)

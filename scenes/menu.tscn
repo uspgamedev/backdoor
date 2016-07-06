@@ -51,9 +51,8 @@ __meta__ = { "_edit_lock_":true }
 
 [node name="new_game" type="Button" parent="saves"]
 
-anchor/right = 1
-anchor/bottom = 1
-margin/bottom = 170.0
+margin/right = 576.0
+margin/bottom = 22.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2

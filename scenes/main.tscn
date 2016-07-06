@@ -3,13 +3,13 @@
 [ext_resource path="res://scenes/main.gd" type="Script" id=1]
 [ext_resource path="res://components/controller/hand.gd" type="Script" id=2]
 [ext_resource path="res://components/controller/cooldownbar.gd" type="Script" id=3]
-[ext_resource path="res://components/controller/deck.gd" type="Script" id=4]
-[ext_resource path="res://components/ui/card_display.tscn" type="PackedScene" id=5]
-[ext_resource path="res://components/ui/upgrade_display.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=7]
-[ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/ui/card_display.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/ui/upgrade_display.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=6]
+[ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/controller/deck.gd" type="Script" id=8]
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=1]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -22,7 +22,7 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=2]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -49,8 +49,8 @@ scale = Vector2( 1, 1 )
 
 [node name="UI_hook" type="Node2D" parent="HUD"]
 
-transform/pos = Vector2( 32, 416 )
-__meta__ = { "_editor_collapsed":true }
+transform/pos = Vector2( 32, 320 )
+__meta__ = { "_edit_lock_":true }
 
 [node name="Hand" type="Node2D" parent="HUD/UI_hook"]
 
@@ -68,8 +68,8 @@ margin/bottom = 179.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
-custom_styles/fg = SubResource( 3 )
-custom_styles/bg = SubResource( 4 )
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
 range/min = 0.0
 range/max = 100.0
 range/step = 1.0
@@ -80,21 +80,9 @@ range/rounded = false
 percent/visible = false
 script/script = ExtResource( 3 )
 
-[node name="Deck" type="Control" parent="HUD/UI_hook"]
+[node name="CardDisplay" parent="HUD" instance=ExtResource( 4 )]
 
-margin/left = 988.0
-margin/top = 174.0
-margin/right = 1218.0
-margin/bottom = 270.0
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-script/script = ExtResource( 4 )
-
-[node name="CardDisplay" parent="HUD" instance=ExtResource( 5 )]
-
-[node name="UpgradesDisplay" parent="HUD" instance=ExtResource( 6 )]
+[node name="UpgradesDisplay" parent="HUD" instance=ExtResource( 5 )]
 
 [node name="base" type="Control" parent="HUD"]
 
@@ -104,20 +92,39 @@ focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
+__meta__ = { "_edit_lock_":true }
 
 [node name="Input Description" type="Label" parent="HUD/base"]
 
-margin/right = 512.0
+margin/left = 16.0
+margin/top = 16.0
+margin/right = 336.0
 margin/bottom = 96.0
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
-custom_fonts/font = ExtResource( 7 )
+custom_fonts/font = ExtResource( 6 )
 text = "Controls:\n- arrow keys to move\n- A/S to change card\n- D to evoke card\n- ESC to save & quit\n- SHIFT+S to save & back to menu"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="item_stats" parent="HUD/base" instance=ExtResource( 8 )]
+[node name="item_stats" parent="HUD/base" instance=ExtResource( 7 )]
+
+[node name="deck" type="Control" parent="HUD"]
+
+anchor/left = 1
+anchor/top = 1
+anchor/right = 1
+anchor/bottom = 1
+margin/left = 120.0
+margin/top = 64.0
+margin/right = 16.0
+margin/bottom = 16.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+script/script = ExtResource( 8 )
 
 

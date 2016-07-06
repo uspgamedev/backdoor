@@ -1,15 +1,16 @@
 [gd_scene load_steps=3 format=1]
 
 [ext_resource path="res://components/ui/item_stats.gd" type="Script" id=1]
-[ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" id=2]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=2]
 
 [node name="item_stats" type="Control"]
 
 anchor/left = 1
 anchor/right = 1
-margin/left = 330.0
-margin/right = 2.0
-margin/bottom = 256.0
+margin/left = 192.0
+margin/top = 16.0
+margin/right = 16.0
+margin/bottom = 96.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
