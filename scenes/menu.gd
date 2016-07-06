@@ -1,5 +1,5 @@
 
-extends Node2D
+extends Control
 
 const MenuButton = preload("res://components/ui/save-button.tscn")
 
