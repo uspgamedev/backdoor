@@ -1,0 +1,171 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/floor-cobblestone_v3.tex" type="Texture" id=1]
+[ext_resource path="res://assets/tiles-v2.tex" type="Texture" id=2]
+[ext_resource path="res://assets/wall-stone-bricks.tex" type="Texture" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+__meta__ = { "__editor_plugin_screen__":"2D" }
+
+[node name="Floor" type="Sprite" parent="."]
+
+transform/pos = Vector2( 32, 48 )
+texture = ExtResource( 1 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 0, 64, 40 )
+
+[node name="Wall Corner" type="Sprite" parent="."]
+
+transform/pos = Vector2( 96, 65 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 64, 0, 64, 96 )
+
+[node name="Wall Corner T" type="Sprite" parent="."]
+
+transform/pos = Vector2( 160, 65 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 128, 0, 64, 96 )
+
+[node name="Wall Left" type="Sprite" parent="."]
+
+transform/pos = Vector2( 224, 61 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 192, 0, 64, 96 )
+
+[node name="Wall Left T" type="Sprite" parent="."]
+
+transform/pos = Vector2( 288, 61 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 256, 0, 64, 96 )
+
+[node name="Wall Right " type="Sprite" parent="."]
+
+transform/pos = Vector2( 352, 61 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 320, 0, 64, 96 )
+
+[node name="Wall Right T" type="Sprite" parent="."]
+
+transform/pos = Vector2( 416, 61 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 384, 0, 64, 96 )
+
+[node name="Wall Stone0" type="Sprite" parent="."]
+
+transform/pos = Vector2( 128, 128 )
+texture = ExtResource( 3 )
+offset = Vector2( -96, 16 )
+region = true
+region_rect = Rect2( 0, 0, 64, 96 )
+
+[node name="Wall Stone1" type="Sprite" parent="."]
+
+transform/pos = Vector2( 96, 176 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 64, 0, 64, 96 )
+
+[node name="Wall Stone2" type="Sprite" parent="."]
+
+transform/pos = Vector2( 160, 176 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 128, 0, 64, 96 )
+
+[node name="Wall Stone3" type="Sprite" parent="."]
+
+transform/pos = Vector2( 224, 176 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 192, 0, 64, 96 )
+
+[node name="Wall Stone4" type="Sprite" parent="."]
+
+transform/pos = Vector2( 288, 176 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 256, 0, 64, 96 )
+
+[node name="Wall Stone5" type="Sprite" parent="."]
+
+transform/pos = Vector2( 32, 272 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 0, 96, 64, 96 )
+
+[node name="Wall Stone6" type="Sprite" parent="."]
+
+transform/pos = Vector2( 96, 272 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 64, 96, 64, 96 )
+
+[node name="Wall Stone7" type="Sprite" parent="."]
+
+transform/pos = Vector2( 160, 272 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 128, 96, 64, 96 )
+
+[node name="Wall Stone8" type="Sprite" parent="."]
+
+transform/pos = Vector2( 224, 272 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 196, 96, 64, 96 )
+
+[node name="Wall Stone9" type="Sprite" parent="."]
+
+transform/pos = Vector2( 32, 368 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 0, 192, 64, 96 )
+
+[node name="Wall Stone10" type="Sprite" parent="."]
+
+transform/pos = Vector2( 96, 368 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 64, 192, 64, 96 )
+
+[node name="Wall Stone11" type="Sprite" parent="."]
+
+transform/pos = Vector2( 160, 368 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 128, 192, 64, 96 )
+
+[node name="Wall Stone12" type="Sprite" parent="."]
+
+transform/pos = Vector2( 224, 368 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -32 )
+region = true
+region_rect = Rect2( 192, 192, 64, 96 )
+
+

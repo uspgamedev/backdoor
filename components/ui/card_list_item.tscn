@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" id=1]
+[ext_resource path="res://components/ui/card_sprite.xscn" type="PackedScene" id=2]
+
+[node name="Item" type="Control"]
+
+margin/right = 294.0
+margin/bottom = 90.0
+rect/min_size = Vector2( 390, 90 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+
+[node name="CardName" type="Label" parent="."]
+
+anchor/right = 1
+margin/left = 83.0
+margin/top = 8.0
+margin/right = 10.0
+margin/bottom = 73.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+custom_fonts/font = ExtResource( 1 )
+text = "test"
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="CardHook" type="Control" parent="."]
+
+margin/left = 47.0
+margin/top = 44.0
+margin/right = 87.0
+margin/bottom = 84.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+
+[node name="Card" parent="CardHook" instance=ExtResource( 2 )]
+
+[node name="Name" parent="CardHook/Card"]
+
+visibility/visible = false
+
+
+[editable path="CardHook/Card"]

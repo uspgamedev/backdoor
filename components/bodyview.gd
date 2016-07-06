@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const BodyViewScene = preload("res://components/bodyview.xscn")
+const BodyViewScene = preload("res://components/bodyview.tscn")
 
 var body
 

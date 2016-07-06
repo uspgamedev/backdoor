@@ -1,0 +1,123 @@
+[gd_scene load_steps=11 format=1]
+
+[ext_resource path="res://scenes/main.gd" type="Script" id=1]
+[ext_resource path="res://components/controller/hand.gd" type="Script" id=2]
+[ext_resource path="res://components/controller/cooldownbar.gd" type="Script" id=3]
+[ext_resource path="res://components/controller/deck.gd" type="Script" id=4]
+[ext_resource path="res://components/ui/card_display.xscn" type="PackedScene" id=5]
+[ext_resource path="res://components/ui/upgrade_display.xscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=7]
+[ext_resource path="res://components/ui/item_stats.xscn" type="PackedScene" id=8]
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0.582031, 0.150055, 0.150055, 1 )
+light_color = Color( 0.828125, 0.181152, 0.181152, 1 )
+dark_color = Color( 0.46875, 0.0604248, 0.0604248, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0.6, 0.6, 0.6, 1 )
+light_color = Color( 0.8, 0.8, 0.8, 1 )
+dark_color = Color( 0.347656, 0.347656, 0.347656, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[node name="sector" type="Node2D"]
+
+script/script = ExtResource( 1 )
+__meta__ = { "__editor_plugin_screen__":"Script", "_edit_lock_":true }
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+
+[node name="UI_hook" type="Node2D" parent="HUD"]
+
+transform/pos = Vector2( 32, 416 )
+__meta__ = { "_editor_collapsed":true }
+
+[node name="Hand" type="Node2D" parent="HUD/UI_hook"]
+
+visibility/visible = false
+transform/pos = Vector2( 64, 64 )
+script/script = ExtResource( 2 )
+
+[node name="CooldownBar" type="ProgressBar" parent="HUD/UI_hook"]
+
+visibility/visible = false
+margin/left = 32.0
+margin/top = 163.0
+margin/right = 512.0
+margin/bottom = 179.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 1.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+script/script = ExtResource( 3 )
+
+[node name="Deck" type="Control" parent="HUD/UI_hook"]
+
+margin/left = 988.0
+margin/top = 174.0
+margin/right = 1218.0
+margin/bottom = 270.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+script/script = ExtResource( 4 )
+
+[node name="CardDisplay" parent="HUD" instance=ExtResource( 5 )]
+
+[node name="UpgradesDisplay" parent="HUD" instance=ExtResource( 6 )]
+
+[node name="base" type="Control" parent="HUD"]
+
+anchor/right = 1
+margin/bottom = 128.0
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+
+[node name="Input Description" type="Label" parent="HUD/base"]
+
+margin/right = 512.0
+margin/bottom = 96.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+custom_fonts/font = ExtResource( 7 )
+text = "Controls:\n- arrow keys to move\n- A/S to change card\n- D to evoke card\n- ESC to save & quit\n- SHIFT+S to save & back to menu"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="item_stats" parent="HUD/base" instance=ExtResource( 8 )]
+
+

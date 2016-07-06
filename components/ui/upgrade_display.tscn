@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://components/ui/upgrade_display.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=2]
+
+[node name="Node2D" type="Control"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+script/script = ExtResource( 1 )
+
+[node name="UpgradeDialog" type="PopupDialog" parent="."]
+
+visibility/visible = false
+margin/left = 401.0
+margin/top = 128.0
+margin/right = 841.0
+margin/bottom = 538.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+popup/exclusive = false
+
+[node name="Panel" type="ScrollContainer" parent="UpgradeDialog"]
+
+anchor/right = 1
+anchor/bottom = 1
+margin/left = 16.0
+margin/top = 90.0
+margin/right = 16.0
+margin/bottom = 16.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+scroll/horizontal = false
+scroll/vertical = true
+
+[node name="UpgradeList" type="VBoxContainer" parent="UpgradeDialog/Panel"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+custom_constants/separation = 10
+alignment = 0
+
+[node name="Label" type="Label" parent="UpgradeDialog"]
+
+anchor/right = 1
+margin/left = 16.0
+margin/top = 16.0
+margin/right = 16.0
+margin/bottom = 90.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Equiped Upgrade Cards"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+

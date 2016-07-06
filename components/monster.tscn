@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://model/monster/monster.gd" type="Script" id=1]
+
+[node name="monster" type="Node"]
+
+script/script = ExtResource( 1 )
+body_hp = 10
+body_type = "stone"
+
+[node name="cards" type="Node" parent="."]
+
+[node name="ai_modules" type="Node" parent="."]
+
+
