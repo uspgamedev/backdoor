@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=1]
 
 [ext_resource path="res://components/ui/card_display.gd" type="Script" id=1]
-[ext_resource path="res://components/ui/card_sprite.xscn" type="PackedScene" id=2]
+[ext_resource path="res://components/ui/card_sprite.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=3]
 [ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" id=4]
 

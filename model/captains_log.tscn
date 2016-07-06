@@ -2,7 +2,7 @@
 
 [ext_resource path="res://model/captains_log.gd" type="Script" id=1]
 [ext_resource path="res://components/util/id_server.gd" type="Script" id=2]
-[ext_resource path="res://components/monster.xscn" type="PackedScene" id=3]
+[ext_resource path="res://components/monster.tscn" type="PackedScene" id=3]
 [ext_resource path="res://model/ai/wander.gd" type="Script" id=4]
 [ext_resource path="res://model/ai/defensive.gd" type="Script" id=5]
 [ext_resource path="res://components/util/card_list.gd" type="Script" id=6]
