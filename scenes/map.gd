@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const MapScene = preload("res://scenes/map.xscn")
+const MapScene = preload("res://scenes/map.tscn")
 
 const Actor        = preload("res://model/actor.gd")
 const Body         = preload("res://model/body.gd")

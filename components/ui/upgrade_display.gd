@@ -1,7 +1,7 @@
 extends Control
 
 const CardSprite = preload("res://components/ui/card_sprite.gd")
-const CardItem = preload("res://components/ui/card_list_item.xscn")
+const CardItem = preload("res://components/ui/card_list_item.tscn")
 
 func clear():
 	for child in self.get_node("UpgradeDialog/Panel/UpgradeList").get_children():

@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const CardScene = preload("res://components/ui/card_sprite.xscn")
+const CardScene = preload("res://components/ui/card_sprite.tscn")
 const CARD_TYPE = preload("res://model/cards/card_entity.gd").CARD_TYPE
 const Action = preload("res://model/action.gd")
 

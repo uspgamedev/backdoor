@@ -1,7 +1,7 @@
 
 extends Node2D
 
-const MenuButton = preload("res://components/ui/save-button.xscn")
+const MenuButton = preload("res://components/ui/save-button.tscn")
 
 const Route = preload("res://model/route.gd")
 

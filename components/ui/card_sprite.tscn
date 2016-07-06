@@ -1,0 +1,88 @@
+[gd_scene load_steps=8 format=1]
+
+[ext_resource path="res://components/ui/card_sprite.gd" type="Script" id=1]
+[ext_resource path="res://assets/card.tex" type="Texture" id=2]
+[ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 64, 80 )
+margin = Rect2( 0, 0, 0, 0 )
+
+[sub_resource type="AtlasTexture" id=2]
+
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 96, 128 )
+margin = Rect2( 0, 0, 0, 0 )
+
+[sub_resource type="AtlasTexture" id=3]
+
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 64, 80 )
+margin = Rect2( 0, 0, 0, 0 )
+
+[sub_resource type="AtlasTexture" id=4]
+
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 64, 80 )
+margin = Rect2( 0, 0, 0, 0 )
+
+[node name="Card" type="Node2D"]
+
+script/script = ExtResource( 1 )
+__meta__ = { "__editor_plugin_screen__":"Script" }
+
+[node name="Background" type="Sprite" parent="."]
+
+texture = SubResource( 1 )
+modulate = Color( 0, 0.054902, 0.211765, 1 )
+
+[node name="Name" type="Label" parent="."]
+
+margin/left = -62.0
+margin/top = 93.0
+margin/right = 61.0
+margin/bottom = 125.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+custom_fonts/font = ExtResource( 3 )
+text = "Card Name"
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Art" type="Sprite" parent="."]
+
+visibility/visible = false
+texture = SubResource( 2 )
+modulate = Color( 0.11206, 0.113228, 0.0773466, 1 )
+
+[node name="Subborder" type="Sprite" parent="."]
+
+texture = SubResource( 3 )
+modulate = Color( 0.388235, 0.470588, 1, 1 )
+
+[node name="Border" type="Sprite" parent="."]
+
+texture = SubResource( 4 )
+
+[node name="CardClass" type="Label" parent="."]
+
+margin/left = -24.0
+margin/top = 22.0
+margin/right = 23.0
+margin/bottom = 35.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+

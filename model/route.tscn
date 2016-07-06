@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://model/route.gd" type="Script" id=1]
+
+[node name="route" type="Node"]
+
+script/script = ExtResource( 1 )
+
+[node name="sectors" type="Node" parent="."]
+
+

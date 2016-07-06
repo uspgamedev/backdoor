@@ -1,7 +1,7 @@
 
 extends Node
 
-const RouteScene = preload("res://model/route.xscn")
+const RouteScene = preload("res://model/route.tscn")
 
 const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")
