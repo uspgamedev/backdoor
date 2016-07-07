@@ -77,6 +77,7 @@ func _fixed_process(delta):
 func _input(event):
   if event.is_action_pressed("ui_cancel"):
     get_node("/root/captains_log").finish()
+    get_tree().quit()
   if event.is_action_pressed("ui_save"):
     get_node("/root/captains_log/scene_manager").close_route()
   if player.is_ready():
