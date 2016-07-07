@@ -1,43 +1,54 @@
 
 extends Node
 
-var is_control = false
-
-var actions
+var enabled = true
+var actions = {}
 
 func _init():
   if self extends Control:
-    is_control = true
     accep_event()
   else:
     set_process_unhandled_input(true)
+  build_action_dict()
+
+func enable():
+  enabled = true
+
+func disable():
+  enabled = false
 
 func _input_event(event):
   if event.type == InputEvent.KEY:
     consume_input_key(event)
 
 func _unhandled_input(event):
-  _input_event(event)
+  if event.is_pressed():
+    _input_event(event)
 
-func find_action(event):
+func get_event_name(action):
+  return "event_" + action.replace("ui_", "").replace("debug_", "")
+
+func build_action_dict():
   var index = 1
   var action = InputMap.get_action_from_id(index)
 
   while action != "":
     index += 1
     action = InputMap.get_action_from_id(index)
-    if event.is_action(action):
-      return action
+    var method_name = get_event_name(action)
+    print("method_name=", method_name, " action=", action)
+    if self.has_method(method_name):
+      actions[action] = funcref(self, method_name)
 
 func consume_input_key(event):
-  var action_name = find_action(event)
-  var method_name = "event_" + action_name.replace("ui_", "").replace("debug", "")
-
-  print("calling method ", method_name, " action ", action_name)
-  if not self.has_method(method_name):
+  if not enabled:
     return
 
-  self.call(method_name)
+  for action in actions.keys():
+    if event.is_action_pressed(action):
+      print("calling method ", get_event_name(action), " action ", action)
+      actions[action].call_func()
+      return
 
 func event_cancel():
   get_node("/root/captains_log").finish()

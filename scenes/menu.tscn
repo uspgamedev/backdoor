@@ -64,7 +64,7 @@ text = "New route"
 flat = false
 __meta__ = { "_edit_lock_":true }
 
-[node name="Node" type="Node" parent="."]
+[node name="Controller" type="Node" parent="."]
 
 script/script = ExtResource( 4 )
 
