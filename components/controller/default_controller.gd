@@ -6,7 +6,7 @@ var actions = {}
 
 func _init():
   if self extends Control:
-    accep_event()
+    set_process_input(true)
   else:
     set_process_unhandled_input(true)
   build_action_dict()
@@ -20,6 +20,8 @@ func disable():
 func _input_event(event):
   if event.type == InputEvent.KEY:
     consume_input_key(event)
+    if self extends Control:
+      accept_event()
 
 func _unhandled_input(event):
   if event.is_pressed():

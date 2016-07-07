@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://components/ui/card_display.gd" type="Script" id=1]
-[ext_resource path="res://components/ui/card_sprite.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/fonts/PressStart2P-16pt.fnt" type="Font" id=3]
-[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=4]
+[ext_resource path="res://components/controller/popup_controller.gd" type="Script" id=2]
+[ext_resource path="res://components/ui/card_sprite.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/fonts/PressStart2P-16pt.fnt" type="Font" id=4]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=5]
 
 [node name="CardDisplay" type="Control"]
 
@@ -28,9 +29,11 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-popup/exclusive = false
+popup/exclusive = true
+script/script = ExtResource( 2 )
+path = ".."
 
-[node name="Card" parent="CardPopup" instance=ExtResource( 2 )]
+[node name="Card" parent="CardPopup" instance=ExtResource( 3 )]
 
 transform/pos = Vector2( 74, 148 )
 
@@ -48,7 +51,7 @@ margin/bottom = 64.0
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
-custom_fonts/font = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 text = "Card Name"
 align = 1
 valign = 1
@@ -80,7 +83,7 @@ margin/bottom = 5.0
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
 text = "Card Description"
 autowrap = true
 percent_visible = 1.0

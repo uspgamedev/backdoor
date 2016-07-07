@@ -10,7 +10,7 @@ func clear():
 func display(upgrades):
 	self.clear()
 
-	self.get_node("UpgradeDialog").show()
+	self.get_node("UpgradeDialog").show_modal(true)
 
 	for upg in upgrades:
 		var item = CardItem.instance()
