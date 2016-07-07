@@ -63,4 +63,6 @@ text = "New route"
 flat = false
 __meta__ = { "_edit_lock_":true }
 
+[connection signal="pressed" from="saves/new_game" to="." method="_on_new_game"]
+
 
