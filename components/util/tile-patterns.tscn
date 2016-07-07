@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://components/util/smol_tileset.tres" type="TileSet" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="ground" type="TileMap" parent="."]
+
+mode = 1
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 32 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 1
+cell/y_sort = true
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( 2, 0, 4, 0, 6, 0, 8, 0, 65537, 0, 65538, 0, 65540, 0, 65541, 0, 65542, 0, 65544, 0, 65545, 0, 131072, 0, 131073, 0, 131074, 0, 131076, 0, 131077, 0, 131078, 0, 131080, 0, 131081, 0, 131082, 0, 262144, 0, 262145, 0, 262146, 0, 262152, 0, 262153, 0, 262154, 0, 262157, 0, 262158, 0, 262160, 0, 262161, 0, 327681, 0, 327682, 0, 327688, 0, 327689, 0, 327692, 0, 327693, 0, 327694, 0, 327696, 0, 327697, 0, 327698, 0, 393216, 0, 393217, 0, 393218, 0, 393224, 0, 393225, 0, 393226, 0, 393228, 0, 393229, 0, 393230, 0, 393232, 0, 393233, 0, 393234, 0, 524288, 0, 524289, 0, 524290, 0, 524292, 0, 524293, 0, 524294, 0, 524296, 0, 524297, 0, 524298, 0, 524300, 0, 524301, 0, 524302, 0, 524304, 0, 524305, 0, 524306, 0, 589825, 0, 589826, 0, 589828, 0, 589829, 0, 589830, 0, 589832, 0, 589833, 0, 589836, 0, 589837, 0, 589838, 0, 589840, 0, 589841, 0, 589842, 0, 655362, 0, 655364, 0, 655366, 0, 655368, 0, 655373, 0, 655374, 0, 655376, 0, 655377, 0 )
+
+[node name="walls" type="TileMap" parent="."]
+
+mode = 1
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 32 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 1
+cell/y_sort = true
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( 65537, 9, 65541, 2, 65545, 3, 131074, 1, 131077, 1, 131080, 1, 327681, 8, 327682, 1, 327688, 1, 327689, 4, 327693, 13, 327694, 1, 327696, 1, 327697, 10, 393229, 1, 393230, 1, 393232, 1, 393233, 1, 524290, 1, 524293, 1, 524296, 1, 524301, 1, 524302, 1, 524304, 1, 524305, 1, 589825, 7, 589829, 6, 589833, 5, 589837, 12, 589838, 1, 589840, 1, 589841, 11 )
+
+
