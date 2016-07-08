@@ -3,6 +3,8 @@ extends Control
 const CardSprite = preload("res://components/ui/card_sprite.gd")
 const CardItem = preload("res://components/ui/card_list_item.tscn")
 
+signal close_popup
+
 func clear():
 	for child in self.get_node("UpgradeDialog/Panel/UpgradeList").get_children():
 		child.queue_free()
@@ -29,4 +31,5 @@ func is_hidden():
 	return self.get_node("UpgradeDialog").is_hidden()
 
 func hide():
+	emit_signal("close_popup")
 	self.get_node("UpgradeDialog").hide()

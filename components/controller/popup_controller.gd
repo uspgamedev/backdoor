@@ -5,4 +5,5 @@ export(String) var path = ".."
 
 func consume_input_key(event):
   if event.type == InputEvent.KEY:
-    getnode(path).hide()
+    get_node(path).hide()
+

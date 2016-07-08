@@ -18,14 +18,14 @@ func disable():
   enabled = false
 
 func _input_event(event):
-  if event.type == InputEvent.KEY:
+  if event.is_pressed() and event.type == InputEvent.KEY:
     consume_input_key(event)
-    if self extends Control:
-      accept_event()
+
+func _input(event):
+  _input_event(event)
 
 func _unhandled_input(event):
-  if event.is_pressed():
-    _input_event(event)
+  _input_event(event)
 
 func get_event_name(action):
   return "event_" + action.replace("ui_", "").replace("debug_", "")
