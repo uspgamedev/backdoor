@@ -48,16 +48,18 @@ func _on_player_consume(card):
 		if card_sprite.card == card:
 			card_sprite.queue_free()
 
-func _input(event):
+func next_card():
 	if focus != null and get_child_count() > 0:
-		if event.is_action_pressed("ui_focus_next"):
-			focus = (focus+1)%get_child_count()
-		elif event.is_action_pressed("ui_focus_prev"):
-			focus = (focus-1+get_child_count())%get_child_count()
-		elif event.is_action_pressed("ui_select") and get_node("/root/sector/HUD/CardDisplay").is_hidden():
-			var card = get_child(focus)
-			if not card.prepare_evocation(player):
-				return
+		focus = (focus+1)%get_child_count()
+
+func prev_card():
+	if focus != null and get_child_count() > 0:
+		focus = (focus-1+get_child_count())%get_child_count()
+
+func user_selected_card():
+	var card = get_child(focus)
+	if not card.prepare_evocation(player):
+		return
 
 func _process(delta):
 	var n = get_child_count()

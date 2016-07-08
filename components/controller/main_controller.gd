@@ -59,5 +59,17 @@ func event_show_upgrades():
   self.upgrades_popup.connect("close_popup", self, "restore_input")
   self.upgrades_popup.display(player.upgrades)
 
+func event_focus_next():
+  hand.next_card()
+
+func event_focus_prev():
+  hand.prev_card()
+
+func event_select():
+  if get_node("/root/sector/HUD/CardDisplay").is_hidden():
+    self.disable()
+    hand.get_selected_card().connect("target_selected", self, "restore_input")
+    hand.user_selected_card()
+
 func restore_input():
   self.enable()

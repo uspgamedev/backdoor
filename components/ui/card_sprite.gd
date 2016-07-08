@@ -31,6 +31,8 @@ const COLOR_DICT = {
 
 var card
 
+signal target_selected
+
 static func create(card):
   var card_sprite = CardScene.instance()
   card_sprite.card = card
@@ -61,6 +63,7 @@ func prepare_evocation(player):
         action.add_option(cursor.target)
       else:
         return false
+      emit_signal("target_selected")
   player.add_action(action)
   return true
 
