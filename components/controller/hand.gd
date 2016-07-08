@@ -71,6 +71,11 @@ func _process(delta):
 		else:
 			card.deselect()
 
+func get_selected_cardsprite():
+	if player.hand.size() <= 0:
+		return null;
+	return get_child(focus)
+
 func get_selected_card():
 	if player.hand.size() <= 0:
 		return null;

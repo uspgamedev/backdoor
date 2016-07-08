@@ -30,8 +30,10 @@ const COLOR_DICT = {
 }
 
 var card
+var used = false
 
-signal target_selected
+signal selecting_target()
+signal target_selected()
 
 static func create(card):
   var card_sprite = CardScene.instance()
@@ -40,6 +42,7 @@ static func create(card):
   card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][BG_COLOR])
   card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][FG_COLOR])
   card_sprite.get_node("CardClass").set_text(get_card_class(card.card_ref))
+  card_sprite.used = false
   return card_sprite
 
 func get_card_class(card):
@@ -52,19 +55,23 @@ func get_card_class(card):
   return ""
 
 func prepare_evocation(player):
+  if used:
+    return
   var action = Action.EvokeCard.new(card)
   for option in self.card.get_ref().get_options(player):
     if option["type"] == "TARGET":
       var cursor = get_node("/root/sector/map/floors/cursor")
       if cursor.select(option["check"]):
+        emit_signal("selecting_target")
         yield(cursor, "target_chosen")
+        emit_signal("target_selected")
         if cursor.target == null:
           return false
         action.add_option(cursor.target)
       else:
         return false
-      emit_signal("target_selected")
   player.add_action(action)
+  used = true
   return true
 
 func select():

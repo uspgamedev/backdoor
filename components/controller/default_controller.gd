@@ -12,9 +12,11 @@ func _init():
   build_action_dict()
 
 func enable():
+  #print("enable ", get_path())
   enabled = true
 
 func disable():
+  #print("disable ", get_path())
   enabled = false
 
 func _input_event(event):
@@ -38,7 +40,6 @@ func build_action_dict():
     index += 1
     action = InputMap.get_action_from_id(index)
     var method_name = get_event_name(action)
-    print("method_name=", method_name, " action=", action)
     if self.has_method(method_name):
       actions[action] = funcref(self, method_name)
 
@@ -48,7 +49,7 @@ func consume_input_key(event):
 
   for action in actions.keys():
     if event.is_action_pressed(action):
-      print("calling method ", get_event_name(action), " action ", action)
+      #print("calling method ", get_event_name(action), " action ", action)
       actions[action].call_func()
       return
 

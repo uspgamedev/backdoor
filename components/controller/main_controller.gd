@@ -67,9 +67,12 @@ func event_focus_prev():
 
 func event_select():
   if get_node("/root/sector/HUD/CardDisplay").is_hidden():
-    self.disable()
-    hand.get_selected_card().connect("target_selected", self, "restore_input")
+    hand.get_selected_cardsprite().connect("selecting_target", self, "block_input")
+    hand.get_selected_cardsprite().connect("target_selected", self, "restore_input")
     hand.user_selected_card()
+
+func block_input():
+  self.disable()
 
 func restore_input():
   self.enable()
