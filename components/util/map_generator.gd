@@ -7,17 +7,18 @@ const MapGrid = preload("res://components/util/map_grid.gd")
 func _ready():
     pass
 
-func _iterate_and_compare_pattern(map, pattern, tile):
-    for i in range(map.size()):
-        for j in range(map[i].size()):
-            for di in [ -1, 2 ]:
-                for dj in [ -1, 2 ]:
-                    if map[i+di][j+dj] == pattern[di+1][dj+1]:
-                        map[i][j] = tile
-
-
 func generate_map(id,w,h):
     var map = MapGrid.new(w,h)
+    var file = File.new()
+    var grow_patterns = {}
+    var clean_patterns = {}
+    var text = ""
+
+    # read grow pattern json
+    file.open("res://components/util/patterns/growing_patterns.json", File.READ)
+    text = file.get_as_text()
+    grow_patterns.parse_json(text)
+    file.close()
 
     # add random wall tiles
     map.add_random()
@@ -25,6 +26,9 @@ func generate_map(id,w,h):
     map.add_random()
 
     # grow wall tiles
+    map.apply_pattern_rules(grow_patterns.patterns, 1)
+    map.apply_pattern_rules(grow_patterns.patterns, 1)
+    map.apply_pattern_rules(grow_patterns.patterns, 1)
 
     # clean wall tiles
 

@@ -30,7 +30,7 @@ transform/pos = Vector2( 160, 80 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -32 )
 region = true
-region_rect = Rect2( 196, 96, 64, 96 )
+region_rect = Rect2( 192, 96, 64, 96 )
 
 [node name="Wall Stone Top Right" type="Sprite" parent="."]
 

@@ -25,7 +25,7 @@
 2/name = "Wall Stone Top"
 2/texture = ExtResource( 2 )
 2/tex_offset = Vector2( 0, -32 )
-2/region = Rect2( 196, 96, 64, 96 )
+2/region = Rect2( 192, 96, 64, 96 )
 2/occluder_offset = Vector2( 32, 48 )
 2/navigation_offset = Vector2( 32, 48 )
 2/shape_offset = Vector2( 0, 0 )

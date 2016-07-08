@@ -14,8 +14,8 @@ const WALL_CORNER_TOP_RIGHT = 10
 const WALL_CORNER_BOTTOM_RIGHT = 11
 const WALL_CORNER_BOTTOM_LEFT = 12
 const WALL_CORNER_TOP_LEFT = 13
-const ANY = "*"
-const ANY_BUT_WALL = "!"
+const ANY = -2
+const ANY_BUT_WALL = -3
 
 var map = []
 var width = 0
@@ -41,8 +41,8 @@ func getTile(i, j):
     return self.map[i][j]
 
 func add_random():
-    var i = 1 + randi() % (self.height-1)
-    var j = 1 + randi() % (self.width-1)
+    var i = 1 + int(randf() * (self.height-1))
+    var j = 1 + int(randf() * (self.width-1))
     self.map[i][j] = WALL
     print("Adding random wall tile:")
     print("[ " + str(i) + ", " + str(j) + " ]")
@@ -51,11 +51,14 @@ func add_random():
 func apply_pattern_rules(patterns, value):
     var newmap = []
     newmap.resize(self.height)
-    for i in range(1, self.width - 1):
+    for i in range(self.width):
         newmap[i] = []
         newmap[i].resize(self.width)
+        for j in range(self.height):
+            newmap[i][j] = EMPTY
+
+    for i in range(1, self.width - 1):
         for j in range(1, self.height - 1):
-            newmap[i][j] = self.map[i][j]
             for pattern in patterns:
                 var change = true
                 for di in range(-1,2):
@@ -65,6 +68,8 @@ func apply_pattern_rules(patterns, value):
                         or (pattern[di+1][dj+1] == ANY_BUT_WALL and self.map[i+di][j+dj] != WALL) ):
                             change = false
                 if change:
-                    newmap.map[i][j] = value
+                    newmap[i][j] = value
                     break
+                else:
+                    newmap[i][j] = self.map[i][j]
     self.map = newmap
