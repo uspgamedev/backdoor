@@ -7,18 +7,21 @@ const MapGrid = preload("res://components/util/map_grid.gd")
 func _ready():
     pass
 
+func get_json_pattern_in_text(filename):
+    var dict = {}
+    var file = File.new()
+    var text = ""
+    file.open("res://components/util/patterns/" + filename + ".json", File.READ)
+    text = file.get_as_text()
+    dict.parse_json(text)
+    file.close()
+    return dict
+
 func generate_map(id,w,h):
     var map = MapGrid.new(w,h)
-    var file = File.new()
-    var grow_patterns = {}
-    var clean_patterns = {}
-    var text = ""
-
-    # read grow pattern json
-    file.open("res://components/util/patterns/growing_patterns.json", File.READ)
-    text = file.get_as_text()
-    grow_patterns.parse_json(text)
-    file.close()
+    var growing_patterns = get_json_pattern_in_text("growing_patterns")
+    var cleaning_patterns = get_json_pattern_in_text("cleaning_patterns")
+    var border_patterns = get_json_pattern_in_text("border_patterns")
 
     # add random wall tiles
     map.add_random()
@@ -26,13 +29,18 @@ func generate_map(id,w,h):
     map.add_random()
 
     # grow wall tiles
-    map.apply_pattern_rules(grow_patterns.patterns, 1)
-    map.apply_pattern_rules(grow_patterns.patterns, 1)
-    map.apply_pattern_rules(grow_patterns.patterns, 1)
+    map.apply_pattern_rules(growing_patterns.patterns, growing_patterns.value)
+    map.apply_pattern_rules(growing_patterns.patterns, growing_patterns.value)
+    map.apply_pattern_rules(growing_patterns.patterns, growing_patterns.value)
 
     # clean wall tiles
+    map.apply_pattern_rules(cleaning_patterns.patterns, cleaning_patterns.value)
+    map.apply_pattern_rules(cleaning_patterns.patterns, cleaning_patterns.value)
+    map.apply_pattern_rules(cleaning_patterns.patterns, cleaning_patterns.value)
 
     # border/corner wall tiles
+    for rule in border_patterns:
+        map.apply_pattern_rules(border_patterns[rule].patterns, border_patterns[rule].value)
 
     # stuff
     var map_node = Map.create(id,w,h)

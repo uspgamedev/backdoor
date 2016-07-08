@@ -112,7 +112,7 @@ offset = Vector2( 0, -32 )
 region = true
 region_rect = Rect2( 128, 192, 64, 96 )
 
-[node name="Wall Stone Bottom Corner Top Left" type="Sprite" parent="."]
+[node name="Wall Stone Corner Top Left" type="Sprite" parent="."]
 
 transform/pos = Vector2( 352, 176 )
 texture = ExtResource( 2 )
