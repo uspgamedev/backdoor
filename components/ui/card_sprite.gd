@@ -37,7 +37,7 @@ static func create(card):
   card_sprite.get_node("Name").set_text(card.get_name())
   card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][BG_COLOR])
   card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][FG_COLOR])
-  card_sprite.get_node("CardClass").set_text(get_card_class(card.card_ref))
+  card_sprite.get_node("CardClass").set_text(card_sprite.get_card_class(card.card_ref))
   return card_sprite
 
 func get_card_class(card):

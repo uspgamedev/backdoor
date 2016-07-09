@@ -58,4 +58,4 @@ func finish():
 	if get_node("/root/").has_node("route"):
 		save_route()
 	profile.save()
-	get_tree().finish()
+	get_tree().quit()
