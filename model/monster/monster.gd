@@ -21,6 +21,7 @@ func create(map, pos):
   #  actor.add_child(ai)
   ### FIXME #61
   var wander = Node.new()
+  wander.set_name("wander")
   wander.set_script(Wander)
   actor.add_child(wander)
   ###
