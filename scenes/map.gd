@@ -24,6 +24,7 @@ var width
 var height
 var bodies
 var actor_bodies
+var enemy_types = ["slime"]
 onready var walls = get_node("walls")
 
 static func create(id, width, height):
@@ -57,6 +58,8 @@ func find_free_body_id():
 func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
+	if body.type in enemy_types:
+		bodyview.set_hl_colour(Color(1.0, .1, .2))
 	get_node("walls").add_child(bodyview)
 
 func remove_body(body):
