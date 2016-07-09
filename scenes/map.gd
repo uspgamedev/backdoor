@@ -60,7 +60,7 @@ func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
 	if body.type in enemy_types:
-		bodyview.set_hl_colour(Color(1.0, .1, .2))
+		bodyview.set_hl_color(Color(1.0, .1, .2, .3))
 	get_node("walls").add_child(bodyview)
 
 func remove_body(body):
