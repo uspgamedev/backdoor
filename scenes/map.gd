@@ -8,22 +8,24 @@ const Body         = preload("res://model/body.gd")
 const BodyView     = preload("res://components/bodyview.gd")
 const Identifiable = preload("res://model/identifiable.gd")
 
-const block = [
-	Vector2(1,0),
-	Vector2(0,1),
-	Vector2(1,1),
-	Vector2(2,0),
-	Vector2(0,2),
-	Vector2(2,1),
-	Vector2(1,2),
-	Vector2(2,2)
-]
+const block = []
+#[
+#	Vector2(1,0),
+#	Vector2(0,1),
+#	Vector2(1,1),
+#	Vector2(2,0),
+#	Vector2(0,2),
+#	Vector2(2,1),
+#	Vector2(1,2),
+#	Vector2(2,2)
+#]
 
 var id
 var width
 var height
 var bodies
 var actor_bodies
+var enemy_types = ["slime"]
 onready var walls = get_node("walls")
 
 static func create(id, width, height):
@@ -57,6 +59,8 @@ func find_free_body_id():
 func add_body(body):
 	var bodyview = BodyView.create(body)
 	bodies.append(body)
+	if body.type in enemy_types:
+		bodyview.set_hl_color(Color(1.0, .1, .2, .3))
 	get_node("walls").add_child(bodyview)
 
 func remove_body(body):
@@ -119,19 +123,19 @@ func check_dead_bodies():
 			else:
 				remove_actor(actor)
 
-func _fixed_process(delta):
-	var player_body = get_actor_body(get_parent().player)
-	for i in range(7):
-		for j in range(7):
-			var pos = player_body.pos + Vector2(-2 + i,-2 + j)
-			var cell = walls.get_cell(pos.x, pos.y)
-			if cell > 0 && cell % 2 == 0:
-				walls.set_cell(pos.x, pos.y, cell - 1)
-	for diff in block:
-		var pos = player_body.pos + diff
-		var cell = walls.get_cell(pos.x, pos.y)
-		if cell % 2 == 1:
-			walls.set_cell(pos.x, pos.y, cell + 1)
+#func _fixed_process(delta):
+#	var player_body = get_actor_body(get_parent().player)
+#	for i in range(7):
+#		for j in range(7):
+#			var pos = player_body.pos + Vector2(-2 + i,-2 + j)
+#			var cell = walls.get_cell(pos.x, pos.y)
+#			if cell > 0 && cell % 2 == 0:
+#				walls.set_cell(pos.x, pos.y, cell - 1)
+#	for diff in block:
+#		var pos = player_body.pos + diff
+#		var cell = walls.get_cell(pos.x, pos.y)
+#		if cell % 2 == 1:
+#			walls.set_cell(pos.x, pos.y, cell + 1)
 
 func serialize():
 	# Store sector general data
