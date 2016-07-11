@@ -22,3 +22,4 @@ func event_select():
 
 func event_cancel():
   emit_signal("cancel")
+  self.get_tree().set_input_as_handled()
