@@ -12,6 +12,8 @@ func display(card):
 	self.get_node("CardPopup/Card") = CardSprite.create(card)
 	self.get_node("CardPopup/Card/Name").hide()
 	self.get_node("CardPopup/DescriptionPanel/CardDescription").set_text(card.get_description())
+
+	popup.enable()
 	popup.show()
 
 func is_hidden():

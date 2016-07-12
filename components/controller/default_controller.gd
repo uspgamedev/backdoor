@@ -42,6 +42,8 @@ func build_action_dict():
     var method_name = get_event_name(action)
     if self.has_method(method_name):
       actions[action] = funcref(self, method_name)
+      if self.get_tree() != null:
+        self.get_tree().set_input_as_handled()
 
 func consume_input_key(event):
   if not enabled:

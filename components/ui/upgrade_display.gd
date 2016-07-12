@@ -14,6 +14,8 @@ func display(upgrades):
 
 	self.get_node("UpgradeDialog").show_modal(true)
 
+	self.get_node("UpgradeDialog").enable()
+
 	for upg in upgrades:
 		var item = CardItem.instance()
 		var card = CardSprite.create(upg)
