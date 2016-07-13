@@ -46,8 +46,8 @@ func generate_map(id,w,h):
     var map_node = Map.create(id,w,h)
     var floors = map_node.get_node("floors")
     var walls = map_node.get_node("walls")
-    for i in range(map.getWidth()):
-        for j in range(map.getHeight()):
+    for i in range(map.get_width()):
+        for j in range(map.get_height()):
             floors.set_cell(j, i, 0)
-            walls.set_cell(j, i, map.getTile(i, j))
+            walls.set_cell(j, i, map.get_tile(i, j))
     return map_node

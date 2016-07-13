@@ -31,13 +31,13 @@ func _init(w, h):
         for j in range(h):
             self.map[i][j] = EMPTY
 
-func getWidth():
+func get_width():
     return self.width
 
-func getHeight():
+func get_height():
     return self.height
 
-func getTile(i, j):
+func get_tile(i, j):
     return self.map[i][j]
 
 func add_random():
