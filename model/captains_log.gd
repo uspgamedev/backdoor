@@ -20,8 +20,8 @@ func create_route():
 	var route = RouteScene.instance()
 	route.id = profile.find_free_route_id()
 	profile.add_journal(route.id)
-	var w = 20
-	var h = 20
+	var w = 64
+	var h = 64
 	var map_node = map_generator.generate_map(1,w,h)
 	route.get_node("sectors").add_child(map_node)
 	route.current_sector = map_node
