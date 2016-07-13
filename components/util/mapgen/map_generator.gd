@@ -5,7 +5,6 @@ const MapGrid = preload("res://components/util/mapgen/map_grid.gd")
 const RandomStep = preload("res://components/util/mapgen/steps/random_step.gd")
 const RoomStep = preload("res://components/util/mapgen/steps/room_step.gd")
 const PatternStep = preload("res://components/util/mapgen/steps/pattern_step.gd")
-#const BorderStep = preload("res://components/util/mapgen/steps/border_step.gd")
 
 var RANDOM_STEP = RandomStep.new()
 var ROOM_STEP = RoomStep.new()
