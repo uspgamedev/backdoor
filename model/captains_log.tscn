@@ -115,7 +115,6 @@ bonus_amount = 2
 [node name="Fireball" type="Node" parent="cards"]
 
 script/script = ExtResource( 11 )
-
 card_type = 0
 description = "a card"
 time_cost = 50
@@ -123,7 +122,6 @@ time_cost = 50
 [node name="map_generator" type="Node" parent="."]
 
 script/script = ExtResource( 12 )
-pipeline = [ "" ]
 
 [node name="scene_manager" type="Node" parent="."]
 
