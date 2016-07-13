@@ -31,12 +31,19 @@ class Room:
     return true
   func put_in(map_grid):
     for i in range(h_+1):
-      if abs(i - 5) > 1:
-        map_grid.set_tile(i_ + i, j_, WALL)
+      map_grid.set_tile(i_ + i, j_, WALL)
       map_grid.set_tile(i_ + i, j_ + w_, WALL)
     for j in range(w_):
       map_grid.set_tile(i_, j_ + j, WALL)
       map_grid.set_tile(i_ + h_, j_ + j, WALL)
+    var i = 1+randi()%(h_-3)
+    var j = (randi()%2)*w_
+    for di in range(3):
+      map_grid.set_tile(i_ + i + di, j_ + j, EMPTY)
+    j = randi()%(w_-3)
+    i = (randi()%2)*h_
+    for dj in range(3):
+      map_grid.set_tile(i_ + i, j_ + j + dj, EMPTY)
 
 var rooms_
 
