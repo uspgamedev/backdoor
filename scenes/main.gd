@@ -27,6 +27,7 @@ func set_player(the_player):
   hand = get_node("HUD/UI_hook/Hand")
   deck_view.set_player(the_player)
   player.connect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
+  get_node("HUD/base").show()
   display_popup = get_node("HUD/CardDisplay")
   upgrades_popup = get_node("HUD/UpgradesDisplay")
   get_node("HUD/Controller").set_player_map(player, hand)
@@ -34,6 +35,7 @@ func set_player(the_player):
 func close():
   get_node("HUD/UI_hook/CooldownBar").stop()
   get_node("HUD/UI_hook/Hand").stop()
+  get_node("HUD/base").hide()
   deck_view.stop()
   player.disconnect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   set_fixed_process(false)
