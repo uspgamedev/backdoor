@@ -2,6 +2,7 @@
 extends Node
 
 const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
+const Attributes = preload("res://model/attributes.gd")
 
 class Card:
   var card_ref
@@ -27,9 +28,7 @@ var weapon
 var suit
 var accessory
 
-export(int) var speed = 10
-export(int) var draw_rate = 5
-export(int) var upgrade_slot = 3
+var attributes
 
 const DRAW_TIME = 120
 const MAX_HAND = 5
@@ -46,9 +45,10 @@ func _init(name):
   deck = []
   upgrades = []
   char_name = name
+  attributes = Attributes.new()
 
 func _ready():
-  cooldown = 100/speed
+  cooldown = 100/attributes.speed
   draw_cooldown = DRAW_TIME
   if weapon != null:
     emit_signal("equipped_item", weapon.get_ref())
@@ -79,10 +79,10 @@ func step_time():
     emit_signal("draw_card", hand[hand.size() - 1])
     emit_signal("update_deck")
   if can_draw():
-    draw_cooldown -= draw_rate
+    draw_cooldown -= attributes.draw_rate
 
 func set_upgrade(upgrade):
-	if upgrades.size() == upgrade_slot:
+	if upgrades.size() == attributes.upgrade_slot:
 		return
 	if upgrade extends Card:
 		upgrades.push_back(upgrade)
@@ -112,7 +112,7 @@ func add_action(the_action):
 
 func use_action():
   print(get_name(), ": used action ", action.get_type())
-  cooldown += action.get_cost(self)/speed
+  cooldown += action.get_cost(self)/attributes.speed
   action.use(self)
   action = null
   emit_signal("spent_action")
