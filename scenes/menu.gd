@@ -30,10 +30,6 @@ func stop():
 	set_process_input(false)
 	hide()
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		caplog.finish()
-
 func _on_new_game():
 	caplog.create_route()
 	stop()

@@ -29,6 +29,7 @@ func set_player(the_player):
   player.connect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   display_popup = get_node("HUD/CardDisplay")
   upgrades_popup = get_node("HUD/UpgradesDisplay")
+  get_node("HUD/Controller").set_player_map(player, hand)
 
 func close():
   get_node("HUD/UI_hook/CooldownBar").stop()
@@ -73,51 +74,3 @@ func _fixed_process(delta):
   for actor in map.actor_bodies:
     if actor != player and !actor.has_action() and actor.is_ready():
       actor.pick_ai_module().think()
-
-func _input(event):
-  if event.is_action_pressed("ui_cancel"):
-    get_node("/root/captains_log").finish()
-  if event.is_action_pressed("ui_save"):
-    get_node("/root/captains_log/scene_manager").close_route()
-  if player.is_ready():
-    var move = Vector2(0,0)
-    if event.is_action_pressed("ui_down"):
-      move.y += 1
-    elif event.is_action_pressed("ui_up"):
-      move.y -= 1
-    elif event.is_action_pressed("ui_right"):
-      move.x += 1
-    elif event.is_action_pressed("ui_left"):
-      move.x -= 1
-    elif event.is_action_pressed("debug_next_sector"):
-      player.add_action(Action.ChangeSector.new(1))
-    elif event.is_action_pressed("debug_create_slime"):
-      get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
-    elif ((event.is_action_released("ui_display_card")
-      or event.is_action_released("ui_focus_next")
-      or event.is_action_released("ui_focus_prev")
-      or event.is_action_released("ui_select")
-      or event.is_action_released("ui_show_upgrades"))
-      and not self.display_popup.is_hidden()):
-        self.display_popup.hide()
-    elif ((event.is_action_released("ui_display_card")
-      or event.is_action_released("ui_focus_next")
-      or event.is_action_released("ui_focus_prev")
-      or event.is_action_released("ui_select")
-      or event.is_action_released("ui_show_upgrades"))
-      and not self.upgrades_popup.is_hidden()):
-        self.upgrades_popup.hide()
-    elif event.is_action_released("ui_display_card") and self.display_popup.is_hidden() and hand.get_selected_card() != null:
-      self.display_popup.display(hand.get_selected_card())
-    elif event.is_action_released("ui_show_upgrades") and self.upgrades_popup.is_hidden() and player != null:
-      self.upgrades_popup.display(player.upgrades)
-
-    if event.is_action_pressed("ui_idle"):
-      player.add_action(Action.Idle.new())
-    elif move.length_squared() > 0:
-      var target_pos = map.get_actor_body(player).pos + move
-      var body = map.get_body_at(target_pos)
-      if body != null:
-        player.add_action(Action.MeleeAttack.new(body))
-      else:
-        player.add_action(Action.Move.new(target_pos))
