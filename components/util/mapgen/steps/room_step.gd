@@ -11,7 +11,6 @@ class Room:
     j_ = j
     w_ = w
     h_ = h
-    randomize()
   func left():
     return j_
   func top():
@@ -61,6 +60,7 @@ func place_rooms(map_grid):
     room.put_in(map_grid)
 
 func apply(map, w, h):
+  randomize()
   var map_grid = MapGrid.clone(map, w, h)
   rooms_ = []
   for n in range(w/5):
