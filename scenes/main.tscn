@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=1]
+[gd_scene load_steps=12 format=1]
 
 [ext_resource path="res://scenes/main.gd" type="Script" id=1]
 [ext_resource path="res://components/controller/hand.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=6]
 [ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/controller/deck.gd" type="Script" id=8]
+[ext_resource path="res://components/controller/main_controller.gd" type="Script" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -50,7 +51,7 @@ scale = Vector2( 1, 1 )
 [node name="UI_hook" type="Node2D" parent="HUD"]
 
 transform/pos = Vector2( 32, 320 )
-__meta__ = { "_edit_lock_":true }
+__meta__ = { "_edit_lock_":true, "_editor_collapsed":true }
 
 [node name="Hand" type="Node2D" parent="HUD/UI_hook"]
 
@@ -92,7 +93,7 @@ focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-__meta__ = { "_edit_lock_":true }
+__meta__ = { "_edit_lock_":true, "_editor_collapsed":true }
 
 [node name="Input Description" type="Label" parent="HUD/base"]
 
@@ -126,5 +127,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
 script/script = ExtResource( 8 )
+
+[node name="Controller" type="Node" parent="HUD"]
+
+script/script = ExtResource( 9 )
 
 

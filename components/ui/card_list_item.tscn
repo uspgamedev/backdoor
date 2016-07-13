@@ -17,6 +17,7 @@ size_flags/vertical = 2
 
 anchor/right = 1
 anchor/bottom = 1
+margin/right = 50.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2

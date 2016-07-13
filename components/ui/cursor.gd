@@ -35,6 +35,10 @@ var check
 signal target_chosen()
 
 func select(the_check):
+  get_node("Controller").connect("move_selection", self, "move_to")
+  get_node("Controller").connect("confirm", self, "confirm")
+  get_node("Controller").connect("cancel", self, "cancel")
+  get_node("Controller").enable()
   target = null
   map = get_node("/root/sector/map")
   var main = get_node("/root/sector")
@@ -45,9 +49,6 @@ func select(the_check):
       break
   if target == null:
     return false
-  main.set_process_input(false)
-  main.get_node("HUD/UI_hook/Hand").set_process_input(false)
-  set_process_input(true)
   set_process(true)
   show()
   return true
@@ -55,9 +56,7 @@ func select(the_check):
 func disable():
   var main = get_node("/root/sector")
   hide()
-  main.set_process_input(true)
-  main.get_node("HUD/UI_hook/Hand").set_process_input(true)
-  set_process_input(false)
+  get_node("Controller").disable()
   set_process(false)
   emit_signal("target_chosen")
 
@@ -104,19 +103,3 @@ func _process(delta):
   var floors = map.get_node("floors")
   if target != null:
     set_pos(floors.map_to_world(target))
-
-func _input(event):
-  var move = Vector2(0,0)
-  if event.is_action_pressed("ui_down"):
-    move.y += 1
-  elif event.is_action_pressed("ui_up"):
-    move.y -= 1
-  elif event.is_action_pressed("ui_right"):
-    move.x += 1
-  elif event.is_action_pressed("ui_left"):
-    move.x -= 1
-  move_to(move)
-  if event.is_action_pressed("ui_select"):
-    confirm()
-  elif event.is_action_pressed("ui_cancel"):
-    cancel()
