@@ -41,18 +41,14 @@ class Room:
 var rooms_
 
 func new_room(w, h):
-  var room
-  var valid = false
-  while not valid:
-    var i = 1 + 2*(randi()%((h-10)/2))
-    var j = 1 + 2*(randi()%((w-10)/2))
-    var rw = 10
-    var rh = 10
-    valid = true
-    room = Room.new(i, j, rw, rh)
-    for other in rooms_:
-      if room.intersects(other):
-        valid = false
+  var i = 1 + 2*(randi()%((h-10)/2))
+  var j = 1 + 2*(randi()%((w-10)/2))
+  var rw = 10
+  var rh = 10
+  var room = Room.new(i, j, rw, rh)
+  for other in rooms_:
+    if room.intersects(other):
+      return
   rooms_.push_back(room)
 
 func place_rooms(map_grid):
@@ -63,7 +59,7 @@ func apply(map, w, h):
   randomize()
   var map_grid = MapGrid.clone(map, w, h)
   rooms_ = []
-  for n in range(w/5):
+  for n in range(20):
     new_room(w, h)
   place_rooms(map_grid)
   return map_grid
