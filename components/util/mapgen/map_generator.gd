@@ -2,7 +2,7 @@
 extends Node
 
 const Map = preload("res://scenes/map.gd")
-const MapGrid = preload("res://components/util/map_grid.gd")
+const MapGrid = preload("res://components/util/mapgen/map_grid.gd")
 
 func _ready():
     pass
@@ -11,7 +11,7 @@ func get_json_pattern_in_text(filename):
     var dict = {}
     var file = File.new()
     var text = ""
-    file.open("res://components/util/patterns/" + filename + ".json", File.READ)
+    file.open("res://components/util/mapgen/patterns/" + filename + ".json", File.READ)
     text = file.get_as_text()
     dict.parse_json(text)
     file.close()
