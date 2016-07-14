@@ -9,8 +9,13 @@ signal close_popup
 
 func display(card):
 	self.get_node("CardPopup/CardName").set_text(card.get_name())
-	self.get_node("CardPopup/Card") = CardSprite.create(card)
-	self.get_node("CardPopup/Card/Name").hide()
+	var card_sprite = CardSprite.create(card)
+
+	card_sprite.set_name("Card")
+	card_sprite.get_node("Name").hide()
+	self.get_node("CardPopup/SpriteHook/Card").free()
+	self.get_node("CardPopup/SpriteHook").add_child(card_sprite)
+
 	self.get_node("CardPopup/DescriptionPanel/CardDescription").set_text(card.get_description())
 
 	popup.enable()
