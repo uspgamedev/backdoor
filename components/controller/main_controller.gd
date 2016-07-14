@@ -75,4 +75,7 @@ func block_input():
   self.disable()
 
 func restore_input():
+  # This is necessary in order to avoid a frame where multiple controllers
+  # become enabled at the same time.
+  yield(get_tree(), "fixed_frame")
   self.enable()

@@ -4,7 +4,7 @@ extends TileMap
 const AOE = 0
 
 func _ready():
-  printt("I'M A HIGHLIGHT MAP DAMMIT")
+  pass
 
 func add_area(pos, format, offset, id):
   for i in range(format.size()):
