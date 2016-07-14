@@ -1,6 +1,8 @@
 
 extends Sprite
 
+const HighlightMap = preload("res://components/ui/highlight_map.gd")
+
 class Queue:
   var values
   var tail
@@ -31,14 +33,16 @@ var map
 var origin
 var target
 var check
+var aoe_
 
 signal target_chosen()
 
-func select(the_check):
+func select(the_check, area):
   get_node("Controller").connect("move_selection", self, "move_to")
   get_node("Controller").connect("confirm", self, "confirm")
   get_node("Controller").connect("cancel", self, "cancel")
   get_node("Controller").enable()
+  aoe_ = area
   target = null
   map = get_node("/root/sector/map")
   var main = get_node("/root/sector")
@@ -57,6 +61,7 @@ func disable():
   var main = get_node("/root/sector")
   hide()
   get_node("Controller").disable()
+  map.get_node("highlights").clear()
   set_process(false)
   emit_signal("target_chosen")
 
@@ -97,6 +102,10 @@ func move_to(dir):
         queue.push(candidate)
   if target != null:
     origin = target
+    if aoe_ != null:
+      var hls = map.get_node("highlights")
+      hls.clear()
+      hls.add_area(target, aoe_.format, aoe_.center, HighlightMap.AOE)
   return found
 
 func _process(delta):

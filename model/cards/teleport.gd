@@ -10,7 +10,7 @@ func can_be_evoked(actor):
 
 func get_options(actor):
 	return [
-		{ "type": "TARGET", "check": funcref(self, "valid_target") }
+		{ "type": "TARGET", "check": funcref(self, "valid_target"), "aoe":null }
 	]
 
 func evoke(actor, options):

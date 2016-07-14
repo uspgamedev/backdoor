@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=15 format=1]
 
 [ext_resource path="res://model/captains_log.gd" type="Script" id=1]
 [ext_resource path="res://components/util/id_server.gd" type="Script" id=2]
@@ -10,9 +10,10 @@
 [ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" id=8]
 [ext_resource path="res://model/cards/card_item.gd" type="Script" id=9]
 [ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=10]
-[ext_resource path="res://components/util/map_generator.gd" type="Script" id=11]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=12]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=13]
+[ext_resource path="res://model/cards/fireball.gd" type="Script" id=11]
+[ext_resource path="res://components/util/map_generator.gd" type="Script" id=12]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=13]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=14]
 
 [node name="captains_log" type="Node"]
 
@@ -110,17 +111,24 @@ description = "Improve the speed of building things"
 time_cost = 50
 bonus_amount = 2
 
-[node name="map_generator" type="Node" parent="."]
+[node name="Fireball" type="Node" parent="cards"]
 
 script/script = ExtResource( 11 )
+card_type = 0
+description = "a card"
+time_cost = 50
 
-[node name="scene_manager" type="Node" parent="."]
+[node name="map_generator" type="Node" parent="."]
 
 script/script = ExtResource( 12 )
 
-[node name="profile" type="Node" parent="."]
+[node name="scene_manager" type="Node" parent="."]
 
 script/script = ExtResource( 13 )
+
+[node name="profile" type="Node" parent="."]
+
+script/script = ExtResource( 14 )
 
 
 [editable path="monsters/Slime"]

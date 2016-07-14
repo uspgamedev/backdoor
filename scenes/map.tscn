@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://scenes/map.gd" type="Script" id=1]
 [ext_resource path="res://components/util/smol_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://components/ui/cursor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/util/highlight_tileset.tres" type="TileSet" id=4]
+[ext_resource path="res://components/ui/highlight_map.gd" type="Script" id=5]
 
 [node name="map" type="Node2D"]
 
@@ -30,6 +32,27 @@ tile_data = IntArray( -524283, 0, -524282, 0, -524281, 0, -524280, 0, -524279, 0
 __meta__ = { "_edit_lock_":true }
 
 [node name="cursor" parent="floors" instance=ExtResource( 3 )]
+
+[node name="highlights" type="TileMap" parent="."]
+
+transform/pos = Vector2( 480, 240 )
+mode = 1
+tile_set = ExtResource( 4 )
+cell/size = Vector2( 64, 32 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 1
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray(  )
+script/script = ExtResource( 5 )
+__meta__ = { "_edit_lock_":true }
 
 [node name="walls" type="TileMap" parent="."]
 
