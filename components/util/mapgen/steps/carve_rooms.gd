@@ -51,8 +51,12 @@ func place_rooms(map_grid):
   for room in rooms_:
     room.put_in(map_grid)
 
+# 1468518527
+
 func apply(map, w, h):
-  randomize()
+  var rngseed = OS.get_unix_time()
+  printt("RNG SEED:", rngseed)
+  seed(rngseed)
   var map_grid = MapGrid.clone(map, w, h)
   rooms_ = []
   for n in range(30):
