@@ -61,7 +61,7 @@ func prepare_evocation(player):
   for option in self.card.get_ref().get_options(player):
     if option["type"] == "TARGET":
       var cursor = get_node("/root/sector/map/floors/cursor")
-      if cursor.select(option["check"]):
+      if cursor.select(option["check"], option["aoe"]):
         emit_signal("selecting_target")
         yield(cursor, "target_chosen")
         emit_signal("target_selected")
