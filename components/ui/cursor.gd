@@ -61,6 +61,7 @@ func disable():
   var main = get_node("/root/sector")
   hide()
   get_node("Controller").disable()
+  map.get_node("highlights").clear()
   set_process(false)
   emit_signal("target_chosen")
 

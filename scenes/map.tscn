@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://scenes/map.gd" type="Script" id=1]
 [ext_resource path="res://components/util/smol_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://components/ui/cursor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/util/highlight_tileset.tres" type="TileSet" id=4]
+[ext_resource path="res://components/ui/highlight_map.gd" type="Script" id=5]
 
 [node name="map" type="Node2D"]
 
@@ -50,6 +51,7 @@ collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray(  )
+script/script = ExtResource( 5 )
 __meta__ = { "_edit_lock_":true }
 
 [node name="walls" type="TileMap" parent="."]
