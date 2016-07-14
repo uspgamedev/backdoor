@@ -9,9 +9,9 @@ const PatternStep = preload("res://components/util/mapgen/steps/pattern_filter.g
 
 var RANDOM_STEP = RandomStep.new()
 var ROOM_STEP = RoomStep.new()
-var GROW_STEP = PatternStep.load_from_file("growing_patterns")
-var CLEAN_STEP = PatternStep.load_from_file("cleaning_patterns")
-var BORDER_STEP = PatternStep.load_from_file("border_patterns")
+var GROW_STEP = PatternStep.load_from_file("growing")
+var CLEAN_STEP = PatternStep.load_from_file("cleaning")
+var BORDER_STEP = PatternStep.load_from_file("border")
 
 var PIPELINE = [
   ROOM_STEP,
