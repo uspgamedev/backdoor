@@ -34,10 +34,10 @@ func create_route():
 		player.deck.append(card)
 	route.player = player
 	get_node("/root/sector").set_player(player)
-	var pos = Vector2(randi()%w, randi()%h)
+	var pos = Vector2(1 + randi()%(w-1), 1+ randi()%(h-1))
 	var walls = map_node.get_node("walls") #FIXME
 	while (walls.get_cell(pos.x, pos.y) != -1):
-		pos = Vector2(randi()%w, randi()%h)
+		pos = Vector2(1 + randi()%(w-1), 1+ randi()%(h-1))
 	var player_body = Body.new(1, "hero", pos, 10)
 	map_node.add_body(player_body)
 	map_node.add_actor(player_body, player)
