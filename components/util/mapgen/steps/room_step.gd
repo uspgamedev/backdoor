@@ -37,8 +37,8 @@ class Room:
 var rooms_
 
 func new_room(w, h):
-  var rw = 10
-  var rh = 10
+  var rw = 6 + 2*(randi()%6)
+  var rh = 6 + 2*(randi()%6)
   var i = 1 + 2*(randi()%((h-rh)/2))
   var j = 1 + 2*(randi()%((w-rw)/2))
   var room = Room.new(i, j, rw, rh)
@@ -55,7 +55,7 @@ func apply(map, w, h):
   randomize()
   var map_grid = MapGrid.clone(map, w, h)
   rooms_ = []
-  for n in range(40):
+  for n in range(30):
     new_room(w, h)
   place_rooms(map_grid)
   return map_grid
