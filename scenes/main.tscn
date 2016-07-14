@@ -84,17 +84,7 @@ script/script = ExtResource( 3 )
 
 [node name="CardDisplay" parent="HUD" instance=ExtResource( 4 )]
 
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 0.0
-
 [node name="UpgradesDisplay" parent="HUD" instance=ExtResource( 5 )]
-
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 0.0
 
 [node name="base" type="Control" parent="HUD"]
 
