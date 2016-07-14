@@ -3,9 +3,9 @@ extends Node
 
 const MapGrid = preload("res://components/util/mapgen/map_grid.gd")
 const Step = preload("res://components/util/mapgen/step.gd")
-const RandomStep = preload("res://components/util/mapgen/steps/random_step.gd")
-const RoomStep = preload("res://components/util/mapgen/steps/room_step.gd")
-const PatternStep = preload("res://components/util/mapgen/steps/pattern_step.gd")
+const RandomStep = preload("res://components/util/mapgen/steps/add_random_wall.gd")
+const RoomStep = preload("res://components/util/mapgen/steps/carve_rooms.gd")
+const PatternStep = preload("res://components/util/mapgen/steps/pattern_filter.gd")
 
 var RANDOM_STEP = RandomStep.new()
 var ROOM_STEP = RoomStep.new()
