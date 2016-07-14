@@ -18,7 +18,7 @@ static func load_from_file(pattern_name):
 
 # override
 func apply(map, w, h):
-  var map_grid = MapGrid.new(w,h)
+  var map_grid = MapGrid.new(w, h, EMPTY)
   for i in range(1, w - 1):
     for j in range(1, h - 1):
       map_grid.set_tile(i, j, map[i][j])

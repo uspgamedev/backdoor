@@ -7,18 +7,18 @@ var map_ = []
 var width_ = 0
 var height_ = 0
 
-func _init(w, h):
-    width_ = w
-    height_ = h
-    map_.resize(h)
-    for i in range(h):
-        map_[i] = []
-        map_[i].resize(w)
-        for j in range(w):
-            map_[i][j] = Step.EMPTY
+func _init(w, h, value):
+  width_ = w
+  height_ = h
+  map_.resize(h)
+  for i in range(h):
+    map_[i] = []
+    map_[i].resize(w)
+    for j in range(w):
+      map_[i][j] = value
 
 static func clone(map, w, h):
-  var map_grid = new(w, h)
+  var map_grid = new(w, h, Step.EMPTY)
   for i in range(h):
     for j in range(w):
       map_grid.set_tile(i, j, map[i][j])
