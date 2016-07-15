@@ -32,8 +32,8 @@ static func create(id, width, height):
 	var map_node = MapScene.instance()
 	map_node.get_node("floors").clear()
 	map_node.get_node("walls").clear()
-	map_node.width = width
-	map_node.height = height
+	map_node.width = int(width)
+	map_node.height = int(height)
 	map_node.id = id
 	map_node.hide()
 	return map_node
@@ -55,6 +55,13 @@ func find_free_body_id():
 	while Body.find(bodies, id):
 		id += 1
 	return id
+
+func get_random_free_pos():
+  var pos = Vector2(1 + randi()%(width-1), 1+ randi()%(height-1))
+  var walls = get_node("walls") #FIXME
+  while (walls.get_cell(pos.x, pos.y) != -1):
+    pos = Vector2(1 + randi()%(width-1), 1+ randi()%(height-1))
+  return pos
 
 func add_body(body):
 	var bodyview = BodyView.create(body)
