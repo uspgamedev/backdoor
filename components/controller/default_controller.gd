@@ -58,3 +58,8 @@ func consume_input_key(event):
 func event_cancel():
   get_node("/root/captains_log").finish()
   get_tree().quit()
+
+func event_toggle_fullscreen():
+  self.get_tree().set_input_as_handled()
+  var is_fullscreen = !OS.is_window_fullscreen()
+  OS.set_window_fullscreen(is_fullscreen)
