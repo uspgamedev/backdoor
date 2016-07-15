@@ -52,7 +52,10 @@ func select(the_check, area):
     if move_to(dir):
       break
   if target == null:
-    return false
+    if check.call_func(map.get_parent().player, origin):
+      target = origin
+    else:
+      return false
   set_process(true)
   show()
   return true
