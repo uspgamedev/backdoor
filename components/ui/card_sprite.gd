@@ -38,6 +38,7 @@ signal target_selected()
 static func create(card):
   var card_sprite = CardScene.instance()
   card_sprite.card = card
+  print("name=", card)
   card_sprite.get_node("Name").set_text(card.get_name())
   card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][BG_COLOR])
   card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][FG_COLOR])

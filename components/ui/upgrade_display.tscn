@@ -12,21 +12,26 @@ focus/ignore_mouse = true
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
 script/script = ExtResource( 1 )
 
 [node name="UpgradeDialog" type="PopupDialog" parent="."]
 
-visibility/visible = false
-anchor/right = 1
-anchor/bottom = 1
-margin/left = 128.0
-margin/top = 128.0
-margin/right = 128.0
-margin/bottom = 16.0
+anchor/left = 3
+anchor/top = 3
+anchor/right = 3
+anchor/bottom = 3
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+margin/left = 200.0
+margin/top = 160.0
+margin/right = -200.0
+margin/bottom = -160.0
 popup/exclusive = true
 script/script = ExtResource( 2 )
 path = ".."
@@ -35,14 +40,14 @@ path = ".."
 
 anchor/right = 1
 anchor/bottom = 1
-margin/left = 16.0
-margin/top = 90.0
-margin/right = 16.0
-margin/bottom = 16.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+margin/left = 16.0
+margin/top = 90.0
+margin/right = 16.0
+margin/bottom = 16.0
 scroll/horizontal = false
 scroll/vertical = true
 
@@ -52,19 +57,24 @@ focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
 custom_constants/separation = 10
 alignment = 0
 
 [node name="Label" type="Label" parent="UpgradeDialog"]
 
 anchor/right = 1
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
 margin/left = 16.0
 margin/top = 16.0
 margin/right = 16.0
 margin/bottom = 90.0
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
 custom_fonts/font = ExtResource( 3 )
 text = "Equiped Upgrade Cards"
 align = 1

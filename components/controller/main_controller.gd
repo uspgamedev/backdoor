@@ -50,9 +50,10 @@ func event_create_slime():
   get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
 
 func event_display_card():
-  self.disable()
-  self.display_popup.connect("close_popup", self, "restore_input")
-  self.display_popup.display(hand.get_selected_card())
+  if get_node("/root/sector/HUD/CardDisplay").is_hidden():
+    self.disable()
+    self.display_popup.connect("close_popup", self, "restore_input")
+    self.display_popup.display(hand.get_selected_card())
 
 func event_show_upgrades():
   self.disable()
