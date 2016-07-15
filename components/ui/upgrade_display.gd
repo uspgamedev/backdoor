@@ -7,7 +7,7 @@ signal close_popup
 
 func clear():
 	for child in self.get_node("UpgradeDialog/Panel/UpgradeList").get_children():
-		child.queue_free()
+		child.free()
 
 func display(upgrades):
 	self.clear()
@@ -18,13 +18,14 @@ func display(upgrades):
 
 	for upg in upgrades:
 		var item = CardItem.instance()
-		var card = CardSprite.create(upg)
-		card.set_name("Card")
+		item.get_node("CardHook/Card").free()
 
-		item.get_node("CardHook").add_child(card)
-		item.get_node("CardName").set_text(card.get_node("Name").get_text())
-		item.get_node("CardHook/Card/Name").hide()
-		item.get_node("CardHook/Card/Name").queue_free()
+		var card_sprite = CardSprite.create(upg)
+		card_sprite.set_name("Card")
+
+		item.get_node("CardHook").add_child(card_sprite)
+		item.get_node("CardName").set_text(card_sprite.get_node("Name").get_text())
+		card_sprite.get_node("Name").free()
 
 		self.get_node("UpgradeDialog/Panel/UpgradeList").add_child(item)
 
