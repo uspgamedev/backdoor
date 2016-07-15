@@ -7,14 +7,14 @@ const AREA = [[0,1,0],
 const CENTER = Vector2(1,1)
 
 func valid_target(actor, target):
-	var map = get_node("/root/sector/map")
-	return map.is_empty_space(target)
+  var map = get_node("/root/sector/map")
+  return map.is_empty_space(target)
 
 func get_options(actor):
-	return [
-		{ "type": "TARGET", "check": funcref(self, "valid_target"),
+  return [
+    { "type": "TARGET", "check": funcref(self, "valid_target"),
     "aoe":{"format":AREA, "center":CENTER}}
-	]
+  ]
 
 func evoke(actor, options):
   var map = get_node("/root/sector/map")

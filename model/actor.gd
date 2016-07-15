@@ -82,12 +82,12 @@ func step_time():
     draw_cooldown -= draw_rate
 
 func set_upgrade(upgrade):
-	if upgrades.size() == upgrade_slot:
-		return
-	if upgrade extends Card:
-		upgrades.push_back(upgrade)
-	else:
-		upgrades.push_back(Card.new(upgrade))
+  if upgrades.size() == upgrade_slot:
+    return
+  if upgrade extends Card:
+    upgrades.push_back(upgrade)
+  else:
+    upgrades.push_back(Card.new(upgrade))
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
@@ -195,7 +195,7 @@ static func unserialize(data, root):
   unserialize_card_array(cards_db, actor.deck, data["deck"])
 
   if data.has("upgrades"):
-	  for card_id in data["upgrades"]:
+    for card_id in data["upgrades"]:
       var upg = load_card(cards_db, card_id)
       actor.set_upgrade(upg)
 
