@@ -31,6 +31,7 @@ modulate = Color( 0.922302, 1, 0.476562, 0.291683 )
 
 texture = ExtResource( 3 )
 offset = Vector2( 0, -32 )
+hframes = 3
 
 [node name="LifeBar" type="ProgressBar" parent="Sprite"]
 
@@ -38,14 +39,15 @@ anchor/left = 3
 anchor/top = 2
 anchor/right = 3
 anchor/bottom = 3
-margin/left = 48.0
-margin/top = -0.84375
-margin/right = -80.0
-margin/bottom = 113.0
 rect/scale = Vector2( 0.25, 0.25 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 48.0
+margin/top = -0.84375
+margin/right = -80.0
+margin/bottom = 113.0
 custom_styles/fg = SubResource( 1 )
 range/min = 0.0
 range/max = 100.0
