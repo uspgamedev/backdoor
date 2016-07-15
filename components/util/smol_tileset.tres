@@ -110,7 +110,7 @@
 12/navigation_offset = Vector2( 32, 48 )
 12/shape_offset = Vector2( 0, 0 )
 12/shapes = [  ]
-13/name = "Wall Stone Bottom Corner Top Left"
+13/name = "Wall Stone Corner Top Left"
 13/texture = ExtResource( 2 )
 13/tex_offset = Vector2( 0, -32 )
 13/region = Rect2( 192, 192, 64, 96 )
