@@ -11,7 +11,7 @@
 [ext_resource path="res://model/cards/card_item.gd" type="Script" id=9]
 [ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=10]
 [ext_resource path="res://model/cards/fireball.gd" type="Script" id=11]
-[ext_resource path="res://components/util/map_generator.gd" type="Script" id=12]
+[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=12]
 [ext_resource path="res://components/util/scene_manager.gd" type="Script" id=13]
 [ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=14]
 
@@ -41,6 +41,7 @@ body_type = "dummy"
 [node name="cards" type="Node" parent="."]
 
 script/script = ExtResource( 5 )
+__meta__ = { "_editor_collapsed":true }
 
 [node name="Heal" type="Node" parent="cards"]
 

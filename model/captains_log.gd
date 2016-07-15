@@ -20,8 +20,8 @@ func create_route():
 	var route = RouteScene.instance()
 	route.id = profile.find_free_route_id()
 	profile.add_journal(route.id)
-	var w = 20
-	var h = 20
+	var w = 64
+	var h = 64
 	var map_node = map_generator.generate_map(1,w,h)
 	route.get_node("sectors").add_child(map_node)
 	route.current_sector = map_node
@@ -34,7 +34,11 @@ func create_route():
 		player.deck.append(card)
 	route.player = player
 	get_node("/root/sector").set_player(player)
-	var player_body = Body.new(1, "hero", Vector2(10,10), 10)
+	var pos = Vector2(1 + randi()%(w-1), 1+ randi()%(h-1))
+	var walls = map_node.get_node("walls") #FIXME
+	while (walls.get_cell(pos.x, pos.y) != -1):
+		pos = Vector2(1 + randi()%(w-1), 1+ randi()%(h-1))
+	var player_body = Body.new(1, "hero", pos, 10)
 	map_node.add_body(player_body)
 	map_node.add_actor(player_body, player)
 	get_parent().add_child(route)
