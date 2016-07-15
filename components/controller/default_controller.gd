@@ -1,6 +1,8 @@
 
 extends Node
 
+const GAME_RESOLUTION = Vector2(640,480)
+
 var enabled = true
 var actions = {}
 
@@ -61,5 +63,16 @@ func event_cancel():
 
 func event_toggle_fullscreen():
   self.get_tree().set_input_as_handled()
-  var is_fullscreen = !OS.is_window_fullscreen()
-  OS.set_window_fullscreen(is_fullscreen)
+  if OS.is_window_fullscreen():
+    OS.set_window_fullscreen(false)
+    get_viewport().set_size_override_stretch(false)
+    get_viewport().set_size_override(true, GAME_RESOLUTION, Vector2(0,0))
+  else:
+    var screen_size = OS.get_screen_size()
+    var ratio = screen_size/GAME_RESOLUTION
+    ratio = ratio.floor()
+    var scaling = min(ratio.x, ratio.y)
+    var margin = screen_size/scaling - GAME_RESOLUTION
+    OS.set_window_fullscreen(true)
+    get_viewport().set_size_override_stretch(true)
+    get_viewport().set_size_override(true, GAME_RESOLUTION, margin/2.0)
