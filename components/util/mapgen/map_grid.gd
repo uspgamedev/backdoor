@@ -36,6 +36,7 @@ func export_scene(id):
   var walls = map_node.get_node("walls")
   for i in range(width_):
       for j in range(height_):
-          floors.set_cell(j, i, 0)
           walls.set_cell(j, i, map_[i][j])
+          if map_[i][j] != 1:
+            floors.set_cell(j, i, 0)
   return map_node
