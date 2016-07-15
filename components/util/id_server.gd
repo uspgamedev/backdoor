@@ -4,8 +4,8 @@ extends Node
 var next = 0
 
 func _ready():
-	pass
+  pass
 
 func generate_id():
-	next += 1
-	return next
+  next += 1
+  return next
