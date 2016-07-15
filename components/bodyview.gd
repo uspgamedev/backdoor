@@ -6,6 +6,7 @@ const BodyViewScene = preload("res://components/bodyview.tscn")
 var body
 
 onready var sprite = get_node("Sprite")
+onready var animation = get_node("Sprite/Animation")
 onready var lifebar = get_node("Sprite/LifeBar")
 onready var hl_indicator = get_node("Highlight")
 
@@ -18,6 +19,7 @@ static func create(body):
 
 func _ready():
   sprite.set_texture(load("res://assets/bodies/" + body.type + "/idle.tex"))
+  animation.play("idle")
   set_process(true)
 
 func highlight():
