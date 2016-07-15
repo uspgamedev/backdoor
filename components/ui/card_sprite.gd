@@ -9,7 +9,6 @@ const Skill = preload("res://model/cards/card_skill.gd")
 const Upgrade = preload("res://model/cards/card_upgrade.gd")
 const Item = preload("res://model/cards/card_item.gd")
 
-
 const ANGLE = -atan2(1,2)
 const BG_COLOR = "bg_color"
 const FG_COLOR = "fg_color"
@@ -77,9 +76,7 @@ func prepare_evocation(player):
 
 func select():
   self.set_pos(Vector2(self.get_pos().x, -32))
-  self.set_rot(0)
   self.get_node("Name").show()
 
 func deselect():
-  self.set_rot(ANGLE)
   self.get_node("Name").hide()
