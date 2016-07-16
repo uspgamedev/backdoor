@@ -72,14 +72,26 @@ func _ready():
   if accessory != null:
     emit_signal("equipped_item", accessory.get_ref())
 
-
 func get_attribute(which):
   assert(which >= 0 and which < ATTR_MAX)
   var value = base_attributes_[which]
   for upgrade in upgrades:
-    if upgrade.get_card_attribute() == which:
-      value += upgrade.get_bonus_amount()
+    var card = upgrade.get_ref()
+    if card.get_card_attribute() == which:
+      value += card.get_bonus_amount()
   return value
+
+func get_athletics():
+  return get_attribute(ATTR_ATHLETICS)
+
+func get_arcana():
+  return get_attribute(ATTR_ARCANA)
+
+func get_tech():
+  return get_attribute(ATTR_TECH)
+
+func get_melee_damage():
+  return get_athletics() + 1 + randi()%6
 
 func get_body():
   return get_node("/root/sector/map").get_actor_body(self)
