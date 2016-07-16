@@ -75,8 +75,8 @@ func prepare_evocation(player):
   return true
 
 func select():
-  self.set_pos(Vector2(self.get_pos().x, -32))
-  self.get_node("Name").show()
+  set_pos(Vector2(get_pos().x, -32))
+  get_node("Name").show()
 
 func deselect():
-  self.get_node("Name").hide()
+  get_node("Name").hide()
