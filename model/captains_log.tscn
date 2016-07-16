@@ -52,28 +52,28 @@ __meta__ = { "_editor_collapsed":true }
 [node name="Heal" type="Node" parent="cards"]
 
 script/script = ExtResource( 7 )
-card_type = 1
+card_attribute = 1
 description = "This skill heals the player"
 time_cost = 20
 
 [node name="Teleport" type="Node" parent="cards"]
 
 script/script = ExtResource( 8 )
-card_type = 2
+card_attribute = 2
 description = "This skill teleport the player"
 time_cost = 50
 
 [node name="Arcane Bolt" type="Node" parent="cards"]
 
 script/script = ExtResource( 9 )
-card_type = 0
+card_attribute = 0
 description = "This skill unleashes a bolt of arcane power"
 time_cost = 50
 
 [node name="Iron Pipe" type="Node" parent="cards"]
 
 script/script = ExtResource( 10 )
-card_type = 1
+card_attribute = 1
 description = "a card"
 time_cost = 50
 slot = 0
@@ -81,7 +81,7 @@ slot = 0
 [node name="Cotton T-Shirt" type="Node" parent="cards"]
 
 script/script = ExtResource( 10 )
-card_type = 0
+card_attribute = 0
 description = "a card"
 time_cost = 50
 slot = 1
@@ -89,7 +89,7 @@ slot = 1
 [node name="LED Earring" type="Node" parent="cards"]
 
 script/script = ExtResource( 10 )
-card_type = 2
+card_attribute = 2
 description = "a card"
 time_cost = 50
 slot = 2
@@ -97,7 +97,7 @@ slot = 2
 [node name="Mov Speed UP" type="Node" parent="cards"]
 
 script/script = ExtResource( 11 )
-card_type = 1
+card_attribute = 1
 description = "Movement Speed UP"
 time_cost = 50
 bonus_amount = 1
@@ -105,7 +105,7 @@ bonus_amount = 1
 [node name="Cast Speed UP" type="Node" parent="cards"]
 
 script/script = ExtResource( 11 )
-card_type = 0
+card_attribute = 0
 description = "Cast Speed Up"
 time_cost = 50
 bonus_amount = 2
@@ -113,7 +113,7 @@ bonus_amount = 2
 [node name="Build Speed UP" type="Node" parent="cards"]
 
 script/script = ExtResource( 11 )
-card_type = 2
+card_attribute = 2
 description = "Improve the speed of building things"
 time_cost = 50
 bonus_amount = 2
@@ -121,7 +121,7 @@ bonus_amount = 2
 [node name="Fireball" type="Node" parent="cards"]
 
 script/script = ExtResource( 12 )
-card_type = 0
+card_attribute = 0
 description = "a card"
 time_cost = 50
 

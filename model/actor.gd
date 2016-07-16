@@ -3,6 +3,16 @@ extends Node
 
 const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 
+const UPGRADE_SLOT_MAX  = 3
+
+const ATTR_ATHLETICS    = 0
+const ATTR_ARCANA       = 1
+const ATTR_TECH         = 2
+const ATTR_MAX          = 3
+
+const DRAW_TIME         = 120
+const HAND_MAX          = 5
+
 class Card:
   var card_ref
   func _init(ref):
@@ -14,25 +24,26 @@ class Card:
   func get_ref():
     return card_ref
 
+
+# Stats
+var char_name
+var base_attributes_
+var speed = 10
+var draw_rate = 5
+
+# Play state
 var cooldown
 var draw_cooldown
 var action
-var char_name
 
+# Play zones
 var hand
 var deck
 var upgrades
-
+# Item slots
 var weapon
 var suit
 var accessory
-
-export(int) var speed = 10
-export(int) var draw_rate = 5
-export(int) var upgrade_slot = 3
-
-const DRAW_TIME = 120
-const MAX_HAND = 5
 
 signal has_action
 signal spent_action
@@ -46,6 +57,10 @@ func _init(name):
   deck = []
   upgrades = []
   char_name = name
+  base_attributes_ = []
+  base_attributes_.resize(ATTR_MAX)
+  for attr in range(ATTR_MAX):
+    base_attributes_[attr] = 0
 
 func _ready():
   cooldown = 100/speed
@@ -57,6 +72,15 @@ func _ready():
   if accessory != null:
     emit_signal("equipped_item", accessory.get_ref())
 
+
+func get_attribute(which):
+  assert(which >= 0 and which < ATTR_MAX)
+  var value = base_attributes_[which]
+  for upgrade in upgrades:
+    if upgrade.get_card_attribute() == which:
+      value += upgrade.get_bonus_amount()
+  return value
+
 func get_body():
   return get_node("/root/sector/map").get_actor_body(self)
 
@@ -64,7 +88,7 @@ func get_body_pos():
   return get_body().pos
 
 func can_draw():
-  return hand.size() < MAX_HAND and deck.size() > 0
+  return hand.size() < HAND_MAX and deck.size() > 0
 
 func consume_card(card):
   hand.erase(card)
@@ -82,7 +106,7 @@ func step_time():
     draw_cooldown -= draw_rate
 
 func set_upgrade(upgrade):
-  if upgrades.size() == upgrade_slot:
+  if upgrades.size() == UPGRADE_SLOT_MAX:
     return
   if upgrade extends Card:
     upgrades.push_back(upgrade)
