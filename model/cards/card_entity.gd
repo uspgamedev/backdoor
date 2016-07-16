@@ -1,20 +1,20 @@
 
 extends Node
 
-class CARD_TYPE:
-  const ARCANE = 0
-  const ATHLETICS = 1
-  const ENGINEERING = 2
+class CARD_ATTRIBUTE:
+  const ATHLETICS = 0
+  const ARCANE = 1
+  const TECH = 2
 
-export(int, "ARCANE", "ATHLETICS", "ENGINEERING") var card_type = 0
+export(int, "ATHLETICS", "ARCANE", "TECH") var card_attribute = 0
 export(String) var description = "a card"
 export(int) var time_cost = 50
 
 func get_time_cost():
   return time_cost
 
-func get_card_type():
-  return card_type
+func get_card_attribute():
+  return card_attribute
 
 func can_be_evoked(actor):
   return true
