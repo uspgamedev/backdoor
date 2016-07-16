@@ -3,10 +3,10 @@ extends Node
 
 class CARD_TYPE:
   const ARCANE = 0
-  const ATHELITCS = 1
+  const ATHLETICS = 1
   const ENGINEERING = 2
 
-export(int, "ARCANE", "ATHELITCS", "ENGINEERING") var card_type = 0
+export(int, "ARCANE", "ATHLETICS", "ENGINEERING") var card_type = 0
 export(String) var description = "a card"
 export(int) var time_cost = 50
 

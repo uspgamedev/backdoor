@@ -18,7 +18,7 @@ const COLOR_DICT = {
       BG_COLOR: Color("000e36"),
       FG_COLOR: Color("6277ff")
     },
-  CARD_TYPE.ATHELITCS: {
+  CARD_TYPE.ATHLETICS: {
       BG_COLOR: Color("3d0b0b"),
       FG_COLOR: Color("d95763")
     },
