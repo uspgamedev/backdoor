@@ -65,7 +65,7 @@ func _process(delta):
   var n = get_child_count()
   for i in range(n):
     var card = get_child(i)
-    card.set_pos(Vector2(4*40-40*i, 0))
+    card.set_pos(Vector2(get_child_count()*40-40*i, 0))
     if i == focus:
       card.select()
     else:
