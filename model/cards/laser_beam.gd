@@ -12,23 +12,24 @@ func valid_target(actor, target):
     (pos.x == target.x and pos.y != target.y and abs(pos.y - target.y) < RANGE) or \
     (pos.y == target.y and pos.x != target.x and abs(pos.x - target.x) < RANGE)
 
-func get_area(actor_pos, target):
-  if actor_pos.x == target.x:
+func get_area(actor, target):
+  if actor.get_body_pos().x == target.x:
     horizontal = true
     return [[1],[1],[1],[1]]
   else:
     horizontal = false
     return [[1,1,1,1]]
 
-func get_center(actor_pos, target):
+func get_center(actor, target):
   var dist
+  var pos = actor.get_body_pos()
   if horizontal:
-    dist = target.y - actor_pos.y
+    dist = target.y - pos.y
     if dist < 0:
       dist = RANGE + dist
     return Vector2(0, dist - 1)
   else:
-    dist = target.x - actor_pos.x
+    dist = target.x - pos.x
     if dist < 0:
       dist = RANGE + dist
     return Vector2(dist - 1, 0)

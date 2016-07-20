@@ -109,11 +109,11 @@ func move_to(dir):
       var format
       var center
       if typeof(aoe_.format) != TYPE_ARRAY:
-        format = aoe_.format.call_func(map.get_parent().player.get_body().pos, target)
+        format = aoe_.format.call_func(map.get_parent().player, target)
       else:
         format = aoe_.format
       if typeof(aoe_.center) != TYPE_VECTOR2:
-        center = aoe_.center.call_func(map.get_parent().player.get_body().pos, target)
+        center = aoe_.center.call_func(map.get_parent().player, target)
         printt(aoe_.center)
         printt(center)
       else:
