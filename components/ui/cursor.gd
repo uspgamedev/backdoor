@@ -106,9 +106,21 @@ func move_to(dir):
   if target != null:
     origin = target
     if aoe_ != null:
+      var format
+      var center
+      if typeof(aoe_.format) != TYPE_ARRAY:
+        format = aoe_.format.call_func(map.get_parent().player.get_body().pos, target)
+      else:
+        format = aoe_.format
+      if typeof(aoe_.center) != TYPE_VECTOR2:
+        center = aoe_.center.call_func(map.get_parent().player.get_body().pos, target)
+        printt(aoe_.center)
+        printt(center)
+      else:
+        center = aoe_.center
       var hls = map.get_node("highlights")
       hls.clear()
-      hls.add_area(target, aoe_.format, aoe_.center, HighlightMap.AOE)
+      hls.add_area(target, format, center, HighlightMap.AOE)
   return found
 
 func _process(delta):
