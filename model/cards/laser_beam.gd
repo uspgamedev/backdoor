@@ -43,12 +43,13 @@ func get_options(actor):
 func evoke(actor, options):
   var map = get_node("/root/sector/map")
   var pos = options[0]
-  var area = get_area(actor.get_body_pos(), pos)
+  var area = get_area(actor, pos)
+  var center = get_center(actor, pos)
   for i in range(area.size()):
     for j in range(area[i].size()):
       var target = area[i][j]
       if target == 1:
-        var body = map.get_body_at(pos - CENTER + Vector2(j,i))
+        var body = map.get_body_at(pos - center + Vector2(j,i))
         if body != null:
-          printt("LASERBEAM SHOT", i, j)
+          printt("LASERBEAM SHOT", pos - center + Vector2(j,i))
           body.take_damage(15)

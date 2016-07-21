@@ -114,8 +114,6 @@ func move_to(dir):
         format = aoe_.format
       if typeof(aoe_.center) != TYPE_VECTOR2:
         center = aoe_.center.call_func(map.get_parent().player, target)
-        printt(aoe_.center)
-        printt(center)
       else:
         center = aoe_.center
       var hls = map.get_node("highlights")
