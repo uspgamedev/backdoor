@@ -12,9 +12,10 @@
 [ext_resource path="res://model/cards/card_item.gd" type="Script" id=10]
 [ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=11]
 [ext_resource path="res://model/cards/fireball.gd" type="Script" id=12]
-[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=13]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=14]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=15]
+[ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=13]
+[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=14]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=15]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=16]
 
 [node name="captains_log" type="Node"]
 
@@ -125,17 +126,24 @@ card_attribute = 0
 description = "a card"
 time_cost = 50
 
-[node name="map_generator" type="Node" parent="."]
+[node name="Laser Beam" type="Node" parent="cards"]
 
 script/script = ExtResource( 13 )
+card_attribute = 0
+description = "Shoots a powerful laser beam"
+time_cost = 50
 
-[node name="scene_manager" type="Node" parent="."]
+[node name="map_generator" type="Node" parent="."]
 
 script/script = ExtResource( 14 )
 
-[node name="profile" type="Node" parent="."]
+[node name="scene_manager" type="Node" parent="."]
 
 script/script = ExtResource( 15 )
+
+[node name="profile" type="Node" parent="."]
+
+script/script = ExtResource( 16 )
 
 
 [editable path="monsters/Slime"]
