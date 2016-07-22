@@ -57,10 +57,10 @@ func find_free_body_id():
   return id
 
 func get_random_free_pos():
-  var pos = Vector2(1 + randi()%(width-1), 1+ randi()%(height-1))
+  var pos = Vector2(1 + randi()%(width-2), 1+ randi()%(height-2))
   var walls = get_node("walls") #FIXME
   while (walls.get_cell(pos.x, pos.y) != -1):
-    pos = Vector2(1 + randi()%(width-1), 1+ randi()%(height-1))
+    pos = Vector2(1 + randi()%(width-2), 1 + randi()%(height-2))
   return pos
 
 func add_body(body):
