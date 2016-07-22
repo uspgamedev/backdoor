@@ -66,11 +66,11 @@ func _ready():
   cooldown = 100/speed
   draw_cooldown = DRAW_TIME
   if weapon != null:
-    emit_signal("equipped_item", weapon.get_ref())
+    emit_signal("equipped_item", weapon.get_ref(), SlotItem.WEAPON)
   if suit != null:
-    emit_signal("equipped_item", suit.get_ref())
+    emit_signal("equipped_item", suit.get_ref(), SlotItem.SUIT)
   if accessory != null:
-    emit_signal("equipped_item", accessory.get_ref())
+    emit_signal("equipped_item", accessory.get_ref(), SlotItem.ACCESSORY)
 
 func get_attribute(which):
   assert(which >= 0 and which < ATTR_MAX)
@@ -95,6 +95,9 @@ func get_melee_damage():
     weapon.get_ref().consume_item()
     var damage = weapon.get_ref().calculate_damage(self)
     printt("Hit with", weapon.get_ref().get_name(), "damage done", damage)
+    if weapon.get_ref().get_durability() < 0:
+      weapon = null
+      emit_signal("equipped_item", null, SlotItem.WEAPON)
     return damage
   return get_athletics() + 1 + randi()%6
 
@@ -135,9 +138,22 @@ func equip_item(card):
     self.weapon = Card.new(card)
   elif card.get_slot() == SlotItem.SUIT:
     self.suit = Card.new(card)
+    get_body().set_damage_reduction(card.get_damage_reduction())
+    get_body().connect("damage_taken", self, "consume_armory")
   elif card.get_slot() == SlotItem.ACCESSORY:
     self.accessory = Card.new(card)
-  emit_signal("equipped_item", card)
+  emit_signal("equipped_item", card, card.get_slot())
+
+func consume_armory():
+  if self.suit == null:
+    return
+  self.suit.get_ref().consume_item()
+  printt("consume armor durability=", self.suit.get_ref().get_durability())
+  if self.suit.get_ref().get_durability() < 0:
+    get_body().set_damage_reduction(0)
+    get_body().disconnect("damage_taken", self, "consume_armory")
+    self.suit = null
+    emit_signal("equipped_item", self.suit, SlotItem.SUIT)
 
 func is_ready():
   return cooldown == 0
@@ -148,11 +164,13 @@ func has_action():
 func add_action(the_action):
   if !has_action() and the_action.can_be_used(self):
     action = the_action
-    print(get_name(), ": added action ", action.get_type())
+    #print(get_name(), ": added action ", action.get_type())
     emit_signal("has_action")
 
 func use_action():
-  print(get_name(), ": used action ", action.get_type())
+  #print(get_name(), ": used action ", action.get_type())
+  if self.suit != null:
+    get_body().connect("damage_taken", self, "consume_armory")
   cooldown += action.get_cost(self)/speed
   action.use(self)
   action = null

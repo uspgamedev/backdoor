@@ -41,4 +41,6 @@ func calculate_damage(player):
   var obj = Reference.new()
   obj.set_script(script)
 
+  consume_item()
+
   return obj.eval()

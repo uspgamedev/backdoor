@@ -9,6 +9,10 @@ onready var slots = [
   get_node("accessory")
 ]
 
-func change_item(item):
-  var slot = slots[item.get_slot()]
-  slot.set_text(slot.get_name() + ": " + item.get_name())
+func change_item(item, slot):
+  var item_name = "none"
+  if item != null:
+    item_name = item.get_name()
+  var slot_item = slots[slot]
+  slot_item.set_text(slot_item.get_name() + ": " + item_name)
+  printt("##################### change item")
