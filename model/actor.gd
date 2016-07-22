@@ -91,6 +91,11 @@ func get_tech():
   return get_attribute(ATTR_TECH)
 
 func get_melee_damage():
+  if weapon != null:
+    weapon.get_ref().consume_item()
+    var damage = weapon.get_ref().calculate_damage(self)
+    printt("Hit with", weapon.get_ref().get_name(), "damage done", damage)
+    return damage
   return get_athletics() + 1 + randi()%6
 
 func get_body():
