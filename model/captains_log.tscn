@@ -11,7 +11,7 @@
 [ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" id=9]
 [ext_resource path="res://model/cards/card_item_weapon.gd" type="Script" id=10]
 [ext_resource path="res://model/cards/card_item_armory.gd" type="Script" id=11]
-[ext_resource path="res://model/cards/card_item.gd" type="Script" id=12]
+[ext_resource path="res://model/cards/card_item_accessory.gd" type="Script" id=12]
 [ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=13]
 [ext_resource path="res://model/cards/fireball.gd" type="Script" id=14]
 [ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=15]
@@ -94,14 +94,16 @@ slot = 1
 initial_durability = 2
 damage_reduction = 3
 
-[node name="LED Earring" type="Node" parent="cards"]
+[node name="Concentration Ring" type="Node" parent="cards"]
 
 script/script = ExtResource( 12 )
-card_attribute = 0
-description = "a card"
+card_attribute = 1
+description = "Double the draw rate"
 time_cost = 50
 slot = 2
-initial_durability = 5
+initial_durability = 100
+init_effect_expression = "actor.set_draw_rate_bonus_multiplier(2)"
+finish_effect_expression = "actor.set_draw_rate_bonus_multiplier(1)"
 
 [node name="Mov Speed UP" type="Node" parent="cards"]
 

@@ -12,6 +12,7 @@ const ATTR_MAX          = 3
 
 const DRAW_TIME         = 120
 const HAND_MAX          = 5
+const ACC_CONSUME       = 10
 
 class Card:
   var card_ref
@@ -30,6 +31,7 @@ var char_name
 var base_attributes_
 var speed = 10
 var draw_rate = 5
+var draw_rate_bonus_multiplier = 1
 
 # Play state
 var cooldown
@@ -50,7 +52,7 @@ signal spent_action
 signal draw_card(card)
 signal consumed_card(card)
 signal update_deck
-signal equipped_item(item)
+signal equipped_item(item, slot_type)
 
 func _init(name):
   hand = []
@@ -122,8 +124,21 @@ func step_time():
     draw_cooldown += DRAW_TIME
     emit_signal("draw_card", hand[hand.size() - 1])
     emit_signal("update_deck")
+  if accessory != null:
+    if accessory.get_ref().get_durability() > 0:
+      accessory.get_ref().consume_item()
+    else:
+      accessory.get_ref().finish_effect(self)
+      accessory = null
+      emit_signal("equipped_item", self.accessory, SlotItem.ACCESSORY)
   if can_draw():
-    draw_cooldown -= draw_rate
+    draw_cooldown -= draw_rate()
+
+func draw_rate():
+  return draw_rate * draw_rate_bonus_multiplier
+
+func set_draw_rate_bonus_multiplier(bonus_multiplier):
+  self.draw_rate_bonus_multiplier = bonus_multiplier
 
 func set_upgrade(upgrade):
   if upgrades.size() == UPGRADE_SLOT_MAX:
@@ -142,6 +157,7 @@ func equip_item(card):
     get_body().connect("damage_taken", self, "consume_armory")
   elif card.get_slot() == SlotItem.ACCESSORY:
     self.accessory = Card.new(card)
+    card.init_effect(self)
   emit_signal("equipped_item", card, card.get_slot())
 
 func consume_armory():
@@ -169,7 +185,7 @@ func add_action(the_action):
 
 func use_action():
   #print(get_name(), ": used action ", action.get_type())
-  if self.suit != null:
+  if self.suit != null and !get_body().is_connected("damage_taken", self, "consume_armory"):
     get_body().connect("damage_taken", self, "consume_armory")
   cooldown += action.get_cost(self)/speed
   action.use(self)

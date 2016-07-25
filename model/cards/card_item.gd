@@ -11,6 +11,9 @@ export(int) var initial_durability = 5
 
 var consumption = 0
 
+func get_initial_durability():
+  return initial_durability
+
 func get_durability():
   return initial_durability - consumption
 
