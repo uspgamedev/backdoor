@@ -32,7 +32,7 @@ func calculate_damage(player):
             "func eval():\n" +\
             "\treturn " + damage_exp
 
-  print("src=\n\n########\n" + src + "\n#######\n")
+  #print("src=\n\n########\n" + src + "\n#######\n")
 
   var script = GDScript.new()
   script.set_source_code(src)

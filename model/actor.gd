@@ -96,7 +96,7 @@ func get_melee_damage():
   if weapon != null:
     weapon.get_ref().consume_item()
     var damage = weapon.get_ref().calculate_damage(self)
-    printt("Hit with", weapon.get_ref().get_name(), "damage done", damage)
+    #printt("Hit with", weapon.get_ref().get_name(), "damage done", damage)
     if weapon.get_ref().get_durability() < 0:
       weapon = null
       emit_signal("equipped_item", null, SlotItem.WEAPON)

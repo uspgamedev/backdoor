@@ -15,4 +15,4 @@ func change_item(item, slot):
     item_name = item.get_name()
   var slot_item = slots[slot]
   slot_item.set_text(slot_item.get_name() + ": " + item_name)
-  printt("##################### change item")
+  #printt("##################### change item")

@@ -8,7 +8,7 @@ func init_effect(actor):
   var src = "func init_effect(actor):\n" +\
             "\t" + init_effect_expression.replace("\n", "\n\t")
 
-  print("src=\n\n########\n" + src + "\n#######\n")
+  #print("src=\n\n########\n" + src + "\n#######\n")
 
   var script = GDScript.new()
   script.set_source_code(src)
@@ -24,7 +24,7 @@ func finish_effect(actor):
   var src = "func finish_effect(actor):\n" +\
             "\t" + finish_effect_expression.replace("\n", "\n\t")
 
-  print("src=\n\n########\n" + src + "\n#######\n")
+  #print("src=\n\n########\n" + src + "\n#######\n")
 
   var script = GDScript.new()
   script.set_source_code(src)
