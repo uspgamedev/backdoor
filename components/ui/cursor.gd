@@ -30,13 +30,20 @@ const DIRS = [
   Vector2(-1,0)  #LEFT
 ]
 
-var map
+var map_
 var origin
 var target_
 var check_
 var aoe_
+var range_
 
 signal target_chosen()
+
+func load_range_():
+  range_ = {}
+  for tile in map_.get_node("floors").get_used_cells():
+    if check_.call_func(map_.get_parent().player, tile):
+      range_[tile] = true
 
 func select(check, area):
   #FIXME: keep reference in attribute, also rename it to lowercase
@@ -46,15 +53,16 @@ func select(check, area):
   get_node("Controller").enable()
   aoe_ = area
   target_ = null
-  map = get_node("/root/sector/map")
+  map_ = get_node("/root/sector/map")
   var main = get_node("/root/sector")
   check_ = check
+  load_range_()
   origin = main.player.get_body().pos
   for dir in DIRS:
     if move_to(dir):
       break
   if target_ == null:
-    if check_.call_func(map.get_parent().player, origin):
+    if check_.call_func(map_.get_parent().player, origin):
       target_ = origin
     else:
       return false
@@ -66,7 +74,7 @@ func disable():
   var main = get_node("/root/sector")
   hide()
   get_node("Controller").disable()
-  map.get_node("highlights").clear()
+  map_.get_node("highlights").clear()
   set_process(false)
   emit_signal("target_chosen")
 
@@ -99,7 +107,7 @@ func move_to(dir):
     var next = queue.pop()
     checked[next] = true
     # Choose next as target if it is valid
-    if check_.call_func(map.get_parent().player, next):
+    if range_.has(next):
       target_ = next
       found = true
       break
@@ -115,19 +123,19 @@ func move_to(dir):
 func _process(delta):
   if target_ != null:
     # update cursor position
-    var floors = map.get_node("floors")
+    var floors = map_.get_node("floors")
     set_pos(floors.map_to_world(target_))
     # update highlight
-    var hls = map.get_node("highlights")
+    var hls = map_.get_node("highlights")
     if aoe_ != null:
       var format
       var center
       if typeof(aoe_.format) != TYPE_ARRAY:
-        format = aoe_.format.call_func(map.get_parent().player, target_)
+        format = aoe_.format.call_func(map_.get_parent().player, target_)
       else:
         format = aoe_.format
       if typeof(aoe_.center) != TYPE_VECTOR2:
-        center = aoe_.center.call_func(map.get_parent().player, target_)
+        center = aoe_.center.call_func(map_.get_parent().player, target_)
       else:
         center = aoe_.center
       hls.clear()
