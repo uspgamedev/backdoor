@@ -92,7 +92,7 @@ description = "a card"
 time_cost = 50
 slot = 1
 initial_durability = 2
-damage_reduction = 3
+absorption = 3
 
 [node name="Concentration Ring" type="Node" parent="cards"]
 
@@ -151,7 +151,7 @@ description = "a card"
 time_cost = 50
 slot = 1
 initial_durability = 5
-damage_reduction = 3
+absorption = 3
 
 [node name="map_generator" type="Node" parent="."]
 
