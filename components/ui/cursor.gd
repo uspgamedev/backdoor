@@ -3,6 +3,7 @@ extends Sprite
 
 const HighlightMap = preload("res://components/ui/highlight_map.gd")
 
+#FIXME: move to separate script
 class Queue:
   var values
   var tail
@@ -31,19 +32,20 @@ const DIRS = [
 
 var map
 var origin
-var target
+var target_
 var check
 var aoe_
 
 signal target_chosen()
 
 func select(the_check, area):
+  #FIXME: keep reference in attribute, also rename it to lowercase
   get_node("Controller").connect("move_selection", self, "move_to")
   get_node("Controller").connect("confirm", self, "confirm")
   get_node("Controller").connect("cancel", self, "cancel")
   get_node("Controller").enable()
   aoe_ = area
-  target = null
+  target_ = null
   map = get_node("/root/sector/map")
   var main = get_node("/root/sector")
   check = the_check
@@ -51,9 +53,9 @@ func select(the_check, area):
   for dir in DIRS:
     if move_to(dir):
       break
-  if target == null:
+  if target_ == null:
     if check.call_func(map.get_parent().player, origin):
-      target = origin
+      target_ = origin
     else:
       return false
   set_process(true)
@@ -72,8 +74,11 @@ func confirm():
   disable()
 
 func cancel():
-  target = null
+  target_ = null
   disable()
+
+func get_target():
+  return target_
 
 func inside(pos, dir):
   var relative = pos - origin
@@ -95,7 +100,7 @@ func move_to(dir):
     checked[next] = true
     # Choose next as target if it is valid
     if check.call_func(map.get_parent().player, next):
-      target = next
+      target_ = next
       found = true
       break
     # If not, expand the search
@@ -103,25 +108,27 @@ func move_to(dir):
       var candidate = next + next_dir
       if not checked.has(candidate) and inside(candidate, dir):
         queue.push(candidate)
-  if target != null:
-    origin = target
+  if target_ != null:
+    origin = target_
+  return found
+
+func _process(delta):
+  if target_ != null:
+    # update cursor position
+    var floors = map.get_node("floors")
+    set_pos(floors.map_to_world(target_))
+    # update highlight
+    var hls = map.get_node("highlights")
     if aoe_ != null:
       var format
       var center
       if typeof(aoe_.format) != TYPE_ARRAY:
-        format = aoe_.format.call_func(map.get_parent().player, target)
+        format = aoe_.format.call_func(map.get_parent().player, target_)
       else:
         format = aoe_.format
       if typeof(aoe_.center) != TYPE_VECTOR2:
-        center = aoe_.center.call_func(map.get_parent().player, target)
+        center = aoe_.center.call_func(map.get_parent().player, target_)
       else:
         center = aoe_.center
-      var hls = map.get_node("highlights")
       hls.clear()
-      hls.add_area(target, format, center, HighlightMap.AOE)
-  return found
-
-func _process(delta):
-  var floors = map.get_node("floors")
-  if target != null:
-    set_pos(floors.map_to_world(target))
+      hls.add_area(target_, format, center, HighlightMap.AOE)
