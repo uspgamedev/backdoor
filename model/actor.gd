@@ -153,7 +153,7 @@ func equip_item(card):
     self.weapon = Card.new(card)
   elif card.get_slot() == SlotItem.SUIT:
     self.suit = Card.new(card)
-    get_body().set_damage_reduction(card.get_damage_reduction())
+    get_body().set_absorption(card.get_absorption())
     get_body().connect("damage_taken", self, "consume_armory")
   elif card.get_slot() == SlotItem.ACCESSORY:
     self.accessory = Card.new(card)
@@ -166,7 +166,7 @@ func consume_armory():
   self.suit.get_ref().consume_item()
   printt("consume armor durability=", self.suit.get_ref().get_durability())
   if self.suit.get_ref().get_durability() < 0:
-    get_body().set_damage_reduction(0)
+    get_body().set_absorption(0)
     get_body().disconnect("damage_taken", self, "consume_armory")
     self.suit = null
     emit_signal("equipped_item", self.suit, SlotItem.SUIT)
