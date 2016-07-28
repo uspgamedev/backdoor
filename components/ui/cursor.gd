@@ -33,12 +33,12 @@ const DIRS = [
 var map
 var origin
 var target_
-var check
+var check_
 var aoe_
 
 signal target_chosen()
 
-func select(the_check, area):
+func select(check, area):
   #FIXME: keep reference in attribute, also rename it to lowercase
   get_node("Controller").connect("move_selection", self, "move_to")
   get_node("Controller").connect("confirm", self, "confirm")
@@ -48,13 +48,13 @@ func select(the_check, area):
   target_ = null
   map = get_node("/root/sector/map")
   var main = get_node("/root/sector")
-  check = the_check
+  check_ = check
   origin = main.player.get_body().pos
   for dir in DIRS:
     if move_to(dir):
       break
   if target_ == null:
-    if check.call_func(map.get_parent().player, origin):
+    if check_.call_func(map.get_parent().player, origin):
       target_ = origin
     else:
       return false
@@ -99,7 +99,7 @@ func move_to(dir):
     var next = queue.pop()
     checked[next] = true
     # Choose next as target if it is valid
-    if check.call_func(map.get_parent().player, next):
+    if check_.call_func(map.get_parent().player, next):
       target_ = next
       found = true
       break
