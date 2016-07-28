@@ -130,20 +130,6 @@ func check_dead_bodies():
       else:
         remove_actor(actor)
 
-#func _fixed_process(delta):
-#  var player_body = get_actor_body(get_parent().player)
-#  for i in range(7):
-#    for j in range(7):
-#      var pos = player_body.pos + Vector2(-2 + i,-2 + j)
-#      var cell = walls.get_cell(pos.x, pos.y)
-#      if cell > 0 && cell % 2 == 0:
-#        walls.set_cell(pos.x, pos.y, cell - 1)
-#  for diff in block:
-#    var pos = player_body.pos + diff
-#    var cell = walls.get_cell(pos.x, pos.y)
-#    if cell % 2 == 1:
-#      walls.set_cell(pos.x, pos.y, cell + 1)
-
 func serialize():
   # Store sector general data
   var sector_data = {}
