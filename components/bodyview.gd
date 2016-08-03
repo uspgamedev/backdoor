@@ -18,7 +18,7 @@ static func create(body):
   return bodyview
 
 func _ready():
-  sprite.set_texture(load("res://assets/bodies/" + body.type + "/idle.tex"))
+  sprite.set_texture(load("res://assets/bodies/" + body.type + "/idle.png"))
   animation.play("idle")
   set_process(true)
 
