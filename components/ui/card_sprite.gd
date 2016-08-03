@@ -65,9 +65,9 @@ func prepare_evocation(player):
         emit_signal("selecting_target")
         yield(cursor, "target_chosen")
         emit_signal("target_selected")
-        if cursor.target == null:
+        if cursor.get_target() == null:
           return false
-        action.add_option(cursor.target)
+        action.add_option(cursor.get_target())
       else:
         return false
   player.add_action(action)
