@@ -27,3 +27,9 @@ func get_description():
 
 func evoke(actor, options):
   print("Card evoked")
+
+## Utility functions
+
+func dist(actor, target):
+  var d = target - actor.get_body_pos()
+  return abs(d.x) + abs(d.y)

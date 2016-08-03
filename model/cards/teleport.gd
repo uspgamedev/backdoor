@@ -3,7 +3,7 @@ extends "res://model/cards/card_skill.gd"
 
 func valid_target(actor, target):
   var map = get_node("/root/sector/map")
-  return map.is_empty_space(target) and map.get_body_at(target) == null
+  return dist(actor,target) <= 10 and map.is_empty_space(target) and map.get_body_at(target) == null
 
 func can_be_evoked(actor):
   return true
