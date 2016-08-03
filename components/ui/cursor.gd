@@ -127,6 +127,9 @@ func _process(delta):
     set_pos(floors.map_to_world(target_))
     # update highlight
     var hls = map_.get_node("highlights")
+    hls.clear()
+    for tile in range_:
+      hls.add_tile(tile, HighlightMap.RANGE)
     if aoe_ != null:
       var format
       var center
@@ -138,5 +141,4 @@ func _process(delta):
         center = aoe_.center.call_func(map_.get_parent().player, target_)
       else:
         center = aoe_.center
-      hls.clear()
       hls.add_area(target_, format, center, HighlightMap.AOE)

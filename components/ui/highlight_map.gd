@@ -1,10 +1,14 @@
 
 extends TileMap
 
-const AOE = 0
+const RANGE = 0
+const AOE = 1
 
 func _ready():
   pass
+
+func add_tile(pos, id):
+  set_cellv(pos, id)
 
 func add_area(pos, format, offset, id):
   for i in range(format.size()):
