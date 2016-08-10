@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
-[ext_resource path="res://scenes/menu.gd" type="Script" id=1]
-[ext_resource path="res://assets/fonts/PressStart2P.fnt" type="Font" id=2]
-[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=3]
-[ext_resource path="res://components/controller/default_controller.gd" type="Script" id=4]
+[ext_resource path="res://components/theme/wilokai.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/menu.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/PressStart2P.fnt" type="BitmapFont" id=3]
+[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="BitmapFont" id=4]
+[ext_resource path="res://components/controller/default_controller.gd" type="Script" id=5]
 
 [node name="menu" type="Control"]
 
@@ -13,11 +14,12 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+theme/theme = ExtResource( 1 )
 margin/left = 0.0
 margin/top = 0.0
 margin/right = 0.0
 margin/bottom = 0.0
-script/script = ExtResource( 1 )
+script/script = ExtResource( 2 )
 
 [node name="Title" type="Label" parent="."]
 
@@ -31,8 +33,8 @@ margin/left = 32.0
 margin/top = 128.0
 margin/right = 32.0
 margin/bottom = 256.0
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color = Color( 0.929688, 0.91153, 0.91153, 1 )
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0.686275, 0.627451, 0.376471, 1 )
 text = "Backdoor"
 align = 1
 valign = 1
@@ -48,9 +50,9 @@ focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 32.0
+margin/left = 128.0
 margin/top = 256.0
-margin/right = 32.0
+margin/right = 128.0
 margin/bottom = 32.0
 alignment = 0
 __meta__ = { "_edit_lock_":true }
@@ -63,17 +65,19 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 576.0
-margin/bottom = 22.0
-custom_fonts/font = ExtResource( 3 )
+margin/right = 384.0
+margin/bottom = 24.0
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
 text = "New route"
 flat = false
 __meta__ = { "_edit_lock_":true }
 
 [node name="Controller" type="Node" parent="."]
 
-script/script = ExtResource( 4 )
+script/script = ExtResource( 5 )
 
 [connection signal="pressed" from="saves/new_game" to="." method="_on_new_game"]
 
