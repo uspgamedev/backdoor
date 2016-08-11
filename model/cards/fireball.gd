@@ -26,4 +26,4 @@ func evoke(actor, options):
         var body = map.get_body_at(pos - CENTER + Vector2(j,i))
         printt("FIREBALL HIT", i, j)
         if body != null:
-          body.take_damage(20)
+          body.take_damage(20, actor)

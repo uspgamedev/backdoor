@@ -52,4 +52,4 @@ func evoke(actor, options):
         var body = map.get_body_at(pos - center + Vector2(j,i))
         if body != null:
           printt("LASERBEAM SHOT", pos - center + Vector2(j,i))
-          body.take_damage(15)
+          body.take_damage(15, actor)

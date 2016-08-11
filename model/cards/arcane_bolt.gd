@@ -14,4 +14,4 @@ func evoke(actor, options):
   var target = options[0]
   var map = get_node("/root/sector/map")
   var body = map.get_body_at(target)
-  body.take_damage(5)
+  body.take_damage(5, actor)
