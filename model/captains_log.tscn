@@ -112,22 +112,38 @@ card_attribute = 0
 description = "+3 ATH"
 time_cost = 50
 bonus_amount = 3
+static_kind = "none"
+static_value = 0
 
 [node name="Mind Focus" type="Node" parent="cards"]
 
 script/script = ExtResource( 13 )
-card_attribute = 0
+card_attribute = 1
 description = "+3 ARC"
 time_cost = 50
 bonus_amount = 3
+static_kind = "none"
+static_value = 0
 
 [node name="Guidorizzi Tome" type="Node" parent="cards"]
 
 script/script = ExtResource( 13 )
-card_attribute = 0
+card_attribute = 2
 description = "+3 TECH"
 time_cost = 50
 bonus_amount = 3
+static_kind = "none"
+static_value = 0
+
+[node name="Adrenaline Dose" type="Node" parent="cards"]
+
+script/script = ExtResource( 13 )
+card_attribute = 0
+description = "+1 ATH, +5 SPD"
+time_cost = 50
+bonus_amount = 1
+static_kind = "bonus_speed"
+static_value = 5
 
 [node name="Fireball" type="Node" parent="cards"]
 
