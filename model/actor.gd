@@ -83,6 +83,14 @@ func get_attribute(which):
       value += card.get_bonus_amount()
   return value
 
+func get_static_effect(which):
+  var value = 0
+  for upgrade in upgrades:
+    var card = upgrade.get_ref()
+    if card.has_static_effect(which):
+      value += card.get_static_effect()
+  return value
+
 func get_athletics():
   return get_attribute(ATTR_ATHLETICS)
 
@@ -91,6 +99,9 @@ func get_arcana():
 
 func get_tech():
   return get_attribute(ATTR_TECH)
+
+func get_speed():
+  return speed + get_static_effect("speed_bonus")
 
 func get_melee_damage():
   if weapon != null:
@@ -187,7 +198,7 @@ func use_action():
   #print(get_name(), ": used action ", action.get_type())
   if self.suit != null and !get_body().is_connected("damage_taken", self, "consume_armory"):
     get_body().connect("damage_taken", self, "consume_armory")
-  cooldown += action.get_cost(self)/speed
+  cooldown += action.get_cost(self)/get_speed()
   action.use(self)
   action = null
   emit_signal("spent_action")
