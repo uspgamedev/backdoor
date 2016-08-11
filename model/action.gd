@@ -46,7 +46,7 @@ class MeleeAttack:
   func get_cost(actor):
     return 100
   func use(actor):
-    body_.take_damage(actor.get_melee_damage())
+    body_.take_damage(actor.get_melee_damage(), actor)
 
 class ChangeSector:
   extends BaseAction

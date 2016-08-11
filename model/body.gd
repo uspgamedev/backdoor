@@ -23,7 +23,7 @@ func set_absorption(absorption):
 func get_absorption():
   return self.absorption
 
-func take_damage(amount):
+func take_damage(amount, source_actor):
   damage += max(amount - absorption, 0)
   printt("Damage done", amount, "reduction", absorption)
   if is_dead():
