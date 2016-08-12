@@ -2,6 +2,7 @@
 extends Node2D
 
 const MapScene = preload("res://scenes/map.tscn")
+const Parallax = preload("res://components/util/parallax_background.tscn")
 
 const Actor        = preload("res://model/actor.gd")
 const Body         = preload("res://model/body.gd")
@@ -99,6 +100,11 @@ func attach_camera(actor):
   camera.set_enable_follow_smoothing(true)
   camera.set_follow_smoothing(5)
   bodyview.add_child(camera)
+  add_bg()
+
+func add_bg():
+  var parallax_bg = Parallax.instance()
+  get_node("background").add_child(parallax_bg)
 
 func move_actor(actor, new_pos):
   move_body(actor_bodies[actor], new_pos)
