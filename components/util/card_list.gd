@@ -1,4 +1,4 @@
-
+tool
 extends Node
 
 const Card = preload("res://model/cards/card_entity.gd")
