@@ -76,4 +76,11 @@ __meta__ = { "_edit_lock_":true }
 
 [node name="actors" type="Node" parent="."]
 
+[node name="background" type="CanvasLayer" parent="."]
+
+layer = 0
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+
 
