@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=1]
+[gd_scene load_steps=20 format=1]
 
 [ext_resource path="res://model/captains_log.gd" type="Script" id=1]
 [ext_resource path="res://components/util/id_server.gd" type="Script" id=2]
@@ -13,11 +13,12 @@
 [ext_resource path="res://model/cards/card_item_armory.gd" type="Script" id=11]
 [ext_resource path="res://model/cards/card_item_accessory.gd" type="Script" id=12]
 [ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=13]
-[ext_resource path="res://model/cards/fireball.gd" type="Script" id=14]
-[ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=15]
-[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=16]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=17]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=18]
+[ext_resource path="res://model/cards/counter.gd" type="Script" id=14]
+[ext_resource path="res://model/cards/fireball.gd" type="Script" id=15]
+[ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=16]
+[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=17]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=18]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=19]
 
 [node name="captains_log" type="Node"]
 
@@ -145,31 +146,41 @@ bonus_amount = 1
 static_kind = "bonus_speed"
 static_value = 5
 
-[node name="Fireball" type="Node" parent="cards"]
+[node name="Counter" type="Node" parent="cards"]
 
 script/script = ExtResource( 14 )
+card_attribute = 2
+description = "Whenever you are hit, counter with 2d4 damage."
+time_cost = 50
+bonus_amount = 1
+static_kind = "none"
+static_value = 0
+
+[node name="Fireball" type="Node" parent="cards"]
+
+script/script = ExtResource( 15 )
 card_attribute = 0
 description = "a card"
 time_cost = 50
 
 [node name="Laser Beam" type="Node" parent="cards"]
 
-script/script = ExtResource( 15 )
+script/script = ExtResource( 16 )
 card_attribute = 0
 description = "Shoots a powerful laser beam"
 time_cost = 50
 
 [node name="map_generator" type="Node" parent="."]
 
-script/script = ExtResource( 16 )
+script/script = ExtResource( 17 )
 
 [node name="scene_manager" type="Node" parent="."]
 
-script/script = ExtResource( 17 )
+script/script = ExtResource( 18 )
 
 [node name="profile" type="Node" parent="."]
 
-script/script = ExtResource( 18 )
+script/script = ExtResource( 19 )
 
 
 [editable path="monsters/Slime"]
