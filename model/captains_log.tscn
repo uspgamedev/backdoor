@@ -30,8 +30,6 @@ script/script = ExtResource( 2 )
 
 [node name="monsters" type="Node" parent="."]
 
-editor/display_folded = true
-
 [node name="Slime" parent="monsters" instance=ExtResource( 3 )]
 
 body_type = "slime"
@@ -46,12 +44,29 @@ chance = 0.3
 script/script = ExtResource( 5 )
 chance = 1.0
 
-[node name="Orc" parent="monsters" instance=ExtResource( 3 )]
+[node name="Floating Eye" parent="monsters" instance=ExtResource( 3 )]
 
-body_type = "dummy"
+body_hp = 15
+body_type = "eye"
+
+[node name="defensive" type="Node" parent="monsters/Floating Eye/ai_modules"]
+
+script/script = ExtResource( 5 )
+chance = 1
+
+[node name="Thief" parent="monsters" instance=ExtResource( 3 )]
+
+body_hp = 25
+body_type = "thief"
+
+[node name="wander" type="Node" parent="monsters/Thief/ai_modules"]
+
+script/script = ExtResource( 4 )
+chance = 1
 
 [node name="cards" type="Node" parent="."]
 
+editor/display_folded = true
 script/script = ExtResource( 6 )
 
 [node name="Heal" type="Node" parent="cards"]
@@ -184,4 +199,5 @@ script/script = ExtResource( 19 )
 
 
 [editable path="monsters/Slime"]
-[editable path="monsters/Orc"]
+[editable path="monsters/Floating Eye"]
+[editable path="monsters/Thief"]
