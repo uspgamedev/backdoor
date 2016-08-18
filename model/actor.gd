@@ -91,6 +91,12 @@ func get_static_effect(which):
       value += card.get_static_effect()
   return value
 
+func check_triggers(which, params):
+  for upgrade in upgrades:
+    var card = upgrade.get_ref()
+    if card.has_trigger_effect(which):
+      card.trigger(self, params)
+
 func get_athletics():
   return get_attribute(ATTR_ATHLETICS)
 
@@ -166,10 +172,14 @@ func equip_item(card):
     self.suit = Card.new(card)
     get_body().set_absorption(card.get_absorption())
     get_body().connect("damage_taken", self, "consume_armory")
+    get_body().connect("damage_taken", self, "_on_damage_taken")
   elif card.get_slot() == SlotItem.ACCESSORY:
     self.accessory = Card.new(card)
     card.init_effect(self)
   emit_signal("equipped_item", card, card.get_slot())
+
+func _on_damage_taken(amount, source):
+  check_triggers("damage_taken", { "amount": amount, "source": source })
 
 func consume_armory():
   if self.suit == null:

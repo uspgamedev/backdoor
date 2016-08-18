@@ -1,6 +1,8 @@
 
 extends Node
 
+const DamageFormula = preload("res://components/util/damage_formula.gd")
+
 class CARD_ATTRIBUTE:
   const ATHLETICS = 0
   const ARCANE = 1

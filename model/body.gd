@@ -8,7 +8,7 @@ var damage
 
 var absorption = 0
 
-signal damage_taken()
+signal damage_taken(amount, source)
 
 func _init(id, the_type, the_pos, the_hp).(id):
   type = the_type
@@ -28,7 +28,7 @@ func take_damage(amount, source_actor):
   printt("Damage done", amount, "reduction", absorption)
   if is_dead():
     pass
-  emit_signal("damage_taken")
+  emit_signal("damage_taken", amount, source_actor)
 
 func heal(amount):
   damage = max(damage - amount, 0)

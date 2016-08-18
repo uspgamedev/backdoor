@@ -22,8 +22,14 @@ func get_bonus_amount():
 func has_static_effect(kind):
   return static_kind == kind
 
+func has_trigger_effect(kind):
+  return false
+
 func get_static_effect():
   return static_value
 
 func evoke(actor, options):
   actor.set_upgrade(self)
+
+func trigger(actor, params):
+  pass #abstract
