@@ -47,7 +47,8 @@ func event_next_sector():
 
 func event_create_slime():
   var map = get_node("../../map")
-  get_node("/root/captains_log/monsters/Slime").create(map, map.get_random_free_pos())
+  var monsters = get_node("/root/captains_log/monsters").get_children()
+  monsters[randi()%monsters.size()].create(map, map.get_random_free_pos())
 
 func event_display_card():
   if get_node("/root/sector/HUD/CardDisplay").is_hidden():
