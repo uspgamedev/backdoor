@@ -64,6 +64,16 @@ body_type = "thief"
 script/script = ExtResource( 4 )
 chance = 1
 
+[node name="Giant Toad" parent="monsters" instance=ExtResource( 3 )]
+
+body_hp = 20
+body_type = "froggy"
+
+[node name="wander" type="Node" parent="monsters/Giant Toad/ai_modules"]
+
+script/script = ExtResource( 4 )
+chance = 1
+
 [node name="cards" type="Node" parent="."]
 
 editor/display_folded = true
@@ -201,3 +211,4 @@ script/script = ExtResource( 19 )
 [editable path="monsters/Slime"]
 [editable path="monsters/Floating Eye"]
 [editable path="monsters/Thief"]
+[editable path="monsters/Giant Toad"]
