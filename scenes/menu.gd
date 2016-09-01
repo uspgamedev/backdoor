@@ -6,8 +6,8 @@ const MenuButton = preload("res://components/ui/save-button.tscn")
 const Route = preload("res://model/route.gd")
 
 onready var saves_node = get_node("saves")
-onready var caplog = get_node("/root/captains_log")
-onready var profile = caplog.get_profile()
+onready var database = get_node("/root/database")
+onready var profile = database.get_profile()
 
 func _ready():
   start()
@@ -31,10 +31,10 @@ func stop():
   hide()
 
 func _on_new_game():
-  caplog.create_route()
+  database.create_route()
   stop()
 
 func _on_load_game(save_id):
   stop()
-  caplog.load_route(save_id)
+  database.load_route(save_id)
   get_tree().set_current_scene(get_node("/root/sector"))

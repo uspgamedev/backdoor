@@ -131,7 +131,7 @@ func check_dead_bodies():
     if body.is_dead():
       var actor = get_body_actor(body)
       if actor == get_parent().player:
-        get_node("/root/captains_log/scene_manager").call_deferred("destroy_route")
+        get_node("/root/database/scene_manager").call_deferred("destroy_route")
       else:
         remove_actor(actor)
 

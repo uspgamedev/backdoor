@@ -1,7 +1,7 @@
 
 extends Node
 
-onready var caplog = get_parent()
+onready var database = get_parent()
 onready var menu = get_node("/root/menu")
 
 func replace_scene(parent, oldscene, newscene):
@@ -15,7 +15,7 @@ func _deferred_replace_scene(parent, oldscene, newscene):
   parent.add_child(newscene)
 
 func close_route():
-  caplog.save_route()
+  database.save_route()
   var route = get_node("/root/route")
   route.close_current_sector()
   route.queue_free()
@@ -26,6 +26,6 @@ func destroy_route():
   var route = get_node("/root/route")
   route.close_current_sector()
   route.queue_free()
-  caplog.erase_route(route.id)
+  database.erase_route(route.id)
   get_tree().set_current_scene(menu)
   menu.start()

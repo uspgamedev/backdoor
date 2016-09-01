@@ -241,7 +241,7 @@ func serialize():
   actor_data["cooldown"] = cooldown
   actor_data["drawcooldown"] = draw_cooldown
 
-  var cards_db = get_node("/root/captains_log/cards")
+  var cards_db = get_node("/root/database/cards")
 
   if weapon != null:
     actor_data["weapon"] = get_card_id(cards_db, weapon)
@@ -276,7 +276,7 @@ static func unserialize(data, root):
   actor.cooldown = data["cooldown"]
   actor.draw_cooldown = data["drawcooldown"]
 
-  var cards_db = root.get_node("captains_log/cards")
+  var cards_db = root.get_node("database/cards")
 
   print("data=", data)
 

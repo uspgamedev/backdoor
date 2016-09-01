@@ -58,7 +58,7 @@ func consume_input_key(event):
       return
 
 func event_cancel():
-  get_node("/root/captains_log").finish()
+  get_node("/root/database").finish()
   get_tree().quit()
 
 func event_toggle_fullscreen():

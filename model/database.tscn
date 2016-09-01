@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=1]
 
-[ext_resource path="res://model/captains_log.gd" type="Script" id=1]
+[ext_resource path="res://model/database.gd" type="Script" id=1]
 [ext_resource path="res://components/util/id_server.gd" type="Script" id=2]
 [ext_resource path="res://components/monster.tscn" type="PackedScene" id=3]
 [ext_resource path="res://model/ai/wander.gd" type="Script" id=4]
@@ -20,7 +20,7 @@
 [ext_resource path="res://components/util/scene_manager.gd" type="Script" id=18]
 [ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=19]
 
-[node name="captains_log" type="Node"]
+[node name="database" type="Node"]
 
 script/script = ExtResource( 1 )
 
@@ -29,6 +29,8 @@ script/script = ExtResource( 1 )
 script/script = ExtResource( 2 )
 
 [node name="monsters" type="Node" parent="."]
+
+editor/display_folded = true
 
 [node name="Slime" parent="monsters" instance=ExtResource( 3 )]
 
