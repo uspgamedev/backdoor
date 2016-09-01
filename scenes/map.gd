@@ -171,7 +171,7 @@ func serialize():
   sector_data["actors"] = actors
   return sector_data
 
-static func unserialize(data, root):
+static func unserialize(data, db):
   # Parse sector
   var map = create(data["id"], data["width"], data["height"])
   # General sector info
@@ -194,6 +194,6 @@ static func unserialize(data, root):
   # Parse actors
   var actors = data["actors"]
   for actor_data in actors:
-    var actor = Actor.unserialize(actor_data, root)
+    var actor = Actor.unserialize(actor_data, db)
     map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
   return map

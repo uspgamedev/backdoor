@@ -42,7 +42,9 @@ func create_route():
 func load_route(id):
   var file = profile.get_journal_file_reader(id)
   assert(file != null)
-  var route = Route.load_from_file(id, file, get_tree().get_root())
+  var data = {}
+  data.parse_json(file.get_as_text())
+  var route = Route.unserialize(data, self)
   file.close()
   get_node("/root/sector").set_player(route.player)
   get_parent().call_deferred("add_child", route)
@@ -51,7 +53,7 @@ func save_route():
   var route = get_node("/root/route")
   var file = profile.get_journal_file_writer(route.id)
   assert(file != null)
-  route.save_to_file(file)
+  file.store_string(route.serialize().to_json())
   file.close()
 
 func finish():

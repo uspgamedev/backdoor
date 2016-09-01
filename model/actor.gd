@@ -271,12 +271,12 @@ static func unserialize_card_array(cards_db, actor_property, card_array):
   for card_id in card_array:
     actor_property.append(load_card(cards_db, card_id))
 
-static func unserialize(data, root):
+static func unserialize(data, db):
   var actor = new(data["name"])
   actor.cooldown = data["cooldown"]
   actor.draw_cooldown = data["drawcooldown"]
 
-  var cards_db = root.get_node("database/cards")
+  var cards_db = db.get_node("cards")
 
   print("data=", data)
 
