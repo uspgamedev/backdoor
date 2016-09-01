@@ -8,6 +8,9 @@ var hand
 var display_popup
 var upgrades_popup
 
+func _ready():
+  self.disable()
+
 func event_save():
   get_node("/root/database/scene_manager").close_route()
 
@@ -41,6 +44,7 @@ func set_player_map(player, hand):
   self.hand = hand
   display_popup = get_node("../CardDisplay")
   upgrades_popup = get_node("../UpgradesDisplay")
+  self.enable()
 
 func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
