@@ -72,7 +72,6 @@ alignment = 0
 
 [node name="cursor" type="Sprite" parent="saves"]
 
-editor/display_folded = true
 transform/pos = Vector2( -32, -8 )
 texture = ExtResource( 4 )
 offset = Vector2( -0.23837, 17.7616 )
