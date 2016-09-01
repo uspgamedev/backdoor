@@ -19,7 +19,9 @@ func start():
     var button = MenuButton.instance()
     button.set_text(char_name)
     button.connect("pressed", self, "_on_load_game", [route_id])
+    button.set("route_id", route_id)
     saves_node.add_child(button)
+  get_node("Controller").setup()
   set_process_input(true)
   show()
 
