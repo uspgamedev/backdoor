@@ -9,7 +9,7 @@ var display_popup
 var upgrades_popup
 
 func event_save():
-  get_node("/root/captains_log/scene_manager").close_route()
+  get_node("/root/database/scene_manager").close_route()
 
 func event_idle():
   player.add_action(Action.Idle.new())
@@ -47,7 +47,7 @@ func event_next_sector():
 
 func event_create_slime():
   var map = get_node("../../map")
-  var monsters = get_node("/root/captains_log/monsters").get_children()
+  var monsters = get_node("/root/database/monsters").get_children()
   monsters[randi()%monsters.size()].create(map, map.get_random_free_pos())
 
 func event_display_card():

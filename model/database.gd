@@ -27,7 +27,7 @@ func create_route():
   route.current_sector = map_node
   map_node.show()
   var player = Actor.new("hero")
-  var cards_db = get_node("/root/captains_log/cards")
+  var cards_db = get_node("/root/database/cards")
   for i in range(20):
     var aux = i % cards_db.get_child_count()
     var card = Actor.Card.new(cards_db.get_child(aux))
