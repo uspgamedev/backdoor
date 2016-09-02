@@ -101,7 +101,7 @@ custom_fonts/font = ExtResource( 5 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
-text = "New route"
+text = "new route"
 flat = false
 align = 0
 

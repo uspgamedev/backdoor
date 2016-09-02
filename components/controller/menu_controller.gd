@@ -16,12 +16,13 @@ func setup():
 func update():
   # updates cursor position
   # should play a sfx eventually too
-  cursor.set_pos(Vector2(-32, -24 + choice * 16))
+  print(choice)
+  cursor.set_pos(Vector2(-32, ((choice-1) * 24) - 8))
+  print(cursor.get_pos())
   print(saves_node.get_child(choice))
 
 func event_up():
-  choice = choice - 1
-  if choice < 1: choice = choice_list_size
+  choice = ((choice + choice_list_size - 2) % choice_list_size) + 1
   update()
 
 func event_down():
@@ -30,9 +31,11 @@ func event_down():
 
 func event_select():
   var selection = saves_node.get_child(choice)
-  if saves_node.get_child(choice).get_type() != "Sprite":
+  if saves_node.get_child(choice) != cursor:
     if selection.get("route_id"):
       selection.emit_signal("pressed", selection.route_id)
     else:
       selection.emit_signal("pressed")
     self.disable()
+  else:
+    print("Error! This shouldn't happen! You can't select the cursor to load!")
