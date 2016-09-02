@@ -12,14 +12,22 @@ func setup():
   choice_list_size = saves_node.get_child_count() - 1
   self.connect("new_game", get_parent(), "_on_new_game")
   self.enable()
+  self.update()
 
 func update():
   # updates cursor position
   # should play a sfx eventually too
-  print(choice)
   cursor.set_pos(Vector2(-32, ((choice-1) * 28) - 4))
-  print(cursor.get_pos())
   print(saves_node.get_child(choice))
+  for btn in saves_node.get_children():
+    if btn != cursor:
+      if btn == saves_node.get_child(choice):
+        print(str(choice) + " is changing color!")
+        btn.add_color_override("font_color", Color(234.0/255,166.0/255,81.0/255))
+      else:
+        btn.add_color_override("font_color", Color(1,1,1))
+
+
 
 func event_up():
   choice = ((choice + choice_list_size - 2) % choice_list_size) + 1

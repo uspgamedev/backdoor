@@ -1,15 +1,8 @@
-[gd_resource type="Theme" load_steps=7 format=1]
+[gd_resource type="Theme" load_steps=6 format=1]
 
 [ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="BitmapFont" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=1]
-
-content_margin/left = -1.0
-content_margin/right = -1.0
-content_margin/top = -1.0
-content_margin/bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=2]
 
 content_margin/left = -1.0
 content_margin/right = -1.0
@@ -42,11 +35,11 @@ content_margin/bottom = -1.0
 Button/colors/font_color = Color( 1, 1, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 Button/colors/font_color_hover = Color( 0.917969, 0.651098, 0.319138, 1 )
-Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/colors/font_color_pressed = Color( 0.882353, 0.623529, 0.305882, 0.960784 )
 Button/constants/hseparation = 8
 Button/fonts/font = ExtResource( 1 )
 Button/styles/disabled = SubResource( 1 )
-Button/styles/focus = SubResource( 2 )
+Button/styles/focus = null
 Button/styles/hover = SubResource( 3 )
 Button/styles/normal = SubResource( 4 )
 Button/styles/pressed = SubResource( 5 )
