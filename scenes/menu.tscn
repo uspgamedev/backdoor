@@ -102,7 +102,7 @@ autoplay = "idle"
 
 [node name="new_game" type="Button" parent="saves"]
 
-rect/min_size = Vector2( 0, 24 )
+rect/min_size = Vector2( 0, 28 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -110,7 +110,7 @@ size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
 margin/right = 384.0
-margin/bottom = 24.0
+margin/bottom = 28.0
 custom_styles/focus = SubResource( 2 )
 custom_fonts/font = ExtResource( 5 )
 toggle_mode = false

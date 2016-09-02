@@ -17,7 +17,7 @@ func setup():
 func update():
   # updates cursor position
   # should play a sfx eventually too
-  cursor.set_pos(Vector2(-32, ((choice-1) * 28) - 4))
+  cursor.set_pos(Vector2(-32, ((choice-1) * 32) - 4))
   print(saves_node.get_child(choice))
   for btn in saves_node.get_children():
     if btn != cursor:
