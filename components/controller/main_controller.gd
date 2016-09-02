@@ -13,6 +13,7 @@ func _ready():
 
 func event_save():
   get_node("/root/database/scene_manager").close_route()
+  self.disable()
 
 func event_idle():
   player.add_action(Action.Idle.new())

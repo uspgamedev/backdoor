@@ -6,18 +6,18 @@ var choice_list_size
 var cursor
 var saves_node
 
-
 func setup():
   saves_node = get_parent().saves_node
   cursor = saves_node.get_node("cursor")
   choice_list_size = saves_node.get_child_count() - 1
   self.connect("new_game", get_parent(), "_on_new_game")
+  self.enable()
 
 func update():
   # updates cursor position
   # should play a sfx eventually too
   print(choice)
-  cursor.set_pos(Vector2(-32, ((choice-1) * 24) - 8))
+  cursor.set_pos(Vector2(-32, ((choice-1) * 28) - 4))
   print(cursor.get_pos())
   print(saves_node.get_child(choice))
 

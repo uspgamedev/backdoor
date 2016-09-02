@@ -27,7 +27,7 @@ func start():
 
 func stop():
   for button in saves_node.get_children():
-    if button.get_name() != "new_game":
+    if button.get_name() != "new_game" and button.get_name() != "cursor":
       button.queue_free()
   set_process_input(false)
   hide()
