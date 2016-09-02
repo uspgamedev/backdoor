@@ -50,7 +50,6 @@ scale = Vector2( 1, 1 )
 
 [node name="UI_hook" type="Node2D" parent="HUD"]
 
-editor/display_folded = true
 transform/pos = Vector2( 32, 320 )
 __meta__ = { "_edit_lock_":true }
 

@@ -44,7 +44,7 @@ func set_player_map(player, hand):
   self.hand = hand
   display_popup = get_node("../CardDisplay")
   upgrades_popup = get_node("../UpgradesDisplay")
-  self.enable()
+  call_deferred("enable")
 
 func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
