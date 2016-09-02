@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=8 format=1]
 
 [ext_resource path="res://components/theme/wilokai.tres" type="Theme" id=1]
 [ext_resource path="res://scenes/menu.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/PressStart2P.fnt" type="BitmapFont" id=3]
 [ext_resource path="res://assets/menu_cursor.png" type="Texture" id=4]
-[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="BitmapFont" id=5]
+[ext_resource path="res://components/ui/save-button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/controller/menu_controller.gd" type="Script" id=6]
 
 [sub_resource type="Animation" id=1]
@@ -18,19 +18,6 @@ tracks/0/path = NodePath(".:offset")
 tracks/0/interp = 1
 tracks/0/imported = false
 tracks/0/keys = { "times":FloatArray( 0, 0.1, 0.3, 0.45 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ Vector2( 0, 14 ), Vector2( 2, 16 ), Vector2( 0, 18 ), Vector2( -2, 16 ) ] }
-
-[sub_resource type="StyleBoxFlat" id=2]
-
-content_margin/left = -1.0
-content_margin/right = -1.0
-content_margin/top = -1.0
-content_margin/bottom = -1.0
-bg_color = Color( 0.6, 0.6, 0.6, 1 )
-light_color = Color( 0.664062, 0.137482, 0.137482, 1 )
-dark_color = Color( 0.464844, 0.308685, 0.308685, 1 )
-border_size = 0
-border_blend = true
-draw_bg = true
 
 [node name="menu" type="Control"]
 
@@ -100,30 +87,16 @@ playback/speed = 1.0
 blend_times = [  ]
 autoplay = "idle"
 
-[node name="new_game" type="Button" parent="saves"]
+[node name="new_game" parent="saves" instance=ExtResource( 5 )]
 
-rect/min_size = Vector2( 0, 28 )
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
 margin/right = 384.0
 margin/bottom = 28.0
-custom_styles/focus = SubResource( 2 )
-custom_fonts/font = ExtResource( 5 )
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
 text = "new route"
-flat = false
-align = 0
 
 [node name="Controller" type="Node" parent="."]
 
 script/script = ExtResource( 6 )
 
-[connection signal="pressed" from="saves/new_game" to="." method="_on_new_game"]
+[connection signal="selected" from="saves/new_game" to="." method="_on_new_game_selected"]
 
 
