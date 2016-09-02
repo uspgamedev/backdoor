@@ -39,11 +39,11 @@ content_margin/bottom = -1.0
 
 [resource]
 
-Button/colors/font_color = Color( 0.678431, 0.513726, 0.313726, 1 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-Button/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 1 )
+Button/colors/font_color_hover = Color( 0.917969, 0.651098, 0.319138, 1 )
 Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
-Button/constants/hseparation = 2
+Button/constants/hseparation = 8
 Button/fonts/font = ExtResource( 1 )
 Button/styles/disabled = SubResource( 1 )
 Button/styles/focus = SubResource( 2 )

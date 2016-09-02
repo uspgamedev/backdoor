@@ -35,4 +35,4 @@ func event_select():
       selection.emit_signal("pressed", selection.route_id)
     else:
       selection.emit_signal("pressed")
-    self.queue_free()
+    self.disable()

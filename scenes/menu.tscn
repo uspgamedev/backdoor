@@ -49,7 +49,7 @@ margin/top = 176.0
 margin/right = -32.0
 margin/bottom = 208.0
 custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0.686275, 0.627451, 0.376471, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "backdoor"
 valign = 2
 percent_visible = 1.0
@@ -74,7 +74,7 @@ alignment = 0
 
 transform/pos = Vector2( -32, -8 )
 texture = ExtResource( 4 )
-offset = Vector2( -0.23837, 17.7616 )
+offset = Vector2( 0, 14 )
 
 [node name="animation" type="AnimationPlayer" parent="saves/cursor"]
 
