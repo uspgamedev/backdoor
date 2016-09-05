@@ -18,8 +18,6 @@ func start():
     var char_name = profile.get_player_name(route_id)
     var button = MenuButton.instance()
     button.set_text(char_name)
-    button.set("route_id", route_id)
-    #button.connect("pressed", self, "_on_load_game", [route_id])
     button.connect("selected", self, "_on_load_game_selected", [route_id])
     saves_node.add_child(button)
   get_node("Controller").setup()
