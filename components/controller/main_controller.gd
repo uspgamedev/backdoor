@@ -13,6 +13,7 @@ func _ready():
 
 func event_save():
   get_node("/root/database/scene_manager").close_route()
+  self.disable()
 
 func event_idle():
   player.add_action(Action.Idle.new())
@@ -44,7 +45,7 @@ func set_player_map(player, hand):
   self.hand = hand
   display_popup = get_node("../CardDisplay")
   upgrades_popup = get_node("../UpgradesDisplay")
-  self.enable()
+  call_deferred("enable")
 
 func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
