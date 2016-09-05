@@ -1,11 +1,11 @@
 
-extends CanvasLayer
+extends Node2D
 
 func _ready():
-  self.hide()
+  hide()
 
 func start():
-  self.show()
+  show()
 
 func end():
-  self.hide()
+  hide()
