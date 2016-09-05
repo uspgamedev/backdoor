@@ -12,8 +12,6 @@ rotation = 0.0
 scale = Vector2( 1, 1 )
 script/script = ExtResource( 1 )
 
-[node name="hello" type="Sprite" parent="."]
-
 [node name="loading" type="Label" parent="."]
 
 focus/ignore_mouse = true
