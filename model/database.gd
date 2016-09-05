@@ -7,6 +7,7 @@ const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")
 const Body = preload("res://model/body.gd")
 
+onready var loading = get_node("/root/loading")
 onready var map_generator = get_node("map_generator")
 onready var profile = get_node("profile")
 
@@ -38,6 +39,7 @@ func create_route():
   map_node.add_body(player_body)
   map_node.add_actor(player_body, player)
   get_parent().add_child(route)
+  loading.end()
 
 func load_route(id):
   var file = profile.get_journal_file_reader(id)
@@ -48,6 +50,7 @@ func load_route(id):
   file.close()
   get_node("/root/sector").set_player(route.player)
   get_parent().call_deferred("add_child", route)
+  loading.end()
 
 func save_route():
   var route = get_node("/root/route")
