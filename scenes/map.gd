@@ -69,6 +69,7 @@ func add_body(body):
   if body.type != "hero":
     bodyview.set_hl_color(Color(1.0, .1, .2, .3))
   get_node("walls").add_child(bodyview)
+  body.connect("moved", bodyview, "set_dir")
 
 func remove_body(body):
   bodies.erase(body)
@@ -109,6 +110,7 @@ func move_actor(actor, new_pos):
   move_body(actor_bodies[actor], new_pos)
 
 func move_body(body, new_pos):
+  body.emit_signal("moved", Vector2(body.pos.x, body.pos.y), new_pos)
   body.pos = new_pos
 
 func get_actor_body(actor):

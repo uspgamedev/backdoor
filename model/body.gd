@@ -9,6 +9,7 @@ var damage
 var absorption = 0
 
 signal damage_taken(amount, source)
+signal moved(current_pos, new_pos)
 
 func _init(id, the_type, the_pos, the_hp).(id):
   type = the_type
