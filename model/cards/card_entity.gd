@@ -1,29 +1,37 @@
 
 extends Node
 
-class CARD_TYPE:
-	const ARCANE = 0
-	const ATHELITCS = 1
-	const ENGINEERING = 2
+const DamageFormula = preload("res://components/util/damage_formula.gd")
 
-export(int, "ARCANE", "ATHELITCS", "ENGINEERING") var card_type = 0
+class CARD_ATTRIBUTE:
+  const ATHLETICS = 0
+  const ARCANE = 1
+  const TECH = 2
+
+export(int, "ATHLETICS", "ARCANE", "TECH") var card_attribute = 0
 export(String) var description = "a card"
 export(int) var time_cost = 50
 
 func get_time_cost():
-	return time_cost
+  return time_cost
 
-func get_card_type():
-	return card_type
+func get_card_attribute():
+  return card_attribute
 
 func can_be_evoked(actor):
-	return true
+  return true
 
 func get_options(actor):
-	return []
+  return []
 
 func get_description():
-	return description
+  return description
 
 func evoke(actor, options):
-	print("Card evoked")
+  print("Card evoked")
+
+## Utility functions
+
+func dist(actor, target):
+  var d = target - actor.get_body_pos()
+  return abs(d.x) + abs(d.y)

@@ -3,6 +3,17 @@ extends Node
 
 const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 
+const UPGRADE_SLOT_MAX  = 3
+
+const ATTR_ATHLETICS    = 0
+const ATTR_ARCANA       = 1
+const ATTR_TECH         = 2
+const ATTR_MAX          = 3
+
+const DRAW_TIME         = 120
+const HAND_MAX          = 5
+const ACC_CONSUME       = 10
+
 class Card:
   var card_ref
   func _init(ref):
@@ -14,48 +25,100 @@ class Card:
   func get_ref():
     return card_ref
 
+
+# Stats
+var char_name
+var base_attributes_
+var speed = 10
+var draw_rate = 5
+var draw_rate_bonus_multiplier = 1
+
+# Play state
 var cooldown
 var draw_cooldown
 var action
-var char_name
 
+# Play zones
 var hand
 var deck
 var upgrades
-
+# Item slots
 var weapon
 var suit
 var accessory
-
-export(int) var speed = 10
-export(int) var draw_rate = 5
-export(int) var upgrade_slot = 3
-
-const DRAW_TIME = 120
-const MAX_HAND = 5
 
 signal has_action
 signal spent_action
 signal draw_card(card)
 signal consumed_card(card)
 signal update_deck
-signal equipped_item(item)
+signal equipped_item(item, slot_type)
 
 func _init(name):
   hand = []
   deck = []
   upgrades = []
   char_name = name
+  base_attributes_ = []
+  base_attributes_.resize(ATTR_MAX)
+  for attr in range(ATTR_MAX):
+    base_attributes_[attr] = 0
 
 func _ready():
   cooldown = 100/speed
   draw_cooldown = DRAW_TIME
   if weapon != null:
-    emit_signal("equipped_item", weapon.get_ref())
+    emit_signal("equipped_item", weapon.get_ref(), SlotItem.WEAPON)
   if suit != null:
-    emit_signal("equipped_item", suit.get_ref())
+    emit_signal("equipped_item", suit.get_ref(), SlotItem.SUIT)
   if accessory != null:
-    emit_signal("equipped_item", accessory.get_ref())
+    emit_signal("equipped_item", accessory.get_ref(), SlotItem.ACCESSORY)
+
+func get_attribute(which):
+  assert(which >= 0 and which < ATTR_MAX)
+  var value = base_attributes_[which]
+  for upgrade in upgrades:
+    var card = upgrade.get_ref()
+    if card.get_card_attribute() == which:
+      value += card.get_bonus_amount()
+  return value
+
+func get_static_effect(which):
+  var value = 0
+  for upgrade in upgrades:
+    var card = upgrade.get_ref()
+    if card.has_static_effect(which):
+      value += card.get_static_effect()
+  return value
+
+func check_triggers(which, params):
+  for upgrade in upgrades:
+    var card = upgrade.get_ref()
+    if card.has_trigger_effect(which):
+      card.trigger(self, params)
+
+func get_athletics():
+  return get_attribute(ATTR_ATHLETICS)
+
+func get_arcana():
+  return get_attribute(ATTR_ARCANA)
+
+func get_tech():
+  return get_attribute(ATTR_TECH)
+
+func get_speed():
+  return speed + get_static_effect("speed_bonus")
+
+func get_melee_damage():
+  if weapon != null:
+    weapon.get_ref().consume_item()
+    var damage = weapon.get_ref().calculate_damage(self)
+    #printt("Hit with", weapon.get_ref().get_name(), "damage done", damage)
+    if weapon.get_ref().get_durability() < 0:
+      weapon = null
+      emit_signal("equipped_item", null, SlotItem.WEAPON)
+    return damage
+  return get_athletics() + 1 + randi()%6
 
 func get_body():
   return get_node("/root/sector/map").get_actor_body(self)
@@ -64,7 +127,7 @@ func get_body_pos():
   return get_body().pos
 
 func can_draw():
-  return hand.size() < MAX_HAND and deck.size() > 0
+  return hand.size() < HAND_MAX and deck.size() > 0
 
 func consume_card(card):
   hand.erase(card)
@@ -78,25 +141,56 @@ func step_time():
     draw_cooldown += DRAW_TIME
     emit_signal("draw_card", hand[hand.size() - 1])
     emit_signal("update_deck")
+  if accessory != null:
+    if accessory.get_ref().get_durability() > 0:
+      accessory.get_ref().consume_item()
+    else:
+      accessory.get_ref().finish_effect(self)
+      accessory = null
+      emit_signal("equipped_item", self.accessory, SlotItem.ACCESSORY)
   if can_draw():
-    draw_cooldown -= draw_rate
+    draw_cooldown -= draw_rate()
+
+func draw_rate():
+  return draw_rate * draw_rate_bonus_multiplier
+
+func set_draw_rate_bonus_multiplier(bonus_multiplier):
+  self.draw_rate_bonus_multiplier = bonus_multiplier
 
 func set_upgrade(upgrade):
-	if upgrades.size() == upgrade_slot:
-		return
-	if upgrade extends Card:
-		upgrades.push_back(upgrade)
-	else:
-		upgrades.push_back(Card.new(upgrade))
+  if upgrades.size() == UPGRADE_SLOT_MAX:
+    return
+  if upgrade extends Card:
+    upgrades.push_back(upgrade)
+  else:
+    upgrades.push_back(Card.new(upgrade))
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
     self.weapon = Card.new(card)
   elif card.get_slot() == SlotItem.SUIT:
     self.suit = Card.new(card)
+    get_body().set_absorption(card.get_absorption())
+    get_body().connect("damage_taken", self, "consume_armory")
+    get_body().connect("damage_taken", self, "_on_damage_taken")
   elif card.get_slot() == SlotItem.ACCESSORY:
     self.accessory = Card.new(card)
-  emit_signal("equipped_item", card)
+    card.init_effect(self)
+  emit_signal("equipped_item", card, card.get_slot())
+
+func _on_damage_taken(amount, source):
+  check_triggers("damage_taken", { "amount": amount, "source": source })
+
+func consume_armory():
+  if self.suit == null:
+    return
+  self.suit.get_ref().consume_item()
+  printt("consume armor durability=", self.suit.get_ref().get_durability())
+  if self.suit.get_ref().get_durability() < 0:
+    get_body().set_absorption(0)
+    get_body().disconnect("damage_taken", self, "consume_armory")
+    self.suit = null
+    emit_signal("equipped_item", self.suit, SlotItem.SUIT)
 
 func is_ready():
   return cooldown == 0
@@ -107,12 +201,14 @@ func has_action():
 func add_action(the_action):
   if !has_action() and the_action.can_be_used(self):
     action = the_action
-    print(get_name(), ": added action ", action.get_type())
+    #print(get_name(), ": added action ", action.get_type())
     emit_signal("has_action")
 
 func use_action():
-  print(get_name(), ": used action ", action.get_type())
-  cooldown += action.get_cost(self)/speed
+  #print(get_name(), ": used action ", action.get_type())
+  if self.suit != null and !get_body().is_connected("damage_taken", self, "consume_armory"):
+    get_body().connect("damage_taken", self, "consume_armory")
+  cooldown += action.get_cost(self)/get_speed()
   action.use(self)
   action = null
   emit_signal("spent_action")
@@ -145,7 +241,7 @@ func serialize():
   actor_data["cooldown"] = cooldown
   actor_data["drawcooldown"] = draw_cooldown
 
-  var cards_db = get_node("/root/captains_log/cards")
+  var cards_db = get_node("/root/database/cards")
 
   if weapon != null:
     actor_data["weapon"] = get_card_id(cards_db, weapon)
@@ -175,12 +271,12 @@ static func unserialize_card_array(cards_db, actor_property, card_array):
   for card_id in card_array:
     actor_property.append(load_card(cards_db, card_id))
 
-static func unserialize(data, root):
+static func unserialize(data, db):
   var actor = new(data["name"])
   actor.cooldown = data["cooldown"]
   actor.draw_cooldown = data["drawcooldown"]
 
-  var cards_db = root.get_node("captains_log/cards")
+  var cards_db = db.get_node("cards")
 
   print("data=", data)
 
@@ -195,7 +291,7 @@ static func unserialize(data, root):
   unserialize_card_array(cards_db, actor.deck, data["deck"])
 
   if data.has("upgrades"):
-	  for card_id in data["upgrades"]:
+    for card_id in data["upgrades"]:
       var upg = load_card(cards_db, card_id)
       actor.set_upgrade(upg)
 

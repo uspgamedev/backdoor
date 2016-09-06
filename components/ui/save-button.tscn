@@ -1,17 +1,28 @@
-[gd_scene load_steps=2 format=1]
+[gd_scene load_steps=3 format=1]
 
-[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="Font" id=1]
+[ext_resource path="res://assets/fonts/PressStart2P-small.fnt" type="BitmapFont" id=1]
 
-[node name="menu_button" type="Button"]
+[sub_resource type="GDScript" id=1]
 
-margin/right = 12.0
-margin/bottom = 19.0
+script/source = "\nextends Label\n\nsignal selected(info)\n"
+
+[node name="menu_button" type="Label"]
+
+rect/min_size = Vector2( 0, 28 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 256.0
+margin/bottom = 35.0
 custom_fonts/font = ExtResource( 1 )
-toggle_mode = false
-flat = false
+text = "load file"
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = 1
+script/script = SubResource( 1 )
 
 

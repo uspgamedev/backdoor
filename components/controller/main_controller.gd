@@ -8,8 +8,12 @@ var hand
 var display_popup
 var upgrades_popup
 
+func _ready():
+  self.disable()
+
 func event_save():
-  get_node("/root/captains_log/scene_manager").close_route()
+  get_node("/root/database/scene_manager").close_route()
+  self.disable()
 
 func event_idle():
   player.add_action(Action.Idle.new())
@@ -41,13 +45,15 @@ func set_player_map(player, hand):
   self.hand = hand
   display_popup = get_node("../CardDisplay")
   upgrades_popup = get_node("../UpgradesDisplay")
+  call_deferred("enable")
 
 func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
 
 func event_create_slime():
   var map = get_node("../../map")
-  get_node("/root/captains_log/monsters/Slime").create(map, Vector2(4,4))
+  var monsters = get_node("/root/database/monsters").get_children()
+  monsters[randi()%monsters.size()].create(map, map.get_random_free_pos())
 
 func event_display_card():
   if get_node("/root/sector/HUD/CardDisplay").is_hidden():

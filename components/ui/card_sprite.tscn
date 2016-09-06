@@ -2,7 +2,7 @@
 
 [ext_resource path="res://components/ui/card_sprite.gd" type="Script" id=1]
 [ext_resource path="res://assets/card.tex" type="Texture" id=2]
-[ext_resource path="res://assets/fonts/PressStart2P-tiny.fnt" type="Font" id=3]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
 
@@ -40,13 +40,14 @@ modulate = Color( 0, 0.054902, 0.211765, 1 )
 
 [node name="Name" type="Label" parent="."]
 
-margin/left = -62.0
-margin/top = 93.0
-margin/right = 61.0
-margin/bottom = 125.0
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -64.0
+margin/top = -64.0
+margin/right = 64.0
+margin/bottom = -32.0
 custom_fonts/font = ExtResource( 3 )
 text = "Card Name"
 align = 1
@@ -73,13 +74,15 @@ texture = SubResource( 4 )
 
 [node name="CardClass" type="Label" parent="."]
 
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
 margin/left = -24.0
 margin/top = 22.0
 margin/right = 23.0
 margin/bottom = 35.0
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
+custom_fonts/font = ExtResource( 3 )
 align = 1
 percent_visible = 1.0
 lines_skipped = 0

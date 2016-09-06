@@ -2,28 +2,27 @@
 extends Node2D
 
 const CardScene = preload("res://components/ui/card_sprite.tscn")
-const CARD_TYPE = preload("res://model/cards/card_entity.gd").CARD_TYPE
+const CARD_ATTRIBUTE = preload("res://model/cards/card_entity.gd").CARD_ATTRIBUTE
 const Action = preload("res://model/action.gd")
 
 const Skill = preload("res://model/cards/card_skill.gd")
 const Upgrade = preload("res://model/cards/card_upgrade.gd")
 const Item = preload("res://model/cards/card_item.gd")
 
-
 const ANGLE = -atan2(1,2)
 const BG_COLOR = "bg_color"
 const FG_COLOR = "fg_color"
 
 const COLOR_DICT = {
-  CARD_TYPE.ARCANE: {
-      BG_COLOR: Color("000e36"),
-      FG_COLOR: Color("6277ff")
-    },
-  CARD_TYPE.ATHELITCS: {
+  CARD_ATTRIBUTE.ATHLETICS: {
       BG_COLOR: Color("3d0b0b"),
       FG_COLOR: Color("d95763")
     },
-  CARD_TYPE.ENGINEERING: {
+  CARD_ATTRIBUTE.ARCANE: {
+      BG_COLOR: Color("000e36"),
+      FG_COLOR: Color("6277ff")
+    },
+  CARD_ATTRIBUTE.TECH: {
       BG_COLOR: Color("133b0b"),
       FG_COLOR: Color("7fd95b")
     }
@@ -40,8 +39,8 @@ static func create(card):
   card_sprite.card = card
   print("name=", card)
   card_sprite.get_node("Name").set_text(card.get_name())
-  card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][BG_COLOR])
-  card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_type()][FG_COLOR])
+  card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_attribute()][BG_COLOR])
+  card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_attribute()][FG_COLOR])
   card_sprite.get_node("CardClass").set_text(get_card_class(card.card_ref))
   card_sprite.used = false
   return card_sprite
@@ -66,9 +65,9 @@ func prepare_evocation(player):
         emit_signal("selecting_target")
         yield(cursor, "target_chosen")
         emit_signal("target_selected")
-        if cursor.target == null:
+        if cursor.get_target() == null:
           return false
-        action.add_option(cursor.target)
+        action.add_option(cursor.get_target())
       else:
         return false
   player.add_action(action)
@@ -76,10 +75,8 @@ func prepare_evocation(player):
   return true
 
 func select():
-  self.set_pos(Vector2(self.get_pos().x, -32))
-  self.set_rot(0)
-  self.get_node("Name").show()
+  set_pos(Vector2(get_pos().x, -32))
+  get_node("Name").show()
 
 func deselect():
-  self.set_rot(ANGLE)
-  self.get_node("Name").hide()
+  get_node("Name").hide()

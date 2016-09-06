@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://components/bodyview.gd" type="Script" id=1]
 [ext_resource path="res://assets/floor-base.tex" type="Texture" id=2]
-[ext_resource path="res://assets/bodies/hero/idle.tex" type="Texture" id=3]
+[ext_resource path="res://assets/bodies/hero/idle.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -16,6 +16,18 @@ dark_color = Color( 0.0714111, 0.40625, 0.257142, 1 )
 border_size = 0
 border_blend = true
 draw_bg = true
+
+[sub_resource type="Animation" id=2]
+
+resource/name = "idle"
+length = 0.9
+loop = true
+step = 0.15
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.3, 0.45, 0.75 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":1, "values":[ 1, 0, 2, 0 ] }
 
 [node name="BodyView" type="Node2D"]
 
@@ -31,6 +43,8 @@ modulate = Color( 0.922302, 1, 0.476562, 0.291683 )
 
 texture = ExtResource( 3 )
 offset = Vector2( 0, -32 )
+hframes = 3
+frame = 2
 
 [node name="LifeBar" type="ProgressBar" parent="Sprite"]
 
@@ -38,14 +52,15 @@ anchor/left = 3
 anchor/top = 2
 anchor/right = 3
 anchor/bottom = 3
-margin/left = 48.0
-margin/top = -0.84375
-margin/right = -80.0
-margin/bottom = 113.0
 rect/scale = Vector2( 0.25, 0.25 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 48.0
+margin/top = -0.833333
+margin/right = -80.0
+margin/bottom = 112.0
 custom_styles/fg = SubResource( 1 )
 range/min = 0.0
 range/max = 100.0
@@ -55,5 +70,16 @@ range/value = 1.0
 range/exp_edit = false
 range/rounded = false
 percent/visible = false
+
+[node name="Animation" type="AnimationPlayer" parent="Sprite"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/idle = SubResource( 2 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
 
 
