@@ -35,8 +35,6 @@ func stop():
       button.queue_free()
 
 func transition_out(database_action, file):
-  #transition.configure_fadeout(controller, "disable", self, "stop")
-  #transition.connect("begin_fadeout", controller, "disable", [], CONNECT_ONESHOT)
   transition.connect("end_fadeout", self, "stop", [], CONNECT_ONESHOT)
   transition.connect("end_fadeout", transition, "unfade_from_black", [.5], CONNECT_ONESHOT)
   if not file:
