@@ -6,7 +6,9 @@ const MenuButton = preload("res://components/ui/save-button.tscn")
 const Route = preload("res://model/route.gd")
 
 onready var loading = get_node("/root/loading")
+onready var transition = get_node("/root/transition")
 onready var saves_node = get_node("saves")
+onready var controller = get_node("controller")
 onready var database = get_node("/root/database")
 onready var profile = database.get_profile()
 
@@ -21,7 +23,7 @@ func start():
     button.set_text(char_name)
     button.connect("selected", self, "_on_load_game_selected", [route_id])
     saves_node.add_child(button)
-  get_node("Controller").setup()
+  controller.setup()
   set_process_input(true)
   show()
 
@@ -33,17 +35,28 @@ func stop():
       button.queue_free()
   set_process_input(false)
 
+func stop_controller():
+  controller.disable()
+
+func transition_out():
+  transition.configure_fadeout(self, "stop_controller", self, "stop")
+
 func _on_new_game_selected():
   print("new game selected!")
-  stop()
-  yield(get_tree(), "idle_frame")
-  yield(get_tree(), "idle_frame")
+  transition_out()
+  transition.fade_to_black(.5)
+  yield(transition, "end_fadeout")
+  transition.unfade_from_black(.5)
+  yield(transition, "end_fadein")
   database.create_route()
+
 
 func _on_load_game_selected(save_id):
   print("load game selected!")
-  stop()
-  yield(get_tree(), "idle_frame")
-  yield(get_tree(), "idle_frame")
+  transition_out()
+  transition.fade_to_black(.5)
+  yield(transition, "end_fadeout")
+  transition.unfade_from_black(.5)
+  yield(transition, "end_fadein")
   database.load_route(save_id)
   get_tree().set_current_scene(get_node("/root/sector"))

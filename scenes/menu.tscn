@@ -94,7 +94,7 @@ margin/right = 384.0
 margin/bottom = 28.0
 text = "new route"
 
-[node name="Controller" type="Node" parent="."]
+[node name="controller" type="Node" parent="."]
 
 script/script = ExtResource( 6 )
 
