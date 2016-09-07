@@ -1,6 +1,9 @@
 
 extends "res://components/controller/default_controller.gd"
 
+const COLOR_SELECTED = Color(234.0/255,166.0/255,81.0/255)
+const COLOR_UNSELECTED = Color(1,1,1)
+
 var choice
 var choice_list_size
 var cursor
@@ -24,9 +27,9 @@ func update_choice():
   for btn in saves_node.get_children():
     if btn != cursor:
       if btn == saves_node.get_child(choice):
-        btn.add_color_override("font_color", Color(234.0/255,166.0/255,81.0/255))
+        btn.add_color_override("font_color", COLOR_SELECTED)
       else:
-        btn.add_color_override("font_color", Color(1,1,1))
+        btn.add_color_override("font_color", COLOR_UNSELECTED)
 
 func event_up():
   choice = ((choice + choice_list_size - 2) % choice_list_size) + 1

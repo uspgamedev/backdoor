@@ -75,6 +75,7 @@ alignment = 0
 transform/pos = Vector2( -32, -4 )
 texture = ExtResource( 4 )
 offset = Vector2( 0, 14 )
+modulate = Color( 0.917647, 0.65098, 0.317647, 1 )
 
 [node name="animation" type="AnimationPlayer" parent="saves/cursor"]
 
@@ -93,7 +94,7 @@ margin/right = 384.0
 margin/bottom = 28.0
 text = "new route"
 
-[node name="Controller" type="Node" parent="."]
+[node name="controller" type="Node" parent="."]
 
 script/script = ExtResource( 6 )
 
