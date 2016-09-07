@@ -11,10 +11,14 @@ var saves_node
 
 onready var menu = get_parent()
 
-func setup():
+func _ready():
   choice = 1 # default to new route choice
+  self.disable()
+
+func setup():
   saves_node = menu.saves_node
   cursor = saves_node.get_node("cursor")
+  cursor.show()
   choice_list_size = saves_node.get_child_count() - 1
   self.enable()
   self.update_choice()
@@ -42,5 +46,6 @@ func event_down():
 func event_select():
   var selection = saves_node.get_child(choice)
   assert(selection != cursor) # redundant check yay
-  selection.emit_signal("selected")
   self.disable()
+  cursor.hide()
+  selection.emit_signal("selected")

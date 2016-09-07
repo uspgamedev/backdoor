@@ -72,6 +72,7 @@ alignment = 0
 
 [node name="cursor" type="Sprite" parent="saves"]
 
+visibility/visible = false
 transform/pos = Vector2( -32, -4 )
 texture = ExtResource( 4 )
 offset = Vector2( 0, 14 )

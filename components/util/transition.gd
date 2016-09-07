@@ -12,20 +12,13 @@ signal end_fadeout()
 signal begin_fadein()
 signal end_fadein()
 
-func reset_connection(signal_, node_, callback_):
-  disconnect(signal_, node_, callback_)
-
 func configure_fadeout(begin_node, begin_callback, end_node, end_callback):
-  connect("begin_fadeout", begin_node, begin_callback)
-  connect("begin_fadeout", self, "reset_connection", ["begin_fadeout", begin_node, begin_callback])
-  connect("end_fadeout", end_node, end_callback)
-  connect("end_fadeout", self, "reset_connection", ["end_fadeout", end_node, end_callback])
+  connect("begin_fadeout", begin_node, begin_callback, [], CONNECT_ONESHOT)
+  connect("end_fadeout", end_node, end_callback, [], CONNECT_ONESHOT)
 
 func configure_fadein(begin_node, begin_callback, end_node, end_callback):
-  connect("begin_fadein", begin_node, begin_callback)
-  connect("begin_fadein", self, "reset_connection", ["begin_fadein", begin_node, begin_callback])
-  connect("end_fadein", end_node, end_callback)
-  connect("end_fadein", self, "reset_connection", ["end_fadein", end_node, end_callback])
+  connect("begin_fadein", begin_node, begin_callback, [], CONNECT_ONESHOT)
+  connect("end_fadein", end_node, end_callback, [], CONNECT_ONESHOT)
 
 func fade_to_black(seconds):
   emit_signal("begin_fadeout")
@@ -57,4 +50,3 @@ func create_viewport_sized_polygon():
 func _ready():
   overlay.set_polygon(create_viewport_sized_polygon())
   overlay.set_color(BLACK)
-  unfade_from_black(1.0)

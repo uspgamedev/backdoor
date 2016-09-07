@@ -23,9 +23,9 @@ func start():
     button.set_text(char_name)
     button.connect("selected", self, "_on_load_game_selected", [route_id])
     saves_node.add_child(button)
-  controller.setup()
-  set_process_input(true)
   show()
+  transition.connect("end_fadein", controller, "setup", [], CONNECT_ONESHOT)
+  transition.unfade_from_black(.5)
 
 func stop():
   hide()
@@ -33,30 +33,21 @@ func stop():
   for button in saves_node.get_children():
     if button.get_name() != "new_game" and button.get_name() != "cursor":
       button.queue_free()
-  set_process_input(false)
 
-func stop_controller():
-  controller.disable()
-
-func transition_out():
-  transition.configure_fadeout(self, "stop_controller", self, "stop")
+func transition_out(database_action, file):
+  transition.connect("end_fadeout", self, "stop", [], CONNECT_ONESHOT)
+  transition.connect("end_fadeout", transition, "unfade_from_black", [.5], CONNECT_ONESHOT)
+  if not file:
+    transition.connect("end_fadein", database, database_action, [], CONNECT_ONESHOT)
+  else:
+    transition.connect("end_fadein", database, database_action, [file], CONNECT_ONESHOT)
+  transition.fade_to_black(.5)
 
 func _on_new_game_selected():
   print("new game selected!")
-  transition_out()
-  transition.fade_to_black(.5)
-  yield(transition, "end_fadeout")
-  transition.unfade_from_black(.5)
-  yield(transition, "end_fadein")
-  database.create_route()
-
+  transition_out("create_route", false)
 
 func _on_load_game_selected(save_id):
   print("load game selected!")
-  transition_out()
-  transition.fade_to_black(.5)
-  yield(transition, "end_fadeout")
-  transition.unfade_from_black(.5)
-  yield(transition, "end_fadein")
-  database.load_route(save_id)
+  transition_out("load_route", save_id)
   get_tree().set_current_scene(get_node("/root/sector"))
