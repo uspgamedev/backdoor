@@ -46,6 +46,6 @@ func event_down():
 func event_select():
   var selection = saves_node.get_child(choice)
   assert(selection != cursor) # redundant check yay
-  selection.emit_signal("selected")
   self.disable()
   cursor.hide()
+  selection.emit_signal("selected")
