@@ -24,7 +24,7 @@ func start():
     button.connect("selected", self, "_on_load_game_selected", [route_id])
     saves_node.add_child(button)
   show()
-  transition.unfade_from_black(1.5)
+  transition.unfade_from_black(.5)
   yield(transition, "end_fadein")
   controller.setup()
 
