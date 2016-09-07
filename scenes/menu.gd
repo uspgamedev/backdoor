@@ -23,9 +23,10 @@ func start():
     button.set_text(char_name)
     button.connect("selected", self, "_on_load_game_selected", [route_id])
     saves_node.add_child(button)
-  controller.setup()
-  set_process_input(true)
   show()
+  transition.unfade_from_black(1.5)
+  yield(transition, "end_fadein")
+  controller.setup()
 
 func stop():
   hide()
@@ -33,7 +34,6 @@ func stop():
   for button in saves_node.get_children():
     if button.get_name() != "new_game" and button.get_name() != "cursor":
       button.queue_free()
-  set_process_input(false)
 
 func stop_controller():
   controller.disable()
