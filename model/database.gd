@@ -19,7 +19,9 @@ func erase_route(id):
   profile.erase_journal(id)
 
 func create_route():
-  var assembler = RouteAssembler.new(profile.find_free_route_id())
+  var route_id = profile.find_free_route_id()
+  var assembler = RouteAssembler.new(route_id)
+  profile.add_journal(route_id)
   assembler.new_sector()
   var w = 64
   var h = 64
@@ -27,6 +29,10 @@ func create_route():
   assembler.make_sector_current()
   assembler.new_body("hero", 10, 0, null)
   assembler.new_actor("hero", 10)
+  var cards_db = get_node("cards")
+  for i in range(20):
+    var card_id = i % cards_db.get_child_count()
+    assembler.add_to_actor_deck(card_id)
   assembler.make_actor_player()
   do_load_route(assembler.get_route_data())
   ##
@@ -59,6 +65,7 @@ func do_save_route(route, player):
   assert(file != null)
   file.store_string(route.serialize(self, player).to_json())
   file.close()
+  print("SAVED")
 
 func finish():
   if get_node("/root/").has_node("route"):
