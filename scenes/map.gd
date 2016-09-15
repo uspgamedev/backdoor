@@ -137,7 +137,7 @@ func check_dead_bodies():
       else:
         remove_actor(actor)
 
-func serialize():
+func serialize(db):
   # Store sector general data
   var sector_data = {}
   sector_data["id"] = id
@@ -169,7 +169,7 @@ func serialize():
   # Store actors
   var actors = []
   for actor in actor_bodies:
-    actors.append(actor.serialize())
+    actors.append(actor.serialize(db))
   sector_data["actors"] = actors
   return sector_data
 

@@ -24,22 +24,24 @@ func create_route():
   var w = 64
   var h = 64
   var map_node = map_generator.generate_map(1,w,h)
-  route.get_node("sectors").add_child(map_node)
+  #route.get_node("sectors").add_child(map_node)
   route.current_sector = map_node
   map_node.show()
   var player = Actor.new("hero")
-  var cards_db = get_node("/root/database/cards")
+  var cards_db = get_node("cards")
   for i in range(20):
     var aux = i % cards_db.get_child_count()
     var card = Actor.Card.new(cards_db.get_child(aux))
     player.deck.append(card)
   route.player = player
-  get_node("/root/sector").set_player(player)
+  #get_node("/root/sector").set_player(player)
   var player_body = Body.new(1, "hero", map_node.get_random_free_pos(), 10)
   map_node.add_body(player_body)
   map_node.add_actor(player_body, player)
-  get_parent().add_child(route)
-  loading.end()
+  do_save_route(route, player)
+  load_route(route.id)
+  #get_parent().add_child(route)
+  #loading.end()
 
 func load_route(id):
   var file = profile.get_journal_file_reader(id)
@@ -54,9 +56,12 @@ func load_route(id):
 
 func save_route():
   var route = get_node("/root/route")
+  do_save_route(route, route.player)
+
+func do_save_route(route, player):
   var file = profile.get_journal_file_writer(route.id)
   assert(file != null)
-  file.store_string(route.serialize().to_json())
+  file.store_string(route.serialize(self, player).to_json())
   file.close()
 
 func finish():

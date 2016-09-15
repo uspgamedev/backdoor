@@ -42,7 +42,7 @@ static func unserialize(data, db):
   route.current_sector.find_body_view(player_body).highlight()
   return route
 
-func serialize():
+func serialize(db, player):
   var data = {}
   data.id = id
   data["sectors"] = []
@@ -50,13 +50,14 @@ func serialize():
   # Group sectors into a single array
   var sectors = [current_sector]
   for sector in get_node("sectors").get_children():
+    print("KOTOARISHIMASU")
     sectors.append(sector)
   var sectors_data = []
   var player_actor_id = -1
   data["sectors"] = sectors_data
   # Serialize sectors
   for sector in sectors:
-    var sector_data = sector.serialize()
+    var sector_data = sector.serialize(db)
     sectors_data.append(sector_data)
     var i = 0
     for actor_data in sector_data["actors"]:
