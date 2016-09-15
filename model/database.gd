@@ -2,6 +2,7 @@
 extends Node
 
 const RouteScene = preload("res://model/route.tscn")
+const RouteAssembler = preload("res://components/util/mapgen/route_assembler.gd")
 
 const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")
@@ -18,46 +19,53 @@ func erase_route(id):
   profile.erase_journal(id)
 
 func create_route():
-  var route = RouteScene.instance()
-  route.id = profile.find_free_route_id()
-  profile.add_journal(route.id)
+  var route_id = profile.find_free_route_id()
+  var assembler = RouteAssembler.new(route_id)
+  profile.add_journal(route_id)
+  assembler.new_sector()
   var w = 64
   var h = 64
-  var map_node = map_generator.generate_map(1,w,h)
-  route.get_node("sectors").add_child(map_node)
-  route.current_sector = map_node
-  map_node.show()
-  var player = Actor.new("hero")
-  var cards_db = get_node("/root/database/cards")
+  map_generator.generate_map(w, h, assembler)
+  assembler.make_sector_current()
+  assembler.new_body("hero", 10, 0, null)
+  assembler.new_actor("hero", 10)
+  var cards_db = get_node("cards")
   for i in range(20):
-    var aux = i % cards_db.get_child_count()
-    var card = Actor.Card.new(cards_db.get_child(aux))
-    player.deck.append(card)
-  route.player = player
-  get_node("/root/sector").set_player(player)
-  var player_body = Body.new(1, "hero", map_node.get_random_free_pos(), 10)
-  map_node.add_body(player_body)
-  map_node.add_actor(player_body, player)
-  get_parent().add_child(route)
-  loading.end()
+    var card_id = i % cards_db.get_child_count()
+    assembler.add_to_actor_deck(card_id)
+  assembler.make_actor_player()
+  do_load_route(assembler.get_route_data())
+  ##
+  #route.get_node("sectors").add_child(map_node)
+  #map_node.show()
+  #get_node("/root/sector").set_player(player)
+  #get_parent().add_child(route)
+  #loading.end()
 
 func load_route(id):
   var file = profile.get_journal_file_reader(id)
   assert(file != null)
   var data = {}
   data.parse_json(file.get_as_text())
-  var route = Route.unserialize(data, self)
   file.close()
+  do_load_route(data)
+
+func do_load_route(route_data):
+  var route = Route.unserialize(route_data, self)
   get_node("/root/sector").set_player(route.player)
   get_parent().call_deferred("add_child", route)
   loading.end()
 
 func save_route():
   var route = get_node("/root/route")
+  do_save_route(route, route.player)
+
+func do_save_route(route, player):
   var file = profile.get_journal_file_writer(route.id)
   assert(file != null)
-  file.store_string(route.serialize().to_json())
+  file.store_string(route.serialize(self, player).to_json())
   file.close()
+  print("SAVED")
 
 func finish():
   if get_node("/root/").has_node("route"):

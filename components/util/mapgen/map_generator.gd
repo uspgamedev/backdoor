@@ -27,8 +27,8 @@ var PIPELINE = [
 func _ready():
     pass
 
-func generate_map(id,w,h):
+func generate_map(w,h,assembler):
   var map = MapGrid.new(w,h, Step.WALL)
   for step in PIPELINE:
     map = map.apply_step(step)
-  return map.export_scene(id)
+  return map.export_scene(assembler)

@@ -11,6 +11,7 @@ const ATTR_TECH         = 2
 const ATTR_MAX          = 3
 
 const DRAW_TIME         = 120
+const BASE_COOLDOWN     = 100
 const HAND_MAX          = 5
 const ACC_CONSUME       = 10
 
@@ -234,14 +235,15 @@ static func serialize_card_array(cards_db, card_array):
     array_data.append(get_card_id(cards_db, card))
   return array_data
 
-func serialize():
+func serialize(db):
   var sector = get_parent().get_parent()
   var actor_data = {}
   actor_data["name"] = char_name
   actor_data["cooldown"] = cooldown
   actor_data["drawcooldown"] = draw_cooldown
 
-  var cards_db = get_node("/root/database/cards")
+  var cards_db = db.get_node("cards")
+  printt("cards_db", cards_db)
 
   if weapon != null:
     actor_data["weapon"] = get_card_id(cards_db, weapon)
