@@ -11,6 +11,7 @@ const ATTR_TECH         = 2
 const ATTR_MAX          = 3
 
 const DRAW_TIME         = 120
+const BASE_COOLDOWN     = 100
 const HAND_MAX          = 5
 const ACC_CONSUME       = 10
 
