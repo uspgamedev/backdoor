@@ -1,110 +1,119 @@
-[gd_scene load_steps=20 format=1]
+[gd_scene load_steps=21 format=1]
 
 [ext_resource path="res://model/database.gd" type="Script" id=1]
-[ext_resource path="res://components/util/id_server.gd" type="Script" id=2]
-[ext_resource path="res://components/monster.tscn" type="PackedScene" id=3]
-[ext_resource path="res://model/ai/wander.gd" type="Script" id=4]
-[ext_resource path="res://model/ai/defensive.gd" type="Script" id=5]
-[ext_resource path="res://components/util/card_list.gd" type="Script" id=6]
-[ext_resource path="res://model/cards/heal.gd" type="Script" id=7]
-[ext_resource path="res://model/cards/teleport.gd" type="Script" id=8]
-[ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" id=9]
-[ext_resource path="res://model/cards/card_item_weapon.gd" type="Script" id=10]
-[ext_resource path="res://model/cards/card_item_armory.gd" type="Script" id=11]
-[ext_resource path="res://model/cards/card_item_accessory.gd" type="Script" id=12]
-[ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=13]
-[ext_resource path="res://model/cards/counter.gd" type="Script" id=14]
-[ext_resource path="res://model/cards/fireball.gd" type="Script" id=15]
-[ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=16]
-[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=17]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=18]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=19]
+[ext_resource path="res://game/database/meta.gd" type="Script" id=2]
+[ext_resource path="res://components/util/id_server.gd" type="Script" id=3]
+[ext_resource path="res://components/monster.tscn" type="PackedScene" id=4]
+[ext_resource path="res://model/ai/wander.gd" type="Script" id=5]
+[ext_resource path="res://model/ai/defensive.gd" type="Script" id=6]
+[ext_resource path="res://components/util/card_list.gd" type="Script" id=7]
+[ext_resource path="res://model/cards/heal.gd" type="Script" id=8]
+[ext_resource path="res://model/cards/teleport.gd" type="Script" id=9]
+[ext_resource path="res://model/cards/arcane_bolt.gd" type="Script" id=10]
+[ext_resource path="res://model/cards/card_item_weapon.gd" type="Script" id=11]
+[ext_resource path="res://model/cards/card_item_armory.gd" type="Script" id=12]
+[ext_resource path="res://model/cards/card_item_accessory.gd" type="Script" id=13]
+[ext_resource path="res://model/cards/card_upgrade.gd" type="Script" id=14]
+[ext_resource path="res://model/cards/counter.gd" type="Script" id=15]
+[ext_resource path="res://model/cards/fireball.gd" type="Script" id=16]
+[ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=17]
+[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=18]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=19]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=20]
 
 [node name="database" type="Node"]
 
 script/script = ExtResource( 1 )
 
-[node name="id_server" type="Node" parent="."]
+[node name="Meta" type="Node" parent="."]
 
 script/script = ExtResource( 2 )
+major = 0
+minor = 0
+patch = 2
+status = "unstable"
+
+[node name="id_server" type="Node" parent="."]
+
+script/script = ExtResource( 3 )
 
 [node name="monsters" type="Node" parent="."]
 
 editor/display_folded = true
 
-[node name="Slime" parent="monsters" instance=ExtResource( 3 )]
+[node name="Slime" parent="monsters" instance=ExtResource( 4 )]
 
 body_type = "slime"
 
 [node name="wander" type="Node" parent="monsters/Slime/ai_modules"]
 
-script/script = ExtResource( 4 )
+script/script = ExtResource( 5 )
 chance = 0.3
 
 [node name="defensive" type="Node" parent="monsters/Slime/ai_modules"]
 
-script/script = ExtResource( 5 )
+script/script = ExtResource( 6 )
 chance = 1.0
 
-[node name="Floating Eye" parent="monsters" instance=ExtResource( 3 )]
+[node name="Floating Eye" parent="monsters" instance=ExtResource( 4 )]
 
 body_hp = 15
 body_type = "eye"
 
 [node name="defensive" type="Node" parent="monsters/Floating Eye/ai_modules"]
 
-script/script = ExtResource( 5 )
+script/script = ExtResource( 6 )
 chance = 1
 
-[node name="Thief" parent="monsters" instance=ExtResource( 3 )]
+[node name="Thief" parent="monsters" instance=ExtResource( 4 )]
 
 body_hp = 25
 body_type = "thief"
 
 [node name="wander" type="Node" parent="monsters/Thief/ai_modules"]
 
-script/script = ExtResource( 4 )
+script/script = ExtResource( 5 )
 chance = 1
 
-[node name="Giant Toad" parent="monsters" instance=ExtResource( 3 )]
+[node name="Giant Toad" parent="monsters" instance=ExtResource( 4 )]
 
 body_hp = 20
 body_type = "froggy"
 
 [node name="wander" type="Node" parent="monsters/Giant Toad/ai_modules"]
 
-script/script = ExtResource( 4 )
+script/script = ExtResource( 5 )
 chance = 1
 
 [node name="cards" type="Node" parent="."]
 
 editor/display_folded = true
-script/script = ExtResource( 6 )
+script/script = ExtResource( 7 )
 
 [node name="Heal" type="Node" parent="cards"]
 
-script/script = ExtResource( 7 )
+script/script = ExtResource( 8 )
 card_attribute = 0
 description = "This skill heals the player"
 time_cost = 20
 
 [node name="Teleport" type="Node" parent="cards"]
 
-script/script = ExtResource( 8 )
+script/script = ExtResource( 9 )
 card_attribute = 0
 description = "This skill teleport the player"
 time_cost = 50
 
 [node name="Arcane Bolt" type="Node" parent="cards"]
 
-script/script = ExtResource( 9 )
+script/script = ExtResource( 10 )
 card_attribute = 1
 description = "This skill unleashes a bolt of arcane power"
 time_cost = 50
 
 [node name="Iron Pipe" type="Node" parent="cards"]
 
-script/script = ExtResource( 10 )
+script/script = ExtResource( 11 )
 card_attribute = 0
 description = "Weapon Iron Pipe"
 time_cost = 10
@@ -114,7 +123,7 @@ damage_expression = "$2d6 + $ATH"
 
 [node name="Combat Suit" type="Node" parent="cards"]
 
-script/script = ExtResource( 11 )
+script/script = ExtResource( 12 )
 card_attribute = 0
 description = "a card"
 time_cost = 50
@@ -124,7 +133,7 @@ absorption = 3
 
 [node name="Concentration Ring" type="Node" parent="cards"]
 
-script/script = ExtResource( 12 )
+script/script = ExtResource( 13 )
 card_attribute = 1
 description = "Double the draw rate"
 time_cost = 50
@@ -135,7 +144,7 @@ finish_effect_expression = "actor.set_draw_rate_bonus_multiplier(1)"
 
 [node name="Strong Grip" type="Node" parent="cards"]
 
-script/script = ExtResource( 13 )
+script/script = ExtResource( 14 )
 card_attribute = 0
 description = "+3 ATH"
 time_cost = 50
@@ -145,7 +154,7 @@ static_value = 0
 
 [node name="Mind Focus" type="Node" parent="cards"]
 
-script/script = ExtResource( 13 )
+script/script = ExtResource( 14 )
 card_attribute = 1
 description = "+3 ARC"
 time_cost = 50
@@ -155,7 +164,7 @@ static_value = 0
 
 [node name="Guidorizzi Tome" type="Node" parent="cards"]
 
-script/script = ExtResource( 13 )
+script/script = ExtResource( 14 )
 card_attribute = 2
 description = "+3 TECH"
 time_cost = 50
@@ -165,7 +174,7 @@ static_value = 0
 
 [node name="Adrenaline Dose" type="Node" parent="cards"]
 
-script/script = ExtResource( 13 )
+script/script = ExtResource( 14 )
 card_attribute = 0
 description = "+1 ATH, +5 SPD"
 time_cost = 50
@@ -175,7 +184,7 @@ static_value = 5
 
 [node name="Counter" type="Node" parent="cards"]
 
-script/script = ExtResource( 14 )
+script/script = ExtResource( 15 )
 card_attribute = 2
 description = "Whenever you are hit, counter with 2d4 damage."
 time_cost = 50
@@ -185,29 +194,29 @@ static_value = 0
 
 [node name="Fireball" type="Node" parent="cards"]
 
-script/script = ExtResource( 15 )
+script/script = ExtResource( 16 )
 card_attribute = 0
 description = "a card"
 time_cost = 50
 
 [node name="Laser Beam" type="Node" parent="cards"]
 
-script/script = ExtResource( 16 )
+script/script = ExtResource( 17 )
 card_attribute = 0
 description = "Shoots a powerful laser beam"
 time_cost = 50
 
 [node name="map_generator" type="Node" parent="."]
 
-script/script = ExtResource( 17 )
+script/script = ExtResource( 18 )
 
 [node name="scene_manager" type="Node" parent="."]
 
-script/script = ExtResource( 18 )
+script/script = ExtResource( 19 )
 
 [node name="profile" type="Node" parent="."]
 
-script/script = ExtResource( 19 )
+script/script = ExtResource( 20 )
 
 
 [editable path="monsters/Slime"]

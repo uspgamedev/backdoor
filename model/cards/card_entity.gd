@@ -9,7 +9,7 @@ class CARD_ATTRIBUTE:
   const TECH = 2
 
 export(int, "ATHLETICS", "ARCANE", "TECH") var card_attribute = 0
-export(String) var description = "a card"
+export(String, MULTILINE) var description = "a card"
 export(int) var time_cost = 50
 
 func get_time_cost():

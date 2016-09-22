@@ -35,12 +35,6 @@ func create_route():
     assembler.add_to_actor_deck(card_id)
   assembler.make_actor_player()
   do_load_route(assembler.get_route_data())
-  ##
-  #route.get_node("sectors").add_child(map_node)
-  #map_node.show()
-  #get_node("/root/sector").set_player(player)
-  #get_parent().add_child(route)
-  #loading.end()
 
 func load_route(id):
   var file = profile.get_journal_file_reader(id)
