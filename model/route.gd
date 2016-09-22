@@ -27,17 +27,12 @@ static func get_player_name_from_file(file):
       sector_data = sector
   return sector_data["actors"][int(data["player_actor_id"])]["name"]
 
-static func load_from_file(id, file, root):
+static func unserialize(data, db):
   var route = RouteScene.instance()
-  route.id = id
-  # Open file
-  var data = {}
-  # Parse to json
-  var text = file.get_as_text()
-  data.parse_json(text)
+  route.id = data.id
   var sectors = data["sectors"]
   for sector_data in sectors:
-    route.get_node("sectors").add_child(Map.unserialize(sector_data, root))
+    route.get_node("sectors").add_child(Map.unserialize(sector_data, db))
   # Set current sector
   route.current_sector = route.find_sector(data["current_sector"])
   route.current_sector.show()
@@ -47,20 +42,22 @@ static func load_from_file(id, file, root):
   route.current_sector.find_body_view(player_body).highlight()
   return route
 
-func save_to_file(file):
+func serialize(db, player):
   var data = {}
+  data.id = id
   data["sectors"] = []
   data["current_sector"] = current_sector.id
   # Group sectors into a single array
   var sectors = [current_sector]
   for sector in get_node("sectors").get_children():
+    print("KOTOARISHIMASU")
     sectors.append(sector)
   var sectors_data = []
   var player_actor_id = -1
   data["sectors"] = sectors_data
   # Serialize sectors
   for sector in sectors:
-    var sector_data = sector.serialize()
+    var sector_data = sector.serialize(db)
     sectors_data.append(sector_data)
     var i = 0
     for actor_data in sector_data["actors"]:
@@ -69,7 +66,7 @@ func save_to_file(file):
         break
       i += 1
   data["player_actor_id"] = player_actor_id
-  file.store_string(data.to_json())
+  return data
 
 func _init():
   print("route created")

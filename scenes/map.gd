@@ -69,6 +69,7 @@ func add_body(body):
   if body.type != "hero":
     bodyview.set_hl_color(Color(1.0, .1, .2, .3))
   get_node("walls").add_child(bodyview)
+  body.connect("moved", bodyview, "set_dir")
 
 func remove_body(body):
   bodies.erase(body)
@@ -109,6 +110,7 @@ func move_actor(actor, new_pos):
   move_body(actor_bodies[actor], new_pos)
 
 func move_body(body, new_pos):
+  body.emit_signal("moved", Vector2(body.pos.x, body.pos.y), new_pos)
   body.pos = new_pos
 
 func get_actor_body(actor):
@@ -131,11 +133,11 @@ func check_dead_bodies():
     if body.is_dead():
       var actor = get_body_actor(body)
       if actor == get_parent().player:
-        get_node("/root/captains_log/scene_manager").call_deferred("destroy_route")
+        get_node("/root/database/scene_manager").call_deferred("destroy_route")
       else:
         remove_actor(actor)
 
-func serialize():
+func serialize(db):
   # Store sector general data
   var sector_data = {}
   sector_data["id"] = id
@@ -167,11 +169,11 @@ func serialize():
   # Store actors
   var actors = []
   for actor in actor_bodies:
-    actors.append(actor.serialize())
+    actors.append(actor.serialize(db))
   sector_data["actors"] = actors
   return sector_data
 
-static func unserialize(data, root):
+static func unserialize(data, db):
   # Parse sector
   var map = create(data["id"], data["width"], data["height"])
   # General sector info
@@ -194,6 +196,6 @@ static func unserialize(data, root):
   # Parse actors
   var actors = data["actors"]
   for actor_data in actors:
-    var actor = Actor.unserialize(actor_data, root)
+    var actor = Actor.unserialize(actor_data, db)
     map.add_actor(Identifiable.find(map.bodies, actor_data["body_id"]), actor)
   return map

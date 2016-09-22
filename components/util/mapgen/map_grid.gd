@@ -30,13 +30,16 @@ func set_tile(i, j, value):
 func apply_step(step):
   return step.apply(map_, width_, height_)
 
-func export_scene(id):
-  var map_node = MapScene.create(id, width_, height_)
-  var floors = map_node.get_node("floors")
-  var walls = map_node.get_node("walls")
+func export_scene(assembler):
+  var floors = []
+  var walls = []
+  floors.resize(width_ * height_)
+  walls.resize(width_ * height_)
   for i in range(width_):
       for j in range(height_):
-          walls.set_cell(j, i, map_[i][j])
-          if map_[i][j] != Step.WALL:
-            floors.set_cell(j, i, 0)
-  return map_node
+          walls[i*width_ + j] = map_[j][i]
+          if map_[j][i] != Step.WALL:
+            floors[i*width_ + j] = 0
+          else:
+            floors[i*width_ + j] = -1
+  assembler.set_sector_map(floors, walls, width_, height_)
