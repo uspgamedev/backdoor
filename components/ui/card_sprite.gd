@@ -6,7 +6,7 @@ const CARD_ATTRIBUTE = preload("res://model/cards/card_entity.gd").CARD_ATTRIBUT
 const Action = preload("res://model/action.gd")
 
 const Skill = preload("res://model/cards/card_skill.gd")
-const Upgrade = preload("res://model/cards/card_upgrade.gd")
+const Focus = preload("res://model/cards/card_focus.gd")
 const Item = preload("res://model/cards/card_item.gd")
 
 const ANGLE = -atan2(1,2)
@@ -48,8 +48,8 @@ static func create(card):
 func get_card_class(card):
   if card extends Skill:
     return "Skill"
-  elif card extends Upgrade:
-    return "Upgrade"
+  elif card extends Focus:
+    return "Focus"
   elif card extends Item:
     return "Item"
   return ""

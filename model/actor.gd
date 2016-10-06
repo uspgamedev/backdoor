@@ -3,7 +3,7 @@ extends Node
 
 const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 
-const UPGRADE_SLOT_MAX  = 3
+const FOCUS_SLOT_MAX  = 3
 
 const ATTR_ATHLETICS    = 0
 const ATTR_ARCANA       = 1
@@ -42,7 +42,7 @@ var action
 # Play zones
 var hand
 var deck
-var upgrades
+var focuses
 # Item slots
 var weapon
 var suit
@@ -58,7 +58,7 @@ signal equipped_item(item, slot_type)
 func _init(name):
   hand = []
   deck = []
-  upgrades = []
+  focuses = []
   char_name = name
   base_attributes_ = []
   base_attributes_.resize(ATTR_MAX)
@@ -78,23 +78,23 @@ func _ready():
 func get_attribute(which):
   assert(which >= 0 and which < ATTR_MAX)
   var value = base_attributes_[which]
-  for upgrade in upgrades:
-    var card = upgrade.get_ref()
+  for focus in focuses:
+    var card = focus.get_ref()
     if card.get_card_attribute() == which:
       value += card.get_bonus_amount()
   return value
 
 func get_static_effect(which):
   var value = 0
-  for upgrade in upgrades:
-    var card = upgrade.get_ref()
+  for focus in focuses:
+    var card = focus.get_ref()
     if card.has_static_effect(which):
       value += card.get_static_effect()
   return value
 
 func check_triggers(which, params):
-  for upgrade in upgrades:
-    var card = upgrade.get_ref()
+  for focus in focuses:
+    var card = focus.get_ref()
     if card.has_trigger_effect(which):
       card.trigger(self, params)
 
@@ -158,13 +158,13 @@ func draw_rate():
 func set_draw_rate_bonus_multiplier(bonus_multiplier):
   self.draw_rate_bonus_multiplier = bonus_multiplier
 
-func set_upgrade(upgrade):
-  if upgrades.size() == UPGRADE_SLOT_MAX:
+func set_focus(focus):
+  if focuses.size() == FOCUS_SLOT_MAX:
     return
-  if upgrade extends Card:
-    upgrades.push_back(upgrade)
+  if focus extends Card:
+    focuses.push_back(focus)
   else:
-    upgrades.push_back(Card.new(upgrade))
+    focuses.push_back(Card.new(focus))
 
 func equip_item(card):
   if card.get_slot() == SlotItem.WEAPON:
@@ -254,7 +254,7 @@ func serialize(db):
 
   actor_data["hand"] = serialize_card_array(cards_db, hand)
   actor_data["deck"] = serialize_card_array(cards_db, deck)
-  actor_data["upgrades"] = serialize_card_array(cards_db, upgrades)
+  actor_data["focuses"] = serialize_card_array(cards_db, focuses)
 
   actor_data["body_id"] = sector.get_actor_body(self).get_id()
   var ai_modules_data = []
@@ -292,10 +292,10 @@ static func unserialize(data, db):
   unserialize_card_array(cards_db, actor.hand, data["hand"])
   unserialize_card_array(cards_db, actor.deck, data["deck"])
 
-  if data.has("upgrades"):
-    for card_id in data["upgrades"]:
+  if data.has("focuses"):
+    for card_id in data["focuses"]:
       var upg = load_card(cards_db, card_id)
-      actor.set_upgrade(upg)
+      actor.set_focus(upg)
 
   var ai_modules = data["ai_modules"]
   for module in ai_modules:

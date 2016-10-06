@@ -6,7 +6,7 @@ const Action = preload("res://model/action.gd")
 var player
 var hand
 var display_popup
-var upgrades_popup
+var focuses_popup
 
 func _ready():
   self.disable()
@@ -44,7 +44,7 @@ func set_player_map(player, hand):
   self.player = player
   self.hand = hand
   display_popup = get_node("../CardDisplay")
-  upgrades_popup = get_node("../UpgradesDisplay")
+  focuses_popup = get_node("../FocussDisplay")
   call_deferred("enable")
 
 func event_next_sector():
@@ -61,11 +61,11 @@ func event_display_card():
     self.display_popup.connect("close_popup", self, "restore_input")
     self.display_popup.display(hand.get_selected_card())
 
-func event_show_upgrades():
-  if get_node("/root/sector/HUD/UpgradesDisplay").is_hidden():
+func event_show_focuses():
+  if get_node("/root/sector/HUD/FocussDisplay").is_hidden():
     self.disable()
-    self.upgrades_popup.connect("close_popup", self, "restore_input")
-    self.upgrades_popup.display(player.upgrades)
+    self.focuses_popup.connect("close_popup", self, "restore_input")
+    self.focuses_popup.display(player.focuses)
 
 func event_focus_next():
   hand.next_card()

@@ -29,7 +29,7 @@ func get_static_effect():
   return static_value
 
 func evoke(actor, options):
-  actor.set_upgrade(self)
+  actor.set_focus(self)
 
 func trigger(actor, params):
   pass #abstract
