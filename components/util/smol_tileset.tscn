@@ -128,4 +128,68 @@ offset = Vector2( 0, 4 )
 region = true
 region_rect = Rect2( 0, 0, 64, 40 )
 
+[node name="FloorDirtLeft" type="Sprite" parent="."]
+
+transform/pos = Vector2( 112, 239.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 64, 64, 32 )
+
+[node name="FloorDirtTop" type="Sprite" parent="."]
+
+transform/pos = Vector2( 192, 239.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 64, 64, 32 )
+
+[node name="FloorDirtBottom" type="Sprite" parent="."]
+
+transform/pos = Vector2( 112, 299.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 96, 64, 32 )
+
+[node name="FloorDirtRight" type="Sprite" parent="."]
+
+transform/pos = Vector2( 192, 299.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 96, 64, 32 )
+
+[node name="FloorDirtBottomLeft" type="Sprite" parent="."]
+
+transform/pos = Vector2( 252, 269.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 128, 64, 32 )
+
+[node name="FloorDirtTopLeft" type="Sprite" parent="."]
+
+transform/pos = Vector2( 282, 239.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 160, 64, 32 )
+
+[node name="FloorDirtTopRight" type="Sprite" parent="."]
+
+transform/pos = Vector2( 322, 269.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 128, 64, 32 )
+
+[node name="FloorDirtBottomRight" type="Sprite" parent="."]
+
+transform/pos = Vector2( 282, 309.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 160, 64, 32 )
+
 
