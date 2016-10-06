@@ -7,6 +7,7 @@ const RandomStep = preload("res://components/util/mapgen/steps/add_random_tiles.
 const RoomStep = preload("res://components/util/mapgen/steps/carve_rooms.gd")
 const PatternStep = preload("res://components/util/mapgen/steps/pattern_filter.gd")
 const MarginStep = preload("res://components/util/mapgen/steps/add_margin.gd")
+const ExpandStep = preload("res://components/util/mapgen/steps/grow_smooth.gd")
 
 var ROOM_STEP = RoomStep.new()
 var GROW_STEP = PatternStep.load_from_file("growing")
@@ -14,6 +15,8 @@ var CLEAN_STEP = PatternStep.load_from_file("cleaning")
 var BORDER_STEP = PatternStep.load_from_file("border")
 var MARGIN_STEP = MarginStep.new()
 var DIRT_STEP = RandomStep.new(Step.EMPTY, Step.FLOOR_DIRT, 0.01)
+var EXPAND_DIRT_STEP1 = ExpandStep.new(Step.EMPTY, Step.FLOOR_DIRT, 2, 8, 5)
+var EXPAND_DIRT_STEP2 = ExpandStep.new(Step.EMPTY, Step.FLOOR_DIRT, 2, 8, 3)
 
 var PIPELINE = [
   ROOM_STEP,
@@ -23,6 +26,7 @@ var PIPELINE = [
   CLEAN_STEP, #CLEAN_STEP, CLEAN_STEP,
   BORDER_STEP,
   DIRT_STEP,
+  EXPAND_DIRT_STEP1, EXPAND_DIRT_STEP2,
 ]
 
 func _ready():
