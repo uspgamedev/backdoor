@@ -66,7 +66,7 @@ func new_actor(name, speed):
   current_actor_.body_id = current_body_.id
   current_actor_.hand = []
   current_actor_.deck = []
-  current_actor_.upgrades = []
+  current_actor_.focuses = []
   current_actor_.ai_modules = []
   current_sector_.actors.append(current_actor_)
 

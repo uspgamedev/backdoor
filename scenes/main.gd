@@ -9,7 +9,7 @@ var done
 var next_sector
 var hand
 var display_popup
-var upgrades_popup
+var focuses_popup
 
 onready var deck_view = get_node("HUD/deck")
 
@@ -29,7 +29,7 @@ func set_player(the_player):
   player.connect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
   get_node("HUD/base").show()
   display_popup = get_node("HUD/CardDisplay")
-  upgrades_popup = get_node("HUD/UpgradesDisplay")
+  focuses_popup = get_node("HUD/FocussDisplay")
   get_node("HUD/Controller").set_player_map(player, hand)
 
 func close():

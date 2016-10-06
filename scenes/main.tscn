@@ -4,7 +4,7 @@
 [ext_resource path="res://components/controller/hand.gd" type="Script" id=2]
 [ext_resource path="res://components/controller/cooldownbar.gd" type="Script" id=3]
 [ext_resource path="res://components/ui/card_display.tscn" type="PackedScene" id=4]
-[ext_resource path="res://components/ui/upgrade_display.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/ui/focus_display.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="BitmapFont" id=6]
 [ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/controller/deck.gd" type="Script" id=8]
@@ -84,7 +84,7 @@ script/script = ExtResource( 3 )
 
 [node name="CardDisplay" parent="HUD" instance=ExtResource( 4 )]
 
-[node name="UpgradesDisplay" parent="HUD" instance=ExtResource( 5 )]
+[node name="FocussDisplay" parent="HUD" instance=ExtResource( 5 )]
 
 [node name="base" type="Control" parent="HUD"]
 

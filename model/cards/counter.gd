@@ -1,6 +1,6 @@
 
 
-extends "res://model/cards/card_upgrade.gd"
+extends "res://model/cards/card_focus.gd"
 
 func has_trigger_effect(kind):
   return kind == "damage_taken"
