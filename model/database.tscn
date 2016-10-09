@@ -17,7 +17,7 @@
 [ext_resource path="res://model/cards/counter.gd" type="Script" id=15]
 [ext_resource path="res://model/cards/fireball.gd" type="Script" id=16]
 [ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=17]
-[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=18]
+[ext_resource path="res://game/procedural/map/generator.gd" type="Script" id=18]
 [ext_resource path="res://components/util/scene_manager.gd" type="Script" id=19]
 [ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=20]
 

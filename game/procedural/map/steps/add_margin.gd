@@ -1,5 +1,5 @@
 
-extends "res://components/util/mapgen/step.gd"
+extends "res://game/procedural/map/step.gd"
 
 const MARGIN = 16
 

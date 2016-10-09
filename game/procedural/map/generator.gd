@@ -1,13 +1,13 @@
 
 extends Node
 
-const MapGrid = preload("res://components/util/mapgen/map_grid.gd")
-const Step = preload("res://components/util/mapgen/step.gd")
-const RandomStep = preload("res://components/util/mapgen/steps/add_random_tiles.gd")
-const RoomStep = preload("res://components/util/mapgen/steps/carve_rooms.gd")
-const PatternStep = preload("res://components/util/mapgen/steps/pattern_filter.gd")
-const MarginStep = preload("res://components/util/mapgen/steps/add_margin.gd")
-const ExpandStep = preload("res://components/util/mapgen/steps/grow_smooth.gd")
+const MapGrid = preload("res://game/procedural/map/grid.gd")
+const Step = preload("res://game/procedural/map/step.gd")
+const RandomStep = preload("res://game/procedural/map/steps/add_random_tiles.gd")
+const RoomStep = preload("res://game/procedural/map/steps/carve_rooms.gd")
+const PatternStep = preload("res://game/procedural/map/steps/pattern_filter.gd")
+const MarginStep = preload("res://game/procedural/map/steps/add_margin.gd")
+const ExpandStep = preload("res://game/procedural/map/steps/grow_smooth.gd")
 
 var ROOM_STEP = RoomStep.new()
 var GROW_STEP = PatternStep.load_from_file("growing")

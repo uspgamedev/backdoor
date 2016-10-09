@@ -1,5 +1,5 @@
 
-const MapGrid = preload("res://components/util/mapgen/map_grid.gd")
+const MapGrid = preload("res://game/procedural/map/grid.gd")
 
 const EMPTY = -1
 const FLOOR = 0

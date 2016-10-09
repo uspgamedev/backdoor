@@ -2,7 +2,7 @@
 extends Node
 
 const RouteScene = preload("res://model/route.tscn")
-const RouteAssembler = preload("res://components/util/mapgen/route_assembler.gd")
+const RouteAssembler = preload("res://game/procedural/map/route_assembler.gd")
 
 const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")

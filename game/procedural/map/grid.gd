@@ -1,5 +1,5 @@
 
-const Step = preload("res://components/util/mapgen/step.gd")
+const Step = preload("res://game/procedural/map/step.gd")
 
 const MapScene = preload("res://scenes/map.gd")
 
