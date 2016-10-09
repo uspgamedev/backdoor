@@ -2,14 +2,15 @@
 extends Node
 
 const RouteScene = preload("res://model/route.tscn")
-const RouteAssembler = preload("res://game/procedural/map/route_assembler.gd")
 
+const RouteAssembler = preload("res://game/procedural/map/route_assembler.gd")
+const MapGenerator = preload("res://game/procedural/map/generator.gd")
 const Route = preload("res://model/route.gd")
 const Actor = preload("res://model/actor.gd")
 const Body = preload("res://model/body.gd")
 
 onready var loading = get_node("/root/loading")
-onready var map_generator = get_node("map_generator")
+onready var map_generator = MapGenerator.new()
 onready var profile = get_node("profile")
 
 func get_profile():

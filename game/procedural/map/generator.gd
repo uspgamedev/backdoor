@@ -1,6 +1,4 @@
 
-extends Node
-
 const MapGrid = preload("res://game/procedural/map/grid.gd")
 const Step = preload("res://game/procedural/map/step.gd")
 const RandomStep = preload("res://game/procedural/map/steps/add_random_tiles.gd")
@@ -28,9 +26,6 @@ var PIPELINE = [
   DIRT_STEP,
   EXPAND_DIRT_STEP1, EXPAND_DIRT_STEP2,
 ]
-
-func _ready():
-    pass
 
 func generate_map(w,h,assembler):
   var map = MapGrid.new(w,h, Step.WALL)
