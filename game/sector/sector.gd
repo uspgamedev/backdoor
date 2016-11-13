@@ -125,7 +125,7 @@ func check_dead_bodies():
   for body in bodies:
     if body.is_dead():
       var actor = get_body_actor(body)
-      if actor == get_parent().player:
+      if actor == get_parent().get_parent().player: #FIXME
         get_node("/root/database/scene_manager").call_deferred("destroy_route")
       else:
         remove_actor(actor)
