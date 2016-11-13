@@ -46,9 +46,10 @@ func load_route(id):
   do_load_route(data)
 
 func do_load_route(route_data):
-  var route = Route.unserialize(route_data, self)
-  get_node("/root/sector").set_player(route.player)
-  get_parent().call_deferred("add_child", route)
+  var route = get_tree().get_root().get_node("Route")
+  route.unserialize(route_data, self)
+  get_node("/root/RouteView").set_player(route.player)
+  route.call_deferred("open_current_sector", null)
   loading.end()
 
 func save_route():

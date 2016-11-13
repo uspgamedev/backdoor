@@ -38,26 +38,11 @@ func apply_step(step):
   return step.apply(map, width, height)
 
 func export_scene(assembler):
-  var floors = []
-  var walls = []
-  floors.resize(width * height)
-  walls.resize(width * height)
+  var tiles = []
+  tiles.resize(width * height)
   printt("exporting map...")
   # Add floors
   for i in range(width):
     for j in range(height):
-      if map[j][i] != Step.WALL:
-        if Step.is_floor(map[j][i]):
-          floors[i*width + j] = map[j][i]
-        else:
-          floors[i*width + j] = Step.FLOOR
-      else:
-        floors[i*width + j] = -1
-  # Add walls
-  for i in range(width):
-      for j in range(height):
-        if Step.is_wall(map[j][i]):
-          walls[i*width + j] = map[j][i]
-        else:
-          walls[i*width + j] = Step.EMPTY
-  assembler.set_sector_map(floors, walls, width, height)
+      tiles[i * width + j] = map[j][i]
+  assembler.set_sector_map(tiles, width, height)

@@ -6,7 +6,7 @@
 [ext_resource path="res://components/util/highlight_tileset.tres" type="TileSet" id=4]
 [ext_resource path="res://components/ui/highlight_map.gd" type="Script" id=5]
 
-[node name="map" type="Node2D"]
+[node name="SectorView" type="Node2D"]
 
 script/script = ExtResource( 1 )
 __meta__ = { "_edit_lock_":true }

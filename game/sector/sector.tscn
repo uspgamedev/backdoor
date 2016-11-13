@@ -6,4 +6,6 @@
 
 script/script = ExtResource( 1 )
 
+[node name="Actors" type="Node" parent="."]
+
 

@@ -32,7 +32,7 @@ func event_left():
 
 func move(direction):
   if player.is_ready():
-    var map = get_node("../../map")
+    var map = get_node("../../SectorView").get_current_sector()
     var target_pos = map.get_actor_body(player).pos + direction
     var body = map.get_body_at(target_pos)
     if body != null:
@@ -51,7 +51,7 @@ func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
 
 func event_create_slime():
-  var map = get_node("../../map")
+  var map = get_node("../../SectorView")
   var monsters = get_node("/root/database/monsters").get_children()
   monsters[randi()%monsters.size()].create(map, map.get_random_free_pos())
 

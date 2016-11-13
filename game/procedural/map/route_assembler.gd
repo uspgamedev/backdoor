@@ -1,4 +1,6 @@
 
+const Tiles = preload("res://game/sector/tiles.gd")
+
 const Actor = preload("res://model/actor.gd")
 
 var route_data_
@@ -28,11 +30,10 @@ func new_sector():
   current_sector_.actors = []
   route_data_.sectors.append(current_sector_)
 
-func set_sector_map(floors, walls, width, height):
+func set_sector_map(tiles, width, height):
   current_sector_.width = width
   current_sector_.height = height
-  current_sector_.floors = floors
-  current_sector_.walls = walls
+  current_sector_.tiles = tiles
 
 func new_body(type, hp, absorption, pos):
   current_body_ = {}
@@ -48,9 +49,9 @@ func new_body(type, hp, absorption, pos):
     ## random empty position
     var width = current_sector_.width
     var height = current_sector_.height
-    var walls = current_sector_.walls
+    var tiles = current_sector_.tiles
     var pos = Vector2(1 + randi()%(width-2), 1+ randi()%(height-2))
-    while (walls[pos.x*width + pos.y] != -1):
+    while Tiles.is_floor(tiles[pos.x*width + pos.y]):
       pos = Vector2(1 + randi()%(width-2), 1 + randi()%(height-2))
     current_body_.pos = pos
   current_sector_.bodies.append(current_body_)
