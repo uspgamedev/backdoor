@@ -36,10 +36,14 @@ func load_sector(sector):
         self.floors.set_cell(tile.x, tile.y, Tiles.FLOOR)
       self.walls.set_cell(tile.x, tile.y, value)
   for body in sector.get_bodies():
-    add_body_view(body)
+    _add_body_view(body)
+  sector.connect("body_added", self, "_add_body_view")
+  sector.connect("body_removed", self, "_remove_body_view")
   show()
 
-func add_body_view(body):
+# FIXME: unload sector
+
+func _add_body_view(body):
   var bodyview = BodyView.create(body)
   if body.type != "hero":
     bodyview.set_hl_color(Color(1.0, .1, .2, .3))
@@ -47,6 +51,9 @@ func add_body_view(body):
     bodyview.highlight()
   get_node("walls").add_child(bodyview)
   body.connect("moved", bodyview, "set_dir")
+
+func _remove_body_view(body):
+  find_body_view(body).queue_free()
 
 func attach_camera(actor):
   var bodyview = find_body_view(current_sector.get_actor_body(actor))

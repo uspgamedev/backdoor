@@ -14,9 +14,6 @@ const moves = [
   Vector2(-1,0)
 ]
 
-func _ready():
-  print("HAHAHAHA")
-
 func think():
   var move = moves[randi()%moves.size()]
   actor.add_action(Action.Move.new(actor.get_body_pos() + move))

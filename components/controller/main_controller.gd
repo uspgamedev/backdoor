@@ -51,7 +51,7 @@ func event_next_sector():
   player.add_action(Action.ChangeSector.new(1))
 
 func event_create_slime():
-  var map = get_node("../../SectorView")
+  var map = get_node("../../SectorView").get_current_sector()
   var monsters = get_node("/root/database/monsters").get_children()
   monsters[randi()%monsters.size()].create(map, map.get_random_free_pos())
 
