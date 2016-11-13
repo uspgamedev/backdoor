@@ -71,6 +71,9 @@ func serialize(db, player):
 func _ready():
   pass
 
+func get_current_sector():
+  return current_sector
+
 func find_sector(id):
   for sector in get_node("sectors").get_children():
     if sector.id == id:

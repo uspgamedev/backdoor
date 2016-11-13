@@ -60,7 +60,8 @@ func prepare_evocation(player):
   var action = Action.EvokeCard.new(card)
   for option in self.card.get_ref().get_options(player):
     if option["type"] == "TARGET":
-      var cursor = get_node("/root/sector/map/floors/cursor")
+      #FIXME
+      var cursor = get_node("/root/RouteView/SectorView/floors/cursor")
       if cursor.select(option["check"], option["aoe"]):
         emit_signal("selecting_target")
         yield(cursor, "target_chosen")

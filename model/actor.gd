@@ -122,7 +122,7 @@ func get_melee_damage():
   return get_athletics() + 1 + randi()%6
 
 func get_body():
-  return get_node("/root/sector/map").get_actor_body(self)
+  return get_node("/root/Route").get_current_sector().get_actor_body(self)
 
 func get_body_pos():
   return get_body().pos

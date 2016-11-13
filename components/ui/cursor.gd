@@ -30,7 +30,7 @@ const DIRS = [
   Vector2(-1,0)  #LEFT
 ]
 
-var map_
+var sector_view
 var origin
 var target_
 var check_
@@ -41,8 +41,8 @@ signal target_chosen()
 
 func load_range_():
   range_ = {}
-  for tile in map_.get_node("floors").get_used_cells():
-    if check_.call_func(map_.get_parent().player, tile):
+  for tile in sector_view.get_node("floors").get_used_cells():
+    if check_.call_func(sector_view.get_parent().player, tile):
       range_[tile] = true
 
 func select(check, area):
@@ -53,8 +53,8 @@ func select(check, area):
   get_node("Controller").enable()
   aoe_ = area
   target_ = null
-  map_ = get_node("/root/sector/map")
-  var main = get_node("/root/sector")
+  sector_view = get_node("/root/RouteView/SectorView")
+  var main = get_node("/root/Route")
   check_ = check
   load_range_()
   origin = main.player.get_body().pos
@@ -62,7 +62,7 @@ func select(check, area):
     if move_to(dir):
       break
   if target_ == null:
-    if check_.call_func(map_.get_parent().player, origin):
+    if check_.call_func(main.player, origin):
       target_ = origin
     else:
       return false
@@ -74,7 +74,7 @@ func disable():
   var main = get_node("/root/sector")
   hide()
   get_node("Controller").disable()
-  map_.get_node("highlights").clear()
+  sector_view.get_node("highlights").clear()
   set_process(false)
   emit_signal("target_chosen")
 
@@ -123,10 +123,10 @@ func move_to(dir):
 func _process(delta):
   if target_ != null:
     # update cursor position
-    var floors = map_.get_node("floors")
+    var floors = sector_view.get_node("floors")
     set_pos(floors.map_to_world(target_))
     # update highlight
-    var hls = map_.get_node("highlights")
+    var hls = sector_view.get_node("highlights")
     hls.clear()
     for tile in range_:
       hls.add_tile(tile, HighlightMap.RANGE)
@@ -134,11 +134,11 @@ func _process(delta):
       var format
       var center
       if typeof(aoe_.format) != TYPE_ARRAY:
-        format = aoe_.format.call_func(map_.get_parent().player, target_)
+        format = aoe_.format.call_func(sector_view.get_parent().player, target_)
       else:
         format = aoe_.format
       if typeof(aoe_.center) != TYPE_VECTOR2:
-        center = aoe_.center.call_func(map_.get_parent().player, target_)
+        center = aoe_.center.call_func(sector_view.get_parent().player, target_)
       else:
         center = aoe_.center
       hls.add_area(target_, format, center, HighlightMap.AOE)
