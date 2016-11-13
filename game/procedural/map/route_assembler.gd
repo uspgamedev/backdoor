@@ -51,7 +51,7 @@ func new_body(type, hp, absorption, pos):
     var height = current_sector_.height
     var tiles = current_sector_.tiles
     var pos = Vector2(1 + randi()%(width-2), 1+ randi()%(height-2))
-    while Tiles.is_floor(tiles[pos.x*width + pos.y]):
+    while !Tiles.is_floor(tiles[pos.x*width + pos.y]):
       pos = Vector2(1 + randi()%(width-2), 1 + randi()%(height-2))
     current_body_.pos = pos
   current_sector_.bodies.append(current_body_)

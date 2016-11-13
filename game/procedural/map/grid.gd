@@ -1,7 +1,7 @@
 
-const Step = preload("res://game/procedural/map/step.gd")
+const Tiles     = preload("res://game/sector/tiles.gd")
 
-const MapScene = preload("res://game/sector/sector_view.gd")
+const MapScene  = preload("res://game/sector/sector_view.gd")
 
 var map = []
 var width = 0
@@ -18,16 +18,16 @@ func _init(w, h, value):
       map[i][j] = value
 
 static func clone(map, w, h):
-  var map_grid = new(w, h, Step.EMPTY)
+  var map_grid = new(w, h, Tiles.EMPTY)
   for i in range(h):
     for j in range(w):
       map_grid.set_tile(i, j, map[i][j])
   return map_grid
 
 func is_tile(i, j, value):
-  if value == Step.ANY:
+  if value == Tiles.ANY:
     return true
-  if value == Step.ANY_BUT_WALL and map[i][j] != Step.WALL:
+  if value == Tiles.ANY_BUT_WALL and map[i][j] != Tiles.WALL:
     return true
   return value == map[i][j]
 
@@ -44,5 +44,9 @@ func export_scene(assembler):
   # Add floors
   for i in range(width):
     for j in range(height):
-      tiles[i * width + j] = map[j][i]
+      # FIXME
+      if Tiles.is_floor(map[j][i]) or Tiles.is_wall(map[j][i]):
+        tiles[i * width + j] = map[j][i]
+      else:
+        tiles[i * width + j] = Tiles.FLOOR
   assembler.set_sector_map(tiles, width, height)
