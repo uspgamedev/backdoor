@@ -15,15 +15,8 @@ var current_sector
 onready var floors = get_node("floors")
 onready var walls = get_node("walls")
 
-static func create(id, width, height):
-  var map_node = ViewScene.instance()
-  map_node.get_node("floors").clear()
-  map_node.get_node("walls").clear()
-  map_node.width = int(width)
-  map_node.height = int(height)
-  map_node.id = id
-  map_node.hide()
-  return map_node
+func _ready():
+  hide()
 
 func get_current_sector():
   return current_sector
@@ -39,9 +32,12 @@ func load_sector(sector):
     if Tiles.is_floor(value):
       self.floors.set_cell(tile.x, tile.y, value)
     if Tiles.is_wall(value):
+      if value != Tiles.WALL: #FIXME
+        self.floors.set_cell(tile.x, tile.y, Tiles.FLOOR)
       self.walls.set_cell(tile.x, tile.y, value)
   for body in sector.get_bodies():
     add_body_view(body)
+  show()
 
 func add_body_view(body):
   var bodyview = BodyView.create(body)
