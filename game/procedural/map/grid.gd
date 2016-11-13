@@ -1,7 +1,7 @@
 
 const Step = preload("res://game/procedural/map/step.gd")
 
-const MapScene = preload("res://scenes/map.gd")
+const MapScene = preload("res://game/sector/sector_view.gd")
 
 var map = []
 var width = 0

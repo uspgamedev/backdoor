@@ -2,13 +2,13 @@
 extends Node
 
 # Scenes
-const RouteScene = preload("res://model/route.tscn")
+const RouteScene    = preload("res://game/route/route.tscn")
 
 # Classes
-const Identifiable = preload("res://model/identifiable.gd")
-const Body         = preload("res://model/body.gd")
-const Actor        = preload("res://model/actor.gd")
-const Map          = preload("res://scenes/map.gd")
+const Identifiable  = preload("res://model/identifiable.gd")
+const Body          = preload("res://model/body.gd")
+const Actor         = preload("res://model/actor.gd")
+const Map           = preload("res://game/sector/sector_view.gd")
 
 var current_sector
 var player

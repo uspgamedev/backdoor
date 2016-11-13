@@ -3,7 +3,7 @@ extends Control
 
 const MenuButton = preload("res://components/ui/save-button.tscn")
 
-const Route = preload("res://model/route.gd")
+const Route = preload("res://game/route/route.gd")
 
 onready var loading = get_node("/root/loading")
 onready var transition = get_node("/root/transition")

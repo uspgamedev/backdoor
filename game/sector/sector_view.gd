@@ -1,25 +1,13 @@
 
 extends Node2D
 
-const MapScene = preload("res://scenes/map.tscn")
+const ViewScene = preload("res://game/sector/sector_view.tscn")
 const Parallax = preload("res://components/util/parallax_background.tscn")
 
 const Actor        = preload("res://model/actor.gd")
 const Body         = preload("res://model/body.gd")
 const BodyView     = preload("res://components/bodyview.gd")
 const Identifiable = preload("res://model/identifiable.gd")
-
-const block = []
-#[
-#  Vector2(1,0),
-#  Vector2(0,1),
-#  Vector2(1,1),
-#  Vector2(2,0),
-#  Vector2(0,2),
-#  Vector2(2,1),
-#  Vector2(1,2),
-#  Vector2(2,2)
-#]
 
 var id
 var width
@@ -29,7 +17,7 @@ var actor_bodies
 onready var walls = get_node("walls")
 
 static func create(id, width, height):
-  var map_node = MapScene.instance()
+  var map_node = ViewScene.instance()
   map_node.get_node("floors").clear()
   map_node.get_node("walls").clear()
   map_node.width = int(width)
@@ -41,10 +29,8 @@ static func create(id, width, height):
 func _init():
   bodies = []
   actor_bodies = {}
-  print("map created")
 
 func _ready():
-  print("map ready")
   pass
 
 func is_empty_space(pos):
@@ -84,8 +70,6 @@ func find_body_view(body):
 func add_actor(body, actor):
   get_node("actors").add_child(actor)
   actor_bodies[actor] = body
-  #var module = preload("res://model/ai/wander.gd").new()
-  #actor.add_child(module)
 
 func remove_actor(actor):
   if actor_bodies[actor] != null:
