@@ -14,9 +14,13 @@ var current_sector
 
 onready var floors = get_node("floors")
 onready var walls = get_node("walls")
+onready var cursor = floors.get_node("cursor")
 
 func _ready():
   hide()
+
+func get_cursor():
+  return cursor
 
 func get_current_sector():
   return current_sector
@@ -47,8 +51,6 @@ func unload_sector():
   self.current_sector.disconnect("body_added", self, "_add_body_view")
   self.current_sector.disconnect("body_removed", self, "_remove_body_view")
   hide()
-
-# FIXME: unload sector
 
 func _add_body_view(body):
   var bodyview = BodyView.create(body)

@@ -37,6 +37,8 @@ var check_
 var aoe_
 var range_
 
+onready var controller = get_node("Controller")
+
 signal target_chosen()
 
 func load_range_():
@@ -46,11 +48,10 @@ func load_range_():
       range_[tile] = true
 
 func select(check, area):
-  #FIXME: keep reference in attribute, also rename it to lowercase
-  get_node("Controller").connect("move_selection", self, "move_to")
-  get_node("Controller").connect("confirm", self, "confirm")
-  get_node("Controller").connect("cancel", self, "cancel")
-  get_node("Controller").enable()
+  controller.connect("move_selection", self, "move_to")
+  controller.connect("confirm", self, "confirm")
+  controller.connect("cancel", self, "cancel")
+  controller.enable()
   aoe_ = area
   target_ = null
   sector_view = get_node("/root/RouteView/SectorView")

@@ -1,5 +1,5 @@
 
-extends Node
+extends "res://game/core/backdoor_node.gd"
 
 const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 

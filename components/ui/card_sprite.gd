@@ -1,5 +1,5 @@
 
-extends Node2D
+extends "res://game/core/backdoor_node2d.gd"
 
 const CardScene = preload("res://components/ui/card_sprite.tscn")
 const CARD_ATTRIBUTE = preload("res://model/cards/card_entity.gd").CARD_ATTRIBUTE
@@ -60,8 +60,7 @@ func prepare_evocation(player):
   var action = Action.EvokeCard.new(card)
   for option in self.card.get_ref().get_options(player):
     if option["type"] == "TARGET":
-      #FIXME
-      var cursor = get_node("/root/RouteView/SectorView/floors/cursor")
+      var cursor = get_sector_view().get_cursor()
       if cursor.select(option["check"], option["aoe"]):
         emit_signal("selecting_target")
         yield(cursor, "target_chosen")

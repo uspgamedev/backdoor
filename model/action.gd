@@ -27,7 +27,7 @@ class Move:
   func _init(target).("move"):
     target_ = target
   func get_map(actor):
-    return actor.get_node("/root/Route").current_sector #FIXME
+    return actor.get_current_sector()
   func can_be_used(actor):
     return get_map(actor).is_empty_space(target_) && get_map(actor).get_body_at(target_) == null
   func get_cost(actor):

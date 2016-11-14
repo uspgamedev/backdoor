@@ -18,6 +18,9 @@ func _ready():
   #get_node("/root/database").start()
   print("sector ready")
 
+func get_sector_view():
+  return sector_view
+
 func set_current_sector(sector):
   sector_view.load_sector(sector)
   sector_view.attach_camera(self.player)

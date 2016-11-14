@@ -75,6 +75,9 @@ func close():
 func get_current_sector():
   return current_sector
 
+func get_player():
+  return player
+
 func find_sector(id):
   for sector in self.sectors.get_children():
     if sector.id == id:

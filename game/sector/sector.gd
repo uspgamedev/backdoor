@@ -1,5 +1,5 @@
 
-extends Node
+extends "res://game/core/backdoor_node.gd"
 
 const Tiles         = preload("res://game/sector/tiles.gd")
 const Actor         = preload("res://model/actor.gd")
@@ -120,13 +120,12 @@ func get_body_at(pos):
       return body
   return null
 
-# FIXME
 func check_dead_bodies():
   for body in bodies:
     if body.is_dead():
       var actor = get_body_actor(body)
-      if actor == get_parent().get_parent().player: #FIXME
-        get_node("/root/database/scene_manager").call_deferred("destroy_route")
+      if actor == get_current_route().get_player():
+        get_scene_manager().call_deferred("destroy_route")
       else:
         remove_actor(actor)
 
