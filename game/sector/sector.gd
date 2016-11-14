@@ -137,26 +137,16 @@ func serialize(db):
   sector_data["width"] = width
   sector_data["height"] = height
   # Store floor tiles
-  var floor_map = []
+  var tiles_data = []
   for i in range(height):
     for j in range(width):
-      floor_map.append(-1)
-  var floors = get_node("floors")
-  for tile_pos in floors.get_used_cells():
-    floor_map[tile_pos.x*width + tile_pos.y] = floors.get_cellv(tile_pos)
-  sector_data["floors"] = floor_map
-  # Store wall tiles
-  var wall_map = []
-  for i in range(height):
-    for j in range(width):
-      wall_map.append(-1)
-  var walls = get_node("walls")
-  for tile_pos in walls.get_used_cells():
-    wall_map[tile_pos.x*width + tile_pos.y] = walls.get_cellv(tile_pos)
-  sector_data["walls"] = wall_map
+      tiles_data.append(-1)
+  for tile in get_tiles():
+    tiles_data[tile.x*width + tile.y] = get_tile_v(tile)
+  sector_data["tiles"] = tiles_data
   # Store bodies
   var bodies = []
-  for body in self.bodies:
+  for body in get_bodies():
     bodies.append(body.serialize())
   sector_data["bodies"] = bodies
   # Store actors

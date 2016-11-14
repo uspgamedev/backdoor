@@ -41,6 +41,13 @@ func load_sector(sector):
   sector.connect("body_removed", self, "_remove_body_view")
   show()
 
+func unload_sector():
+  self.floors.clear()
+  self.walls.clear()
+  self.current_sector.disconnect("body_added", self, "_add_body_view")
+  self.current_sector.disconnect("body_removed", self, "_remove_body_view")
+  hide()
+
 # FIXME: unload sector
 
 func _add_body_view(body):
@@ -56,6 +63,7 @@ func _remove_body_view(body):
   find_body_view(body).queue_free()
 
 func attach_camera(actor):
+  print("attaching camera")
   var bodyview = find_body_view(current_sector.get_actor_body(actor))
   var camera = Camera2D.new()
   camera.make_current()

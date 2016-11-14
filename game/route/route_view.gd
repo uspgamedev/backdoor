@@ -4,7 +4,6 @@ extends Node2D
 const Action   = preload("res://model/action.gd")
 
 var player
-var map
 var hand
 var display_popup
 var focuses_popup
@@ -41,11 +40,9 @@ func close():
   get_node("HUD/base").hide()
   deck_view.stop()
   player.disconnect("equipped_item", get_node("HUD/base/item_stats"), "change_item")
+  sector_view.unload_sector()
   set_process_input(false)
-  map.queue_free()
-  map = null
 
 func new_sector():
-  map = get_node("SectorView")
   set_process_input(true)
   print("start sector")

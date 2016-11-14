@@ -1,5 +1,5 @@
 
-extends Node
+extends "res://game/core/backdoor_node.gd"
 
 # Scenes
 const SectorScene   = preload("res://game/sector/sector.tscn")
@@ -17,6 +17,8 @@ var id
 var done
 var next_sector
 
+onready var sectors = get_node("Sectors")
+
 static func get_player_name_from_file(file):
   # Open file
   var data = {}
@@ -32,10 +34,9 @@ static func get_player_name_from_file(file):
 
 func unserialize(data, db):
   self.id = data.id
-  var sectors = data["sectors"]
-  for sector_data in sectors:
+  for sector_data in data["sectors"]:
     var sector = SectorScene.instance()
-    self.get_node("sectors").add_child(sector)
+    self.sectors.add_child(sector)
     sector.unserialize(sector_data, db)
   # Set current sector
   self.current_sector = self.find_sector(data["current_sector"])
@@ -47,16 +48,11 @@ func serialize(db, player):
   data.id = id
   data["sectors"] = []
   data["current_sector"] = current_sector.id
-  # Group sectors into a single array
-  var sectors = [current_sector]
-  for sector in get_node("sectors").get_children():
-    print("KOTOARISHIMASU")
-    sectors.append(sector)
   var sectors_data = []
   var player_actor_id = -1
   data["sectors"] = sectors_data
   # Serialize sectors
-  for sector in sectors:
+  for sector in self.sectors.get_children():
     var sector_data = sector.serialize(db)
     sectors_data.append(sector_data)
     var i = 0
@@ -71,11 +67,16 @@ func serialize(db, player):
 func _ready():
   pass
 
+func close():
+  close_current_sector()
+  for sector in self.sectors.get_children():
+    sector.queue_free()
+
 func get_current_sector():
   return current_sector
 
 func find_sector(id):
-  for sector in get_node("sectors").get_children():
+  for sector in self.sectors.get_children():
     if sector.id == id:
       return sector
   if current_sector.id == id:
@@ -85,18 +86,19 @@ func find_sector(id):
 func change_sector(target):
   var player_body = current_sector.get_actor_body(player)
   close_current_sector()
-  get_node("sectors").add_child(current_sector)
+  sectors.add_child(current_sector)
   current_sector = find_sector(target)
   open_current_sector(player_body)
 
 func close_current_sector():
+  done = true
   current_sector.set_fixed_process(false)
-  current_sector.hide()
   current_sector.remove_actor(player)
-  get_node("/root/sector").close()
+  set_fixed_process(false)
+  get_route_view().close()
 
 func open_current_sector(player_body):
-  var route_view = get_node("/root/RouteView")
+  var route_view = get_route_view()
   route_view.set_current_sector(self.current_sector)
   # FIXME (change_sector)
   #if player_body != null:
