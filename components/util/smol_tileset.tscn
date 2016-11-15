@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/floor-cobblestone_v2.tex" type="Texture" id=1]
 [ext_resource path="res://assets/wall-stone-bricks.tex" type="Texture" id=2]
-[ext_resource path="res://assets/tiles-v2.tex" type="Texture" id=3]
+[ext_resource path="res://assets/floor-dirt.png" type="Texture" id=3]
 
 [node name="Node2D" type="Node2D"]
 
@@ -120,52 +120,76 @@ offset = Vector2( 0, -32 )
 region = true
 region_rect = Rect2( 192, 192, 64, 96 )
 
-[node name="Wall Corner" type="Sprite" parent="."]
+[node name="FloorDirt" type="Sprite" parent="."]
 
-transform/pos = Vector2( 32, 465 )
+transform/pos = Vector2( 32, 239.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 64, 0, 64, 96 )
+region_rect = Rect2( 0, 0, 64, 40 )
 
-[node name="Wall Corner T" type="Sprite" parent="."]
+[node name="FloorDirtLeft" type="Sprite" parent="."]
 
-transform/pos = Vector2( 96, 465 )
+transform/pos = Vector2( 112, 239.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 128, 0, 64, 96 )
+region_rect = Rect2( 0, 64, 64, 32 )
 
-[node name="Wall Left" type="Sprite" parent="."]
+[node name="FloorDirtTop" type="Sprite" parent="."]
 
-transform/pos = Vector2( 160, 464 )
+transform/pos = Vector2( 192, 239.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 192, 0, 64, 96 )
+region_rect = Rect2( 64, 64, 64, 32 )
 
-[node name="Wall Left T" type="Sprite" parent="."]
+[node name="FloorDirtBottom" type="Sprite" parent="."]
 
-transform/pos = Vector2( 224, 464 )
+transform/pos = Vector2( 112, 299.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 256, 0, 64, 96 )
+region_rect = Rect2( 0, 96, 64, 32 )
 
-[node name="Wall Right " type="Sprite" parent="."]
+[node name="FloorDirtRight" type="Sprite" parent="."]
 
-transform/pos = Vector2( 288, 464 )
+transform/pos = Vector2( 192, 299.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 320, 0, 64, 96 )
+region_rect = Rect2( 64, 96, 64, 32 )
 
-[node name="Wall Right T" type="Sprite" parent="."]
+[node name="FloorDirtBottomLeft" type="Sprite" parent="."]
 
-transform/pos = Vector2( 352, 464 )
+transform/pos = Vector2( 252, 269.221 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -32 )
+offset = Vector2( 0, 4 )
 region = true
-region_rect = Rect2( 384, 0, 64, 96 )
+region_rect = Rect2( 0, 128, 64, 32 )
+
+[node name="FloorDirtTopLeft" type="Sprite" parent="."]
+
+transform/pos = Vector2( 282, 239.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 0, 160, 64, 32 )
+
+[node name="FloorDirtTopRight" type="Sprite" parent="."]
+
+transform/pos = Vector2( 322, 269.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 128, 64, 32 )
+
+[node name="FloorDirtBottomRight" type="Sprite" parent="."]
+
+transform/pos = Vector2( 282, 309.221 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 4 )
+region = true
+region_rect = Rect2( 64, 160, 64, 32 )
 
 

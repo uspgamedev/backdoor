@@ -1,14 +1,15 @@
-[gd_scene load_steps=12 format=1]
+[gd_scene load_steps=13 format=1]
 
-[ext_resource path="res://scenes/main.gd" type="Script" id=1]
-[ext_resource path="res://components/controller/hand.gd" type="Script" id=2]
-[ext_resource path="res://components/controller/cooldownbar.gd" type="Script" id=3]
-[ext_resource path="res://components/ui/card_display.tscn" type="PackedScene" id=4]
-[ext_resource path="res://components/ui/focus_display.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="BitmapFont" id=6]
-[ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=7]
-[ext_resource path="res://components/controller/deck.gd" type="Script" id=8]
-[ext_resource path="res://components/controller/main_controller.gd" type="Script" id=9]
+[ext_resource path="res://game/route/route_view.gd" type="Script" id=1]
+[ext_resource path="res://game/sector/sector_view.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/controller/hand.gd" type="Script" id=3]
+[ext_resource path="res://components/controller/cooldownbar.gd" type="Script" id=4]
+[ext_resource path="res://components/ui/card_display.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/ui/focus_display.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="BitmapFont" id=7]
+[ext_resource path="res://components/ui/item_stats.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/controller/deck.gd" type="Script" id=9]
+[ext_resource path="res://components/controller/main_controller.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -36,10 +37,12 @@ border_size = 0
 border_blend = true
 draw_bg = true
 
-[node name="sector" type="Node2D"]
+[node name="RouteView" type="Node2D"]
 
 script/script = ExtResource( 1 )
 __meta__ = { "__editor_plugin_screen__":"Script", "_edit_lock_":true }
+
+[node name="SectorView" parent="." instance=ExtResource( 2 )]
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -50,6 +53,7 @@ scale = Vector2( 1, 1 )
 
 [node name="UI_hook" type="Node2D" parent="HUD"]
 
+editor/display_folded = true
 transform/pos = Vector2( 32, 320 )
 __meta__ = { "_edit_lock_":true }
 
@@ -57,7 +61,7 @@ __meta__ = { "_edit_lock_":true }
 
 visibility/visible = false
 transform/pos = Vector2( 64, 64 )
-script/script = ExtResource( 2 )
+script/script = ExtResource( 3 )
 
 [node name="CooldownBar" type="ProgressBar" parent="HUD/UI_hook"]
 
@@ -80,14 +84,15 @@ range/value = 1.0
 range/exp_edit = false
 range/rounded = false
 percent/visible = false
-script/script = ExtResource( 3 )
+script/script = ExtResource( 4 )
 
-[node name="CardDisplay" parent="HUD" instance=ExtResource( 4 )]
+[node name="CardDisplay" parent="HUD" instance=ExtResource( 5 )]
 
-[node name="FocussDisplay" parent="HUD" instance=ExtResource( 5 )]
+[node name="FocussDisplay" parent="HUD" instance=ExtResource( 6 )]
 
 [node name="base" type="Control" parent="HUD"]
 
+editor/display_folded = true
 visibility/visible = false
 anchor/right = 1
 focus/ignore_mouse = false
@@ -110,13 +115,13 @@ margin/left = 16.0
 margin/top = 16.0
 margin/right = 336.0
 margin/bottom = 96.0
-custom_fonts/font = ExtResource( 6 )
+custom_fonts/font = ExtResource( 7 )
 text = "Controls:\n- arrow keys to move\n- A/S to change card\n- D to evoke card\n- ESC to save & quit\n- SHIFT+S to save & back to menu"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="item_stats" parent="HUD/base" instance=ExtResource( 7 )]
+[node name="item_stats" parent="HUD/base" instance=ExtResource( 8 )]
 
 [node name="deck" type="Control" parent="HUD"]
 
@@ -132,10 +137,10 @@ margin/left = 120.0
 margin/top = 64.0
 margin/right = 16.0
 margin/bottom = 16.0
-script/script = ExtResource( 8 )
+script/script = ExtResource( 9 )
 
 [node name="Controller" type="Node" parent="HUD"]
 
-script/script = ExtResource( 9 )
+script/script = ExtResource( 10 )
 
 

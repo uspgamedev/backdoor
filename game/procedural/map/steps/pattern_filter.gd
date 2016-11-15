@@ -1,5 +1,5 @@
 
-extends "res://components/util/mapgen/step.gd"
+extends "res://game/procedural/map/step.gd"
 
 const THREAD_NUM = 4
 
@@ -25,7 +25,7 @@ static func load_from_file(pattern_name):
   var dict = {}
   var file = File.new()
   var text = ""
-  file.open("res://components/util/mapgen/patterns/" + pattern_name + ".json", File.READ)
+  file.open("res://game/procedural/map/patterns/" + pattern_name + ".json", File.READ)
   text = file.get_as_text()
   dict.parse_json(text)
   file.close()

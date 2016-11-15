@@ -7,7 +7,7 @@ const AREA = [[0,1,0],
 const CENTER = Vector2(1,1)
 
 func valid_target(actor, target):
-  var map = get_node("/root/sector/map")
+  var map = get_current_sector()
   return map.is_empty_space(target)
 
 func get_options(actor):
@@ -17,7 +17,7 @@ func get_options(actor):
   ]
 
 func evoke(actor, options):
-  var map = get_node("/root/sector/map")
+  var map = get_current_sector()
   var pos = options[0]
   for i in range(AREA.size()):
     for j in range(AREA[i].size()):

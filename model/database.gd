@@ -1,15 +1,16 @@
 
-extends Node
+extends "res://game/core/backdoor_node.gd"
 
-const RouteScene = preload("res://model/route.tscn")
-const RouteAssembler = preload("res://components/util/mapgen/route_assembler.gd")
+const RouteScene = preload("res://game/route/route.tscn")
 
-const Route = preload("res://model/route.gd")
+const RouteAssembler = preload("res://game/procedural/map/route_assembler.gd")
+const MapGenerator = preload("res://game/procedural/map/generator.gd")
+const Route = preload("res://game/route/route.gd")
 const Actor = preload("res://model/actor.gd")
 const Body = preload("res://model/body.gd")
 
 onready var loading = get_node("/root/loading")
-onready var map_generator = get_node("map_generator")
+onready var map_generator = MapGenerator.new()
 onready var profile = get_node("profile")
 
 func get_profile():
@@ -45,24 +46,24 @@ func load_route(id):
   do_load_route(data)
 
 func do_load_route(route_data):
-  var route = Route.unserialize(route_data, self)
-  get_node("/root/sector").set_player(route.player)
-  get_parent().call_deferred("add_child", route)
+  var route = get_current_route()
+  route.unserialize(route_data, self)
+  get_route_view().set_player(route.player)
+  route.call_deferred("open_current_sector", null)
   loading.end()
 
 func save_route():
-  var route = get_node("/root/route")
-  do_save_route(route, route.player)
+  do_save_route(get_current_route())
 
-func do_save_route(route, player):
+func do_save_route(route):
   var file = profile.get_journal_file_writer(route.id)
   assert(file != null)
-  file.store_string(route.serialize(self, player).to_json())
+  file.store_string(route.serialize(self, route.player).to_json())
   file.close()
   print("SAVED")
 
 func finish():
-  if get_node("/root/").has_node("route"):
+  if get_node("/root/").has_node("Route"):
     save_route()
   profile.save()
   get_tree().quit()

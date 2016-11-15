@@ -2,7 +2,7 @@
 extends "res://model/cards/card_skill.gd"
 
 func valid_target(actor, target):
-  var map = get_node("/root/sector/map")
+  var map = get_current_sector()
   return dist(actor,target) <= 10 and map.is_empty_space(target) and map.get_body_at(target) == null
 
 func can_be_evoked(actor):
@@ -15,4 +15,4 @@ func get_options(actor):
 
 func evoke(actor, options):
   var target = options[0]
-  get_node("/root/sector/map").move_body(actor.get_body(), target)
+  get_current_sector().move_body(actor.get_body(), target)

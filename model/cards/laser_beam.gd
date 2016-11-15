@@ -6,7 +6,7 @@ const RANGE = 5
 var horizontal = true
 
 func valid_target(actor, target):
-  var map = get_node("/root/sector/map")
+  var map = get_current_sector()
   var pos = actor.get_body_pos()
   return map.is_empty_space(target) and \
     (pos.x == target.x and pos.y != target.y and abs(pos.y - target.y) < RANGE) or \
@@ -41,7 +41,7 @@ func get_options(actor):
   ]
 
 func evoke(actor, options):
-  var map = get_node("/root/sector/map")
+  var map = get_current_sector()
   var pos = options[0]
   var area = get_area(actor, pos)
   var center = get_center(actor, pos)

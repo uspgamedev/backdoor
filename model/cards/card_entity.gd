@@ -1,5 +1,5 @@
 
-extends Node
+extends "res://game/core/backdoor_node.gd"
 
 const DamageFormula = preload("res://components/util/damage_formula.gd")
 

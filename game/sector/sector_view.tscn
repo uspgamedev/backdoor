@@ -1,12 +1,12 @@
 [gd_scene load_steps=6 format=1]
 
-[ext_resource path="res://scenes/map.gd" type="Script" id=1]
+[ext_resource path="res://game/sector/sector_view.gd" type="Script" id=1]
 [ext_resource path="res://components/util/smol_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://components/ui/cursor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/util/highlight_tileset.tres" type="TileSet" id=4]
 [ext_resource path="res://components/ui/highlight_map.gd" type="Script" id=5]
 
-[node name="map" type="Node2D"]
+[node name="SectorView" type="Node2D"]
 
 script/script = ExtResource( 1 )
 __meta__ = { "_edit_lock_":true }

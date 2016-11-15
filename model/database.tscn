@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=1]
+[gd_scene load_steps=20 format=1]
 
 [ext_resource path="res://model/database.gd" type="Script" id=1]
 [ext_resource path="res://game/database/meta.gd" type="Script" id=2]
@@ -17,9 +17,8 @@
 [ext_resource path="res://model/cards/counter.gd" type="Script" id=15]
 [ext_resource path="res://model/cards/fireball.gd" type="Script" id=16]
 [ext_resource path="res://model/cards/laser_beam.gd" type="Script" id=17]
-[ext_resource path="res://components/util/mapgen/map_generator.gd" type="Script" id=18]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=19]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=20]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=18]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=19]
 
 [node name="database" type="Node"]
 
@@ -206,17 +205,13 @@ card_attribute = 0
 description = "Shoots a powerful laser beam"
 time_cost = 50
 
-[node name="map_generator" type="Node" parent="."]
+[node name="scene_manager" type="Node" parent="."]
 
 script/script = ExtResource( 18 )
 
-[node name="scene_manager" type="Node" parent="."]
-
-script/script = ExtResource( 19 )
-
 [node name="profile" type="Node" parent="."]
 
-script/script = ExtResource( 20 )
+script/script = ExtResource( 19 )
 
 
 [editable path="monsters/Slime"]
