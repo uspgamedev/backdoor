@@ -46,14 +46,20 @@ func pvt_copy_tiles(data):
 func get_tile(i, j):
   return map[i * width + j]
 
-func get_tile_v(tile):
-  return get_tile(tile.x, tile.y)
+func get_tile_v(pos):
+  return get_tile(pos.x, pos.y)
 
 func get_tiles():
   return tiles
 
 func is_empty_space(pos):
   return Tiles.is_floor(get_tile_v(pos))
+
+func has_pattern(matcher, i, j):
+  return matcher.match(funcref(self, "get_tile"), i, j)
+
+func has_pattern_v(matcher, pos):
+  return has_pattern(matcher, pos.x, pos.y)
 
 func find_free_body_id():
   var id = 1

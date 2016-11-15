@@ -15,6 +15,7 @@ var current_sector
 onready var floors = get_node("floors")
 onready var walls = get_node("walls")
 onready var cursor = floors.get_node("cursor")
+onready var matcher = get_node("Matcher")
 
 func _ready():
   hide()
@@ -36,9 +37,12 @@ func load_sector(sector):
     if Tiles.is_floor(value):
       self.floors.set_cell(tile.x, tile.y, value)
     if Tiles.is_wall(value):
-      if value != Tiles.WALL: #FIXME
+      var match = sector.has_pattern_v(matcher, tile)
+      if match != null:
         self.floors.set_cell(tile.x, tile.y, Tiles.FLOOR)
-      self.walls.set_cell(tile.x, tile.y, value)
+        self.walls.set_cell(tile.x, tile.y, match)
+      else:
+        self.walls.set_cell(tile.x, tile.y, value)
   for body in sector.get_bodies():
     _add_body_view(body)
   sector.connect("body_added", self, "_add_body_view")
