@@ -10,7 +10,6 @@ const ExpandStep = preload("res://game/procedural/map/steps/grow_smooth.gd")
 var ROOM_STEP = RoomStep.new()
 var GROW_STEP = PatternStep.load_from_file("growing")
 var CLEAN_STEP = PatternStep.load_from_file("cleaning")
-var BORDER_STEP = PatternStep.load_from_file("border")
 var MARGIN_STEP = MarginStep.new()
 var DIRT_STEP = RandomStep.new(Step.EMPTY, Step.FLOOR_DIRT, 0.01)
 var EXPAND_DIRT_STEP1 = ExpandStep.new(Step.EMPTY, Step.FLOOR_DIRT, 2, 8, 5)
@@ -22,7 +21,6 @@ var PIPELINE = [
   #GROW_STEP, GROW_STEP, GROW_STEP,
   MARGIN_STEP,
   CLEAN_STEP, #CLEAN_STEP, CLEAN_STEP,
-  BORDER_STEP,
   DIRT_STEP,
   EXPAND_DIRT_STEP1, EXPAND_DIRT_STEP2,
 ]

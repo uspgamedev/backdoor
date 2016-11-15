@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=9 format=1]
 
 [ext_resource path="res://game/sector/sector_view.gd" type="Script" id=1]
 [ext_resource path="res://components/util/smol_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://components/ui/cursor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/util/highlight_tileset.tres" type="TileSet" id=4]
 [ext_resource path="res://components/ui/highlight_map.gd" type="Script" id=5]
+[ext_resource path="res://game/sector/pattern_matching/matcher.gd" type="Script" id=6]
+[ext_resource path="res://game/sector/pattern_matching/rule.gd" type="Script" id=7]
+[ext_resource path="res://game/sector/pattern_matching/pattern.gd" type="Script" id=8]
 
 [node name="SectorView" type="Node2D"]
 
@@ -13,6 +16,7 @@ __meta__ = { "_edit_lock_":true }
 
 [node name="floors" type="TileMap" parent="."]
 
+editor/display_folded = true
 transform/pos = Vector2( 480, 240 )
 mode = 1
 tile_set = ExtResource( 2 )
@@ -82,5 +86,129 @@ layer = 0
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
+
+[node name="Matcher" type="Node" parent="."]
+
+script/script = ExtResource( 6 )
+
+[node name="Top" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 2
+
+[node name="Pattern" type="Node" parent="Matcher/Top"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -2, -3, -2, 1, 1, 1, 1, 1, 1 )
+
+[node name="Right" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 4
+
+[node name="Pattern" type="Node" parent="Matcher/Right"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, -2, 1, 1, -3, 1, 1, -2 )
+
+[node name="Bottom" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 6
+
+[node name="Pattern" type="Node" parent="Matcher/Bottom"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, 1, 1, 1, 1, -2, -3, -2 )
+
+[node name="Left" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 8
+
+[node name="Pattern" type="Node" parent="Matcher/Left"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -2, 1, 1, -3, 1, 1, -2, 1, 1 )
+
+[node name="OuterTopRight" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 3
+
+[node name="Pattern" type="Node" parent="Matcher/OuterTopRight"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -3, -3, -3, 1, 1, -3, 1, 1, -3 )
+
+[node name="OuterBottomRight" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 5
+
+[node name="Pattern" type="Node" parent="Matcher/OuterBottomRight"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, -3, 1, 1, -3, -3, -3, -3 )
+
+[node name="OuterBottomLeft" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 7
+
+[node name="Pattern" type="Node" parent="Matcher/OuterBottomLeft"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -3, 1, 1, -3, 1, 1, -3, -3, -3 )
+
+[node name="OuterTopLeft" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 9
+
+[node name="Pattern" type="Node" parent="Matcher/OuterTopLeft"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -3, -3, -3, -3, 1, 1, -3, 1, 1 )
+
+[node name="InnerTopRight" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 10
+
+[node name="Pattern" type="Node" parent="Matcher/InnerTopRight"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, -3, 1, 1, 1, 1, 1, 1 )
+
+[node name="InnerBottomRight" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 11
+
+[node name="Pattern" type="Node" parent="Matcher/InnerBottomRight"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, 1, 1, 1, 1, 1, 1, -3 )
+
+[node name="InnerBottomLeft" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 12
+
+[node name="Pattern" type="Node" parent="Matcher/InnerBottomLeft"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( 1, 1, 1, 1, 1, 1, -3, 1, 1 )
+
+[node name="InnerTopLeft" type="Node" parent="Matcher"]
+
+script/script = ExtResource( 7 )
+result = 13
+
+[node name="Pattern" type="Node" parent="Matcher/InnerTopLeft"]
+
+script/script = ExtResource( 8 )
+pattern = Matrix3( -3, 1, 1, 1, 1, 1, 1, 1, 1 )
 
 
