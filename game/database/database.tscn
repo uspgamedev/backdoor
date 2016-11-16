@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=1]
 
-[ext_resource path="res://model/database.gd" type="Script" id=1]
+[ext_resource path="res://game/database/database.gd" type="Script" id=1]
 [ext_resource path="res://game/database/meta.gd" type="Script" id=2]
 [ext_resource path="res://components/util/id_server.gd" type="Script" id=3]
 [ext_resource path="res://components/monster.tscn" type="PackedScene" id=4]
