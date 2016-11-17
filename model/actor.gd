@@ -278,9 +278,7 @@ static func unserialize(data, db):
   actor.cooldown = data["cooldown"]
   actor.draw_cooldown = data["drawcooldown"]
 
-  var cards_db = db.get_node("cards")
-
-  print("data=", data)
+  var cards_db = db.get_cards()
 
   if data.has("weapon"):
     actor.weapon = load_card(cards_db, data["weapon"])

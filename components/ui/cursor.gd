@@ -33,7 +33,7 @@ const DIRS = [
 var sector_view
 var origin
 var target_
-var check_
+var checker
 var aoe_
 var range_
 
@@ -44,10 +44,10 @@ signal target_chosen()
 func load_range_():
   range_ = {}
   for tile in sector_view.get_node("floors").get_used_cells():
-    if check_.call_func(sector_view.get_parent().player, tile):
+    if checker.check(sector_view.get_parent().player, tile):
       range_[tile] = true
 
-func select(check, area):
+func select(checker, area):
   controller.connect("move_selection", self, "move_to")
   controller.connect("confirm", self, "confirm")
   controller.connect("cancel", self, "cancel")
@@ -56,14 +56,14 @@ func select(check, area):
   target_ = null
   sector_view = get_node("/root/RouteView/SectorView")
   var main = get_node("/root/Route")
-  check_ = check
+  self.checker = checker
   load_range_()
   origin = main.player.get_body().pos
   for dir in DIRS:
     if move_to(dir):
       break
   if target_ == null:
-    if check_.call_func(main.player, origin):
+    if checker.check(main.player, origin):
       target_ = origin
     else:
       return false

@@ -12,9 +12,13 @@ const Body = preload("res://model/body.gd")
 onready var loading = get_node("/root/loading")
 onready var map_generator = MapGenerator.new()
 onready var profile = get_node("profile")
+onready var cards = get_node("Cards")
 
 func get_profile():
   return profile
+
+func get_cards():
+  return cards
 
 func erase_route(id):
   profile.erase_journal(id)
@@ -30,9 +34,8 @@ func create_route():
   assembler.make_sector_current()
   assembler.new_body("hero", 10, 0, null)
   assembler.new_actor("hero", 10)
-  var cards_db = get_node("cards")
   for i in range(20):
-    var card_id = i % cards_db.get_child_count()
+    var card_id = i % cards.get_child_count()
     assembler.add_to_actor_deck(card_id)
   assembler.make_actor_player()
   do_load_route(assembler.get_route_data())

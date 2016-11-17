@@ -62,17 +62,16 @@ class ChangeSector:
 
 class EvokeCard:
   extends BaseAction
-  var card_
-  var options_
+  var card
+  var target
   func _init(card).("use_card"):
-    card_ = card
-    options_ = []
-  func add_option(option):
-    options_.append(option)
+    self.card = card
+  func set_target(target):
+    self.target = target
   func get_cost(actor):
-    return card_.card_ref.get_time_cost()
+    return self.card.card_ref.get_time_cost()
   func can_be_used(actor):
-    return (card_.card_ref.can_be_evoked(actor))
+    return self.card.card_ref.can_be_evoked(actor)
   func use(actor):
-    actor.consume_card(card_)
-    card_.card_ref.evoke(actor,options_)
+    actor.consume_card(self.card)
+    self.card.card_ref.evoke(actor, self.target)

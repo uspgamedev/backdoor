@@ -5,6 +5,7 @@ const CardScene = preload("res://components/ui/card_sprite.tscn")
 const CARD_ATTRIBUTE = preload("res://model/cards/card_entity.gd").CARD_ATTRIBUTE
 const Action = preload("res://model/action.gd")
 
+const TargetType = preload("res://game/database/cards/target_types.gd")
 const Skill = preload("res://model/cards/card_skill.gd")
 const Focus = preload("res://model/cards/card_focus.gd")
 const Item = preload("res://model/cards/card_item.gd")
@@ -58,18 +59,19 @@ func prepare_evocation(player):
   if used:
     return
   var action = Action.EvokeCard.new(card)
-  for option in self.card.get_ref().get_options(player):
-    if option["type"] == "TARGET":
-      var cursor = get_sector_view().get_cursor()
-      if cursor.select(option["check"], option["aoe"]):
-        emit_signal("selecting_target")
-        yield(cursor, "target_chosen")
-        emit_signal("target_selected")
-        if cursor.get_target() == null:
-          return false
-        action.add_option(cursor.get_target())
-      else:
+  var target_type = self.card.get_ref().get_target_type()
+  var target_range = self.card.get_ref().get_target_range()
+  if target_type != TargetType.NONE:
+    var cursor = get_sector_view().get_cursor()
+    if cursor.select(TargetType.Checker.new(get_current_sector(), target_type, target_range), null):
+      emit_signal("selecting_target")
+      yield(cursor, "target_chosen")
+      emit_signal("target_selected")
+      if cursor.get_target() == null:
         return false
+      action.set_target(cursor.get_target())
+    else:
+      return false
   player.add_action(action)
   used = true
   return true
