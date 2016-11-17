@@ -5,6 +5,7 @@ const SlotItem = preload("res://model/cards/card_item.gd").SlotItem
 
 const FOCUS_SLOT_MAX  = 3
 
+#FIXME
 const ATTR_ATHLETICS    = 0
 const ATTR_ARCANA       = 1
 const ATTR_TECH         = 2

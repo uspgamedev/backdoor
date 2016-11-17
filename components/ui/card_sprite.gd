@@ -39,9 +39,9 @@ static func create(card):
   var card_sprite = CardScene.instance()
   card_sprite.card = card
   print("name=", card)
-  card_sprite.get_node("Name").set_text(card.get_name())
-  card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_card_attribute()][BG_COLOR])
-  card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_card_attribute()][FG_COLOR])
+  card_sprite.get_node("Name").set_text(card.card_ref.get_full_name())
+  card_sprite.get_node("Background").set_modulate(COLOR_DICT[card.card_ref.get_attribute()][BG_COLOR])
+  card_sprite.get_node("Subborder").set_modulate(COLOR_DICT[card.card_ref.get_attribute()][FG_COLOR])
   card_sprite.get_node("CardClass").set_text(get_card_class(card.card_ref))
   card_sprite.used = false
   return card_sprite

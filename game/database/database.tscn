@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://game/database/database.gd" type="Script" id=1]
 [ext_resource path="res://game/database/meta.gd" type="Script" id=2]
@@ -7,9 +7,11 @@
 [ext_resource path="res://model/ai/wander.gd" type="Script" id=5]
 [ext_resource path="res://model/ai/defensive.gd" type="Script" id=6]
 [ext_resource path="res://components/util/card_list.gd" type="Script" id=7]
-[ext_resource path="res://game/database/cards/components/card_base.gd" type="Script" id=8]
-[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=9]
-[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=10]
+[ext_resource path="res://game/database/cards/components/skill_base.gd" type="Script" id=8]
+[ext_resource path="res://game/database/cards/components/steps/on_target.gd" type="Script" id=9]
+[ext_resource path="res://game/database/cards/components/effects/damage.gd" type="Script" id=10]
+[ext_resource path="res://components/util/scene_manager.gd" type="Script" id=11]
+[ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=12]
 
 [node name="database" type="Node"]
 
@@ -84,19 +86,30 @@ script/script = ExtResource( 7 )
 script/script = ExtResource( 8 )
 full_name = "Arcane Bolt"
 slug_name = "arcane-bolt"
-card_attribute = 1
+attribute = 1
 description = "SHPLAW"
 time_cost = 50
 target_type = 1
 target_range = 10
 
-[node name="scene_manager" type="Node" parent="."]
+[node name="OnTarget" type="Node" parent="Cards/ArcaneBolt"]
 
 script/script = ExtResource( 9 )
 
-[node name="profile" type="Node" parent="."]
+[node name="Damage" type="Node" parent="Cards/ArcaneBolt/OnTarget"]
 
 script/script = ExtResource( 10 )
+base_damage = 0
+dice_count = 1
+dice_sides = 6
+
+[node name="scene_manager" type="Node" parent="."]
+
+script/script = ExtResource( 11 )
+
+[node name="profile" type="Node" parent="."]
+
+script/script = ExtResource( 12 )
 
 
 [editable path="monsters/Slime"]

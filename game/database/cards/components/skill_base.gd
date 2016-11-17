@@ -1,14 +1,14 @@
 
 extends "res://game/database/cards/components/card_base.gd"
 
-const Effect = preload("res://game/database/cards/components/effect.gd")
+const Step = preload("res://game/database/cards/components/step.gd")
 
-onready var effects = get_children()
+onready var steps = get_children()
 
 func _ready():
-  for effect in effects:
-    assert(effect.get_script() == Effect)
+  for step in steps:
+    assert(step extends Step)
 
-func evoke(actor, options):
-  for effect in effects:
-    effect.execute(actor, options)
+func evoke(actor, target):
+  for step in steps:
+    step.execute(actor, self, target)
