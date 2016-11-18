@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://game/database/cards/components/skill_base.gd" type="Script" id=1]
+
+[node name="SkillBase" type="Node"]
+
+script/script = ExtResource( 1 )
+full_name = "Default Card"
+slug_name = "default-card"
+attribute = 0
+description = "a card"
+time_cost = 50
+target_type = null
+target_range = 0
+
+

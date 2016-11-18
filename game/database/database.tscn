@@ -7,9 +7,9 @@
 [ext_resource path="res://model/ai/wander.gd" type="Script" id=5]
 [ext_resource path="res://model/ai/defensive.gd" type="Script" id=6]
 [ext_resource path="res://components/util/card_list.gd" type="Script" id=7]
-[ext_resource path="res://game/database/cards/components/skill_base.gd" type="Script" id=8]
-[ext_resource path="res://game/database/cards/components/steps/on_target.gd" type="Script" id=9]
-[ext_resource path="res://game/database/cards/components/effects/damage.gd" type="Script" id=10]
+[ext_resource path="res://game/database/cards/components/skill_base.tscn" type="PackedScene" id=8]
+[ext_resource path="res://game/database/cards/components/steps/on_target.tscn" type="PackedScene" id=9]
+[ext_resource path="res://game/database/cards/components/effects/damage.tscn" type="PackedScene" id=10]
 [ext_resource path="res://components/util/scene_manager.gd" type="Script" id=11]
 [ext_resource path="res://components/persist/profile_persist.gd" type="Script" id=12]
 
@@ -81,26 +81,20 @@ chance = 1
 
 script/script = ExtResource( 7 )
 
-[node name="ArcaneBolt" type="Node" parent="Cards"]
+[node name="ArcaneBolt" parent="Cards" instance=ExtResource( 8 )]
 
-script/script = ExtResource( 8 )
 full_name = "Arcane Bolt"
 slug_name = "arcane-bolt"
 attribute = 1
 description = "SHPLAW"
-time_cost = 50
 target_type = 1
 target_range = 10
 
-[node name="OnTarget" type="Node" parent="Cards/ArcaneBolt"]
+[node name="OnTarget" parent="Cards/ArcaneBolt" instance=ExtResource( 9 )]
 
-script/script = ExtResource( 9 )
+[node name="Damage" parent="Cards/ArcaneBolt/OnTarget" instance=ExtResource( 10 )]
 
-[node name="Damage" type="Node" parent="Cards/ArcaneBolt/OnTarget"]
-
-script/script = ExtResource( 10 )
-base_damage = 0
-dice_count = 1
+base_damage = 2
 dice_sides = 6
 
 [node name="scene_manager" type="Node" parent="."]
