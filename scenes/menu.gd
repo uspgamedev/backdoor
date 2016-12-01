@@ -19,6 +19,8 @@ func start():
   var journals = profile.get_journals()
   for route_id in journals:
     var char_name = profile.get_player_name(route_id)
+    if char_name == null:
+      continue
     var button = MenuButton.instance()
     button.set_text(char_name)
     button.connect("selected", self, "_on_load_game_selected", [route_id])

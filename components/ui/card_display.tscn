@@ -3,8 +3,8 @@
 [ext_resource path="res://components/ui/card_display.gd" type="Script" id=1]
 [ext_resource path="res://components/controller/popup_controller.gd" type="Script" id=2]
 [ext_resource path="res://components/ui/card_sprite.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/fonts/PressStart2P-16pt.fnt" type="Font" id=4]
-[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="Font" id=5]
+[ext_resource path="res://assets/fonts/PressStart2P-16pt.fnt" type="BitmapFont" id=4]
+[ext_resource path="res://assets/fonts/PressStart2P-8pt.fnt" type="BitmapFont" id=5]
 
 [node name="CardDisplay" type="Control"]
 
@@ -22,6 +22,7 @@ script/script = ExtResource( 1 )
 
 [node name="CardPopup" type="PopupDialog" parent="."]
 
+visibility/visible = false
 anchor/left = 3
 anchor/top = 3
 anchor/right = 3
@@ -49,11 +50,6 @@ transform/pos = Vector2( 12.0976, 25.8243 )
 [node name="Name" parent="CardPopup/SpriteHook/Card"]
 
 visibility/visible = false
-size_flags/vertical = 0
-
-[node name="CardClass" parent="CardPopup/SpriteHook/Card"]
-
-size_flags/vertical = 0
 
 [node name="CardName" type="Label" parent="CardPopup"]
 
