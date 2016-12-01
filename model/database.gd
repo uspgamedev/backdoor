@@ -56,8 +56,11 @@ func save_route():
   do_save_route(get_current_route())
 
 func do_save_route(route):
+  if route.id == null:
+    return
   var file = profile.get_journal_file_writer(route.id)
-  assert(file != null)
+  if file == null:
+    return
   file.store_string(route.serialize(self, route.player).to_json())
   file.close()
   print("SAVED")
