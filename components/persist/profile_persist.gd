@@ -12,7 +12,7 @@ var profile_data
 func _init():
   profile_data = {}
   var profile_stream = File.new()
-  if profile_stream.open("user://profile.meta", File.READ) == 0:
+  if profile_stream.open("user://profile.meta", File.READ) == OK:
     profile_data.parse_json(profile_stream.get_as_text())
     profile_stream.close()
   else:
@@ -34,7 +34,7 @@ func get_journal_filename(route_id, type =  FILE_TYPE.JOURNAL):
 func check_journal_version(route_id):
   var v_file = File.new()
   var v_filename = get_journal_filename(route_id, FILE_TYPE.VERSION)
-  if !v_file.open(v_filename, File.READ) == 0:
+  if v_file.open(v_filename, File.READ) != OK:
     return true
 
   var v_data = v_file.get_as_text().strip_edges(true, true).to_lower()
@@ -47,7 +47,7 @@ func check_journal_version(route_id):
 func save_journal_version(route_id):
   var v_file = File.new()
   var v_filename = get_journal_filename(route_id, FILE_TYPE.VERSION)
-  if !v_file.open(v_filename, File.WRITE) == 0:
+  if v_file.open(v_filename, File.WRITE) != OK:
     print("Could not open journal '", v_filename,"': ", v_file.get_error())
     return
 
@@ -63,7 +63,7 @@ func rename_corrupted_files(route_id):
 func get_journal_file_reader(route_id):
   var file = File.new()
   var filename = get_journal_filename(route_id)
-  if file.open(filename, File.READ) == 0:
+  if file.open(filename, File.READ) == OK:
     if not check_journal_version(route_id):
       print("Could not open journal '", filename,"': Invalid journal version")
       file.close()
@@ -77,7 +77,7 @@ func get_journal_file_reader(route_id):
 func get_journal_file_writer(route_id):
   var file = File.new()
   var filename = get_journal_filename(route_id)
-  if file.open(filename, File.WRITE) == 0:
+  if file.open(filename, File.WRITE) == OK:
     save_journal_version(route_id)
     return file
   else:
@@ -88,7 +88,7 @@ func add_journal(route_id):
 
 func erase_journal(route_id):
   var dir = Directory.new()
-  if dir.open("user://") == 0:
+  if dir.open("user://") == OK:
     dir.remove(get_journal_filename(route_id))
     dir.remove(get_journal_filename(route_id, FILE_TYPE.VERSION))
     profile_data["saves"].erase(route_id)
