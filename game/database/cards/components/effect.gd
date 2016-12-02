@@ -1,5 +1,5 @@
 
 extends "res://game/core/backdoor_node.gd"
 
-func execute(actor, card, target):
+func execute(actor, card, options):
   assert(false)

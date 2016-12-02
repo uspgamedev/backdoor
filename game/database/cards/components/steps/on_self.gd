@@ -10,8 +10,6 @@ func _ready():
     assert(effect extends Effect)
 
 func execute(actor, card, target):
-  var map = get_current_sector()
-  var body = map.get_body_at(target)
-  var options = { "target_body": body }
+  var options = { target_body: actor.get_body() }
   for effect in effects:
     effect.execute(actor, card, options)
