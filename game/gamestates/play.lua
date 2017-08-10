@@ -1,6 +1,8 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
 local Map = require "domain.map"
+local Body = require "domain.body"
+local Actor = require "domain.actor"
 local MapView = require "domain.mapview"
 
 local state = {}
@@ -17,6 +19,9 @@ function state:enter()
 
   local map = Map(10,10)
   local map_view = MapView(map)
+  local body = Body(100)
+  local actor = Actor(body)
+  map:putBody(8,4,body)
   map_view:addElement("L1", nil, "map_view")
 
 end

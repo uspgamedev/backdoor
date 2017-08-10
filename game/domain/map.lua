@@ -15,11 +15,16 @@ function Map:init(w, h)
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      self.tiles[i][j] = {25, 73, 187}
+      self.tiles[i][j] = {25, 73, 127}
       self.bodies[i][j] = false
     end
   end
 
+end
+
+function Map:putBody(i, j, body)
+  assert(not self.bodies[i][j])
+  self.bodies[i][j] = body
 end
 
 return Map

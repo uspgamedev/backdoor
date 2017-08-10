@@ -7,5 +7,7 @@ function Body:init(hp)
   ELEMENT.init(self)
 
   self.hp = hp
-  
+
 end
+
+return Body

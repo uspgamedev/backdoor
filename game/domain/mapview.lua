@@ -1,3 +1,7 @@
+
+local TILE_W = 80
+local TILE_H = 80
+
 local MapView = Class {
   __includes = { ELEMENT }
 }
@@ -15,12 +19,19 @@ function MapView:setMap(map)
 end
 
 function MapView:draw()
-
-  for i = 0, self.map.h-1 do
-    for j = 0, self.map.w-1 do
-      local tile = self.map.tiles[i+1][j+1]
-      love.graphics.setColor(tile)
-      love.graphics.rectangle("fill", j*80, i*80, 80, 80)
+  local map = self.map
+  local g = love.graphics
+  for i = 0, map.h-1 do
+    for j = 0, map.w-1 do
+      local tile = map.tiles[i+1][j+1]
+      local body = map.bodies[i+1][j+1]
+      local x, y = j*TILE_W, i*TILE_H
+      g.setColor(tile)
+      g.rectangle("fill", x, y, TILE_W, TILE_H)
+      if body then
+        g.setColor(200, 100, 100)
+        g.print(body.hp, x, y)
+      end
     end
   end
 
