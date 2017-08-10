@@ -7,7 +7,7 @@ LUX_REPO=externals/luxproject
 UFO_LIB=$(GAME_DIR)/ufo
 UFO_REPO=externals/ufoproject
 
-IMGUI_LIB=$(GAME_DIR)/imgui.so
+IMGUI_LIB=imgui.so
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 

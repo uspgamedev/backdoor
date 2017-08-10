@@ -1,5 +1,6 @@
 
-local Activity = require 'ufo.Activity'
+local Activity  = require 'ufo.Activity'
+local Debug     = require 'activities.DebugActivity'
 
 local BootstrapActivity = class:new{}
 
@@ -9,12 +10,12 @@ BootstrapActivity:inherit(Activity)
 
 function BootstrapActivity:instance (obj)
 
-  setfenv(1, obj)
-
   self:super(obj)
 
+  setfenv(1, obj)
+
   function __accept:Load()
-    print("HUZZAH")
+    switch(Debug())
   end
 
 end
