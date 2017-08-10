@@ -9,7 +9,11 @@ local state = {}
 
 --LOCAL VARIABLES--
 
-local switch --If gamestate should change to another one
+local _switch --If gamestate should change to another one
+local _map_view
+local _current_map
+
+local _turn_delay = 1
 
 --LOCAL FUNCTIONS--
 
@@ -17,12 +21,13 @@ local switch --If gamestate should change to another one
 
 function state:enter()
 
-  local map = Map(10,10)
-  local map_view = MapView(map)
+  _current_map = Map(10,10)
+  _map_view = MapView(_current_map)
+  _map_view:addElement("L1", nil, "map_view")
+
   local body = Body(100)
   local actor = Actor(body)
-  map:putBody(8,4,body)
-  map_view:addElement("L1", nil, "map_view")
+  _current_map:putActor(actor, 8, 4)
 
 end
 
@@ -32,10 +37,15 @@ function state:leave()
 
 end
 
-
 function state:update(dt)
 
-	if switch == "menu" then
+  _turn_delay = _turn_delay - dt
+  if _turn_delay < 0 then
+    _current_map:playTurns()
+    _turn_delay = 1
+  end
+
+	if _switch == "menu" then
 		--Gamestate.switch(GS.MENU)
 	end
 
@@ -52,7 +62,7 @@ end
 function state:keypressed(key)
 
 	if key == "r" then
-		switch = "MENU"
+		_switch = "MENU"
 	else
     	Util.defaultKeyPressed(key)
 	end
