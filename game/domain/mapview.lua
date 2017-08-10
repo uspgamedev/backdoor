@@ -18,7 +18,8 @@ function MapView:draw()
 
   for i = 0, self.map.h-1 do
     for j = 0, self.map.w-1 do
-      love.graphics.setColor(125,75,25)
+      local tile = self.map.tiles[i+1][j+1]
+      love.graphics.setColor(tile)
       love.graphics.rectangle("fill", j*80, i*80, 80, 80)
     end
   end
