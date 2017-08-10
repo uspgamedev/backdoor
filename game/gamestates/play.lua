@@ -4,6 +4,7 @@ local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
 local MapView = require "domain.mapview"
+local AI = require 'domain.ai'
 
 local state = {}
 
@@ -13,7 +14,8 @@ local _switch --If gamestate should change to another one
 local _map_view
 local _current_map
 
-local _turn_delay = 1
+local _turn_time = 1
+local _turn_delay = _turn_time
 
 --LOCAL FUNCTIONS--
 
@@ -25,9 +27,14 @@ function state:enter()
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")
 
-  local body = Body(100)
-  local actor = Actor(body)
-  _current_map:putActor(actor, 8, 4)
+  local rand = love.math.random
+  for _=1,5 do
+    local body = Body(100)
+    local actor = Actor(body)
+    local i, j = rand(_current_map.h), rand(_current_map.w)
+    AI.addActor(actor, 'random_walk')
+    _current_map:putActor(actor, i, j)
+  end
 
 end
 
@@ -42,7 +49,7 @@ function state:update(dt)
   _turn_delay = _turn_delay - dt
   if _turn_delay < 0 then
     _current_map:playTurns()
-    _turn_delay = 1
+    _turn_delay = _turn_time
   end
 
 	if _switch == "menu" then
@@ -62,7 +69,7 @@ end
 function state:keypressed(key)
 
 	if key == "r" then
-		_switch = "MENU"
+		_switch = "menu"
 	else
     	Util.defaultKeyPressed(key)
 	end

@@ -1,4 +1,6 @@
 
+local AI = require 'domain.ai'
+
 local Map = Class {
   __includes = { ELEMENT }
 }
@@ -50,9 +52,11 @@ end
 
 function Map:randomNeighbor(i, j)
   local rand = love.math.random
-  local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
-  i = math.max(1, math.min(self.h, i+di))
-  j = math.max(1, math.min(self.w, j+dj))
+  repeat
+    local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
+    i = math.max(1, math.min(self.h, i+di))
+    j = math.max(1, math.min(self.w, j+dj))
+  until not self.bodies[i][j]
   return i, j
 end
 
@@ -60,18 +64,14 @@ function turnLoop(self)
   local yield = coroutine.yield
   while true do
     for i = 1, 10 do
+      AI.processActors(self)
       for _,actor in ipairs(self.actors) do
         actor:tick()
         if actor:ready() then
           while not actor:hasAction() do
             yield()
           end
-          local action = actor:getAction()
-          if action == 'walk' then
-            local i, j = self:randomNeighbor(unpack(self.bodies[actor.body]))
-            self:putBody(actor.body, i, j)
-            actor:spendTime(3)
-          end
+          actor:getAction()()
         end
       end
     end

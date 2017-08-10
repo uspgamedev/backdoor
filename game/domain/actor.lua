@@ -9,7 +9,7 @@ function Actor:init(body)
 
   self.body = body
   self.cooldown = 10
-  self.next_action = 'walk'
+  self.next_action = nil
 
 end
 
@@ -26,7 +26,13 @@ function Actor:hasAction()
 end
 
 function Actor:getAction()
-  return self.next_action
+  local action = self.next_action
+  self.next_action = nil
+  return action
+end
+
+function Actor:setAction(action)
+  self.next_action = action
 end
 
 function Actor:spendTime(n)
