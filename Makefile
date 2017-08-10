@@ -4,14 +4,19 @@ GAME_DIR=game
 LUX_LIB=$(GAME_DIR)/lux
 LUX_REPO=externals/luxproject
 
-UFO_LIB=$(GAME_DIR)/ufo
-UFO_REPO=externals/ufoproject
+STEAMING_LIB=$(GAME_DIR)/steaming
+STEAMING_REPO=externals/STEAMING
+STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
+								 $(STEAMING_REPO)/clean_template/res_manager.lua \
+								 $(STEAMING_REPO)/clean_template/util.lua \
+								 $(STEAMING_REPO)/clean_template/classes \
+								 $(STEAMING_REPO)/clean_template/extra_libs
 
 IMGUI_LIB=imgui.so
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 
-DEPENDENCIES=$(LUX_LIB) $(UFO_LIB) $(IMGUI_LIB)
+DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB)
 
 ## MAIN TARGETS
 
@@ -20,7 +25,7 @@ all: $(DEPENDENCIES)
 
 update:
 	cd $(LUX_REPO); git pull
-	cd $(UFO_REPO); git pull
+	cd $(STEAMING_REPO); git pull
 
 ## LUX
 
@@ -30,13 +35,14 @@ $(LUX_LIB): $(LUX_REPO)
 $(LUX_REPO):
 	git clone https://github.com/Kazuo256/luxproject.git $(LUX_REPO)
 
-## UFO
+## STEAMING
 
-$(UFO_LIB): $(UFO_REPO)
-	cp -r $(UFO_REPO)/lib/ufo $(UFO_LIB)
+$(STEAMING_LIB): $(STEAMING_REPO)
+	mkdir $(STEAMING_LIB)
+	cp -r $(STEAMING_MODULES) $(STEAMING_LIB)
 
-$(UFO_REPO):
-	git clone https://github.com/Kazuo256/ufoproject.git $(UFO_REPO)
+$(STEAMING_REPO):
+	git clone https://github.com/uspgamedev/STEAMING.git $(STEAMING_REPO)
 
 ## IMGUI
 
