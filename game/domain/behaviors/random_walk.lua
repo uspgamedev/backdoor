@@ -1,8 +1,8 @@
 
+local action = require 'domain.action'
+
 return function (map, actor)
-  return function ()
-    local i, j = map:randomNeighbor(unpack(map.bodies[actor.body]))
-    map:putBody(actor.body, i, j)
-    actor:spendTime(3)
-  end
+  local i, j = unpack(map.bodies[actor.body])
+  i, j = map:randomNeighbor(i, j)
+  return action.MOVE(map, actor, i, j)
 end

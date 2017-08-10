@@ -50,6 +50,11 @@ function Map:putActor(actor, i, j)
   return table.insert(self.actors, actor)
 end
 
+function Map:valid(i, j)
+  return (i >= 1 and i <= self.h) and
+         (j >= 1 and j <= self.w) and not self.bodies[i][j]
+end
+
 function Map:randomNeighbor(i, j)
   local rand = love.math.random
   repeat
@@ -71,7 +76,8 @@ function turnLoop(self)
           while not actor:hasAction() do
             yield()
           end
-          actor:getAction()()
+          local action = actor:getAction()
+          action()
         end
       end
     end
