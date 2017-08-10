@@ -2,6 +2,9 @@
 -- IMGUI
 imgui     = require 'imgui'
 
+-- IMGUI
+cpml     = require 'cpml'
+
 -- HUMP
 Gamestate = require "steaming.extra_libs.hump.gamestate"
 Timer     = require "steaming.extra_libs.hump.timer"

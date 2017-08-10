@@ -16,7 +16,10 @@ IMGUI_LIB=imgui.so
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB)
+CPML_LIB=$(GAME_DIR)/cpml
+CPML_REPO=externals/cpml
+
+DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB)
 
 ## MAIN TARGETS
 
@@ -55,6 +58,16 @@ $(IMGUI_BUILD_DIR): $(IMGUI_REPO)
 
 $(IMGUI_REPO):
 	git clone -b 0.8 https://github.com/slages/love-imgui.git $(IMGUI_REPO)
+
+## CPML
+
+$(CPML_LIB): $(CPML_REPO)
+	mkdir $(CPML_LIB)
+	cp -r $(CPML_REPO)/modules $(CPML_LIB)
+	cp -r $(CPML_REPO)/init.lua $(CPML_LIB)
+
+$(CPML_REPO):
+	git clone https://github.com/excessive/cpml.git $(CPML_REPO)
 
 ## CLEAN UP
 
