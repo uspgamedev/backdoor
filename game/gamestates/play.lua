@@ -1,5 +1,8 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local Map = require "domain.map"
+local MapView = require "domain.mapview"
+
 local state = {}
 
 --LOCAL VARIABLES--
@@ -11,6 +14,10 @@ local switch --If gamestate should change to another one
 --STATE FUNCTIONS--
 
 function state:enter()
+
+  local map = Map(10,10)
+  local map_view = MapView(map)
+  map_view:addElement("L1", nil, "map_view")
 
 end
 
