@@ -19,7 +19,7 @@ function Map:init(w, h)
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      self.tiles[i][j] = {25, 73, 127}
+      self.tiles[i][j] = {25, 73, 95}
       self.bodies[i][j] = false
     end
   end
