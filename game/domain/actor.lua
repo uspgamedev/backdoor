@@ -3,6 +3,8 @@ local Actor = Class{
   __includes = { ELEMENT }
 }
 
+local next_id = 1
+
 function Actor:init(body, behavior)
 
   ELEMENT.init(self)
@@ -10,6 +12,8 @@ function Actor:init(body, behavior)
   self.body = body
   self.behavior = behavior
   self.cooldown = 10
+  self:setId(("actor#%d"):format(1000+next_id))
+  next_id = next_id + 1
 
 end
 

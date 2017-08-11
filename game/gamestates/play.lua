@@ -7,6 +7,8 @@ local Actor = require "domain.actor"
 local MapView = require "domain.mapview"
 local action = require 'domain.action'
 
+local GUI = require 'debug.gui'
+
 local state = {}
 
 --LOCAL VARIABLES--
@@ -17,6 +19,8 @@ local _current_map
 
 local _player
 local _next_player_action
+
+local _gui
 
 --LOCAL FUNCTIONS--
 
@@ -46,6 +50,9 @@ function state:enter()
 
   _current_map:playTurns()
   _next_player_action = nil
+  
+  _gui = GUI(_current_map)
+  _gui:addElement("GUI")
 
 end
 
@@ -78,6 +85,11 @@ end
 
 function state:keypressed(key)
 
+  imgui.KeyPressed(key)
+  if imgui.GetWantCaptureKeyboard() then
+     return
+  end
+
   if DIR[key] then
     _next_player_action = action.MOVE(_current_map, _player, key)
   end
@@ -88,6 +100,30 @@ function state:keypressed(key)
     	Util.defaultKeyPressed(key)
 	end
 
+end
+
+function state:textinput(t)
+  imgui.TextInput(t)
+end
+
+function state:keyreleased(key)
+  imgui.KeyReleased(key)
+end
+
+function state:mousemoved(x, y)
+  imgui.MouseMoved(x, y)
+end
+
+function state:mousepressed(x, y, button)
+  imgui.MousePressed(button)
+end
+
+function state:mousereleased(x, y, button)
+  imgui.MouseReleased(button)
+end
+
+function state:wheelmoved(x, y)
+  imgui.WheelMoved(y)
 end
 
 --Return state functions
