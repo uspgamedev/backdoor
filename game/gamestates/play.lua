@@ -4,7 +4,6 @@ local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
 local MapView = require "domain.mapview"
-local AI = require 'domain.ai'
 local action = require 'domain.action'
 
 local state = {}
@@ -16,7 +15,7 @@ local _map_view
 local _current_map
 
 local _player
-local _refresh
+local _next_player_action
 
 --LOCAL FUNCTIONS--
 
@@ -29,20 +28,23 @@ function state:enter()
   _map_view:addElement("L1", nil, "map_view")
 
   local rand = love.math.random
+  local monster_behavior = require 'domain.behaviors.random_walk'
   for _=1,5 do
     local body = Body(100)
-    local actor = Actor(body)
+    local actor = Actor(body, monster_behavior)
     local i, j = rand(_current_map.h), rand(_current_map.w)
-    AI.addActor(actor, 'random_walk')
     _current_map:putActor(actor, i, j)
   end
 
   local body = Body(137)
-  _player = Actor(body)
+  _player = Actor(body,
+    function (self, map) return select(2,coroutine.yield()) end
+  )
   local i, j = rand(_current_map.h), rand(_current_map.w)
   _current_map:putActor(_player, i, j)
 
-  _refresh = true
+  _current_map:playTurns()
+  _next_player_action = nil
 
 end
 
@@ -54,9 +56,9 @@ end
 
 function state:update(dt)
 
-  if _refresh then
-    _current_map:playTurns()
-    _refresh = false
+  if _next_player_action then
+    _current_map:playTurns(_next_player_action)
+    _next_player_action = nil
   end
 
 	if _switch == "menu" then
@@ -84,9 +86,8 @@ function state:keypressed(key)
 
   local dir = dir_keys[key] if dir then
     local i, j = unpack(_current_map.bodies[_player.body])
-    _player:setAction(action.MOVE(_current_map, _player, i + dir[1],
-                                  j + dir[2]))
-    _refresh = true
+    _next_player_action = action.MOVE(_current_map, _player, i + dir[1],
+                                      j + dir[2])
   end
 
 	if key == "r" then
@@ -99,3 +100,4 @@ end
 
 --Return state functions
 return state
+

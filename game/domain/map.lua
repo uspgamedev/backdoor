@@ -1,6 +1,4 @@
 
-local AI = require 'domain.ai'
-
 local Map = Class {
   __includes = { ELEMENT }
 }
@@ -65,28 +63,20 @@ function Map:randomNeighbor(i, j)
   return i, j
 end
 
-function turnLoop(self)
+function turnLoop(self, ...)
   local yield = coroutine.yield
   while true do
-    for i = 1, 10 do
-      AI.processActors(self)
-      for _,actor in ipairs(self.actors) do
-        actor:tick()
-        if actor:ready() then
-          while not actor:hasAction() do
-            yield()
-          end
-          local action = actor:getAction()
-          action()
-        end
+    for _,actor in ipairs(self.actors) do
+      actor:tick()
+      if actor:ready() then
+        actor:makeAction(self)
       end
     end
-    yield()
   end
 end
 
-function Map:playTurns()
-  return assert(coroutine.resume(self.turnLoop, self))
+function Map:playTurns(...)
+  return assert(coroutine.resume(self.turnLoop, self, ...))
 end
 
 return Map

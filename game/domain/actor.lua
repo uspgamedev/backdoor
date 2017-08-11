@@ -3,13 +3,13 @@ local Actor = Class{
   __includes = { ELEMENT }
 }
 
-function Actor:init(body)
+function Actor:init(body, behavior)
 
   ELEMENT.init(self)
 
   self.body = body
+  self.behavior = behavior
   self.cooldown = 10
-  self.next_action = nil
 
 end
 
@@ -21,18 +21,8 @@ function Actor:ready()
   return self.cooldown <= 0
 end
 
-function Actor:hasAction()
-  return self.next_action
-end
-
-function Actor:getAction()
-  local action = self.next_action
-  self.next_action = nil
-  return action
-end
-
-function Actor:setAction(action)
-  self.next_action = action
+function Actor:makeAction(map)
+  return self:behavior(map) ()
 end
 
 function Actor:spendTime(n)
