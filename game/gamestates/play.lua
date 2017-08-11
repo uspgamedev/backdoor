@@ -5,7 +5,7 @@ local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
 local action = require 'domain.action'
-local MapView = require "view.mapview"
+local MapView = require "domain.view.mapview"
 
 local GUI = require 'debug.gui'
 
