@@ -4,8 +4,8 @@ local DIR = require 'domain.definitions.dir'
 local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
-local MapView = require "domain.mapview"
 local action = require 'domain.action'
+local MapView = require "view.mapview"
 
 local GUI = require 'debug.gui'
 
