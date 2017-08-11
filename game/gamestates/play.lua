@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local DIR = require 'domain.definitions.dir'
 local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
@@ -75,19 +76,10 @@ function state:draw()
 
 end
 
-local dir_keys = {
-  left = {0,-1},
-  right = {0,1},
-  down = {1,0},
-  up = {-1,0},
-}
-
 function state:keypressed(key)
 
-  local dir = dir_keys[key] if dir then
-    local i, j = unpack(_current_map.bodies[_player.body])
-    _next_player_action = action.MOVE(_current_map, _player, i + dir[1],
-                                      j + dir[2])
+  if DIR[key] then
+    _next_player_action = action.MOVE(_current_map, _player, key)
   end
 
 	if key == "r" then
