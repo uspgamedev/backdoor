@@ -24,6 +24,22 @@ local _gui
 
 --LOCAL FUNCTIONS--
 
+local function _makeActor(bodyspec, actorspec, i, j)
+  local body = Body(bodyspec)
+  local actor = Actor(body, actorspec)
+  _current_map:putActor(actor, i, j)
+  return actor
+end
+
+local function _randomValidTile()
+  local rand = love.math.random
+  local i, j
+  repeat
+    i, j = rand(_current_map.h), rand(_current_map.w)
+  until _current_map:valid(i, j)
+  return i, j
+end
+
 --STATE FUNCTIONS--
 
 function state:enter()
@@ -32,21 +48,11 @@ function state:enter()
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")
 
-  local rand = love.math.random
   for _=1,5 do
-    local body = Body 'slime'
-    local actor = Actor(body, 'dumb')
-    local i, j
-    repeat
-      i, j = rand(_current_map.h), rand(_current_map.w)
-    until _current_map:valid(i, j)
-    _current_map:putActor(actor, i, j)
+    _makeActor('slime', 'dumb', _randomValidTile())
   end
 
-  local body = Body 'hearthborn'
-  _player = Actor(body, 'player')
-  local i, j = rand(_current_map.h), rand(_current_map.w)
-  _current_map:putActor(_player, i, j)
+  _player = _makeActor('hearthborn', 'player', _randomValidTile())
   _map_view:lookAt(_player)
 
   _current_map:playTurns()
