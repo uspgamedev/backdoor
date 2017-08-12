@@ -1,7 +1,7 @@
 --MODULE FOR DRAWING STUFF--
 
 local tween = require 'helpers.tween'
-local first_time = true
+local first_time = false
 
 local fade = 1
 

@@ -17,7 +17,7 @@ function setup.config()
 
 
     --GLOBAL VARIABLES--
-    DEBUG = true --DEBUG mode status
+    DEBUG = false --DEBUG mode status
 
     O_WIN_W = 1280 --The original width of your game. Work with this value when using res_manager multiple resolutions support
     O_WIN_H = 720  --The original height of your game. Work with this value when using res_manager multiple resolutions support
