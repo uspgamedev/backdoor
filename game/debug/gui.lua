@@ -1,39 +1,70 @@
 
+local tween = require 'helpers.tween'
+
 local GUI = Class {
   __includes = { ELEMENT }
 }
 
-function GUI:init(map)
+local view = {}
+
+function GUI:init()
 
   ELEMENT.init(self)
-  self.map = map
-  self.shown_actors = {}
+  self.stack = {}
+  self.active = false
 
 end
 
+function GUI:push(level, viewname, ...)
+  for i=level,#self.stack do
+    self.stack[i] = nil
+  end
+  self.stack[level] = view[viewname](level, ...)
+end
+
+function view.main(level)
+  local x = tween.start((level-2)*200, (level-1)*200, 5)
+  return function(self)
+    imgui.SetNextWindowPos(x(), 200, "Always")
+    imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
+    imgui.Begin("Actors", true, { "NoCollapse" })
+    for actor,_ in pairs(Util.findSubtype 'actor') do
+      if imgui.Button(actor.id) then
+        self:push(level+1, 'actor', actor)
+      end
+    end
+    imgui.End()
+  end
+end
+
+function view.actor(level, actor)
+  local x = tween.start((level-2)*200, (level-1)*200, 5)
+  return function(self)
+    imgui.SetNextWindowPos(x(), 200, "Always")
+    imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
+    imgui.Begin(actor.id, false, { "NoCollapse" })
+    imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
+    imgui.End()
+  end
+end
+
+
 function GUI:draw()
-  if not DEBUG then return end
+  if DEBUG and not self.active then
+    self:push(1, 'main')
+    self.active = true
+  elseif not DEBUG then
+    self.stack = {}
+    self.active = false
+    return
+  end
+
   local g = love.graphics
 
   imgui.NewFrame()
 
-  imgui.SetNextWindowPos(0, 200, "Always")
-  imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
-  imgui.Begin("Actors", true, { "NoCollapse" })
-  for actor,_ in pairs(Util.findSubtype 'actor') do
-    if imgui.Button(actor.id) then
-      self.shown_actors[actor] = not self.shown_actors[actor]
-    end
-  end
-  imgui.End()
-
-  for actor,show in pairs(self.shown_actors) do
-    if show then
-      imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
-      imgui.Begin(actor.id, false, { "AlwaysAutoResize" })
-      imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
-      imgui.End()
-    end
+  for _,view in ipairs(self.stack) do
+    view(self)
   end
 
   g.setBackgroundColor(50, 80, 80, 255)
