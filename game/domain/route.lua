@@ -22,6 +22,7 @@ function Route:instance(obj)
   function obj.register(element)
     local id = ID_FORMAT:format(ID_BASE + _next_id)
     element:setId(id)
+    element:setSubtype(element.spectype)
     _next_id = _next_id + 1
     return id, element
   end

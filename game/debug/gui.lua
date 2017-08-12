@@ -20,7 +20,7 @@ function GUI:draw()
   imgui.SetNextWindowPos(50, 50, "FirstUseEver")
   imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
   imgui.Begin("Actors", true, { "NoCollapse" })
-  for _,actor in ipairs(self.map.actors) do
+  for actor,_ in pairs(Util.findSubtype 'actor') do
     if imgui.Button(actor.id) then
       self.shown_actors[actor] = not self.shown_actors[actor]
     end
