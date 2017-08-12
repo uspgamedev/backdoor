@@ -17,7 +17,7 @@ function GUI:draw()
 
   imgui.NewFrame()
 
-  imgui.SetNextWindowPos(50, 50, "FirstUseEver")
+  imgui.SetNextWindowPos(0, 200, "Always")
   imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
   imgui.Begin("Actors", true, { "NoCollapse" })
   for actor,_ in pairs(Util.findSubtype 'actor') do
