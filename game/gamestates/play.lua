@@ -35,7 +35,7 @@ function state:enter()
   local rand = love.math.random
   local monster_behavior = require 'domain.behaviors.random_walk'
   for _=1,5 do
-    local body = Body(100)
+    local body = Body 'slime'
     local actor = Actor(body, monster_behavior)
     local i, j
     repeat
@@ -44,7 +44,7 @@ function state:enter()
     _current_map:putActor(actor, i, j)
   end
 
-  local body = Body(137)
+  local body = Body 'hearthborn'
   _player = Actor(body,
     function (self, map) return select(2,coroutine.yield()) end
   )

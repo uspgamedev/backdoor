@@ -54,7 +54,7 @@ function MapView:draw()
           g.setColor(90, 140, 140)
           g.polygon('fill', 0.0, -0.8, 0.25, 0.0, 0.0, 0.2)
           g.pop()
-          g.print(body.hp, 0, 0)
+          g.print(body:getHP(), 0, 0)
         end
         g.pop()
       end
