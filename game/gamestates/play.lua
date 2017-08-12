@@ -28,7 +28,7 @@ local _gui
 
 function state:enter()
 
-  _current_map = Map(8,8)
+  _current_map = Map(20,20)
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")
 
