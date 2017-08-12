@@ -31,12 +31,12 @@ function GUI:draw()
     if show then
       imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
       imgui.Begin(actor.id, false, { "AlwaysAutoResize" })
-      imgui.Text(("HP: %d"):format(actor.body:getHP()))
+      imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
       imgui.End()
     end
   end
 
-  g.setBackgroundColor(100, 120, 120, 255)
+  g.setBackgroundColor(50, 80, 80, 255)
   g.setColor(255, 255, 255)
   imgui.Render()
 end

@@ -26,6 +26,7 @@ end
 function MapView:draw()
   local map = self.map
   local g = love.graphics
+  g.setBackgroundColor(50, 80, 80, 255)
   do
     local x, y = CAM:position()
     local i, j = unpack(map:getActorPos(self.target))

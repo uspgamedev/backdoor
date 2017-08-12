@@ -1,6 +1,7 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
 local DIR = require 'domain.definitions.dir'
+local Route = require 'domain.route'
 local Map = require "domain.map"
 local Body = require "domain.body"
 local Actor = require "domain.actor"
@@ -14,6 +15,7 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _switch --If gamestate should change to another one
+local _route
 local _map_view
 local _current_map
 
@@ -25,8 +27,9 @@ local _gui
 --LOCAL FUNCTIONS--
 
 local function _makeActor(bodyspec, actorspec, i, j)
-  local body = Body(bodyspec)
-  local actor = Actor(body, actorspec)
+  local bid, body = _route.register(Body(bodyspec))
+  local aid, actor = _route.register(Actor(actorspec))
+  actor:setBody(bid)
   _current_map:putActor(actor, i, j)
   return actor
 end
@@ -44,6 +47,8 @@ end
 
 function state:enter()
 
+  _route = Route()
+
   _current_map = Map(20,20)
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")
@@ -60,7 +65,6 @@ function state:enter()
   
   _gui = GUI(_current_map)
   _gui:addElement("GUI")
-  DEBUG = false
 
 end
 

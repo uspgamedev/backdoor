@@ -46,12 +46,12 @@ function Map:putBody(body, i, j)
 end
 
 function Map:putActor(actor, i, j)
-  self:putBody(actor.body, i, j)
+  self:putBody(actor:getBody(), i, j)
   return table.insert(self.actors, actor)
 end
 
 function Map:getActorPos(actor)
-  return self.bodies[actor.body]
+  return self.bodies[actor:getBody()]
 end
 
 function Map:valid(i, j)

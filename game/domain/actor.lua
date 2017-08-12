@@ -5,13 +5,13 @@ local Actor = Class{
   __includes = { GameElement }
 }
 
-function Actor:init(body, spec_name)
+function Actor:init(spec_name)
 
   GameElement.init(self, 'actor', spec_name)
 
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
-  self.body = body
+  self.body_id = nil
   self.cooldown = 10
 
 end
@@ -25,11 +25,11 @@ function Actor:saveState(state)
 end
 
 function Actor:setBody(body_id)
-  self.body = body_id
+  self.body_id = body_id
 end
 
 function Actor:getBody()
-  return Util.findId(self.body)
+  return Util.findId(self.body_id)
 end
 
 function Actor:tick()
