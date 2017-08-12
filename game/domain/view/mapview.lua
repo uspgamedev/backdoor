@@ -11,6 +11,7 @@ function MapView:init(map)
   ELEMENT.init(self)
 
   self.map = map
+  self.target = nil
 
 end
 
@@ -18,9 +19,20 @@ function MapView:setMap(map)
   self.map = map
 end
 
+function MapView:lookAt(target)
+  self.target = target
+end
+
 function MapView:draw()
   local map = self.map
   local g = love.graphics
+  do
+    local x, y = CAM:position()
+    local i, j = unpack(map:getActorPos(self.target))
+    local tx, ty = (j-0.5)*TILE_W, (i-0.5)*TILE_H
+    local smooth = 1/5
+    CAM:move((tx - x)*smooth,(ty - y)*smooth)
+  end
   for i = 0, map.h-1 do
     for j = 0, map.w-1 do
       local tile = map.tiles[i+1][j+1]

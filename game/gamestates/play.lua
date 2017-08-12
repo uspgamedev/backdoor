@@ -47,6 +47,7 @@ function state:enter()
   )
   local i, j = rand(_current_map.h), rand(_current_map.w)
   _current_map:putActor(_player, i, j)
+  _map_view:lookAt(_player)
 
   _current_map:playTurns()
   _next_player_action = nil

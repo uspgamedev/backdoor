@@ -19,7 +19,7 @@ function Map:init(w, h)
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      self.tiles[i][j] = {25, 73, 95}
+      self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
       self.bodies[i][j] = false
     end
   end
@@ -46,6 +46,10 @@ end
 function Map:putActor(actor, i, j)
   self:putBody(actor.body, i, j)
   return table.insert(self.actors, actor)
+end
+
+function Map:getActorPos(actor)
+  return self.bodies[actor.body]
 end
 
 function Map:valid(i, j)

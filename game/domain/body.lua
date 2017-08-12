@@ -1,3 +1,4 @@
+
 local Body = Class{
   __includes = { ELEMENT }
 }
@@ -11,3 +12,4 @@ function Body:init(hp)
 end
 
 return Body
+
