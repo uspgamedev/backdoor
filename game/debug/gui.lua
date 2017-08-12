@@ -23,8 +23,9 @@ function GUI:push(viewname, ...)
   local x = tween.start((level-2)*200, (level-1)*200, 5)
   self.stack[level] = function (self)
     imgui.SetNextWindowPos(x(), 200, "Always")
-    imgui.SetNextWindowSizeConstraints(200, 100, 200, 400)
-    local _,open = imgui.Begin(viewname, true, { "NoCollapse" })
+    imgui.SetNextWindowSizeConstraints(200, 80, 200, 400)
+    local _,open = imgui.Begin(viewname, true,
+                               { "NoCollapse", "AlwaysAutoResize" })
     if open then
       render(self)
     end
@@ -40,9 +41,32 @@ function GUI:pop(level)
 end
 
 view["Debug Menu"] = function()
+  local selected = nil
+  local menus = {
+    "Game", "Current Route", "Database"
+  }
+  return function(self)
+    for _,menu in ipairs(menus) do
+      if imgui.Selectable(menu, menu == selected) then
+        selected = menu
+        self:push(menu)
+      end
+    end
+  end
+end
+
+view["Game"] = function()
+  return function(self)
+    imgui.Text("Not yet implemented ;)")
+  end
+end
+
+view["Current Route"] = function()
+  local selected = nil
   return function(self)
     for actor,_ in pairs(Util.findSubtype 'actor') do
-      if imgui.Button(actor.id) then
+      if imgui.Selectable(actor.id, actor == selected) then
+        selected = actor
         self:push("Actor", actor)
       end
     end
@@ -56,6 +80,11 @@ view["Actor"] = function (actor)
   end
 end
 
+view["Database"] = function()
+  return function(self)
+    imgui.Text("Not yet implemented ;)")
+  end
+end
 
 function GUI:draw()
   if DEBUG and not self.active then
