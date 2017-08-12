@@ -1,6 +1,8 @@
 
 local tween = require 'helpers.tween'
 
+local MENU_WIDTH = 240
+
 local GUI = Class {
   __includes = { ELEMENT }
 }
@@ -20,10 +22,10 @@ function GUI:push(viewname, ...)
   local level = self.current_level+1
   self:pop(level)
   local render = view[viewname](...)
-  local x = tween.start((level-2)*200, (level-1)*200, 5)
+  local x = tween.start((level-2)*MENU_WIDTH, (level-1)*(MENU_WIDTH+8), 5)
   self.stack[level] = function (self)
-    imgui.SetNextWindowPos(x(), 200, "Always")
-    imgui.SetNextWindowSizeConstraints(200, 80, 200, 400)
+    imgui.SetNextWindowPos(x(), MENU_WIDTH, "Always")
+    imgui.SetNextWindowSizeConstraints(MENU_WIDTH, 80, MENU_WIDTH, 400)
     local _,open = imgui.Begin(viewname, true,
                                { "NoCollapse", "AlwaysAutoResize" })
     if open then
@@ -74,9 +76,12 @@ view["Current Route"] = function()
 end
 
 view["Actor"] = function (actor)
+  local edit_hp
   return function(self)
     imgui.Text(("ID: %s"):format(actor:getId()))
-    imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
+    local hp = actor:getBody():getHP()
+    local _, newhp = imgui.SliderInt("HP", hp, 1, actor:getBody():getMaxHP())
+    actor:getBody():setHP(newhp)
   end
 end
 
