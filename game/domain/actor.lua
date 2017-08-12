@@ -1,16 +1,35 @@
 
+local GameElement = require 'domain.gameelement'
+
 local Actor = Class{
-  __includes = { ELEMENT }
+  __includes = { GameElement }
 }
 
-function Actor:init(body)
+function Actor:init(spec_name)
 
-  ELEMENT.init(self)
+  GameElement.init(self, 'actor', spec_name)
 
-  self.body = body
+  self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
+
+  self.body_id = nil
   self.cooldown = 10
-  self.next_action = nil
 
+end
+
+function Actor:loadState(state)
+
+end
+
+function Actor:saveState(state)
+
+end
+
+function Actor:setBody(body_id)
+  self.body_id = body_id
+end
+
+function Actor:getBody()
+  return Util.findId(self.body_id)
 end
 
 function Actor:tick()
@@ -21,18 +40,8 @@ function Actor:ready()
   return self.cooldown <= 0
 end
 
-function Actor:hasAction()
-  return self.next_action
-end
-
-function Actor:getAction()
-  local action = self.next_action
-  self.next_action = nil
-  return action
-end
-
-function Actor:setAction(action)
-  self.next_action = action
+function Actor:makeAction(map)
+  return self:behavior(map) ()
 end
 
 function Actor:spendTime(n)

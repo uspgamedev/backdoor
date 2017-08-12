@@ -1,6 +1,4 @@
 
-local AI = require 'domain.ai'
-
 local Map = Class {
   __includes = { ELEMENT }
 }
@@ -21,7 +19,11 @@ function Map:init(w, h)
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      self.tiles[i][j] = {25, 73, 127}
+      if love.math.random() > 0.2 then
+        self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
+      else
+        self.tiles[i][j] = false
+      end
       self.bodies[i][j] = false
     end
   end
@@ -31,10 +33,8 @@ function Map:init(w, h)
 end
 
 function Map:putBody(body, i, j)
-  assert(i >= 1 and i <= self.h)
-  assert(j >= 1 and j <= self.w)
+  assert(self:valid(i,j))
   local bodies = self.bodies
-  assert(not bodies[i][j])
   local pos = bodies[body] if pos then
     bodies[pos[1]][pos[2]] = false
   else
@@ -46,13 +46,18 @@ function Map:putBody(body, i, j)
 end
 
 function Map:putActor(actor, i, j)
-  self:putBody(actor.body, i, j)
+  self:putBody(actor:getBody(), i, j)
   return table.insert(self.actors, actor)
+end
+
+function Map:getActorPos(actor)
+  return self.bodies[actor:getBody()]
 end
 
 function Map:valid(i, j)
   return (i >= 1 and i <= self.h) and
-         (j >= 1 and j <= self.w) and not self.bodies[i][j]
+         (j >= 1 and j <= self.w) and
+         self.tiles[i][j] and not self.bodies[i][j]
 end
 
 function Map:randomNeighbor(i, j)
@@ -65,28 +70,20 @@ function Map:randomNeighbor(i, j)
   return i, j
 end
 
-function turnLoop(self)
+function turnLoop(self, ...)
   local yield = coroutine.yield
   while true do
-    for i = 1, 10 do
-      AI.processActors(self)
-      for _,actor in ipairs(self.actors) do
-        actor:tick()
-        if actor:ready() then
-          while not actor:hasAction() do
-            yield()
-          end
-          local action = actor:getAction()
-          action()
-        end
+    for _,actor in ipairs(self.actors) do
+      actor:tick()
+      if actor:ready() then
+        actor:makeAction(self)
       end
     end
-    yield()
   end
 end
 
-function Map:playTurns()
-  return assert(coroutine.resume(self.turnLoop, self))
+function Map:playTurns(...)
+  return assert(coroutine.resume(self.turnLoop, self, ...))
 end
 
 return Map
