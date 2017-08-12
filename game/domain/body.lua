@@ -1,16 +1,14 @@
 
-local DB = require 'database'
+local GameElement = require 'domain.gameelement'
 
 local Body = Class{
-  __includes = { ELEMENT }
+  __includes = { GameElement }
 }
 
 function Body:init(specname)
 
-  ELEMENT.init(self)
+  GameElement.init(self, 'body', specname)
 
-  self.specname = specname
-  self.spec = DB.bodyspecs[specname]
   self.damage = 0
 
 end
@@ -26,7 +24,7 @@ function Body:saveState()
 end
 
 function Body:getHP()
-  return self.spec.hp - self.damage
+  return self:getSpec('hp') - self.damage
 end
 
 return Body

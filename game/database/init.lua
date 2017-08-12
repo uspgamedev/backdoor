@@ -1,14 +1,24 @@
 
 local DB = {}
 
-DB.bodyspecs = {}
+DB.body = {}
 
-DB.bodyspecs['hearthborn'] = {
+DB.body['hearthborn'] = {
   hp = 12
 }
 
-DB.bodyspecs['slime'] = {
+DB.body['slime'] = {
   hp = 8
+}
+
+DB.actor = {}
+
+DB.actor['player'] = {
+  behavior = 'player'
+}
+
+DB.actor['dumb'] = {
+  behavior = 'random_walk'
 }
 
 return DB

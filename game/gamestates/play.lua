@@ -35,7 +35,7 @@ function state:enter()
   local rand = love.math.random
   for _=1,5 do
     local body = Body 'slime'
-    local actor = Actor(body, 'random_walk')
+    local actor = Actor(body, 'dumb')
     local i, j
     repeat
       i, j = rand(_current_map.h), rand(_current_map.w)
@@ -54,6 +54,7 @@ function state:enter()
   
   _gui = GUI(_current_map)
   _gui:addElement("GUI")
+  DEBUG = false
 
 end
 
