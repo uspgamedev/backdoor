@@ -33,10 +33,9 @@ function state:enter()
   _map_view:addElement("L1", nil, "map_view")
 
   local rand = love.math.random
-  local monster_behavior = require 'domain.behaviors.random_walk'
   for _=1,5 do
     local body = Body 'slime'
-    local actor = Actor(body, monster_behavior)
+    local actor = Actor(body, 'random_walk')
     local i, j
     repeat
       i, j = rand(_current_map.h), rand(_current_map.w)
@@ -45,9 +44,7 @@ function state:enter()
   end
 
   local body = Body 'hearthborn'
-  _player = Actor(body,
-    function (self, map) return select(2,coroutine.yield()) end
-  )
+  _player = Actor(body, 'player')
   local i, j = rand(_current_map.h), rand(_current_map.w)
   _current_map:putActor(_player, i, j)
   _map_view:lookAt(_player)

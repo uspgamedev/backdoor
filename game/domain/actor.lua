@@ -5,15 +5,24 @@ local Actor = Class{
 
 local next_id = 1
 
-function Actor:init(body, behavior)
+function Actor:init(body, behavior_name)
 
   ELEMENT.init(self)
 
   self.body = body
-  self.behavior = behavior
+  self.behavior_name = behavior_name
+  self.behavior = require('domain.behaviors.' .. behavior_name)
   self.cooldown = 10
   self:setId(("actor#%d"):format(1000+next_id))
   next_id = next_id + 1
+
+end
+
+function Actor:loadState(state)
+
+end
+
+function Actor:saveState(state)
 
 end
 
