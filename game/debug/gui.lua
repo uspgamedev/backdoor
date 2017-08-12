@@ -65,7 +65,7 @@ view["Current Route"] = function()
   local selected = nil
   return function(self)
     for actor,_ in pairs(Util.findSubtype 'actor') do
-      if imgui.Selectable(actor.id, actor == selected) then
+      if imgui.Selectable(actor:getId(), actor == selected) then
         selected = actor
         self:push("Actor", actor)
       end
@@ -75,7 +75,7 @@ end
 
 view["Actor"] = function (actor)
   return function(self)
-    imgui.Text(("ID: %s"):format(actor.id))
+    imgui.Text(("ID: %s"):format(actor:getId()))
     imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
   end
 end
