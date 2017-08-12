@@ -37,7 +37,10 @@ function state:enter()
   for _=1,5 do
     local body = Body(100)
     local actor = Actor(body, monster_behavior)
-    local i, j = rand(_current_map.h), rand(_current_map.w)
+    local i, j
+    repeat
+      i, j = rand(_current_map.h), rand(_current_map.w)
+    until _current_map:valid(i, j)
     _current_map:putActor(actor, i, j)
   end
 
