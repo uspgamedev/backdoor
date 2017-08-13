@@ -22,12 +22,12 @@ end
 function GUI:push(viewname, ...)
   local level = self.current_level+1
   self:pop(level)
-  local render = view[viewname](...)
+  local title, render = view[viewname](...)
   local x = tween.start((level-2)*MENU_WIDTH, (level-1)*(MENU_WIDTH+8), 5)
   self.stack[level] = function (self)
     imgui.SetNextWindowPos(x(), MENU_WIDTH, "Always")
     imgui.SetNextWindowSizeConstraints(MENU_WIDTH, 80, MENU_WIDTH, 400)
-    local _,open = imgui.Begin(viewname, true,
+    local _,open = imgui.Begin(title, true,
                                { "NoCollapse", "AlwaysAutoResize" })
     if open then
       render(self)
@@ -43,12 +43,12 @@ function GUI:pop(level)
   end
 end
 
-view["Debug Menu"] = function()
+view["debug_menu"] = function()
   local selected = nil
   local menus = {
-    "Game", "Current Route", "Database"
+    "game", "current_route", "database"
   }
-  return function(self)
+  return "Debug Menu", function(self)
     for _,menu in ipairs(menus) do
       if imgui.Selectable(menu, menu == selected) then
         selected = menu
@@ -58,27 +58,27 @@ view["Debug Menu"] = function()
   end
 end
 
-view["Game"] = function()
-  return function(self)
+view["game"] = function()
+  return "Game", function(self)
     imgui.Text("Not yet implemented ;)")
   end
 end
 
-view["Current Route"] = function()
+view["current_route"] = function()
   local selected = nil
-  return function(self)
+  return "Current Route", function(self)
     for actor,_ in pairs(Util.findSubtype 'actor') do
       if imgui.Selectable(actor:getId(), actor == selected) then
         selected = actor
-        self:push("Actor", actor)
+        self:push("actor", actor)
       end
     end
   end
 end
 
-view["Actor"] = function (actor)
+view["actor"] = function (actor)
   local edit_hp
-  return function(self)
+  return "Actor Inspector", function(self)
     imgui.Text(("ID: %s"):format(actor:getId()))
     local hp = actor:getBody():getHP()
     imgui.PushItemWidth(100)
@@ -89,19 +89,19 @@ view["Actor"] = function (actor)
   end
 end
 
-view["Database"] = function()
+view["database"] = function()
   local domains = {
     'body', 'actor',
     body = "Body Types",
     actor = "Actor Types"
   }
   local selected = nil
-  return function(self)
+  return "Database", function(self)
     for _,name in ipairs(domains) do
       local title = domains[name]
       if imgui.Selectable(title, selected == name) then
         selected = name
-        self:push("Domain List", selected)
+        self:push("domain_list", selected)
       end
     end
     imgui.Spacing()
@@ -111,13 +111,13 @@ view["Database"] = function()
   end
 end
 
-view["Domain List"] = function(domain_name)
+view["domain_list"] = function(domain_name)
   local selected = nil
-  return function(self)
+  return "Domain List", function(self)
     for name,spec in pairs(DB.loadDomain(domain_name)) do
       if imgui.Selectable(name, selected == name) then
         selected = name
-        self:push("Specification", spec, domain_name)
+        self:push("specification", spec, domain_name)
       end
     end
   end
@@ -161,21 +161,20 @@ function spec_item:enum(spec, domain_name, key)
   imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
   imgui.PopItemWidth()
   if imgui.IsItemClicked() then
-    self:push("Choose One", key.name, options, value)
+    self:push("choose_one", key.name, options, value)
   end
 end
 
-view["Specification"] = function(spec, domain_name)
-  return function(self)
-    imgui.Text("Wait for it...")
+view["specification"] = function(spec, domain_name)
+  return "Specification", function(self)
     for _,key in DB.schemaFor(domain_name) do
       spec_item[key.type](self, spec, domain_name, key)
     end
   end
 end
 
-view["Choose One"] = function(name, list, value)
-  return function(self)
+view["choose_one"] = function(name, list, value)
+  return "Choose One", function(self)
     imgui.Text(("Choose a %s:"):format(name))
     imgui.PushItemWidth(160)
     local changed, newvalue = imgui.ListBox("", value(), list, #list)
@@ -189,7 +188,7 @@ end
 function GUI:draw()
   if DEBUG and not self.active then
     self.current_level = 0
-    self:push("Debug Menu")
+    self:push("debug_menu")
     self.active = true
   elseif not DEBUG then
     self.stack = {}
