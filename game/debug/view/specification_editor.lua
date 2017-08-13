@@ -4,11 +4,9 @@ local DB = require 'database'
 local spec_item = {}
 
 function spec_item:integer(spec, domain_name, key)
-  imgui.PushItemWidth(160)
   local value = spec[key.id]
-  local _, newvalue = imgui.InputInt(key.name, value, 1, 10)
+  local _, newvalue = imgui.InputInt(key.name, value or 0, 1, 10)
   spec[key.id] = newvalue
-  imgui.PopItemWidth()
 end
 
 function spec_item:enum(spec, domain_name, key)
@@ -35,9 +33,7 @@ function spec_item:enum(spec, domain_name, key)
       return current
     end
   end
-  imgui.PushItemWidth(160)
   imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
-  imgui.PopItemWidth()
   if imgui.IsItemClicked() then
     self:push("list_picker", key.name, options, value)
   end
@@ -46,9 +42,11 @@ end
 return function(spec, domain_name, title)
 
   return title .. " Editor", function(self)
+    imgui.PushItemWidth(120)
     for _,key in DB.schemaFor(domain_name) do
       spec_item[key.type](self, spec, domain_name, key)
     end
+    imgui.PopItemWidth()
   end
 
 end

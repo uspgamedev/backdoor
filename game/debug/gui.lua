@@ -40,7 +40,7 @@ function GUI:push(viewname, ...)
     local _,open = imgui.Begin(title, true,
                                { "NoCollapse", "AlwaysAutoResize" })
     if open then
-      render(self)
+      open = not render(self)
     end
     imgui.End()
     return open
