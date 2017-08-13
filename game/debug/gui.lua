@@ -43,53 +43,12 @@ function GUI:pop(level)
   end
 end
 
-view["debug_menu"] = function()
-  local selected = nil
-  local menus = {
-    "game", "current_route", "database"
-  }
-  return "Debug Menu", function(self)
-    for _,menu in ipairs(menus) do
-      if imgui.Selectable(menu, menu == selected) then
-        selected = menu
-        self:push(menu)
-      end
-    end
-  end
-end
+view["debug_menu"]      = require 'debug.view.debug_menu'
+view["game_menu"]       = require 'debug.view.game_menu'
+view["route_menu"]      = require 'debug.view.route_menu'
+view["actor_inspector"] = require 'debug.view.actor_inspector'
 
-view["game"] = function()
-  return "Game", function(self)
-    imgui.Text("Not yet implemented ;)")
-  end
-end
-
-view["current_route"] = function()
-  local selected = nil
-  return "Current Route", function(self)
-    for actor,_ in pairs(Util.findSubtype 'actor') do
-      if imgui.Selectable(actor:getId(), actor == selected) then
-        selected = actor
-        self:push("actor", actor)
-      end
-    end
-  end
-end
-
-view["actor"] = function (actor)
-  local edit_hp
-  return "Actor Inspector", function(self)
-    imgui.Text(("ID: %s"):format(actor:getId()))
-    local hp = actor:getBody():getHP()
-    imgui.PushItemWidth(100)
-    local _, newhp = imgui.SliderInt("Hit Points", hp, 1,
-                                     actor:getBody():getMaxHP())
-    imgui.PopItemWidth()
-    actor:getBody():setHP(newhp)
-  end
-end
-
-view["database"] = function()
+view["database_menu"] = function()
   local domains = {
     'body', 'actor',
     body = "Body Types",
