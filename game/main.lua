@@ -35,7 +35,7 @@ GS = {
 --LÖVE FUNCTIONS--
 ------------------
 
-function love.load()
+function love.load(arg)
 
     Setup.config() --Configure your game
 
