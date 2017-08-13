@@ -5,19 +5,19 @@ local DB = {}
 
 local SCHEMA = {
   body = {
-    extends = "string",
-    hp = "number"
+    { id = 'extends', type = "enum", options = 'domain' },
+    { id = 'hp', type = "integer", range = {1,999} }
   },
   actor = {
-    extends = "string",
-    behavior = "string"
+    { id = 'extends', type = "enum", options = 'domain' },
+    { id = 'behavior', type = "enum", options = {'player','random_walk'} }
   }
 }
 
 local domains = {}
 
 function DB.schemaFor(domain_name)
-  return pairs(SCHEMA[domain_name])
+  return ipairs(SCHEMA[domain_name])
 end
 
 function DB.loadDomain(domain_name)

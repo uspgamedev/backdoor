@@ -117,9 +117,60 @@ view["Domain List"] = function(domain_name)
     for name,spec in pairs(DB.loadDomain(domain_name)) do
       if imgui.Selectable(name, selected == name) then
         selected = name
-        --self:push("Actor", actor)
+        self:push("Specification", spec, domain_name)
       end
     end
+  end
+end
+
+view["Specification"] = function(spec, domain_name)
+  return function(self)
+    imgui.Text("Wait for it...")
+    imgui.PushItemWidth(100)
+    for _,key in DB.schemaFor(domain_name) do
+      if key.type == 'enum' then
+        if key.options == 'domain' then
+        elseif type(key.options) == 'table' then
+          local current = 0
+          for i,option in ipairs(key.options) do
+            if option == spec[key.id] then
+              current = i
+              break
+            end
+          end
+          local function value(newvalue)
+            if newvalue then
+              current = newvalue
+              spec[key.id] = key.options[newvalue]
+            else
+              return current
+            end
+          end
+          imgui.InputText(key.id, spec[key.id], 64, { "ReadOnly" })
+          imgui.SameLine()
+          if imgui.Button("Change") then
+            self:push("Choose One", key.id, key.options, value)
+          end
+        end
+      elseif key.type == 'integer' then
+        local value = spec[key.id]
+        local _, newvalue = imgui.InputInt(key.id, value, 1, 10)
+        spec[key.id] = newvalue
+      end
+    end
+    imgui.PopItemWidth()
+  end
+end
+
+view["Choose One"] = function(name, list, value)
+  return function(self)
+    imgui.Text(("Choose a %s:"):format(name))
+    imgui.PushItemWidth(160)
+    local changed, newvalue = imgui.ListBox("", value(), list, #list)
+    if changed then
+      value(newvalue)
+    end
+    imgui.PopItemWidth()
   end
 end
 
