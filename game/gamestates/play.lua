@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local Route = require 'domain.route'
 local Map = require "domain.map"

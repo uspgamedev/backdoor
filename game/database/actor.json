@@ -1,8 +1,8 @@
 {
-  "player": {
-    "behavior": "player"
+  "player":{
+    "behavior":"player"
   },
-  "dumb": {
-    "behavior": "random_walk"
+  "dumb":{
+    "behavior":"random_walk"
   }
 }

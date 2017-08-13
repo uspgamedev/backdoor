@@ -1,8 +1,8 @@
 {
-  "hearthborn": {
-    "hp": 12
+  "slime":{
+    "hp":8
   },
-  "slime": {
-    "hp": 8
+  "hearthborn":{
+    "hp":12
   }
 }
