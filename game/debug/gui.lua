@@ -151,14 +151,12 @@ view["Specification"] = function(spec, domain_name)
             return current
           end
         end
-        if imgui.Button(("Change##%s"):format(key.id)) then
-          print("change")
-          self:push("Choose One", key.name, options, value)
-        end
-        imgui.SameLine()
-        imgui.PushItemWidth(100)
+        imgui.PushItemWidth(160)
         imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
         imgui.PopItemWidth()
+        if imgui.IsItemClicked() then
+          self:push("Choose One", key.name, options, value)
+        end
       elseif key.type == 'integer' then
         imgui.PushItemWidth(160)
         local value = spec[key.id]
