@@ -1,10 +1,26 @@
 
 local json = require 'dkjson'
+
 local DB = {}
+
+local SCHEMA = {
+  body = {
+    extends = "string",
+    hp = "number"
+  },
+  actor = {
+    extends = "string",
+    behavior = "string"
+  }
+}
 
 local domains = {}
 
-function DB.loadSpec(domain_name, spec_name)
+function DB.schemaFor(domain_name)
+  return pairs(SCHEMA[domain_name])
+end
+
+function DB.loadDomain(domain_name)
   local domain = domains[domain_name] if not domain then
     -- FIXME: hardcoded base path
     local filepath = ("game/database/%s.json"):format(domain_name)
@@ -18,7 +34,11 @@ function DB.loadSpec(domain_name, spec_name)
     end
     domains[domain_name] = domain
   end
-  return domain[spec_name]
+  return domain
+end
+
+function DB.loadSpec(domain_name, spec_name)
+  return DB.loadDomain(domain_name)[spec_name]
 end
 
 function DB.save()

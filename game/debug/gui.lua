@@ -90,9 +90,35 @@ view["Actor"] = function (actor)
 end
 
 view["Database"] = function()
+  local domains = {
+    'body', 'actor',
+    body = "Body Types",
+    actor = "Actor Types"
+  }
+  local selected = nil
   return function(self)
+    for _,name in ipairs(domains) do
+      local title = domains[name]
+      if imgui.Selectable(title, selected == name) then
+        selected = name
+        self:push("Domain List", selected)
+      end
+    end
+    imgui.Spacing()
     if imgui.Button("Save", 224, 24) then
       DB.save()
+    end
+  end
+end
+
+view["Domain List"] = function(domain_name)
+  local selected = nil
+  return function(self)
+    for name,spec in pairs(DB.loadDomain(domain_name)) do
+      if imgui.Selectable(name, selected == name) then
+        selected = name
+        --self:push("Actor", actor)
+      end
     end
   end
 end
