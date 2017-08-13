@@ -5,16 +5,26 @@ local DB = {}
 
 local SCHEMA = {
   body = {
-    { id = 'extends', type = "enum", options = 'domain' },
-    { id = 'hp', type = "integer", range = {1,999} }
+    { id = 'extends', name = "Prototype", type = "enum", options = 'body' },
+    { id = 'hp', name = "Hit Points", type = "integer", range = {1,999} }
   },
   actor = {
-    { id = 'extends', type = "enum", options = 'domain' },
-    { id = 'behavior', type = "enum", options = {'player','random_walk'} }
+    { id = 'extends', name = "Prototype", type = "enum", options = 'actor' },
+    { id = 'behavior', name = "Behavior", type = "enum",
+      options = {'player','random_walk'} }
   }
 }
 
 local domains = {}
+
+local spec_meta = {}
+
+function spec_meta:__index(key)
+  local extends = rawget(self, "extends")
+  if extends then
+    return domains[extends][key]
+  end
+end
 
 function DB.schemaFor(domain_name)
   return ipairs(SCHEMA[domain_name])
@@ -30,7 +40,7 @@ function DB.loadDomain(domain_name)
     file:close()
     assert(domain, err)
     for k,spec in pairs(domain) do
-      setmetatable(spec, { __index = spec.extends })
+      setmetatable(spec, spec_meta)
     end
     domains[domain_name] = domain
   end

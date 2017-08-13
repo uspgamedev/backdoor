@@ -126,39 +126,47 @@ end
 view["Specification"] = function(spec, domain_name)
   return function(self)
     imgui.Text("Wait for it...")
-    imgui.PushItemWidth(100)
     for _,key in DB.schemaFor(domain_name) do
       if key.type == 'enum' then
-        if key.options == 'domain' then
-        elseif type(key.options) == 'table' then
-          local current = 0
-          for i,option in ipairs(key.options) do
-            if option == spec[key.id] then
-              current = i
-              break
-            end
-          end
-          local function value(newvalue)
-            if newvalue then
-              current = newvalue
-              spec[key.id] = key.options[newvalue]
-            else
-              return current
-            end
-          end
-          imgui.InputText(key.id, spec[key.id], 64, { "ReadOnly" })
-          imgui.SameLine()
-          if imgui.Button("Change") then
-            self:push("Choose One", key.id, key.options, value)
+        local options = key.options
+        if type(options) == 'string' then
+          local domain = DB.loadDomain(options)
+          options = {}
+          for k,v in pairs(domain) do
+            table.insert(options,k)
           end
         end
+        local current = 0
+        for i,option in ipairs(options) do
+          if option == spec[key.id] then
+            current = i
+            break
+          end
+        end
+        local function value(newvalue)
+          if newvalue then
+            current = newvalue
+            spec[key.id] = options[newvalue]
+          else
+            return current
+          end
+        end
+        if imgui.Button(("Change##%s"):format(key.id)) then
+          print("change")
+          self:push("Choose One", key.name, options, value)
+        end
+        imgui.SameLine()
+        imgui.PushItemWidth(100)
+        imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
+        imgui.PopItemWidth()
       elseif key.type == 'integer' then
+        imgui.PushItemWidth(160)
         local value = spec[key.id]
-        local _, newvalue = imgui.InputInt(key.id, value, 1, 10)
+        local _, newvalue = imgui.InputInt(key.name, value, 1, 10)
         spec[key.id] = newvalue
+        imgui.PopItemWidth()
       end
     end
-    imgui.PopItemWidth()
   end
 end
 
