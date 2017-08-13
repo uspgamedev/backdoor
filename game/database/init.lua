@@ -27,8 +27,8 @@ function DB.loadDomain(domain_name)
     local file = assert(io.open(filepath, 'r'))
     local _, err
     domain, _, err = json.decode(file:read('*a'))
-    assert(domain, err)
     file:close()
+    assert(domain, err)
     for k,spec in pairs(domain) do
       setmetatable(spec, { __index = spec.extends })
     end
