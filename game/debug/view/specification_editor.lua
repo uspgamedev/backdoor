@@ -39,7 +39,7 @@ function spec_item:enum(spec, domain_name, key)
   end
 end
 
-return function(spec, domain_name, title)
+return function(spec, domain_name, title, delete)
 
   return title .. " Editor", function(self)
     imgui.PushItemWidth(120)
@@ -47,6 +47,13 @@ return function(spec, domain_name, title)
       spec_item[key.type](self, spec, domain_name, key)
     end
     imgui.PopItemWidth()
+    imgui.Spacing()
+    imgui.Indent(180)
+    if imgui.Button("Delete") then
+      delete()
+      return true
+    end
+    imgui.Unindent(180)
   end
 
 end
