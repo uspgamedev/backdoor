@@ -123,47 +123,53 @@ view["Domain List"] = function(domain_name)
   end
 end
 
+local spec_item = {}
+
+function spec_item:integer(spec, domain_name, key)
+  imgui.PushItemWidth(160)
+  local value = spec[key.id]
+  local _, newvalue = imgui.InputInt(key.name, value, 1, 10)
+  spec[key.id] = newvalue
+  imgui.PopItemWidth()
+end
+
+function spec_item:enum(spec, domain_name, key)
+  local options = key.options
+  if type(options) == 'string' then
+    local domain = DB.loadDomain(options)
+    options = {}
+    for k,v in pairs(domain) do
+      table.insert(options,k)
+    end
+  end
+  local current = 0
+  for i,option in ipairs(options) do
+    if option == spec[key.id] then
+      current = i
+      break
+    end
+  end
+  local function value(newvalue)
+    if newvalue then
+      current = newvalue
+      spec[key.id] = options[newvalue]
+    else
+      return current
+    end
+  end
+  imgui.PushItemWidth(160)
+  imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
+  imgui.PopItemWidth()
+  if imgui.IsItemClicked() then
+    self:push("Choose One", key.name, options, value)
+  end
+end
+
 view["Specification"] = function(spec, domain_name)
   return function(self)
     imgui.Text("Wait for it...")
     for _,key in DB.schemaFor(domain_name) do
-      if key.type == 'enum' then
-        local options = key.options
-        if type(options) == 'string' then
-          local domain = DB.loadDomain(options)
-          options = {}
-          for k,v in pairs(domain) do
-            table.insert(options,k)
-          end
-        end
-        local current = 0
-        for i,option in ipairs(options) do
-          if option == spec[key.id] then
-            current = i
-            break
-          end
-        end
-        local function value(newvalue)
-          if newvalue then
-            current = newvalue
-            spec[key.id] = options[newvalue]
-          else
-            return current
-          end
-        end
-        imgui.PushItemWidth(160)
-        imgui.InputText(key.name, spec[key.id] or "<none>", 64, { "ReadOnly" })
-        imgui.PopItemWidth()
-        if imgui.IsItemClicked() then
-          self:push("Choose One", key.name, options, value)
-        end
-      elseif key.type == 'integer' then
-        imgui.PushItemWidth(160)
-        local value = spec[key.id]
-        local _, newvalue = imgui.InputInt(key.name, value, 1, 10)
-        spec[key.id] = newvalue
-        imgui.PopItemWidth()
-      end
+      spec_item[key.type](self, spec, domain_name, key)
     end
   end
 end
