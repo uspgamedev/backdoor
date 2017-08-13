@@ -80,7 +80,10 @@ view["Actor"] = function (actor)
   return function(self)
     imgui.Text(("ID: %s"):format(actor:getId()))
     local hp = actor:getBody():getHP()
-    local _, newhp = imgui.SliderInt("HP", hp, 1, actor:getBody():getMaxHP())
+    imgui.PushItemWidth(100)
+    local _, newhp = imgui.SliderInt("Hit Points", hp, 1,
+                                     actor:getBody():getMaxHP())
+    imgui.PopItemWidth()
     actor:getBody():setHP(newhp)
   end
 end
