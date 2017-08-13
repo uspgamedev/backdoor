@@ -53,6 +53,5 @@ end
 
 function love.quit()
   imgui.ShutDown();
-  require 'database'.save()
 end
 

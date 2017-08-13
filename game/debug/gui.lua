@@ -1,4 +1,5 @@
 
+local DB = require 'database'
 local tween = require 'helpers.tween'
 
 local MENU_WIDTH = 240
@@ -90,7 +91,9 @@ end
 
 view["Database"] = function()
   return function(self)
-    imgui.Text("Not yet implemented ;)")
+    if imgui.Button("Save", 224, 24) then
+      DB.save()
+    end
   end
 end
 
