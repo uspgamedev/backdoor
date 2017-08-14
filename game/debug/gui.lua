@@ -56,7 +56,7 @@ end
 function GUI:draw()
   if DEBUG and not self.active then
     self.current_level = 0
-    self:push("debug_menu")
+    self:push("dev_menu")
     self.active = true
   elseif not DEBUG then
     self.stack = {}

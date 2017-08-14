@@ -10,7 +10,7 @@ return function ()
     database_menu = "Database"
   }
 
-  return "Debug Menu", function(self)
+  return "Dev Mode", function(self)
     for _,menu in ipairs(menus) do
       if imgui.Selectable(menus[menu], menu == selected) then
         selected = menu
