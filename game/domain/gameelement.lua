@@ -15,8 +15,12 @@ function GameElement:init(spectype, specname)
 
 end
 
+function GameElement:getId()
+  return self.id
+end
+
 function GameElement:getSpec(key)
-  return DB[self.spectype][self.specname][key]
+  return DB.loadSpec(self.spectype, self.specname)[key]
 end
 
 return GameElement

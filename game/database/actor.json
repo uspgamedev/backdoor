@@ -1,0 +1,8 @@
+{
+  "player":{
+    "behavior":"player"
+  },
+  "dumb":{
+    "behavior":"random_walk"
+  }
+}

@@ -1,38 +1,80 @@
 
+local DB = require 'database'
+local tween = require 'helpers.tween'
+
+local MENU_WIDTH = 240
+
 local GUI = Class {
   __includes = { ELEMENT }
 }
 
-function GUI:init(map)
+local view = {}
+
+-- This automatically loads all debug menus in debug/view
+for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view") do
+  if file:match "^.+%.lua$" then
+    file = file:gsub("%.lua", "")
+    view[file] = require('debug.view.' .. file)
+  end
+end
+
+function GUI:init()
 
   ELEMENT.init(self)
-  self.map = map
-  self.shown_actors = {}
+  self.stack = {}
+  self.active = false
+  self.current_level = 1
 
 end
 
+--- Pushes a menu. Menus in debug mode appear from left to right and behave like
+--  a stack. It's easier to understand if you play and check it out.
+function GUI:push(viewname, ...)
+  local level = self.current_level+1
+  self:pop(level)
+  local title, render = view[viewname](...)
+  local x = tween.start((level-2)*MENU_WIDTH, (level-1)*(MENU_WIDTH+8), 5)
+  self.stack[level] = function (self)
+    imgui.SetNextWindowPos(x(), MENU_WIDTH, "Always")
+    imgui.SetNextWindowSizeConstraints(MENU_WIDTH, 80, MENU_WIDTH, 400)
+    local _,open = imgui.Begin(title, true,
+                               { "NoCollapse", "AlwaysAutoResize" })
+    if open then
+      open = not render(self)
+    end
+    imgui.End()
+    return open
+  end
+end
+
+function GUI:pop(level)
+  for i=level,#self.stack do
+    self.stack[i] = nil
+  end
+end
+
 function GUI:draw()
-  if not DEBUG then return end
+  if DEBUG and not self.active then
+    self.current_level = 0
+    self:push("dev_menu")
+    self.active = true
+  elseif not DEBUG then
+    self.stack = {}
+    self.active = false
+    return
+  end
+
   local g = love.graphics
 
   imgui.NewFrame()
 
-  imgui.SetNextWindowPos(50, 50, "FirstUseEver")
-  imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
-  imgui.Begin("Actors", true, { "NoCollapse" })
-  for actor,_ in pairs(Util.findSubtype 'actor') do
-    if imgui.Button(actor.id) then
-      self.shown_actors[actor] = not self.shown_actors[actor]
-    end
-  end
-  imgui.End()
-
-  for actor,show in pairs(self.shown_actors) do
-    if show then
-      imgui.SetNextWindowSizeConstraints(200, 10, 200, 400)
-      imgui.Begin(actor.id, false, { "AlwaysAutoResize" })
-      imgui.Text(("HP: %d"):format(actor:getBody():getHP()))
-      imgui.End()
+  for level,view in ipairs(self.stack) do
+    self.current_level = level
+    if not view(self) then
+      if level > 1 then
+        self:pop(level)
+        break
+      end
     end
   end
 
@@ -42,3 +84,4 @@ function GUI:draw()
 end
 
 return GUI
+

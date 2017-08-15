@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local Route = require 'domain.route'
 local Map = require "domain.map"
@@ -76,14 +77,12 @@ end
 
 function state:update(dt)
 
-  if _next_player_action then
-    _current_map:playTurns(_next_player_action)
-    _next_player_action = nil
+  if not DEBUG then
+    if _next_player_action then
+      _current_map:playTurns(_next_player_action)
+      _next_player_action = nil
+    end
   end
-
-	if _switch == "menu" then
-		--Gamestate.switch(GS.MENU)
-	end
 
 	Util.destroyAll()
 
@@ -102,15 +101,13 @@ function state:keypressed(key)
      return
   end
 
-  if DIR[key] then
-    _next_player_action = action.MOVE(_current_map, _player, key)
+  if not DEBUG then
+    if DIR[key] then
+      _next_player_action = action.MOVE(_current_map, _player, key)
+    end
   end
 
-	if key == "r" then
-		_switch = "menu"
-	else
-    	Util.defaultKeyPressed(key)
-	end
+  Util.defaultKeyPressed(key)
 
 end
 

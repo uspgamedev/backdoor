@@ -35,7 +35,7 @@ GS = {
 --LÖVE FUNCTIONS--
 ------------------
 
-function love.load()
+function love.load(arg)
 
     Setup.config() --Configure your game
 
@@ -49,5 +49,9 @@ function love.load()
 
     Gamestate.switch(GS.PLAY) --Jump to the inicial state
 
+end
+
+function love.quit()
+  imgui.ShutDown();
 end
 

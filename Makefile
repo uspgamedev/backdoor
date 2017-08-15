@@ -19,7 +19,9 @@ IMGUI_BUILD_DIR=externals/love-imgui/build
 CPML_LIB=$(GAME_DIR)/cpml
 CPML_REPO=externals/cpml
 
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB)
+DKJSON_LIB=$(GAME_DIR)/dkjson.lua
+
+DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB)
 
 ## MAIN TARGETS
 
@@ -68,6 +70,11 @@ $(CPML_LIB): $(CPML_REPO)
 
 $(CPML_REPO):
 	git clone https://github.com/excessive/cpml.git $(CPML_REPO)
+
+## DKJSON
+
+$(DKJSON_LIB):
+	wget -O $(DKJSON_LIB) -- http://dkolf.de/src/dkjson-lua.fsl/raw/dkjson.lua?name=16cbc26080996d9da827df42cb0844a25518eeb3
 
 ## CLEAN UP
 

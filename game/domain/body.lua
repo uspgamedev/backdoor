@@ -24,7 +24,15 @@ function Body:saveState()
 end
 
 function Body:getHP()
-  return self:getSpec('hp') - self.damage
+  return self:getMaxHP() - self.damage
+end
+
+function Body:getMaxHP()
+  return self:getSpec('hp')
+end
+
+function Body:setHP(hp)
+  self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
 
 return Body
