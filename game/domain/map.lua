@@ -60,8 +60,12 @@ function Map:putActor(actor, i, j)
   return table.insert(self.actors, actor)
 end
 
+function Map:getBodyPos(body)
+  return unpack(self.bodies[body])
+end
+
 function Map:getActorPos(actor)
-  return self.bodies[actor:getBody()]
+  return self:getBodyPos(actor:getBody())
 end
 
 function Map:valid(i, j)

@@ -32,6 +32,10 @@ function Body:getMap()
   return Util.findId(self.map_id)
 end
 
+function Body:getPos()
+  return self:getMap():getBodyPos(self)
+end
+
 function Body:getHP()
   return self:getMaxHP() - self.damage
 end

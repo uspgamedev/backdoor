@@ -32,6 +32,10 @@ function Actor:getBody()
   return Util.findId(self.body_id)
 end
 
+function Actor:getPos()
+  return self:getBody():getPos()
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
 end

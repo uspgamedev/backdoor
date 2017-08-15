@@ -65,7 +65,7 @@ function state:enter()
   _current_map:playTurns()
   _next_player_action = nil
   
-  _gui = GUI(_current_map)
+  _gui = GUI(_map_view)
   _gui:addElement("GUI")
 
 end
@@ -79,6 +79,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    _map_view:lookAt(_player)
     if _next_player_action then
       _current_map:playTurns(_next_player_action)
       _next_player_action = nil

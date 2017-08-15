@@ -29,7 +29,7 @@ function MapView:draw()
   g.setBackgroundColor(50, 80, 80, 255)
   do
     local x, y = CAM:position()
-    local i, j = unpack(map:getActorPos(self.target))
+    local i, j = self.target:getPos()
     local tx, ty = (j-0.5)*TILE_W, (i-0.5)*TILE_H
     local smooth = 1/5
     CAM:move((tx - x)*smooth,(ty - y)*smooth)
