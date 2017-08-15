@@ -10,6 +10,7 @@ function Body:init(specname)
   GameElement.init(self, 'body', specname)
 
   self.damage = 0
+  self.map_id = nil
 
 end
 
@@ -21,6 +22,14 @@ function Body:saveState()
   local state = {}
   state.damage = self.damage
   return state
+end
+
+function Body:setMap(map_id)
+  self.map_id = map_id
+end
+
+function Body:getMap()
+  return Util.findId(self.map_id)
 end
 
 function Body:getHP()
