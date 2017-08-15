@@ -1,7 +1,7 @@
 
 *At the Front Stage, from the Fateful Dream Endless saga:*
 
-## The Outermaze Book of Rhapsodies'
+The Outermaze Book of Rhapsodies'
 
 # BACKDOOR ROUTE
 

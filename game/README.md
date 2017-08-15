@@ -16,8 +16,8 @@ follows:
 + `helpers/`
   Assorted source files with auxiliary routines.
 
-Besides these, the following directories *should* also be here but *are not*
-supposed to be versioned:
+Besides these, the following directories *should* also be here after the inital
+setup but *are not* supposed to be versioned:
 
 + `cpml/`
 + `lux/`
