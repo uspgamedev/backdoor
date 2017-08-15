@@ -97,7 +97,7 @@ function turnLoop(self, ...)
 end
 
 function Map:playTurns(...)
-  return assert(coroutine.resume(self.turnLoop, self, ...))
+  return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
 end
 
 return Map
