@@ -21,7 +21,8 @@ local _map_view
 local _current_map
 
 local _player
-local _next_player_action
+local _next_action
+local _controlled_actor
 
 local _gui
 
@@ -44,6 +45,11 @@ local function _randomValidTile()
   return i, j
 end
 
+local function _playTurns()
+  _controlled_actor = _current_map:playTurns(_next_action)
+  _next_action = nil
+end
+
 --STATE FUNCTIONS--
 
 function state:enter()
@@ -51,6 +57,7 @@ function state:enter()
   _route = Route()
 
   _current_map = Map(20,20)
+  _route.register(_current_map)
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")
 
@@ -61,10 +68,9 @@ function state:enter()
   _player = _makeActor('hearthborn', 'player', _randomValidTile())
   _map_view:lookAt(_player)
 
-  _current_map:playTurns()
-  _next_player_action = nil
+  _playTurns()
   
-  _gui = GUI(_current_map)
+  _gui = GUI(_map_view)
   _gui:addElement("GUI")
 
 end
@@ -78,10 +84,10 @@ end
 function state:update(dt)
 
   if not DEBUG then
-    if _next_player_action then
-      _current_map:playTurns(_next_player_action)
-      _next_player_action = nil
+    if _next_action then
+      _playTurns()
     end
+    _map_view:lookAt(_controlled_actor or _player)
   end
 
 	Util.destroyAll()
@@ -102,8 +108,8 @@ function state:keypressed(key)
   end
 
   if not DEBUG then
-    if DIR[key] then
-      _next_player_action = action.MOVE(_current_map, _player, key)
+    if DIR[key] and _controlled_actor then
+      _next_action = action.MOVE(_current_map, _controlled_actor, key)
     end
   end
 

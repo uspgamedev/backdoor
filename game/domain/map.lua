@@ -27,20 +27,30 @@ function Map:init(w, h)
       self.bodies[i][j] = false
     end
   end
+  -- A special tile where we can always remove things from...
+  -- Because nothing is ever there!
+  self.bodies[0] = { [0] = false }
 
   self.turnLoop = coroutine.create(turnLoop)
 
 end
 
+--- Puts body at position (i.j), removing it from where it was before, wherever
+--  that is!
 function Map:putBody(body, i, j)
   assert(self:valid(i,j))
-  local bodies = self.bodies
-  local pos = bodies[body] if pos then
-    bodies[pos[1]][pos[2]] = false
-  else
-    pos = {}
-    bodies[body] = pos
+  -- Remove body from where it was vefore
+  local oldmap = body:getMap() or self
+  local oldbodies = oldmap.bodies
+  local pos = oldmap.bodies[body] or {0,0}
+  oldbodies[pos[1]][pos[2]] = false
+  if self ~= oldmap then
+    oldbodies[body] = nil
   end
+  -- Actually put body at (i,j) in this map
+  local bodies = self.bodies
+  body:setMap(self.id)
+  bodies[body] = pos
   bodies[i][j] = body
   pos[1], pos[2] = i, j
 end
@@ -50,8 +60,12 @@ function Map:putActor(actor, i, j)
   return table.insert(self.actors, actor)
 end
 
+function Map:getBodyPos(body)
+  return unpack(self.bodies[body])
+end
+
 function Map:getActorPos(actor)
-  return self.bodies[actor:getBody()]
+  return self:getBodyPos(actor:getBody())
 end
 
 function Map:valid(i, j)
@@ -83,7 +97,7 @@ function turnLoop(self, ...)
 end
 
 function Map:playTurns(...)
-  return assert(coroutine.resume(self.turnLoop, self, ...))
+  return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
 end
 
 return Map
