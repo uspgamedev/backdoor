@@ -53,6 +53,7 @@ return function (_map, _params)
   local function removeDeadEnds()
     local FLOOR = schematics.FLOOR
     local corner
+    assert(_n >= 0, "Cannot remove negative ammounts of deadends.")
     while _n > 0 do
       if _n == 0 then return _map end
       local x = random.odd(_minx, _maxx)
