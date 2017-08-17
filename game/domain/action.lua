@@ -45,7 +45,7 @@ function action.PRIMARY(map, actor)
             FX.damage{target = target, amount = 2}
             FX.spend_time{target = actor, amount = 3}
         else
-            FX.spend_time{target = actor, amount = 1}
+            coroutine.yield(actor)
         end
     end
 
