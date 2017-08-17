@@ -1,21 +1,21 @@
 
 -- dependencies
-local Helpers = require 'lux.pack' 'domain.transformers.helpers'
+local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
 local Vector2 = require 'cpml.modules.vec2'
 
-local schematics = Helpers.schematics
-local random     = Helpers.random
+local SCHEMATICS = HELPERS.schematics
+local RANDOM     = HELPERS.random
 
-return function (_map, _params)
-  local _width, _height = _map.getDim()
-  local _mw, _mh = _map.getMargins()
+return function (map, params)
+  local _width, _height = map.getDim()
+  local _mw, _mh = map.getMargins()
 
   local _minx = _mw + 1
   local _miny = _mh + 1
   local _maxx = _width - _mw
   local _maxy = _height - _mh
 
-  local _n = _params.n
+  local _n = params.n
   local _cardinals = {
     Vector2( 1,  0),
     Vector2( 0,  1),
@@ -24,12 +24,12 @@ return function (_map, _params)
   }
 
   local function isCorner(point)
-    local FLOOR = schematics.FLOOR
+    local FLOOR = SCHEMATICS.FLOOR
     local notwall = false
     local count = 0
     for i, dir in ipairs(_cardinals) do
       local pos = point + dir
-      if _map.get(pos.x, pos.y) ~= FLOOR then
+      if map.get(pos.x, pos.y) ~= FLOOR then
         count = count + 1
       else
         notwall = pos
@@ -43,22 +43,22 @@ return function (_map, _params)
   end
 
   local function cleanCorner(corner)
-    local NAUGHT = schematics.NAUGHT
+    local NAUGHT = SCHEMATICS.NAUGHT
     while corner and isCorner(corner) do
-      _map.set(corner.x, corner.y, NAUGHT)
+      map.set(corner.x, corner.y, NAUGHT)
       corner = isCorner(corner)
     end
   end
 
   local function removeDeadEnds()
-    local FLOOR = schematics.FLOOR
+    local FLOOR = SCHEMATICS.FLOOR
     local corner
     assert(_n >= 0, "Cannot remove negative ammounts of deadends.")
     while _n > 0 do
-      if _n == 0 then return _map end
-      local x = random.odd(_minx, _maxx)
-      local y = random.odd(_miny, _maxy)
-      if _map.get(x, y) == FLOOR then
+      if _n == 0 then return map end
+      local x = RANDOM.odd(_minx, _maxx)
+      local y = RANDOM.odd(_miny, _maxy)
+      if map.get(x, y) == FLOOR then
         corner = Vector2(x, y)
         if isCorner(corner) then
           cleanCorner(corner)
@@ -66,7 +66,7 @@ return function (_map, _params)
         end
       end
     end
-    return _map
+    return map
   end
 
   return removeDeadEnds()

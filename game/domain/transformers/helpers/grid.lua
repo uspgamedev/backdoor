@@ -1,6 +1,6 @@
 
 local Grid = require 'lux.class' :new{}
-local schematics = require 'domain.transformers.helpers.schematics'
+local SCHEMATICS = require 'domain.transformers.helpers.schematics'
 
 function Grid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
@@ -11,7 +11,7 @@ function Grid:instance(obj, w, h, mw, mh)
   for i = 1, h do
     _map[i] = {}
     for j = 1, w do
-      _map[i][j] = schematics.NAUGHT
+      _map[i][j] = SCHEMATICS.NAUGHT
     end
   end
 

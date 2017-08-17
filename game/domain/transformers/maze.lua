@@ -1,77 +1,78 @@
 
 -- dependencies
-local Helpers = require 'lux.pack' 'domain.transformers.helpers'
+local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
 local Vector2  = require 'cpml.modules.vec2'
 
-local Rectangle  = Helpers.rect
-local random     = Helpers.random
-local schematics = Helpers.schematics
+local Rectangle  = HELPERS.rect
+local RANDOM     = HELPERS.random
+local SCHEMATICS = HELPERS.schematics
 
 return function (map, params)
-  local width, height = map.getDim()
-  local mw, mh = map.getMargins()
+  local _width, _height = map.getDim()
+  local _mw, _mh = map.getMargins()
 
   -- corridor positions
-  local minx = mw + 1
-  local miny = mh + 1
-  local maxx = width - mw
-  local maxy = height - mh
-  local dist = 2 * (params.double and 2 or 1)
-  local cardinals = {
-    Vector2( 1,  0) * dist,
-    Vector2( 0,  1) * dist,
-    Vector2(-1,  0) * dist,
-    Vector2( 0, -1) * dist,
+  local _minx = _mw + 1
+  local _miny = _mh + 1
+  local _maxx = _width - _mw
+  local _maxy = _height - _mh
+  local _dist = 2 * (params.double and 2 or 1)
+  local _cardinals = {
+    Vector2( 1,  0) * _dist,
+    Vector2( 0,  1) * _dist,
+    Vector2(-1,  0) * _dist,
+    Vector2( 0, -1) * _dist,
   }
 
-  local potentials = {}  -- { point, direction }
-  local maze_scheme = {} -- { point, direction }
-  local start
+  local _potentials = {}  -- { point, direction }
+  local _maze_scheme = {} -- { point, direction }
+  local _start
 
   local function isPointInScheme(point)
-    for _, p in ipairs(maze_scheme) do
+    for _, p in ipairs(_maze_scheme) do
       if p[1] + p[2] == point then return true end
     end
     return false
   end
 
   local function isValidPoint(point)
-    local FLOOR = schematics.FLOOR
+    local FLOOR = SCHEMATICS.FLOOR
     local x, y = point.x, point.y
     return map.isInsideMargins(x, y)
-      and map.get(x, y) ~= schematics.FLOOR
-      and not isPointInScheme(point)
+           and map.get(x, y) ~= SCHEMATICS.FLOOR
+           and not isPointInScheme(point)
   end
 
   local function setStartPoint()
-    repeat start = Vector2(random.odd(minx, maxx), random.odd(miny, maxy))
-    until isValidPoint(start)
+    repeat _start = Vector2(RANDOM.odd(_minx, _maxx),
+                            RANDOM.odd(_miny, _maxy))
+    until isValidPoint(_start)
   end
 
   local function addPotentialMovements()
     local insert = table.insert
-    for _, dir in ipairs(cardinals) do
-      local newpoint = start + dir
+    for _, dir in ipairs(_cardinals) do
+      local newpoint = _start + dir
       if isValidPoint(newpoint) then
-        insert(potentials, { start, dir })
+        insert(_potentials, { _start, dir })
       end
     end
   end
 
   local function getPotentialMovement()
-    local N = #potentials
+    local N = #_potentials
     local movement
     local k
 
     local function removeFromPotentials(i)
-      potentials[i] = potentials[N]
-      potentials[N] = nil
-      N = #potentials
+      _potentials[i] = _potentials[N]
+      _potentials[N] = nil
+      N = #_potentials
     end
 
     repeat
-      k = random.interval(1, N)
-      movement = potentials[k]
+      k = RANDOM.interval(1, N)
+      movement = _potentials[k]
       if not isValidPoint(movement[1] + movement[2]) then
         movement = false
       end
@@ -88,16 +89,16 @@ return function (map, params)
       addPotentialMovements()
       moveable = getPotentialMovement()
       if moveable then
-        start = moveable[1] + moveable[2]
-        insert(maze_scheme, moveable)
+        _start = moveable[1] + moveable[2]
+        insert(_maze_scheme, moveable)
       end
-    until not moveable or #potentials == 0
+    until not moveable or #_potentials == 0
   end
 
   local function caveMaze()
-    local FLOOR = schematics.FLOOR
+    local FLOOR = SCHEMATICS.FLOOR
     local abs = math.abs
-    for _, movement in ipairs(maze_scheme) do
+    for _, movement in ipairs(_maze_scheme) do
       local pos1, pos2 = movement[1], movement[1] + movement[2]
       local dx = (pos2.x - pos1.x) / abs(pos2.x - pos1.x)
       local dy = (pos2.y - pos1.y) / abs(pos2.y - pos1.y)

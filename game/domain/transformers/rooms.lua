@@ -1,53 +1,53 @@
 
 -- dependencies
-local Helpers = require 'lux.pack' 'domain.transformers.helpers'
+local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
 
-local Rectangle  = Helpers.rect
-local random     = Helpers.random
-local schematics = Helpers.schematics
+local Rectangle  = HELPERS.rect
+local random     = HELPERS.random
+local schematics = HELPERS.schematics
 
 return function (map, params)
-  local width, height = map.getDim()
-  local mw, mh = map.getMargins()
+  local _width, _height = map.getDim()
+  local _mw, _mh = map.getMargins()
 
   -- room dimensions
-  local minw = params.minw
-  local minh = params.minh
-  local maxw = params.maxw
-  local maxh = params.maxh
-  local rmargin = 3
+  local _minw = params.minw
+  local _minh = params.minh
+  local _maxw = params.maxw
+  local _maxh = params.maxh
+  local _rmargin = 3
 
   -- room quantities
-  local count = params.count
-  local tries = params.tries
+  local _count = params.count
+  local _tries = params.tries
 
   -- room positions
-  local minx = mw + 1
-  local miny = mh + 1
-  local maxx = width - mw
-  local maxy = height - mh
+  local _minx = _mw + 1
+  local _miny = _mh + 1
+  local _maxx = _width - _mw
+  local _maxy = _height - _mh
 
-  local rooms = {}
+  local _rooms = {}
 
   local function makeOneRoom()
     return Rectangle(
-      random.odd(minx, maxx), random.odd(miny, maxy),
-      random.even(minw, maxw), random.even(minh, maxh)
+      random.odd(_minx, _maxx), random.odd(_miny, _maxy),
+      random.even(_minw, _maxw), random.even(_minh, _maxh)
     )
   end
 
   local function isRoomIntersecting(room)
     local try = 0
-    local N = #rooms
+    local N = #_rooms
     local cpos = room.getPos()
     local cdim = room.getDim()
     local copy = Rectangle(
-      cpos.x - rmargin - 1,
-      cpos.y - rmargin - 1,
-      cdim.x + rmargin * 2 + 1,
-      cdim.y + rmargin * 2 + 1)
+      cpos.x - _rmargin - 1,
+      cpos.y - _rmargin - 1,
+      cdim.x + _rmargin * 2 + 1,
+      cdim.y + _rmargin * 2 + 1)
     for i = 1, N do
-      if copy.intersect(rooms[i]) then return true end
+      if copy.intersect(_rooms[i]) then return true end
     end
     return false
   end
@@ -59,20 +59,20 @@ return function (map, params)
 
   local function generateRooms ()
     local insert = table.insert
-    for i = 1, count do
-      insert(rooms, (function ()
+    for i = 1, _count do
+      insert(_rooms, (function ()
         local room
         repeat
-          tries = tries - 1
+          _tries = _tries - 1
           room = makeOneRoom()
-        until tries == 0 or isRoomInsideMap(room, map) and not isRoomIntersecting(room)
+        until _tries == 0 or isRoomInsideMap(room, map) and not isRoomIntersecting(room)
         return room
       end)())
     end
   end
 
   local function caveRooms()
-    for _, room in ipairs(rooms) do
+    for _, room in ipairs(_rooms) do
       local min, max = room.getMin(), room.getMax()
       for x = min.x, max.x do
         for y = min.y, max.y do
