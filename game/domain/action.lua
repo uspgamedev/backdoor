@@ -1,8 +1,7 @@
 
 local DIR = require 'domain.definitions.dir'
 
---Effects
-local Damage = require "domain.effects.damage"
+local FX = require "domain.effects"
 
 ----------
 
@@ -11,7 +10,7 @@ local action = {}
 
 function action.IDLE(actor)
   return function()
-    actor:spendTime(1)
+    FX.spend_time{target = actor, amount = 1}
   end
 end
 
@@ -24,7 +23,7 @@ function action.MOVE(map, actor, dir_name)
   if map:isValid(i, j) then
     return function()
       map:putBody(actor:getBody(), i, j)
-      actor:spendTime(3)
+      FX.spend_time{target = actor, amount = 3}
     end
   else
     return action.IDLE(actor)
@@ -43,8 +42,8 @@ function action.PRIMARY(map, actor)
     end
     if target then
         return function()
-            Damage{target = target, amount = 2}
-            actor:spendTime(3)
+            FX.damage{target = target, amount = 2}
+            FX.spend_time{target = actor, amount = 3}
         end
     else
         return action.IDLE(actor)
