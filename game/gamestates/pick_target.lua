@@ -47,7 +47,7 @@ function state:enter(_, actor, map, map_view, target_opt)
   end
 
   local confirm = function ()
-    if _map_view.cursor.valid_position_func(unpack(_map_view.getCursorPos())) then
+    if _map_view.cursor.valid_position_func(_map_view:getCursorPos()) then
         local args = {
           target_is_valid = true,
           pos = {_map_view:getCursorPos()}
@@ -87,6 +87,10 @@ function state:enter(_, actor, map, map_view, target_opt)
 end
 
 function state:leave()
+    Signal.clear("move_cursor")
+    Signal.clear("confirm")
+    Signal.clear("cancel")
+
     _map_view:removeCursor()
     CONTROL.set_map(_previous_control_map)
 end

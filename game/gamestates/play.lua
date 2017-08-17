@@ -143,7 +143,7 @@ function state:resume(state, args)
     if args.target_is_valid then
         _playTurns(args.pos)
     else
-        --do other stuff
+        _playTurns(nil)
     end
 
   end

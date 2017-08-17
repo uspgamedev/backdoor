@@ -39,9 +39,9 @@ function action.PRIMARY(map, actor)
                                 return map:isInside(i,j) and map.bodies[i][j]
                             end
         })
-        local i,j = unpack(target)
-        target = map.bodies[i][j]
         if target then
+            local i,j = unpack(target)
+            target = map.bodies[i][j]
             FX.damage{target = target, amount = 2}
             FX.spend_time{target = actor, amount = 3}
         else
