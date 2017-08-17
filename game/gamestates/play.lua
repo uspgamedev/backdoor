@@ -3,11 +3,13 @@
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local Route = require 'domain.route'
-local Map = require "domain.map"
-local Body = require "domain.body"
-local Actor = require "domain.actor"
-local action = require 'domain.action'
-local MapView = require "domain.view.mapview"
+local Map = require 'domain.map'
+local Body = require 'domain.body'
+local Actor = require 'domain.actor'
+local MapView = require 'domain.view.mapview'
+local INPUT = require 'infra.input'
+local ACTION = require 'domain.action'
+local CONTROL = require 'infra.control'
 
 local GUI = require 'debug.gui'
 
@@ -69,7 +71,54 @@ function state:enter()
   _map_view:lookAt(_player)
 
   _playTurns()
-  
+
+  local move = function (dir)
+      if _controlled_actor then
+        _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
+      end
+  end
+  Signal.register("move", move)
+
+  CONTROL.set_map {
+      PRESS_ACTION_1 = function ()
+          Signal.emit("widget_1")
+      end,
+      PRESS_ACTION_2 = function ()
+          Signal.emit("widget_2")
+      end,
+      PRESS_ACTION_3 = function ()
+          Signal.emit("widget_3")
+      end,
+      PRESS_ACTION_4 = function ()
+          Signal.emit("widget_4")
+      end,
+      PRESS_SPECIAL = function ()
+          Signal.emit("start_card_turn")
+      end,
+      PRESS_CANCEL = function ()
+          Signal.emit("wait")
+      end,
+      PRESS_UP = function ()
+          Signal.emit("move", "up")
+      end,
+      PRESS_RIGHT = function ()
+          Signal.emit("move", "right")
+      end,
+      PRESS_DOWN = function ()
+          Signal.emit("move", "down")
+      end,
+      PRESS_LEFT = function ()
+          Signal.emit("move", "left")
+      end,
+      PRESS_QUIT = function ()
+          Signal.emit("quit")
+      end,
+      PRESS_PAUSE = function ()
+          Signal.emit("pause")
+      end,
+  }
+
+
   _gui = GUI(_map_view)
   _gui:addElement("GUI")
 
@@ -84,6 +133,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    INPUT.update()
     if _next_action then
       _playTurns()
     end
@@ -108,9 +158,7 @@ function state:keypressed(key)
   end
 
   if not DEBUG then
-    if DIR[key] and _controlled_actor then
-      _next_action = action.MOVE(_current_map, _controlled_actor, key)
-    end
+    INPUT.key_pressed(key)
   end
 
   Util.defaultKeyPressed(key)
@@ -122,7 +170,16 @@ function state:textinput(t)
 end
 
 function state:keyreleased(key)
-  imgui.KeyReleased(key)
+
+    imgui.KeyReleased(key)
+    if imgui.GetWantCaptureKeyboard() then
+       return
+    end
+
+    if not DEBUG then
+        INPUT.key_released(key)
+    end
+
 end
 
 function state:mousemoved(x, y)
@@ -143,4 +200,3 @@ end
 
 --Return state functions
 return state
-

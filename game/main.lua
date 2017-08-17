@@ -11,6 +11,7 @@ Timer     = require "steaming.extra_libs.hump.timer"
 Class     = require "steaming.extra_libs.hump.class"
 Camera    = require "steaming.extra_libs.hump.camera"
 Vector    = require "steaming.extra_libs.hump.vector"
+Signal    = require "steaming.extra_libs.hump.signal"
 
 
 -- CLASSES
@@ -54,4 +55,3 @@ end
 function love.quit()
   imgui.ShutDown();
 end
-
