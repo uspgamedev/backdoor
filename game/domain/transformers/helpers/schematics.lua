@@ -1,7 +1,7 @@
 
 return {
   NAUGHT = " ",
-  FLOOR  = "-",
+  FLOOR  = ".",
   WALL   = "#",
 }
 
