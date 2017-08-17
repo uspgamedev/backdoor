@@ -43,7 +43,7 @@ local function _randomValidTile()
   local i, j
   repeat
     i, j = rand(_current_map.h), rand(_current_map.w)
-  until _current_map:valid(i, j)
+until _current_map:isValid(i, j)
   return i, j
 end
 
@@ -77,7 +77,13 @@ function state:enter()
         _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
       end
   end
+  local use_primary_action = function ()
+      if _controlled_actor then
+        _next_action = ACTION.PRIMARY(_current_map, _controlled_actor)
+      end
+  end
   Signal.register("move", move)
+  Signal.register("widget_1", use_primary_action)
 
   local signals = {
       PRESS_UP = {"move", "up"},

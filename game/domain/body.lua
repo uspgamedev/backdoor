@@ -48,5 +48,8 @@ function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
 
-return Body
+function Body:takeDamage(amount)
+  self.damage = math.min(self:getMaxHP(), self.damage + amount)
+end
 
+return Body
