@@ -1,143 +1,95 @@
 
 -- dependencies
-local vec2 = require 'cpml.modules.vec2'
-local rand = math.random
 local floor = math.floor
+local Rectangle = require 'domain.generators.helpers.rect'
+local Grid = require 'domain.generators.helpers.grid'
+local Rand = require 'domain.generators.helpers.random'
 
 -- static consts
-local FLOOR = 0
-local WALL = 1
+local NAUGHT = "*"
+local FLOOR  = " "
+local WALL   = "#"
 
 -- parametres
-local width = 64
-local height = 64
+local width = 32
+local height = 32
 local margin = 2
 local room_margin = 2
-local min_rw, min_rh = 9, 9
-local max_rw, max_rh = 25, 25
-local room_count = floor(((width + height) / 2) /
-  ((max_rw + max_rh) / 2)) ^ 2 - 1
+local min_rw, min_rh = 3, 3
+local max_rw, max_rh = 9, 9
 
--- generators
-local function rectangle ()
-  local rect = {}
+local room_count = 5
 
-  local pos = vec2(
-    rand(1 + margin, width - margin),
-    rand(1 + margin, height - margin)
-  )
-  local size = vec2(
-    rand(min_rw, max_rw),
-    rand(min_rh, max_rh)
-  )
+local useful_pos = {
+  margin + 1,
+  width - margin,
+  margin + 1,
+  height - margin
+}
 
-  function rect:get_pos ()
-    return pos
+-- validators
+local function is_room_intersecting(room, room_list)
+  local N = #room_list
+  local cpos = room.getPos()
+  local cdim = room.getDim()
+  local copy = Rectangle(
+    cpos.x - room_margin - 1,
+    cpos.y - room_margin - 1,
+    cdim.x + room_margin * 2 + 1,
+    cdim.y + room_margin * 2+ 1)
+  for i = 1, N do
+    if copy.intersect(room_list[i]) then return true end
   end
-
-  function rect:get_size ()
-    return size
-  end
-
-  function rect:get_max()
-    return pos + size
-  end
-
-  rect.get_min = rect.get_pos
-
-  function rect:intersect (rect2)
-    local a, b = self, rect2
-    local col = true
-    local amin = a:get_min()
-    local bmin = b:get_min()
-    local amax = a:get_max()
-    local bmax = b:get_max()
-    if
-      amin.x - room_margin > bmax.x or
-      amin.y - room_margin > bmax.y or
-      amax.x < bmin.x - room_margin or
-      amax.y < bmin.y - room_margin then
-      col = false
-    end
-    return col
-  end
-
-  return rect
+  return false
 end
 
-local function make_rooms ()
+local function is_room_inside_map(room, map)
+  local max = room.getMax()
+  return map.isInsideMargin(max.x, max.y, margin)
+end
+
+-- generators
+local function make_one_room()
+  return Rectangle(
+    Rand.odd(useful_pos[1], useful_pos[2]),
+    Rand.odd(useful_pos[3], useful_pos[4]),
+    Rand.interval(min_rw, max_rw),
+    Rand.interval(min_rh, max_rh)
+  )
+end
+
+local function make_rooms_for_map (map)
   local rooms = {}
   for i = 1, room_count do
     table.insert(rooms, (function ()
       local rect
       repeat
-        rect = rectangle()
-      until (function ()
-        local max = rect:get_max()
-        if max.x > width - margin or max.y > height - margin then
-          return false
-        end
-        for _, rect2 in ipairs(rooms) do
-          if rect:intersect(rect2) then
-            return false
-          end
-        end
-        print(rect:get_max())
-        return true
-      end)()
+        rect = make_one_room()
+      until is_room_inside_map(rect, map) and not is_room_intersecting(rect, rooms)
       return rect
     end)())
   end
   return rooms
 end
 
-local function make_mt_map()
-  local map = {}
-  for i = 1, height do
-    map[i] = {}
-    for j = 1, width do
-      map[i][j] = WALL
-    end
-  end
-  return map
-end
-
--- testing
-make_mt_map()
-make_rooms()
-
 local function cave_rooms(map, rooms)
   for _, room in ipairs(rooms) do
-    local min, max = room:get_min(), room:get_max()
-    local size = room:get_size()
-    print("caving room:", min, max)
-    for i = min.y, max.y do
-      for j = min.x, max.x do
-        map[i][j] = FLOOR
+    local min, max = room.getMin(), room.getMax()
+    for x = min.x, max.x do
+      for y = min.y, max.y do
+        map.set(x, y, FLOOR)
       end
     end
   end
 end
 
-local function print_map(map)
-  local s = ""
-  for i = 1, height do
-    for j = 1, width do
-      s = s .. " " .. map[i][j]
-    end
-    s = s .. "\n"
-  end
-  print(s)
-end
-
 -- final generator
-return function (...)
-  local map = make_mt_map()
-  local rooms = make_rooms()
+return function ()
+  local map = Grid(width, height, WALL)
+  local rooms = make_rooms_for_map(map)
   cave_rooms(map, rooms)
 
   -- finished, print
-  print_map(map)
   return map
 end
 
