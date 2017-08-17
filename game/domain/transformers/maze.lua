@@ -29,14 +29,13 @@ return function (map, params)
   local start
 
   local function isValidPoint(point)
-    local FLOOR = 
+    local FLOOR = schematics.FLOOR
     local x, y = point.x, point.y
     return map.isInsideMargins(x, y)
       and map.get(x, y) ~= schematics.FLOOR
   end
 
   local function setStartPoint()
-    local FLOOR = schematics.FLOOR
     repeat start = Vector2(random.odd(minx, maxx), random.odd(miny, maxy))
     until isValidPoint(start)
   end
@@ -74,13 +73,14 @@ return function (map, params)
   end
 
   local function caveMaze()
+    local FLOOR = schematics.FLOOR
     for _, movement in ipairs(maze_scheme) do
       local pos1, pos2 = movement[1], movement[1] + movement[2]
       for x = pos1.x, pos2.x do
-        map.set(x, po1.y, schematics.FLOOR)
+        map.set(x, po1.y, FLOOR)
       end
       for y = pos1.y, pos2.y do
-        map.set(pos1.x, y, schematics.FLOOR)
+        map.set(pos1.x, y, FLOOR)
       end
     end
     return map
