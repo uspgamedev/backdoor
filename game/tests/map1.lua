@@ -1,8 +1,12 @@
 
 -- dependencies
-local Transformers = require 'domain.transformers'
+local Transformers = require 'lux.pack' 'domain.transformers'
 local Grid = require 'domain.transformers.helpers.grid'
 
+-- seed value
+local seed = tonumber(tostring(os.time()):sub(-7):reverse())
+
+-- test values
 local params = {
   general = {
     width = 48,
@@ -20,6 +24,9 @@ local params = {
   },
   maze = {
     double = false
+  },
+  deadends = {
+    n = 64
   }
 }
 
@@ -30,8 +37,12 @@ local map = Grid(
   params.general.mh
 )
 
+math.randomseed(seed)
 Transformers.rooms(map, params.rooms)
 Transformers.maze(map, params.maze)
+Transformers.deadends(map, params.deadends)
+
+print(map)
 
 return map
 
