@@ -47,9 +47,11 @@ until _current_map:isValid(i, j)
   return i, j
 end
 
-local function _playTurns()
-  _controlled_actor = _current_map:playTurns(_next_action)
+local function _playTurns(...)
+  _controlled_actor, request, target_opt = _current_map:playTurns(...)
   _next_action = nil
+
+  return request, target_opt
 end
 
 --STATE FUNCTIONS--
@@ -95,9 +97,9 @@ function state:enter()
       PRESS_ACTION_3 = {"widget_3"},
       PRESS_ACTION_4 = {"widget_4"},
       PRESS_SPECIAL = {"start_card_turn"},
-      CANCEL = {"wait"},
-      PAUSE = {"pause"},
-      QUIT = {"quit"}
+      PRESS_CANCEL = {"wait"},
+      PRESS_PAUSE = {"pause"},
+      PRESS_QUIT = {"quit"}
   }
   for name, signal in pairs(signals) do
       signals[name] = function ()
@@ -122,13 +124,29 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      _playTurns()
+      local request
+      request, target_opt = _playTurns(_next_action)
+      if request == 'pick_target' then
+        return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map, _map_view, target_opt)
+      end
     end
     _map_view:lookAt(_controlled_actor or _player)
   end
 
 	Util.destroyAll()
 
+end
+
+function state:resume(state, args)
+  if state == GS.PICK_TARGET then
+
+    if args.target_is_valid then
+        _playTurns(args.pos)
+    else
+        --do other stuff
+    end
+
+  end
 end
 
 function state:draw()
@@ -148,7 +166,9 @@ function state:keypressed(key)
     INPUT.key_pressed(key)
   end
 
-  Util.defaultKeyPressed(key)
+  if key ~= "escape" then
+      Util.defaultKeyPressed(key)
+  end
 
 end
 

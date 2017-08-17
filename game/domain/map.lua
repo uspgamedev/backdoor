@@ -90,7 +90,6 @@ function Map:randomNeighbor(i, j)
 end
 
 function turnLoop(self, ...)
-  local yield = coroutine.yield
   while true do
     for _,actor in ipairs(self.actors) do
       actor:tick()

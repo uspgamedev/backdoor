@@ -27,9 +27,8 @@ Setup     = require "setup"
 
 -- GAMESTATES
 GS = {
-    --MENU     = require "gamestates.menu",     --Menu Gamestate
-    PLAY     = require "gamestates.play",     --Game Gamestate
-    --GAMEOVER = require "gamestates.gameover"  --Gameover Gamestate
+    PLAY = require "gamestates.play",     --Game Gamestate
+    PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
 }
 
 ------------------
