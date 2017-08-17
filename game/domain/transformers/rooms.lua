@@ -6,20 +6,22 @@ local Rectangle  = Helpers.rect
 local random     = Helpers.random
 local schematics = Helpers.schematics
 
--- localify
-local floor = math.floor
-
 return function (map, params)
   local width  = map.getWidth()
   local height = map.getHeight()
+
+  -- room dimensions
   local minw = params.minw
   local minh = params.minh
   local maxw = params.maxw
   local maxh = params.maxh
-  local count = params.count
-  local tries = params.tries
   local rmargin = 3
 
+  -- room quantities
+  local count = params.count
+  local tries = params.tries
+
+  -- room positions
   local minx = mw + 1
   local miny = mh + 1
   local maxx = width - mw
@@ -52,7 +54,7 @@ return function (map, params)
 
   local function isRoomInsideMap(room)
     local max = room.getMax()
-    return map.isInsideMargin(max.x, max.y)
+    return map.isInsideMargins(max.x, max.y)
   end
 
   local function generateRooms ()

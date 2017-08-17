@@ -26,7 +26,7 @@ function Grid:instance(obj, w, h, mw, mh)
     return _mw, _mh
   end
 
-  function obj.isInsideMargin(x, y)
+  function obj.isInsideMargins(x, y)
     return y > _mh and y <= _h - _mh and x > _mw and x <= _w - _mw
   end
 
