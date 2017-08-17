@@ -28,7 +28,7 @@ local useful_pos = {
 }
 
 -- validators
-local function is_room_intersecting(room, room_list)
+local function isRoomIntersecting(room, room_list)
   local N = #room_list
   local cpos = room.getPos()
   local cdim = room.getDim()
@@ -43,13 +43,13 @@ local function is_room_intersecting(room, room_list)
   return false
 end
 
-local function is_room_inside_map(room, map)
+local function isRoomInsideMap(room, map)
   local max = room.getMax()
   return map.isInsideMargin(max.x, max.y, margin)
 end
 
 -- generators
-local function make_one_room()
+local function makeOneRoom()
   return Rectangle(
     Rand.odd(useful_pos[1], useful_pos[2]),
     Rand.odd(useful_pos[3], useful_pos[4]),
@@ -58,21 +58,21 @@ local function make_one_room()
   )
 end
 
-local function make_rooms_for_map (map)
+local function makeRoomsForMap (map)
   local rooms = {}
   for i = 1, room_count do
     table.insert(rooms, (function ()
       local rect
       repeat
         rect = make_one_room()
-      until is_room_inside_map(rect, map) and not is_room_intersecting(rect, rooms)
+      until isRoomInsideMap(rect, map) and not isRoomIntersecting(rect, rooms)
       return rect
     end)())
   end
   return rooms
 end
 
-local function cave_rooms(map, rooms)
+local function caveRooms(map, rooms)
   for _, room in ipairs(rooms) do
     local min, max = room.getMin(), room.getMax()
     for x = min.x, max.x do
@@ -86,8 +86,8 @@ end
 -- final generator
 return function ()
   local map = Grid(width, height, WALL)
-  local rooms = make_rooms_for_map(map)
-  cave_rooms(map, rooms)
+  local rooms = makeRoomsForMap(map)
+  caveRooms(map, rooms)
 
   -- finished, print
   return map
