@@ -4,7 +4,7 @@ local Rectangle = require 'lux.class' :new{}
 -- dependencies
 local Vector2 = require 'cpml.modules.vec2'
 
-function Rectangle:instance(obj, point1, point2)
+function Rectangle:instance(obj, x, y, w, h)
   local _pos = Vector2(x, y)
   local _dim = Vector2(w, h)
 
