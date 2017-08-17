@@ -1,15 +1,16 @@
 
 local Grid = require 'lux.class' :new{}
 
-function Grid:instance(obj, w, h, fill)
+function Grid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
+  local _mw, _mh = mw, mh
   local _map = {}
 
   -- fill map
   for i = 1, h do
     _map[i] = {}
     for j = 1, w do
-      _map[i][j] = fill or 0
+      _map[i][j] = " "
     end
   end
 
@@ -18,15 +19,15 @@ function Grid:instance(obj, w, h, fill)
   end
 
   function obj.isInside(x, y)
-    return obj.get(x, y) ~= nil
+    return x >= 1 and x <= _w and y >= 1 and y <= _h
   end
 
-  function obj.isInsideMargin(x, y, mw, mh)
-    mw = mw or 0
-    mh = mw or mh
-    return obj.isInside(x, y)
-      and y > mh and y <= _h - mh
-      and x > mw and x <= _w - mw
+  function obj.getMargins()
+    return _mw, _mh
+  end
+
+  function obj.isInsideMargin(x, y)
+    return y > _mh and y <= _h - _mh and x > _mw and x <= _w - _mw
   end
 
   function obj.set(x, y, fill)

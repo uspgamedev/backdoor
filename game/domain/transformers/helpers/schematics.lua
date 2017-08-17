@@ -1,0 +1,7 @@
+
+return {
+  NAUGHT = " ",
+  FLOOR  = "-",
+  WALL   = "#",
+}
+
