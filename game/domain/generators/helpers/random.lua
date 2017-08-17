@@ -2,7 +2,6 @@
 -- dependencies
 local rand = love and love.math.random or math.random
 local floor = math.floor
-local test = ...
 
 local function odd(e, d)
   local e = d and e or 1
