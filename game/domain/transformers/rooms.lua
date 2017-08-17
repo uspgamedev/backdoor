@@ -3,8 +3,8 @@
 local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
 
 local Rectangle  = HELPERS.rect
-local random     = HELPERS.random
-local schematics = HELPERS.schematics
+local RANDOM     = HELPERS.random
+local SCHEMATICS = HELPERS.schematics
 
 return function (map, params)
   local _width, _height = map.getDim()
@@ -31,8 +31,8 @@ return function (map, params)
 
   local function makeOneRoom()
     return Rectangle(
-      random.odd(_minx, _maxx), random.odd(_miny, _maxy),
-      random.even(_minw, _maxw), random.even(_minh, _maxh)
+      RANDOM.odd(_minx, _maxx), RANDOM.odd(_miny, _maxy),
+      RANDOM.even(_minw, _maxw), RANDOM.even(_minh, _maxh)
     )
   end
 
@@ -60,14 +60,21 @@ return function (map, params)
   local function generateRooms ()
     local insert = table.insert
     for i = 1, _count do
-      insert(_rooms, (function ()
+      local room = (function ()
         local room
         repeat
           _tries = _tries - 1
           room = makeOneRoom()
-        until _tries == 0 or isRoomInsideMap(room, map) and not isRoomIntersecting(room)
+        until (isRoomInsideMap(room, map)
+              and not isRoomIntersecting(room))
+              or _tries == 0
+        if _tries == 0 then room = false end
         return room
-      end)())
+      end)()
+      if room then
+        print("room:", room.getMin(), room.getMax())
+        insert(_rooms, room)
+      end
     end
   end
 
@@ -76,7 +83,7 @@ return function (map, params)
       local min, max = room.getMin(), room.getMax()
       for x = min.x, max.x do
         for y = min.y, max.y do
-          map.set(x, y, schematics.FLOOR)
+          map.set(x, y, SCHEMATICS.FLOOR)
         end
       end
     end

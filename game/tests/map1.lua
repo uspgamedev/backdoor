@@ -19,7 +19,7 @@ local _params = {
     minh = 3,
     maxw = 9,
     maxh = 9,
-    count = 8,
+    count = 12,
     tries = 128,
   },
   maze = {
