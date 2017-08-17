@@ -7,8 +7,8 @@ local random     = Helpers.random
 local schematics = Helpers.schematics
 
 return function (map, params)
-  local width  = map.getWidth()
-  local height = map.getHeight()
+  local width, height = map.getDim()
+  local mw, mh = map.getMargins()
 
   -- room dimensions
   local minw = params.minw
@@ -31,8 +31,8 @@ return function (map, params)
 
   local function makeOneRoom()
     return Rectangle(
-      Rand.odd(minx, maxx), Rand.odd(miny, maxy),
-      Rand.odd(minw, maxw), Rand.odd(minh, maxh)
+      random.odd(minx, maxx), random.odd(miny, maxy),
+      random.even(minw, maxw), random.even(minh, maxh)
     )
   end
 
