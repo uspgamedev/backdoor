@@ -79,45 +79,26 @@ function state:enter()
   end
   Signal.register("move", move)
 
-  CONTROL.set_map {
-      PRESS_ACTION_1 = function ()
-          Signal.emit("widget_1")
-      end,
-      PRESS_ACTION_2 = function ()
-          Signal.emit("widget_2")
-      end,
-      PRESS_ACTION_3 = function ()
-          Signal.emit("widget_3")
-      end,
-      PRESS_ACTION_4 = function ()
-          Signal.emit("widget_4")
-      end,
-      PRESS_SPECIAL = function ()
-          Signal.emit("start_card_turn")
-      end,
-      PRESS_CANCEL = function ()
-          Signal.emit("wait")
-      end,
-      PRESS_UP = function ()
-          Signal.emit("move", "up")
-      end,
-      PRESS_RIGHT = function ()
-          Signal.emit("move", "right")
-      end,
-      PRESS_DOWN = function ()
-          Signal.emit("move", "down")
-      end,
-      PRESS_LEFT = function ()
-          Signal.emit("move", "left")
-      end,
-      PRESS_QUIT = function ()
-          Signal.emit("quit")
-      end,
-      PRESS_PAUSE = function ()
-          Signal.emit("pause")
-      end,
+  local signals = {
+      PRESS_UP = {"move", "up"},
+      PRESS_DOWN = {"move", "down"},
+      PRESS_RIGHT = {"move", "right"},
+      PRESS_LEFT = {"move", "left"},
+      PRESS_ACTION_1 = {"widget_1"},
+      PRESS_ACTION_2 = {"widget_2"},
+      PRESS_ACTION_3 = {"widget_3"},
+      PRESS_ACTION_4 = {"widget_4"},
+      PRESS_SPECIAL = {"start_card_turn"},
+      CANCEL = {"wait"},
+      PAUSE = {"pause"},
+      QUIT = {"quit"}
   }
-
+  for name, signal in pairs(signals) do
+      signals[name] = function ()
+          Signal.emit(unpack(signal))
+      end
+  end
+  CONTROL.set_map(signals)
 
   _gui = GUI(_map_view)
   _gui:addElement("GUI")
