@@ -2,16 +2,16 @@
 
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
+local INPUT = require 'infra.input'
+local CONTROL = require 'infra.control'
+local GUI = require 'debug.gui'
+
 local Route = require 'domain.route'
 local Map = require 'domain.map'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local MapView = require 'domain.view.mapview'
-local INPUT = require 'infra.input'
-local ACTION = require 'domain.action'
-local CONTROL = require 'infra.control'
-
-local GUI = require 'debug.gui'
+local Action = require 'domain.action'
 
 local state = {}
 
@@ -77,7 +77,10 @@ function state:enter()
 
   local move = function (dir)
     if _controlled_actor then
-      _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
+      local i, j = _controlled_actor:getPos()
+      dir = DIR[dir]
+      i, j = i+dir[1], j+dir[2]
+      _next_action = Action('MOVE', _controlled_actor, _current_map, {{i,j}})
     end
   end
   local use_primary_action = function ()

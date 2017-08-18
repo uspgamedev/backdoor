@@ -45,7 +45,7 @@ function Actor:ready()
 end
 
 function Actor:makeAction(map)
-  return self:behavior(map) ()
+  return self:behavior(map):run()
 end
 
 function Actor:spendTime(n)
