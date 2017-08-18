@@ -31,8 +31,8 @@ function UnionFind:instance(obj, e)
   function obj.find()
     if _parent == obj then return obj end
     local p = _parent
-    while p ~= obj do
-      p = obj.getParent()
+    while p ~= p.getParent() do
+      p = p.getParent()
     end
     _parent = p
     return _parent
@@ -44,7 +44,7 @@ function UnionFind:unite(obj1, obj2)
   local parent1 = obj1.find()
   local parent2 = obj2.find()
   local rank1 = parent1.getRank()
-  local rank2 - parent2.getRank()
+  local rank2 = parent2.getRank()
   if rank1 >= rank2 then
     return parent2.setParent(parent1)
   else

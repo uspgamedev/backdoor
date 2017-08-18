@@ -65,10 +65,10 @@ return function (_mapgrid, params)
         repeat
           _tries = _tries - 1
           room = makeOneRoom()
-        until (isRoomInsideMap(room, _mapgrid)
-              and not isRoomIntersecting(room))
-              or _tries == 0
-        if _tries == 0 then room = false end
+        until isRoomInsideMap(room, _mapgrid)
+              and not isRoomIntersecting(room)
+              or _tries <= 0
+        if _tries <= 0 then room = false end
         return room
       end)()
       if room then
