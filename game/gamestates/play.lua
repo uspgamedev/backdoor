@@ -43,7 +43,7 @@ local function _randomValidTile()
   local i, j
   repeat
     i, j = rand(_current_map.h), rand(_current_map.w)
-until _current_map:isValid(i, j)
+  until _current_map:isValid(i, j)
   return i, j
 end
 
@@ -76,36 +76,36 @@ function state:enter()
   _playTurns()
 
   local move = function (dir)
-      if _controlled_actor then
-        _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
-      end
+    if _controlled_actor then
+      _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
+    end
   end
   local use_primary_action = function ()
-      if _controlled_actor then
-        _next_action = ACTION.PRIMARY(_current_map, _controlled_actor)
-      end
+    if _controlled_actor then
+      _next_action = ACTION.PRIMARY(_current_map, _controlled_actor)
+    end
   end
   Signal.register("move", move)
   Signal.register("widget_1", use_primary_action)
 
   local signals = {
-      PRESS_UP = {"move", "up"},
-      PRESS_DOWN = {"move", "down"},
-      PRESS_RIGHT = {"move", "right"},
-      PRESS_LEFT = {"move", "left"},
-      PRESS_ACTION_1 = {"widget_1"},
-      PRESS_ACTION_2 = {"widget_2"},
-      PRESS_ACTION_3 = {"widget_3"},
-      PRESS_ACTION_4 = {"widget_4"},
-      PRESS_SPECIAL = {"start_card_turn"},
-      PRESS_CANCEL = {"wait"},
-      PRESS_PAUSE = {"pause"},
-      PRESS_QUIT = {"quit"}
+    PRESS_UP = {"move", "up"},
+    PRESS_DOWN = {"move", "down"},
+    PRESS_RIGHT = {"move", "right"},
+    PRESS_LEFT = {"move", "left"},
+    PRESS_ACTION_1 = {"widget_1"},
+    PRESS_ACTION_2 = {"widget_2"},
+    PRESS_ACTION_3 = {"widget_3"},
+    PRESS_ACTION_4 = {"widget_4"},
+    PRESS_SPECIAL = {"start_card_turn"},
+    PRESS_CANCEL = {"wait"},
+    PRESS_PAUSE = {"pause"},
+    PRESS_QUIT = {"quit"}
   }
   for name, signal in pairs(signals) do
-      signals[name] = function ()
-          Signal.emit(unpack(signal))
-      end
+    signals[name] = function ()
+      Signal.emit(unpack(signal))
+    end
   end
   CONTROL.set_map(signals)
 
@@ -116,7 +116,7 @@ end
 
 function state:leave()
 
-	Util.destroyAll("force")
+  Util.destroyAll("force")
 
 end
 
@@ -128,13 +128,13 @@ function state:update(dt)
       local request, target_opt = _playTurns(_next_action)
       if request == 'pick_target' then
         return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map,
-                              _map_view, target_opt)
+          _map_view, target_opt)
       end
     end
     _map_view:lookAt(_controlled_actor or _player)
   end
 
-	Util.destroyAll()
+  Util.destroyAll()
 
 end
 
@@ -142,9 +142,9 @@ function state:resume(state, args)
   if state == GS.PICK_TARGET then
 
     if args.target_is_valid then
-        _playTurns(args.pos)
+      _playTurns(args.pos)
     else
-        _playTurns(nil)
+      _playTurns(nil)
     end
 
   end
@@ -152,7 +152,7 @@ end
 
 function state:draw()
 
-    Draw.allTables()
+  Draw.allTables()
 
 end
 
@@ -160,7 +160,7 @@ function state:keypressed(key)
 
   imgui.KeyPressed(key)
   if imgui.GetWantCaptureKeyboard() then
-     return
+    return
   end
 
   if not DEBUG then
@@ -168,7 +168,7 @@ function state:keypressed(key)
   end
 
   if key ~= "escape" then
-      Util.defaultKeyPressed(key)
+    Util.defaultKeyPressed(key)
   end
 
 end
@@ -179,14 +179,14 @@ end
 
 function state:keyreleased(key)
 
-    imgui.KeyReleased(key)
-    if imgui.GetWantCaptureKeyboard() then
-       return
-    end
+  imgui.KeyReleased(key)
+  if imgui.GetWantCaptureKeyboard() then
+    return
+  end
 
-    if not DEBUG then
-        INPUT.key_released(key)
-    end
+  if not DEBUG then
+    INPUT.key_released(key)
+  end
 
 end
 
