@@ -53,4 +53,3 @@ function Actor:spendTime(n)
 end
 
 return Actor
-

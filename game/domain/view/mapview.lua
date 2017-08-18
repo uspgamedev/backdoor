@@ -1,8 +1,9 @@
-
 local TILE_W = 80
 local TILE_H = 80
 
-local MapView = Class {
+local Cursor
+
+local MapView = Class{
   __includes = { ELEMENT }
 }
 
@@ -12,6 +13,8 @@ function MapView:init(map)
 
   self.map = map
   self.target = nil
+
+  self.cursor = nil
 
 end
 
@@ -61,7 +64,78 @@ function MapView:draw()
       end
     end
   end
+  local c_i, c_j = self:getCursorPos()
+  --Draw Cursor, if it exists
+  if self.cursor then
+      local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
+      g.push()
+      g.translate(x, y)
+      if self.cursor.valid_position_func(c_i,c_j) then
+          g.setColor(250, 250, 250)
+      else
+          g.setColor(255,0,0)
+      end
+      local line_w = love.graphics.getLineWidth()
+      love.graphics.setLineWidth(4)
+      g.rectangle("line", 0, 0, TILE_W, TILE_H)
+      love.graphics.setLineWidth(line_w)
+      g.pop()
+  end
 
+end
+
+--CURSOR FUNCTIONS
+
+function MapView:newCursor(i,j,valid_position_func)
+    i, j = i or 1, j or 1
+    self.cursor = Cursor(i,j,valid_position_func)
+end
+
+function MapView:removeCursor()
+    self.cursor = nil
+end
+
+function MapView:getCursorPos()
+    if not self.cursor then return end
+
+    return self.cursor:getPos()
+end
+
+function MapView:setCursorPos(i,j)
+    if not self.cursor then return end
+
+    self.cursor.i = i
+    self.cursor.j = j
+end
+
+function MapView:moveCursor(di,dj)
+    if not self.cursor then return end
+
+    self.cursor.i = self.cursor.i + di
+    self.cursor.j = self.cursor.j + dj
+end
+
+function MapView:lookAtCursor()
+    if self.cursor then
+        self:lookAt(self.cursor)
+    end
+end
+
+--CURSOR CLASS--
+
+Cursor = Class{
+  __includes = { ELEMENT }
+}
+
+function Cursor:init(i, j, valid_position_func)
+    self.i = i
+    self.j = j
+
+    self.valid_position_func = valid_position_func
+end
+
+function Cursor:getPos()
+    return self.i, self.j
 end
 
 return MapView

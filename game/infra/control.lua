@@ -1,3 +1,5 @@
+-- FIXME: this file needs to follow the code style conventions!
+
 -- MODULE
 local controls = {}
 
@@ -26,6 +28,10 @@ end
 function controls.set_map (m)
   setmetatable(m, redirect)
   mapped_controls = m
+end
+
+function controls.getMap()
+  return mapped_controls
 end
 
 function controls.update ()

@@ -38,7 +38,7 @@ end
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Map:putBody(body, i, j)
-  assert(self:valid(i,j))
+  assert(self:isValid(i,j))
   -- Remove body from where it was vefore
   local oldmap = body:getMap() or self
   local oldbodies = oldmap.bodies
@@ -68,11 +68,16 @@ function Map:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
 end
 
-function Map:valid(i, j)
-  return (i >= 1 and i <= self.h) and
-         (j >= 1 and j <= self.w) and
+function Map:isInside(i, j)
+    return (i >= 1 and i <= self.h) and
+           (j >= 1 and j <= self.w)
+end
+
+function Map:isValid(i, j)
+  return self:isInside(i,j) and
          self.tiles[i][j] and not self.bodies[i][j]
 end
+
 
 function Map:randomNeighbor(i, j)
   local rand = love.math.random
@@ -85,7 +90,6 @@ function Map:randomNeighbor(i, j)
 end
 
 function turnLoop(self, ...)
-  local yield = coroutine.yield
   while true do
     for _,actor in ipairs(self.actors) do
       actor:tick()
