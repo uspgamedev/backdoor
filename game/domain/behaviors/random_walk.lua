@@ -8,8 +8,9 @@ return function (actor, map)
   local di, dj = unpack(dir)
   i, j = i+di, j+dj
   if map:isValid(i, j) then
-    return Action('MOVE', actor, map, {{i,j}})
+    return 'MOVE', {{i,j}}
   else
-    return Action('IDLE', actor, map, {})
+    return 'IDLE', {}
   end
 end
+

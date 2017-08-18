@@ -1,5 +1,6 @@
 
 local GameElement = require 'domain.gameelement'
+local Action      = require 'domain.action'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -13,6 +14,11 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = 10
+  self.actions = {
+    IDLE = true,
+    MOVE = true,
+    PRIMARY = "SHOOT"
+  }
 
 end
 
@@ -45,7 +51,17 @@ function Actor:ready()
 end
 
 function Actor:makeAction(map)
-  return self:behavior(map):run()
+  local action_name, params = self:behavior(map)
+  local check = self.actions[action_name]
+  if check then
+    local action
+    if check == true then
+      action = Action(action_name, self, map, params)
+    else
+      action = Action(check, self, map, params)
+    end
+    return action:run()
+  end
 end
 
 function Actor:spendTime(n)

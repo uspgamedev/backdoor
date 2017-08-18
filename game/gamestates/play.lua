@@ -80,12 +80,12 @@ function state:enter()
       local i, j = _controlled_actor:getPos()
       dir = DIR[dir]
       i, j = i+dir[1], j+dir[2]
-      _next_action = Action('MOVE', _controlled_actor, _current_map, {{i,j}})
+      _next_action = {'MOVE', {{i,j}}}
     end
   end
   local use_primary_action = function ()
     if _controlled_actor then
-      _next_action = ACTION.PRIMARY(_current_map, _controlled_actor)
+      _next_action = {'PRIMARY', {_controlled_actor:getBody()}}
     end
   end
   Signal.register("move", move)
@@ -128,7 +128,7 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      local request, target_opt = _playTurns(_next_action)
+      local request, target_opt = _playTurns(unpack(_next_action))
       if request == 'pick_target' then
         return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map,
           _map_view, target_opt)

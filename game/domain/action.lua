@@ -65,7 +65,7 @@ actions.IDLE = {
 actions.MOVE = {
   cost = 3,
   params = {
-    { "pos", "pos" }
+    { "pos" }
   },
   effects = {
     { "move_to", 1 }
@@ -76,7 +76,6 @@ actions.SHOOT = {
   cost = 6,
   params = {
     { "body_target" },
-    { "constant", 2 },
   },
   effects = {
     { "damage", 1 },
