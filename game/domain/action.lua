@@ -33,23 +33,11 @@ actions.SHOOT = {
 }
 
 
-local Action = Class {
-  __includes = { ELEMENT }
-}
+local ACTION = {}
 
-function Action:init(specname, actor, map, params)
-  self.spec = actions[specname]
-  self.actor = actor
-  self.map = map
-  self.params = params
-end
-
-function Action:run(map)
-  local spec = self.spec
-  local actor = self.actor
-  local map = self.map
-  local params = self.params
-  actor:spendTime(self.spec.cost)
+function ACTION.run(action_name, actor, map, params)
+  local spec = actions[action_name]
+  actor:spendTime(spec.cost)
   for i,effect_spec in ipairs(spec.effects) do
     local args = {}
     local fx_name
@@ -64,5 +52,5 @@ function Action:run(map)
   end
 end
 
-return Action
+return ACTION
 

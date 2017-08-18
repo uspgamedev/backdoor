@@ -11,7 +11,6 @@ local Map = require 'domain.map'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local MapView = require 'domain.view.mapview'
-local Action = require 'domain.action'
 
 local state = {}
 

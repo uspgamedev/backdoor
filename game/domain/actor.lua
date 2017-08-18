@@ -1,6 +1,6 @@
 
 local GameElement = require 'domain.gameelement'
-local Action      = require 'domain.action'
+local ACTION      = require 'domain.action'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -56,11 +56,11 @@ function Actor:makeAction(map)
   if check then
     local action
     if check == true then
-      action = Action(action_name, self, map, params)
+      action = action_name
     else
-      action = Action(check, self, map, params)
+      action = check
     end
-    return action:run()
+    return ACTION.run(action, self, map, params)
   end
 end
 
