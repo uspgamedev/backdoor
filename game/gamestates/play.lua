@@ -56,6 +56,34 @@ local function _playTurns(...)
   return request, target_opt
 end
 
+local function _moveActor(dir)
+  if _controlled_actor then
+    local i, j = _controlled_actor:getPos()
+    dir = DIR[dir]
+    i, j = i+dir[1], j+dir[2]
+    if _current_map:isValid(i,j) then
+      _next_action = {'MOVE', {{i,j}}}
+    end
+  end
+end
+
+local function _usePrimaryAction()
+  if _controlled_actor then
+    _task = function (target)
+      _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
+    end
+    return Gamestate.push(
+      GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+      {
+        pos = {_controlled_actor:getPos()},
+        valid_position_func = function(i, j)
+          return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+        end
+      }
+    )
+  end
+end
+
 --STATE FUNCTIONS--
 
 function state:enter()
@@ -76,34 +104,8 @@ function state:enter()
 
   _playTurns()
 
-  local move = function (dir)
-    if _controlled_actor then
-      local i, j = _controlled_actor:getPos()
-      dir = DIR[dir]
-      i, j = i+dir[1], j+dir[2]
-      if _current_map:isValid(i,j) then
-        _next_action = {'MOVE', {{i,j}}}
-      end
-    end
-  end
-  local use_primary_action = function ()
-    if _controlled_actor then
-      _task = function (target)
-        _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
-      end
-      return Gamestate.push(
-        GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
-        {
-          pos = {_controlled_actor:getPos()},
-          valid_position_func = function(i, j)
-            return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
-          end
-        }
-      )
-    end
-  end
-  Signal.register("move", move)
-  Signal.register("widget_1", use_primary_action)
+  Signal.register("move", _moveActor)
+  Signal.register("widget_1", _usePrimaryAction)
 
   local signals = {
     PRESS_UP = {"move", "up"},
