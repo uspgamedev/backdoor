@@ -56,30 +56,44 @@ local function _playTurns(...)
 end
 
 local function _moveActor(dir)
-  if _controlled_actor then
-    local i, j = _controlled_actor:getPos()
-    dir = DIR[dir]
-    i, j = i+dir[1], j+dir[2]
-    if _current_map:isValid(i,j) then
-      _next_action = {'MOVE', {{i,j}}}
-    end
+  local i, j = _controlled_actor:getPos()
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if _current_map:isValid(i,j) then
+    _next_action = {'MOVE', {{i,j}}}
   end
 end
 
 local function _usePrimaryAction()
-  if _controlled_actor then
-    _task = function (target)
-      _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
+  Gamestate.push(
+    GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+    {
+      pos = {_controlled_actor:getPos()},
+      valid_position_func = function(i, j)
+        return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+      end
+    }
+  )
+  local args = coroutine.yield(_task)
+  if args.target_is_valid then
+    local target = args.pos
+    _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
+  end
+end
+
+local function _resumeTask(...)
+  if _task then
+    local _
+    _, _task = assert(coroutine.resume(_task, ...))
+  end
+end
+
+local function _makeSignalHandler(callback)
+  return function (...)
+    if _controlled_actor then
+      _task = coroutine.create(callback)
+      return _resumeTask(...)
     end
-    return Gamestate.push(
-      GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
-      {
-        pos = {_controlled_actor:getPos()},
-        valid_position_func = function(i, j)
-          return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
-        end
-      }
-    )
   end
 end
 
@@ -103,8 +117,8 @@ function state:enter()
 
   _playTurns()
 
-  Signal.register("move", _moveActor)
-  Signal.register("widget_1", _usePrimaryAction)
+  Signal.register("move", _makeSignalHandler(_moveActor))
+  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
 
   local signals = {
     PRESS_UP = {"move", "up"},
@@ -155,10 +169,7 @@ end
 function state:resume(state, args)
   if state == GS.PICK_TARGET then
 
-    if _task and args.target_is_valid then
-        _task(args.pos)
-        _task = nil
-    end
+    _resumeTask(args)
 
   end
 end

@@ -56,7 +56,7 @@ function Map:putBody(body, i, j)
 end
 
 function Map:getBodyAt(i, j)
-  return self.bodies[i][j]
+  return self:isInside(i,j) and self.bodies[i][j] or nil
 end
 
 function Map:putActor(actor, i, j)
