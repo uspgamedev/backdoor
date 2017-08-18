@@ -33,20 +33,29 @@ local _params = {
   }
 }
 
-local _map = MapGrid(
-  _params.general.width,
-  _params.general.height,
-  _params.general.mw,
-  _params.general.mh
-)
-
 math.randomseed(_seed)
-TRANSFORMERS.rooms(_map, _params.rooms)
-TRANSFORMERS.maze(_map, _params.maze)
-TRANSFORMERS.connections(_map, _params.connections)
-TRANSFORMERS.deadends(_map, _params.deadends)
 
-print(_map)
 
-return _map
+
+local function generate()
+  local map = MapGrid(
+    _params.general.width,
+    _params.general.height,
+    _params.general.mw,
+    _params.general.mh
+    )
+  TRANSFORMERS.rooms(map, _params.rooms)
+  TRANSFORMERS.maze(map, _params.maze)
+  TRANSFORMERS.connections(map, _params.connections)
+  TRANSFORMERS.deadends(map, _params.deadends)
+  print(map)
+  return map
+end
+
+for i = 1, 32 do
+  print(i)
+  generate()
+end
+
+return generate()
 

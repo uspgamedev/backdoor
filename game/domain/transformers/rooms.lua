@@ -72,7 +72,6 @@ return function (_mapgrid, params)
         return room
       end)()
       if room then
-        print("room:", room.getMin(), room.getMax())
         insert(_rooms, room)
       end
     end

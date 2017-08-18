@@ -41,7 +41,6 @@ return function (_mapgrid, _params)
     union = UnionFind:unite(union, r1)
     union = UnionFind:unite(union, r2)
     _flooded[union.getElement()] = union
-    print("connecting:", p)
     _mapgrid.set(p.x, p.y, SCHEMATICS.FLOOR)
   end
 
