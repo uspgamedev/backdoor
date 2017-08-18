@@ -26,14 +26,19 @@ actions.SHOOT = {
   cost = 6,
   params = {
     { "body_target" },
+    { "body_target" },
   },
   effects = {
     { "damage", 1 },
+    { "damage", 2 },
   }
 }
 
-
 local ACTION = {}
+
+function ACTION.paramsOf(action_name)
+  return ipairs(actions[action_name].params)
+end
 
 function ACTION.run(action_name, actor, map, params)
   local spec = actions[action_name]

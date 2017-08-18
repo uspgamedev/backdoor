@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local ACTION = require 'domain.action'
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local INPUT = require 'infra.input'
@@ -65,20 +66,28 @@ local function _moveActor(dir)
 end
 
 local function _usePrimaryAction()
-  Gamestate.push(
-    GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
-    {
-      pos = {_controlled_actor:getPos()},
-      valid_position_func = function(i, j)
-        return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+  local action_name = _controlled_actor:getAction('PRIMARY')
+  local params = {}
+  for _,param in ACTION.paramsOf(action_name) do
+    if param[1] == 'body_target' then
+      Gamestate.push(
+        GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+        {
+          pos = {_controlled_actor:getPos()},
+          valid_position_func = function(i, j)
+            return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+          end
+        }
+      )
+      local args = coroutine.yield(_task)
+      if args.target_is_valid then
+        table.insert(params, _current_map:getBodyAt(unpack(args.pos)))
+      else
+        return
       end
-    }
-  )
-  local args = coroutine.yield(_task)
-  if args.target_is_valid then
-    local target = args.pos
-    _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
+    end
   end
+  _next_action = {'PRIMARY', params}
 end
 
 local function _resumeTask(...)
