@@ -1,8 +1,8 @@
 
-local Grid = require 'lux.class' :new{}
+local MapGrid = require 'lux.class' :new{}
 local SCHEMATICS = require 'domain.transformers.helpers.schematics'
 
-function Grid:instance(obj, w, h, mw, mh)
+function MapGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
   local _mw, _mh = mw, mh
   local _map = {}
@@ -54,5 +54,5 @@ function Grid:instance(obj, w, h, mw, mh)
 
 end
 
-return Grid
+return MapGrid
 
