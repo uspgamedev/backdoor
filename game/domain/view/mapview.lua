@@ -116,9 +116,9 @@ function MapView:moveCursor(di,dj)
 end
 
 function MapView:lookAtCursor()
-    if self.cursor then
-        self:lookAt(self.cursor)
-    end
+  if self.cursor then
+    self:lookAt(self.cursor)
+  end
 end
 
 --CURSOR CLASS--

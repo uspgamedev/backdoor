@@ -25,6 +25,7 @@ local _current_map
 local _player
 local _next_action
 local _controlled_actor
+local _task
 
 local _gui
 
@@ -80,12 +81,25 @@ function state:enter()
       local i, j = _controlled_actor:getPos()
       dir = DIR[dir]
       i, j = i+dir[1], j+dir[2]
-      _next_action = {'MOVE', {{i,j}}}
+      if _current_map:isValid(i,j) then
+        _next_action = {'MOVE', {{i,j}}}
+      end
     end
   end
   local use_primary_action = function ()
     if _controlled_actor then
-      _next_action = {'PRIMARY', {_controlled_actor:getBody()}}
+      _task = function (target)
+        _next_action = {'PRIMARY', {_current_map:getBodyAt(unpack(target))}}
+      end
+      return Gamestate.push(
+        GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+        {
+          pos = {_controlled_actor:getPos()},
+          valid_position_func = function(i, j)
+            return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+          end
+        }
+      )
     end
   end
   Signal.register("move", move)
@@ -129,10 +143,6 @@ function state:update(dt)
     INPUT.update()
     if _next_action then
       local request, target_opt = _playTurns(unpack(_next_action))
-      if request == 'pick_target' then
-        return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map,
-          _map_view, target_opt)
-      end
     end
     _map_view:lookAt(_controlled_actor or _player)
   end
@@ -144,10 +154,9 @@ end
 function state:resume(state, args)
   if state == GS.PICK_TARGET then
 
-    if args.target_is_valid then
-      _playTurns(args.pos)
-    else
-      _playTurns(nil)
+    if _task and args.target_is_valid then
+        _task(args.pos)
+        _task = nil
     end
 
   end

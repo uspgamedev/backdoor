@@ -40,7 +40,6 @@ function state:enter(_, actor, map, map_view, target_opt)
   _map_view = map_view
   local i, j = unpack(target_opt.pos)
   _map_view:newCursor(i, j, target_opt.valid_position_func)
-  _map_view:lookAtCursor()
 
   local move_cursor = function (dir)
       _map_view:moveCursor(unpack(DIR[dir]))
@@ -98,6 +97,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    _map_view:lookAtCursor()
     INPUT.update()
   end
 

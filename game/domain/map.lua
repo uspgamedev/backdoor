@@ -55,6 +55,10 @@ function Map:putBody(body, i, j)
   pos[1], pos[2] = i, j
 end
 
+function Map:getBodyAt(i, j)
+  return self.bodies[i][j]
+end
+
 function Map:putActor(actor, i, j)
   self:putBody(actor:getBody(), i, j)
   return table.insert(self.actors, actor)
