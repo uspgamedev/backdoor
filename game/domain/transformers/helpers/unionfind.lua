@@ -1,10 +1,10 @@
 
 local UnionFind = require 'lux.class' :new{}
 
-function UnionFind:instance(obj, parent, e)
-  local _parent = parent or obj
-  local _e = e
+function UnionFind:instance(obj, e)
+  local _parent = obj
   local _rank = 1
+  local _e = e
 
   function obj.getElement()
     return _e

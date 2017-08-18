@@ -6,9 +6,9 @@ local Vector2 = require 'cpml.modules.vec2'
 local SCHEMATICS = HELPERS.schematics
 local RANDOM     = HELPERS.random
 
-return function (map, params)
-  local _width, _height = map.getDim()
-  local _mw, _mh = map.getMargins()
+return function (_mapgrid, params)
+  local _width, _height = _mapgrid.getDim()
+  local _mw, _mh = _mapgrid.getMargins()
 
   local _minx = _mw + 1
   local _miny = _mh + 1
@@ -29,7 +29,7 @@ return function (map, params)
     local count = 0
     for i, dir in ipairs(_cardinals) do
       local pos = point + dir
-      if map.get(pos.x, pos.y) ~= FLOOR then
+      if _mapgrid.get(pos.x, pos.y) ~= FLOOR then
         count = count + 1
       else
         notwall = pos
@@ -45,7 +45,7 @@ return function (map, params)
   local function cleanCorner(corner)
     local NAUGHT = SCHEMATICS.NAUGHT
     while corner and isCorner(corner) do
-      map.set(corner.x, corner.y, NAUGHT)
+      _mapgrid.set(corner.x, corner.y, NAUGHT)
       corner = isCorner(corner)
     end
   end
@@ -55,10 +55,10 @@ return function (map, params)
     local corner
     assert(_n >= 0, "Cannot remove negative ammounts of deadends.")
     while _n > 0 do
-      if _n == 0 then return map end
+      if _n == 0 then return _mapgrid end
       local x = RANDOM.odd(_minx, _maxx)
       local y = RANDOM.odd(_miny, _maxy)
-      if map.get(x, y) == FLOOR then
+      if _mapgrid.get(x, y) == FLOOR then
         corner = Vector2(x, y)
         if isCorner(corner) then
           cleanCorner(corner)
@@ -66,7 +66,7 @@ return function (map, params)
         end
       end
     end
-    return map
+    return _mapgrid
   end
 
   return removeDeadEnds()

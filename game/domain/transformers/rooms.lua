@@ -6,9 +6,9 @@ local Rectangle  = HELPERS.rect
 local RANDOM     = HELPERS.random
 local SCHEMATICS = HELPERS.schematics
 
-return function (map, params)
-  local _width, _height = map.getDim()
-  local _mw, _mh = map.getMargins()
+return function (_mapgrid, params)
+  local _width, _height = _mapgrid.getDim()
+  local _mw, _mh = _mapgrid.getMargins()
 
   -- room dimensions
   local _minw = params.minw
@@ -54,7 +54,7 @@ return function (map, params)
 
   local function isRoomInsideMap(room)
     local max = room.getMax()
-    return map.isInsideMargins(max.x, max.y)
+    return _mapgrid.isInsideMargins(max.x, max.y)
   end
 
   local function generateRooms ()
@@ -65,7 +65,7 @@ return function (map, params)
         repeat
           _tries = _tries - 1
           room = makeOneRoom()
-        until (isRoomInsideMap(room, map)
+        until (isRoomInsideMap(room, _mapgrid)
               and not isRoomIntersecting(room))
               or _tries == 0
         if _tries == 0 then room = false end
@@ -83,11 +83,11 @@ return function (map, params)
       local min, max = room.getMin(), room.getMax()
       for x = min.x, max.x do
         for y = min.y, max.y do
-          map.set(x, y, SCHEMATICS.FLOOR)
+          _mapgrid.set(x, y, SCHEMATICS.FLOOR)
         end
       end
     end
-    return map
+    return _mapgrid
   end
 
   generateRooms()

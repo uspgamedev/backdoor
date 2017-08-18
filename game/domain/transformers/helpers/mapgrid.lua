@@ -6,6 +6,7 @@ function MapGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
   local _mw, _mh = mw, mh
   local _map = {}
+  local _content = {}
 
   -- fill map
   for i = 1, h do
@@ -29,6 +30,10 @@ function MapGrid:instance(obj, w, h, mw, mh)
 
   function obj.isInsideMargins(x, y)
     return y > _mh and y <= _h - _mh and x > _mw and x <= _w - _mw
+  end
+
+  function obj.addContent(e)
+    table.insert(_content, e)
   end
 
   function obj.set(x, y, fill)

@@ -7,9 +7,9 @@ local Rectangle  = HELPERS.rect
 local RANDOM     = HELPERS.random
 local SCHEMATICS = HELPERS.schematics
 
-return function (map, params)
-  local _width, _height = map.getDim()
-  local _mw, _mh = map.getMargins()
+return function (_mapgrid, params)
+  local _width, _height = _mapgrid.getDim()
+  local _mw, _mh = _mapgrid.getMargins()
 
   -- corridor positions
   local _minx = _mw + 1
@@ -38,8 +38,8 @@ return function (map, params)
   local function isValidPoint(point)
     local FLOOR = SCHEMATICS.FLOOR
     local x, y = point.x, point.y
-    return map.isInsideMargins(x, y)
-           and map.get(x, y) ~= SCHEMATICS.FLOOR
+    return _mapgrid.isInsideMargins(x, y)
+           and _mapgrid.get(x, y) ~= SCHEMATICS.FLOOR
            and not isPointInScheme(point)
   end
 
@@ -103,13 +103,13 @@ return function (map, params)
       local dx = (pos2.x - pos1.x) / abs(pos2.x - pos1.x)
       local dy = (pos2.y - pos1.y) / abs(pos2.y - pos1.y)
       for x = pos1.x, pos2.x, dx do
-        map.set(x, pos1.y, FLOOR)
+        _mapgrid.set(x, pos1.y, FLOOR)
       end
       for y = pos1.y, pos2.y, dy do
-        map.set(pos1.x, y, FLOOR)
+        _mapgrid.set(pos1.x, y, FLOOR)
       end
     end
-    return map
+    return _mapgrid
   end
 
   setStartPoint()
