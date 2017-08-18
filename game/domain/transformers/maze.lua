@@ -16,6 +16,8 @@ return function (_mapgrid, params)
   local _miny = _mh + 1
   local _maxx = _width - _mw
   local _maxy = _height - _mh
+
+  -- params
   local _dist = 2 * (params.double and 2 or 1)
   local _cardinals = {
     Vector2( 1,  0) * _dist,
@@ -26,6 +28,7 @@ return function (_mapgrid, params)
 
   local _potentials = {}  -- { point, direction }
   local _maze_scheme = {} -- { point, direction }
+  local _possible_starts = {}
   local _start
 
   local function isPointInScheme(point)
@@ -43,10 +46,41 @@ return function (_mapgrid, params)
            and not isPointInScheme(point)
   end
 
+  local function getAllPossibleStartPoints()
+    local insert = table.insert
+    local mx = _minx % 2 == 1 and _minx or _minx + 1
+    local my = _miny % 2 == 1 and _miny or _miny + 1
+    for x = mx, _maxx, 2 do
+      for y = my, _maxy, 2 do
+        local p = Vector2(x, y)
+        if isValidPoint(p) then
+          insert(_possible_starts, p)
+        end
+      end
+    end
+  end
+
+  local function removePossibleStart(k)
+    local N = #_possible_starts
+    local possible_start = _possible_starts[k]
+    _possible_starts[k] = _possible_starts[N]
+    _possible_starts[N] = nil
+    return possible_start
+  end
+
+  local function getPossibleStart(p)
+    local N = #_possible_starts
+    for k = 1, N do
+      if _possible_starts[k] == p then
+        return k
+      end
+    end
+  end
+
   local function setStartPoint()
-    repeat _start = Vector2(RANDOM.odd(_minx, _maxx),
-                            RANDOM.odd(_miny, _maxy))
-    until isValidPoint(_start)
+    local N = #_possible_starts
+    local k = RANDOM.interval(1, N)
+    _start = removePossibleStart(k)
   end
 
   local function addPotentialMovements()
@@ -77,7 +111,7 @@ return function (_mapgrid, params)
         movement = false
       end
       removeFromPotentials(k)
-    until movement or N < 1
+    until movement or N <= 1
 
     return movement
   end
@@ -91,6 +125,8 @@ return function (_mapgrid, params)
       if moveable then
         _start = moveable[1] + moveable[2]
         insert(_maze_scheme, moveable)
+        local k = getPossibleStart(_start)
+        if k then removePossibleStart(k) end
       end
     until not moveable or #_potentials == 0
   end
@@ -112,8 +148,11 @@ return function (_mapgrid, params)
     return _mapgrid
   end
 
-  setStartPoint()
-  generateMaze()
+  getAllPossibleStartPoints()
+  while #_possible_starts > 0 do
+    setStartPoint()
+    generateMaze()
+  end
   return caveMaze()
 end
 
