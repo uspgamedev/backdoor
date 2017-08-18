@@ -83,12 +83,12 @@ return function (_mapgrid, _params)
     local insert = table.insert
     local sides = getFloorNeighbours(x, y)
     if #sides == 2 then
-      --if side[1].dist2(side[2]) == 4 then
+      if sides[1]:dist2(sides[2]) == 4 then
         local id1 = getId(sides[1].x, sides[1].y)
         local id2 = getId(sides[2].x, sides[2].y)
         local c = { Vector2(x, y), { id1, id2 } }
         insert(_connectors, c)
-      --end
+      end
     end
   end
 
