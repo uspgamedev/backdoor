@@ -98,6 +98,8 @@ return function (_mapgrid, params)
     local movement
     local k
 
+    if N == 0 then return false end
+
     local function removeFromPotentials(i)
       _potentials[i] = _potentials[N]
       _potentials[N] = nil
