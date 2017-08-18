@@ -48,6 +48,7 @@ until _current_map:isValid(i, j)
 end
 
 local function _playTurns(...)
+  local request, target_opt
   _controlled_actor, request, target_opt = _current_map:playTurns(...)
   _next_action = nil
 
@@ -124,8 +125,7 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      local request
-      request, target_opt = _playTurns(_next_action)
+      local request, target_opt = _playTurns(_next_action)
       if request == 'pick_target' then
         return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map, _map_view, target_opt)
       end
