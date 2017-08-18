@@ -50,8 +50,15 @@ local function generate()
   return map
 end
 
-print("SEED:", _seed)
-generate()
+local function test(s)
+  local seed = s or math.random(1000000, 9999999)
+  math.randomseed(seed)
+  print("SEED:", seed)
+  return generate()
+end
 
-return generate
+return {
+  generate = generate,
+  test = test
+}
 
