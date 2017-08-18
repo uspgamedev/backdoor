@@ -11,8 +11,8 @@ local _params = {
   general = {
     width = 32,
     height = 32,
-    mw = 2,
-    mh = 2,
+    mw = 3,
+    mh = 3,
   },
   rooms = {
     minw = 3,
@@ -35,8 +35,6 @@ local _params = {
 
 math.randomseed(_seed)
 
-
-
 local function generate()
   local map = MapGrid(
     _params.general.width,
@@ -53,7 +51,7 @@ local function generate()
 end
 
 for i = 1, 32 do
-  print(i)
+  print(i, _seed)
   generate()
 end
 
