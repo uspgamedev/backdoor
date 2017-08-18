@@ -26,11 +26,9 @@ actions.SHOOT = {
   cost = 6,
   params = {
     { "body_target" },
-    { "body_target" },
   },
   effects = {
     { "damage", 1 },
-    { "damage", 2 },
   }
 }
 

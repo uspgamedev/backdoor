@@ -10,7 +10,12 @@ return function (actor, map)
   if map:isValid(i, j) then
     return 'MOVE', {{i,j}}
   else
-    return 'IDLE', {}
+    local body = map:getBodyAt(i,j)
+    if body then
+      return 'PRIMARY', {body}
+    else
+      return 'IDLE', {}
+    end
   end
 end
 
