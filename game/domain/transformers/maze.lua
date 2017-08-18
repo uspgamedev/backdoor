@@ -105,13 +105,13 @@ return function (_mapgrid, params)
     end
 
     repeat
-      k = RANDOM.interval(1, N)
+      k = N > 1 and RANDOM.interval(N) or 1
       movement = _potentials[k]
       if not isValidPoint(movement[1] + movement[2]) then
         movement = false
       end
       removeFromPotentials(k)
-    until movement or N <= 1
+    until movement or N <= 0
 
     return movement
   end

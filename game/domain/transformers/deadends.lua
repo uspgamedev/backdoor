@@ -69,25 +69,31 @@ return function (_mapgrid, params)
   local function removeDeadEnds()
     local FLOOR = SCHEMATICS.FLOOR
     local corner
-    assert(_n >= 0, "Cannot remove negative ammounts of deadends.")
-    while #_corners > 0 and _n > 0 do
-      if _n <= 0 then return _mapgrid end
-      local len = #_corners
+    local len = #_corners
+    if len == 0 then return false end
+    while len > 0 do
       local k = RANDOM.interval(1, len)
 
       corner = _corners[k]
       _corners[k] = _corners[len]
       _corners[len] = nil
+      len = #_corners
       if isCorner(corner) then
         cleanCorner(corner)
-        _n = _n - 1
       end
     end
-    return _mapgrid
+    return true
   end
 
-  getDeadEnds()
-  return removeDeadEnds()
+  local try = 0
+  while try < _n do
+    try = try + 1
+    getDeadEnds()
+    if not removeDeadEnds() then
+      return _mapgrid
+    end
+  end
+  return _mapgrid
 end
 
 

@@ -29,8 +29,8 @@ local _params = {
     n = 128
   },
   deadends = {
-    n = 128
-  }
+    n = 128,
+  },
 }
 
 math.randomseed(_seed)
@@ -50,10 +50,8 @@ local function generate()
   return map
 end
 
-for i = 1, 32 do
-  print(i, _seed)
-  generate()
-end
+print("SEED:", _seed)
+generate()
 
-return generate()
+return generate
 
