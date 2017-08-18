@@ -1,6 +1,5 @@
 
 local DIR = require 'domain.definitions.dir'
-
 local FX = require "domain.effects"
 
 ----------
@@ -32,20 +31,23 @@ end
 
 function action.PRIMARY(map, actor)
     return function()
-        local _,target = coroutine.yield(actor, "pick_target",
-        {
-          pos = {actor:getPos()},
-          valid_position_func = function(i, j)
-                                return map:isInside(i,j) and map.bodies[i][j]
-                            end
-        })
+        local _,target = coroutine.yield(
+          actor,
+          "pick_target",
+          {
+            pos = {actor:getPos()},
+            valid_position_func = function(i, j)
+              return map:isInside(i,j) and map.bodies[i][j]
+            end
+          }
+        )
         if target then
             local i,j = unpack(target)
             target = map.bodies[i][j]
             FX.damage{target = target, amount = 2}
             FX.spend_time{target = actor, amount = 3}
         else
-            coroutine.yield(actor)
+            return select(2,coroutine.yield(actor)) ()
         end
     end
 

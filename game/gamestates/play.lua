@@ -127,7 +127,8 @@ function state:update(dt)
     if _next_action then
       local request, target_opt = _playTurns(_next_action)
       if request == 'pick_target' then
-        return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map, _map_view, target_opt)
+        return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map,
+                              _map_view, target_opt)
       end
     end
     _map_view:lookAt(_controlled_actor or _player)
@@ -207,3 +208,4 @@ end
 
 --Return state functions
 return state
+
