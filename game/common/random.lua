@@ -1,7 +1,12 @@
 
 -- dependencies
 local rand = love and love.math.random or math.random
+local setSeed = love and love.math.setRandomSeed or math.randomseed
 local floor = math.floor
+
+local function generateSeed()
+  return tonumber(tostring(os.time()):sub(-7):reverse())
+end
 
 local function odd(e, d)
   assert(d > e or not d and e > 0, "Invalid arguments for function `odd`.")
@@ -26,8 +31,9 @@ local function even(e, d)
 end
 
 return {
+  generateSeed = generateSeed,
+  setSeed = setSeed,
+  interval = rand,
   odd = odd,
   even = even,
-  interval = rand,
 }
-

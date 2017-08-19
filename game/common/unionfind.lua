@@ -41,16 +41,13 @@ function UnionFind:instance(obj, e)
 end
 
 function UnionFind:unite(obj1, obj2)
-  local parent1 = obj1.find()
-  local parent2 = obj2.find()
-  local rank1 = parent1.getRank()
-  local rank2 = parent2.getRank()
-  if rank1 >= rank2 then
-    return parent2.setParent(parent1)
+  local p1 = obj1.find()
+  local p2 = obj2.find()
+  if p1.getRank() >= p2.getRank() then
+    return p2.setParent(p1)
   else
-    return parent1.setParent(parent2)
+    return p1.setParent(p2)
   end
 end
 
 return UnionFind
-

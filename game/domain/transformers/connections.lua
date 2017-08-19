@@ -1,12 +1,10 @@
 
 -- dependencies
-local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
-local Vector2  = require 'cpml.modules.vec2'
-
-local Rectangle  = HELPERS.rect
-local UnionFind  = HELPERS.unionfind
-local RANDOM     = HELPERS.random
-local SCHEMATICS = HELPERS.schematics
+local SCHEMATICS = require 'definitions.schematics'
+local RANDOM     = require 'common.random'
+local Rectangle  = require 'common.rect'
+local UnionFind  = require 'common.unionfind'
+local Vector2    = require 'cpml.modules.vec2'
 
 return function (_mapgrid, _params)
   local _width, _height = _mapgrid.getDim()

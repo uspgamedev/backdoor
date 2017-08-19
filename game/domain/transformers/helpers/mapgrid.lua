@@ -1,6 +1,6 @@
 
 local MapGrid = require 'lux.class' :new{}
-local SCHEMATICS = require 'domain.transformers.helpers.schematics'
+local SCHEMATICS = require 'definitions.schematics'
 
 function MapGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
@@ -60,4 +60,3 @@ function MapGrid:instance(obj, w, h, mw, mh)
 end
 
 return MapGrid
-

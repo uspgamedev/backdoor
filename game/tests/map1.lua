@@ -1,10 +1,13 @@
 
 -- dependencies
+local RANDOM       = require 'common.random'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
-local MapGrid = require 'domain.transformers.helpers.mapgrid'
+local MapGrid      = require 'domain.transformers.helpers.mapgrid'
 
 -- seed value
-local _seed = tonumber(tostring(os.time()):sub(-7):reverse())
+local _seed = RANDOM.generateSeed()
+RANDOM.setSeed(_seed)
+
 
 -- test values
 local _params = {
@@ -33,15 +36,13 @@ local _params = {
   },
 }
 
-math.randomseed(_seed)
-
+-- generation of map, pretty straightforward
 local function generate()
-  local map = MapGrid(
-    _params.general.width,
-    _params.general.height,
-    _params.general.mw,
-    _params.general.mh
-    )
+  local w = _params.general.width
+  local h = _params.general.height
+  local mw = _params.general.mw
+  local mh = _params.general.mh
+  local map = MapGrid(w, h, mw, mh)
   TRANSFORMERS.rooms(map, _params.rooms)
   TRANSFORMERS.maze(map, _params.maze)
   TRANSFORMERS.connections(map, _params.connections)
@@ -50,15 +51,16 @@ local function generate()
   return map
 end
 
+-- generation of map with controlled seeds
 local function test(s)
-  local seed = s or math.random(1000000, 9999999)
-  math.randomseed(seed)
+  local seed = s or RANDOM.generateSeed()
+  RANDOM.setSeed(seed)
   print("SEED:", seed)
   return generate()
 end
 
+-- returns as a table mapping to the functions above
 return {
   generate = generate,
   test = test
 }
-

@@ -1,10 +1,8 @@
 
 -- dependencies
-local HELPERS = require 'lux.pack' 'domain.transformers.helpers'
-
-local Rectangle  = HELPERS.rect
-local RANDOM     = HELPERS.random
-local SCHEMATICS = HELPERS.schematics
+local SCHEMATICS = require 'definitions.schematics'
+local RANDOM     = require 'common.random'
+local Rectangle  = require 'common.rect'
 
 return function (_mapgrid, params)
   local _width, _height = _mapgrid.getDim()
@@ -92,4 +90,3 @@ return function (_mapgrid, params)
   generateRooms()
   return caveRooms()
 end
-
