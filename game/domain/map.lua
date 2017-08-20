@@ -1,16 +1,36 @@
 
+local DB = require 'database'
+local SCHEMATICS = require 'definitions.schematics'
+local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
+local MapGrid = require 'domain.transformers.helpers.mapgrid'
+
 local Map = Class {
   __includes = { ELEMENT }
 }
 
 local turnLoop
 
-function Map:init(w, h)
+function Map:init(sector_name)
 
   ELEMENT.init(self)
 
+  local specs = DB.loadDomain(sector_name)
+  local general = specs.general
+  local transformers = specs.transformers
+  local w, h = general.width, general.height
+
+  -- load sector's specs
+  self.base = MapGrid(w, h, general.mw, general.mh)
+
   self.w = w
   self.h = h
+
+  -- sector mapgrid generation
+  for _, transformer in ipairs(transformers) do
+    local transformer_name = transformer.name
+    local transformer_params = transformer.params
+    TRANSFORMERS[transformer_name](self.base, transformer_params)
+  end
 
   self.tiles = {}
   self.bodies = {}
@@ -19,7 +39,7 @@ function Map:init(w, h)
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      if love.math.random() > 0.2 then
+      if self.base.get(j, i) == SCHEMATICS.FLOOR then
         self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
       else
         self.tiles[i][j] = false
