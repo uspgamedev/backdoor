@@ -1,5 +1,5 @@
 
-local DB = require 'database'
+local SECTORS = require 'database' .loadDomain("sector")
 local SCHEMATICS = require 'definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 local MapGrid = require 'domain.transformers.helpers.mapgrid'
@@ -14,7 +14,9 @@ function Map:init(sector_name)
 
   ELEMENT.init(self)
 
-  local specs = DB.loadDomain("sector")[sector_name]
+  local specs = SECTORS[sector_name]
+  assert(specs, ("Database entry `sector.%s` not found."):format(sector_name))
+
   local general = specs.general
   local transformers = specs.transformers
   local w, h = general.width, general.height
