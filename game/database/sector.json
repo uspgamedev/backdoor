@@ -1,0 +1,42 @@
+{
+  "sector01": {
+    "general": {
+      "width": 32,
+      "height": 32,
+      "mw": 3,
+      "mh": 3,
+    },
+    "transformers": [
+      {
+        "name": "rooms",
+        "params": {
+          "minw": 3,
+          "minh": 3,
+          "maxw": 7,
+          "maxh": 7,
+          "count": 12,
+          "tries": 256,
+        }
+      },
+      {
+        "name": "maze",
+        "params": {
+          "double": false
+        }
+      },
+      {
+        "name": "connections",
+        "params": {
+          "n": 128
+        }
+      },
+      {
+        "name": "deadends",
+        "params": {
+          "n": 128,
+        }
+      }
+
+    ]
+  }
+}

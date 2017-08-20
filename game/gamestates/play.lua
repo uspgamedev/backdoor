@@ -61,7 +61,7 @@ function state:enter()
 
   _route = Route()
 
-  _current_map = Map("sector1")
+  _current_map = Map("sector01")
   _route.register(_current_map)
   _map_view = MapView(_current_map)
   _map_view:addElement("L1", nil, "map_view")

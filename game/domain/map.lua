@@ -14,7 +14,9 @@ function Map:init(sector_name)
 
   ELEMENT.init(self)
 
-  local specs = DB.loadDomain(sector_name)
+  local specs = DB.loadSpec("sector", sector_name)
+  assert(specs, ("Database entry `sector.%s` not found."):format(sector_name))
+
   local general = specs.general
   local transformers = specs.transformers
   local w, h = general.width, general.height
