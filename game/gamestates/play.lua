@@ -17,7 +17,6 @@ local state = {}
 
 --LOCAL VARIABLES--
 
-local _switch --If gamestate should change to another one
 local _route
 local _map_view
 local _current_map
