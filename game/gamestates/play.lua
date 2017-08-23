@@ -166,7 +166,7 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      local request, target_opt = _playTurns(unpack(_next_action))
+      _playTurns(unpack(_next_action))
     end
     _map_view:lookAt(_controlled_actor or _player)
   end
