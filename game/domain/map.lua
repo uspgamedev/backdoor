@@ -38,7 +38,8 @@ end
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Map:putBody(body, i, j)
-  assert(self:isValid(i,j), debug.traceback())
+  assert(self:isValid(i,j),
+         ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
   -- Remove body from where it was vefore
   local oldmap = body:getMap() or self
   local oldbodies = oldmap.bodies

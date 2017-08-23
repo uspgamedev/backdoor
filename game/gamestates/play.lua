@@ -61,7 +61,7 @@ local function _moveActor(dir)
   dir = DIR[dir]
   i, j = i+dir[1], j+dir[2]
   if _current_map:isValid(i,j) then
-    _next_action = {'MOVE', {{i,j}}}
+    _next_action = {'MOVE', { pos = {i,j} }}
   end
 end
 
@@ -69,7 +69,7 @@ local function _usePrimaryAction()
   local action_name = _controlled_actor:getAction('PRIMARY')
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
-    if param[1] == 'body_target' then
+    if param[1] == 'choose_target' then
       Gamestate.push(
         GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
         {
@@ -81,7 +81,7 @@ local function _usePrimaryAction()
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        table.insert(params, _current_map:getBodyAt(unpack(args.pos)))
+        params[param[3]] = _current_map:getBodyAt(unpack(args.pos))
       else
         return
       end
