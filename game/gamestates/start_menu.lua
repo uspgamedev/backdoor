@@ -10,6 +10,7 @@ local state = {}
 
 local _width, _height
 local _menu_view
+local _font
 
 --LOCAL FUNCTIONS--
 
@@ -21,16 +22,22 @@ local function _sendToLayer ()
   end
 end
 
+local function _title ()
+  _menu_view:push { "setFont", _font }
+  _menu_view:push { "setColor", 0xff, 0xff, 0xff, 0xff }
+  _menu_view:push { "print", "backdoor", 80*4, _height/4 }
+end
+
 --STATE FUNCTIONS--
 
 function state:init ()
   _menu_view = HudView()
+  _font = love.graphics.newFont(48)
   _width, _height = love.window.getMode()
 end
 
 function state:enter ()
   _menu_view:addElement("HUD", nil, "menu_view")
-  print(Util.findId("menu_view"))
   CONTROLS.setMap {
     PRESS_ACTION_1 = MENU.confirm,
     PRESS_SPECIAL  = MENU.cancel,
@@ -47,20 +54,21 @@ end
 
 function state:update (dt)
   INPUT.update()
-  if MENU.begin("START_MENU", _width / 2 - 160, _height / 2, false, 320) then
-    if MENU.item("NEW ROUTE") then
+  if MENU.begin("START_MENU", 80*4, _height / 2) then
+    if MENU.item("New route") then
       SWITCHER.switch(GS.PLAY)
     end
-    if MENU.item("LOAD ROUTE") then
+    if MENU.item("Load route") then
       print("Not implemented yet")
     end
-    if MENU.item("QUIT") then
+    if MENU.item("Quit") then
       love.event.quit()
     end
   else
     love.event.quit()
   end
   MENU.finish()
+  _title()
   _sendToLayer()
 end
 

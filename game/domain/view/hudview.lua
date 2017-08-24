@@ -32,7 +32,6 @@ function HudView:draw()
   local g = love.graphics
   g.push()
   for i = 1, self.size do
-    print(unpack(self.queue[i]))
     g[self.queue[i][1]](unpack(self.queue[i], 2))
   end
   g.pop()

@@ -12,7 +12,7 @@ local _size
 local _width, _height
 local _itemqueue = Queue(64)
 local _renderqueue = Queue(64)
-local _font = love.graphics.newFont(16)
+local _font = love.graphics.newFont(20)
 local _actions = {
   confirm = false,
   cancel = false,
@@ -21,7 +21,7 @@ local _actions = {
 }
 
 -- padding, lineheight
-local PD, LH = 16, 24
+local PD, LH = 32, 20
 
 -- get/set selection
 local function _selection(n)
@@ -96,7 +96,8 @@ function Menu.item(item)
   _count = _count + 1
 
   -- update width to match max item width
-  _width = math.max(_width, _font:getWidth(item))
+  local linewidth = _font:getWidth(item)
+  _width = _width < linewidth+2*PD and _width+linewidth or _width
 
   -- scroll item in limitted box
   if not _scroll_interval or _count >= _scroll_top
@@ -139,6 +140,7 @@ function Menu.finish()
   _renderqueue.push { "rectangle", "fill", 0, 0, _width, _height }
 
   -- push items to render queue
+  _renderqueue.push { "setFont", _font }
   while not _itemqueue.isEmpty() do
     _renderqueue.push(_itemqueue.pop())
     _renderqueue.push(_itemqueue.pop())
