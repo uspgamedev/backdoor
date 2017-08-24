@@ -8,6 +8,7 @@ local _scroll_interval
 local _scroll_top
 local _count
 local _current
+local _size
 local _width, _height
 local _itemqueue = Queue(64)
 local _renderqueue = Queue(64)
@@ -78,6 +79,7 @@ function Menu.begin(name, x, y, scroll)
     _scroll_interval = scroll
     _scroll_top = 1
     _count = 0
+    _size = 0
     _width, _height = 0, 0
   end
 
@@ -121,10 +123,18 @@ end
 
 
 function Menu.finish()
+  -- update menu size
+  _size = _count
+
+  -- reposition selection if out of bounds
+  if _selection() > _size then _selection(1)
+  elseif _selection() < 1 then _selection(_size) end
+
   -- update scrolling, if there is any
   _updateScroll()
 
   -- draw menu container
+  _renderqueue.push { "setColor", 0x20, 0x20, 0x20, 0xff }
   _renderqueue.push { "rectangle", "fill", 0, 0, _width, _height }
 
   -- push items to render queue
@@ -143,9 +153,32 @@ function Menu.cancel() _actions.cancel = true end
 function Menu.next() _actions.next = true end
 function Menu.prev() _actions.prev = true end
 
--- getter
+-- getters
 function Menu.getRenderQueue ()
+  -- render queue
   return _renderqueue
+end
+
+function Menu.getSelection ()
+  -- currently selected index
+  return _selection()
+end
+
+function Menu.getSize ()
+  -- total number of items in menu
+  return _size
+end
+
+function Menu.hasItemsAbove ()
+  -- if you can scroll up
+  return _scroll_interval and _scroll_top > 1
+    and _scroll_top - 1
+end
+
+function Menu.hasItemsBelow ()
+  -- if you can scroll down
+  return _scroll_interval and _scroll_top < _size - _scroll_interval
+    and _size - _scroll_top - _scroll_interval
 end
 
 return Menu
