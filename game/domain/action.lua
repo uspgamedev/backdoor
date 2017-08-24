@@ -5,39 +5,7 @@ local OP = require 'lux.pack' 'domain.operators'
 
 local GameElement = require 'domain.gameelement'
 
-local actions = {}
-
-actions.IDLE = {
-  cost = 1,
-  params = {},
-  values = {},
-  effects = {}
-}
-
-actions.MOVE = {
-  cost = 3,
-  params = {
-    { "direction", {}, "pos" }
-  },
-  values = {},
-  effects = {
-    { "move_to", { "par:pos" } }
-  }
-}
-
-actions.SHOOT = {
-  cost = 6,
-  params = {
-    { "choose_target", {5, "BODY"}, "target" },
-  },
-  values = {
-    { "get_attribute", {"ATH"}, "attr" },
-    { "add", {"val:attr", 3}, "amount" },
-  },
-  effects = {
-    { "deal_damage", { "par:target", "val:amount" } }
-  }
-}
+local actions = require 'database.actions'
 
 local function unref(params, values, ref)
   if type(ref) == 'string' then
@@ -82,4 +50,3 @@ function ACTION.run(action_name, actor, map, params)
 end
 
 return ACTION
-
