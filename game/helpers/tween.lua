@@ -6,7 +6,7 @@ function tween.start(from, to, pace)
     dt = dt or 1
     local step = (to - from)/pace
     if step*step > 0.01 then
-      from = from + step
+      from = from + step * dt
     else
       from = to
     end
@@ -15,4 +15,3 @@ function tween.start(from, to, pace)
 end
 
 return tween
-
