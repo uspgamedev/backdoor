@@ -37,6 +37,7 @@ function draw.allTables()
 
     DrawTable(DRAW_TABLE.GUI)
 
+    SWITCHER.handleChangedState()
 end
 
 --Draw all the elements in a table
