@@ -6,7 +6,6 @@ imgui     = require 'imgui'
 cpml      = require 'cpml'
 
 -- HUMP
-Gamestate = require "steaming.extra_libs.hump.gamestate"
 Timer     = require "steaming.extra_libs.hump.timer"
 Class     = require "steaming.extra_libs.hump.class"
 Camera    = require "steaming.extra_libs.hump.camera"
@@ -31,6 +30,9 @@ GS = {
     PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
 }
 
+-- GAMESTATE SWITCHER
+SWITCHER = require 'infra.switcher'
+
 ------------------
 --LÖVE FUNCTIONS--
 ------------------
@@ -39,7 +41,9 @@ function love.load(arg)
 
     Setup.config() --Configure your game
 
-    Gamestate.registerEvents() --Overwrites love callbacks to call Gamestate as well
+
+    SWITCHER.override() --Overwrites love callbacks to call Gamestate as well
+
 
     --[[
         Setup support for multiple resolutions. Res.init() Must be called after Gamestate.registerEvents()
@@ -47,8 +51,9 @@ function love.load(arg)
     ]]
     Res.init()
 
-    Gamestate.switch(GS.PLAY) --Jump to the inicial state
 
+    SWITCHER.switch(GS.PLAY) --Jump to the inicial state
+    
 end
 
 function love.quit()
