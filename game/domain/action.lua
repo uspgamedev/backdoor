@@ -2,10 +2,9 @@
 local DIR = require 'domain.definitions.dir'
 local FX = require "domain.effects"
 local OP = require 'lux.pack' 'domain.operators'
+local DB = require 'database'
 
 local GameElement = require 'domain.gameelement'
-
-local actions = require 'database.actions'
 
 local function unref(params, values, ref)
   if type(ref) == 'string' then
@@ -24,11 +23,11 @@ end
 local ACTION = {}
 
 function ACTION.paramsOf(action_name)
-  return ipairs(actions[action_name].params)
+  return ipairs(DB.loadSpec("action",action_name).params)
 end
 
 function ACTION.run(action_name, actor, sector, params)
-  local spec = actions[action_name]
+  local spec = DB.loadSpec("action",action_name)
   local values = {}
   actor:spendTime(spec.cost)
   for i,operation in ipairs(spec.values) do
