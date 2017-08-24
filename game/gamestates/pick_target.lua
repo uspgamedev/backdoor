@@ -17,7 +17,6 @@ local state = {}
 
 --LOCAL VARIABLES--
 
-local _switch --If gamestate should change to another one
 local _route
 local _map_view
 local _current_map
@@ -40,7 +39,6 @@ function state:enter(_, actor, map, map_view, target_opt)
   _map_view = map_view
   local i, j = unpack(target_opt.pos)
   _map_view:newCursor(i, j, target_opt.valid_position_func)
-  _map_view:lookAtCursor()
 
   local move_cursor = function (dir)
       _map_view:moveCursor(unpack(DIR[dir]))
@@ -98,6 +96,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    _map_view:lookAtCursor()
     INPUT.update()
   end
 

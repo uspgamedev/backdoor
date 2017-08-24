@@ -1,7 +1,21 @@
 
 local DIR = require 'domain.definitions.dir'
-local action = require 'domain.action'
+local Action = require 'domain.action'
 
 return function (actor, map)
-  return action.MOVE(map, actor, DIR[love.math.random(4)])
+  local dir = DIR[DIR[love.math.random(4)]]
+  local i, j = actor:getPos()
+  local di, dj = unpack(dir)
+  i, j = i+di, j+dj
+  if map:isValid(i, j) then
+    return 'MOVE', { pos = {i,j} }
+  else
+    local body = map:getBodyAt(i,j)
+    if body then
+      return 'PRIMARY', { target = body }
+    else
+      return 'IDLE', {}
+    end
+  end
 end
+

@@ -1,23 +1,22 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
+local ACTION = require 'domain.action'
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
+local INPUT = require 'infra.input'
+local CONTROL = require 'infra.control'
+local GUI = require 'debug.gui'
+
 local Route = require 'domain.route'
 local Map = require 'domain.map'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local MapView = require 'domain.view.mapview'
-local INPUT = require 'infra.input'
-local ACTION = require 'domain.action'
-local CONTROL = require 'infra.control'
-
-local GUI = require 'debug.gui'
 
 local state = {}
 
 --LOCAL VARIABLES--
 
-local _switch --If gamestate should change to another one
 local _route
 local _map_view
 local _current_map
@@ -25,6 +24,7 @@ local _current_map
 local _player
 local _next_action
 local _controlled_actor
+local _task
 
 local _gui
 
@@ -55,6 +55,56 @@ local function _playTurns(...)
   return request, target_opt
 end
 
+local function _moveActor(dir)
+  local i, j = _controlled_actor:getPos()
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if _current_map:isValid(i,j) then
+    _next_action = {'MOVE', { pos = {i,j} }}
+  end
+end
+
+local function _usePrimaryAction()
+  local action_name = _controlled_actor:getAction('PRIMARY')
+  local params = {}
+  for _,param in ACTION.paramsOf(action_name) do
+    if param[1] == 'choose_target' then
+      Gamestate.push(
+        GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+        {
+          pos = {_controlled_actor:getPos()},
+          valid_position_func = function(i, j)
+            return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+          end
+        }
+      )
+      local args = coroutine.yield(_task)
+      if args.target_is_valid then
+        params[param[3]] = _current_map:getBodyAt(unpack(args.pos))
+      else
+        return
+      end
+    end
+  end
+  _next_action = {'PRIMARY', params}
+end
+
+local function _resumeTask(...)
+  if _task then
+    local _
+    _, _task = assert(coroutine.resume(_task, ...))
+  end
+end
+
+local function _makeSignalHandler(callback)
+  return function (...)
+    if _controlled_actor then
+      _task = coroutine.create(callback)
+      return _resumeTask(...)
+    end
+  end
+end
+
 --STATE FUNCTIONS--
 
 function state:enter()
@@ -75,18 +125,8 @@ function state:enter()
 
   _playTurns()
 
-  local move = function (dir)
-    if _controlled_actor then
-      _next_action = ACTION.MOVE(_current_map, _controlled_actor, dir)
-    end
-  end
-  local use_primary_action = function ()
-    if _controlled_actor then
-      _next_action = ACTION.PRIMARY(_current_map, _controlled_actor)
-    end
-  end
-  Signal.register("move", move)
-  Signal.register("widget_1", use_primary_action)
+  Signal.register("move", _makeSignalHandler(_moveActor))
+  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
 
   local signals = {
     PRESS_UP = {"move", "up"},
@@ -125,11 +165,7 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      local request, target_opt = _playTurns(_next_action)
-      if request == 'pick_target' then
-        return Gamestate.push(GS.PICK_TARGET, _controlled_actor, _current_map,
-          _map_view, target_opt)
-      end
+      _playTurns(unpack(_next_action))
     end
     _map_view:lookAt(_controlled_actor or _player)
   end
@@ -141,11 +177,7 @@ end
 function state:resume(state, args)
   if state == GS.PICK_TARGET then
 
-    if args.target_is_valid then
-      _playTurns(args.pos)
-    else
-      _playTurns(nil)
-    end
+    _resumeTask(args)
 
   end
 end

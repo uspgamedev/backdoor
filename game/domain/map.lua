@@ -60,7 +60,8 @@ end
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Map:putBody(body, i, j)
-  assert(self:isValid(i,j))
+  assert(self:isValid(i,j),
+         ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
   -- Remove body from where it was vefore
   local oldmap = body:getMap() or self
   local oldbodies = oldmap.bodies
@@ -75,6 +76,10 @@ function Map:putBody(body, i, j)
   bodies[body] = pos
   bodies[i][j] = body
   pos[1], pos[2] = i, j
+end
+
+function Map:getBodyAt(i, j)
+  return self:isInside(i,j) and self.bodies[i][j] or nil
 end
 
 function Map:putActor(actor, i, j)
