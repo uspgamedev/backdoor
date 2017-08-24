@@ -24,6 +24,21 @@ local _task
 local _sector_view
 local _gui
 
+local SIGNALS = {
+  PRESS_UP = {"move", "up"},
+  PRESS_DOWN = {"move", "down"},
+  PRESS_RIGHT = {"move", "right"},
+  PRESS_LEFT = {"move", "left"},
+  PRESS_ACTION_1 = {"widget_1"},
+  PRESS_ACTION_2 = {"widget_2"},
+  PRESS_ACTION_3 = {"widget_3"},
+  PRESS_ACTION_4 = {"widget_4"},
+  PRESS_SPECIAL = {"start_card_turn"},
+  PRESS_CANCEL = {"wait"},
+  PRESS_PAUSE = {"pause"},
+  PRESS_QUIT = {"quit"}
+}
+
 --LOCAL FUNCTIONS--
 
 local function _moveActor(dir)
@@ -89,6 +104,14 @@ end
 
 --STATE FUNCTIONS--
 
+function state:init()
+  for name, signal in pairs(SIGNALS) do
+    SIGNALS[name] = function ()
+      Signal.emit(unpack(signal))
+    end
+  end
+end
+
 function state:enter()
 
   _route = Route()
@@ -109,27 +132,7 @@ function state:enter()
 
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
-
-  local signals = {
-    PRESS_UP = {"move", "up"},
-    PRESS_DOWN = {"move", "down"},
-    PRESS_RIGHT = {"move", "right"},
-    PRESS_LEFT = {"move", "left"},
-    PRESS_ACTION_1 = {"widget_1"},
-    PRESS_ACTION_2 = {"widget_2"},
-    PRESS_ACTION_3 = {"widget_3"},
-    PRESS_ACTION_4 = {"widget_4"},
-    PRESS_SPECIAL = {"start_card_turn"},
-    PRESS_CANCEL = {"wait"},
-    PRESS_PAUSE = {"pause"},
-    PRESS_QUIT = {"quit"}
-  }
-  for name, signal in pairs(signals) do
-    signals[name] = function ()
-      Signal.emit(unpack(signal))
-    end
-  end
-  CONTROL.set_map(signals)
+  CONTROL.set_map(SIGNALS)
 
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
