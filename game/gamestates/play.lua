@@ -69,7 +69,7 @@ local function _usePrimaryAction()
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param[1] == 'choose_target' then
-      Gamestate.push(
+      SWITCHER.push(
         GS.PICK_TARGET, _controlled_actor, _current_sector, _sector_view,
         {
           pos = {_controlled_actor:getPos()},

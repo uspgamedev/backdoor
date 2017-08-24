@@ -50,7 +50,7 @@ function state:enter(_, actor, sector, sector_view, target_opt)
           target_is_valid = true,
           pos = {_sector_view:getCursorPos()}
         }
-        Gamestate.pop(args)
+        SWITCHER.pop(args)
     end
   end
 
@@ -58,7 +58,7 @@ function state:enter(_, actor, sector, sector_view, target_opt)
       local args = {
         target_is_valid = false,
       }
-      Gamestate.pop(args)
+      SWITCHER.pop(args)
   end
 
   Signal.register("move_cursor", move_cursor)
