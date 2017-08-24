@@ -45,7 +45,7 @@ local function _usePrimaryAction()
   for _,param in ACTION.paramsOf(action_name) do
     if param[1] == 'choose_target' then
       SWITCHER.push(
-        GS.PICK_TARGET, controlled_actor, current_sector, _sector_view,
+        GS.PICK_TARGET, _sector_view,
         {
           pos = { controlled_actor:getPos() },
           valid_position_func = function(i, j)
