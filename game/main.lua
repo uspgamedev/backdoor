@@ -42,7 +42,7 @@ function love.load(arg)
     Setup.config() --Configure your game
 
 
-    SWITCHER.override() --Overwrites love callbacks to call Gamestate as well
+    SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
 
 
     --[[
@@ -53,7 +53,7 @@ function love.load(arg)
 
 
     SWITCHER.switch(GS.PLAY) --Jump to the inicial state
-    
+
 end
 
 function love.quit()
