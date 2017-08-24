@@ -1,6 +1,6 @@
 
 local seed = ...
-local generator = require 'tests.map1'
+local generator = require 'tests.sector1'
 
 if seed then
   print(seed)
@@ -10,6 +10,3 @@ else
     generator.test()
   end
 end
-
-
-

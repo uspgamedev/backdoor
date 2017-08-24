@@ -1,5 +1,4 @@
 
-return function (actor, map, attribute_type)
+return function (actor, sector, attribute_type)
   return 2
 end
-

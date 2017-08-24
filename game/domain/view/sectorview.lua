@@ -3,31 +3,31 @@ local TILE_H = 80
 
 local Cursor
 
-local MapView = Class{
+local SectorView = Class{
   __includes = { ELEMENT }
 }
 
-function MapView:init(map)
+function SectorView:init(sector)
 
   ELEMENT.init(self)
 
-  self.map = map
+  self.sector = sector
   self.target = nil
 
   self.cursor = nil
 
 end
 
-function MapView:setMap(map)
-  self.map = map
+function SectorView:setSector(sector)
+  self.sector = sector
 end
 
-function MapView:lookAt(target)
+function SectorView:lookAt(target)
   self.target = target
 end
 
-function MapView:draw()
-  local map = self.map
+function SectorView:draw()
+  local sector = self.sector
   local g = love.graphics
   g.setBackgroundColor(50, 80, 80, 255)
   do
@@ -37,11 +37,11 @@ function MapView:draw()
     local smooth = 1/5
     CAM:move((tx - x)*smooth,(ty - y)*smooth)
   end
-  for i = 0, map.h-1 do
-    for j = 0, map.w-1 do
-      local tile = map.tiles[i+1][j+1]
+  for i = 0, sector.h-1 do
+    for j = 0, sector.w-1 do
+      local tile = sector.tiles[i+1][j+1]
       if tile then
-        local body = map.bodies[i+1][j+1]
+        local body = sector.bodies[i+1][j+1]
         local x, y = j*TILE_W, i*TILE_H
         g.push()
         g.translate(x, y)
@@ -86,36 +86,36 @@ end
 
 --CURSOR FUNCTIONS
 
-function MapView:newCursor(i,j,valid_position_func)
+function SectorView:newCursor(i,j,valid_position_func)
     i, j = i or 1, j or 1
     self.cursor = Cursor(i,j,valid_position_func)
 end
 
-function MapView:removeCursor()
+function SectorView:removeCursor()
     self.cursor = nil
 end
 
-function MapView:getCursorPos()
+function SectorView:getCursorPos()
     if not self.cursor then return end
 
     return self.cursor:getPos()
 end
 
-function MapView:setCursorPos(i,j)
+function SectorView:setCursorPos(i,j)
     if not self.cursor then return end
 
     self.cursor.i = i
     self.cursor.j = j
 end
 
-function MapView:moveCursor(di,dj)
+function SectorView:moveCursor(di,dj)
     if not self.cursor then return end
 
     self.cursor.i = self.cursor.i + di
     self.cursor.j = self.cursor.j + dj
 end
 
-function MapView:lookAtCursor()
+function SectorView:lookAtCursor()
   if self.cursor then
     self:lookAt(self.cursor)
   end
@@ -138,4 +138,4 @@ function Cursor:getPos()
     return self.i, self.j
 end
 
-return MapView
+return SectorView

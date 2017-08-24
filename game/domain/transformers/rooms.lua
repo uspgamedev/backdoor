@@ -4,9 +4,9 @@ local SCHEMATICS = require 'definitions.schematics'
 local RANDOM     = require 'common.random'
 local Rectangle  = require 'common.rect'
 
-return function (_mapgrid, params)
-  local _width, _height = _mapgrid.getDim()
-  local _mw, _mh = _mapgrid.getMargins()
+return function (_sectorgrid, params)
+  local _width, _height = _sectorgrid.getDim()
+  local _mw, _mh = _sectorgrid.getMargins()
 
   -- room dimensions
   local _minw = params.minw
@@ -50,9 +50,9 @@ return function (_mapgrid, params)
     return false
   end
 
-  local function isRoomInsideMap(room)
+  local function isRoomInsideSector(room)
     local max = room.getMax()
-    return _mapgrid.isInsideMargins(max.x, max.y)
+    return _sectorgrid.isInsideMargins(max.x, max.y)
   end
 
   local function generateRooms ()
@@ -63,7 +63,7 @@ return function (_mapgrid, params)
         repeat
           _tries = _tries - 1
           room = makeOneRoom()
-        until isRoomInsideMap(room, _mapgrid)
+      until isRoomInsideSector(room, _sectorgrid)
               and not isRoomIntersecting(room)
               or _tries <= 0
         if _tries <= 0 then room = false end
@@ -80,11 +80,11 @@ return function (_mapgrid, params)
       local min, max = room.getMin(), room.getMax()
       for x = min.x, max.x do
         for y = min.y, max.y do
-          _mapgrid.set(x, y, SCHEMATICS.FLOOR)
+          _sectorgrid.set(x, y, SCHEMATICS.FLOOR)
         end
       end
     end
-    return _mapgrid
+    return _sectorgrid
   end
 
   generateRooms()

@@ -2,15 +2,15 @@
 local DB = require 'database'
 local SCHEMATICS = require 'definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
-local MapGrid = require 'domain.transformers.helpers.mapgrid'
+local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 
-local Map = Class {
+local Sector = Class {
   __includes = { ELEMENT }
 }
 
 local turnLoop
 
-function Map:init(sector_name)
+function Sector:init(sector_name)
 
   ELEMENT.init(self)
 
@@ -22,12 +22,12 @@ function Map:init(sector_name)
   local w, h = general.width, general.height
 
   -- load sector's specs
-  self.base = MapGrid(w, h, general.mw, general.mh)
+  self.base = SectorGrid(w, h, general.mw, general.mh)
 
   self.w = w
   self.h = h
 
-  -- sector mapgrid generation
+  -- sector grid generation
   for _, transformer in ipairs(transformers) do
     local transformer_name = transformer.name
     local transformer_params = transformer.params
@@ -59,54 +59,54 @@ end
 
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
-function Map:putBody(body, i, j)
+function Sector:putBody(body, i, j)
   assert(self:isValid(i,j),
          ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
   -- Remove body from where it was vefore
-  local oldmap = body:getMap() or self
-  local oldbodies = oldmap.bodies
-  local pos = oldmap.bodies[body] or {0,0}
+  local oldsector = body:getSector() or self
+  local oldbodies = oldsector.bodies
+  local pos = oldsector.bodies[body] or {0,0}
   oldbodies[pos[1]][pos[2]] = false
-  if self ~= oldmap then
+  if self ~= oldsector then
     oldbodies[body] = nil
   end
-  -- Actually put body at (i,j) in this map
+  -- Actually put body at (i,j) in this sector
   local bodies = self.bodies
-  body:setMap(self.id)
+  body:setSector(self.id)
   bodies[body] = pos
   bodies[i][j] = body
   pos[1], pos[2] = i, j
 end
 
-function Map:getBodyAt(i, j)
+function Sector:getBodyAt(i, j)
   return self:isInside(i,j) and self.bodies[i][j] or nil
 end
 
-function Map:putActor(actor, i, j)
+function Sector:putActor(actor, i, j)
   self:putBody(actor:getBody(), i, j)
   return table.insert(self.actors, actor)
 end
 
-function Map:getBodyPos(body)
+function Sector:getBodyPos(body)
   return unpack(self.bodies[body])
 end
 
-function Map:getActorPos(actor)
+function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
 end
 
-function Map:isInside(i, j)
+function Sector:isInside(i, j)
     return (i >= 1 and i <= self.h) and
            (j >= 1 and j <= self.w)
 end
 
-function Map:isValid(i, j)
+function Sector:isValid(i, j)
   return self:isInside(i,j) and
          self.tiles[i][j] and not self.bodies[i][j]
 end
 
 
-function Map:randomNeighbor(i, j)
+function Sector:randomNeighbor(i, j)
   local rand = love.math.random
   repeat
     local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
@@ -127,8 +127,8 @@ function turnLoop(self, ...)
   end
 end
 
-function Map:playTurns(...)
+function Sector:playTurns(...)
   return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
 end
 
-return Map
+return Sector

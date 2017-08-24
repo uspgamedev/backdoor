@@ -18,13 +18,13 @@ for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view") do
   end
 end
 
-function GUI:init(map_view)
+function GUI:init(sector_view)
 
   ELEMENT.init(self)
   self.stack = {}
   self.active = false
   self.current_level = 1
-  self.map_view = map_view
+  self.sector_view = sector_view
 
 end
 
@@ -85,4 +85,3 @@ function GUI:draw()
 end
 
 return GUI
-

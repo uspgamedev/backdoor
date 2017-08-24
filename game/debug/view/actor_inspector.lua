@@ -3,7 +3,7 @@ return function (actor)
 
   return "Actor Inspector", function(self)
     local hp = actor:getBody():getHP()
-    self.map_view:lookAt(actor)
+    self.sector_view:lookAt(actor)
     imgui.Text(("ID: %s"):format(actor:getId()))
     imgui.PushItemWidth(100)
     local changed, newhp = imgui.SliderInt("Hit Points", hp, 1,
@@ -15,4 +15,3 @@ return function (actor)
   end
 
 end
-

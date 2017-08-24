@@ -2,7 +2,7 @@
 -- dependencies
 local RANDOM       = require 'common.random'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
-local MapGrid      = require 'domain.transformers.helpers.mapgrid'
+local SectorGrid      = require 'domain.transformers.helpers.sectorgrid'
 
 -- seed value
 local _seed = RANDOM.generateSeed()
@@ -36,22 +36,22 @@ local _params = {
   },
 }
 
--- generation of map, pretty straightforward
+-- generation of sector, pretty straightforward
 local function generate()
   local w = _params.general.width
   local h = _params.general.height
   local mw = _params.general.mw
   local mh = _params.general.mh
-  local map = MapGrid(w, h, mw, mh)
-  TRANSFORMERS.rooms(map, _params.rooms)
-  TRANSFORMERS.maze(map, _params.maze)
-  TRANSFORMERS.connections(map, _params.connections)
-  TRANSFORMERS.deadends(map, _params.deadends)
-  print(map)
-  return map
+  local sector = SectorGrid(w, h, mw, mh)
+  TRANSFORMERS.rooms(sector, _params.rooms)
+  TRANSFORMERS.maze(sector, _params.maze)
+  TRANSFORMERS.connections(sector, _params.connections)
+  TRANSFORMERS.deadends(sector, _params.deadends)
+  print(sector)
+  return sector
 end
 
--- generation of map with controlled seeds
+-- generation of sector with controlled seeds
 local function test(s)
   local seed = s or RANDOM.generateSeed()
   RANDOM.setSeed(seed)

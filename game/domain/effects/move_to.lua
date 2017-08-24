@@ -1,5 +1,4 @@
 
-return function (actor, map, pos)
-  map:putBody(actor:getBody(), unpack(pos))
+return function (actor, sector, pos)
+  sector:putBody(actor:getBody(), unpack(pos))
 end
-

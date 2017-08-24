@@ -4,9 +4,9 @@ local SCHEMATICS = require 'definitions.schematics'
 local RANDOM     = require 'common.random'
 local Vector2    = require 'cpml.modules.vec2'
 
-return function (_mapgrid, params)
-  local _width, _height = _mapgrid.getDim()
-  local _mw, _mh = _mapgrid.getMargins()
+return function (_sectorgrid, params)
+  local _width, _height = _sectorgrid.getDim()
+  local _mw, _mh = _sectorgrid.getMargins()
 
   -- corridor positions
   local _minx = _mw + 1
@@ -38,8 +38,8 @@ return function (_mapgrid, params)
   local function isValidPoint(point)
     local FLOOR = SCHEMATICS.FLOOR
     local x, y = point.x, point.y
-    return _mapgrid.isInsideMargins(x, y)
-           and _mapgrid.get(x, y) ~= SCHEMATICS.FLOOR
+    return _sectorgrid.isInsideMargins(x, y)
+           and _sectorgrid.get(x, y) ~= SCHEMATICS.FLOOR
            and not isPointInScheme(point)
   end
 
@@ -138,13 +138,13 @@ return function (_mapgrid, params)
       local dx = (pos2.x - pos1.x) / abs(pos2.x - pos1.x)
       local dy = (pos2.y - pos1.y) / abs(pos2.y - pos1.y)
       for x = pos1.x, pos2.x, dx do
-        _mapgrid.set(x, pos1.y, FLOOR)
+        _sectorgrid.set(x, pos1.y, FLOOR)
       end
       for y = pos1.y, pos2.y, dy do
-        _mapgrid.set(pos1.x, y, FLOOR)
+        _sectorgrid.set(pos1.x, y, FLOOR)
       end
     end
-    return _mapgrid
+    return _sectorgrid
   end
 
   getAllPossibleStartPoints()

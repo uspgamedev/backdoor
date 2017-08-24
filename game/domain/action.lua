@@ -27,7 +27,7 @@ function ACTION.paramsOf(action_name)
   return ipairs(actions[action_name].params)
 end
 
-function ACTION.run(action_name, actor, map, params)
+function ACTION.run(action_name, actor, sector, params)
   local spec = actions[action_name]
   local values = {}
   actor:spendTime(spec.cost)
@@ -37,7 +37,7 @@ function ACTION.run(action_name, actor, map, params)
     for j,arg in ipairs(args) do
       argvalues[j] = unref(params, values, arg)
     end
-    values[valname] = OP[opname](actor, map, unpack(argvalues))
+    values[valname] = OP[opname](actor, sector, unpack(argvalues))
   end
   for i,effect_spec in ipairs(spec.effects) do
     local argvalues = {}
@@ -45,7 +45,7 @@ function ACTION.run(action_name, actor, map, params)
     for j,arg in ipairs(args) do
       argvalues[j] = unref(params, values, arg)
     end
-    FX[fx_name](actor, map, unpack(argvalues))
+    FX[fx_name](actor, sector, unpack(argvalues))
   end
 end
 

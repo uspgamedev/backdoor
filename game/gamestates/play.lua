@@ -8,18 +8,18 @@ local CONTROL = require 'infra.control'
 local GUI = require 'debug.gui'
 
 local Route = require 'domain.route'
-local Map = require 'domain.map'
+local Sector = require 'domain.sector'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
-local MapView = require 'domain.view.mapview'
+local SectorView = require 'domain.view.sectorview'
 
 local state = {}
 
 --LOCAL VARIABLES--
 
 local _route
-local _map_view
-local _current_map
+local _sector_view
+local _current_sector
 
 local _player
 local _next_action
@@ -34,7 +34,7 @@ local function _makeActor(bodyspec, actorspec, i, j)
   local bid, body = _route.register(Body(bodyspec))
   local aid, actor = _route.register(Actor(actorspec))
   actor:setBody(bid)
-  _current_map:putActor(actor, i, j)
+  _current_sector:putActor(actor, i, j)
   return actor
 end
 
@@ -42,14 +42,14 @@ local function _randomValidTile()
   local rand = love.math.random
   local i, j
   repeat
-    i, j = rand(_current_map.h), rand(_current_map.w)
-  until _current_map:isValid(i, j)
+    i, j = rand(_current_sector.h), rand(_current_sector.w)
+until _current_sector:isValid(i, j)
   return i, j
 end
 
 local function _playTurns(...)
   local request, target_opt
-  _controlled_actor, request, target_opt = _current_map:playTurns(...)
+  _controlled_actor, request, target_opt = _current_sector:playTurns(...)
   _next_action = nil
 
   return request, target_opt
@@ -59,7 +59,7 @@ local function _moveActor(dir)
   local i, j = _controlled_actor:getPos()
   dir = DIR[dir]
   i, j = i+dir[1], j+dir[2]
-  if _current_map:isValid(i,j) then
+  if _current_sector:isValid(i,j) then
     _next_action = {'MOVE', { pos = {i,j} }}
   end
 end
@@ -70,17 +70,17 @@ local function _usePrimaryAction()
   for _,param in ACTION.paramsOf(action_name) do
     if param[1] == 'choose_target' then
       Gamestate.push(
-        GS.PICK_TARGET, _controlled_actor, _current_map, _map_view,
+        GS.PICK_TARGET, _controlled_actor, _current_sector, _sector_view,
         {
           pos = {_controlled_actor:getPos()},
           valid_position_func = function(i, j)
-            return _current_map:isInside(i,j) and _current_map:getBodyAt(i,j)
+            return _current_sector:isInside(i,j) and _current_sector:getBodyAt(i,j)
           end
         }
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        params[param[3]] = _current_map:getBodyAt(unpack(args.pos))
+        params[param[3]] = _current_sector:getBodyAt(unpack(args.pos))
       else
         return
       end
@@ -111,17 +111,17 @@ function state:enter()
 
   _route = Route()
 
-  _current_map = Map("sector01")
-  _route.register(_current_map)
-  _map_view = MapView(_current_map)
-  _map_view:addElement("L1", nil, "map_view")
+  _current_sector = Sector("sector01")
+  _route.register(_current_sector)
+  _sector_view = SectorView(_current_sector)
+  _sector_view:addElement("L1", nil, "sector_view")
 
   for _=1,5 do
     _makeActor('slime', 'dumb', _randomValidTile())
   end
 
   _player = _makeActor('hearthborn', 'player', _randomValidTile())
-  _map_view:lookAt(_player)
+  _sector_view:lookAt(_player)
 
   _playTurns()
 
@@ -149,7 +149,7 @@ function state:enter()
   end
   CONTROL.set_map(signals)
 
-  _gui = GUI(_map_view)
+  _gui = GUI(_sector_view)
   _gui:addElement("GUI")
 
 end
@@ -167,7 +167,7 @@ function state:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end
-    _map_view:lookAt(_controlled_actor or _player)
+    _sector_view:lookAt(_controlled_actor or _player)
   end
 
   Util.destroyAll()

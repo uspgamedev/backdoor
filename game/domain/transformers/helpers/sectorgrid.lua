@@ -1,18 +1,18 @@
 
-local MapGrid = require 'lux.class' :new{}
+local SectorGrid = require 'lux.class' :new{}
 local SCHEMATICS = require 'definitions.schematics'
 
-function MapGrid:instance(obj, w, h, mw, mh)
+function SectorGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
   local _mw, _mh = mw, mh
-  local _map = {}
+  local _sector = {}
   local _content = {}
 
-  -- fill map
+  -- fill sector
   for i = 1, h do
-    _map[i] = {}
+    _sector[i] = {}
     for j = 1, w do
-      _map[i][j] = SCHEMATICS.NAUGHT
+      _sector[i][j] = SCHEMATICS.NAUGHT
     end
   end
 
@@ -39,11 +39,11 @@ function MapGrid:instance(obj, w, h, mw, mh)
   function obj.set(x, y, fill)
     local e_str = "("..tostring(x)..", "..tostring(y)..")"
     assert(obj.get(x, y), "Out of range: " .. e_str)
-    _map[y][x] = fill
+    _sector[y][x] = fill
   end
 
   function obj.get(x, y)
-    return _map[y] and _map[y][x]
+    return _sector[y] and _sector[y][x]
   end
 
   function obj.__operator:tostring()
@@ -59,4 +59,4 @@ function MapGrid:instance(obj, w, h, mw, mh)
 
 end
 
-return MapGrid
+return SectorGrid

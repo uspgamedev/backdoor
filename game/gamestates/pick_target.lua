@@ -3,10 +3,10 @@
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local Route = require 'domain.route'
-local Map = require 'domain.map'
+local Sector = require 'domain.sector'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
-local MapView = require 'domain.view.mapview'
+local SectorView = require 'domain.view.sectorview'
 local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
@@ -18,8 +18,8 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _route
-local _map_view
-local _current_map
+local _sector_view
+local _current_sector
 
 local _current_actor
 local _cursor
@@ -32,23 +32,23 @@ local _previous_control_map
 
 --STATE FUNCTIONS--
 
-function state:enter(_, actor, map, map_view, target_opt)
+function state:enter(_, actor, sector, sector_view, target_opt)
 
   _current_actor = actor
-  _current_map = map
-  _map_view = map_view
+  _current_sector = sector
+  _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
-  _map_view:newCursor(i, j, target_opt.valid_position_func)
+  _sector_view:newCursor(i, j, target_opt.valid_position_func)
 
   local move_cursor = function (dir)
-      _map_view:moveCursor(unpack(DIR[dir]))
+      _sector_view:moveCursor(unpack(DIR[dir]))
   end
 
   local confirm = function ()
-    if _map_view.cursor.valid_position_func(_map_view:getCursorPos()) then
+    if _sector_view.cursor.valid_position_func(_sector_view:getCursorPos()) then
         local args = {
           target_is_valid = true,
-          pos = {_map_view:getCursorPos()}
+          pos = {_sector_view:getCursorPos()}
         }
         Gamestate.pop(args)
     end
@@ -89,14 +89,14 @@ function state:leave()
     Signal.clear("confirm")
     Signal.clear("cancel")
 
-    _map_view:removeCursor()
+    _sector_view:removeCursor()
     CONTROL.set_map(_previous_control_map)
 end
 
 function state:update(dt)
 
   if not DEBUG then
-    _map_view:lookAtCursor()
+    _sector_view:lookAtCursor()
     INPUT.update()
   end
 

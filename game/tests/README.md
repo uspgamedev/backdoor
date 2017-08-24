@@ -9,5 +9,5 @@ The files on this folder must be required from the `game/` folder. Why? Because 
 ## List of Tests
 
 1. random
-2. map1
-3. bulkmap
+2. sector1
+3. bulksectorgenerator

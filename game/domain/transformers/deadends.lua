@@ -4,9 +4,9 @@ local SCHEMATICS = require 'definitions.schematics'
 local RANDOM     = require 'common.random'
 local Vector2    = require 'cpml.modules.vec2'
 
-return function (_mapgrid, params)
-  local _width, _height = _mapgrid.getDim()
-  local _mw, _mh = _mapgrid.getMargins()
+return function (_sectorgrid, params)
+  local _width, _height = _sectorgrid.getDim()
+  local _mw, _mh = _sectorgrid.getMargins()
 
   local _minx = _mw + 1
   local _miny = _mh + 1
@@ -28,7 +28,7 @@ return function (_mapgrid, params)
     local count = 0
     for i, dir in ipairs(_cardinals) do
       local pos = point + dir
-      if _mapgrid.get(pos.x, pos.y) ~= FLOOR then
+      if _sectorgrid.get(pos.x, pos.y) ~= FLOOR then
         count = count + 1
       else
         notwall = pos
@@ -44,7 +44,7 @@ return function (_mapgrid, params)
   local function cleanCorner(corner)
     local NAUGHT = SCHEMATICS.NAUGHT
     while corner and isCorner(corner) do
-      _mapgrid.set(corner.x, corner.y, NAUGHT)
+      _sectorgrid.set(corner.x, corner.y, NAUGHT)
       corner = isCorner(corner)
     end
   end
@@ -55,7 +55,7 @@ return function (_mapgrid, params)
     for x = _minx, _maxx do
       for y = _miny, _maxy do
         local p = Vector2(x, y)
-        if _mapgrid.get(x, y) == FLOOR then
+        if _sectorgrid.get(x, y) == FLOOR then
           if isCorner(p) then
             insert(_corners, p)
           end
@@ -88,8 +88,8 @@ return function (_mapgrid, params)
     try = try + 1
     getDeadEnds()
     if not removeDeadEnds() then
-      return _mapgrid
+      return _sectorgrid
     end
   end
-  return _mapgrid
+  return _sectorgrid
 end

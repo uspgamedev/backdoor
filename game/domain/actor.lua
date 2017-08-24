@@ -54,8 +54,8 @@ function Actor:ready()
   return self.cooldown <= 0
 end
 
-function Actor:makeAction(map)
-  local action_name, params = self:behavior(map)
+function Actor:makeAction(sector)
+  local action_name, params = self:behavior(sector)
   local check = self.actions[action_name]
   if check then
     local action
@@ -64,7 +64,7 @@ function Actor:makeAction(map)
     else
       action = check
     end
-    return ACTION.run(action, self, map, params)
+    return ACTION.run(action, self, sector, params)
   end
 end
 

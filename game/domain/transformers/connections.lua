@@ -6,9 +6,9 @@ local Rectangle  = require 'common.rect'
 local UnionFind  = require 'common.unionfind'
 local Vector2    = require 'cpml.modules.vec2'
 
-return function (_mapgrid, _params)
-  local _width, _height = _mapgrid.getDim()
-  local _mw, _mh = _mapgrid.getMargins()
+return function (_sectorgrid, _params)
+  local _width, _height = _sectorgrid.getDim()
+  local _mw, _mh = _sectorgrid.getMargins()
 
   -- valid positions
   local _minx = _mw + 1
@@ -39,7 +39,7 @@ return function (_mapgrid, _params)
     union = UnionFind:unite(union, r1)
     union = UnionFind:unite(union, r2)
     _flooded[union.getElement()] = union
-    _mapgrid.set(p.x, p.y, SCHEMATICS.FLOOR)
+    _sectorgrid.set(p.x, p.y, SCHEMATICS.FLOOR)
   end
 
   local function getFloorNeighbours(x, y)
@@ -49,7 +49,7 @@ return function (_mapgrid, _params)
     local pos = Vector2(x, y)
     for i, dir in ipairs(_cardinals) do
       local p = pos + dir
-      if _mapgrid.get(p.x, p.y) == FLOOR then
+      if _sectorgrid.get(p.x, p.y) == FLOOR then
         insert(neighbours, p)
       end
     end
@@ -95,7 +95,7 @@ return function (_mapgrid, _params)
     for x = _minx, _maxx do
       for y = _miny, _maxy do
         local id = getId(x, y)
-        if _mapgrid.get(x, y) == FLOOR then
+        if _sectorgrid.get(x, y) == FLOOR then
           if not _flooded[id] then
             floodOneRegion(x, y)
           end
@@ -132,7 +132,7 @@ return function (_mapgrid, _params)
       _connections = _connections - 1
       connectTwoRegions(r1, r2, c[1])
     end
-    return _mapgrid
+    return _sectorgrid
   end
 
   floodRegions()
