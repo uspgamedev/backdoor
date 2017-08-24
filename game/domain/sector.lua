@@ -82,6 +82,55 @@ function Sector:getBodyAt(i, j)
   return self:isInside(i,j) and self.bodies[i][j] or nil
 end
 
+--Removes the body at given position if it exists. Returns the associated actor if any
+function Sector:removeBodyAt(i, j, body)
+
+  local removed_actor
+
+  --Checks if this body has an actor
+  for i, actor in ipairs(self.actors) do
+    if actor:getBody() ==  body then
+
+      --FIXME: If player dies the game just closes. Change this in the future
+      if actor:getSpec("behavior") == "player" then
+          os.exit(0)
+      end
+
+      removed_actor = table.remove(self.actors, i)
+
+      break
+    end
+  end
+
+  --Remove body from the sector
+  self.bodies[i][j] = false
+
+  return removed_actor
+
+end
+
+--Remove all bodies with <=0 hp on the map and return a table containing all removed actors
+function Sector:removeDeadBodies()
+  local dead_actor_list = {}
+
+  for i = 1, self.h do
+    for j = 1, self.w do
+
+      local body = self:getBodyAt(i,j)
+
+      if body and body:getHP() <= 0 then
+        local actor = self:removeBodyAt(i,j, body)
+        if actor then
+          table.insert(dead_actor_list,actor)
+        end
+      end
+
+    end
+  end
+
+  return dead_actor_list
+end
+
 function Sector:putActor(actor, i, j)
   self:putBody(actor:getBody(), i, j)
   return table.insert(self.actors, actor)
@@ -96,7 +145,7 @@ function Sector:getActorPos(actor)
 end
 
 function Sector:isInside(i, j)
-    return (i >= 1 and i <= self.h) and
+  return (i >= 1 and i <= self.h) and
            (j >= 1 and j <= self.w)
 end
 
@@ -116,14 +165,40 @@ function Sector:randomNeighbor(i, j)
   return i, j
 end
 
+--Check for dead bodies if any, and remove associated actors from the queue
+local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
+    local dead_actor_list = sector:removeDeadBodies()
+    for _, dead_actor in ipairs(dead_actor_list) do
+      for i, act in ipairs(actors_queue) do
+        if dead_actor == act then
+          table.remove(actors_queue, i)
+          break
+        end
+      end
+    end
+end
+
+
 function turnLoop(self, ...)
+  local actors_queue = {}
   while true do
+
+    --Initialize actor queue
     for _,actor in ipairs(self.actors) do
+      table.insert(actors_queue,actor)
+    end
+
+    while(not Util.tableEmpty(actors_queue)) do
+      actor = table.remove(actors_queue)
+
       actor:tick()
       if actor:ready() then
         actor:makeAction(self)
       end
+
+      manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
     end
+
   end
 end
 
