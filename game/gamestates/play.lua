@@ -1,3 +1,4 @@
+
 --MODULE FOR THE GAMESTATE: GAME--
 
 local ACTION = require 'domain.action'
@@ -8,9 +9,6 @@ local CONTROL = require 'infra.control'
 local GUI = require 'debug.gui'
 
 local Route = require 'domain.route'
-local Sector = require 'domain.sector'
-local Body = require 'domain.body'
-local Actor = require 'domain.actor'
 local SectorView = require 'domain.view.sectorview'
 
 local state = {}
@@ -18,69 +16,47 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _route
-local _sector_view
-local _current_sector
-
 local _player
 local _next_action
-local _controlled_actor
+
 local _task
 
+local _sector_view
 local _gui
 
 --LOCAL FUNCTIONS--
 
-local function _makeActor(bodyspec, actorspec, i, j)
-  local bid, body = _route.register(Body(bodyspec))
-  local aid, actor = _route.register(Actor(actorspec))
-  actor:setBody(bid)
-  _current_sector:putActor(actor, i, j)
-  return actor
-end
-
-local function _randomValidTile()
-  local rand = love.math.random
-  local i, j
-  repeat
-    i, j = rand(_current_sector.h), rand(_current_sector.w)
-until _current_sector:isValid(i, j)
-  return i, j
-end
-
-local function _playTurns(...)
-  local request, target_opt
-  _controlled_actor, request, target_opt = _current_sector:playTurns(...)
-  _next_action = nil
-
-  return request, target_opt
-end
-
 local function _moveActor(dir)
-  local i, j = _controlled_actor:getPos()
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
   dir = DIR[dir]
   i, j = i+dir[1], j+dir[2]
-  if _current_sector:isValid(i,j) then
+  if current_sector:isValid(i,j) then
     _next_action = {'MOVE', { pos = {i,j} }}
   end
 end
 
 local function _usePrimaryAction()
-  local action_name = _controlled_actor:getAction('PRIMARY')
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local action_name = controlled_actor:getAction('PRIMARY')
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param[1] == 'choose_target' then
       SWITCHER.push(
-        GS.PICK_TARGET, _controlled_actor, _current_sector, _sector_view,
+        GS.PICK_TARGET, controlled_actor, current_sector, _sector_view,
         {
-          pos = {_controlled_actor:getPos()},
+          pos = { controlled_actor:getPos() },
           valid_position_func = function(i, j)
-            return _current_sector:isInside(i,j) and _current_sector:getBodyAt(i,j)
+            return current_sector:isInside(i,j) and
+                   current_sector:getBodyAt(i,j)
           end
         }
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        params[param[3]] = _current_sector:getBodyAt(unpack(args.pos))
+        params[param[3]] = current_sector:getBodyAt(unpack(args.pos))
       else
         return
       end
@@ -98,11 +74,17 @@ end
 
 local function _makeSignalHandler(callback)
   return function (...)
-    if _controlled_actor then
+    local controlled_actor = _route.getControlledActor()
+    if controlled_actor then
       _task = coroutine.create(callback)
       return _resumeTask(...)
     end
   end
+end
+
+local function _playTurns(...)
+  _route.playTurns(...)
+  _next_action = nil
 end
 
 --STATE FUNCTIONS--
@@ -111,16 +93,16 @@ function state:enter()
 
   _route = Route()
 
-  _current_sector = Sector("sector01")
-  _route.register(_current_sector)
-  _sector_view = SectorView(_current_sector)
+  local sector = _route.makeSector('sector01')
+
+  _sector_view = SectorView(sector)
   _sector_view:addElement("L1", nil, "sector_view")
 
   for _=1,5 do
-    _makeActor('slime', 'dumb', _randomValidTile())
+    _route.makeActor('slime', 'dumb', sector:randomValidTile())
   end
 
-  _player = _makeActor('hearthborn', 'player', _randomValidTile())
+  _player = _route.makeActor('hearthborn', 'player', sector:randomValidTile())
   _sector_view:lookAt(_player)
 
   _playTurns()
@@ -167,7 +149,7 @@ function state:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end
-    _sector_view:lookAt(_controlled_actor or _player)
+    _sector_view:lookAt(_route.getControlledActor() or _player)
   end
 
   Util.destroyAll()
@@ -240,3 +222,4 @@ end
 
 --Return state functions
 return state
+

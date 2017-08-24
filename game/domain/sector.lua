@@ -2,23 +2,39 @@
 local DB = require 'database'
 local SCHEMATICS = require 'definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
+
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
+local GameElement = require 'domain.gameelement'
 
 local Sector = Class {
-  __includes = { ELEMENT }
+  __includes = { GameElement }
 }
 
 local turnLoop
 
-function Sector:init(sector_name)
+function Sector:init(spec_name)
 
-  ELEMENT.init(self)
+  GameElement.init(self, 'sector', spec_name)
 
-  local specs = DB.loadSpec("sector", sector_name)
-  assert(specs, ("Database entry `sector.%s` not found."):format(sector_name))
+  self.w = 1
+  self.h = 1
 
-  local general = specs.general
-  local transformers = specs.transformers
+  self.tiles = {{ false }}
+  self.bodies = {}
+  self.actors = {}
+
+  -- A special tile where we can always remove things from...
+  -- Because nothing is ever there!
+  self.bodies[0] = { [0] = false }
+
+  self.turnLoop = coroutine.create(turnLoop)
+
+end
+
+function Sector:generate()
+
+  local general = self:getSpec('general')
+  local transformers = self:getSpec('transformers')
   local w, h = general.width, general.height
 
   -- load sector's specs
@@ -34,9 +50,6 @@ function Sector:init(sector_name)
     TRANSFORMERS[transformer_name](self.base, transformer_params)
   end
 
-  self.tiles = {}
-  self.bodies = {}
-  self.actors = {}
   for i = 1, h do
     self.tiles[i] = {}
     self.bodies[i] = {}
@@ -49,11 +62,6 @@ function Sector:init(sector_name)
       self.bodies[i][j] = false
     end
   end
-  -- A special tile where we can always remove things from...
-  -- Because nothing is ever there!
-  self.bodies[0] = { [0] = false }
-
-  self.turnLoop = coroutine.create(turnLoop)
 
 end
 
@@ -105,6 +113,14 @@ function Sector:isValid(i, j)
          self.tiles[i][j] and not self.bodies[i][j]
 end
 
+function Sector:randomValidTile()
+  local rand = love.math.random
+  local i, j
+  repeat
+    i, j = rand(self.h), rand(self.w)
+  until self:isValid(i, j)
+  return i, j
+end
 
 function Sector:randomNeighbor(i, j)
   local rand = love.math.random
