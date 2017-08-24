@@ -72,7 +72,7 @@ function state:enter(_, sector_view, target_opt)
       end
   end
   _previous_control_map = CONTROL.getMap()
-  CONTROL.set_map(signals)
+  CONTROL.setMap(signals)
 
 end
 
@@ -82,7 +82,7 @@ function state:leave()
     Signal.clear("cancel")
 
     _sector_view:removeCursor()
-    CONTROL.set_map(_previous_control_map)
+    CONTROL.setMap(_previous_control_map)
 end
 
 function state:update(dt)

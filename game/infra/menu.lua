@@ -36,14 +36,14 @@ end
 
 -- check movement
 local function _checkMovement()
-  if _actions.next then _registered[name] = _registered[name] + 1 end
-  if _actions.prev then _registered[name] = _registered[name] - 1 end
+  if _actions.next then _registered[_current] = _registered[_current] + 1 end
+  if _actions.prev then _registered[_current] = _registered[_current] - 1 end
   return true
 end
 
 -- check height
 local function _checkDimensions ()
-  _width = 2*PD
+  _width = math.max(_width, 2*PD)
   if _scroll_interval then _height = _scroll_interval*LH + 2*PD
   else _height = PD end
   return true
@@ -71,7 +71,7 @@ local function _updateScroll()
 end
 
 -- start menu
-function Menu.begin(name, x, y, scroll)
+function Menu.begin(name, x, y, scroll, static_width)
   -- register new menu
   if _current ~= name then
     _registered[name] = 1
@@ -80,11 +80,11 @@ function Menu.begin(name, x, y, scroll)
     _scroll_top = 1
     _count = 0
     _size = 0
-    _width, _height = 0, 0
+    _width, _height = static_width or 0, 0
   end
 
   -- push menu position
-  _renderqueue.push { "translate", x, y }
+  _renderqueue.push { "translate", x or 0, y or 0 }
 
   -- check menu input and set menu box minimal dimensions
   return _checkCancel() and _checkMovement() and _checkDimensions()
@@ -125,6 +125,7 @@ end
 function Menu.finish()
   -- update menu size
   _size = _count
+  _count = 0
 
   -- reposition selection if out of bounds
   if _selection() > _size then _selection(1)
