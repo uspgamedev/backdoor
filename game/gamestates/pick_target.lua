@@ -17,25 +17,17 @@ local state = {}
 
 --LOCAL VARIABLES--
 
-local _route
-local _sector_view
-local _current_sector
-
-local _current_actor
-local _cursor
-
 local _is_valid_position
 
-local _gui
+local _sector_view
+local _cursor
 
 local _previous_control_map
 
 --STATE FUNCTIONS--
 
-function state:enter(_, actor, sector, sector_view, target_opt)
+function state:enter(_, sector_view, target_opt)
 
-  _current_actor = actor
-  _current_sector = sector
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
   _sector_view:newCursor(i, j, target_opt.valid_position_func)
