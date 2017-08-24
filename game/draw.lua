@@ -24,6 +24,8 @@ function draw.allTables()
 
     CAM:detach() --Stop tracking camera
 
+    DrawTable(DRAW_TABLE.HUD)
+
     if DEBUG and first_time then
       fade = tween.start(0, 50, 5)
       first_time = false
@@ -35,8 +37,6 @@ function draw.allTables()
     g.setColor(255, 255, 255, fade())
     g.rectangle('fill', 0, 0, 1280, 720)
 
-    DrawTable(DRAW_TABLE.HUD)
-    
     DrawTable(DRAW_TABLE.GUI)
 
     SWITCHER.handleChangedState()
