@@ -1,8 +1,13 @@
-
+-- DEPENDENCIES --
 local Queue = require 'lux.common.Queue'
 
-local Menu = {}
 
+-- CONSTANTS --
+local PD, LH = 32, 20 -- padding, lineheight
+
+
+-- PRIVATE VARIABLES --
+local Menu = {}
 local _registered = {}
 local _scroll_interval
 local _scroll_top
@@ -20,9 +25,8 @@ local _actions = {
   prev = false,
 }
 
--- padding, lineheight
-local PD, LH = 32, 20
 
+-- PRIVATE METHODS --
 -- get/set selection
 local function _selection(n)
   _registered[_current] = n or _registered[_current]
@@ -150,18 +154,21 @@ function Menu.finish()
   for k in pairs(_actions) do _actions[k] = false end
 end
 
--- menu actions
+function Menu.flush (menu_view)
+  while not _renderqueue.isEmpty() do
+    menu_view:push(_renderqueue.pop())
+  end
+end
+
+
+-- MENU ACTIONS --
 function Menu.confirm() _actions.confirm = true end
 function Menu.cancel() _actions.cancel = true end
 function Menu.next() _actions.next = true end
 function Menu.prev() _actions.prev = true end
 
--- getters
-function Menu.getRenderQueue ()
-  -- render queue
-  return _renderqueue
-end
 
+-- GETTERS --
 function Menu.getSelection ()
   -- currently selected index
   return _selection()

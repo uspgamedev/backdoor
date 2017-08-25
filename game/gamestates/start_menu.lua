@@ -14,14 +14,6 @@ local _font
 
 --LOCAL FUNCTIONS--
 
-local function _sendToLayer ()
-  local render_queue = MENU.getRenderQueue()
-  while not render_queue.isEmpty() do
-    local printing = render_queue.pop()
-    _menu_view:push(printing)
-  end
-end
-
 local function _title ()
   _menu_view:push { "setFont", _font }
   _menu_view:push { "setColor", 0xff, 0xff, 0xff, 0xff }
@@ -69,7 +61,7 @@ function state:update (dt)
   end
   MENU.finish()
   _title()
-  _sendToLayer()
+  MENU.flush(_menu_view)
 end
 
 function state:draw ()
