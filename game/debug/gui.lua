@@ -100,6 +100,7 @@ function GUI:draw()
           self:push("domain_list", name, title)
         end
       end
+      imgui.Separator()
       if imgui.MenuItem("Save") then
         DB.save()
       end
