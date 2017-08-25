@@ -4,9 +4,10 @@ local DB = require 'database'
 return function()
 
   local domains = {
-    'body', 'actor',
+    'body', 'actor', 'sector',
     body = "Body Type",
-    actor = "Actor Type"
+    actor = "Actor Type",
+    sector = "Sector Type"
   }
 
   local selected = nil
