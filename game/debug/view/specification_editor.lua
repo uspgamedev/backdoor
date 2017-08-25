@@ -5,6 +5,16 @@ local spec_item = {}
 
 --[[ Common inputs ]]-----------------------------------------------------------
 
+function spec_item.boolean(spec, key)
+  return function (self) 
+    local value = spec[key.id] or false
+    local changed, newvalue = imgui.Checkbox(key.name, value)
+    if changed then
+      spec[key.id] = newvalue
+    end
+  end
+end
+
 function spec_item.integer(spec, key)
   return function (self) 
     local value = spec[key.id] or key.range[1]
@@ -66,7 +76,7 @@ function spec_item.list(spec, key)
 
   return function(self)
     imgui.Text(("%ss:"):format(key.name))
-    imgui.Indent(40)
+    imgui.Indent(20)
     for i,element in ipairs(list) do
       local view = ("%2d: %s"):format(i, element.typename)
       if imgui.Selectable(view, selected == i) then
@@ -87,7 +97,7 @@ function spec_item.list(spec, key)
         end
       )
     end
-    imgui.Unindent(40)
+    imgui.Unindent(20)
   end
 end
 
