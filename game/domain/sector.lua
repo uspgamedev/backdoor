@@ -33,12 +33,12 @@ end
 
 function Sector:generate()
 
-  local general = self:getSpec('general')
   local transformers = self:getSpec('transformers')
-  local w, h = general.width, general.height
+  local w, h = self:getSpec('width'), self:getSpec('height')
 
   -- load sector's specs
-  self.base = SectorGrid(w, h, general.mw, general.mh)
+  self.base = SectorGrid(w, h, self:getSpec('margin-width'),
+                         self:getSpec('margin-height'))
 
   self.w = w
   self.h = h

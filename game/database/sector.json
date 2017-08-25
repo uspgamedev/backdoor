@@ -1,11 +1,9 @@
 {
   "sector01": {
-    "general": {
-      "width": 32,
-      "height": 32,
-      "mw": 3,
-      "mh": 3,
-    },
+    "width": 32,
+    "height": 32,
+    "margin-width": 3,
+    "margin-height": 3,
     "transformers": [
       {
         "name": "rooms",
@@ -15,7 +13,7 @@
           "maxw": 7,
           "maxh": 7,
           "count": 12,
-          "tries": 256,
+          "tries": 256
         }
       },
       {
@@ -33,7 +31,7 @@
       {
         "name": "deadends",
         "params": {
-          "n": 128,
+          "n": 128
         }
       }
 
