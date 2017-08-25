@@ -56,37 +56,38 @@ end
 --[[ List of elements ]]--------------------------------------------------------
 
 function spec_item.list(spec, key)
-  local data = spec[key.id]
-  local list = { n = 0 }
-  local selected = 0
-  local function add(value)
-    table.insert(list, value)
-    list.n = list.n + 1
-  end
+
+  local list = spec[key.id] or {}
+  local selected = nil
+
   local function delete()
-    data[list[selected]] = nil
     table.remove(list, selected)
-    list.n = list.n - 1
   end
-  for name,spec in pairs(data) do
-    add(name)
-  end
+
   return function(self)
+    imgui.Text(("%ss:"):format(key.name))
+    imgui.Indent(40)
+    for i,element in ipairs(list) do
+      local view = ("%2d: %s"):format(i, element.typename)
+      if imgui.Selectable(view, selected == i) then
+        selected = i
+        self:push('specification_editor', element, element.typename, key.name,
+                  delete)
+      end
+    end
     if imgui.Button("New " .. key.name) then
-      self:push('name_input', key.name,
+      self:push(
+        'list_picker', key.name, key.typeoptions,
         function (value)
-          data[value] = {}
-          add(value)
-        end)
+          if value then
+            table.insert(list, { typename = key.typeoptions[value] })
+            return true
+          end
+          return 0
+        end
+      )
     end
-    imgui.Text(("All %ss:"):format(key.name))
-    local changed
-    changed, selected = imgui.ListBox("", selected, list, list.n, 5)
-    if changed then
-      local element = data[list[selected]]
-      self:push('specification_editor', element, element.typename, key.name,
-                delete)
-    end
+    imgui.Unindent(40)
   end
 end
 
