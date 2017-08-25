@@ -25,7 +25,7 @@ function controls.flush ()
   input_queue.popAll()
 end
 
-function controls.set_map (m)
+function controls.setMap (m)
   setmetatable(m, redirect)
   mapped_controls = m
 end
@@ -43,5 +43,5 @@ function controls.update ()
   input_queue.popAll()
 end
 
-controls.set_map(mapped_controls)
+controls.setMap(mapped_controls)
 return controls

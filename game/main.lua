@@ -28,6 +28,7 @@ Setup     = require "setup"
 GS = {
     PLAY = require "gamestates.play",     --Game Gamestate
     PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
+    START_MENU = require "gamestates.start_menu", --Player is choosing targets
 }
 
 -- GAMESTATE SWITCHER
@@ -52,7 +53,7 @@ function love.load(arg)
     Res.init()
 
 
-    SWITCHER.switch(GS.PLAY) --Jump to the inicial state
+    SWITCHER.switch(GS.START_MENU) --Jump to the inicial state
 
 end
 

@@ -28,7 +28,8 @@ function setup.config()
         BG  = {}, --Background (bottom layer, first to draw)
         L1  = {}, --Layer 1
         L2  = {}, --Layer 2
-        GUI = {}  --Graphic User Interface (top layer, last to draw)
+        HUD = {}, --HUD (top layer, second to last to draw)
+        GUI = {}, --Graphic User Interface (top layer, last to draw)
     }
     --Other Tables
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)

@@ -132,7 +132,7 @@ function state:enter()
 
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
-  CONTROL.set_map(SIGNALS)
+  CONTROL.setMap(SIGNALS)
 
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
@@ -225,4 +225,3 @@ end
 
 --Return state functions
 return state
-
