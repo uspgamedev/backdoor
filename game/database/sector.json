@@ -6,33 +6,25 @@
     "margin-height": 3,
     "transformers": [
       {
-        "name": "rooms",
-        "params": {
-          "minw": 3,
-          "minh": 3,
-          "maxw": 7,
-          "maxh": 7,
-          "count": 12,
-          "tries": 256
-        }
+        "typename": "rooms",
+        "minw": 3,
+        "minh": 3,
+        "maxw": 7,
+        "maxh": 7,
+        "count": 12,
+        "tries": 256
       },
       {
-        "name": "maze",
-        "params": {
-          "double": false
-        }
+        "typename": "maze",
+        "double": false
       },
       {
-        "name": "connections",
-        "params": {
-          "n": 128
-        }
+        "typename": "connections",
+        "n": 128
       },
       {
-        "name": "deadends",
-        "params": {
-          "n": 128
-        }
+        "typename": "deadends",
+        "n": 128
       }
 
     ]

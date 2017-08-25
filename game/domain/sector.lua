@@ -45,9 +45,7 @@ function Sector:generate()
 
   -- sector grid generation
   for _, transformer in ipairs(transformers) do
-    local transformer_name = transformer.name
-    local transformer_params = transformer.params
-    TRANSFORMERS[transformer_name](self.base, transformer_params)
+    TRANSFORMERS[transformer.typename](self.base, transformer)
   end
 
   for i = 1, h do
