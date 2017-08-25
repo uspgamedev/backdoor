@@ -22,7 +22,7 @@ function spec_meta:__index(key)
 end
 
 function DB.schemaFor(domain_name)
-  return ipairs(SCHEMA[domain_name])
+  return ipairs(SCHEMA[domain_name:gsub('/', '.')])
 end
 
 function DB.loadDomain(domain_name)

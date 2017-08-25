@@ -81,8 +81,8 @@ function spec_item.list(spec, key)
       local view = ("%2d: %s"):format(i, element.typename)
       if imgui.Selectable(view, selected == i) then
         selected = i
-        self:push('specification_editor', element, element.typename, key.name,
-                  delete)
+        self:push('specification_editor', element,
+                  key.id .. '/' .. element.typename, key.name, delete)
       end
     end
     if imgui.Button("New " .. key.name) then
