@@ -110,7 +110,7 @@ return function(spec, domain_name, title, delete)
     table.insert(inputs, spec_item[key.type](spec, key))
   end
 
-  return title .. " Editor", function(self)
+  return title .. " Editor", 2, function(self)
     imgui.PushItemWidth(120)
     for _,input in ipairs(inputs) do
       input(self)

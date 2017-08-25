@@ -1,7 +1,7 @@
 
 return function (actor)
 
-  return "Actor Inspector", function(self)
+  return "Actor Inspector", 2, function(self)
     local hp = actor:getBody():getHP()
     self.sector_view:lookAt(actor)
     imgui.Text(("ID: %s"):format(actor:getId()))

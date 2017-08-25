@@ -1,7 +1,7 @@
 
 return function(name, list, value)
 
-  return "Choose a " .. name, function(self)
+  return "Choose a " .. name, 1, function(self)
     imgui.Text("Options:")
     imgui.PushItemWidth(160)
     local changed, newvalue = imgui.ListBox("", value(), list, #list, 5)

@@ -25,7 +25,7 @@ return function(domain_name, title)
     list.n = list.n - 1
   end
 
-  return title .. " List", function(self)
+  return title .. " List", 1, function(self)
     if imgui.Button("New "..title) then
       self:push('name_input', title,
         function (value)
