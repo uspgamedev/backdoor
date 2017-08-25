@@ -5,11 +5,14 @@ local spec_item = {}
 
 function spec_item:integer(spec, domain_name, key)
   local value = spec[key.id]
-  local _, newvalue = imgui.InputInt(key.name, value or 0, 1, 10)
-  spec[key.id] = newvalue
+  local changed, newvalue = imgui.InputInt(key.name, value or 0, 1, 10)
+  if changed then
+    spec[key.id] = newvalue
+  end
 end
 
 function spec_item:enum(spec, domain_name, key)
+  -- Build option list from given array or from a database domain
   local options = key.options
   if type(options) == 'string' then
     local domain = DB.loadDomain(options)
@@ -17,7 +20,9 @@ function spec_item:enum(spec, domain_name, key)
     for k,v in pairs(domain) do
       table.insert(options,k)
     end
+    table.sort(options)
   end
+  -- Find the index of the currently assigned option
   local current = 0
   for i,option in ipairs(options) do
     if option == spec[key.id] then
@@ -25,6 +30,7 @@ function spec_item:enum(spec, domain_name, key)
       break
     end
   end
+  -- Value getter/setter
   local function value(newvalue)
     if newvalue then
       current = newvalue
