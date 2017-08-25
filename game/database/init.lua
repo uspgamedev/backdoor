@@ -1,7 +1,13 @@
 
 local json = require 'dkjson'
+local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 
 local DB = {}
+
+-- Pending issues:
+-- + Support range inputs (min + length)
+-- + Use range input to min/max pairs in transformers
+-- + 'list' should actually be 'mixedlist'
 
 local SCHEMA = {
   body = {
@@ -19,7 +25,8 @@ local SCHEMA = {
     { id = 'margin-width', name = "Margin Width", type = "integer",
       range = {0,16} },
     { id = 'margin-height', name = "Margin Height", type = "integer",
-      range = {0,16} }
+      range = {0,16} },
+    { id = 'transformers', name = "Transformer", type = 'list' }
   }
 }
 
@@ -35,7 +42,7 @@ function spec_meta:__index(key)
 end
 
 function DB.schemaFor(domain_name)
-  return ipairs(SCHEMA[domain_name])
+  return ipairs(SCHEMA[domain_name] or TRANSFORMERS[domain_name].schema)
 end
 
 function DB.loadDomain(domain_name)

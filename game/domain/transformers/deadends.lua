@@ -4,7 +4,13 @@ local SCHEMATICS = require 'definitions.schematics'
 local RANDOM     = require 'common.random'
 local Vector2    = require 'cpml.modules.vec2'
 
-return function (_sectorgrid, params)
+local transformer = {}
+
+transformer.schema = {
+
+}
+
+function transformer.process(_sectorgrid, params)
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -93,3 +99,6 @@ return function (_sectorgrid, params)
   end
   return _sectorgrid
 end
+
+return transformer
+
