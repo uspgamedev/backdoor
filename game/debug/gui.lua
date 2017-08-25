@@ -43,7 +43,7 @@ function GUI:push(viewname, ...)
   local title, render = view[viewname](...)
   local x = tween.start((level-2)*MENU_WIDTH, (level-1)*(MENU_WIDTH+8), 5)
   self.stack[level] = function (self)
-    imgui.SetNextWindowPos(x(), MENU_WIDTH, "Always")
+    imgui.SetNextWindowPos(x(), 40, "Always")
     imgui.SetNextWindowSizeConstraints(MENU_WIDTH, 80, MENU_WIDTH, 400)
     local _,open = imgui.Begin(title, true,
                                { "NoCollapse", "AlwaysAutoResize" })
