@@ -7,7 +7,7 @@ local ROUTEBUILDER = require 'infra.routebuilder'
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
 local PROFILE_FILENAME = SAVEDIR.."profile"
-local METABASE = { next_id = 1, save_list = {}, version = VERSION }
+local METABASE = { next_id = 1, save_list = {} }
 
 -- HELPERS
 local filesystem = love.filesystem
@@ -36,6 +36,7 @@ end
 
 -- METHODS --
 function PROFILE.init()
+  METABASE.version = VERSION
   if RUNFLAGS.CLEAR then _cleanSlate() end
   -- check if profile exists
   if not filesystem.exists(PROFILE_FILENAME) then _newProfile() end
