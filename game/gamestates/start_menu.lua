@@ -52,8 +52,8 @@ function state:update (dt)
   if MENU.begin(_menu_context, 80*4, _height / 2, 3, 160) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
-        local route_id = PROFILE.newRoute()
-        SWITCHER.switch(GS.PLAY, route_id)
+        local route_data = PROFILE.newRoute()
+        SWITCHER.switch(GS.PLAY, route_data)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
@@ -64,8 +64,8 @@ function state:update (dt)
     elseif _menu_context == "LOAD_LIST" then
       local savelist = PROFILE.getSaveList()
       if #savelist > 0 then
-        for _,route_id in ipairs(savelist) do
-          if MENU.item(route_id) then
+        for route_id, route_header in pairs(savelist) do
+          if MENU.item(route_header.charname) then
             SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
           end
         end
