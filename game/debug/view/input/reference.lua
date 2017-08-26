@@ -3,23 +3,7 @@ local DB = require 'database'
 
 local inputs = {}
 
-inputs['value/output'] = function(spec, key, parent)
-  return function(self)
-    local changed, value = imgui.InputText(key.name, spec[key.id] or key.id, 64)
-    if changed then
-      spec[key.id] = value
-    end
-  end
-end
-
-inputs['value/integer'] = function(spec, key, parent)
-
-  local inputInt = require 'debug.view.helpers.integer'
-
-  local idx = 0
-  local value = 0
-
-  local use_ref = false
+local function _getRefs(spec, key, parent)
   local refs = {}
   for k,param in pairs(parent.params) do
     if param ~= spec then
@@ -28,21 +12,43 @@ inputs['value/integer'] = function(spec, key, parent)
   end
   for k,value in pairs(parent.operators) do
     if value ~= spec then
-      table.insert(refs, "val:" .. value.output)
-    end
-  end
-
-  if type(spec[key.id]) == 'number' then
-    value = spec[key.id]
-    use_ref = false
-  else
-    for i,ref in ipairs(refs) do
-      if ref == spec[key.id] then
-        idx = i
-        use_ref = true
-        break
+      local t = require('domain.operators.'..value.typename).type
+      if not t or t == key.match then
+        table.insert(refs, "val:" .. value.output)
       end
     end
+  end
+  local idx = 0
+  for i,ref in ipairs(refs) do
+    if ref == spec[key.id] then
+      idx = i
+      break
+    end
+  end
+  return refs, idx
+end
+
+inputs['output'] = function(spec, key, parent)
+  return function(self)
+    local changed, value = imgui.InputText(key.name, spec[key.id] or key.id, 64)
+    if changed then
+      spec[key.id] = value
+    end
+  end
+end
+
+inputs['value'] = function(spec, key, parent)
+
+  local inputInt = require 'debug.view.helpers.integer'
+
+  local value = 0
+  local refs, idx = _getRefs(spec, key, parent)
+
+  local use_ref = true
+
+  if key.match == 'integer' and type(spec[key.id]) == 'number' then
+    value = spec[key.id]
+    use_ref = false
   end
 
   return function(self)
@@ -56,8 +62,10 @@ inputs['value/integer'] = function(spec, key, parent)
       value = inputInt(value, key.name, range)
       spec[key.id] = value
     end
-    imgui.SameLine()
-    changed, use_ref = imgui.Checkbox("Ref##"..key.id, use_ref)
+    if key.match == 'integer' then
+      imgui.SameLine()
+      changed, use_ref = imgui.Checkbox("Ref##"..key.id, use_ref)
+    end
   end
 end
 

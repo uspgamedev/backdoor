@@ -2,7 +2,7 @@
 local FX = {}
 
 FX.schema = {
-  { id = 'pos', name = "Position", type = 'value/pos' }
+  { id = 'pos', name = "Position", type = 'value', match = 'pos' }
 }
 
 function FX.process (actor, sector,params)

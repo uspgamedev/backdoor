@@ -4,7 +4,7 @@ local OP = {}
 OP.schema = {
   { id = 'which', name = "Attribute", type = 'enum',
     options = {'ATH', 'ARC', 'MEC' } },
-  { id = 'output', name = "Label", type = 'value/output' }
+  { id = 'output', name = "Label", type = 'output' }
 }
 
 OP.type = 'integer'
