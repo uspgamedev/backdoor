@@ -9,6 +9,8 @@ local setup = {}
 --Set game's global variables, random seed, window configuration and anything else needed
 function setup.config()
 
+    VERSION = "0.0.4"
+
     --RANDOM SEED--
     love.math.setRandomSeed( os.time() )
 

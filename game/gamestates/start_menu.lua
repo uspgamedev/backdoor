@@ -2,6 +2,7 @@
 local MENU = require 'infra.menu'
 local INPUT = require 'infra.input'
 local CONTROLS = require 'infra.control'
+local PROFILE = require 'infra.profile'
 local HudView = require 'domain.view.hudview'
 
 local state = {}
@@ -10,6 +11,7 @@ local state = {}
 
 local _width, _height
 local _menu_view
+local _menu_context
 local _font
 
 --LOCAL FUNCTIONS--
@@ -30,6 +32,7 @@ end
 
 function state:enter ()
   _menu_view:addElement("HUD", nil, "menu_view")
+  _menu_context = "START_MENU"
   CONTROLS.setMap {
     PRESS_ACTION_1 = MENU.confirm,
     PRESS_SPECIAL  = MENU.cancel,
@@ -46,18 +49,38 @@ end
 
 function state:update (dt)
   INPUT.update()
-  if MENU.begin("START_MENU", 80*4, _height / 2) then
-    if MENU.item("New route") then
-      SWITCHER.switch(GS.PLAY)
-    end
-    if MENU.item("Load route") then
-      print("Not implemented yet")
-    end
-    if MENU.item("Quit") then
-      love.event.quit()
+  if MENU.begin(_menu_context, 80*4, _height / 2, 3, 160) then
+    if _menu_context == "START_MENU" then
+      if MENU.item("New route") then
+        local route_data = PROFILE.newRoute()
+        SWITCHER.switch(GS.PLAY, route_data)
+      end
+      if MENU.item("Load route") then
+        _menu_context = "LOAD_LIST"
+      end
+      if MENU.item("Quit") then
+        love.event.quit()
+      end
+    elseif _menu_context == "LOAD_LIST" then
+      local savelist = PROFILE.getSaveList()
+      if #savelist > 0 then
+        for route_id, route_header in pairs(savelist) do
+          if MENU.item(route_header.charname) then
+            SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+          end
+        end
+      else
+        if MENU.item("[ NO DATA ]") then
+          _menu_context = "START_MENU"
+        end
+      end
     end
   else
-    love.event.quit()
+    if _menu_context == "START_MENU" then
+      love.event.quit()
+    elseif _menu_context == "LOAD_LIST" then
+      _menu_context = "START_MENU"
+    end
   end
   MENU.finish()
   _title()
