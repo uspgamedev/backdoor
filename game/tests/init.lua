@@ -4,9 +4,6 @@ local RUNFLAGS = require 'infra.runflags'
 --CONTSTANTS--
 local TESTSDIR = "tests/"
 
---HELPERS--
-local filesystem = love.filesystem
-
 --LOCALS--
 local _module_name = RUNFLAGS.TEST
 local _require_error_msg = [==[
