@@ -5,7 +5,10 @@ local _flags = {}
 function RUNFLAGS.init(arg)
   for _, runflag in ipairs(arg) do
     if runflag:match("^%-") then
-      _flags[runflag:match("[^%-]+"):upper()] = true
+      local flagname = runflag:match("%-(%w+)")
+      local value = runflag:match("=(.+)")
+      value = tonumber(value) or value or true
+      _flags[flagname:upper()] = value
     end
   end
   RUNFLAGS.init = function () end
