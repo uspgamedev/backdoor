@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 
 local inputs = {}
@@ -18,8 +19,8 @@ function inputs.list(spec, key)
   end
 
   return function(self)
-    imgui.Text(("%ss:"):format(key.name))
-    imgui.Indent(20)
+    IMGUI.Text(("%ss:"):format(key.name))
+    IMGUI.Indent(20)
     for i,element in ipairs(list) do
       local view
       if element.output then
@@ -27,13 +28,13 @@ function inputs.list(spec, key)
       else
         view = ("%2d: %s"):format(i, element.typename)
       end
-      if imgui.Selectable(view, selected == i) then
+      if IMGUI.Selectable(view, selected == i) then
         selected = i
         self:push('specification_editor', element,
                   key.id .. '/' .. element.typename, key.name, delete, spec)
       end
     end
-    if imgui.Button("New " .. key.name) then
+    if IMGUI.Button("New " .. key.name) then
       self:push(
         'list_picker', key.name, typeoptions,
         function (value)
@@ -45,7 +46,7 @@ function inputs.list(spec, key)
         end
       )
     end
-    imgui.Unindent(20)
+    IMGUI.Unindent(20)
   end
 end
 

@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 
 local function add(list, value)
@@ -26,7 +27,7 @@ return function(domain_name, title)
   end
 
   return title .. " List", 1, function(self)
-    if imgui.Button("New "..title) then
+    if IMGUI.Button("New "..title) then
       self:push('name_input', title,
         function (value)
           local new = {}
@@ -40,9 +41,9 @@ return function(domain_name, title)
           sort(list)
         end)
     end
-    imgui.Text(("All %ss:"):format(title))
+    IMGUI.Text(("All %ss:"):format(title))
     local changed
-    changed, selected = imgui.ListBox("", selected, list, list.n, 5)
+    changed, selected = IMGUI.ListBox("", selected, list, list.n, 5)
     if changed then
       self:push('specification_editor', domain[list[selected]], domain_name,
                 title, delete)

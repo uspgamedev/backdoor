@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 
 local inputs = {}
@@ -31,7 +32,7 @@ end
 
 inputs['output'] = function(spec, key, parent)
   return function(self)
-    local changed, value = imgui.InputText(key.name, spec[key.id] or key.id, 64)
+    local changed, value = IMGUI.InputText(key.name, spec[key.id] or key.id, 64)
     if changed then
       spec[key.id] = value
     end
@@ -55,7 +56,7 @@ inputs['value'] = function(spec, key, parent)
   return function(self)
     local changed
     if use_ref then
-      changed, idx = imgui.Combo(key.name, idx, refs, #refs, 5)
+      changed, idx = IMGUI.Combo(key.name, idx, refs, #refs, 5)
       if changed then
         spec[key.id] = refs[idx]
       end
@@ -64,8 +65,8 @@ inputs['value'] = function(spec, key, parent)
       spec[key.id] = value
     end
     if key.match == 'integer' then
-      imgui.SameLine()
-      changed, use_ref = imgui.Checkbox("Ref##"..key.id, use_ref)
+      IMGUI.SameLine()
+      changed, use_ref = IMGUI.Checkbox("Ref##"..key.id, use_ref)
     end
   end
 end

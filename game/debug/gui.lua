@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 local tween = require 'helpers.tween'
 
@@ -60,14 +61,14 @@ function GUI:push(viewname, ...)
   self.stack[level] = {
     size = size,
     draw = function (self)
-      imgui.SetNextWindowPos(x(), 40, "Always")
-      imgui.SetNextWindowSizeConstraints(width, 80, width, 400)
-      local _,open = imgui.Begin(title, true,
+      IMGUI.SetNextWindowPos(x(), 40, "Always")
+      IMGUI.SetNextWindowSizeConstraints(width, 80, width, 400)
+      local _,open = IMGUI.Begin(title, true,
                                  { "NoCollapse", "AlwaysAutoResize" })
       if open then
         open = not render(self)
       end
-      imgui.End()
+      IMGUI.End()
       return open
     end
   }
@@ -92,39 +93,39 @@ function GUI:draw()
 
   local g = love.graphics
 
-  imgui.NewFrame()
+  IMGUI.NewFrame()
 
-  if imgui.BeginMainMenuBar() then
-    if imgui.BeginMenu("Game") then
-      imgui.Text("WIP")
-      if imgui.MenuItem("New Game") then
+  if IMGUI.BeginMainMenuBar() then
+    if IMGUI.BeginMenu("Game") then
+      IMGUI.Text("WIP")
+      if IMGUI.MenuItem("New Game") then
       end
-      if imgui.MenuItem("Save & Quit") then
+      if IMGUI.MenuItem("Save & Quit") then
       end
-      if imgui.MenuItem("Load") then
+      if IMGUI.MenuItem("Load") then
       end
-      imgui.EndMenu()
+      IMGUI.EndMenu()
     end
-    if imgui.BeginMenu("Current Route") then
-      if imgui.MenuItem("Actors") then
+    if IMGUI.BeginMenu("Current Route") then
+      if IMGUI.MenuItem("Actors") then
         self:push('actors_menu')
       end
-      imgui.EndMenu()
+      IMGUI.EndMenu()
     end
-    if imgui.BeginMenu("Database") then
+    if IMGUI.BeginMenu("Database") then
       for _,name in ipairs(DOMAINS) do
         local title = DOMAINS[name]
-        if imgui.MenuItem(title.."s") then
+        if IMGUI.MenuItem(title.."s") then
           self:push("domain_list", name, title)
         end
       end
-      imgui.Separator()
-      if imgui.MenuItem("Save") then
+      IMGUI.Separator()
+      if IMGUI.MenuItem("Save") then
         DB.save()
       end
-      imgui.EndMenu()
+      IMGUI.EndMenu()
     end
-    imgui.EndMainMenuBar()
+    IMGUI.EndMainMenuBar()
   end
 
   for level,view in ipairs(self.stack) do
@@ -139,7 +140,7 @@ function GUI:draw()
 
   g.setBackgroundColor(50, 80, 80, 255)
   g.setColor(255, 255, 255)
-  imgui.Render()
+  IMGUI.Render()
 end
 
 return GUI

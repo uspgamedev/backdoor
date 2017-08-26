@@ -1,10 +1,12 @@
 
+local IMGUI = require 'imgui'
+
 local inputs = {}
 
 function inputs.boolean(spec, key)
   return function (self) 
     local value = spec[key.id] or false
-    local changed, newvalue = imgui.Checkbox(key.name, value)
+    local changed, newvalue = IMGUI.Checkbox(key.name, value)
     if changed then
       spec[key.id] = newvalue
     end

@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 
 local spec_item = {}
@@ -16,9 +17,9 @@ end
 
 local function _invalid(spec, key)
   return function (self)
-    imgui.PushStyleColor("Text", 200, 100, 0, 255)
-    imgui.Text(("Unknown input type: %s"):format(key.type))
-    imgui.PopStyleColor(1)
+    IMGUI.PushStyleColor("Text", 200, 100, 0, 255)
+    IMGUI.Text(("Unknown input type: %s"):format(key.type))
+    IMGUI.PopStyleColor(1)
   end
 end
 
@@ -33,18 +34,18 @@ return function(spec, domain_name, title, delete, parent)
   end
 
   return title .. " Editor", 2, function(self)
-    imgui.PushItemWidth(160)
+    IMGUI.PushItemWidth(160)
     for _,input in ipairs(inputs) do
       input(self)
     end
-    imgui.PopItemWidth()
-    imgui.Spacing()
-    imgui.Indent(360)
-    if imgui.Button("Delete") then
+    IMGUI.PopItemWidth()
+    IMGUI.Spacing()
+    IMGUI.Indent(360)
+    if IMGUI.Button("Delete") then
       delete()
       return true
     end
-    imgui.Unindent(360)
+    IMGUI.Unindent(360)
   end
 
 end

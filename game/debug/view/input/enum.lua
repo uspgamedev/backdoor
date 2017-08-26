@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local DB = require 'database'
 
 local inputs = {}
@@ -26,7 +27,7 @@ function inputs.enum(spec, key)
   end
 
   return function(self)
-    local changed,value = imgui.Combo(key.name, current, options, #options, 10)
+    local changed,value = IMGUI.Combo(key.name, current, options, #options, 10)
     if changed then
       current = value
       spec[key.id] = options[value]
