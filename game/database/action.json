@@ -10,25 +10,49 @@
     "MOVE":{
       "cost":3,
       "params":[
-        [ "direction", [], "pos" ]
+        {
+          "typename":"direction",
+          "output":"pos"
+        }
       ],
       "values":[],
       "effects":[
-        [ "move_to", [ "par:pos" ] ]
+        {
+          "typename":"move_to",
+          "pos":"par:pos"
+        }
       ]
     },
 
     "SHOOT":{
       "cost":6,
       "params":[
-        [ "choose_target", [5, "BODY"], "target"]
+        {
+          "typename":"choose_target",
+          "max-range":5,
+          "filter":"BODY",
+          "output":"target"
+        }
       ],
       "values":[
-        [ "get_attribute", ["ATH"], "attr" ],
-        [ "add", ["val:attr", 3], "amount" ]
+        {
+          "typename":"get_attribute",
+          "which":"ATH",
+          "output":"attr"
+        },
+        {
+          "typename":"add",
+          "lhs":"val:attr",
+          "rhs":3,
+          "output":"amount"
+        }
       ],
       "effects":[
-        [ "deal_damage", ["par:target", "val:amount"]]
+        {
+          "typename":"deal_damage",
+          "target":"par:target",
+          "amount":"val:amount"
+        }
       ]
     }
 }

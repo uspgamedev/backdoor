@@ -1,6 +1,6 @@
 
 local DIR = require 'domain.definitions.dir'
-local FX = require "domain.effects"
+local FX = require 'lux.pack' 'domain.effects'
 local OP = require 'lux.pack' 'domain.operators'
 local DB = require 'database'
 
@@ -23,28 +23,28 @@ end
 local ACTION = {}
 
 function ACTION.paramsOf(action_name)
-  return ipairs(DB.loadSpec("action",action_name).params)
+  return ipairs(DB.loadSpec("action", action_name).params)
 end
 
 function ACTION.run(action_name, actor, sector, params)
-  local spec = DB.loadSpec("action",action_name)
+  local spec = DB.loadSpec("action", action_name)
   local values = {}
   actor:spendTime(spec.cost)
   for i,operation in ipairs(spec.values) do
     local argvalues = {}
-    local opname, args, valname = unpack(operation)
-    for j,arg in ipairs(args) do
-      argvalues[j] = unref(params, values, arg)
+    local opname, valname = operation.typename, operation.output
+    for _,arg in DB.schemaFor('operators/'..opname) do
+      argvalues[arg.id] = unref(params, values, operation[arg.id])
     end
-    values[valname] = OP[opname](actor, sector, unpack(argvalues))
+    values[valname] = OP[opname].process(actor, sector, argvalues)
   end
   for i,effect_spec in ipairs(spec.effects) do
     local argvalues = {}
-    local fx_name, args = unpack(effect_spec)
-    for j,arg in ipairs(args) do
-      argvalues[j] = unref(params, values, arg)
+    local fx_name = effect_spec.typename
+    for _,arg in DB.schemaFor('effects/'..fx_name) do
+      argvalues[arg.id] = unref(params, values, effect_spec[arg.id])
     end
-    FX[fx_name].process(actor, sector, unpack(argvalues))
+    FX[fx_name].process(actor, sector, argvalues)
   end
 end
 
