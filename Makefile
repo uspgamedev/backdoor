@@ -26,7 +26,7 @@ DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB)
 ## MAIN TARGETS
 
 all: $(DEPENDENCIES)
-	love game
+	love game $(FLAGS)
 
 update:
 	cd $(LUX_REPO); git pull
