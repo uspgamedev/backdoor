@@ -7,8 +7,10 @@ function RUNFLAGS.init(arg)
     if runflag:match("^%-") then
       local flagname = runflag:match("%-(%w+)")
       local value = runflag:match("=(.+)")
-      value = tonumber(value) or value or true
-      _flags[flagname:upper()] = value
+      if flagname then
+        value = tonumber(value) or value or true
+        _flags[flagname:upper()] = value
+      end
     end
   end
   RUNFLAGS.init = function () end
