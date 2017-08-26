@@ -126,7 +126,7 @@ return function(spec, domain_name, title, delete)
     table.insert(inputs, (input or _invalid)(spec, key))
   end
 
-  return title .. " Editor", 2, function(self)
+  return title .. " Editor", 1, function(self)
     imgui.PushItemWidth(120)
     for _,input in ipairs(inputs) do
       input(self)

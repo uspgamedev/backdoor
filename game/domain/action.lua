@@ -30,7 +30,7 @@ function ACTION.run(action_name, actor, sector, params)
   local spec = DB.loadSpec("action", action_name)
   local values = {}
   actor:spendTime(spec.cost)
-  for i,operation in ipairs(spec.values) do
+  for i,operation in ipairs(spec.operators) do
     local argvalues = {}
     local opname, valname = operation.typename, operation.output
     for _,arg in DB.schemaFor('operators/'..opname) do

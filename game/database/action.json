@@ -3,7 +3,7 @@
     "IDLE":{
       "cost":1,
       "params":[],
-      "values":[],
+      "operators":[],
       "effects":[]
     },
 
@@ -15,7 +15,7 @@
           "output":"pos"
         }
       ],
-      "values":[],
+      "operators":[],
       "effects":[
         {
           "typename":"move_to",
@@ -34,7 +34,7 @@
           "output":"target"
         }
       ],
-      "values":[
+      "operators":[
         {
           "typename":"get_attribute",
           "which":"ATH",
