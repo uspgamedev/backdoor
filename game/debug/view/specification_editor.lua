@@ -7,7 +7,9 @@ local spec_item = {}
 
 local function _invalid(spec, key)
   return function (self)
-    imgui.Text("ERROR")
+    imgui.PushStyleColor("Text", 200, 100, 0, 255)
+    imgui.Text(("Unknown input type: %s"):format(key.type))
+    imgui.PopStyleColor(1)
   end
 end
 
