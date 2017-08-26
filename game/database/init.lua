@@ -5,10 +5,6 @@ local SCHEMA = require 'lux.pack' 'database.schema'
 
 local DB = {}
 
--- Pending issues:
--- + Support range inputs (min + length)
--- + Use range input to min/max pairs in transformers
-
 local domains = {}
 
 local spec_meta = {}
