@@ -23,16 +23,29 @@ end
 
 local subschemas = {}
 
-function _subschemaFor(base, branch)
-  local pack = require 'lux.pack' ('domain.' .. base)
-  local sub = subschemas[base] if not sub then
-    sub = setmetatable(
-      {},
-      { __index = function(t,k) return pack[k].schema end }
-    )
+function _loadSubschema(base)
+  local fs = love.filesystem
+  local sub = subschemas[base]
+  if not sub then
+    sub = {}
+    for _,file in ipairs(fs.getDirectoryItems("domain/" .. base)) do
+      if file:match "^.+%.lua$" then
+        file = file:gsub("%.lua", "")
+        sub[file] = require('domain.' .. base .. '.' .. file).schema
+        table.insert(sub, file)
+      end
+    end
     subschemas[base] = sub
   end
-  return sub[branch]
+  return sub
+end
+
+function _subschemaFor(base, branch)
+  return _loadSubschema(base)[branch]
+end
+
+function DB.subschemaTypes(base)
+  return ipairs(_loadSubschema(base))
 end
 
 function DB.schemaFor(domain_name)

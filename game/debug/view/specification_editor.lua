@@ -3,6 +3,14 @@ local DB = require 'database'
 
 local spec_item = {}
 
+--[[ Invalid input ]]-----------------------------------------------------------
+
+local function _invalid(spec, key)
+  return function (self)
+    imgui.Text("ERROR")
+  end
+end
+
 --[[ Common inputs ]]-----------------------------------------------------------
 
 function spec_item.boolean(spec, key)
@@ -69,6 +77,11 @@ function spec_item.list(spec, key)
 
   local list = spec[key.id] or {}
   local selected = nil
+  local typeoptions = {}
+
+  for _,option in DB.subschemaTypes(key.id) do
+    table.insert(typeoptions, option)
+  end
 
   local function delete()
     table.remove(list, selected)
@@ -87,10 +100,10 @@ function spec_item.list(spec, key)
     end
     if imgui.Button("New " .. key.name) then
       self:push(
-        'list_picker', key.name, key.typeoptions,
+        'list_picker', key.name, typeoptions,
         function (value)
           if value then
-            table.insert(list, { typename = key.typeoptions[value] })
+            table.insert(list, { typename = typeoptions[value] })
             return true
           end
           return 0
@@ -107,7 +120,8 @@ return function(spec, domain_name, title, delete)
 
   local inputs = {}
   for _,key in DB.schemaFor(domain_name) do
-    table.insert(inputs, spec_item[key.type](spec, key))
+    local input = spec_item[key.type]
+    table.insert(inputs, (input or _invalid)(spec, key))
   end
 
   return title .. " Editor", 2, function(self)

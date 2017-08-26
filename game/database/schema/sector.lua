@@ -6,11 +6,6 @@ return  {
     range = {0,16} },
   { id = 'margin-height', name = "Margin Height", type = "integer",
     range = {0,16} },
-  { id = 'transformers', name = "Transformer", type = 'list',
-    typeoptions = {
-      'rooms',
-      'maze',
-      'connections',
-      'deadends' } }
+  { id = 'transformers', name = "Transformer", type = 'list' }
 }
 
