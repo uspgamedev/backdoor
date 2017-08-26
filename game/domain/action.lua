@@ -44,7 +44,7 @@ function ACTION.run(action_name, actor, sector, params)
     for j,arg in ipairs(args) do
       argvalues[j] = unref(params, values, arg)
     end
-    FX[fx_name](actor, sector, unpack(argvalues))
+    FX[fx_name].process(actor, sector, unpack(argvalues))
   end
 end
 
