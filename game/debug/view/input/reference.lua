@@ -5,19 +5,20 @@ local inputs = {}
 
 local function _appendRefs(from, to, dir, tag, spec, match)
   for k,item in pairs(from) do
-    if item ~= spec then
-      local t = require(('domain.%s.%s'):format(dir, item.typename)).type
-      if not t or t == match then
-        table.insert(to, tag .. ":" .. item.output)
-      end
+    if item == spec then return false end
+    local t = require(('domain.%s.%s'):format(dir, item.typename)).type
+    if not t or t == match then
+      table.insert(to, tag .. ":" .. item.output)
     end
   end
+  return true
 end
 
 local function _getRefs(spec, key, parent)
   local refs = {}
-  _appendRefs(parent.params, refs, 'params', 'par', spec, key.match)
-  _appendRefs(parent.operators, refs, 'operators', 'val', spec, key.match)
+  if _appendRefs(parent.params, refs, 'params', 'par', spec, key.match) then
+    _appendRefs(parent.operators, refs, 'operators', 'val', spec, key.match)
+  end
   local idx = 0
   for i,ref in ipairs(refs) do
     if ref == spec[key.id] then
