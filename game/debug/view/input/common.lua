@@ -12,16 +12,10 @@ function inputs.boolean(spec, key)
 end
 
 function inputs.integer(spec, key)
+  local inputInt = require 'debug.view.helpers.integer'
   return function (self) 
-    local value = spec[key.id] or key.range[1]
-    local changed, newvalue = imgui.InputInt(key.name, value, 1, 10)
-    if changed then
-      if key.range then
-        spec[key.id] = math.max(key.range[1], math.min(key.range[2], newvalue))
-      else
-        spec[key.id] = newvalue
-      end
-    end
+    local value = spec[key.id] or (key.range or {0})[1]
+    spec[key.id] = inputInt(value, key.name, range)
   end
 end
 

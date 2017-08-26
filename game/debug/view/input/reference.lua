@@ -5,6 +5,7 @@ local inputs = {}
 
 inputs['value/integer'] = function(spec, key, parent)
 
+  local inputInt = require 'debug.view.helpers.integer'
 
   local idx = 0
   local value = 0
@@ -41,15 +42,8 @@ inputs['value/integer'] = function(spec, key, parent)
         spec[key.id] = refs[idx]
       end
     else
-      local changed, newvalue = imgui.InputInt(key.name, value, 1, 10)
-      if changed then
-        local range = key.range
-        if range then
-          spec[key.id] = math.max(range[1], math.min(range[2], newvalue))
-        else
-          spec[key.id] = newvalue
-        end
-      end
+      value = inputInt(value, key.name, range)
+      spec[key.id] = value
     end
   end
 end
