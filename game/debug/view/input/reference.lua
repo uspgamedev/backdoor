@@ -3,6 +3,15 @@ local DB = require 'database'
 
 local inputs = {}
 
+inputs['value/output'] = function(spec, key, parent)
+  return function(self)
+    local changed, value = imgui.InputText(key.name, spec[key.id] or key.id, 64)
+    if changed then
+      spec[key.id] = value
+    end
+  end
+end
+
 inputs['value/integer'] = function(spec, key, parent)
 
   local inputInt = require 'debug.view.helpers.integer'
@@ -13,10 +22,14 @@ inputs['value/integer'] = function(spec, key, parent)
   local use_ref = false
   local refs = {}
   for k,param in pairs(parent.params) do
-    table.insert(refs, "par:" .. param.output)
+    if param ~= spec then
+      table.insert(refs, "par:" .. param.output)
+    end
   end
   for k,value in pairs(parent.operators) do
-    table.insert(refs, "val:" .. value.output)
+    if value ~= spec then
+      table.insert(refs, "val:" .. value.output)
+    end
   end
 
   if type(spec[key.id]) == 'number' then
@@ -34,8 +47,6 @@ inputs['value/integer'] = function(spec, key, parent)
 
   return function(self)
     local changed
-    changed, use_ref = imgui.Checkbox("Ref##"..key.id, use_ref)
-    imgui.SameLine()
     if use_ref then
       changed, idx = imgui.Combo(key.name, idx, refs, #refs, 5)
       if changed then
@@ -45,6 +56,8 @@ inputs['value/integer'] = function(spec, key, parent)
       value = inputInt(value, key.name, range)
       spec[key.id] = value
     end
+    imgui.SameLine()
+    changed, use_ref = imgui.Checkbox("Ref##"..key.id, use_ref)
   end
 end
 
