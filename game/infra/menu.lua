@@ -48,8 +48,7 @@ end
 -- check height
 local function _checkDimensions ()
   _width = math.max(_width, 2*PD)
-  if _scroll_interval then _height = _scroll_interval*LH + 2*PD
-  else _height = PD end
+  _height = PD
   return true
 end
 
@@ -68,8 +67,8 @@ local function _updateScroll()
   if _scroll_interval then
     if _scroll_top > _selection() then
       _scroll_top = _selection()
-    elseif _selection - _scroll_top > _scroll_interval then
-      _scroll_top = _selection - _scroll_top
+    elseif _selection() - _scroll_top > _scroll_interval then
+      _scroll_top = _selection() - _scroll_top
     end
   end
 end
