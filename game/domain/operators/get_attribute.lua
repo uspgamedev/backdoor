@@ -3,8 +3,11 @@ local OP = {}
 
 OP.schema = {
   { id = 'which', name = "Attribute", type = 'enum',
-    options = {'ATH', 'ARC', 'MEC' } }
+    options = {'ATH', 'ARC', 'MEC' } },
+  { id = 'output', name = "Label", type = 'value/output' }
 }
+
+OP.type = 'integer'
 
 function OP.process(actor, sector, params)
   return 2

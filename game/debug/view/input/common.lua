@@ -16,7 +16,11 @@ function inputs.integer(spec, key)
     local value = spec[key.id] or key.range[1]
     local changed, newvalue = imgui.InputInt(key.name, value, 1, 10)
     if changed then
-      spec[key.id] = math.max(key.range[1], math.min(key.range[2], newvalue))
+      if key.range then
+        spec[key.id] = math.max(key.range[1], math.min(key.range[2], newvalue))
+      else
+        spec[key.id] = newvalue
+      end
     end
   end
 end

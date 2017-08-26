@@ -24,16 +24,16 @@ end
 
 --[[ Menu rendering ]]----------------------------------------------------------
 
-return function(spec, domain_name, title, delete)
+return function(spec, domain_name, title, delete, parent)
 
   local inputs = {}
   for _,key in DB.schemaFor(domain_name) do
     local input = spec_item[key.type]
-    table.insert(inputs, (input or _invalid)(spec, key) or _invalid())
+    table.insert(inputs, (input or _invalid)(spec, key, parent) or _invalid())
   end
 
-  return title .. " Editor", 1, function(self)
-    imgui.PushItemWidth(120)
+  return title .. " Editor", 2, function(self)
+    imgui.PushItemWidth(160)
     for _,input in ipairs(inputs) do
       input(self)
     end

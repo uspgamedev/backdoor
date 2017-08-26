@@ -25,7 +25,7 @@ function inputs.list(spec, key)
       if imgui.Selectable(view, selected == i) then
         selected = i
         self:push('specification_editor', element,
-                  key.id .. '/' .. element.typename, key.name, delete)
+                  key.id .. '/' .. element.typename, key.name, delete, spec)
       end
     end
     if imgui.Button("New " .. key.name) then
