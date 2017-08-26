@@ -64,5 +64,5 @@ end
 
 function love.quit()
   imgui.ShutDown();
-  PROFILE.save()
+  PROFILE.quit()
 end

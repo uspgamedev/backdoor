@@ -6,6 +6,7 @@ local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
 local INPUT = require 'infra.input'
 local CONTROL = require 'infra.control'
+local PROFILE = require 'infra.profile'
 local GUI = require 'debug.gui'
 
 local Route = require 'domain.route'
@@ -112,7 +113,7 @@ function state:init()
   end
 end
 
-function state:enter()
+function state:enter(pre, route_data)
 
   _route = Route()
 
@@ -132,6 +133,10 @@ function state:enter()
 
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("pause", function ()
+    PROFILE.saveRoute(route_data)
+    love.event.quit()
+  end)
   CONTROL.setMap(SIGNALS)
 
   _gui = GUI(_sector_view)

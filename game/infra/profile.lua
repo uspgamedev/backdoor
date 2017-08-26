@@ -6,7 +6,8 @@ local ROUTEBUILDER = require 'infra.routebuilder'
 
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
-local PROFILE_FILENAME = SAVEDIR.."profile"
+local PROFILE_FILENAME = "profile"
+local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
 local METABASE = { next_id = 1, save_list = {} }
 
 -- HELPERS
@@ -27,32 +28,38 @@ end
 
 local function _newProfile()
   filesystem.createDirectory(SAVEDIR)
-  local file, err = filesystem.newFile(PROFILE_FILENAME, "w")
+  local file, err = filesystem.newFile(PROFILE_PATH, "w")
   assert(file, err)
   local encoded = json.encode(METABASE)
   file:write(encoded)
   return file:close()
 end
 
--- METHODS --
-function PROFILE.init()
-  METABASE.version = VERSION
-  if RUNFLAGS.CLEAR then _cleanSlate() end
-  -- check if profile exists
-  if not filesystem.exists(PROFILE_FILENAME) then _newProfile() end
+local function _saveProfile()
+  local file, err = filesystem.newFile(PROFILE_PATH, "w")
+  assert(file, err)
+  local content = json.encode(_metadata)
+  file:write(content)
+  return file:close()
+end
 
-  -- load profile
-  local filedata, err = filesystem.newFileData(PROFILE_FILENAME)
+local function _loadProfile()
+  local filedata, err = filesystem.newFileData(PROFILE_PATH)
   assert(filedata, err)
   _metadata = json.decode(filedata:getString())
   _id_generator = IDGenerator(_metadata.next_id)
 end
 
-function PROFILE.save()
-  local file, err = filesystem.newFile(PROFILE_FILENAME, "w")
-  assert(file, err)
-  file:write(json.encode(_metadata))
-  return file:close()
+-- METHODS --
+function PROFILE.init()
+  -- set version
+  METABASE.version = VERSION
+  -- clean all save history if CLEAR runflag is set
+  if RUNFLAGS.CLEAR then _cleanSlate() end
+  -- check if profile exists and generate one if not
+  if not filesystem.exists(PROFILE_PATH) then _newProfile() end
+  -- load profile from disk
+  _loadProfile()
 end
 
 function PROFILE.loadRoute(route_id)
@@ -97,6 +104,7 @@ end
 -- permadeath. Also if you quit without saving, you lose your savefle.
 -- BUT! If the game crashes, you keep your last save.
 function PROFILE.quit()
+  _saveProfile()
   local save_list = _metadata.save_list
   for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
     if filename ~= PROFILE_FILENAME and not save_list[filename] then
