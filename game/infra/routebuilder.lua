@@ -1,4 +1,6 @@
 
+local RANDOM = require 'common.random'
+
 local ROUTEBUILDER = {}
 
 function ROUTEBUILDER.build (route_id)
@@ -7,7 +9,7 @@ function ROUTEBUILDER.build (route_id)
     charname = "Banana",
     route_id = route_id,
     next_id = 1,
-    seed = tonumber(tostring(os.time()):sub(-7):reverse()),
+    seed = RANDOM.generateSeed(),
     actors = {},
     sectors = {},
   }
