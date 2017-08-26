@@ -89,7 +89,8 @@ function PROFILE.newRoute()
   local route_data = ROUTEBUILDER.build(route_id)
   _metadata.next_id = _id_generator.getNextID()
   print(("Generating %s..."):format(route_id))
-  print(("Seed: %d"):format(route_data.seed))
+  print(("Seed: %d"):format(route_data.rng_seed))
+  print(("RNG state: %d"):format(route_data.rng_state))
   return route_data
 end
 
