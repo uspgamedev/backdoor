@@ -21,7 +21,12 @@ function inputs.list(spec, key)
     imgui.Text(("%ss:"):format(key.name))
     imgui.Indent(20)
     for i,element in ipairs(list) do
-      local view = ("%2d: %s"):format(i, element.typename)
+      local view
+      if element.output then
+        view = ("%s -> [%s]"):format(element.typename, element.output)
+      else
+        view = ("%2d: %s"):format(i, element.typename)
+      end
       if imgui.Selectable(view, selected == i) then
         selected = i
         self:push('specification_editor', element,

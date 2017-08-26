@@ -39,12 +39,12 @@ return function(spec, domain_name, title, delete, parent)
     end
     imgui.PopItemWidth()
     imgui.Spacing()
-    imgui.Indent(180)
+    imgui.Indent(360)
     if imgui.Button("Delete") then
       delete()
       return true
     end
-    imgui.Unindent(180)
+    imgui.Unindent(360)
   end
 
 end
