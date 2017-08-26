@@ -29,7 +29,13 @@ return function(domain_name, title)
     if imgui.Button("New "..title) then
       self:push('name_input', title,
         function (value)
-          domain[value] = {}
+          local new = {}
+          for _,key in DB.schemaFor(domain_name) do
+            if key.type == 'list' then
+              new[key.id] = {}
+            end
+          end
+          domain[value] = new
           add(list, value)
           sort(list)
         end)

@@ -7,7 +7,10 @@ local function _getRefs(spec, key, parent)
   local refs = {}
   for k,param in pairs(parent.params) do
     if param ~= spec then
-      table.insert(refs, "par:" .. param.output)
+      local t = require('domain.params.'..param.typename).type
+      if not t or t == key.match then
+        table.insert(refs, "par:" .. param.output)
+      end
     end
   end
   for k,value in pairs(parent.operators) do

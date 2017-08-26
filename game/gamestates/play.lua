@@ -126,6 +126,7 @@ function state:enter()
   end
 
   _player = _route.makeActor('hearthborn', 'player', sector:randomValidTile())
+  _player:setAction('PRIMARY', 'DOUBLESHOOT')
   _sector_view:lookAt(_player)
 
   _playTurns()
