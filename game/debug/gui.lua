@@ -9,10 +9,11 @@ local GUI = Class {
 }
 
 local DOMAINS = {
-  'body', 'actor', 'sector',
+  'body', 'actor', 'sector', 'action',
   body = "Body Type",
   actor = "Actor Type",
-  sector = "Sector Type"
+  sector = "Sector Type",
+  action = "Action"
 }
 
 local view = {}

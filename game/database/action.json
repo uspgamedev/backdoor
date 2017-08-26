@@ -30,5 +30,5 @@
       "effects":[
         [ "deal_damage", ["par:target", "val:amount"]]
       ]
-    },
+    }
 }
