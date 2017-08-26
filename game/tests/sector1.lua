@@ -52,15 +52,10 @@ local function generate()
 end
 
 -- generation of sector with controlled seeds
-local function test(s)
+return function(s)
   local seed = s or RANDOM.generateSeed()
   RANDOM.setSeed(seed)
   print("SEED:", seed)
   return generate()
 end
 
--- returns as a table mapping to the functions above
-return {
-  generate = generate,
-  test = test
-}

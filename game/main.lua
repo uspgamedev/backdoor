@@ -57,6 +57,7 @@ function love.load(arg)
     ]]
     Res.init()
 
+    require 'tests'
 
     SWITCHER.switch(GS.START_MENU) --Jump to the inicial state
 
