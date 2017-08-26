@@ -21,10 +21,24 @@ function spec_meta:__index(key)
   end
 end
 
+local subschemas = {}
+
+function _subschemaFor(base, branch)
+  local pack = require 'lux.pack' ('domain.' .. base)
+  local sub = subschemas[base] if not sub then
+    sub = setmetatable(
+      {},
+      { __index = function(t,k) return pack[k].schema end }
+    )
+    subschemas[base] = sub
+  end
+  return sub[branch]
+end
+
 function DB.schemaFor(domain_name)
   local base, branch = domain_name:match('^(.+)/(.+)$')
   if base and branch then
-    return ipairs(SCHEMA[base][branch])
+    return ipairs(_subschemaFor(base, branch))
   else
     return ipairs(SCHEMA[domain_name])
   end
