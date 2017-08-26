@@ -34,6 +34,9 @@ GS = {
 -- GAMESTATE SWITCHER
 SWITCHER = require 'infra.switcher'
 
+local PROFILE = require 'infra.profile'
+local RUNFLAGS = require 'infra.runflags'
+
 ------------------
 --LÖVE FUNCTIONS--
 ------------------
@@ -42,9 +45,11 @@ function love.load(arg)
 
     Setup.config() --Configure your game
 
+    RUNFLAGS.init(arg)
 
     SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
 
+    PROFILE.init() -- initializes save & load system
 
     --[[
         Setup support for multiple resolutions. Res.init() Must be called after Gamestate.registerEvents()
@@ -59,4 +64,5 @@ end
 
 function love.quit()
   imgui.ShutDown();
+  PROFILE.save()
 end
