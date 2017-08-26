@@ -65,7 +65,7 @@ function state:update (dt)
       local savelist = PROFILE.getSaveList()
       if next(savelist) then
         for route_id, route_header in pairs(savelist) do
-          if MENU.item(route_header.charname) then
+          if MENU.item(route_header.charname .. route_id) then
             SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
           end
         end

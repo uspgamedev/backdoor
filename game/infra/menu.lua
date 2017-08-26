@@ -67,11 +67,37 @@ local function _updateScroll()
   if _scroll_interval then
     if _scroll_top > _selection() then
       _scroll_top = _selection()
-    elseif _selection() - _scroll_top > _scroll_interval then
-      _scroll_top = _selection() - _scroll_top
+    elseif _selection() - _scroll_top >= _scroll_interval then
+      _scroll_top = _selection() - _scroll_interval + 1
     end
   end
 end
+
+-- indicates if there are more items hidden
+local function _indicateScrolling ()
+  if _scroll_interval then
+    _renderqueue.push { "setColor", 0xff, 0xff, 0xff, 0xff }
+    if _scroll_top > 1 then
+      _renderqueue.push { "polygon", "fill",
+        {
+          _width - 1.00*PD, 1.00*PD,
+          _width - 1.50*PD, 1.00*PD,
+          _width - 1.25*PD, 0.75*PD,
+        }
+      }
+    end
+    if _scroll_top + _scroll_interval <= _size then
+      _renderqueue.push { "polygon", "fill",
+        {
+          _width - 1.00*PD, _height - 1.00*PD,
+          _width - 1.50*PD, _height - 1.00*PD,
+          _width - 1.25*PD, _height - 0.75*PD,
+        }
+      }
+    end
+  end
+end
+
 
 -- start menu
 function Menu.begin(name, x, y, scroll, static_width)
@@ -104,7 +130,7 @@ function Menu.item(item)
 
   -- scroll item in limitted box
   if not _scroll_interval or _count >= _scroll_top
-    and _count <= _scroll_top + _scroll_interval then
+    and _count < _scroll_top + _scroll_interval then
 
     -- check if selected
     if _count == _selection() then
@@ -141,6 +167,9 @@ function Menu.finish()
   -- draw menu container
   _renderqueue.push { "setColor", 0x20, 0x20, 0x20, 0xff }
   _renderqueue.push { "rectangle", "fill", 0, 0, _width, _height }
+
+  -- draw scroll bar
+  _indicateScrolling()
 
   -- push items to render queue
   _renderqueue.push { "setFont", _font }
