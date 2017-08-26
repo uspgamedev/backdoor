@@ -22,7 +22,12 @@ function spec_meta:__index(key)
 end
 
 function DB.schemaFor(domain_name)
-  return ipairs(SCHEMA[domain_name:gsub('/', '.')])
+  local base, branch = domain_name:match('^(.+)/(.+)$')
+  if base and branch then
+    return ipairs(SCHEMA[base][branch])
+  else
+    return ipairs(SCHEMA[domain_name])
+  end
 end
 
 function DB.loadDomain(domain_name)
