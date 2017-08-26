@@ -3,24 +3,21 @@ local DB = require 'database'
 
 local inputs = {}
 
+local function _appendRefs(from, to, dir, tag, spec, match)
+  for k,item in pairs(from) do
+    if item ~= spec then
+      local t = require(('domain.%s.%s'):format(dir, item.typename)).type
+      if not t or t == match then
+        table.insert(to, tag .. ":" .. item.output)
+      end
+    end
+  end
+end
+
 local function _getRefs(spec, key, parent)
   local refs = {}
-  for k,param in pairs(parent.params) do
-    if param ~= spec then
-      local t = require('domain.params.'..param.typename).type
-      if not t or t == key.match then
-        table.insert(refs, "par:" .. param.output)
-      end
-    end
-  end
-  for k,value in pairs(parent.operators) do
-    if value ~= spec then
-      local t = require('domain.operators.'..value.typename).type
-      if not t or t == key.match then
-        table.insert(refs, "val:" .. value.output)
-      end
-    end
-  end
+  _appendRefs(parent.params, refs, 'params', 'par', spec, key.match)
+  _appendRefs(parent.operators, refs, 'operators', 'val', spec, key.match)
   local idx = 0
   for i,ref in ipairs(refs) do
     if ref == spec[key.id] then
