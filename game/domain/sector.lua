@@ -188,10 +188,10 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
       for i, act in ipairs(actors_queue) do
         if dead_actor == act then
           table.remove(actors_queue, i)
-          dead_actor:kill()
           break
         end
       end
+      dead_actor:kill()
     end
 end
 
