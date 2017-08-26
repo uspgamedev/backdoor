@@ -8,7 +8,6 @@ local DB = {}
 -- Pending issues:
 -- + Support range inputs (min + length)
 -- + Use range input to min/max pairs in transformers
--- + 'list' should actually be 'mixedlist'
 
 local domains = {}
 
