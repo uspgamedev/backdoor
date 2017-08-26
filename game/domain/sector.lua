@@ -110,6 +110,8 @@ function Sector:removeBodyAt(i, j, body)
 
   --Remove body from the sector
   self.bodies[i][j] = false
+  self.bodies[body] = nil
+  body:kill()
 
   return removed_actor
 
@@ -186,6 +188,7 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
       for i, act in ipairs(actors_queue) do
         if dead_actor == act then
           table.remove(actors_queue, i)
+          dead_actor:kill()
           break
         end
       end

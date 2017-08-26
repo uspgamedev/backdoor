@@ -15,6 +15,10 @@ function GameElement:init(spectype, specname)
 
 end
 
+function GameElement:kill()
+  self.death = true
+end
+
 function GameElement:getId()
   return self.id
 end
