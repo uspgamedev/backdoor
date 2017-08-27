@@ -33,21 +33,19 @@ end
 
 function Sector:generate()
 
-  local general = self:getSpec('general')
   local transformers = self:getSpec('transformers')
-  local w, h = general.width, general.height
+  local w, h = self:getSpec('width'), self:getSpec('height')
 
   -- load sector's specs
-  self.base = SectorGrid(w, h, general.mw, general.mh)
+  self.base = SectorGrid(w, h, self:getSpec('margin-width'),
+                         self:getSpec('margin-height'))
 
   self.w = w
   self.h = h
 
   -- sector grid generation
   for _, transformer in ipairs(transformers) do
-    local transformer_name = transformer.name
-    local transformer_params = transformer.params
-    TRANSFORMERS[transformer_name](self.base, transformer_params)
+    TRANSFORMERS[transformer.typename].process(self.base, transformer)
   end
 
   for i = 1, h do
@@ -112,6 +110,8 @@ function Sector:removeBodyAt(i, j, body)
 
   --Remove body from the sector
   self.bodies[i][j] = false
+  self.bodies[body] = nil
+  body:kill()
 
   return removed_actor
 
@@ -191,6 +191,7 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
           break
         end
       end
+      dead_actor:kill()
     end
 end
 

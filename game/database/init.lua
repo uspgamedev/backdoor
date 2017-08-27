@@ -1,19 +1,9 @@
 
 local json = require 'dkjson'
+local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
+local SCHEMA = require 'lux.pack' 'database.schema'
 
 local DB = {}
-
-local SCHEMA = {
-  body = {
-    { id = 'extends', name = "Prototype", type = "enum", options = 'body' },
-    { id = 'hp', name = "Hit Points", type = "integer", range = {1,999} }
-  },
-  actor = {
-    { id = 'extends', name = "Prototype", type = "enum", options = 'actor' },
-    { id = 'behavior', name = "Behavior", type = "enum",
-      options = {'player','random_walk'} }
-  }
-}
 
 local domains = {}
 
@@ -26,8 +16,40 @@ function spec_meta:__index(key)
   end
 end
 
+local subschemas = {}
+
+function _loadSubschema(base)
+  local fs = love.filesystem
+  local sub = subschemas[base]
+  if not sub then
+    sub = {}
+    for _,file in ipairs(fs.getDirectoryItems("domain/" .. base)) do
+      if file:match "^.+%.lua$" then
+        file = file:gsub("%.lua", "")
+        sub[file] = require('domain.' .. base .. '.' .. file).schema
+        table.insert(sub, file)
+      end
+    end
+    subschemas[base] = sub
+  end
+  return sub
+end
+
+function _subschemaFor(base, branch)
+  return _loadSubschema(base)[branch]
+end
+
+function DB.subschemaTypes(base)
+  return ipairs(_loadSubschema(base))
+end
+
 function DB.schemaFor(domain_name)
-  return ipairs(SCHEMA[domain_name])
+  local base, branch = domain_name:match('^(.+)/(.+)$')
+  if base and branch then
+    return ipairs(_subschemaFor(base, branch))
+  else
+    return ipairs(SCHEMA[domain_name])
+  end
 end
 
 function DB.loadDomain(domain_name)

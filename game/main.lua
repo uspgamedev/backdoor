@@ -1,8 +1,5 @@
 
--- IMGUI
-imgui     = require 'imgui'
-
--- IMGUI
+-- CPML
 cpml      = require 'cpml'
 
 -- HUMP

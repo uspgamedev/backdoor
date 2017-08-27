@@ -59,7 +59,7 @@ local function _usePrimaryAction()
   local action_name = controlled_actor:getAction('PRIMARY')
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
-    if param[1] == 'choose_target' then
+    if param.typename == 'choose_target' then
       SWITCHER.push(
         GS.PICK_TARGET, _sector_view,
         {
@@ -72,7 +72,7 @@ local function _usePrimaryAction()
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        params[param[3]] = current_sector:getBodyAt(unpack(args.pos))
+        params[param.output] = current_sector:getBodyAt(unpack(args.pos))
       else
         return
       end
@@ -127,6 +127,7 @@ function state:enter(pre, route_data)
   end
 
   _player = _route.makeActor('hearthborn', 'player', sector:randomValidTile())
+  _player:setAction('PRIMARY', 'DOUBLESHOOT')
   _sector_view:lookAt(_player)
 
   _playTurns()

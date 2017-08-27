@@ -6,7 +6,14 @@ local Rectangle  = require 'common.rect'
 local UnionFind  = require 'common.unionfind'
 local Vector2    = require 'cpml.modules.vec2'
 
-return function (_sectorgrid, _params)
+local transformer = {}
+
+transformer.schema = {
+  { id = 'n', name = "Num Connections", type = 'integer',
+    range = { 1, 1024 } }
+}
+
+function transformer.process(_sectorgrid, params)
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -17,7 +24,7 @@ return function (_sectorgrid, _params)
   local _maxy = _height - _mh
 
   -- lists and sets
-  local _connections = _params.n
+  local _connections = params.n
   local _flooded = {}
   local _connectors = {}
   local _cardinals = {
@@ -138,3 +145,6 @@ return function (_sectorgrid, _params)
   floodRegions()
   return connectAllRegions()
 end
+
+return transformer
+
