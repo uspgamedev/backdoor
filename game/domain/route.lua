@@ -60,7 +60,15 @@ function Route:instance(obj)
   end
 
   function obj.playTurns(...)
-    _controlled_actor = _current_sector:playTurns(...)
+    local request, extra = _current_sector:playTurns(...)
+    _controlled_actor = (request == "actorTurn") and extra or nil
+    return request
+  end
+
+  function obj.destroyAll()
+    Util.destroySubtype("actor", "force")
+    Util.destroySubtype("body", "force")
+    Util.destroySubtype("sector", "force")
   end
 
 end

@@ -99,7 +99,9 @@ local function _makeSignalHandler(callback)
 end
 
 local function _playTurns(...)
-  _route.playTurns(...)
+  if _route.playTurns(...) == "playerDead" then
+    SWITCHER.switch(GS.START_MENU)
+  end
   _next_action = nil
 end
 
@@ -147,8 +149,10 @@ end
 
 function state:leave()
 
-  Util.destroyAll("force")
-
+  --Util.destroyAll("force")
+  _route.destroyAll()
+  _sector_view:destroy()
+  Util.destroyAll()
 end
 
 function state:update(dt)
