@@ -39,6 +39,7 @@ local SIGNALS = {
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
+local __NOTHING__ = function () end
 
 --LOCAL FUNCTIONS--
 
@@ -99,8 +100,9 @@ local function _makeSignalHandler(callback)
 end
 
 local function _playTurns(...)
-  _route.playTurns(...)
+  local request = _route.playTurns(...)
   _next_action = nil
+  return request
 end
 
 --STATE FUNCTIONS--
@@ -147,18 +149,25 @@ end
 
 function state:leave()
 
-  Util.destroyAll("force")
-
+  --Util.destroyAll("force")
+  _route.destroyAll()
+  _sector_view:destroy()
+  Util.destroyAll()
 end
 
 function state:update(dt)
 
+  local request = false
   if not DEBUG then
     INPUT.update()
     if _next_action then
-      _playTurns(unpack(_next_action))
+      request = _playTurns(unpack(_next_action))
     end
     _sector_view:lookAt(_route.getControlledActor() or _player)
+    if request == "playerDead" then
+      print("SWITCHING STATES")
+      SWITCHER.switch(GS.START_MENU)
+    end
   end
 
   Util.destroyAll()

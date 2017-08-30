@@ -99,7 +99,8 @@ function Sector:removeBodyAt(i, j, body)
 
       --FIXME: If player dies the game just closes. Change this in the future
       if actor:getSpec("behavior") == "player" then
-          os.exit(0)
+          --os.exit(0)
+          coroutine.yield("playerDead")
       end
 
       removed_actor = table.remove(self.actors, i)
