@@ -6,8 +6,8 @@ local Controls = require 'infra.control'
 local SWITCHER = {}
 
 local _stack_size = 0
-local _pushed = Queue(16)
-local _popped = Queue(16)
+local _pushed = false
+local _popped = false
 
 function SWITCHER.init()
   Gamestate.registerEvents()
@@ -15,31 +15,30 @@ end
 
 function SWITCHER.switch(to, ...)
   if _stack_size == 0 then _stack_size = 1 end
-  print("SWITCH", _stack_size)
   Controls.flush()
   Gamestate.switch(to, ...)
 end
 
 function SWITCHER.push(to, ...)
   _stack_size = _stack_size + 1
-  print("PUSH", _stack_size)
   Controls.flush()
-  _pushed.push { to, ... }
+  _pushed = { to, ... }
 end
 
 function SWITCHER.pop(...)
   _stack_size = _stack_size - 1
-  print("POP", _stack_size)
   Controls.flush()
-  _popped.push { ... }
+  _popped = { ... }
 end
 
 function SWITCHER.handleChangedState()
-  while not _popped.isEmpty() do
-    Gamestate.pop(unpack(_popped.pop()))
+  if _popped then
+    Gamestate.pop(unpack(_popped))
+    _popped = false
   end
-  while not _pushed.isEmpty() do
-    Gamestate.push(unpack(_pushed.pop()))
+  if _pushed then
+    Gamestate.push(unpack(_pushed))
+    _pushed = false
   end
 end
 
