@@ -31,6 +31,7 @@ function state:init ()
 end
 
 function state:enter ()
+  love.graphics.setBackgroundColor(0, 0, 0)
   _menu_view:addElement("HUD", nil, "menu_view")
   _menu_context = "START_MENU"
   CONTROLS.setMap {
@@ -41,6 +42,7 @@ function state:enter ()
     PRESS_UP       = MENU.prev,
     PRESS_DOWN     = MENU.next,
   }
+  print("START MENU")
 end
 
 function state:leave ()
