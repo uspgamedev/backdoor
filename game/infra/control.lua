@@ -1,47 +1,44 @@
--- FIXME: this file needs to follow the code style conventions!
-
--- MODULE
-local controls = {}
-
--- DEPENDENCIES
+--DEPENDENCIES--
 local Queue = require 'lux.common.Queue'
 
--- PRIVATE INFO
-local redirect = {
+
+--PRIVATE--
+local REDIRECT = {
   __index = function (self, k)
     if k == "RELEASE_QUIT" then love.event.quit() end
     return function () end
   end
 }
-local mapped_controls = {}
-local input_queue = Queue(64)
 
--- PUBLIC METHODS
-function controls.enqueue (control)
-  input_queue.push(control)
+local Controls = {}
+
+local _mapped_controls = {}
+local _inputs = Queue(64)
+
+
+--PUBLIC--
+function Controls.enqueue (control)
+  _inputs.push(control)
 end
 
-function controls.flush ()
-  input_queue.popAll()
+function Controls.flush ()
+  _inputs.popAll()
 end
 
-function controls.setMap (m)
-  setmetatable(m, redirect)
-  mapped_controls = m
+function Controls.setMap (m)
+  _mapped_controls = setmetatable(m or {}, REDIRECT)
 end
 
-function controls.getMap()
-  return mapped_controls
+function Controls.getMap()
+  return _mapped_controls
 end
 
-function controls.update ()
-  local act
-  while not input_queue.isEmpty() do
-    act = input_queue.pop()
-    mapped_controls[act]()
+function Controls.update ()
+  while not _inputs.isEmpty() do
+    _mapped_controls[_inputs.pop()]()
   end
-  input_queue.popAll()
 end
 
-controls.setMap(mapped_controls)
-return controls
+Controls.setMap(_mapped_controls)
+return Controls
+

@@ -2,6 +2,8 @@
 local Route = require 'lux.class' :new{}
 
 local IDGenerator = require 'common.idgenerator'
+local RANDOM = require 'common.random'
+local PROFILE = require 'infra.profile'
 
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
@@ -12,6 +14,7 @@ function Route:instance(obj)
   local _id_generator = IDGenerator()
   local _current_sector = nil
   local _controlled_actor = nil
+  local _data
 
   Util.destroyAll 'true_force'
 
@@ -23,12 +26,14 @@ function Route:instance(obj)
   end
 
   function obj.loadState(state)
-    _id_generator = IDGenerator(state.next_id)
+    _data = state
+    _id_generator = IDGenerator(_data.next_id)
   end
 
   function obj.saveState()
-    local state = {}
-    state.next_id = _id_generator.getNextID()
+    _data.next_id = _id_generator.getNextID()
+    _data.rng_state = RANDOM.getState()
+    PROFILE.saveRoute(_data)
     return state
   end
 

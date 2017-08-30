@@ -25,6 +25,11 @@ local _task
 local _sector_view
 local _gui
 
+local _mapped_signals
+
+local _unregisterSignals
+local _registerSignals
+
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
   PRESS_DOWN = {"move", "down"},
@@ -60,6 +65,7 @@ local function _usePrimaryAction()
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param.typename == 'choose_target' then
+      _unregisterSignals()
       SWITCHER.push(
         GS.PICK_TARGET, _sector_view,
         {
@@ -105,12 +111,32 @@ local function _playTurns(...)
   _next_action = nil
 end
 
+local function _saveAndQuit()
+  _route.saveState()
+  SWITCHER.switch(GS.START_MENU)
+end
+
+function _registerSignals()
+  Signal.register("move", _makeSignalHandler(_moveActor))
+  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("pause", _makeSignalHandler(_saveAndQuit))
+  CONTROL.setMap(_mapped_signals)
+end
+
+function _unregisterSignals()
+  for _,signal_pack in pairs(SIGNALS) do
+    Signal.clear(signal_pack[1])
+  end
+  CONTROL.setMap()
+end
+
 --STATE FUNCTIONS--
 
 function state:init()
-  for name, signal in pairs(SIGNALS) do
-    SIGNALS[name] = function ()
-      Signal.emit(unpack(signal))
+  _mapped_signals = {}
+  for input_name, signal_pack in pairs(SIGNALS) do
+    _mapped_signals[input_name] = function ()
+      Signal.emit(unpack(signal_pack))
     end
   end
 end
@@ -119,6 +145,7 @@ function state:enter(pre, route_data)
 
   _route = Route()
 
+  _route.loadState(route_data)
   local sector = _route.makeSector('sector01')
 
   _sector_view = SectorView(sector)
@@ -133,14 +160,7 @@ function state:enter(pre, route_data)
   _sector_view:lookAt(_player)
 
   _playTurns()
-
-  Signal.register("move", _makeSignalHandler(_moveActor))
-  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("pause", function ()
-    PROFILE.saveRoute(route_data)
-    love.event.quit()
-  end)
-  CONTROL.setMap(SIGNALS)
+  _registerSignals()
 
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
@@ -149,10 +169,11 @@ end
 
 function state:leave()
 
-  --Util.destroyAll("force")
+  _unregisterSignals()
   _route.destroyAll()
   _sector_view:destroy()
   Util.destroyAll()
+
 end
 
 function state:update(dt)
@@ -172,6 +193,7 @@ end
 function state:resume(state, args)
   if state == GS.PICK_TARGET then
 
+    _registerSignals()
     _resumeTask(args)
 
   end
