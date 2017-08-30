@@ -127,6 +127,7 @@ function _unregisterSignals()
   for _,signal_pack in pairs(SIGNALS) do
     Signal.clear(signal_pack[1])
   end
+  CONTROL.setMap()
 end
 
 --STATE FUNCTIONS--
