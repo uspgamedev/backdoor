@@ -42,7 +42,6 @@ function state:enter ()
     PRESS_UP       = MENU.prev,
     PRESS_DOWN     = MENU.next,
   }
-  print("START MENU")
 end
 
 function state:leave ()
