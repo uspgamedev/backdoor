@@ -8,15 +8,22 @@ local SWITCHER = {}
 local _stack_size = 0
 local _pushed = false
 local _popped = false
+local _switched = false
 
 function SWITCHER.init()
   Gamestate.registerEvents()
 end
 
-function SWITCHER.switch(to, ...)
-  if _stack_size == 0 then _stack_size = 1 end
-  Controls.flush()
+function SWITCHER.start(to, ...)
+  -- call right after init, with the initial gamestate
+  -- call it only once!
+  _stack_size = 1
   Gamestate.switch(to, ...)
+end
+
+function SWITCHER.switch(to, ...)
+  Controls.flush()
+  _switched = { to, ... }
 end
 
 function SWITCHER.push(to, ...)
@@ -39,6 +46,11 @@ function SWITCHER.handleChangedState()
   if _pushed then
     Gamestate.push(unpack(_pushed))
     _pushed = false
+  end
+  if _switched then
+    print(debug.traceback())
+    Gamestate.switch(unpack(_switched))
+    _switched = false
   end
 end
 
