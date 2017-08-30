@@ -25,6 +25,8 @@ local _task
 local _sector_view
 local _gui
 
+local _mapped_signals
+
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
   PRESS_DOWN = {"move", "down"},
@@ -108,9 +110,10 @@ end
 --STATE FUNCTIONS--
 
 function state:init()
-  for name, signal in pairs(SIGNALS) do
-    SIGNALS[name] = function ()
-      Signal.emit(unpack(signal))
+  _mapped_signals = {}
+  for input_name, signal_pack in pairs(SIGNALS) do
+    _mapped_signals[input_name] = function ()
+      Signal.emit(unpack(signal_pack))
     end
   end
 end
@@ -138,9 +141,10 @@ function state:enter(pre, route_data)
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
   Signal.register("pause", function ()
     PROFILE.saveRoute(route_data)
-    love.event.quit()
+    SWITCHER.switch(GS.START_MENU)
   end)
-  CONTROL.setMap(SIGNALS)
+  print(_mapped_signals)
+  CONTROL.setMap(_mapped_signals)
 
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
@@ -149,10 +153,10 @@ end
 
 function state:leave()
 
-  --Util.destroyAll("force")
   _route.destroyAll()
   _sector_view:destroy()
   Util.destroyAll()
+
 end
 
 function state:update(dt)
