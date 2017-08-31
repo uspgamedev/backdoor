@@ -127,23 +127,49 @@ function transformer.process(_sectorgrid, params)
   end
 
   local function connectAllRegions()
+    local copy_connectors = {}
     while countRegions() > 1 and #_connectors > 0 do
       if _connections <= 0 then break end
       local N = #_connectors
+      local k
+      local c
+      local r1
+      local r2
+      repeat
+        k = N > 1 and RANDOM.interval(1, N) or 1
+        c = _connectors[k]
+        r1 = _flooded[c[2][1]].find()
+        r2 = _flooded[c[2][2]].find()
+        _connectors[k] = _connectors[N]
+        _connectors[N] = nil
+        N = N - 1
+        table.insert(copy_connectors, c)
+      until r1 ~= r2 or N == 0 or _connections == 0
+      _connections = _connections - 1
+      connectTwoRegions(r1, r2, c[1])
+    end
+    return copy_connectors
+  end
+
+  local function makeLoops(connectors)
+    while #connectors > 0 do
+      if _connections <= 0 then break end
+      local N = #connectors
       local k = N > 1 and RANDOM.interval(1, N) or 1
-      local c = _connectors[k]
+      local c = connectors[k]
       local r1 = _flooded[c[2][1]].find()
       local r2 = _flooded[c[2][2]].find()
-      _connectors[k] = _connectors[N]
-      _connectors[N] = nil
+      connectors[k] = connectors[N]
+      connectors[N] = nil
       _connections = _connections - 1
+      N = N - 1
       connectTwoRegions(r1, r2, c[1])
     end
     return _sectorgrid
   end
 
   floodRegions()
-  return connectAllRegions()
+  return makeLoops(connectAllRegions())
 end
 
 return transformer
