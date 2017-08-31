@@ -165,6 +165,13 @@ function SectorView:draw()
     g.setColor(COLORS.NEUTRAL)
     draw_sprite(x, y)
     g.translate(x, y)
+    local lineLifeSize = 100;
+    local actualLineLifeSize = lineLifeSize;
+    local actualFillLifeSize = (actualLineLifeSize * body:getHP())/body:getMaxHP();
+    g.setColor( 0, 0, 0)
+    g.rectangle("line", -10, -40, actualLineLifeSize, 5)
+    g.setColor( 0, 255, 0)
+    g.rectangle("fill", -8, -38, actualFillLifeSize, 2)
     g.setFont(FONT)
     g.print(body:getHP(), TILE_W/8, 0)
     g.pop()
