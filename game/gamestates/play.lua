@@ -172,6 +172,7 @@ function state:leave()
   _unregisterSignals()
   _route.destroyAll()
   _sector_view:destroy()
+  _gui:destroy()
   Util.destroyAll()
 
 end
