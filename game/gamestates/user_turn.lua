@@ -5,6 +5,7 @@ local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
+local HandView = require 'domain.view.handview'
 
 local state = {}
 
@@ -16,6 +17,8 @@ local _route
 local _next_action
 local _previous_control_map
 local _save_and_quit
+
+local _hand_view
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -131,6 +134,9 @@ function state:enter(_, route, sector_view)
   _route = route
   _sector_view = sector_view
   _save_and_quit = false
+
+  _hand_view = HandView(_route.getControlledActor().hand)
+  _hand_view:addElement("HUD", nil, "hand_view")
 
   _registerSignals()
 

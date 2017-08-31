@@ -4,25 +4,29 @@
         "typename":"direction",
         "output":"pos"
       }],
-    "cost":3,
-    "operators":[],
     "effects":[{
         "typename":"move_to",
         "pos":"par:pos"
+      }],
+    "operators":[],
+    "cost":3
+  },
+  "DRAW":{
+    "params":[],
+    "cost":4,
+    "operators":[],
+    "effects":[{
+        "typename":"draw_card"
       }]
   },
   "HEAL":{
     "params":[{
         "typename":"choose_target",
-        "max-range":5,
+        "filter":"BODY",
         "output":"target",
-        "filter":"BODY"
+        "max-range":5
       }],
-    "effects":[{
-        "typename":"heal",
-        "target":"par:target",
-        "amount":"val:amount"
-      }],
+    "cost":4,
     "operators":[{
         "typename":"get_attribute",
         "output":"arcana",
@@ -30,30 +34,61 @@
       },{
         "op":"+",
         "typename":"integer_binop",
-        "output":"amount",
+        "lhs":"val:arcana",
         "rhs":2,
-        "lhs":"val:arcana"
+        "output":"amount"
       }],
-    "cost":4
+    "effects":[{
+        "typename":"heal",
+        "target":"par:target",
+        "amount":"val:amount"
+      }]
   },
   "IDLE":{
     "params":[],
-    "cost":1,
+    "effects":[],
     "operators":[],
-    "effects":[]
+    "cost":1
+  },
+  "SHOOT":{
+    "params":[{
+        "typename":"choose_target",
+        "filter":"BODY",
+        "output":"target",
+        "max-range":5
+      }],
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"par:target",
+        "amount":"val:amount"
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"attr",
+        "which":"ATH"
+      },{
+        "op":"+",
+        "typename":"integer_binop",
+        "lhs":"val:attr",
+        "rhs":2,
+        "output":"amount"
+      }],
+    "cost":6
   },
   "DOUBLESHOOT":{
     "params":[{
         "typename":"choose_target",
-        "max-range":10,
+        "filter":"BODY",
         "output":"target",
-        "filter":"BODY"
+        "max-range":10
       },{
         "typename":"choose_target",
-        "max-range":10,
+        "filter":"BODY",
         "output":"target2",
-        "filter":"BODY"
+        "max-range":10
       }],
+    "cost":12,
+    "operators":[],
     "effects":[{
         "typename":"deal_damage",
         "target":"par:target",
@@ -62,33 +97,6 @@
         "typename":"deal_damage",
         "target":"par:target2",
         "amount":4
-      }],
-    "operators":[],
-    "cost":12
-  },
-  "SHOOT":{
-    "params":[{
-        "typename":"choose_target",
-        "max-range":5,
-        "output":"target",
-        "filter":"BODY"
-      }],
-    "cost":6,
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"ATH"
-      },{
-        "op":"+",
-        "typename":"integer_binop",
-        "output":"amount",
-        "rhs":2,
-        "lhs":"val:attr"
-      }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"par:target",
-        "amount":"val:amount"
       }]
   }
 }
