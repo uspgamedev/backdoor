@@ -25,6 +25,7 @@ function Body:saveState()
   state.specname = self.specname
   state.damage = self.damage
   state.sector_id = self.sector_id
+  state.id = self.id
   return state
 end
 
