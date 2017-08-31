@@ -77,7 +77,8 @@ local function _usePrimaryAction()
 end
 
 local function _saveAndQuit()
-  _route.saveState()
+  local route_data = _route.saveState()
+  PROFILE.saveRoute(route_data)
   SWITCHER.switch(GS.START_MENU)
 end
 

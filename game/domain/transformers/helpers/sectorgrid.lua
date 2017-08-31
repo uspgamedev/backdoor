@@ -59,4 +59,19 @@ function SectorGrid:instance(obj, w, h, mw, mh)
 
 end
 
+function SectorGrid:from(matrix, mw, mh)
+  local h = #matrix
+  local w = #matrix[1]
+  mw = mw or 0
+  mh = mh or 0
+  local grid = SectorGrid(w, h, mw, mh)
+  for i = 1, h do
+    for j = 1, w do
+      grid.set(j, i, matrix[i][j])
+    end
+  end
+  return grid
+end
+
 return SectorGrid
+

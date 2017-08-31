@@ -17,6 +17,7 @@ end
 function Body:loadState(state)
   self.damage = state.damage
   self.sector_id = state.sector_id
+  self:setId(state.id)
 end
 
 function Body:saveState()

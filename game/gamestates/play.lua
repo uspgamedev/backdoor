@@ -34,24 +34,23 @@ end
 
 function state:enter(pre, route_data)
 
+  -- load route
   _route = Route()
-
   _route.loadState(route_data)
-  local sector = _route.makeSector('sector01')
 
+  -- set player
+  _player = _route.getControlledActor()
+
+  -- sector view
+  local sector = _route.getCurrentSector()
   _sector_view = SectorView(sector)
   _sector_view:addElement("L1", nil, "sector_view")
-
-  for _=1,20 do
-    _route.makeActor('slime', 'dumb', sector:randomValidTile())
-  end
-
-  _player = _route.makeActor('hearthborn', 'player', sector:randomValidTile())
-  _player:setAction('PRIMARY', 'DOUBLESHOOT')
   _sector_view:lookAt(_player)
 
+  -- start gamestate
   _playTurns()
 
+  -- GUI
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
 

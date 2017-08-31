@@ -26,6 +26,7 @@ function Actor:loadState(state)
   self.cooldown = state.cooldown
   self.actions = state.actions
   self.body_id = state.body_id
+  self:setId(state.id)
 end
 
 function Actor:saveState()
@@ -34,6 +35,7 @@ function Actor:saveState()
   state.cooldown = self.cooldown
   state.actions = self.actions
   state.body_id = self.body_id
+  state.id = self.id
   return state
 end
 

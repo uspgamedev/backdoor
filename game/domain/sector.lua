@@ -34,19 +34,28 @@ function Sector:init(spec_name)
 
 end
 
-function Sector:loadState(state)
-  self.tiles = state.tiles
+function Sector:loadState(state, register)
   self.w = state.w
   self.h = state.h
-  for _,actor_state in ipairs(state.actors) do
-    local actor = Actor(actor_state.specname)
-    actor:loadState(actor_state)
-    table.insert(self.actors, actor)
-  end
-  for _,body_state in ipairs(state.bodies) do
-    local body = Body(body_state.specname)
-    body:loadState(body_state)
-    table.insert(self.bodies, body)
+  self:setId(state.id)
+  if state.tiles then
+    self:makeTiles(SectorGrid:from(state.tiles))
+    local bodies = {}
+    for _,body_state in ipairs(state.bodies) do
+      local body = Body(body_state.specname)
+      body:loadState(body_state)
+      register(body)
+      bodies[body.id] = body_state
+    end
+    for _,actor_state in ipairs(state.actors) do
+      local actor = Actor(actor_state.specname)
+      actor:loadState(actor_state)
+      register(actor)
+      local body_state = bodies[actor.body_id]
+      local i, j = body_state.i, body_state.j
+      print(i, j, self.tiles[i][j])
+      self:putActor(actor, i, j)
+    end
   end
 end
 
@@ -78,7 +87,7 @@ function Sector:generate()
 
   -- load sector's specs
   local base = SectorGrid(w, h, self:getSpec('margin-width'),
-                         self:getSpec('margin-height'))
+    self:getSpec('margin-height'))
 
   self.w = w
   self.h = h
@@ -88,6 +97,11 @@ function Sector:generate()
     TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
+  self:makeTiles(base)
+end
+
+function Sector:makeTiles(base)
+  local w, h = self.w, self.h
   for i = 1, h do
     self.tiles[i] = {}
     self.bodies[i] = {}
@@ -100,14 +114,13 @@ function Sector:generate()
       self.bodies[i][j] = false
     end
   end
-
 end
 
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Sector:putBody(body, i, j)
   assert(self:isValid(i,j),
-         ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
+    ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
   -- Remove body from where it was vefore
   local oldsector = body:getSector() or self
   local oldbodies = oldsector.bodies
@@ -193,12 +206,12 @@ end
 
 function Sector:isInside(i, j)
   return (i >= 1 and i <= self.h) and
-           (j >= 1 and j <= self.w)
+  (j >= 1 and j <= self.w)
 end
 
 function Sector:isValid(i, j)
   return self:isInside(i,j) and
-         self.tiles[i][j] and not self.bodies[i][j]
+  self.tiles[i][j] and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()
@@ -222,16 +235,16 @@ end
 
 --Check for dead bodies if any, and remove associated actors from the queue
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
-    local dead_actor_list = sector:removeDeadBodies()
-    for _, dead_actor in ipairs(dead_actor_list) do
-      for i, act in ipairs(actors_queue) do
-        if dead_actor == act then
-          table.remove(actors_queue, i)
-          break
-        end
+  local dead_actor_list = sector:removeDeadBodies()
+  for _, dead_actor in ipairs(dead_actor_list) do
+    for i, act in ipairs(actors_queue) do
+      if dead_actor == act then
+        table.remove(actors_queue, i)
+        break
       end
-      dead_actor:kill()
     end
+    dead_actor:kill()
+  end
 end
 
 
