@@ -1,4 +1,4 @@
---MODULE FOR THE GAMESTATE: GAME--
+--MODULE FOR THE GAMESTATE: PICKING A TARGET--
 
 local DB = require 'database'
 local DIR = require 'domain.definitions.dir'

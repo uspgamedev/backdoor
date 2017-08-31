@@ -66,7 +66,7 @@ function Route:instance(obj)
 
   function obj.playTurns(...)
     local request, extra = _current_sector:playTurns(...)
-    _controlled_actor = (request == "actorTurn") and extra or nil
+    _controlled_actor = (request == "userTurn") and extra or nil
     return request
   end
 
@@ -79,4 +79,3 @@ function Route:instance(obj)
 end
 
 return Route
-

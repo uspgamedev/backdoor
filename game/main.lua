@@ -25,7 +25,8 @@ Setup     = require "setup"
 GS = {
     PLAY = require "gamestates.play",     --Game Gamestate
     PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
-    START_MENU = require "gamestates.start_menu", --Player is choosing targets
+    START_MENU = require "gamestates.start_menu", --The game main menu
+    USER_TURN = require "gamestates.user_turn", --User's turn
 }
 
 -- GAMESTATE SWITCHER

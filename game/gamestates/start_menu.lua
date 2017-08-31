@@ -1,4 +1,4 @@
---MODULE FOR THE GAMESTATE: GAME--
+--MODULE FOR THE GAMESTATE: MAIN MENU--
 local MENU = require 'infra.menu'
 local INPUT = require 'infra.input'
 local CONTROLS = require 'infra.control'
