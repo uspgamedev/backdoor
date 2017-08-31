@@ -1,3 +1,4 @@
+--Get an attribute value of user
 
 local OP = {}
 
@@ -10,8 +11,7 @@ OP.schema = {
 OP.type = 'integer'
 
 function OP.process(actor, sector, params)
-  return 2
+  return 2 --FIXME
 end
 
 return OP
-
