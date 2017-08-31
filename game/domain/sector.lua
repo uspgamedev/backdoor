@@ -31,13 +31,22 @@ function Sector:init(spec_name)
 
 end
 
+function Sector:loadState(state)
+
+end
+
+function Sector:saveState()
+  local state = {}
+  return state
+end
+
 function Sector:generate()
 
   local transformers = self:getSpec('transformers')
   local w, h = self:getSpec('width'), self:getSpec('height')
 
   -- load sector's specs
-  self.base = SectorGrid(w, h, self:getSpec('margin-width'),
+  local base = SectorGrid(w, h, self:getSpec('margin-width'),
                          self:getSpec('margin-height'))
 
   self.w = w
@@ -45,14 +54,14 @@ function Sector:generate()
 
   -- sector grid generation
   for _, transformer in ipairs(transformers) do
-    TRANSFORMERS[transformer.typename].process(self.base, transformer)
+    TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
   for i = 1, h do
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      if self.base.get(j, i) == SCHEMATICS.FLOOR then
+      if base.get(j, i) == SCHEMATICS.FLOOR then
         self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
       else
         self.tiles[i][j] = false

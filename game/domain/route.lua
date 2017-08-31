@@ -11,10 +11,13 @@ local Sector = require 'domain.sector'
 
 function Route:instance(obj)
 
+  -- Saved data
+  local _id
   local _id_generator = IDGenerator()
+  local _player_name = "Unknown"
+  local _sectors = {}
   local _current_sector = nil
   local _controlled_actor = nil
-  local _data
 
   Util.destroyAll 'true_force'
 
@@ -26,8 +29,15 @@ function Route:instance(obj)
   end
 
   function obj.loadState(state)
-    _data = state
-    _id_generator = IDGenerator(_data.next_id)
+    _id = state.id
+    _id_generator = IDGenerator(state.next_id)
+    _player_name = state.player_name
+    _sectors = {}
+    for _,sector_state in ipairs(state.sectors) do
+      local sector = Sector(sector_state.specname)
+      sector:loadState(sector_state)
+      table.insert(_sectors, sector)
+    end
   end
 
   function obj.saveState()
