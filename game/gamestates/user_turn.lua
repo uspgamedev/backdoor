@@ -15,10 +15,11 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
+local _hand_view
+
 local _previous_control_map
 local _save_and_quit
 
-local _hand_view
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -29,7 +30,7 @@ local SIGNALS = {
   PRESS_ACTION_2 = {"widget_2"},
   PRESS_ACTION_3 = {"widget_3"},
   PRESS_ACTION_4 = {"widget_4"},
-  PRESS_SPECIAL = {"start_card_turn"},
+  PRESS_SPECIAL = {"start_card_selection"},
   PRESS_CANCEL = {"wait"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
@@ -41,6 +42,15 @@ local _unregisterSignals
 local _registerSignals
 
 --LOCAL FUNCTIONS--
+
+local function _changeToCardSelectScreen()
+
+  if #_hand_view.hand > 0 then
+    _unregisterSignals()
+    SWITCHER.push(GS.CARD_SELECT, _route, _sector_view, _hand_view)
+  end
+
+end
 
 local function _moveActor(dir)
   local current_sector = _route.getCurrentSector()
@@ -106,6 +116,7 @@ end
 function _registerSignals()
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("start_card_selection", _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -152,10 +163,16 @@ function state:leave()
 end
 
 function state:resume(state, args)
+  _registerSignals()
   if state == GS.PICK_TARGET then
 
-    _registerSignals()
     _resumeTask(args)
+
+  elseif state == GS.CARD_SELECT then
+
+    if args.chose_a_card then
+      _next_action = {"DEBUG"}
+    end
 
   end
 end

@@ -44,6 +44,15 @@
       }],
     "cost":4
   },
+  "DEBUG":{
+    "params":[],
+    "cost":2,
+    "operators":[],
+    "effects":[{
+        "typename":"print",
+        "text":42
+      }]
+  },
   "IDLE":{
     "params":[],
     "cost":1,

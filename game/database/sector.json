@@ -7,8 +7,8 @@
         "minh":3,
         "minw":3,
         "tries":512,
-        "count":24,
         "maxh":7,
+        "count":24,
         "maxw":7
       },{
         "typename":"maze",
