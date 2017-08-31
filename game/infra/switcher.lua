@@ -48,7 +48,6 @@ function SWITCHER.handleChangedState()
     _pushed = false
   end
   if _switched then
-    print(debug.traceback())
     Gamestate.switch(unpack(_switched))
     _switched = false
   end
