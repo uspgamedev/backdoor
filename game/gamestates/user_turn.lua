@@ -1,28 +1,17 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
-local DB = require 'database'
 local DIR = require 'domain.definitions.dir'
-local Route = require 'domain.route'
-local Sector = require 'domain.sector'
-local Body = require 'domain.body'
-local Actor = require 'domain.actor'
-local SectorView = require 'domain.view.sectorview'
 local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
-
-local GUI = require 'debug.gui'
 
 local state = {}
 
 --LOCAL VARIABLES--
 
-local _is_valid_position
 local _task
 local _mapped_signals
-
 local _route
-
 local _previous_control_map
 
 local SIGNALS = {
@@ -31,13 +20,13 @@ local SIGNALS = {
   PRESS_RIGHT = {"move", "right"},
   PRESS_LEFT = {"move", "left"},
   PRESS_ACTION_1 = {"widget_1"},
---  PRESS_ACTION_2 = {"widget_2"},
---  PRESS_ACTION_3 = {"widget_3"},
---  PRESS_ACTION_4 = {"widget_4"},
---  PRESS_SPECIAL = {"start_card_turn"},
---  PRESS_CANCEL = {"wait"},
+  PRESS_ACTION_2 = {"widget_2"},
+  PRESS_ACTION_3 = {"widget_3"},
+  PRESS_ACTION_4 = {"widget_4"},
+  PRESS_SPECIAL = {"start_card_turn"},
+  PRESS_CANCEL = {"wait"},
   PRESS_PAUSE = {"pause"},
---  PRESS_QUIT = {"quit"}
+  PRESS_QUIT = {"quit"}
 }
 
 --LOCAL FUNCTIONS DECLARATIONS--

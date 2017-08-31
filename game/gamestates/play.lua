@@ -1,12 +1,6 @@
 
 --MODULE FOR THE GAMESTATE: GAME--
 
-local ACTION = require 'domain.action'
-local DB = require 'database'
-local DIR = require 'domain.definitions.dir'
-local INPUT = require 'infra.input'
-local CONTROL = require 'infra.control'
-local PROFILE = require 'infra.profile'
 local GUI = require 'debug.gui'
 
 local Route = require 'domain.route'
@@ -37,10 +31,6 @@ local function _playTurns(...)
 end
 
 --STATE FUNCTIONS--
-
-function state:init()
-
-end
 
 function state:enter(pre, route_data)
 
@@ -79,7 +69,6 @@ end
 function state:update(dt)
 
   if not DEBUG then
-    INPUT.update()
     if _next_action then
       _playTurns(unpack(_next_action))
     end
@@ -111,10 +100,6 @@ function state:keypressed(key)
     return
   end
 
-  if not DEBUG then
-    INPUT.key_pressed(key)
-  end
-
   if key ~= "escape" then
     Util.defaultKeyPressed(key)
   end
@@ -130,10 +115,6 @@ function state:keyreleased(key)
   imgui.KeyReleased(key)
   if imgui.GetWantCaptureKeyboard() then
     return
-  end
-
-  if not DEBUG then
-    INPUT.key_released(key)
   end
 
 end
