@@ -3,6 +3,9 @@ local DB = require 'database'
 local SCHEMATICS = require 'definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 
+local Actor = require 'domain.actor'
+local Body = require 'domain.body'
+
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'
 
@@ -32,11 +35,39 @@ function Sector:init(spec_name)
 end
 
 function Sector:loadState(state)
-
+  self.tiles = state.tiles
+  self.w = state.w
+  self.h = state.h
+  for _,actor_state in ipairs(state.actors) do
+    local actor = Actor(actor_state.specname)
+    actor:loadState(actor_state)
+    table.insert(self.actors, actor)
+  end
+  for _,body_state in ipairs(state.bodies) do
+    local body = Body(body_state.specname)
+    body:loadState(body_state)
+    table.insert(self.bodies, body)
+  end
 end
 
 function Sector:saveState()
   local state = {}
+  state.specname = self.specname
+  state.w = self.w
+  state.h = self.h
+  state.tiles = self.tiles
+  state.actors = {}
+  state.bodies = {}
+  for _,actor in ipairs(self.actors) do
+    local actor_state = actor:saveState()
+    table.insert(state.actors, actor_state)
+  end
+  for body in pairs(self.bodies) do
+    if not tonumber(body) then
+      local body_state = body:saveState()
+      table.insert(state.bodies, body_state)
+    end
+  end
   return state
 end
 

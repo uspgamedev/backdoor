@@ -33,6 +33,7 @@ function Route:instance(obj)
     _id_generator = IDGenerator(state.next_id)
     _player_name = state.player_name
     _sectors = {}
+    RANDOM.setState(state.rng_state)
     for _,sector_state in ipairs(state.sectors) do
       local sector = Sector(sector_state.specname)
       sector:loadState(sector_state)
@@ -41,9 +42,17 @@ function Route:instance(obj)
   end
 
   function obj.saveState()
-    _data.next_id = _id_generator.getNextID()
-    _data.rng_state = RANDOM.getState()
-    PROFILE.saveRoute(_data)
+    local state = {}
+    state.id = _id
+    state.next_id = _id_generator.getNextID()
+    state.player_name = _player_name
+    state.rng_state = RANDOM.getState()
+    state.rng_seed = RANDOM.getSeed()
+    state.sectors = {}
+    for _,sector in ipairs(_sectors) do
+      local sector_state = sector:saveState()
+      table.insert(state.sectors, sector_state)
+    end
     return state
   end
 
@@ -62,6 +71,7 @@ function Route:instance(obj)
   function obj.makeSector(sector_spec)
     local id,sector = _register(Sector(sector_spec))
     sector:generate()
+    table.insert(_sectors, sector)
     _current_sector = sector
     return sector
   end

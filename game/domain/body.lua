@@ -16,11 +16,14 @@ end
 
 function Body:loadState(state)
   self.damage = state.damage
+  self.sector_id = state.sector_id
 end
 
 function Body:saveState()
   local state = {}
+  state.specname = self.specname
   state.damage = self.damage
+  state.sector_id = self.sector_id
   return state
 end
 
