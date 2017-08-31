@@ -3,19 +3,19 @@
     "width":64,
     "margin-height":3,
     "transformers":[{
-        "typename":"rooms",
-        "minh":3,
+        "tries":512,
+        "count":24,
         "minw":3,
-        "tries":256,
+        "typename":"rooms",
         "maxh":7,
-        "count":12,
+        "minh":3,
         "maxw":7
       },{
         "typename":"maze",
         "double":false
       },{
         "typename":"connections",
-        "n":128
+        "n":48
       },{
         "typename":"deadends",
         "n":128

@@ -22,8 +22,8 @@ local _params = {
     minh = 3,
     maxw = 7,
     maxh = 7,
-    count = 12,
-    tries = 256,
+    count = 24,
+    tries = 512,
   },
   maze = {
     double = false
@@ -43,10 +43,10 @@ local function generate()
   local mw = _params.general.mw
   local mh = _params.general.mh
   local sector = SectorGrid(w, h, mw, mh)
-  TRANSFORMERS.rooms(sector, _params.rooms)
-  TRANSFORMERS.maze(sector, _params.maze)
-  TRANSFORMERS.connections(sector, _params.connections)
-  TRANSFORMERS.deadends(sector, _params.deadends)
+  TRANSFORMERS.rooms.process(sector, _params.rooms)
+  TRANSFORMERS.maze.process(sector, _params.maze)
+  TRANSFORMERS.connections.process(sector, _params.connections)
+  TRANSFORMERS.deadends.process(sector, _params.deadends)
   print(sector)
   return sector
 end
