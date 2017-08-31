@@ -1,14 +1,14 @@
 {
   "sector01":{
-    "width":32,
+    "width":64,
     "margin-height":3,
     "transformers":[{
-        "typename":"rooms",
-        "minh":3,
-        "minw":3,
         "tries":256,
-        "count":12,
         "maxh":7,
+        "minw":3,
+        "typename":"rooms",
+        "count":12,
+        "minh":3,
         "maxw":7
       },{
         "typename":"maze",
@@ -20,7 +20,7 @@
         "typename":"deadends",
         "n":128
       }],
-    "height":32,
+    "height":64,
     "margin-width":3
   }
 }

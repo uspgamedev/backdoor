@@ -151,7 +151,7 @@ function state:enter(pre, route_data)
   _sector_view = SectorView(sector)
   _sector_view:addElement("L1", nil, "sector_view")
 
-  for _=1,5 do
+  for _=1,20 do
     _route.makeActor('slime', 'dumb', sector:randomValidTile())
   end
 
@@ -172,6 +172,7 @@ function state:leave()
   _unregisterSignals()
   _route.destroyAll()
   _sector_view:destroy()
+  _gui:destroy()
   Util.destroyAll()
 
 end

@@ -4,33 +4,55 @@
         "typename":"direction",
         "output":"pos"
       }],
+    "cost":3,
+    "operators":[],
     "effects":[{
         "typename":"move_to",
         "pos":"par:pos"
-      }],
-    "operators":[],
-    "cost":3
+      }]
   },
   "IDLE":{
     "params":[],
-    "effects":[],
+    "cost":1,
     "operators":[],
-    "cost":1
+    "effects":[]
+  },
+  "SHOOT":{
+    "params":[{
+        "typename":"choose_target",
+        "max-range":5,
+        "output":"target",
+        "filter":"BODY"
+      }],
+    "cost":6,
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"attr",
+        "which":"ATH"
+      },{
+        "typename":"add",
+        "lhs":"val:attr",
+        "output":"amount",
+        "rhs":3
+      }],
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"par:target",
+        "amount":"val:amount"
+      }]
   },
   "DOUBLESHOOT":{
     "params":[{
         "typename":"choose_target",
-        "filter":"BODY",
+        "max-range":10,
         "output":"target",
-        "max-range":10
+        "filter":"BODY"
       },{
         "typename":"choose_target",
-        "filter":"BODY",
+        "max-range":10,
         "output":"target2",
-        "max-range":10
+        "filter":"BODY"
       }],
-    "cost":12,
-    "operators":[],
     "effects":[{
         "typename":"deal_damage",
         "target":"par:target",
@@ -39,30 +61,8 @@
         "typename":"deal_damage",
         "target":"par:target2",
         "amount":4
-      }]
-  },
-  "SHOOT":{
-    "params":[{
-        "typename":"choose_target",
-        "filter":"BODY",
-        "output":"target",
-        "max-range":5
       }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"par:target",
-        "amount":"val:amount"
-      }],
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"ATH"
-      },{
-        "typename":"add",
-        "output":"amount",
-        "rhs":3,
-        "lhs":"val:attr"
-      }],
-    "cost":6
+    "operators":[],
+    "cost":12
   }
 }
