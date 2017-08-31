@@ -2,6 +2,12 @@
 
 local drawCard
 
+--CardView properties
+
+local card_view ={
+
+}
+
 --HandView Class--
 
 local HandView = Class{
@@ -14,7 +20,7 @@ function HandView:init(hand)
   ELEMENT.init(self)
 
   self.hand = hand
-  self.x, self.y = 100, 20
+  self.x, self.y = 20, 20
 
 end
 
