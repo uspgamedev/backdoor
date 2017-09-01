@@ -25,6 +25,7 @@ function Sector:init(spec_name)
   self.tiles = {{ false }}
   self.bodies = {}
   self.actors = {}
+  self.exits = {}
 
   -- A special tile where we can always remove things from...
   -- Because nothing is ever there!
@@ -38,6 +39,7 @@ function Sector:loadState(state, register)
   self.w = state.w or self.w
   self.h = state.h or self.h
   self.id = state.id
+  self.exits = state.exits
   self:setId(state.id)
   if state.tiles then
     local grid = SectorGrid:from(state.tiles)
@@ -73,6 +75,7 @@ function Sector:saveState()
   state.w = self.w
   state.h = self.h
   state.id = self.id
+  state.exits = self.exits
   state.tiles = self.tiles
   state.actors = {}
   state.bodies = {}
@@ -105,6 +108,7 @@ function Sector:generate()
   end
 
   self:makeTiles(base.grid)
+  self:makeExits(base.exits)
 end
 
 function Sector:makeTiles(grid)
@@ -115,11 +119,23 @@ function Sector:makeTiles(grid)
     for j = 1, self.w do
       if grid.get(j, i) == SCHEMATICS.FLOOR then
         self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
-      else
-        self.tiles[i][j] = false
+      elseif grid.get(j, i) == SCHEMATICS.EXIT then
+        print(j, i)
+        self.tiles[i][j] = {0x77, 0xba, 0x99}
       end
       self.bodies[i][j] = false
     end
+  end
+end
+
+function Sector:makeExits(exits)
+  local generated_exits = exits or {}
+  for i, exit in ipairs(generated_exits) do
+    self.exits[i] = {
+      pos = exit.pos,
+      target_specname = exit.target_specname,
+      target_id = false,
+    }
   end
 end
 

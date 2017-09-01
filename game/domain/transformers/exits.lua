@@ -5,12 +5,15 @@ local SCHEMATICS = require 'definitions.schematics'
 local transformer = {}
 
 transformer.schema = {
-  { id = 'n', name = "No. of exits", type = 'integer', range = {1} }
+  { id = 'exits', name = "Exits", type = 'array', schema = {
+      id = "target_specname", name = "Target Sector Spec", type = 'enum', options = "sector"
+    }
+  },
 }
 
 function transformer.process(sectorinfo, params)
   local _sectorgrid = sectorinfo.grid
-  local n = params.n
+  local _exits = params.exits
 
   local function getPossibleExits()
     local possible_exits = {}
@@ -20,7 +23,7 @@ function transformer.process(sectorinfo, params)
            _sectorgrid.get(x - 1, y) == SCHEMATICS.FLOOR and
            _sectorgrid.get(x, y + 1) == SCHEMATICS.FLOOR and
            _sectorgrid.get(x, y - 1) == SCHEMATICS.FLOOR then
-          table.insert(possible_exits, {x, y})
+          table.insert(possible_exits, {y, x})
         end
       end
     end
@@ -28,17 +31,21 @@ function transformer.process(sectorinfo, params)
   end
 
   local function getRandomExits(possible_exits)
+    local N = #_exits
     local exits = {}
-    for i = 1, n do
+    for i = 1, N do
       local idx = RANDOM.interval(1, #possible_exits)
-      table.insert(exits, possible_exits[idx])
+      table.insert(exits, {
+        pos = possible_exits[idx],
+        target_specname = _exits[i].target_specname
+      })
     end
     return exits
   end
 
   local function setExits(exits)
-    for i, exit in ipairs(exits) do
-      local x, y = exit[1], exit[2]
+    for _,exit in ipairs(exits) do
+      local x, y = exit[2], exit[1]
       _sectorgrid.set(x, y, SCHEMATICS.EXIT)
     end
   end

@@ -35,18 +35,25 @@ local function _generateSectorsData(idgenerator)
   -- create first sector
   local sectors = {}
   local t = SCHEMATICS.FLOOR
+  local e = SCHEMATICS.EXIT
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
       { t, t, t, },
-      { t, t, t, },
+      { t, e, t, },
       { t, t, t, },
     },
     w = 3,
     h = 3,
     bodies = {},
     actors = {},
+    exits = {
+      {
+        pos = {2, 2},
+        target_specname = "sector01",
+      },
+    }
   }
 
   -- generate player
@@ -58,10 +65,6 @@ local function _generateSectorsData(idgenerator)
   first_sector.actors[1] = player_actor
 
   sectors[1] = first_sector
-  for i = 2, 4 do
-    local sector = { specname = 'sector01' }
-    sectors[i] = sector
-  end
 
   -- create player
   return sectors

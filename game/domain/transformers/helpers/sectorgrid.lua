@@ -86,7 +86,7 @@ function SectorGrid:from(matrix, mw, mh)
   local grid = SectorGrid(w, h, mw, mh)
   for i = 1, h do
     for j = 1, w do
-      grid.set(j, i, matrix[i][j] and SCHEMATICS.FLOOR or SCHEMATICS.NAUGHT)
+      grid.set(j, i, matrix[i][j] or false)
     end
   end
   return grid
