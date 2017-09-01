@@ -14,7 +14,8 @@
         "tries":256,
         "count":24,
         "minh":3,
-        "maxw":9
+        "maxw":9,
+        "maxh":9
       },{
         "typename":"maze"
       },{
@@ -25,7 +26,11 @@
         "n":128
       },{
         "typename":"exits",
-        "n":2
+        "exits":[
+          {
+            "target_specname": "sector01"
+          }
+        ]
       }],
     "height":8,
     "margin-height":0
