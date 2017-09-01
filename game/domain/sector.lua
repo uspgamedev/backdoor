@@ -35,11 +35,13 @@ function Sector:init(spec_name)
 end
 
 function Sector:loadState(state, register)
-  self.w = state.w
-  self.h = state.h
+  self.w = state.w or self.w
+  self.h = state.h or self.h
+  self.id = state.id
   self:setId(state.id)
   if state.tiles then
-    self:makeTiles(SectorGrid:from(state.tiles))
+    local grid = SectorGrid:from(state.tiles)
+    self:makeTiles(grid)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
@@ -53,7 +55,6 @@ function Sector:loadState(state, register)
       register(actor)
       local body_state = bodies[actor.body_id]
       local i, j = body_state.i, body_state.j
-      print(i, j, self.tiles[i][j])
       self:putActor(actor, i, j)
     end
   end
@@ -64,6 +65,7 @@ function Sector:saveState()
   state.specname = self.specname
   state.w = self.w
   state.h = self.h
+  state.id = self.id
   state.tiles = self.tiles
   state.actors = {}
   state.bodies = {}
@@ -71,9 +73,12 @@ function Sector:saveState()
     local actor_state = actor:saveState()
     table.insert(state.actors, actor_state)
   end
-  for body in pairs(self.bodies) do
+  for body, body_pos in pairs(self.bodies) do
     if not tonumber(body) then
+      local i, j = body_pos[1], body_pos[2]
       local body_state = body:saveState()
+      body_state.i = i
+      body_state.j = j
       table.insert(state.bodies, body_state)
     end
   end

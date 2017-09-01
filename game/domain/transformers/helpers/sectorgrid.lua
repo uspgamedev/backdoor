@@ -60,6 +60,7 @@ function SectorGrid:instance(obj, w, h, mw, mh)
 end
 
 function SectorGrid:from(matrix, mw, mh)
+  -- when we implement walls and other tiles, we'll need to update this method
   local h = #matrix
   local w = #matrix[1]
   mw = mw or 0
@@ -67,7 +68,7 @@ function SectorGrid:from(matrix, mw, mh)
   local grid = SectorGrid(w, h, mw, mh)
   for i = 1, h do
     for j = 1, w do
-      grid.set(j, i, matrix[i][j])
+      grid.set(j, i, matrix[i][j] and SCHEMATICS.FLOOR or SCHEMATICS.NAUGHT)
     end
   end
   return grid
