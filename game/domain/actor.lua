@@ -23,11 +23,20 @@ function Actor:init(spec_name)
 end
 
 function Actor:loadState(state)
-
+  self.cooldown = state.cooldown
+  self.actions = state.actions
+  self.body_id = state.body_id
+  self:setId(state.id)
 end
 
-function Actor:saveState(state)
-
+function Actor:saveState()
+  local state = {}
+  state.specname = self.specname
+  state.cooldown = self.cooldown
+  state.actions = self.actions
+  state.body_id = self.body_id
+  state.id = self.id
+  return state
 end
 
 function Actor:setBody(body_id)

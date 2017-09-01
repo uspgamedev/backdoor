@@ -15,7 +15,6 @@ local function _moveCamera(target)
   local tx, ty = (j-0.5)*TILE_W, (i-0.5)*TILE_H
   local smooth = 1/5
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
-  return CAM:position()
 end
 
 function SectorView:init(sector)
@@ -40,7 +39,10 @@ end
 function SectorView:draw()
   local sector = self.sector
   local g = love.graphics
-  local cx, cy = _moveCamera(self.target)
+  if self.target then
+    _moveCamera(self.target)
+  end
+  local cx, cy = CAM:position()
   cx = cx / TILE_W
   cy = cy / TILE_H
   g.setBackgroundColor(50, 80, 80, 255)

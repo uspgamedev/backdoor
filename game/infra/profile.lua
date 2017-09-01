@@ -66,21 +66,21 @@ function PROFILE.loadRoute(route_id)
   local filedata, err = filesystem.newFileData(SAVEDIR..route_id)
   local route_data = json.decode(filedata:getString())
   -- delete save from list
-  _metadata.save_list[route_data.route_id] = nil
+  _metadata.save_list[route_data.id] = nil
   assert(filedata, err)
   return route_data
 end
 
 function PROFILE.saveRoute(route_data)
-  local file, err = filesystem.newFile(SAVEDIR..route_data.route_id, "w")
+  local file, err = filesystem.newFile(SAVEDIR..route_data.id, "w")
   assert(file, err)
   -- add save to list
   -- Not that since we have the route's data in this scope, we can
   -- put a header in a profile header instead of just the value `true`.
-  _metadata.save_list[route_data.route_id] = {
-    charname = route_data.charname
+  _metadata.save_list[route_data.id] = {
+    player_name = route_data.player_name
   }
-  file:write(json.encode(route_data))
+  file:write(json.encode(route_data, { indent = true }))
   return file:close()
 end
 

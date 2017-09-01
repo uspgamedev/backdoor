@@ -11,29 +11,69 @@ local Sector = require 'domain.sector'
 
 function Route:instance(obj)
 
+  -- Saved data
+  local _id
   local _id_generator = IDGenerator()
+  local _player_name = "Unknown"
+  local _player_id
+  local _sectors = {}
   local _current_sector = nil
   local _controlled_actor = nil
-  local _data
 
   Util.destroyAll 'true_force'
 
   local function _register(element)
-    local id = _id_generator.newID()
+    local id = element.id or _id_generator.newID()
     element:setId(id)
     element:setSubtype(element.spectype)
     return id, element
   end
 
   function obj.loadState(state)
-    _data = state
-    _id_generator = IDGenerator(_data.next_id)
+    -- id
+    _id = state.id
+    _id_generator = IDGenerator(state.next_id)
+
+    -- player
+    _player_name = state.player_name
+    _player_id = state.player_id
+
+    -- rng
+    -- setState is theoretically enough to reproduce seed as well
+    RANDOM.setState(state.rng_state)
+
+    -- sectors
+    _sectors = {}
+    for _,sector_state in ipairs(state.sectors) do
+      local sector = Sector(sector_state.specname)
+      sector:loadState(sector_state, _register)
+      _register(sector)
+      table.insert(_sectors, sector)
+    end
+
+    -- current sector
+    obj.setCurrentSector(state.current_sector_id)
   end
 
   function obj.saveState()
-    _data.next_id = _id_generator.getNextID()
-    _data.rng_state = RANDOM.getState()
-    PROFILE.saveRoute(_data)
+    local state = {}
+    -- id
+    state.id = _id
+    state.next_id = _id_generator.getNextID()
+    -- id
+    state.player_name = _player_name
+    state.player_id = _player_id
+    -- rng
+    state.rng_state = RANDOM.getState()
+    state.rng_seed = RANDOM.getSeed()
+    -- sectors
+    state.sectors = {}
+    for _,sector in ipairs(_sectors) do
+      local sector_state = sector:saveState()
+      table.insert(state.sectors, sector_state)
+    end
+    -- current sector
+    state.current_sector_id = _current_sector.id
     return state
   end
 
@@ -52,6 +92,7 @@ function Route:instance(obj)
   function obj.makeSector(sector_spec)
     local id,sector = _register(Sector(sector_spec))
     sector:generate()
+    table.insert(_sectors, sector)
     _current_sector = sector
     return sector
   end

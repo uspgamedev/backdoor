@@ -3,6 +3,9 @@ local DB = require 'database'
 local SCHEMATICS = require 'definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 
+local Actor = require 'domain.actor'
+local Body = require 'domain.body'
+
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'
 
@@ -31,28 +34,91 @@ function Sector:init(spec_name)
 
 end
 
+function Sector:loadState(state, register)
+  self.w = state.w or self.w
+  self.h = state.h or self.h
+  self.id = state.id
+  self:setId(state.id)
+  if state.tiles then
+    local grid = SectorGrid:from(state.tiles)
+    self:makeTiles(grid)
+    local bodies = {}
+    for _,body_state in ipairs(state.bodies) do
+      local body = Body(body_state.specname)
+      body:loadState(body_state)
+      register(body)
+      bodies[body.id] = body_state
+    end
+    for _,actor_state in ipairs(state.actors) do
+      local actor = Actor(actor_state.specname)
+      actor:loadState(actor_state)
+      register(actor)
+      local body_id = actor.body_id
+      local body_state = bodies[body_id]
+      local i, j = body_state.i, body_state.j
+      bodies[body_id] = nil
+      self:putActor(actor, i, j)
+    end
+    for id, body_state in pairs(bodies) do
+      local i, j = body_state.i, body_state.j
+      local body = Util.findId(id)
+      self:putBody(body, i, j)
+    end
+  end
+end
+
+function Sector:saveState()
+  local state = {}
+  state.specname = self.specname
+  state.w = self.w
+  state.h = self.h
+  state.id = self.id
+  state.tiles = self.tiles
+  state.actors = {}
+  state.bodies = {}
+  for _,actor in ipairs(self.actors) do
+    local actor_state = actor:saveState()
+    table.insert(state.actors, actor_state)
+  end
+  for body, body_pos in pairs(self.bodies) do
+    if not tonumber(body) then
+      local i, j = body_pos[1], body_pos[2]
+      local body_state = body:saveState()
+      body_state.i = i
+      body_state.j = j
+      table.insert(state.bodies, body_state)
+    end
+  end
+  return state
+end
+
 function Sector:generate()
 
   local transformers = self:getSpec('transformers')
   local w, h = self:getSpec('width'), self:getSpec('height')
 
   -- load sector's specs
-  self.base = SectorGrid(w, h, self:getSpec('margin-width'),
-                         self:getSpec('margin-height'))
+  local base = SectorGrid(w, h, self:getSpec('margin-width'),
+    self:getSpec('margin-height'))
 
   self.w = w
   self.h = h
 
   -- sector grid generation
   for _, transformer in ipairs(transformers) do
-    TRANSFORMERS[transformer.typename].process(self.base, transformer)
+    TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
+  self:makeTiles(base)
+end
+
+function Sector:makeTiles(base)
+  local w, h = self.w, self.h
   for i = 1, h do
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, w do
-      if self.base.get(j, i) == SCHEMATICS.FLOOR then
+      if base.get(j, i) == SCHEMATICS.FLOOR then
         self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
       else
         self.tiles[i][j] = false
@@ -60,14 +126,13 @@ function Sector:generate()
       self.bodies[i][j] = false
     end
   end
-
 end
 
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Sector:putBody(body, i, j)
   assert(self:isValid(i,j),
-         ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
+    ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
   -- Remove body from where it was vefore
   local oldsector = body:getSector() or self
   local oldbodies = oldsector.bodies
@@ -153,12 +218,12 @@ end
 
 function Sector:isInside(i, j)
   return (i >= 1 and i <= self.h) and
-           (j >= 1 and j <= self.w)
+  (j >= 1 and j <= self.w)
 end
 
 function Sector:isValid(i, j)
   return self:isInside(i,j) and
-         self.tiles[i][j] and not self.bodies[i][j]
+  self.tiles[i][j] and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()
@@ -182,16 +247,16 @@ end
 
 --Check for dead bodies if any, and remove associated actors from the queue
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
-    local dead_actor_list = sector:removeDeadBodies()
-    for _, dead_actor in ipairs(dead_actor_list) do
-      for i, act in ipairs(actors_queue) do
-        if dead_actor == act then
-          table.remove(actors_queue, i)
-          break
-        end
+  local dead_actor_list = sector:removeDeadBodies()
+  for _, dead_actor in ipairs(dead_actor_list) do
+    for i, act in ipairs(actors_queue) do
+      if dead_actor == act then
+        table.remove(actors_queue, i)
+        break
       end
-      dead_actor:kill()
     end
+    dead_actor:kill()
+  end
 end
 
 

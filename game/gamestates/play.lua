@@ -2,6 +2,7 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
 local GUI = require 'debug.gui'
+local PROFILE = require 'infra.profile'
 
 local Route = require 'domain.route'
 local SectorView = require 'domain.view.sectorview'
@@ -30,28 +31,33 @@ local function _playTurns(...)
   _next_action = nil
 end
 
+local function _saveAndQuit()
+  local route_data = _route.saveState()
+  PROFILE.saveRoute(route_data)
+  SWITCHER.switch(GS.START_MENU)
+end
+
 --STATE FUNCTIONS--
 
 function state:enter(pre, route_data)
 
+  -- load route
   _route = Route()
-
   _route.loadState(route_data)
-  local sector = _route.makeSector('sector01')
 
+  -- set player
+  _player = _route.getControlledActor()
+
+  -- sector view
+  local sector = _route.getCurrentSector()
   _sector_view = SectorView(sector)
   _sector_view:addElement("L1", nil, "sector_view")
-
-  for _=1,20 do
-    _route.makeActor('slime', 'dumb', sector:randomValidTile())
-  end
-
-  _player = _route.makeActor('hearthborn', 'player', sector:randomValidTile())
-  _player:setAction('PRIMARY', 'DOUBLESHOOT')
   _sector_view:lookAt(_player)
 
+  -- start gamestate
   _playTurns()
 
+  -- GUI
   _gui = GUI(_sector_view)
   _gui:addElement("GUI")
 
@@ -82,6 +88,7 @@ end
 function state:resume(state, args)
 
   if state == GS.USER_TURN then
+    if args == "SAVE_AND_QUIT" then return _saveAndQuit() end
     _next_action = args.next_action
   end
 
