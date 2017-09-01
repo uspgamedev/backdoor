@@ -1,5 +1,8 @@
 {
   "dummy":{
     "name":"printf"
+  },
+  "dummy2":{
+    "name":"wilson"
   }
 }

@@ -89,12 +89,19 @@ function Actor:spendTime(n)
   self.cooldown = self.cooldown + n
 end
 
---Draw a card from actor's buffer (for now actually just creates a card from no-where)
+--Draw a card from actor's buffer
 function Actor:drawCard()
   if #self.hand >= self.hand_limit then return end
 
-  --TODO: Change this
-  table.insert(self.hand, CARD("dummy"))
+  --TODO: Change this so actor draws from his buffer
+  local card
+  if love.math.random() >.5 then
+    card = CARD("dummy")
+  else
+    card = CARD("dummy2")
+  end
+  table.insert(self.hand, card)
+  Signal.emit("actor_draw", self, card)
 
 end
 

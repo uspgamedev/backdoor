@@ -52,6 +52,23 @@ local function _changeToCardSelectScreen()
 
 end
 
+--Receive a card index from player hands (between 1 and max-hand-size)
+local function _useCardByIndex(index)
+
+  local card = _hand_view.hand[index]
+  local player = _route.getControlledActor()
+  print("used a card named "..card:getName())
+
+  --Remove card from player hand (data only)
+  table.remove(player.hand, index)
+
+  --Remove card from View (visual only)
+  Signal.emit("actor_used_card", player, index)
+
+  --FIXME Change this to using an action "play card effect" that receives card info and does the effect
+  _next_action = {'IDLE', {card}}
+end
+
 local function _moveActor(dir)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
@@ -138,6 +155,7 @@ function state:init()
       Signal.emit(unpack(signal_pack))
     end
   end
+
 end
 
 function state:enter(_, route, sector_view)
@@ -146,8 +164,19 @@ function state:enter(_, route, sector_view)
   _sector_view = sector_view
   _save_and_quit = false
 
-  _hand_view = HandView(_route.getControlledActor().hand)
-  _hand_view:addElement("HUD", nil, "hand_view")
+  if not _hand_view then
+    _hand_view = HandView()
+    _hand_view:addElement("HUD", nil, "hand_view")
+    Signal.register("actor_draw",
+      function(actor, card)
+        _hand_view:addCard(actor,card)
+      end)
+    Signal.register("actor_used_card",
+      function(actor, card_index)
+        _hand_view:removeCard(actor,card_index)
+      end)
+  end
+  _hand_view:reset(_route.getControlledActor().hand, _route)
 
   _registerSignals()
 
@@ -171,7 +200,7 @@ function state:resume(state, args)
   elseif state == GS.CARD_SELECT then
 
     if args.chose_a_card then
-      _next_action = {"DEBUG"}
+      _useCardByIndex(args.card_index)
     end
 
   end
@@ -183,7 +212,7 @@ function state:update(dt)
     INPUT.update()
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     _sector_view:lookAt(_route.getControlledActor())
-
+    MAIN_TIMER:update(dt)
     if _next_action then
       SWITCHER.pop({next_action = _next_action})
       _next_action = nil

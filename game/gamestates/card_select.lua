@@ -52,6 +52,7 @@ end
 local function _confirm_card()
   local args = {
     chose_a_card = true,
+    card_index = _focus_index,
   }
   SWITCHER.pop(args)
 end
@@ -115,6 +116,14 @@ function state:enter(_, route, sector_view, hand_view)
   _hand_size = #_hand_view.hand
   _hand_view.focus_index = 1
 
+  if _timer_handles["start"] then
+    MAIN_TIMER:cancel(_timer_handles["start"])
+  end
+  if _timer_handles["end"] then
+    MAIN_TIMER:cancel(_timer_handles["end"])
+  end
+  _timer_handles["start"] = MAIN_TIMER:tween(0.2, _hand_view, {y = _hand_view.initial_y - 200}, 'out-cubic')
+
   _registerSignals()
 
   _previous_control_map = CONTROL.getMap()
@@ -127,6 +136,16 @@ end
 function state:leave()
 
   _hand_view.focus_index = -1
+
+
+  if _timer_handles["start"] then
+    MAIN_TIMER:cancel(_timer_handles["start"])
+  end
+  if _timer_handles["end"] then
+    MAIN_TIMER:cancel(_timer_handles["end"])
+  end
+  _timer_handles["end"] = MAIN_TIMER:tween(0.2, _hand_view, {y = _hand_view.initial_y}, 'out-cubic')
+
   _unregisterSignals()
 
 end
@@ -135,6 +154,7 @@ function state:update(dt)
 
   if not DEBUG then
     INPUT.update()
+    MAIN_TIMER:update(dt)
     _sector_view:lookAt(_route.getControlledActor())
   end
 

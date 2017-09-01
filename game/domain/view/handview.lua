@@ -1,8 +1,8 @@
---Local Functions--
+--LOCAL FUNCTIONS DECLARATIONS--
 
 local drawCard
 
---CardView properties
+--CARDVIEW PROPERTIES--
 
 local card_view = {
   w = 130,
@@ -15,20 +15,19 @@ local HandView = Class{
   __includes = { ELEMENT }
 }
 
---Class Functions--
+--CLASS FUNCTIONS--
 
-function HandView:init(hand)
+function HandView:init()
+
   ELEMENT.init(self)
 
-  self.hand = hand
   self.focus_index = -1 --What card is focused. -1 if none
-  self.x, self.y = 100, O_WIN_H - card_view.h - 30
+  self.x, self.y = 100, O_WIN_H - 30
   self.initial_x, self.initial_y = self.x, self.y
 
 end
 
 function HandView:draw()
-
   local x, y = self.x, self.y
   local gap = 150
   for i, card in ipairs(self.hand) do
@@ -38,9 +37,34 @@ function HandView:draw()
 
 end
 
+function HandView:addCard(actor, card)
+  if self.route.getControlledActor() == actor then
+    table.insert(self.hand, card)
+  end
+end
+
+--Remove card given by index (must be valid)
+function HandView:removeCard(actor, card_index)
+  if self.route.getControlledActor() == actor then
+    table.remove(self.hand, card_index)
+  end
+end
+
+function HandView:reset(_hand,_route)
+  self.route = _route
+  self.hand = {}
+
+  for i,card in ipairs(_hand) do
+    self.hand[i] = card
+  end
+
+end
+
+
+  --LOCAL FUNCTIONS--
+
 --Draw a card starting its upper left corner on given x,y values
 function drawCard(card, x, y, focused)
-
   --Draw card background
   if focused then
     love.graphics.setColor(244, 164, 66)
