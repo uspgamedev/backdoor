@@ -42,7 +42,7 @@ local function _exitSector()
     id, sector = _route.makeSector(exit.specname)
     local entry = sector:getExit(1)
     sector:link(1, current_sector.id, i, j)
-    current_sector:link(idx, id, unpack(exit.pos))
+    current_sector:link(idx, id, unpack(entry.pos))
     ti, tj = unpack(entry.pos)
   else
     id = exit.id
@@ -52,6 +52,7 @@ local function _exitSector()
   sector:putActor(controlled_actor, ti, tj)
   _route.setCurrentSector(id)
   _sector_view:setSector(sector)
+  _playTurns()
 end
 
 local function _saveAndQuit()
