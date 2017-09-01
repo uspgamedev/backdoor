@@ -1,18 +1,22 @@
 {
   "sector01":{
-    "width":64,
-    "margin-height":3,
+    "width":8,
+    "margin-width":0,
     "transformers":[{
-        "typename":"rooms",
-        "minh":3,
-        "minw":3,
-        "tries":512,
-        "maxh":7,
-        "count":24,
-        "maxw":7
+        "w":64,
+        "typename":"boostrap",
+        "h":64,
+        "mh":2,
+        "mw":2
       },{
-        "typename":"maze",
-        "double":false
+        "tries":256,
+        "minw":3,
+        "typename":"rooms",
+        "count":24,
+        "minh":3,
+        "maxw":9
+      },{
+        "typename":"maze"
       },{
         "typename":"connections",
         "loops":24
@@ -20,7 +24,7 @@
         "typename":"deadends",
         "n":128
       }],
-    "height":64,
-    "margin-width":3
+    "height":8,
+    "margin-height":0
   }
 }
