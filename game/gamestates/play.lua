@@ -2,6 +2,7 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
 local GUI = require 'debug.gui'
+local PROFILE = require 'infra.profile'
 
 local Route = require 'domain.route'
 local SectorView = require 'domain.view.sectorview'
@@ -28,6 +29,12 @@ local function _playTurns(...)
     SWITCHER.push(GS.USER_TURN, _route, _sector_view)
   end
   _next_action = nil
+end
+
+local function _saveAndQuit()
+  local route_data = _route.saveState()
+  PROFILE.saveRoute(route_data)
+  SWITCHER.switch(GS.START_MENU)
 end
 
 --STATE FUNCTIONS--
@@ -81,6 +88,7 @@ end
 function state:resume(state, args)
 
   if state == GS.USER_TURN then
+    if args == "SAVE_AND_QUIT" then _saveAndQuit() return end
     _next_action = args.next_action
   end
 

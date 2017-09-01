@@ -5,6 +5,7 @@ local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
+
 local state = {}
 
 --LOCAL VARIABLES--
@@ -13,6 +14,7 @@ local _task
 local _mapped_signals
 local _route
 local _previous_control_map
+local _save_and_quit
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -77,9 +79,7 @@ local function _usePrimaryAction()
 end
 
 local function _saveAndQuit()
-  local route_data = _route.saveState()
-  PROFILE.saveRoute(route_data)
-  SWITCHER.switch(GS.START_MENU)
+  _save_and_quit = true
 end
 
 local function _resumeTask(...)
@@ -129,6 +129,7 @@ function state:enter(_, route, sector_view)
 
   _route = route
   _sector_view = sector_view
+  _save_and_quit = false
 
   _registerSignals()
 
@@ -156,6 +157,7 @@ function state:update(dt)
 
   if not DEBUG then
     INPUT.update()
+    if _save_and_quit then SWITCHER.pop("SAVE_AND_QUIT") end
     _sector_view:lookAt(_route.getControlledActor())
 
     if _next_action then
