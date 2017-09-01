@@ -1,5 +1,6 @@
 
 local SCHEMATICS = require 'domain.definitions.schematics'
+local COLORS = require 'domain.definitions.colors'
 local RANDOM = require 'common.random'
 local IDGenerator = require 'common.idgenerator'
 
@@ -34,15 +35,25 @@ end
 local function _generateSectorsData(idgenerator)
   -- create first sector
   local sectors = {}
-  local t = {type=SCHEMATICS.FLOOR}
-  local e = {type=SCHEMATICS.EXIT}
+  local t = {
+    type = SCHEMATICS.FLOOR,
+    unpack(COLORS.FLOOR1)
+  }
+  local r = {
+    type = SCHEMATICS.FLOOR,
+    unpack(COLORS.FLOOR2)
+  }
+  local e = {
+    type = SCHEMATICS.EXIT,
+    unpack(COLORS.EXIT)
+  }
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
-      { t, t, t, },
-      { t, e, t, },
-      { t, t, t, },
+      { t, r, t, },
+      { r, e, r, },
+      { t, r, t, },
     },
     w = 3,
     h = 3,

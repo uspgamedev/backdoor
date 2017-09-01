@@ -36,7 +36,7 @@ local function _exitSector()
   local controlled_actor = _route.getControlledActor()
   local i, j = controlled_actor:getPos()
   local idx, exit = current_sector:findExit(i, j)
-  if not idx then return end -- no exit here!
+  if not idx then return _playTurns() end -- no exit here!
   local id, sector, ti, tj
   if not exit.id then
     id, sector = _route.makeSector(exit.specname)

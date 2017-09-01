@@ -56,7 +56,7 @@ function SectorView:draw()
           local x, y = j*TILE_W, i*TILE_H
           g.push()
           g.translate(x, y)
-          g.setColor(tile)
+          g.setColor(unpack(tile))
           g.rectangle("fill", 0, 0, TILE_W, TILE_H)
           g.setColor(50, 50, 50)
           g.rectangle("fill", 0, TILE_H, TILE_W, TILE_H/4)

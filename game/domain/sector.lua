@@ -2,6 +2,7 @@
 local DB = require 'database'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
+local COLORS = require 'domain.definitions.colors'
 
 local Actor = require 'domain.actor'
 local Body = require 'domain.body'
@@ -13,7 +14,19 @@ local Sector = Class {
   __includes = { GameElement }
 }
 
-local turnLoop
+local _turnLoop
+
+local function _resize(w, h)
+  local t = {}
+  for i = 1, h do
+    t[i] = {}
+    for j = 1, w do
+      t[i][j] = false
+    end
+  end
+  t[0] = { [0]=false }
+  return t
+end
 
 function Sector:init(spec_name)
 
@@ -32,7 +45,7 @@ function Sector:init(spec_name)
   -- Because nothing is ever there!
   self.bodies[0] = { [0] = false }
 
-  self.turnLoop = coroutine.create(turnLoop)
+  self.turnLoop = coroutine.create(_turnLoop)
 
 end
 
@@ -45,6 +58,7 @@ function Sector:loadState(state, register)
   if state.tiles then
     local grid = SectorGrid:from(state.tiles)
     self:makeTiles(grid)
+    --self.bodies = _resize(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
@@ -108,7 +122,6 @@ function Sector:generate()
     base = TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
-  print(base.grid)
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
 end
@@ -122,9 +135,13 @@ function Sector:makeTiles(grid)
       local tile = false
       local tile_type = grid.get(j, i)
       if grid.get(j, i) == SCHEMATICS.FLOOR then
-        tile = {25, 73, 95 + (i+j)%2*20}
+        if (i+j) % 2 == 0 then
+          tile = { unpack(COLORS.FLOOR1) }
+        else
+          tile = { unpack(COLORS.FLOOR2) }
+        end
       elseif grid.get(j, i) == SCHEMATICS.EXIT then
-        tile = {0x77, 0xba, 0x99}
+        tile = { unpack(COLORS.EXIT) }
       end
       if tile then tile.type = tile_type end
       self.tiles[i][j] = tile
@@ -159,7 +176,6 @@ end
 function Sector:findExit(i, j)
   -- returns: int: idx, table: target
   for idx, exit in ipairs(self.exits) do
-    print(idx, exit)
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
       return idx, self:getExit(idx)
@@ -323,7 +339,7 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
 end
 
 
-function turnLoop(self, ...)
+function _turnLoop(self, ...)
   local actors_queue = self.actors_queue
   while true do
 
@@ -349,5 +365,7 @@ end
 function Sector:playTurns(...)
   return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
 end
+
+
 
 return Sector
