@@ -53,9 +53,16 @@ function Sector:loadState(state, register)
       local actor = Actor(actor_state.specname)
       actor:loadState(actor_state)
       register(actor)
-      local body_state = bodies[actor.body_id]
+      local body_id = actor.body_id
+      local body_state = bodies[body_id]
       local i, j = body_state.i, body_state.j
+      bodies[body_id] = nil
       self:putActor(actor, i, j)
+    end
+    for id, body_state in pairs(bodies) do
+      local i, j = body_state.i, body_state.j
+      local body = Util.findId(id)
+      self:putBody(body, i, j)
     end
   end
 end
