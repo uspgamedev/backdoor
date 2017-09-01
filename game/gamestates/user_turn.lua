@@ -157,7 +157,7 @@ function state:update(dt)
 
   if not DEBUG then
     INPUT.update()
-    if _save_and_quit then SWITCHER.pop("SAVE_AND_QUIT") end
+    if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     _sector_view:lookAt(_route.getControlledActor())
 
     if _next_action then

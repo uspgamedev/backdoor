@@ -88,7 +88,7 @@ end
 function state:resume(state, args)
 
   if state == GS.USER_TURN then
-    if args == "SAVE_AND_QUIT" then _saveAndQuit() return end
+    if args == "SAVE_AND_QUIT" then return _saveAndQuit() end
     _next_action = args.next_action
   end
 
