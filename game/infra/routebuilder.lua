@@ -34,8 +34,8 @@ end
 local function _generateSectorsData(idgenerator)
   -- create first sector
   local sectors = {}
-  local t = SCHEMATICS.FLOOR
-  local e = SCHEMATICS.EXIT
+  local t = {type=SCHEMATICS.FLOOR}
+  local e = {type=SCHEMATICS.EXIT}
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),

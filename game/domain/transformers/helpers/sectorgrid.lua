@@ -86,7 +86,9 @@ function SectorGrid:from(matrix, mw, mh)
   local grid = SectorGrid(w, h, mw, mh)
   for i = 1, h do
     for j = 1, w do
-      grid.set(j, i, matrix[i][j] or false)
+      local tile = matrix[i][j]
+      if tile then tile = tile.type end
+      grid.set(j, i, tile)
     end
   end
   return grid

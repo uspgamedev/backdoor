@@ -108,22 +108,26 @@ function Sector:generate()
     base = TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
+  print(base.grid)
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
 end
 
 function Sector:makeTiles(grid)
-  print(grid)
   self.w, self.h = grid.getDim()
   for i = 1, self.h do
     self.tiles[i] = {}
     self.bodies[i] = {}
     for j = 1, self.w do
+      local tile = false
+      local tile_type = grid.get(j, i)
       if grid.get(j, i) == SCHEMATICS.FLOOR then
-        self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
+        tile = {25, 73, 95 + (i+j)%2*20}
       elseif grid.get(j, i) == SCHEMATICS.EXIT then
-        self.tiles[i][j] = {0x77, 0xba, 0x99}
+        tile = {0x77, 0xba, 0x99}
       end
+      if tile then tile.type = tile_type end
+      self.tiles[i][j] = tile
       self.bodies[i][j] = false
     end
   end
