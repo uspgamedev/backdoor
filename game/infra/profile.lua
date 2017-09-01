@@ -80,7 +80,7 @@ function PROFILE.saveRoute(route_data)
   _metadata.save_list[route_data.id] = {
     player_name = route_data.player_name
   }
-  file:write(json.encode(route_data))
+  file:write(json.encode(route_data, { indent = true }))
   return file:close()
 end
 
