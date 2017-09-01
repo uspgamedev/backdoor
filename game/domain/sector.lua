@@ -26,6 +26,7 @@ function Sector:init(spec_name)
   self.bodies = {}
   self.actors = {}
   self.exits = {}
+  self.actors_queue = {}
 
   -- A special tile where we can always remove things from...
   -- Because nothing is ever there!
@@ -112,6 +113,7 @@ function Sector:generate()
 end
 
 function Sector:makeTiles(grid)
+  print(grid)
   self.w, self.h = grid.getDim()
   for i = 1, self.h do
     self.tiles[i] = {}
@@ -120,7 +122,6 @@ function Sector:makeTiles(grid)
       if grid.get(j, i) == SCHEMATICS.FLOOR then
         self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
       elseif grid.get(j, i) == SCHEMATICS.EXIT then
-        print(j, i)
         self.tiles[i][j] = {0x77, 0xba, 0x99}
       end
       self.bodies[i][j] = false
@@ -137,6 +138,36 @@ function Sector:makeExits(exits)
       target_id = false,
     }
   end
+end
+
+function Sector:getExit(idx)
+  local exit = self.exits[idx]
+  assert(exit,
+    ("No exit of index: %d\n%s"):format(idx, debug.traceback()))
+  return {
+    pos        = exit.pos,
+    specname   = exit.target_specname,
+    id         = exit.target_id,
+    target_pos = exit.target_pos,
+  }
+end
+
+function Sector:findExit(i, j)
+  -- returns: int: idx, table: target
+  for idx, exit in ipairs(self.exits) do
+    print(idx, exit)
+    local di, dj = unpack(exit.pos)
+    if di == i and dj == j then
+      return idx, self:getExit(idx)
+    end
+  end
+  return false
+end
+
+function Sector:link(idx, sector_id, i, j)
+  local exit = self.exits[idx]
+  exit.target_id = sector_id
+  exit.target_pos = {i, j}
 end
 
 --- Puts body at position (i.j), removing it from where it was before, wherever
@@ -215,8 +246,25 @@ function Sector:removeDeadBodies()
 end
 
 function Sector:putActor(actor, i, j)
-  self:putBody(actor:getBody(), i, j)
+  local body = actor:getBody()
+  local oldsector = body:getSector()
+  if oldsector and oldsector ~= self then
+    oldsector:removeActor(actor)
+  end
+  self:putBody(body, i, j)
   return table.insert(self.actors, actor)
+end
+
+function Sector:removeActor(removed_actor)
+  local idx
+  for i, actor in ipairs(self.actors) do
+    if actor == removed_actor then idx = i break end
+  end
+  table.remove(self.actors, idx)
+  for i, actor in ipairs(self.actors_queue) do
+    if actor == removed_actor then idx = i break end
+  end
+  table.remove(self.actors_queue, idx)
 end
 
 function Sector:getBodyPos(body)
@@ -272,7 +320,7 @@ end
 
 
 function turnLoop(self, ...)
-  local actors_queue = {}
+  local actors_queue = self.actors_queue
   while true do
 
     --Initialize actor queue

@@ -45,7 +45,7 @@ function transformer.process(sectorinfo, params)
 
   local function setExits(exits)
     for _,exit in ipairs(exits) do
-      local x, y = exit[2], exit[1]
+      local x, y = exit.pos[2], exit.pos[1]
       _sectorgrid.set(x, y, SCHEMATICS.EXIT)
     end
   end
