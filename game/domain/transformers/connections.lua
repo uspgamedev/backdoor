@@ -13,7 +13,8 @@ transformer.schema = {
     range = { 1, 1024 } }
 }
 
-function transformer.process(_sectorgrid, params)
+function transformer.process(sectorinfo, params)
+  local _sectorgrid = sectorinfo.grid
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -161,11 +162,11 @@ function transformer.process(_sectorgrid, params)
       N = N - 1
       connectTwoRegions(r1, r2, c[1])
     end
-    return _sectorgrid
   end
 
   floodRegions()
-  return makeLoops(connectAllRegions())
+  makeLoops(connectAllRegions())
+  return sectorinfo
 end
 
 return transformer

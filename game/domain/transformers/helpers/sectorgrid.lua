@@ -6,14 +6,13 @@ local SectorGrid = require 'lux.class' :new{}
 function SectorGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
   local _mw, _mh = mw, mh
-  local _sector = {}
-  local _content = {}
+  local _grid = {}
 
   -- fill sector
   for i = 1, h do
-    _sector[i] = {}
+    _grid[i] = {}
     for j = 1, w do
-      _sector[i][j] = SCHEMATICS.NAUGHT
+      _grid[i][j] = SCHEMATICS.NAUGHT
     end
   end
 
@@ -33,18 +32,14 @@ function SectorGrid:instance(obj, w, h, mw, mh)
     return y > _mh and y <= _h - _mh and x > _mw and x <= _w - _mw
   end
 
-  function obj.addContent(e)
-    table.insert(_content, e)
-  end
-
   function obj.set(x, y, fill)
     local e_str = "("..tostring(x)..", "..tostring(y)..")"
     assert(obj.get(x, y), "Out of range: " .. e_str)
-    _sector[y][x] = fill
+    _grid[y][x] = fill
   end
 
   function obj.get(x, y)
-    return _sector[y] and _sector[y][x]
+    return _grid[y] and _grid[y][x]
   end
 
   function obj.__operator:tostring()
