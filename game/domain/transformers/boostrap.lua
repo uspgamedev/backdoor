@@ -1,4 +1,6 @@
 
+local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
+
 local transformer = {}
 
 transformer.schema = {
