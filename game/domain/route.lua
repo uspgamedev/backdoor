@@ -19,7 +19,6 @@ function Route:instance(obj)
   local _sectors = {}
   local _current_sector = nil
   local _controlled_actor = nil
-  local _rng_seed
 
   Util.destroyAll 'true_force'
 
