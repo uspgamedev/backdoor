@@ -9,9 +9,9 @@
         "mh":2,
         "mw":2
       },{
-        "tries":256,
-        "minw":3,
         "typename":"rooms",
+        "minw":3,
+        "tries":256,
         "count":24,
         "minh":3,
         "maxw":9
@@ -23,6 +23,9 @@
       },{
         "typename":"deadends",
         "n":128
+      },{
+        "typename":"exits",
+        "n":2
       }],
     "height":8,
     "margin-height":0
