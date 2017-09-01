@@ -31,6 +31,29 @@ local function _playTurns(...)
   _next_action = nil
 end
 
+local function _exitSector()
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
+  local idx, exit = current_sector:findExit(i, j)
+  if not idx then return end -- no exit here!
+  local id, sector, ti, tj
+  if not exit.id then
+    id, sector = _route.makeSector(exit.specname)
+    local entry = sector:getExit(1)
+    sector:link(1, current_sector.id, i, j)
+    current_sector:link(idx, id, unpack(exit.pos))
+    ti, tj = unpack(entry.pos)
+  else
+    id = exit.id
+    sector = Util.findId(id)
+    ti, tj = unpack(exit.target_pos)
+  end
+  sector:putActor(controlled_actor, ti, tj)
+  _route.setCurrentSector(id)
+  _sector_view:setSector(sector)
+end
+
 local function _saveAndQuit()
   local route_data = _route.saveState()
   PROFILE.saveRoute(route_data)
@@ -89,6 +112,7 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _saveAndQuit() end
+    if args == "EXIT_SECTOR" then return _exitSector() end
     _next_action = args.next_action
   end
 

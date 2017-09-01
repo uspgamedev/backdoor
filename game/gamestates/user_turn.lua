@@ -19,6 +19,7 @@ local _hand_view
 
 local _previous_control_map
 local _save_and_quit
+local _exit_sector
 
 
 local SIGNALS = {
@@ -109,6 +110,10 @@ local function _usePrimaryAction()
   _next_action = {'PRIMARY', params}
 end
 
+local function _exitSector()
+  _exit_sector = true
+end
+
 local function _saveAndQuit()
   _save_and_quit = true
 end
@@ -134,6 +139,7 @@ function _registerSignals()
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
   Signal.register("start_card_selection", _makeSignalHandler(_changeToCardSelectScreen))
+  Signal.register("widget_2", _makeSignalHandler(_exitSector))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -163,6 +169,7 @@ function state:enter(_, route, sector_view)
   _route = route
   _sector_view = sector_view
   _save_and_quit = false
+  _exit_sector = false
 
   if not _hand_view then
     _hand_view = HandView()
@@ -211,6 +218,7 @@ function state:update(dt)
   if not DEBUG then
     INPUT.update()
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
+    if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
     _sector_view:lookAt(_route.getControlledActor())
     MAIN_TIMER:update(dt)
     if _next_action then
