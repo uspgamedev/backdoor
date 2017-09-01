@@ -42,6 +42,28 @@ function SectorGrid:instance(obj, w, h, mw, mh)
     return _grid[y] and _grid[y][x]
   end
 
+  function obj.iterate ()
+    local init_s = { 1, 0, tbl = _grid }
+    return function(s, value)
+      local m = s.tbl
+
+      s[2] = s[2] + 1
+      i, j = s[1], s[2]
+      value = m[i] and m[i][j]
+
+      if not value then
+        s[1] = s[1] + 1
+        s[2] = 1
+        i, j = s[1], s[2]
+        value = m[i] and m[i][j]
+      end
+
+      return value and j, i, value
+    end,
+    init_s,
+    0
+  end
+
   function obj.__operator:tostring()
     local s = ""
     for y = 1, _h do
