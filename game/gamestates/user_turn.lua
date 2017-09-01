@@ -13,6 +13,7 @@ local state = {}
 local _task
 local _mapped_signals
 local _route
+local _next_action
 local _previous_control_map
 local _save_and_quit
 
