@@ -1,7 +1,7 @@
 local TILE_W = 80
 local TILE_H = 80
-local HALF_W = 9
-local HALF_H = 5
+local HALF_W = 10
+local HALF_H = 6
 
 local Cursor
 
@@ -13,7 +13,7 @@ local function _moveCamera(target)
   local x, y = CAM:position()
   local i, j = target:getPos()
   local tx, ty = (j-0.5)*TILE_W, (i-0.5)*TILE_H
-  local smooth = 1/5
+  local smooth = 1/12
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
