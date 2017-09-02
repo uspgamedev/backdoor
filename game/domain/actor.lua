@@ -1,7 +1,8 @@
 
 local GameElement = require 'domain.gameelement'
 local ACTION      = require 'domain.action'
-local CARD        = require 'domain.card'
+local Card        = require 'domain.card'
+local RANDOM      = require 'common.random'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -31,6 +32,13 @@ function Actor:loadState(state)
   self.actions = state.actions
   self.body_id = state.body_id
   self:setId(state.id)
+  self.hand_limit = state.hand_limit
+  self.hand = {}
+  for _,card_state in ipairs(state.hand) do
+    local card = Card(card_state.specname)
+    card:loadState(card_state)
+    table.insert(self.hand, card)
+  end
 end
 
 function Actor:saveState()
@@ -40,6 +48,12 @@ function Actor:saveState()
   state.actions = self.actions
   state.body_id = self.body_id
   state.id = self.id
+  state.hand_limit = self.hand_limit
+  state.hand = {}
+  for _,card in ipairs(self.hand) do
+    local card_state = card:saveState()
+    table.insert(state.hand, card_state)
+  end
   return state
 end
 
@@ -95,10 +109,10 @@ function Actor:drawCard()
 
   --TODO: Change this so actor draws from his buffer
   local card
-  if love.math.random() >.5 then
-    card = CARD("dummy")
+  if RANDOM.interval() >.5 then
+    card = Card("dummy")
   else
-    card = CARD("dummy2")
+    card = Card("dummy2")
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)

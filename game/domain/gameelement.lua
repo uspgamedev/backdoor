@@ -23,6 +23,15 @@ function GameElement:getId()
   return self.id
 end
 
+function GameElement:loadState(state)
+end
+
+function GameElement:saveState()
+  local state = {}
+  state.specname = self.specname
+  return state
+end
+
 function GameElement:getSpec(key)
   return DB.loadSpec(self.spectype, self.specname)[key]
 end
