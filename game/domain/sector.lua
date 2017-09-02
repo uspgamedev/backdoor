@@ -24,6 +24,8 @@ local function _initBodies(w, h)
       t[i][j] = false
     end
   end
+  -- A special tile where we can always remove things from...
+  -- Because nothing is ever there!
   t[0] = { [0]=false }
   return t
 end
@@ -36,14 +38,10 @@ function Sector:init(spec_name)
   self.h = 1
 
   self.tiles = {{ false }}
-  self.bodies = {}
+  self.bodies = _initBodies(1,1)
   self.actors = {}
   self.exits = {}
   self.actors_queue = {}
-
-  -- A special tile where we can always remove things from...
-  -- Because nothing is ever there!
-  self.bodies[0] = { [0] = false }
 
   self.turnLoop = coroutine.create(_turnLoop)
 
@@ -56,9 +54,8 @@ function Sector:loadState(state, register)
   self.exits = state.exits
   self:setId(state.id)
   if state.tiles then
-    local grid = SectorGrid:from(state.tiles)
-    self:makeTiles(grid)
-    --self.bodies = _initBodies(self.w, self.h)
+    self.tiles = state.tiles
+    self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
@@ -134,16 +131,9 @@ function Sector:makeTiles(grid)
     for j = 1, self.w do
       local tile = false
       local tile_type = grid.get(j, i)
-      if grid.get(j, i) == SCHEMATICS.FLOOR then
-        if (i+j) % 2 == 0 then
-          tile = { unpack(COLORS.FLOOR1) }
-        else
-          tile = { unpack(COLORS.FLOOR2) }
-        end
-      elseif grid.get(j, i) == SCHEMATICS.EXIT then
-        tile = { unpack(COLORS.EXIT) }
+      if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
+        tile = { type = tile_type }
       end
-      if tile then tile.type = tile_type end
       self.tiles[i][j] = tile
       self.bodies[i][j] = false
     end

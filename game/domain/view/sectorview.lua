@@ -1,7 +1,16 @@
+
+local SCHEMATICS  = require 'domain.definitions.schematics'
+local COLORS      = require 'domain.definitions.colors'
+
 local TILE_W = 80
 local TILE_H = 80
 local HALF_W = 10
 local HALF_H = 6
+
+local TILE_COLORS = {
+  [SCHEMATICS.FLOOR] = COLORS.FLOOR1,
+  [SCHEMATICS.EXIT] = COLORS.EXIT,
+}
 
 local Cursor
 
@@ -56,7 +65,7 @@ function SectorView:draw()
           local x, y = j*TILE_W, i*TILE_H
           g.push()
           g.translate(x, y)
-          g.setColor(unpack(tile))
+          g.setColor(TILE_COLORS[tile.type])
           g.rectangle("fill", 0, 0, TILE_W, TILE_H)
           g.setColor(50, 50, 50)
           g.rectangle("fill", 0, TILE_H, TILE_W, TILE_H/4)
