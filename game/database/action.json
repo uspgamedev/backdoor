@@ -14,7 +14,8 @@
   "DRAW":{
     "params":[],
     "effects":[{
-        "typename":"draw_card"
+        "typename":"draw_card",
+        "amount":2
       }],
     "operators":[],
     "cost":4
