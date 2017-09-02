@@ -15,7 +15,7 @@
         "double":false
       },{
         "typename":"connections",
-        "n":48
+        "loops":24
       },{
         "typename":"deadends",
         "n":128
