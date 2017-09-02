@@ -1,6 +1,6 @@
 
 local RANDOM = require 'common.random'
-local SCHEMATICS = require 'definitions.schematics'
+local SCHEMATICS = require 'domain.definitions.schematics'
 
 local transformer = {}
 
