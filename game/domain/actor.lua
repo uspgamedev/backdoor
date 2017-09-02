@@ -1,6 +1,7 @@
 
 local GameElement = require 'domain.gameelement'
 local ACTION      = require 'domain.action'
+local CARD        = require 'domain.card'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -19,6 +20,9 @@ function Actor:init(spec_name)
     MOVE = true,
     PRIMARY = "SHOOT"
   }
+
+  self.hand = {}
+  self.hand_limit = 7
 
 end
 
@@ -83,6 +87,22 @@ end
 
 function Actor:spendTime(n)
   self.cooldown = self.cooldown + n
+end
+
+--Draw a card from actor's buffer
+function Actor:drawCard()
+  if #self.hand >= self.hand_limit then return end
+
+  --TODO: Change this so actor draws from his buffer
+  local card
+  if love.math.random() >.5 then
+    card = CARD("dummy")
+  else
+    card = CARD("dummy2")
+  end
+  table.insert(self.hand, card)
+  Signal.emit("actor_draw", self, card)
+
 end
 
 return Actor

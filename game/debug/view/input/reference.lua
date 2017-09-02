@@ -42,6 +42,8 @@ end
 inputs['value'] = function(spec, key, parent)
 
   local inputInt = require 'debug.view.helpers.integer'
+  local inputStr = require 'debug.view.helpers.string'
+
 
   local value = 0
   local refs, idx = _getRefs(spec, key, parent)
@@ -49,6 +51,9 @@ inputs['value'] = function(spec, key, parent)
   local use_ref = true
 
   if key.match == 'integer' and type(spec[key.id]) == 'number' then
+    value = spec[key.id]
+    use_ref = false
+  elseif key.match == 'string' and type(spec[key.id]) == 'string' then
     value = spec[key.id]
     use_ref = false
   end
@@ -61,15 +66,20 @@ inputs['value'] = function(spec, key, parent)
         spec[key.id] = refs[idx]
       end
     else
-      value = inputInt(value, key.name, range)
+      if key.match == "integer" then
+        value = inputInt(value, key.name, key.range)
+      elseif key.match == 'string' then
+        value = inputStr(value, key.name)
+      end
       spec[key.id] = value
     end
-    if key.match == 'integer' then
+
+    if key.match == 'integer' or key.match == 'string' then
       IMGUI.SameLine()
       changed, use_ref = IMGUI.Checkbox("Ref##"..key.id, use_ref)
     end
+
   end
 end
 
 return inputs
-

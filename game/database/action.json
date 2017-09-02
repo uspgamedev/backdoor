@@ -11,6 +11,14 @@
         "pos":"par:pos"
       }]
   },
+  "DRAW":{
+    "params":[],
+    "effects":[{
+        "typename":"draw_card"
+      }],
+    "operators":[],
+    "cost":4
+  },
   "HEAL":{
     "params":[{
         "typename":"choose_target",
@@ -35,6 +43,15 @@
         "lhs":"val:arcana"
       }],
     "cost":4
+  },
+  "DEBUG":{
+    "params":[],
+    "cost":2,
+    "operators":[],
+    "effects":[{
+        "typename":"print",
+        "text":42
+      }]
   },
   "IDLE":{
     "params":[],

@@ -5,6 +5,7 @@ local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
+local HandView = require 'domain.view.handview'
 
 local state = {}
 
@@ -14,8 +15,11 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
+local _hand_view
+
 local _previous_control_map
 local _save_and_quit
+
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -26,7 +30,7 @@ local SIGNALS = {
   PRESS_ACTION_2 = {"widget_2"},
   PRESS_ACTION_3 = {"widget_3"},
   PRESS_ACTION_4 = {"widget_4"},
-  PRESS_SPECIAL = {"start_card_turn"},
+  PRESS_SPECIAL = {"start_card_selection"},
   PRESS_CANCEL = {"wait"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
@@ -38,6 +42,32 @@ local _unregisterSignals
 local _registerSignals
 
 --LOCAL FUNCTIONS--
+
+local function _changeToCardSelectScreen()
+
+  if #_hand_view.hand > 0 then
+    _unregisterSignals()
+    SWITCHER.push(GS.CARD_SELECT, _route, _sector_view, _hand_view)
+  end
+
+end
+
+--Receive a card index from player hands (between 1 and max-hand-size)
+local function _useCardByIndex(index)
+
+  local card = _hand_view.hand[index]
+  local player = _route.getControlledActor()
+  print("used a card named "..card:getName())
+
+  --Remove card from player hand (data only)
+  table.remove(player.hand, index)
+
+  --Remove card from View (visual only)
+  Signal.emit("actor_used_card", player, index)
+
+  --FIXME Change this to using an action "play card effect" that receives card info and does the effect
+  _next_action = {'IDLE', {card}}
+end
 
 local function _moveActor(dir)
   local current_sector = _route.getCurrentSector()
@@ -103,6 +133,7 @@ end
 function _registerSignals()
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("start_card_selection", _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -124,6 +155,7 @@ function state:init()
       Signal.emit(unpack(signal_pack))
     end
   end
+
 end
 
 function state:enter(_, route, sector_view)
@@ -131,6 +163,20 @@ function state:enter(_, route, sector_view)
   _route = route
   _sector_view = sector_view
   _save_and_quit = false
+
+  if not _hand_view then
+    _hand_view = HandView()
+    _hand_view:addElement("HUD", nil, "hand_view")
+    Signal.register("actor_draw",
+      function(actor, card)
+        _hand_view:addCard(actor,card)
+      end)
+    Signal.register("actor_used_card",
+      function(actor, card_index)
+        _hand_view:removeCard(actor,card_index)
+      end)
+  end
+  _hand_view:reset(_route.getControlledActor().hand, _route)
 
   _registerSignals()
 
@@ -146,10 +192,16 @@ function state:leave()
 end
 
 function state:resume(state, args)
+  _registerSignals()
   if state == GS.PICK_TARGET then
 
-    _registerSignals()
     _resumeTask(args)
+
+  elseif state == GS.CARD_SELECT then
+
+    if args.chose_a_card then
+      _useCardByIndex(args.card_index)
+    end
 
   end
 end
@@ -160,7 +212,7 @@ function state:update(dt)
     INPUT.update()
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     _sector_view:lookAt(_route.getControlledActor())
-
+    MAIN_TIMER:update(dt)
     if _next_action then
       SWITCHER.pop({next_action = _next_action})
       _next_action = nil

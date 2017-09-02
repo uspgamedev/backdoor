@@ -14,7 +14,7 @@ local function _generatePlayerActorData(idgenerator, body_id)
     actions = {
       IDLE = true,
       MOVE = true,
-      PRIMARY = "SHOOT"
+      PRIMARY = "DRAW"
     }
   }
 end
@@ -86,4 +86,3 @@ function ROUTEBUILDER.build(route_id)
 end
 
 return ROUTEBUILDER
-
