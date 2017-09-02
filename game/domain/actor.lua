@@ -109,7 +109,7 @@ function Actor:drawCard()
 
   --TODO: Change this so actor draws from his buffer
   local card
-  if RANDOM.interval() >.5 then
+  if RANDOM.generate() >.5 then
     card = Card("dummy")
   else
     card = Card("dummy2")

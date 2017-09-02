@@ -34,7 +34,7 @@ function transformer.process(sectorinfo, params)
     local N = #_exits
     local exits = {}
     for i = 1, N do
-      local idx = RANDOM.interval(1, #possible_exits)
+      local idx = RANDOM.generate(1, #possible_exits)
       table.insert(exits, {
         pos = possible_exits[idx],
         target_specname = _exits[i].target_specname

@@ -41,8 +41,8 @@ function transformer.process(sectorinfo, params)
 
   local function makeOneRoom()
     return Rectangle(
-      RANDOM.odd(_minx, _maxx), RANDOM.odd(_miny, _maxy),
-      RANDOM.even(_minw, _maxw), RANDOM.even(_minh, _maxh)
+      RANDOM.generateOdd(_minx, _maxx), RANDOM.generateOdd(_miny, _maxy),
+      RANDOM.generateEven(_minw, _maxw), RANDOM.generateEven(_minh, _maxh)
     )
   end
 

@@ -134,7 +134,7 @@ function transformer.process(sectorinfo, params)
     while countRegions() > 1 and N > 0 do
       local k, c, r1, r2
       repeat
-        k = N > 1 and RANDOM.interval(1, N) or 1
+        k = N > 1 and RANDOM.generate(1, N) or 1
         c = _connectors[k]
         r1 = _flooded[c[2][1]].find()
         r2 = _flooded[c[2][2]].find()
@@ -152,7 +152,7 @@ function transformer.process(sectorinfo, params)
     local N = #connectors
     while N > 0 do
       if _loops <= 0 then break end
-      local k = N > 1 and RANDOM.interval(1, N) or 1
+      local k = N > 1 and RANDOM.generate(1, N) or 1
       local c = connectors[k]
       local r1 = _flooded[c[2][1]].find()
       local r2 = _flooded[c[2][2]].find()
