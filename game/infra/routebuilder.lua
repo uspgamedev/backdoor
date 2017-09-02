@@ -15,7 +15,9 @@ local function _generatePlayerActorData(idgenerator, body_id)
       IDLE = true,
       MOVE = true,
       PRIMARY = "DRAW"
-    }
+    },
+    hand_limit = 7,
+    hand = {}
   }
 end
 
