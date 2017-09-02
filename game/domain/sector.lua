@@ -1,6 +1,6 @@
 
 local DB = require 'database'
-local SCHEMATICS = require 'definitions.schematics'
+local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 
 local Actor = require 'domain.actor'
