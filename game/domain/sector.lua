@@ -173,8 +173,10 @@ function Sector:getExit(idx)
   }
 end
 
+--- Finds the exit at [i,j], if any
+--  @return[1] The exit index
+--  @return[2] The corresponding result of Sector:getExit
 function Sector:findExit(i, j)
-  -- returns: int: idx, table: target
   for idx, exit in ipairs(self.exits) do
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
@@ -215,7 +217,8 @@ function Sector:getBodyAt(i, j)
   return self:isInside(i,j) and self.bodies[i][j] or nil
 end
 
---Removes the body at given position if it exists. Returns the associated actor if any
+--- Removes the body at given position if it exists.
+--  @return The associated actor if any
 function Sector:removeBodyAt(i, j, body)
 
   local removed_actor
@@ -243,7 +246,8 @@ function Sector:removeBodyAt(i, j, body)
 
 end
 
---Remove all bodies with <=0 hp on the map and return a table containing all removed actors
+--- Remove all bodies with <=0 hp on the map
+--  @return A table containing all removed actors
 function Sector:removeDeadBodies()
   local dead_actor_list = {}
 
@@ -324,7 +328,7 @@ function Sector:randomNeighbor(i, j)
   return i, j
 end
 
---Check for dead bodies if any, and remove associated actors from the queue
+--- Check for dead bodies if any, and remove associated actors from the queue.
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   local dead_actor_list = sector:removeDeadBodies()
   for _, dead_actor in ipairs(dead_actor_list) do
