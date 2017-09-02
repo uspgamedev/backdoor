@@ -16,7 +16,7 @@ local Sector = Class {
 
 local _turnLoop
 
-local function _resize(w, h)
+local function _initBodies(w, h)
   local t = {}
   for i = 1, h do
     t[i] = {}
@@ -58,7 +58,7 @@ function Sector:loadState(state, register)
   if state.tiles then
     local grid = SectorGrid:from(state.tiles)
     self:makeTiles(grid)
-    --self.bodies = _resize(self.w, self.h)
+    --self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
