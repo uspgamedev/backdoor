@@ -1,6 +1,6 @@
 
 local RANDOM = require 'common.RANDOM'
-local generator = require 'tests.sector1'
+local generator = require 'tests.sector01'
 local seed = RANDOM.generateSeed()
 
 return function ()

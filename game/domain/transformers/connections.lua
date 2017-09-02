@@ -9,7 +9,7 @@ local Vector2    = require 'cpml.modules.vec2'
 local transformer = {}
 
 transformer.schema = {
-  { id = 'n', name = "Num Connections", type = 'integer',
+  { id = 'loops', name = "Num Connections", type = 'integer',
     range = { 1, 1024 } }
 }
 
@@ -24,7 +24,7 @@ function transformer.process(_sectorgrid, params)
   local _maxy = _height - _mh
 
   -- lists and sets
-  local _connections = params.n
+  local _loops = params.loops
   local _flooded = {}
   local _connectors = {}
   local _cardinals = {
@@ -131,7 +131,6 @@ function transformer.process(_sectorgrid, params)
     local copy_connectors = {}
     local N = #_connectors
     while countRegions() > 1 and N > 0 do
-      if _connections <= 0 then break end
       local k, c, r1, r2
       repeat
         k = N > 1 and RANDOM.interval(1, N) or 1
@@ -142,8 +141,7 @@ function transformer.process(_sectorgrid, params)
         _connectors[N] = nil
         N = N - 1
         if r1 == r2 then insert(copy_connectors, c) end
-      until r1 ~= r2 or N == 0 or _connections == 0
-      _connections = _connections - 1
+      until r1 ~= r2 or N == 0
       connectTwoRegions(r1, r2, c[1])
     end
     return copy_connectors
@@ -152,14 +150,14 @@ function transformer.process(_sectorgrid, params)
   local function makeLoops(connectors)
     local N = #connectors
     while N > 0 do
-      if _connections <= 0 then break end
+      if _loops <= 0 then break end
       local k = N > 1 and RANDOM.interval(1, N) or 1
       local c = connectors[k]
       local r1 = _flooded[c[2][1]].find()
       local r2 = _flooded[c[2][2]].find()
       connectors[k] = connectors[N]
       connectors[N] = nil
-      _connections = _connections - 1
+      _loops = _loops - 1
       N = N - 1
       connectTwoRegions(r1, r2, c[1])
     end
