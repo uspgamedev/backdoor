@@ -1,6 +1,6 @@
 
 -- dependencies
-local SCHEMATICS = require 'definitions.schematics'
+local SCHEMATICS = require 'domain.definitions.schematics'
 local RANDOM     = require 'common.random'
 local Vector2    = require 'cpml.modules.vec2'
 

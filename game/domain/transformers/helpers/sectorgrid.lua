@@ -1,6 +1,7 @@
 
+local SCHEMATICS = require 'domain.definitions.schematics'
+
 local SectorGrid = require 'lux.class' :new{}
-local SCHEMATICS = require 'definitions.schematics'
 
 function SectorGrid:instance(obj, w, h, mw, mh)
   local _w, _h = w, h
