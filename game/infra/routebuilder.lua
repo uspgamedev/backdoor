@@ -1,5 +1,6 @@
 
 local SCHEMATICS = require 'domain.definitions.schematics'
+local COLORS = require 'domain.definitions.colors'
 local RANDOM = require 'common.random'
 local IDGenerator = require 'common.idgenerator'
 
@@ -34,19 +35,36 @@ end
 local function _generateSectorsData(idgenerator)
   -- create first sector
   local sectors = {}
-  local t = SCHEMATICS.FLOOR
+  local t = {
+    type = SCHEMATICS.FLOOR,
+    unpack(COLORS.FLOOR1)
+  }
+  local r = {
+    type = SCHEMATICS.FLOOR,
+    unpack(COLORS.FLOOR2)
+  }
+  local e = {
+    type = SCHEMATICS.EXIT,
+    unpack(COLORS.EXIT)
+  }
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
-      { t, t, t, },
-      { t, t, t, },
-      { t, t, t, },
+      { t, r, t, },
+      { r, e, r, },
+      { t, r, t, },
     },
     w = 3,
     h = 3,
     bodies = {},
     actors = {},
+    exits = {
+      {
+        pos = {2, 2},
+        target_specname = "sector01",
+      },
+    }
   }
 
   -- generate player
@@ -58,10 +76,6 @@ local function _generateSectorsData(idgenerator)
   first_sector.actors[1] = player_actor
 
   sectors[1] = first_sector
-  for i = 2, 4 do
-    local sector = { specname = 'sector01' }
-    sectors[i] = sector
-  end
 
   -- create player
   return sectors

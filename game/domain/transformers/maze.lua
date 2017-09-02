@@ -10,7 +10,8 @@ transformer.schema = {
   { id = 'double', name = "Double Step", type = "boolean" }
 }
 
-function transformer.process(_sectorgrid, params)
+function transformer.process(sectorinfo, params)
+  local _sectorgrid = sectorinfo.grid
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -150,7 +151,6 @@ function transformer.process(_sectorgrid, params)
         _sectorgrid.set(pos1.x, y, FLOOR)
       end
     end
-    return _sectorgrid
   end
 
   getAllPossibleStartPoints()
@@ -158,7 +158,8 @@ function transformer.process(_sectorgrid, params)
     setStartPoint()
     generateMaze()
   end
-  return caveMaze()
+  caveMaze()
+  return sectorinfo
 end
 
 return transformer

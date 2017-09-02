@@ -10,12 +10,13 @@ transformer.schema = {
   { id = 'minw', name = "Minimum Width", type = 'integer', range = {2,32} },
   { id = 'minh', name = "Minimum Height", type = 'integer', range = {2,32} },
   { id = 'maxw', name = "Maximum Width", type = 'integer', range = {2,32} },
-  { id = 'maxw', name = "Maximum Width", type = 'integer', range = {2,32} },
+  { id = 'maxh', name = "Maximum Height", type = 'integer', range = {2,32} },
   { id = 'count', name = "Room Count", type = 'integer', range = {1,32} },
   { id = 'tries', name = "Maximum Tries", type = 'integer', range = {1,1024} },
 }
 
-function transformer.process(_sectorgrid, params)
+function transformer.process(sectorinfo, params)
+  local _sectorgrid = sectorinfo.grid
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -74,7 +75,7 @@ function transformer.process(_sectorgrid, params)
         repeat
           _tries = _tries - 1
           room = makeOneRoom()
-      until isRoomInsideSector(room, _sectorgrid)
+        until isRoomInsideSector(room, _sectorgrid)
               and not isRoomIntersecting(room)
               or _tries <= 0
         if _tries <= 0 then room = false end
@@ -95,11 +96,11 @@ function transformer.process(_sectorgrid, params)
         end
       end
     end
-    return _sectorgrid
   end
 
   generateRooms()
-  return caveRooms()
+  caveRooms()
+  return sectorinfo
 end
 
 return transformer

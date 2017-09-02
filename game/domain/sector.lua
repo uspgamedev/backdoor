@@ -2,6 +2,7 @@
 local DB = require 'database'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
+local COLORS = require 'domain.definitions.colors'
 
 local Actor = require 'domain.actor'
 local Body = require 'domain.body'
@@ -13,7 +14,19 @@ local Sector = Class {
   __includes = { GameElement }
 }
 
-local turnLoop
+local _turnLoop
+
+local function _initBodies(w, h)
+  local t = {}
+  for i = 1, h do
+    t[i] = {}
+    for j = 1, w do
+      t[i][j] = false
+    end
+  end
+  t[0] = { [0]=false }
+  return t
+end
 
 function Sector:init(spec_name)
 
@@ -25,12 +38,14 @@ function Sector:init(spec_name)
   self.tiles = {{ false }}
   self.bodies = {}
   self.actors = {}
+  self.exits = {}
+  self.actors_queue = {}
 
   -- A special tile where we can always remove things from...
   -- Because nothing is ever there!
   self.bodies[0] = { [0] = false }
 
-  self.turnLoop = coroutine.create(turnLoop)
+  self.turnLoop = coroutine.create(_turnLoop)
 
 end
 
@@ -38,10 +53,12 @@ function Sector:loadState(state, register)
   self.w = state.w or self.w
   self.h = state.h or self.h
   self.id = state.id
+  self.exits = state.exits
   self:setId(state.id)
   if state.tiles then
     local grid = SectorGrid:from(state.tiles)
     self:makeTiles(grid)
+    --self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
@@ -73,6 +90,7 @@ function Sector:saveState()
   state.w = self.w
   state.h = self.h
   state.id = self.id
+  state.exits = self.exits
   state.tiles = self.tiles
   state.actors = {}
   state.bodies = {}
@@ -95,37 +113,81 @@ end
 function Sector:generate()
 
   local transformers = self:getSpec('transformers')
-  local w, h = self:getSpec('width'), self:getSpec('height')
 
   -- load sector's specs
-  local base = SectorGrid(w, h, self:getSpec('margin-width'),
-    self:getSpec('margin-height'))
-
-  self.w = w
-  self.h = h
+  local base = {}
 
   -- sector grid generation
   for _, transformer in ipairs(transformers) do
-    TRANSFORMERS[transformer.typename].process(base, transformer)
+    base = TRANSFORMERS[transformer.typename].process(base, transformer)
   end
 
-  self:makeTiles(base)
+  self:makeTiles(base.grid)
+  self:makeExits(base.exits)
 end
 
-function Sector:makeTiles(base)
-  local w, h = self.w, self.h
-  for i = 1, h do
+function Sector:makeTiles(grid)
+  self.w, self.h = grid.getDim()
+  for i = 1, self.h do
     self.tiles[i] = {}
     self.bodies[i] = {}
-    for j = 1, w do
-      if base.get(j, i) == SCHEMATICS.FLOOR then
-        self.tiles[i][j] = {25, 73, 95 + (i+j)%2*20}
-      else
-        self.tiles[i][j] = false
+    for j = 1, self.w do
+      local tile = false
+      local tile_type = grid.get(j, i)
+      if grid.get(j, i) == SCHEMATICS.FLOOR then
+        if (i+j) % 2 == 0 then
+          tile = { unpack(COLORS.FLOOR1) }
+        else
+          tile = { unpack(COLORS.FLOOR2) }
+        end
+      elseif grid.get(j, i) == SCHEMATICS.EXIT then
+        tile = { unpack(COLORS.EXIT) }
       end
+      if tile then tile.type = tile_type end
+      self.tiles[i][j] = tile
       self.bodies[i][j] = false
     end
   end
+end
+
+function Sector:makeExits(exits)
+  local generated_exits = exits or {}
+  for i, exit in ipairs(generated_exits) do
+    self.exits[i] = {
+      pos = exit.pos,
+      target_specname = exit.target_specname,
+      target_id = false,
+    }
+  end
+end
+
+function Sector:getExit(idx)
+  local exit = self.exits[idx]
+  assert(exit,
+    ("No exit of index: %d\n%s"):format(idx, debug.traceback()))
+  return {
+    pos        = exit.pos,
+    specname   = exit.target_specname,
+    id         = exit.target_id,
+    target_pos = exit.target_pos,
+  }
+end
+
+function Sector:findExit(i, j)
+  -- returns: int: idx, table: target
+  for idx, exit in ipairs(self.exits) do
+    local di, dj = unpack(exit.pos)
+    if di == i and dj == j then
+      return idx, self:getExit(idx)
+    end
+  end
+  return false
+end
+
+function Sector:link(idx, sector_id, i, j)
+  local exit = self.exits[idx]
+  exit.target_id = sector_id
+  exit.target_pos = {i, j}
 end
 
 --- Puts body at position (i.j), removing it from where it was before, wherever
@@ -204,8 +266,25 @@ function Sector:removeDeadBodies()
 end
 
 function Sector:putActor(actor, i, j)
-  self:putBody(actor:getBody(), i, j)
+  local body = actor:getBody()
+  local oldsector = body:getSector()
+  if oldsector and oldsector ~= self then
+    oldsector:removeActor(actor)
+  end
+  self:putBody(body, i, j)
   return table.insert(self.actors, actor)
+end
+
+function Sector:removeActor(removed_actor)
+  local idx
+  for i, actor in ipairs(self.actors) do
+    if actor == removed_actor then idx = i break end
+  end
+  table.remove(self.actors, idx)
+  for i, actor in ipairs(self.actors_queue) do
+    if actor == removed_actor then idx = i break end
+  end
+  table.remove(self.actors_queue, idx)
 end
 
 function Sector:getBodyPos(body)
@@ -260,8 +339,8 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
 end
 
 
-function turnLoop(self, ...)
-  local actors_queue = {}
+function _turnLoop(self, ...)
+  local actors_queue = self.actors_queue
   while true do
 
     --Initialize actor queue
@@ -286,5 +365,7 @@ end
 function Sector:playTurns(...)
   return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
 end
+
+
 
 return Sector

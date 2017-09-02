@@ -11,7 +11,8 @@ transformer.schema = {
     range = { 0, 1024 } }
 }
 
-function transformer.process(_sectorgrid, params)
+function transformer.process(sectorinfo, params)
+  local _sectorgrid = sectorinfo.grid
   local _width, _height = _sectorgrid.getDim()
   local _mw, _mh = _sectorgrid.getMargins()
 
@@ -90,15 +91,12 @@ function transformer.process(_sectorgrid, params)
     return true
   end
 
-  local try = 0
-  while try < _n do
-    try = try + 1
+  for i = 1, _n do
     getDeadEnds()
-    if not removeDeadEnds() then
-      return _sectorgrid
-    end
+    if not removeDeadEnds() then break end
   end
-  return _sectorgrid
+
+  return sectorinfo
 end
 
 return transformer

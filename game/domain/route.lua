@@ -93,8 +93,7 @@ function Route:instance(obj)
     local id,sector = _register(Sector(sector_spec))
     sector:generate()
     table.insert(_sectors, sector)
-    _current_sector = sector
-    return sector
+    return id, sector
   end
 
   function obj.makeActor(bodyspec, actorspec, i, j)
