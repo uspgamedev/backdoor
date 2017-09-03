@@ -7,7 +7,11 @@ local RANDOM = {}
 local _rng = love.math.newRandomGenerator()
 
 --METHODS--
-function RANDOM.odd(e, d)
+function RANDOM.generate(e, d)
+  return _rng:random(e, d)
+end
+
+function RANDOM.generateOdd(e, d)
   assert(d > e or not d and e > 0, "Invalid arguments for function `odd`.")
   if not d then
     d = e
@@ -18,7 +22,7 @@ function RANDOM.odd(e, d)
   return e + _rng:random(0, floor((d - e) / 2)) * 2
 end
 
-function RANDOM.even(e, d)
+function RANDOM.generateEven(e, d)
   assert(d > e or not d and e > 0, "Invalid arguments for function `even`.")
   if not d then
     d = e
@@ -47,10 +51,6 @@ end
 
 function RANDOM.setState(state)
   return _rng:setState(state)
-end
-
-function RANDOM.interval(e, d)
-  return _rng:random(e, d)
 end
 
 return RANDOM

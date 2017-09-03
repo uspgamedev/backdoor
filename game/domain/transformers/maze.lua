@@ -83,7 +83,7 @@ function transformer.process(sectorinfo, params)
 
   local function setStartPoint()
     local N = #_possible_starts
-    local k = RANDOM.interval(1, N)
+    local k = RANDOM.generate(1, N)
     _start = removePossibleStart(k)
   end
 
@@ -111,7 +111,7 @@ function transformer.process(sectorinfo, params)
     end
 
     repeat
-      k = N > 1 and RANDOM.interval(N) or 1
+      k = N > 1 and RANDOM.generate(N) or 1
       movement = _potentials[k]
       if not isValidPoint(movement[1] + movement[2]) then
         movement = false

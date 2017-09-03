@@ -11,17 +11,14 @@ RANDOM.setSeed(_seed)
 
 -- generation of sector, pretty straightforward
 local SPEC = DB.loadSpec("sector", "sector01")
-local W, H = SPEC.width, SPEC.height
-local MW = SPEC["margin-width"]
-local MH = SPEC["margin-height"]
 
 local function generate()
-  local grid = SectorGrid(W, H, MW, MH)
+  local sectorinfo = {}
   for _, specs in ipairs(SPEC.transformers) do
-    TRANSFORMERS[specs.typename].process(grid, specs)
+    sectorinfo = TRANSFORMERS[specs.typename].process(sectorinfo, specs)
   end
-  print(grid)
-  return grid
+  print(sectorinfo.grid)
+  return sectorinfo
 end
 
 -- generation of sector with controlled seeds

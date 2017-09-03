@@ -78,7 +78,7 @@ function transformer.process(sectorinfo, params)
     local len = #_corners
     if len == 0 then return false end
     while len > 0 do
-      local k = RANDOM.interval(1, len)
+      local k = RANDOM.generate(1, len)
 
       corner = _corners[k]
       _corners[k] = _corners[len]
