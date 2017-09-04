@@ -17,13 +17,15 @@ local HandView = Class{
 
 --CLASS FUNCTIONS--
 
-function HandView:init()
+function HandView:init(route)
 
   ELEMENT.init(self)
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = 100, O_WIN_H - 30
   self.initial_x, self.initial_y = self.x, self.y
+  self.route = route
+  self:reset()
 
 end
 
@@ -50,12 +52,14 @@ function HandView:removeCard(actor, card_index)
   end
 end
 
-function HandView:reset(_hand,_route)
-  self.route = _route
+function HandView:reset()
   self.hand = {}
 
-  for i,card in ipairs(_hand) do
-    self.hand[i] = card
+  local controlled_actor = self.route.getControlledActor()
+  if controlled_actor then
+    for i,card in ipairs(controlled_actor:getHand()) do
+      self.hand[i] = card
+    end
   end
 
 end

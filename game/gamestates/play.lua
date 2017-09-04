@@ -6,6 +6,7 @@ local PROFILE = require 'infra.profile'
 
 local Route = require 'domain.route'
 local SectorView = require 'domain.view.sectorview'
+local HandView = require 'domain.view.handview'
 
 local state = {}
 
@@ -16,6 +17,7 @@ local _player
 local _next_action
 
 local _sector_view
+local _hand_view
 local _gui
 
 --LOCAL FUNCTION--
@@ -26,7 +28,7 @@ local function _playTurns(...)
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
-    SWITCHER.push(GS.USER_TURN, _route, _sector_view)
+    SWITCHER.push(GS.USER_TURN, _route, _sector_view, _hand_view)
   end
   _next_action = nil
 end
@@ -78,6 +80,22 @@ function state:enter(pre, route_data)
   _sector_view:addElement("L1", nil, "sector_view")
   _sector_view:lookAt(_player)
 
+  -- hand view
+  _hand_view = HandView(_route)
+  _hand_view:addElement("HUD", nil, "hand_view")
+  Signal.register(
+    "actor_draw",
+    function(actor, card)
+      _hand_view:addCard(actor,card)
+    end
+  )
+  Signal.register(
+    "actor_used_card",
+    function(actor, card_index)
+      _hand_view:removeCard(actor,card_index)
+    end
+  )
+
   -- start gamestate
   _playTurns()
 
@@ -91,6 +109,7 @@ function state:leave()
 
   _route.destroyAll()
   _sector_view:destroy()
+  _hand_view:destroy()
   _gui:destroy()
   Util.destroyAll()
 
