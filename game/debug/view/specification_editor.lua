@@ -34,11 +34,9 @@ return function(spec, domain_name, title, delete, parent)
   end
 
   return title .. " Editor", 2, function(self)
-    IMGUI.PushItemWidth(160)
     for _,input in ipairs(inputs) do
       input(self)
     end
-    IMGUI.PopItemWidth()
     IMGUI.Spacing()
     IMGUI.Indent(360)
     if IMGUI.Button("Delete") then
