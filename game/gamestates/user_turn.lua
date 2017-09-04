@@ -164,26 +164,15 @@ function state:init()
 
 end
 
-function state:enter(_, route, sector_view)
+function state:enter(_, route, sector_view, hand_view)
 
   _route = route
   _sector_view = sector_view
   _save_and_quit = false
   _exit_sector = false
 
-  if not _hand_view then
-    _hand_view = HandView()
-    _hand_view:addElement("HUD", nil, "hand_view")
-    Signal.register("actor_draw",
-      function(actor, card)
-        _hand_view:addCard(actor,card)
-      end)
-    Signal.register("actor_used_card",
-      function(actor, card_index)
-        _hand_view:removeCard(actor,card_index)
-      end)
-  end
-  _hand_view:reset(_route.getControlledActor().hand, _route)
+  _hand_view = hand_view
+  _hand_view:reset()
 
   _registerSignals()
 

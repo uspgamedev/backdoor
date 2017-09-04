@@ -77,6 +77,10 @@ function Actor:setAction(name, id)
   self.actions[name] = id
 end
 
+function Actor:getHand()
+  return self.hand
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
 end
