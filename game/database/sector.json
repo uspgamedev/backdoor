@@ -3,19 +3,19 @@
     "width":8,
     "margin-width":0,
     "transformers":[{
-        "w":64,
+        "w":40,
         "typename":"boostrap",
-        "h":64,
+        "h":40,
         "mh":2,
         "mw":2
       },{
         "typename":"rooms",
+        "minh":3,
         "minw":3,
         "tries":256,
+        "maxh":9,
         "count":24,
-        "minh":3,
-        "maxw":9,
-        "maxh":9
+        "maxw":9
       },{
         "typename":"maze"
       },{
@@ -26,12 +26,15 @@
         "n":128
       },{
         "typename":"exits",
-        "exits":[
-          { "target_specname": "sector01" },
-          { "target_specname": "sector01" },
-          { "target_specname": "sector01" },
-          { "target_specname": "sector01" }
-        ]
+        "exits":[{
+            "target_specname":"sector01"
+          },{
+            "target_specname":"sector01"
+          },{
+            "target_specname":"sector01"
+          },{
+            "target_specname":"sector01"
+          }]
       }],
     "height":8,
     "margin-height":0

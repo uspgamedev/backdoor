@@ -5,8 +5,13 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 local transformer = {}
 
 transformer.schema = {
-  { id = 'exits', name = "Exits", type = 'array', schema = {
-      id = "target_specname", name = "Target Sector Spec", type = 'enum', options = "sector"
+  {
+    id = 'exits', name = "Exit", type = 'array', preview = {1},
+    schema = {
+      {
+        id = "target_specname", name = "Target Sector Spec", type = 'enum',
+        options = "sector"
+      }
     }
   },
 }
