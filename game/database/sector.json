@@ -4,7 +4,7 @@
     "margin-width":0,
     "transformers":[{
         "w":40,
-        "typename":"boostrap",
+        "typename":"bootstrap",
         "h":40,
         "mh":2,
         "mw":2
