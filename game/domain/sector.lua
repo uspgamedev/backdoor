@@ -109,14 +109,13 @@ end
 
 function Sector:generate()
 
-  local transformers = self:getSpec('transformers')
-
   -- load sector's specs
   local base = {}
 
   -- sector grid generation
-  for _, transformer in ipairs(transformers) do
-    base = TRANSFORMERS[transformer.typename].process(base, transformer)
+  for _,transformer in DB.schemaFor('sector') do
+    base = TRANSFORMERS[transformer.id].process(base,
+                                                self:getSpec(transformer.id))
   end
 
   self:makeTiles(base.grid)

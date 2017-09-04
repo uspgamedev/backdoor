@@ -7,7 +7,7 @@ local Vector2    = require 'cpml.modules.vec2'
 local transformer = {}
 
 transformer.schema = {
-  { id = 'n', name = "Total deadends", type = 'integer',
+  { id = 'amount', name = "Total deadends", type = 'integer',
     range = { 0, 1024 } }
 }
 
@@ -22,7 +22,7 @@ function transformer.process(sectorinfo, params)
   local _maxy = _height - _mh
 
   local _corners = {}
-  local _n = params.n
+  local _n = params.amount
   local _cardinals = {
     Vector2( 1,  0),
     Vector2( 0,  1),

@@ -4,6 +4,7 @@ local DB = require 'database'
 local tween = require 'helpers.tween'
 
 local MENU_WIDTH = 240
+local MENU_MAX_HEIGHT = 600
 
 local GUI = Class {
   __includes = { ELEMENT }
@@ -63,7 +64,7 @@ function GUI:push(viewname, ...)
     size = size,
     draw = function (self)
       IMGUI.SetNextWindowPos(x(), 40, "Always")
-      IMGUI.SetNextWindowSizeConstraints(width, 80, width, 400)
+      IMGUI.SetNextWindowSizeConstraints(width, 80, width, MENU_MAX_HEIGHT)
       local _,open = IMGUI.Begin(title, true,
                                  { "NoCollapse", "AlwaysAutoResize" })
       if open then
