@@ -4,74 +4,76 @@
         "typename":"direction",
         "output":"pos"
       }],
-    "cost":3,
-    "operators":[],
     "effects":[{
         "typename":"move_to",
         "pos":"par:pos"
-      }]
+      }],
+    "operators":[],
+    "cost":3
   },
   "DRAW":{
     "params":[],
+    "cost":4,
+    "operators":[],
     "effects":[{
         "typename":"draw_card",
         "amount":2
+      }]
+  },
+  "DEBUG":{
+    "params":[],
+    "effects":[{
+        "typename":"print",
+        "text":42
       }],
     "operators":[],
-    "cost":4
+    "cost":2
   },
-  "HEAL":{
+  "SHOOT":{
     "params":[{
         "typename":"choose_target",
-        "max-range":5,
+        "filter":"BODY",
         "output":"target",
-        "filter":"BODY"
+        "max-range":5
       }],
     "effects":[{
-        "typename":"heal",
+        "typename":"deal_damage",
         "target":"par:target",
         "amount":"val:amount"
       }],
     "operators":[{
         "typename":"get_attribute",
-        "output":"arcana",
-        "which":"ARC"
+        "output":"attr",
+        "which":"ATH"
       },{
         "op":"+",
         "typename":"integer_binop",
-        "output":"amount",
+        "lhs":"val:attr",
         "rhs":2,
-        "lhs":"val:arcana"
+        "output":"amount"
       }],
-    "cost":4
-  },
-  "DEBUG":{
-    "params":[],
-    "cost":2,
-    "operators":[],
-    "effects":[{
-        "typename":"print",
-        "text":42
-      }]
+    "cost":6
   },
   "IDLE":{
     "params":[],
-    "cost":1,
+    "effects":[],
     "operators":[],
-    "effects":[]
+    "cost":1
   },
   "DOUBLESHOOT":{
     "params":[{
         "typename":"choose_target",
-        "max-range":10,
+        "filter":"BODY",
         "output":"target",
-        "filter":"BODY"
+        "max-range":10
       },{
         "typename":"choose_target",
-        "max-range":10,
+        "filter":"BODY",
         "output":"target2",
-        "filter":"BODY"
+        "max-range":10
       }],
+    "cost":12,
+    "operators":[],
     "effects":[{
         "typename":"deal_damage",
         "target":"par:target",
@@ -80,31 +82,29 @@
         "typename":"deal_damage",
         "target":"par:target2",
         "amount":4
-      }],
-    "operators":[],
-    "cost":12
+      }]
   },
-  "SHOOT":{
+  "HEAL":{
     "params":[{
         "typename":"choose_target",
-        "max-range":5,
+        "filter":"BODY",
         "output":"target",
-        "filter":"BODY"
+        "max-range":5
       }],
-    "cost":6,
+    "cost":4,
     "operators":[{
         "typename":"get_attribute",
-        "output":"attr",
-        "which":"ATH"
+        "output":"arcana",
+        "which":"ARC"
       },{
         "op":"+",
         "typename":"integer_binop",
-        "output":"amount",
+        "lhs":"val:arcana",
         "rhs":2,
-        "lhs":"val:attr"
+        "output":"amount"
       }],
     "effects":[{
-        "typename":"deal_damage",
+        "typename":"heal",
         "target":"par:target",
         "amount":"val:amount"
       }]
