@@ -53,20 +53,21 @@ local function _changeToCardSelectScreen()
 
 end
 
---Receive a card index from player hands (between 1 and max-hand-size)
+--- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
 
   local card = _hand_view.hand[index]
   local player = _route.getControlledActor()
   print("used a card named "..card:getName())
 
-  --Remove card from player hand (data only)
+  -- Remove card from player hand (data only)
   table.remove(player.hand, index)
 
-  --Remove card from View (visual only)
+  -- Remove card from View (visual only)
   Signal.emit("actor_used_card", player, index)
 
-  --FIXME Change this to using an action "play card effect" that receives card info and does the effect
+  -- FIXME Change this to using an action "play card effect" that receives card
+  -- info and does the effect
   _next_action = {'IDLE', {card}}
 end
 
@@ -81,10 +82,10 @@ local function _moveActor(dir)
   end
 end
 
-local function _usePrimaryAction()
+local function _useAction(action_slot)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
-  local action_name = controlled_actor:getAction('PRIMARY')
+  local action_name = controlled_actor:getAction(action_slot)
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param.typename == 'choose_target' then
@@ -103,11 +104,20 @@ local function _usePrimaryAction()
       if args.target_is_valid then
         params[param.output] = current_sector:getBodyAt(unpack(args.pos))
       else
-        return
+        return false
       end
     end
   end
-  _next_action = {'PRIMARY', params}
+  _next_action = {action_slot, params}
+  return true
+end
+
+local function _usePrimaryAction()
+  return _useAction('PRIMARY')
+end
+
+local function _useFirstWidget()
+  return _useAction('WIDGET_1')
 end
 
 local function _exitSector()
@@ -140,6 +150,7 @@ function _registerSignals()
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
   Signal.register("start_card_selection", _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("widget_2", _makeSignalHandler(_exitSector))
+  Signal.register("widget_3", _makeSignalHandler(_useFirstWidget))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
