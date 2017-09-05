@@ -16,18 +16,37 @@ transformer.schema = {
   },
 }
 
-local function _isPossibleExit(grid, x, y)
+local FLOOR_THRESHOLD = 2
+local EXIT_THRESHOLD = 5
+
+local function _hasSpaceForExit(grid, x, y)
   local f = SCHEMATICS.FLOOR
-  local e = SCHEMATICS.EXIT
-  for dx = -1, 1, 1 do
-    for dy = -1, 1, 1 do
+  for dx = -FLOOR_THRESHOLD, FLOOR_THRESHOLD do
+    for dy = -FLOOR_THRESHOLD, FLOOR_THRESHOLD do
       local tx, ty = dx + x, dy + y
       local tile = grid.get(tx, ty)
       -- verify it's a position surrounded by floors and not a single exit
-      if tile ~= f or tile == e then return false end
+      if tile ~= f then return false end
     end
   end
   return true
+end
+
+local function _hasNoExitNearby(grid, x, y)
+  local e = SCHEMATICS.EXIT
+  for dx = -EXIT_THRESHOLD, EXIT_THRESHOLD, 1 do
+    for dy = -EXIT_THRESHOLD, EXIT_THRESHOLD, 1 do
+      local tx, ty = dx + x, dy + y
+      local tile = grid.get(tx, ty)
+      -- verify it's a position surrounded by floors and not a single exit
+      if tile == e then return false end
+    end
+  end
+  return true
+end
+
+local function _isPossibleExit(grid, x, y)
+  return _hasSpaceForExit(grid, x, y) and _hasNoExitNearby(grid, x, y)
 end
 
 function transformer.process(sectorinfo, params)
@@ -81,6 +100,7 @@ function transformer.process(sectorinfo, params)
     end
   end)()
 
+  print("NO OF EXITS:", ("%d/%d"):format(#chosen_exits, #exits_specs))
   sectorinfo.exits = chosen_exits
   return sectorinfo
 end
