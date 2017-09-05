@@ -2,27 +2,33 @@
   "sector01":{
     "width":8,
     "margin-height":0,
-    "encounters":[],
-    "maze":{
-      "double":false
+    "encounters":{
+      "min":10,
+      "max":30
+    },
+    "exits":{
+      "exits":[{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        }]
     },
     "rooms":{
-      "minh":3,
-      "minw":3,
       "tries":256,
+      "minw":3,
+      "minh":3,
       "maxh":9,
       "count":24,
       "maxw":9
     },
-    "bootstrap":{
-      "mh":2,
-      "h":40,
-      "w":40,
-      "mw":2
-    },
+    "height":8,
     "margin-width":0,
-    "deadends":{
-      "amount":128
+    "maze":{
+      "double":false
     },
     "transformers":[{
         "w":40,
@@ -31,12 +37,12 @@
         "mh":2,
         "mw":2
       },{
-        "typename":"rooms",
-        "minh":3,
-        "minw":3,
         "tries":256,
-        "count":24,
         "maxh":9,
+        "minw":3,
+        "typename":"rooms",
+        "count":24,
+        "minh":3,
         "maxw":9
       },{
         "typename":"maze"
@@ -61,17 +67,14 @@
     "connections":{
       "loops":24
     },
-    "height":8,
-    "exits":{
-      "exits":[{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        }]
+    "bootstrap":{
+      "mh":2,
+      "h":40,
+      "mw":2,
+      "w":40
+    },
+    "deadends":{
+      "amount":128
     }
   }
 }
