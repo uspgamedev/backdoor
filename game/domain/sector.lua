@@ -114,8 +114,10 @@ function Sector:generate()
 
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
-    base = TRANSFORMERS[transformer.id].process(base,
-                                                self:getSpec(transformer.id))
+    local spec = self:getSpec(transformer.id)
+    if spec then
+      base = TRANSFORMERS[transformer.id].process(base, spec)
+    end
   end
 
   self:makeTiles(base.grid)
