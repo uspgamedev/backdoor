@@ -91,7 +91,7 @@ function Route:instance(obj)
 
   function obj.makeSector(sector_spec)
     local id,sector = _register(Sector(sector_spec))
-    sector:generate()
+    sector:generate(_register)
     table.insert(_sectors, sector)
     return id, sector
   end

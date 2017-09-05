@@ -1,4 +1,5 @@
 
+local IMGUI = require 'imgui'
 local INPUT = {}
 package.loaded['debug.view.input'] = INPUT
 
