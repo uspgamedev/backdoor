@@ -20,6 +20,10 @@ function SectorGrid:instance(obj, w, h, mw, mh)
     return _w, _h
   end
 
+  function obj.getRange()
+    return _mw, _w - _mw, _mh, _h - _mh
+  end
+
   function obj.isInside(x, y)
     return x >= 1 and x <= _w and y >= 1 and y <= _h
   end

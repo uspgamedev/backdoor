@@ -107,19 +107,22 @@ function Sector:saveState()
   return state
 end
 
-function Sector:generate()
+function Sector:generate(register)
 
   -- load sector's specs
   local base = {}
 
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
-    base = TRANSFORMERS[transformer.id].process(base,
-                                                self:getSpec(transformer.id))
+    local spec = self:getSpec(transformer.id)
+    if spec then
+      base = TRANSFORMERS[transformer.id].process(base, spec)
+    end
   end
 
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
+  self:makeEncounters(base.encounters, register)
 end
 
 function Sector:makeTiles(grid)
@@ -147,6 +150,17 @@ function Sector:makeExits(exits)
       target_specname = exit.target_specname,
       target_id = false,
     }
+  end
+end
+
+function Sector:makeEncounters(encounters, register)
+  for _,encounter in ipairs(encounters) do
+    local actor_spec, body_spec = unpack(encounter.monster)
+    local i, j = unpack(encounter.pos)
+    local bid, body = register(Body(body_spec))
+    local aid, actor = register(Actor(actor_spec))
+    actor:setBody(bid)
+    self:putActor(actor, i, j)
   end
 end
 

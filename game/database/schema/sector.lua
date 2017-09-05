@@ -12,5 +12,7 @@ return  {
     schema = 'transformers.deadends' },
   { id = 'exits', name = "Exit Settings", type = 'section',
     schema = 'transformers.exits' },
+  { id = 'encounters', name = "Encounter Settings", type = 'section',
+    schema = 'transformers.encounters' },
 }
 
