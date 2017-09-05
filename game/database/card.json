@@ -1,8 +1,12 @@
 {
   "dummy":{
-    "name":"printf"
+    "type":"ART",
+    "name":"printf",
+    "art_action":"SHOOT"
   },
   "dummy2":{
-    "name":"wilson"
+    "type":"ART",
+    "name":"wilson",
+    "art_action":"HEAL"
   }
 }

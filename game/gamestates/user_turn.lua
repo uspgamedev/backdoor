@@ -53,24 +53,6 @@ local function _changeToCardSelectScreen()
 
 end
 
---- Receive a card index from player hands (between 1 and max-hand-size)
-local function _useCardByIndex(index)
-
-  local card = _hand_view.hand[index]
-  local player = _route.getControlledActor()
-  print("used a card named "..card:getName())
-
-  -- Remove card from player hand (data only)
-  table.remove(player.hand, index)
-
-  -- Remove card from View (visual only)
-  Signal.emit("actor_used_card", player, index)
-
-  -- FIXME Change this to using an action "play card effect" that receives card
-  -- info and does the effect
-  _next_action = {'IDLE', {card}}
-end
-
 local function _moveActor(dir)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
@@ -117,7 +99,18 @@ local function _usePrimaryAction()
 end
 
 local function _useFirstWidget()
-  return _useAction('WIDGET_1')
+  return _useAction('WIDGET_A')
+end
+
+--- Receive a card index from player hands (between 1 and max-hand-size)
+local function _useCardByIndex(index)
+
+  local card = _hand_view.hand[index]
+  local player = _route.getControlledActor()
+
+  if _useAction(index) then
+    Signal.emit("actor_used_card", player, index)
+  end
 end
 
 local function _exitSector()
@@ -135,20 +128,25 @@ local function _resumeTask(...)
   end
 end
 
+local function _startTask(callback, ...)
+  local controlled_actor = _route.getControlledActor()
+  if controlled_actor then
+    _task = coroutine.create(callback)
+    return _resumeTask(...)
+  end
+end
+
 local function _makeSignalHandler(callback)
   return function (...)
-    local controlled_actor = _route.getControlledActor()
-    if controlled_actor then
-      _task = coroutine.create(callback)
-      return _resumeTask(...)
-    end
+    return _startTask(callback, ...)
   end
 end
 
 function _registerSignals()
   Signal.register("move", _makeSignalHandler(_moveActor))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("start_card_selection", _makeSignalHandler(_changeToCardSelectScreen))
+  Signal.register("start_card_selection",
+                  _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("widget_2", _makeSignalHandler(_exitSector))
   Signal.register("widget_3", _makeSignalHandler(_useFirstWidget))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
@@ -207,7 +205,7 @@ function state:resume(state, args)
   elseif state == GS.CARD_SELECT then
 
     if args.chose_a_card then
-      _useCardByIndex(args.card_index)
+      _startTask(_useCardByIndex, args.card_index)
     end
 
   end
