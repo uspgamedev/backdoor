@@ -20,7 +20,8 @@
       "tries":256,
       "maxh":9,
       "count":24,
-      "maxw":9
+      "maxw":9,
+      "rmar":1
     },
     "bootstrap":{
       "mh":2,
