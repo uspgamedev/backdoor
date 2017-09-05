@@ -100,7 +100,6 @@ function transformer.process(sectorinfo, params)
     end
   end)()
 
-  print("NO OF EXITS:", ("%d/%d"):format(#chosen_exits, #exits_specs))
   sectorinfo.exits = chosen_exits
   return sectorinfo
 end
