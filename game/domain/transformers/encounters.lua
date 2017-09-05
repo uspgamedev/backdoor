@@ -9,6 +9,13 @@ transformer.schema = {
     range = {1} },
   { id = 'max', name = "Maximum number of encounters", type = 'integer',
     range = {1} },
+  { id = 'recipes', name = "Encounter recipe", type = 'array',
+    schema = {
+      { id = 'actorspec', name = "Actor Specification", type = 'enum',
+        options = 'actor' },
+      { id = 'bodyspec', name = "Body Specification", type = 'enum',
+        options = 'body' },
+    } }
 }
 
 local function _hash(i,j)
@@ -17,13 +24,15 @@ end
 
 function transformer.process(sectorinfo, params)
   local grid = sectorinfo.grid
+  local recipes = params.recipes
   local encounters = {}
   local total = RANDOM.generate(params.min, params.max)
   local used = {}
 
   for i=1,total do
     local encounter = {}
-    encounter.monster = { 'dumb', 'slime' }
+    local recipe = recipes[RANDOM.generate(1,#recipes)]
+    encounter.monster = { recipe.actorspec, recipe.bodyspec }
     local minj, maxj, mini, maxi = grid.getRange()
     local i, j
     repeat
