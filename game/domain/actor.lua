@@ -69,8 +69,23 @@ function Actor:getPos()
   return self:getBody():getPos()
 end
 
-function Actor:getAction(name)
-  return self.actions[name]
+function Actor:isWidget(slot)
+  return type(slot) == 'string'
+end
+
+function Actor:isCard(slot)
+  return type(slot) == 'number'
+end
+
+function Actor:getAction(slot)
+  if self:isWidget(slot) then
+    return self.actions[slot]
+  elseif self:isCard(slot) then
+    local card = self.hand[slot]
+    if card and card:isArt() then
+      return card:getArtAction()
+    end
+  end
 end
 
 function Actor:setAction(name, id)
@@ -90,14 +105,17 @@ function Actor:ready()
 end
 
 function Actor:makeAction(sector)
-  local action_name, params = self:behavior(sector)
-  local check = self.actions[action_name]
+  local action_slot, params = self:behavior(sector)
+  local check = self:getAction(action_slot)
   if check then
     local action
     if check == true then
-      action = action_name
+      action = action_slot
     else
       action = check
+    end
+    if self:isCard(action_slot) then
+      table.remove(self.hand, action_slot)
     end
     return ACTION.run(action, self, sector, params)
   end
@@ -124,3 +142,4 @@ function Actor:drawCard()
 end
 
 return Actor
+

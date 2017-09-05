@@ -122,7 +122,9 @@ function state:enter(_, route, sector_view, hand_view)
   if _timer_handles["end"] then
     MAIN_TIMER:cancel(_timer_handles["end"])
   end
-  _timer_handles["start"] = MAIN_TIMER:tween(0.2, _hand_view, {y = _hand_view.initial_y - 200}, 'out-cubic')
+  _timer_handles["start"] = MAIN_TIMER:tween(0.2, _hand_view,
+                                             { y = _hand_view.initial_y - 200 },
+                                             'out-cubic')
 
   _registerSignals()
 
