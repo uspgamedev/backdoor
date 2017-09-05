@@ -20,16 +20,23 @@ function transformer.process(sectorinfo, params)
   local _sectorgrid = sectorinfo.grid
   local _exits = params.exits
 
+
+  local function isPossibleExit(x, y)
+    local f = SCHEMATICS.FLOOR
+    for dx = -1, 1, 1 do
+      for dy = -1, 1, 1 do
+        local tx, ty = dx + x, dy + y
+        if _sectorgrid.get(tx, ty) ~= f then return false end
+      end
+    end
+    return true
+  end
+
   local function getPossibleExits()
     local possible_exits = {}
     for x, y, tile in _sectorgrid.iterate() do
-      if tile == SCHEMATICS.FLOOR then
-        if _sectorgrid.get(x + 1, y) == SCHEMATICS.FLOOR and
-           _sectorgrid.get(x - 1, y) == SCHEMATICS.FLOOR and
-           _sectorgrid.get(x, y + 1) == SCHEMATICS.FLOOR and
-           _sectorgrid.get(x, y - 1) == SCHEMATICS.FLOOR then
-          table.insert(possible_exits, {y, x})
-        end
+      if isPossibleExit(x, y) then
+        table.insert(possible_exits, {y, x})
       end
     end
     return possible_exits
