@@ -122,6 +122,7 @@ function Sector:generate()
 
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
+  self:makeEncounters(base.encounters)
 end
 
 function Sector:makeTiles(grid)
@@ -150,6 +151,9 @@ function Sector:makeExits(exits)
       target_id = false,
     }
   end
+end
+
+function Sector:makeEncounters(encounters)
 end
 
 function Sector:getExit(idx)
