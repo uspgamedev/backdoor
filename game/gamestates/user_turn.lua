@@ -1,7 +1,6 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
 local DIR = require 'domain.definitions.dir'
-local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
@@ -226,7 +225,6 @@ end
 function state:update(dt)
 
   if not DEBUG then
-    --INPUT.update()
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
     _sector_view:lookAt(_route.getControlledActor())
@@ -255,10 +253,6 @@ function state:keypressed(key)
      return
   end
 
-  if not DEBUG then
-    --INPUT.key_pressed(key)
-  end
-
   if key ~= "escape" then
       Util.defaultKeyPressed(key)
   end
@@ -274,10 +268,6 @@ function state:keyreleased(key)
     imgui.KeyReleased(key)
     if imgui.GetWantCaptureKeyboard() then
        return
-    end
-
-    if not DEBUG then
-        --INPUT.key_released(key)
     end
 
 end
