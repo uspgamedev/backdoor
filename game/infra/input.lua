@@ -7,20 +7,24 @@ local controls = require 'infra.control'
 
 -- Translate keyboard keys to in-game controls
 local _key_mapping = {
-  f = "CONFIRM",
-  d = "CANCEL",
-  s = "SPECIAL",
-  a = "EXTRA",
-  r = "ACTION_1",
-  e = "ACTION_2",
-  w = "ACTION_3",
-  q = "ACTION_4",
-  up = "UP",
-  right = "RIGHT",
-  down = "DOWN",
-  left = "LEFT",
-  f8 = "QUIT",
-  escape = "PAUSE",
+  f       = "CONFIRM",
+  d       = "CANCEL",
+  s       = "SPECIAL",
+  a       = "EXTRA",
+  r       = "ACTION_1",
+  e       = "ACTION_2",
+  w       = "ACTION_3",
+  q       = "ACTION_4",
+  up      = "UP",
+  right   = "RIGHT",
+  down    = "DOWN",
+  left    = "LEFT",
+  k       = "UP",
+  l       = "RIGHT",
+  j       = "DOWN",
+  h       = "LEFT",
+  f8      = "QUIT",
+  escape  = "PAUSE",
 }
 
 -- List what action controls the game should check for
