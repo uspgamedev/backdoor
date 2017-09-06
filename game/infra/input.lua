@@ -42,55 +42,71 @@ local enabled_actions = {
 }
 
 -- Send actions to the control manager
-local function send_action (atype, aname)
+local function _sendAction (atype, aname)
   if not enabled_actions[aname] then return end
   local full_name = atype .. "_" .. aname
   controls.enqueue(full_name)
 end
 
-local function handle_press (key)
+local function _handlePress (key)
   local action_found = key_mapping[key]
   if not action_found then return end
-  send_action("PRESS", action_found)
+  _sendAction("PRESS", action_found)
 end
 
-local function handle_release (key)
+local function _handleRelease (key)
   local action_found = key_mapping[key]
   if not action_found then return end
-  send_action("RELEASE", action_found)
+  _sendAction("RELEASE", action_found)
 end
 
-local function handle_hold (key)
+local function _handleHold (key)
   local action_found = key_mapping[key]
   if not action_found then return end
-  send_action("HOLD", action_found)
+  _sendAction("HOLD", action_found)
 end
 
-local function check_held_keyboard_keys ()
+local function _checkHeldKeyboardKeys ()
   for key in pairs(key_mapping) do
     if love.keyboard.isDown(key) then
-      handle_hold(key)
+      _handleHold(key)
     end
   end
 end
 
 -- Public methods
-function input.key_pressed (key)
-  handle_press(key)
+function input.keyPressed (key)
+  _handlePress(key)
 end
 
-function input.key_released (key)
-  handle_release(key)
+function input.keyReleased (key)
+  _handleRelease(key)
 end
 
 function input.load ()
+  local key_released = love.keyreleased
+  local key_pressed = love.keypressed
+  local update = love.update
+  love.keyreleased = function(key)
+    if not DEBUG then input.keyReleased(key) end
+    key_released(key)
+  end
+  love.keypressed = function(key)
+    if not DEBUG then input.keyPressed(key) end
+    key_pressed(key)
+  end
+  love.update = function(dt)
+    if not DEBUG then input.update() end
+    update(dt)
+  end
+
   -- check saved input mapping
   -- load default values from a file here
 end
 
 function input.update ()
   -- check held controls
-  check_held_keyboard_keys()
+  _checkHeldKeyboardKeys()
   controls.update()
 end
 

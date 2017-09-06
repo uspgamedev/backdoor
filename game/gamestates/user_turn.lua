@@ -226,7 +226,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
-    INPUT.update()
+    --INPUT.update()
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
     _sector_view:lookAt(_route.getControlledActor())
@@ -256,7 +256,7 @@ function state:keypressed(key)
   end
 
   if not DEBUG then
-    INPUT.key_pressed(key)
+    --INPUT.key_pressed(key)
   end
 
   if key ~= "escape" then
@@ -277,7 +277,7 @@ function state:keyreleased(key)
     end
 
     if not DEBUG then
-        INPUT.key_released(key)
+        --INPUT.key_released(key)
     end
 
 end

@@ -35,6 +35,7 @@ SWITCHER = require 'infra.switcher'
 
 local PROFILE = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
+local INPUT = require 'infra.input'
 
 ------------------
 --LÖVE FUNCTIONS--
@@ -58,6 +59,7 @@ function love.load(arg)
 
     require 'tests'
 
+    INPUT.load()
     SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
 end

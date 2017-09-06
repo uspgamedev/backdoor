@@ -7,7 +7,6 @@ local Sector = require 'domain.sector'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local SectorView = require 'domain.view.sectorview'
-local INPUT = require 'infra.input'
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
@@ -89,7 +88,6 @@ function state:update(dt)
 
   if not DEBUG then
     _sector_view:lookAtCursor()
-    INPUT.update()
   end
 
   Util.destroyAll()
@@ -109,10 +107,6 @@ function state:keypressed(key)
      return
   end
 
-  if not DEBUG then
-    INPUT.key_pressed(key)
-  end
-
   if key ~= "escape" then
       Util.defaultKeyPressed(key)
   end
@@ -128,10 +122,6 @@ function state:keyreleased(key)
     imgui.KeyReleased(key)
     if imgui.GetWantCaptureKeyboard() then
        return
-    end
-
-    if not DEBUG then
-        INPUT.key_released(key)
     end
 
 end
