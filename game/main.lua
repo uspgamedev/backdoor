@@ -59,7 +59,7 @@ function love.load(arg)
 
     require 'tests'
 
-    INPUT.load()
+    INPUT.init()
     SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
 end
