@@ -11,6 +11,7 @@ transformer.schema = {
   { id = 'minh', name = "Minimum Height", type = 'integer', range = {2,32} },
   { id = 'maxw', name = "Maximum Width", type = 'integer', range = {2,32} },
   { id = 'maxh', name = "Maximum Height", type = 'integer', range = {2,32} },
+  { id = 'rmar', name = "Room Margin", type = 'integer', range = {1,32}},
   { id = 'count', name = "Room Count", type = 'integer', range = {1,32} },
   { id = 'tries', name = "Maximum Tries", type = 'integer', range = {1,1024} },
 }
@@ -25,7 +26,7 @@ function transformer.process(sectorinfo, params)
   local _minh = params.minh
   local _maxw = params.maxw
   local _maxh = params.maxh
-  local _rmargin = 3
+  local _rmargin = params.rmar
 
   -- room quantities
   local _count = params.count
