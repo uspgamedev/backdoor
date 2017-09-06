@@ -10,14 +10,17 @@ local _seed = RANDOM.generateSeed()
 RANDOM.setSeed(_seed)
 
 -- generation of sector, pretty straightforward
-local SPEC = DB.loadSpec("sector", "sector01")
-
 local function generate()
   local sectorinfo = {}
-  for _, specs in ipairs(SPEC.transformers) do
-    sectorinfo = TRANSFORMERS[specs.typename].process(sectorinfo, specs)
+
+  for _,transformer in DB.schemaFor('sector') do
+    local spec = DB.loadSpec("sector", "sector01")[transformer.id]
+    if spec then
+      sectorinfo = TRANSFORMERS[transformer.id].process(sectorinfo, spec)
+    end
   end
-  print(sectorinfo.grid)
+
+  print(sectorinfo.grid, sectorinfo.grid:getDim())
   return sectorinfo
 end
 
