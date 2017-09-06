@@ -66,7 +66,7 @@ function transformer.process(sectorinfo, params)
   end
 
   -- get a number of random possible exits from that list
-  (function()
+  local function chooseExits()
     local N = #exits_specs -- max number of exits
     for edx = 1, N do
       local i, j
@@ -76,7 +76,6 @@ function transformer.process(sectorinfo, params)
           -- if there is only one last possible exit, check it:
           i, j = unpack(possible_exits[1])
           -- if it's not a good position, tough luck, break it up
-          -- this is why this has to be a lambda
           if not _isPossibleExit(sectorgrid, j, i) then return end
         else
           -- if there are many possible exits, get a random one:
@@ -98,8 +97,9 @@ function transformer.process(sectorinfo, params)
       table.insert(chosen_exits, exit)
       sectorgrid.set(j, i, SCHEMATICS.EXIT)
     end
-  end)()
+  end
 
+  chooseExits()
   sectorinfo.exits = chosen_exits
   return sectorinfo
 end
