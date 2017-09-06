@@ -14,12 +14,13 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
-local _hand_view
+local _view
 
 local _previous_control_map
 local _save_and_quit
 local _exit_sector
 
+local _show_widgets
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -34,6 +35,7 @@ local SIGNALS = {
   PRESS_ACTION_2 = {"widget_2"},
   PRESS_ACTION_3 = {"widget_3"},
   PRESS_ACTION_4 = {"widget_4"},
+  HOLD_ACTION_3 = {"show_widgets"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -47,9 +49,9 @@ local _registerSignals
 
 local function _changeToCardSelectScreen()
 
-  if #_hand_view.hand > 0 then
+  if #_view.hand.hand > 0 then
     _unregisterSignals()
-    SWITCHER.push(GS.CARD_SELECT, _route, _sector_view, _hand_view)
+    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
   end
 
 end
@@ -75,7 +77,7 @@ local function _useAction(action_slot)
     if param.typename == 'choose_target' then
       _unregisterSignals()
       SWITCHER.push(
-        GS.PICK_TARGET, _sector_view,
+        GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
           valid_position_func = function(i, j)
@@ -105,16 +107,20 @@ local function _useFirstWidget()
 end
 
 local function _useSecondWidget()
-  return _useAction('WIDGET_B')
+  --_view.widget:show()
 end
 
 local function _useThirdWidget()
   return _useAction('WIDGET_C')
 end
 
+local function _showWidgets()
+  _show_widgets = true
+end
+
 --- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
-  local card = _hand_view.hand[index]
+  local card = _view.hand.hand[index]
   local player = _route.getControlledActor()
 
   if _useAction(index) then
@@ -161,6 +167,7 @@ function _registerSignals()
   Signal.register("widget_3", _makeSignalHandler(_useSecondWidget))
   Signal.register("widget_4", _makeSignalHandler(_useThirdWidget))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
+  Signal.register("show_widgets", _showWidgets)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -184,15 +191,14 @@ function state:init()
 
 end
 
-function state:enter(_, route, sector_view, hand_view)
+function state:enter(_, route, view)
 
   _route = route
-  _sector_view = sector_view
   _save_and_quit = false
   _exit_sector = false
 
-  _hand_view = hand_view
-  _hand_view:reset()
+  _view = view
+  _view.hand:reset()
 
   _registerSignals()
 
@@ -227,12 +233,22 @@ function state:update(dt)
   if not DEBUG then
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
-    _sector_view:lookAt(_route.getControlledActor())
+
+    _view.sector:lookAt(_route.getControlledActor())
+
     MAIN_TIMER:update(dt)
+
     if _next_action then
       SWITCHER.pop({next_action = _next_action})
       _next_action = nil
     end
+
+    if _show_widgets then
+      _view.widget:show()
+    elseif not _show_widgets then
+      _view.widget:hide()
+    end
+    _show_widgets = false
 
   end
 
@@ -241,9 +257,7 @@ function state:update(dt)
 end
 
 function state:draw()
-
-    Draw.allTables()
-
+  Draw.allTables()
 end
 
 function state:keypressed(key)
@@ -265,10 +279,10 @@ end
 
 function state:keyreleased(key)
 
-    imgui.KeyReleased(key)
-    if imgui.GetWantCaptureKeyboard() then
-       return
-    end
+  imgui.KeyReleased(key)
+  if imgui.GetWantCaptureKeyboard() then
+     return
+  end
 
 end
 
@@ -290,3 +304,4 @@ end
 
 --Return state functions
 return state
+
