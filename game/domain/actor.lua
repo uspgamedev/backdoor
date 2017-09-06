@@ -65,6 +65,18 @@ function Actor:getBody()
   return Util.findId(self.body_id)
 end
 
+function Actor:getATH()
+  return self:getSpec('ath')
+end
+
+function Actor:getARC()
+  return self:getSpec('arc')
+end
+
+function Actor:getMEC()
+  return self:getSpec('mec')
+end
+
 function Actor:getPos()
   return self:getBody():getPos()
 end
