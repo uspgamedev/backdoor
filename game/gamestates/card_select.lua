@@ -25,9 +25,9 @@ local _previous_control_map
 local SIGNALS = {
   PRESS_RIGHT = {"move_focus", "right"},
   PRESS_LEFT = {"move_focus", "left"},
-  PRESS_ACTION_1 = {"confirm"},
-  PRESS_SPECIAL = {"cancel"},
+  PRESS_CONFIRM = {"confirm"},
   PRESS_CANCEL = {"cancel"},
+  PRESS_SPECIAL = {"cancel"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
