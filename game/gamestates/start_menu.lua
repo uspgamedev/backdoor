@@ -35,7 +35,7 @@ function state:enter ()
   _menu_view:addElement("HUD", nil, "menu_view")
   _menu_context = "START_MENU"
   CONTROLS.setMap {
-    PRESS_ACTION_1 = MENU.confirm,
+    PRESS_CONFIRM  = MENU.confirm,
     PRESS_SPECIAL  = MENU.cancel,
     PRESS_CANCEL   = MENU.cancel,
     PRESS_QUIT     = MENU.cancel,

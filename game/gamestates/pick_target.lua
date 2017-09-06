@@ -62,7 +62,7 @@ function state:enter(_, sector_view, target_opt)
       PRESS_DOWN = {"move_cursor", "down"},
       PRESS_RIGHT = {"move_cursor", "right"},
       PRESS_LEFT = {"move_cursor", "left"},
-      PRESS_ACTION_1 = {"confirm"},
+      PRESS_CONFIRM = {"confirm"},
       PRESS_CANCEL = {"cancel"},
       PRESS_PAUSE = {"pause"},
   }

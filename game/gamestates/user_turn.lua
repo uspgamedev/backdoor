@@ -27,12 +27,14 @@ local SIGNALS = {
   PRESS_DOWN = {"move", "down"},
   PRESS_RIGHT = {"move", "right"},
   PRESS_LEFT = {"move", "left"},
+  PRESS_CONFIRM = {"confirm"},
+  PRESS_CANCEL = {"wait"},
+  PRESS_SPECIAL = {"start_card_selection"},
+  PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"widget_1"},
   PRESS_ACTION_2 = {"widget_2"},
   PRESS_ACTION_3 = {"widget_3"},
   PRESS_ACTION_4 = {"widget_4"},
-  PRESS_SPECIAL = {"start_card_selection"},
-  PRESS_CANCEL = {"wait"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -68,6 +70,7 @@ local function _useAction(action_slot)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
   local action_name = controlled_actor:getAction(action_slot)
+  if not action_name then return false end
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param.typename == 'choose_target' then
@@ -102,9 +105,16 @@ local function _useFirstWidget()
   return _useAction('WIDGET_A')
 end
 
+local function _useSecondWidget()
+  return _useAction('WIDGET_B')
+end
+
+local function _useThirdWidget()
+  return _useAction('WIDGET_C')
+end
+
 --- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
-
   local card = _hand_view.hand[index]
   local player = _route.getControlledActor()
 
@@ -144,11 +154,13 @@ end
 
 function _registerSignals()
   Signal.register("move", _makeSignalHandler(_moveActor))
-  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("confirm", _makeSignalHandler(_exitSector))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
-  Signal.register("widget_2", _makeSignalHandler(_exitSector))
-  Signal.register("widget_3", _makeSignalHandler(_useFirstWidget))
+  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("widget_2", _makeSignalHandler(_useFirstWidget))
+  Signal.register("widget_3", _makeSignalHandler(_useSecondWidget))
+  Signal.register("widget_4", _makeSignalHandler(_useThirdWidget))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
