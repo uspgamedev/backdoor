@@ -1,6 +1,5 @@
 --MODULE FOR THE GAMESTATE: SELECTING A CARD IN HAND--
 
-local INPUT = require 'infra.input'
 local CONTROL = require 'infra.control'
 
 local state = {}
@@ -155,7 +154,6 @@ end
 function state:update(dt)
 
   if not DEBUG then
-    INPUT.update()
     MAIN_TIMER:update(dt)
     _sector_view:lookAt(_route.getControlledActor())
   end
@@ -177,10 +175,6 @@ function state:keypressed(key)
      return
   end
 
-  if not DEBUG then
-    INPUT.key_pressed(key)
-  end
-
   if key ~= "escape" then
       Util.defaultKeyPressed(key)
   end
@@ -196,10 +190,6 @@ function state:keyreleased(key)
     imgui.KeyReleased(key)
     if imgui.GetWantCaptureKeyboard() then
        return
-    end
-
-    if not DEBUG then
-        INPUT.key_released(key)
     end
 
 end

@@ -1,6 +1,5 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local MENU = require 'infra.menu'
-local INPUT = require 'infra.input'
 local CONTROLS = require 'infra.control'
 local PROFILE = require 'infra.profile'
 local HudView = require 'domain.view.hudview'
@@ -49,7 +48,6 @@ function state:leave ()
 end
 
 function state:update (dt)
-  INPUT.update()
   if MENU.begin(_menu_context, 80*4, _height / 2, 3, 160) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
@@ -90,14 +88,6 @@ end
 
 function state:draw ()
   Draw.allTables()
-end
-
-function state:keypressed(key)
-  INPUT.key_pressed(key)
-end
-
-function state:keyreleased(key)
-  INPUT.key_released(key)
 end
 
 function state:getView ()
