@@ -1,5 +1,6 @@
 
 local json = require 'dkjson'
+local lzw = require 'lualzw'
 local IDGenerator = require 'common.idgenerator'
 local RUNFLAGS = require 'infra.runflags'
 local ROUTEBUILDER = require 'infra.routebuilder'
@@ -27,28 +28,25 @@ local function _cleanSlate ()
   end
 end
 
-local function _newProfile()
-  filesystem.createDirectory(SAVEDIR)
-  local file, err = filesystem.newFile(PROFILE_PATH, "w")
-  assert(file, err)
-  local encoded = json.encode(METABASE, {indent = true})
-  file:write(encoded)
+local function _saveProfile(base)
+  local profile_data = base or _metadata
+  local file = assert(filesystem.newFile(PROFILE_PATH, "w"))
+  profile_data.key_mapping = INPUT.getMapping()
+  local content = json.encode(profile_data, {indent = true})
+  local compressed = assert(lzw.compress(content))
+  file:write(compressed)
   return file:close()
 end
 
-local function _saveProfile()
-  local file, err = filesystem.newFile(PROFILE_PATH, "w")
-  assert(file, err)
-  _metadata.key_mapping = INPUT.getMapping()
-  local content = json.encode(_metadata, {indent = true})
-  file:write(content)
-  return file:close()
+local function _newProfile()
+  filesystem.createDirectory(SAVEDIR)
+  _saveProfile(METABASE)
 end
 
 local function _loadProfile()
-  local filedata, err = filesystem.newFileData(PROFILE_PATH)
-  assert(filedata, err)
-  _metadata = json.decode(filedata:getString())
+  local filedata = assert(filesystem.newFileData(PROFILE_PATH))
+  local decompressed = lzw.decompress(filedata:getString())
+  _metadata = json.decode(decompressed)
   _id_generator = IDGenerator(_metadata.next_id)
   INPUT.loadMapping(_metadata.key_mapping)
 end
@@ -66,24 +64,23 @@ function PROFILE.init()
 end
 
 function PROFILE.loadRoute(route_id)
-  local filedata, err = filesystem.newFileData(SAVEDIR..route_id)
-  local route_data = json.decode(filedata:getString())
-  -- delete save from list
+  local filedata = assert(filesystem.newFileData(SAVEDIR..route_id))
+  local decompressed = lzw.decompress(filedata:getString())
+  local route_data = json.decode(decompressed)
+  -- delete save from profile list
   _metadata.save_list[route_data.id] = nil
-  assert(filedata, err)
   return route_data
 end
 
 function PROFILE.saveRoute(route_data)
-  local file, err = filesystem.newFile(SAVEDIR..route_data.id, "w")
-  assert(file, err)
-  -- add save to list
-  -- Not that since we have the route's data in this scope, we can
-  -- put a header in a profile header instead of just the value `true`.
+  local file = assert(filesystem.newFile(SAVEDIR..route_data.id, "w"))
+  -- add save to profile list
   _metadata.save_list[route_data.id] = {
     player_name = route_data.player_name
   }
-  file:write(json.encode(route_data, { indent = true }))
+  local content = json.encode(route_data, { indent = true })
+  local compressed = lzw.compress(content)
+  file:write(compressed)
   return file:close()
 end
 
