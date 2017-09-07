@@ -66,7 +66,7 @@ function WidgetView:draw()
   local cos, sin, pi = math.cos, math.sin, math.pi
   local enter = self.enter[1]
   g.push()
-  g.translate(W/2, H/2)
+  g.translate(W/2, H/2 - 20)
   local rot = pi/2 * (1 - enter)
   for i=0,3 do
     local x,y = cos(rot + i/4*2*pi), sin(rot + i/4*2*pi)
