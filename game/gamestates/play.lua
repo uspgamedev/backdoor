@@ -1,12 +1,13 @@
 
 --MODULE FOR THE GAMESTATE: GAME--
 
-local GUI = require 'debug.gui'
-local PROFILE = require 'infra.profile'
+local GUI         = require 'debug.gui'
+local PROFILE     = require 'infra.profile'
 
-local Route = require 'domain.route'
-local SectorView = require 'domain.view.sectorview'
-local HandView = require 'domain.view.handview'
+local Route       = require 'domain.route'
+local SectorView  = require 'domain.view.sectorview'
+local HandView    = require 'domain.view.handview'
+local WidgetView  = require 'domain.view.widgetview'
 
 local state = {}
 
@@ -16,8 +17,7 @@ local _route
 local _player
 local _next_action
 
-local _sector_view
-local _hand_view
+local _view
 local _gui
 
 --LOCAL FUNCTION--
@@ -28,7 +28,7 @@ local function _playTurns(...)
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
-    SWITCHER.push(GS.USER_TURN, _route, _sector_view, _hand_view)
+    SWITCHER.push(GS.USER_TURN, _route, _view)
   end
   _next_action = nil
 end
@@ -53,7 +53,7 @@ local function _exitSector()
   end
   sector:putActor(controlled_actor, ti, tj)
   _route.setCurrentSector(id)
-  _sector_view:setSector(sector)
+  _view.sector:setSector(sector)
   _playTurns()
 end
 
@@ -74,33 +74,40 @@ function state:enter(pre, route_data)
   -- set player
   _player = _route.getControlledActor()
 
+  -- View table
+  _view = {}
+
   -- sector view
   local sector = _route.getCurrentSector()
-  _sector_view = SectorView(sector)
-  _sector_view:addElement("L1", nil, "sector_view")
-  _sector_view:lookAt(_player)
+  _view.sector = SectorView(sector)
+  _view.sector:addElement("L1", nil, "sector_view")
+  _view.sector:lookAt(_player)
 
   -- hand view
-  _hand_view = HandView(_route)
-  _hand_view:addElement("HUD", nil, "hand_view")
+  _view.hand = HandView(_route)
+  _view.hand:addElement("HUD", nil, "hand_view")
   Signal.register(
     "actor_draw",
     function(actor, card)
-      _hand_view:addCard(actor,card)
+      _view.hand:addCard(actor,card)
     end
   )
   Signal.register(
     "actor_used_card",
     function(actor, card_index)
-      _hand_view:removeCard(actor,card_index)
+      _view.hand:removeCard(actor,card_index)
     end
   )
+
+  -- Widget view
+  _view.widget = WidgetView(_route)
+  _view.widget:addElement("GUI")
 
   -- start gamestate
   _playTurns()
 
   -- GUI
-  _gui = GUI(_sector_view)
+  _gui = GUI(_view.sector)
   _gui:addElement("GUI")
 
 end
@@ -108,8 +115,9 @@ end
 function state:leave()
 
   _route.destroyAll()
-  _sector_view:destroy()
-  _hand_view:destroy()
+  for _,view in pairs(_view) do
+    view:destroy()
+  end
   _gui:destroy()
   Util.destroyAll()
 
@@ -121,7 +129,7 @@ function state:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end
-    _sector_view:lookAt(_route.getControlledActor() or _player)
+    _view.sector:lookAt(_route.getControlledActor() or _player)
   end
 
   Util.destroyAll()

@@ -8,7 +8,6 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _route
-local _sector_view
 local _hand_view
 
 local _task
@@ -105,10 +104,9 @@ function state:init()
   end
 end
 
-function state:enter(_, route, sector_view, hand_view)
+function state:enter(_, route, hand_view)
 
   _route = route
-  _sector_view = sector_view
   _hand_view = hand_view
 
   _focus_index = 1
@@ -155,7 +153,6 @@ function state:update(dt)
 
   if not DEBUG then
     MAIN_TIMER:update(dt)
-    _sector_view:lookAt(_route.getControlledActor())
   end
 
   Util.destroyAll()

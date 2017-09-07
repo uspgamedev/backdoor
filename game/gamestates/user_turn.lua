@@ -1,10 +1,11 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
-local DIR = require 'domain.definitions.dir'
-local ACTION = require 'domain.action'
-local CONTROL = require 'infra.control'
+local DIR       = require 'domain.definitions.dir'
+local ACTION    = require 'domain.action'
+local CONTROL   = require 'infra.control'
+local INPUT     = require 'infra.input'
 
-local HandView = require 'domain.view.handview'
+local HandView  = require 'domain.view.handview'
 
 local state = {}
 
@@ -14,12 +15,12 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
-local _hand_view
+local _view
 
 local _previous_control_map
 local _save_and_quit
 local _exit_sector
-
+local _lock
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -30,10 +31,7 @@ local SIGNALS = {
   PRESS_CANCEL = {"wait"},
   PRESS_SPECIAL = {"start_card_selection"},
   PRESS_EXTRA = {"extra"},
-  PRESS_ACTION_1 = {"widget_1"},
-  PRESS_ACTION_2 = {"widget_2"},
-  PRESS_ACTION_3 = {"widget_3"},
-  PRESS_ACTION_4 = {"widget_4"},
+  PRESS_ACTION_1 = {"primary_action"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -45,23 +43,47 @@ local _registerSignals
 
 --LOCAL FUNCTIONS--
 
+local function _lockState()
+  _lock = true
+  _unregisterSignals()
+  _view.widget:hide()
+end
+
+local function _unlockState()
+  _lock = false
+  _registerSignals()
+end
+
+local function _showWidgets()
+  return not _next_action and INPUT.isDown('ACTION_2')
+end
+
 local function _changeToCardSelectScreen()
 
-  if #_hand_view.hand > 0 then
+  if #_view.hand.hand > 0 then
     _unregisterSignals()
-    SWITCHER.push(GS.CARD_SELECT, _route, _sector_view, _hand_view)
+    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
   end
 
 end
 
-local function _moveActor(dir)
-  local current_sector = _route.getCurrentSector()
-  local controlled_actor = _route.getControlledActor()
-  local i, j = controlled_actor:getPos()
-  dir = DIR[dir]
-  i, j = i+dir[1], j+dir[2]
-  if current_sector:isValid(i,j) then
-    _next_action = {'MOVE', { pos = {i,j} }}
+local function _move(dir)
+  if _showWidgets() then
+    for i,d in ipairs(DIR) do
+      if d == dir then
+        _view.widget:select(i)
+        break
+      end
+    end
+  else
+    local current_sector = _route.getCurrentSector()
+    local controlled_actor = _route.getControlledActor()
+    local i, j = controlled_actor:getPos()
+    dir = DIR[dir]
+    i, j = i+dir[1], j+dir[2]
+    if current_sector:isValid(i,j) then
+      _next_action = {'MOVE', { pos = {i,j} }}
+    end
   end
 end
 
@@ -73,9 +95,9 @@ local function _useAction(action_slot)
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param.typename == 'choose_target' then
-      _unregisterSignals()
+      _lockState()
       SWITCHER.push(
-        GS.PICK_TARGET, _sector_view,
+        GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
           valid_position_func = function(i, j)
@@ -100,21 +122,9 @@ local function _usePrimaryAction()
   return _useAction('PRIMARY')
 end
 
-local function _useFirstWidget()
-  return _useAction('WIDGET_A')
-end
-
-local function _useSecondWidget()
-  return _useAction('WIDGET_B')
-end
-
-local function _useThirdWidget()
-  return _useAction('WIDGET_C')
-end
-
 --- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
-  local card = _hand_view.hand[index]
+  local card = _view.hand.hand[index]
   local player = _route.getControlledActor()
 
   if _useAction(index) then
@@ -122,8 +132,16 @@ local function _useCardByIndex(index)
   end
 end
 
-local function _exitSector()
-  _exit_sector = true
+local function _interact()
+  if _showWidgets() then
+    local selected = _view.widget:getSelected()
+    if selected then
+      local widget = { 'A', 'B', 'C', 'D' }
+      _useAction(('WIDGET_%s'):format(widget[selected]))
+    end
+  elseif not _next_action then
+    _exit_sector = true
+  end
 end
 
 local function _saveAndQuit()
@@ -152,14 +170,11 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("move", _makeSignalHandler(_moveActor))
-  Signal.register("confirm", _makeSignalHandler(_exitSector))
+  Signal.register("move", _move)
+  Signal.register("confirm", _makeSignalHandler(_interact))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
-  Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("widget_2", _makeSignalHandler(_useFirstWidget))
-  Signal.register("widget_3", _makeSignalHandler(_useSecondWidget))
-  Signal.register("widget_4", _makeSignalHandler(_useThirdWidget))
+  Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -184,31 +199,32 @@ function state:init()
 
 end
 
-function state:enter(_, route, sector_view, hand_view)
+function state:enter(_, route, view)
 
   _route = route
-  _sector_view = sector_view
   _save_and_quit = false
   _exit_sector = false
 
-  _hand_view = hand_view
-  _hand_view:reset()
+  _view = view
+  _view.hand:reset()
 
   _registerSignals()
 
   _previous_control_map = CONTROL.getMap()
   CONTROL.setMap(_mapped_signals)
 
+  _unlockState()
+
 end
 
 function state:leave()
 
-  _unregisterSignals()
+  _lockState()
 
 end
 
 function state:resume(state, args)
-  _registerSignals()
+  _unlockState()
   if state == GS.PICK_TARGET then
 
     _resumeTask(args)
@@ -224,11 +240,20 @@ end
 
 function state:update(dt)
 
-  if not DEBUG then
+  if not DEBUG and not _lock then
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
-    _sector_view:lookAt(_route.getControlledActor())
+
+    _view.sector:lookAt(_route.getControlledActor())
+
     MAIN_TIMER:update(dt)
+
+    if _showWidgets() then
+      _view.widget:show()
+    else
+      _view.widget:hide()
+    end
+
     if _next_action then
       SWITCHER.pop({next_action = _next_action})
       _next_action = nil
@@ -241,9 +266,7 @@ function state:update(dt)
 end
 
 function state:draw()
-
-    Draw.allTables()
-
+  Draw.allTables()
 end
 
 function state:keypressed(key)
@@ -265,10 +288,10 @@ end
 
 function state:keyreleased(key)
 
-    imgui.KeyReleased(key)
-    if imgui.GetWantCaptureKeyboard() then
-       return
-    end
+  imgui.KeyReleased(key)
+  if imgui.GetWantCaptureKeyboard() then
+     return
+  end
 
 end
 
@@ -290,3 +313,4 @@ end
 
 --Return state functions
 return state
+

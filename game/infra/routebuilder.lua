@@ -16,7 +16,10 @@ local function _generatePlayerActorData(idgenerator, body_id)
       IDLE = true,
       MOVE = true,
       PRIMARY = "DOUBLESHOOT",
-      WIDGET_A = "DRAW"
+      WIDGET_A = "HEAL",
+      WIDGET_B = "DRAW",
+      WIDGET_C = "DRAW",
+      WIDGET_D = "DRAW"
     },
     hand_limit = 7,
     hand = {}
