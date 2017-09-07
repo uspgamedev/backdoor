@@ -1,10 +1,11 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
-local DIR = require 'domain.definitions.dir'
-local ACTION = require 'domain.action'
-local CONTROL = require 'infra.control'
+local DIR       = require 'domain.definitions.dir'
+local ACTION    = require 'domain.action'
+local CONTROL   = require 'infra.control'
+local INPUT     = require 'infra.input'
 
-local HandView = require 'domain.view.handview'
+local HandView  = require 'domain.view.handview'
 
 local state = {}
 
@@ -20,8 +21,6 @@ local _previous_control_map
 local _save_and_quit
 local _exit_sector
 
-local _show_widgets
-
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
   PRESS_DOWN = {"move", "down"},
@@ -35,7 +34,6 @@ local SIGNALS = {
   PRESS_ACTION_2 = {"widget_2"},
   PRESS_ACTION_3 = {"widget_3"},
   PRESS_ACTION_4 = {"widget_4"},
-  HOLD_ACTION_3 = {"show_widgets"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -47,6 +45,10 @@ local _registerSignals
 
 --LOCAL FUNCTIONS--
 
+local function _showWidgets()
+  return INPUT.isDown('ACTION_3')
+end
+
 local function _changeToCardSelectScreen()
 
   if #_view.hand.hand > 0 then
@@ -57,13 +59,16 @@ local function _changeToCardSelectScreen()
 end
 
 local function _moveActor(dir)
-  local current_sector = _route.getCurrentSector()
-  local controlled_actor = _route.getControlledActor()
-  local i, j = controlled_actor:getPos()
-  dir = DIR[dir]
-  i, j = i+dir[1], j+dir[2]
-  if current_sector:isValid(i,j) then
-    _next_action = {'MOVE', { pos = {i,j} }}
+  if _showWidgets() then
+  else
+    local current_sector = _route.getCurrentSector()
+    local controlled_actor = _route.getControlledActor()
+    local i, j = controlled_actor:getPos()
+    dir = DIR[dir]
+    i, j = i+dir[1], j+dir[2]
+    if current_sector:isValid(i,j) then
+      _next_action = {'MOVE', { pos = {i,j} }}
+    end
   end
 end
 
@@ -114,10 +119,6 @@ local function _useThirdWidget()
   return _useAction('WIDGET_C')
 end
 
-local function _showWidgets()
-  _show_widgets = true
-end
-
 --- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
   local card = _view.hand.hand[index]
@@ -158,7 +159,7 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("move", _makeSignalHandler(_moveActor))
+  Signal.register("move", _moveActor)
   Signal.register("confirm", _makeSignalHandler(_exitSector))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
@@ -167,7 +168,6 @@ function _registerSignals()
   Signal.register("widget_3", _makeSignalHandler(_useSecondWidget))
   Signal.register("widget_4", _makeSignalHandler(_useThirdWidget))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
-  Signal.register("show_widgets", _showWidgets)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -243,12 +243,11 @@ function state:update(dt)
       _next_action = nil
     end
 
-    if _show_widgets then
+    if _showWidgets() then
       _view.widget:show()
     else
       _view.widget:hide()
     end
-    _show_widgets = false
 
   end
 

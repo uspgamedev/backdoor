@@ -51,10 +51,9 @@ function love.load(arg)
 
     PROFILE.init() -- initializes save & load system
 
-    --[[
-        Setup support for multiple resolutions. Res.init() Must be called after Gamestate.registerEvents()
-        so it will properly call the draw function applying translations.
-    ]]
+    -- Setup support for multiple resolutions. Res.init() Must be called after
+    -- Gamestate.registerEvents() so it will properly call the draw function
+    -- applying translations.
     Res.init()
 
     require 'tests'

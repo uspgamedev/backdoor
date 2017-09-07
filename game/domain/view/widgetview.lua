@@ -21,6 +21,7 @@ function WidgetView:init(route)
 
   self.route = route
   self.invisible = true
+  self.selected = 0
 
 end
 

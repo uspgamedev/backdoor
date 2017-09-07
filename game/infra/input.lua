@@ -45,6 +45,8 @@ local _enabled_actions = {
   PAUSE = true,
 }
 
+local _down = {}
+
 -- Send actions to the control manager
 local function _sendAction (atype, aname)
   if not _enabled_actions[aname] then return end
@@ -56,18 +58,21 @@ local function _handlePress (key)
   local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("PRESS", action_found)
+  _down[action_found] = true
 end
 
 local function _handleRelease (key)
   local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("RELEASE", action_found)
+  _down[action_found] = false
 end
 
 local function _handleHold (key)
   local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("HOLD", action_found)
+  _down[action_found] = true
 end
 
 local function _checkHeldKeyboardKeys ()
@@ -85,6 +90,10 @@ end
 
 function input.keyReleased (key)
   _handleRelease(key)
+end
+
+function input.isDown (action)
+  return _down[action]
 end
 
 function input.init ()
