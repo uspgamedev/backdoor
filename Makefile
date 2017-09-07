@@ -84,7 +84,7 @@ $(DKJSON_LIB):
 $(LUALZW_LIB): $(LUALZW_REPO)
 	mkdir $(LUALZW_LIB)
 	cp -r $(LUALZW_REPO)/* $(LUALZW_LIB)
-	echo "return require 'lualzw.lualzw'" | cat >$(LUALZW_LIB)/init.lua
+	echo "return require 'lualzw.lualzw'" >$(LUALZW_LIB)/init.lua
 
 $(LUALZW_REPO):
 	git clone https://github.com/Rochet2/lualzw.git $(LUALZW_REPO)
