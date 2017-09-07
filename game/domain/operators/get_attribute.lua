@@ -11,7 +11,7 @@ OP.schema = {
 OP.type = 'integer'
 
 function OP.process(actor, sector, params)
-  return 2 --FIXME
+  return actor["get"..params.which](actor)
 end
 
 return OP
