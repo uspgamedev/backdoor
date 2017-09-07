@@ -245,7 +245,7 @@ function state:update(dt)
 
     if _show_widgets then
       _view.widget:show()
-    elseif not _show_widgets then
+    else
       _view.widget:hide()
     end
     _show_widgets = false
