@@ -17,8 +17,27 @@ local filesystem = love.filesystem
 
 -- LOCALS --
 local PROFILE = {}
+local __COMPRESS__ = false
 local _id_generator
 local _metadata
+
+local function _compress(str) --> str
+  if not __COMPRESS__ then return str end
+  return assert(lzw.compress(str))
+end
+
+local function _decompress(str) --> str
+  if not __COMPRESS__ then return str end
+  return assert(lzw.decompress(str))
+end
+
+local function _encode(t) --> str
+  return _compress(json.encode(t, {indent = true}))
+end
+
+local function _decode(str) --> table
+  return json.decode(_decompress(str))
+end
 
 local function _cleanSlate ()
   print("CLEAR FLAG SET. DELETING ALL SAVE DATA.")
@@ -32,9 +51,7 @@ local function _saveProfile(base)
   local profile_data = base or _metadata
   local file = assert(filesystem.newFile(PROFILE_PATH, "w"))
   profile_data.key_mapping = INPUT.getMapping()
-  local content = json.encode(profile_data, {indent = true})
-  local compressed = assert(lzw.compress(content))
-  file:write(compressed)
+  file:write(_encode(profile_data))
   return file:close()
 end
 
@@ -45,8 +62,7 @@ end
 
 local function _loadProfile()
   local filedata = assert(filesystem.newFileData(PROFILE_PATH))
-  local decompressed = lzw.decompress(filedata:getString())
-  _metadata = json.decode(decompressed)
+  _metadata = _decode(filedata:getString())
   _id_generator = IDGenerator(_metadata.next_id)
   INPUT.loadMapping(_metadata.key_mapping)
 end
@@ -56,6 +72,7 @@ function PROFILE.init()
   -- set version
   METABASE.version = VERSION
   -- clean all save history if CLEAR runflag is set
+  __COMPRESS__ = __COMPRESS__ or RUNFLAGS.COMPRESS
   if RUNFLAGS.CLEAR then _cleanSlate() end
   -- check if profile exists and generate one if not
   if not filesystem.exists(PROFILE_PATH) then _newProfile() end
@@ -65,8 +82,7 @@ end
 
 function PROFILE.loadRoute(route_id)
   local filedata = assert(filesystem.newFileData(SAVEDIR..route_id))
-  local decompressed = lzw.decompress(filedata:getString())
-  local route_data = json.decode(decompressed)
+  local route_data = _decode(filedata:getString())
   -- delete save from profile list
   _metadata.save_list[route_data.id] = nil
   return route_data
@@ -78,9 +94,7 @@ function PROFILE.saveRoute(route_data)
   _metadata.save_list[route_data.id] = {
     player_name = route_data.player_name
   }
-  local content = json.encode(route_data, { indent = true })
-  local compressed = lzw.compress(content)
-  file:write(compressed)
+  file:write(_encode(route_data))
   return file:close()
 end
 
