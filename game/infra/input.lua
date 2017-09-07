@@ -6,7 +6,7 @@ local input = {}
 local controls = require 'infra.control'
 
 -- Translate keyboard keys to in-game controls
-local key_mapping = {
+local _key_mapping = {
   f = "CONFIRM",
   d = "CANCEL",
   s = "SPECIAL",
@@ -24,7 +24,7 @@ local key_mapping = {
 }
 
 -- List what action controls the game should check for
-local enabled_actions = {
+local _enabled_actions = {
   ACTION_1 = true,
   ACTION_2 = true,
   ACTION_3 = true,
@@ -43,31 +43,31 @@ local enabled_actions = {
 
 -- Send actions to the control manager
 local function _sendAction (atype, aname)
-  if not enabled_actions[aname] then return end
+  if not _enabled_actions[aname] then return end
   local full_name = atype .. "_" .. aname
   controls.enqueue(full_name)
 end
 
 local function _handlePress (key)
-  local action_found = key_mapping[key]
+  local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("PRESS", action_found)
 end
 
 local function _handleRelease (key)
-  local action_found = key_mapping[key]
+  local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("RELEASE", action_found)
 end
 
 local function _handleHold (key)
-  local action_found = key_mapping[key]
+  local action_found = _key_mapping[key]
   if not action_found then return end
   _sendAction("HOLD", action_found)
 end
 
 local function _checkHeldKeyboardKeys ()
-  for key in pairs(key_mapping) do
+  for key in pairs(_key_mapping) do
     if love.keyboard.isDown(key) then
       _handleHold(key)
     end
@@ -83,7 +83,7 @@ function input.keyReleased (key)
   _handleRelease(key)
 end
 
-function input.load ()
+function input.init ()
   local key_released = love.keyreleased
   local key_pressed = love.keypressed
   local update = love.update
@@ -99,9 +99,14 @@ function input.load ()
     if not DEBUG then input.update() end
     update(dt)
   end
+end
 
-  -- check saved input mapping
-  -- load default values from a file here
+function input.loadMapping(key_mapping)
+  _key_mapping = key_mapping or _key_mapping
+end
+
+function input.getMapping()
+  return _key_mapping
 end
 
 function input.update ()

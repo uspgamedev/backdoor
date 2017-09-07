@@ -3,6 +3,7 @@ local json = require 'dkjson'
 local IDGenerator = require 'common.idgenerator'
 local RUNFLAGS = require 'infra.runflags'
 local ROUTEBUILDER = require 'infra.routebuilder'
+local INPUT = require 'infra.input'
 
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
@@ -30,7 +31,7 @@ local function _newProfile()
   filesystem.createDirectory(SAVEDIR)
   local file, err = filesystem.newFile(PROFILE_PATH, "w")
   assert(file, err)
-  local encoded = json.encode(METABASE)
+  local encoded = json.encode(METABASE, {indent = true})
   file:write(encoded)
   return file:close()
 end
@@ -38,7 +39,8 @@ end
 local function _saveProfile()
   local file, err = filesystem.newFile(PROFILE_PATH, "w")
   assert(file, err)
-  local content = json.encode(_metadata)
+  _metadata.key_mapping = INPUT.getMapping()
+  local content = json.encode(_metadata, {indent = true})
   file:write(content)
   return file:close()
 end
@@ -48,6 +50,7 @@ local function _loadProfile()
   assert(filedata, err)
   _metadata = json.decode(filedata:getString())
   _id_generator = IDGenerator(_metadata.next_id)
+  INPUT.loadMapping(_metadata.key_mapping)
 end
 
 -- METHODS --
