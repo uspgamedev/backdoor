@@ -20,6 +20,7 @@ local _view
 local _previous_control_map
 local _save_and_quit
 local _exit_sector
+local _lock
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
@@ -45,8 +46,19 @@ local _registerSignals
 
 --LOCAL FUNCTIONS--
 
+local function _lockState()
+  _lock = true
+  _unregisterSignals()
+  _view.widget:hide()
+end
+
+local function _unlockState()
+  _lock = false
+  _registerSignals()
+end
+
 local function _showWidgets()
-  return INPUT.isDown('ACTION_3')
+  return not _next_action and INPUT.isDown('ACTION_3')
 end
 
 local function _changeToCardSelectScreen()
@@ -58,8 +70,14 @@ local function _changeToCardSelectScreen()
 
 end
 
-local function _moveActor(dir)
+local function _move(dir)
   if _showWidgets() then
+    for i,d in ipairs(DIR) do
+      if d == dir then
+        _view.widget:select(i)
+        break
+      end
+    end
   else
     local current_sector = _route.getCurrentSector()
     local controlled_actor = _route.getControlledActor()
@@ -80,7 +98,7 @@ local function _useAction(action_slot)
   local params = {}
   for _,param in ACTION.paramsOf(action_name) do
     if param.typename == 'choose_target' then
-      _unregisterSignals()
+      _lockState()
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
@@ -129,8 +147,16 @@ local function _useCardByIndex(index)
   end
 end
 
-local function _exitSector()
-  _exit_sector = true
+local function _interact()
+  if _showWidgets() then
+    local selected = _view.widget:getSelected()
+    if selected then
+      local widget = { 'A', 'B', 'C', 'D' }
+      _useAction(('WIDGET_%s'):format(widget[selected]))
+    end
+  else
+    _exit_sector = true
+  end
 end
 
 local function _saveAndQuit()
@@ -159,8 +185,8 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("move", _moveActor)
-  Signal.register("confirm", _makeSignalHandler(_exitSector))
+  Signal.register("move", _move)
+  Signal.register("confirm", _makeSignalHandler(_interact))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("widget_1", _makeSignalHandler(_usePrimaryAction))
@@ -205,16 +231,18 @@ function state:enter(_, route, view)
   _previous_control_map = CONTROL.getMap()
   CONTROL.setMap(_mapped_signals)
 
+  _unlockState()
+
 end
 
 function state:leave()
 
-  _unregisterSignals()
+  _lockState()
 
 end
 
 function state:resume(state, args)
-  _registerSignals()
+  _unlockState()
   if state == GS.PICK_TARGET then
 
     _resumeTask(args)
@@ -230,7 +258,7 @@ end
 
 function state:update(dt)
 
-  if not DEBUG then
+  if not DEBUG and not _lock then
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
 
@@ -238,15 +266,15 @@ function state:update(dt)
 
     MAIN_TIMER:update(dt)
 
-    if _next_action then
-      SWITCHER.pop({next_action = _next_action})
-      _next_action = nil
-    end
-
     if _showWidgets() then
       _view.widget:show()
     else
       _view.widget:hide()
+    end
+
+    if _next_action then
+      SWITCHER.pop({next_action = _next_action})
+      _next_action = nil
     end
 
   end

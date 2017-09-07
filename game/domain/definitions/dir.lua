@@ -1,6 +1,6 @@
 
 return {
-  'left', 'right', 'down', 'up',
+  'right', 'up', 'left', 'down',
   left = {0,-1},
   right = {0,1},
   down = {1,0},

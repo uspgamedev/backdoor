@@ -21,8 +21,15 @@ function WidgetView:init(route)
 
   self.route = route
   self.invisible = true
-  self.selected = 0
 
+end
+
+function WidgetView:select(idx)
+  self.selected = idx
+end
+
+function WidgetView:getSelected()
+  return self.selected
 end
 
 function WidgetView:show()
@@ -34,6 +41,7 @@ function WidgetView:show()
   if self.fadein or not self.invisible then
     return
   end
+  self.selected = false
   self.invisible = false
   self.enter = self.enter or { 0 }
   self.fadein = MAIN_TIMER:tween(
@@ -68,13 +76,19 @@ function WidgetView:draw()
   local enter = self.enter[1]
   g.push()
   g.translate(W/2, H/2 - 20)
-  local rot = pi/2 * (1 - enter)
+  local rot = pi/2 * (enter - 1)
   for i=0,3 do
-    local x,y = cos(rot + i/4*2*pi), sin(rot + i/4*2*pi)
+    g.push()
+    local x,y = cos(rot + i/4*2*pi), -sin(rot + i/4*2*pi)
+    g.translate(128*x, 128*y)
+    if self.selected == i+1 then
+      g.scale(1.5, 1.5)
+    end
     g.setColor(80, 10, 50, enter*100)
-    g.circle("fill", 128*x+8, 128*y+8, 32)
+    g.circle("fill", 8, 8, 32)
     g.setColor(20, 100, 80, enter*255)
-    g.circle("fill", 128*x, 128*y, 32)
+    g.circle("fill", 0, 0, 32)
+    g.pop()
   end
   g.pop()
 end

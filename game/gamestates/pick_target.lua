@@ -87,6 +87,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    MAIN_TIMER:update(dt)
     _sector_view:lookAtCursor()
   end
 
