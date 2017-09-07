@@ -67,10 +67,12 @@ function WidgetView:draw()
   local enter = self.enter[1]
   g.push()
   g.translate(W/2, H/2)
-  g.setColor(20, 100, 80, enter*100)
-  g.rotate(pi/2 * (1 - enter))
+  local rot = pi/2 * (1 - enter)
   for i=0,3 do
-    local x,y = cos(i/4*2*pi), sin(i/4*2*pi)
+    local x,y = cos(rot + i/4*2*pi), sin(rot + i/4*2*pi)
+    g.setColor(80, 10, 50, enter*100)
+    g.circle("fill", 128*x+8, 128*y+8, 32)
+    g.setColor(20, 100, 80, enter*255)
     g.circle("fill", 128*x, 128*y, 32)
   end
   g.pop()
