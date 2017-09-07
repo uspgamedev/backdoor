@@ -139,7 +139,7 @@ local function _interact()
       local widget = { 'A', 'B', 'C', 'D' }
       _useAction(('WIDGET_%s'):format(widget[selected]))
     end
-  else
+  elseif not _next_action then
     _exit_sector = true
   end
 end
