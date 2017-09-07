@@ -1,8 +1,14 @@
 {
   "player":{
-    "behavior":"player"
+    "arc":0,
+    "behavior":"player",
+    "ath":0,
+    "mec":0
   },
   "dumb":{
-    "behavior":"random_walk"
+    "arc":0,
+    "behavior":"random_walk",
+    "ath":0,
+    "mec":0
   }
 }
