@@ -388,6 +388,8 @@ function _turnLoop(self, ...)
   end
 end
 
+--- Plays turn coroutine.
+--  Any erros in it are propagated with the appropriate stacktrace.
 function Sector:playTurns(...)
   local result = table.pack(coroutine.resume(self.turnLoop, self, ...))
   local ok, err = unpack(result)
