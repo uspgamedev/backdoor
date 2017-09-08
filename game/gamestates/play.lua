@@ -53,7 +53,6 @@ local function _exitSector()
   end
   sector:putActor(controlled_actor, ti, tj)
   _route.setCurrentSector(id)
-  _view.sector:setSector(sector)
   _playTurns()
 end
 
@@ -79,7 +78,7 @@ function state:enter(pre, route_data)
 
   -- sector view
   local sector = _route.getCurrentSector()
-  _view.sector = SectorView(sector)
+  _view.sector = SectorView(_route)
   _view.sector:addElement("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
 

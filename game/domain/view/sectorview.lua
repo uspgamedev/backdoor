@@ -26,19 +26,15 @@ local function _moveCamera(target)
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
-function SectorView:init(sector)
+function SectorView:init(route)
 
   ELEMENT.init(self)
 
-  self.sector = sector
   self.target = nil
-
   self.cursor = nil
 
-end
+  self.route = route
 
-function SectorView:setSector(sector)
-  self.sector = sector
 end
 
 function SectorView:lookAt(target)
@@ -46,7 +42,7 @@ function SectorView:lookAt(target)
 end
 
 function SectorView:draw()
-  local sector = self.sector
+  local sector = self.route.getCurrentSector()
   local g = love.graphics
   if self.target then
     _moveCamera(self.target)

@@ -104,6 +104,9 @@ function Route:instance(obj)
     return actor
   end
 
+  function obj.takeExit()
+  end
+
   function obj.playTurns(...)
     local request, extra = _current_sector:playTurns(...)
     _controlled_actor = (request == "userTurn") and extra or nil
