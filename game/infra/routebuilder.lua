@@ -15,6 +15,7 @@ local function _generatePlayerActorData(idgenerator, body_id)
     actions = {
       IDLE = true,
       MOVE = true,
+      INTERACT = true,
       PRIMARY = "DOUBLESHOOT",
       WIDGET_A = "HEAL",
       WIDGET_B = "DRAW",

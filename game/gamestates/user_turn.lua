@@ -140,7 +140,7 @@ local function _interact()
       _useAction(('WIDGET_%s'):format(widget[selected]))
     end
   elseif not _next_action then
-    _exit_sector = true
+    _next_action = { 'INTERACT' }
   end
 end
 

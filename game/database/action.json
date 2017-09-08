@@ -20,6 +20,22 @@
         "amount":2
       }]
   },
+  "CHANGE_SECTOR":{
+    "params":[{
+        "typename":"sector",
+        "output":"sector"
+      },{
+        "typename":"direction",
+        "output":"pos"
+      }],
+    "effects":[{
+        "typename":"change_sector",
+        "target_sector":"par:sector",
+        "target_pos":"par:pos"
+      }],
+    "operators":[],
+    "cost":1
+  },
   "HEAL":{
     "params":[{
         "typename":"choose_target",
@@ -45,12 +61,6 @@
         "amount":"val:amount"
       }]
   },
-  "IDLE":{
-    "params":[],
-    "effects":[],
-    "operators":[],
-    "cost":1
-  },
   "SHOOT":{
     "params":[{
         "typename":"choose_target",
@@ -75,6 +85,12 @@
         "output":"amount"
       }],
     "cost":6
+  },
+  "IDLE":{
+    "params":[],
+    "effects":[],
+    "operators":[],
+    "cost":1
   },
   "DOUBLESHOOT":{
     "params":[{
