@@ -52,7 +52,6 @@ local function _exitSector()
     ti, tj = unpack(exit.target_pos)
   end
   sector:putActor(controlled_actor, ti, tj)
-  _route.setCurrentSector(id)
   _playTurns()
 end
 
