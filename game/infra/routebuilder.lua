@@ -13,9 +13,6 @@ local function _generatePlayerActorData(idgenerator, body_id)
     specname = "player",
     cooldown = 10,
     actions = {
-      IDLE = true,
-      MOVE = true,
-      INTERACT = true,
       PRIMARY = "DOUBLESHOOT",
       WIDGET_A = "HEAL",
       WIDGET_B = "DRAW",

@@ -8,6 +8,13 @@ local Actor = Class{
   __includes = { GameElement }
 }
 
+local BASE_ACTIONS = {
+  IDLE = true,
+  MOVE = true,
+  INTERACT = true,
+  NEWHAND = true
+}
+
 function Actor:init(spec_name)
 
   GameElement.init(self, 'actor', spec_name)
@@ -16,12 +23,7 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = 10
-  self.actions = {
-    IDLE = true,
-    MOVE = true,
-    INTERACT = true,
-    PRIMARY = "SHOOT"
-  }
+  self.actions = setmetatable({ PRIMARY = "SHOOT" }, { __index = BASE_ACTIONS })
 
   self.hand = {}
   self.hand_limit = 7
@@ -30,7 +32,7 @@ end
 
 function Actor:loadState(state)
   self.cooldown = state.cooldown
-  self.actions = state.actions
+  self.actions = setmetatable(state.actions, { __index = BASE_ACTIONS })
   self.body_id = state.body_id
   self:setId(state.id)
   self.hand_limit = state.hand_limit
