@@ -30,13 +30,14 @@ local function _initBodies(w, h)
   return t
 end
 
-function Sector:init(spec_name)
+function Sector:init(spec_name, route)
 
   GameElement.init(self, 'sector', spec_name)
 
   self.w = 1
   self.h = 1
 
+  self.route = route
   self.tiles = {{ false }}
   self.bodies = _initBodies(1,1)
   self.actors = {}
@@ -164,26 +165,39 @@ function Sector:makeEncounters(encounters, register)
   end
 end
 
-function Sector:getExit(idx)
+--- Returns the exit with the given index
+--  @param idx      The exit index (must be valid)
+--  @param generate Flag indicating whether to generate the next sector over
+--                  or not.
+function Sector:getExit(idx, generate)
   local exit = self.exits[idx]
   assert(exit,
-    ("No exit of index: %d\n%s"):format(idx, debug.traceback()))
-  return {
-    pos        = exit.pos,
-    specname   = exit.target_specname,
-    id         = exit.target_id,
-    target_pos = exit.target_pos,
+    ("No exit of index: %d"):format(idx))
+  local result = {
+    pos         = exit.pos,
+    specname    = exit.target_specname,
+    id          = exit.target_id,
+    target_pos  = exit.target_pos
   }
+  if not exit.target_id and generate then
+    self.route.linkSectorExit(self, idx, result)
+    result.id = exit.target_id
+    result.target_pos = exit.target_pos
+  end
+  return result
 end
 
 --- Finds the exit at [i,j], if any
---  @return[1] The exit index
---  @return[2] The corresponding result of Sector:getExit
-function Sector:findExit(i, j)
+--  @param i        The i-position of the possible exit
+--  @param j        The j-position of the possible exit
+--  @param generate A flag passed on to Sector:getExit()
+--  @return[1]      The exit index
+--  @return[2]      The corresponding result of Sector:getExit
+function Sector:findExit(i, j, generate)
   for idx, exit in ipairs(self.exits) do
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
-      return idx, self:getExit(idx)
+      return idx, self:getExit(idx, generate)
     end
   end
   return false
@@ -199,7 +213,7 @@ end
 --  that is!
 function Sector:putBody(body, i, j)
   assert(self:isValid(i,j),
-    ("Invalid position (%d,%d):"):format(i,j) .. debug.traceback())
+    ("Invalid position (%d,%d):"):format(i,j))
   -- Remove body from where it was vefore
   local oldsector = body:getSector() or self
   local oldbodies = oldsector.bodies
@@ -230,7 +244,7 @@ function Sector:removeBodyAt(i, j, body)
   for i, actor in ipairs(self.actors) do
     if actor:getBody() ==  body then
 
-      if actor:getSpec("behavior") == "player" then
+      if actor:isPlayer() then
         coroutine.yield("playerDead")
       end
 
@@ -355,7 +369,7 @@ function _turnLoop(self, ...)
       table.insert(actors_queue,actor)
     end
 
-    while(not Util.tableEmpty(actors_queue)) do
+    while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)
 
       actor:tick()
@@ -364,13 +378,26 @@ function _turnLoop(self, ...)
       end
 
       manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+
+      if actor:isPlayer() and actor:getBody():getSector() ~= self then
+        coroutine.yield('changeSector')
+        break
+      end
     end
 
   end
 end
 
+--- Plays turn coroutine.
+--  Any erros in it are propagated with the appropriate stacktrace.
 function Sector:playTurns(...)
-  return select(2, assert(coroutine.resume(self.turnLoop, self, ...)))
+  local result = table.pack(coroutine.resume(self.turnLoop, self, ...))
+  local ok, err = unpack(result)
+  if not ok then
+    return error(debug.traceback(self.turnLoop, err))
+  else
+    return unpack(result, 2)
+  end
 end
 
 

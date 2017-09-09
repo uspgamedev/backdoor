@@ -1,4 +1,7 @@
 
+-- LUX portability
+require 'lux.portable'
+
 -- CPML
 cpml      = require 'cpml'
 

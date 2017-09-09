@@ -2,7 +2,8 @@
 local FX = {}
 
 FX.schema = {
-  { id = 'target_sector', name = "Target Sector", type = 'value', match = 'string' },
+  { id = 'target_sector', name = "Target Sector", type = 'value',
+    match = 'sector' },
   { id = 'target_pos', name = "Target Position", type = 'value', match = 'pos' }
 }
 

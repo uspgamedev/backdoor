@@ -45,7 +45,7 @@ function Route:instance(obj)
     -- sectors
     _sectors = {}
     for _,sector_state in ipairs(state.sectors) do
-      local sector = Sector(sector_state.specname)
+      local sector = Sector(sector_state.specname, obj)
       sector:loadState(sector_state, _register)
       _register(sector)
       table.insert(_sectors, sector)
@@ -90,10 +90,23 @@ function Route:instance(obj)
   end
 
   function obj.makeSector(sector_spec)
-    local id,sector = _register(Sector(sector_spec))
+    local id,sector = _register(Sector(sector_spec, obj))
     sector:generate(_register)
     table.insert(_sectors, sector)
     return id, sector
+  end
+
+  --- Links an exit with the next sector over, generating it
+  --  @param from_sector  The sector where to exit from
+  --  @param idx          The exit index
+  --  @param exit         The exit data
+  function obj.linkSectorExit(from_sector, idx, exit)
+    if not exit.id then
+      local id, to_sector = obj.makeSector(exit.specname)
+      local entry = to_sector:getExit(1)
+      to_sector:link(1, from_sector.id, unpack(exit.pos))
+      from_sector:link(idx, id, unpack(entry.pos))
+    end
   end
 
   function obj.makeActor(bodyspec, actorspec, i, j)
@@ -104,7 +117,22 @@ function Route:instance(obj)
     return actor
   end
 
+  function obj.getPlayerActor()
+    return Util.findId(_player_id)
+  end
+
+  function obj.takeExit()
+  end
+
+  local function _checkSector()
+    local player_sector = obj.getPlayerActor():getBody():getSector()
+    if player_sector ~= _current_sector then
+      obj.setCurrentSector(player_sector.id)
+    end
+  end
+
   function obj.playTurns(...)
+    _checkSector()
     local request, extra = _current_sector:playTurns(...)
     _controlled_actor = (request == "userTurn") and extra or nil
     return request

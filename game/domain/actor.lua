@@ -19,6 +19,7 @@ function Actor:init(spec_name)
   self.actions = {
     IDLE = true,
     MOVE = true,
+    INTERACT = true,
     PRIMARY = "SHOOT"
   }
 
@@ -55,6 +56,10 @@ function Actor:saveState()
     table.insert(state.hand, card_state)
   end
   return state
+end
+
+function Actor:isPlayer()
+  return self:getSpec('behavior') == 'player'
 end
 
 function Actor:setBody(body_id)
@@ -116,13 +121,32 @@ function Actor:ready()
   return self.cooldown <= 0
 end
 
+local function _interact(self)
+  local action, params
+  local sector = self:getBody():getSector()
+  local i, j = self:getPos()
+  local id, exit = sector:findExit(i, j, true)
+  if id then
+    action = 'CHANGE_SECTOR'
+    params = { sector = exit.id, pos = exit.target_pos }
+  else
+    -- FIXME: actor wastes time when interacting with nothing!
+    action = 'IDLE'
+  end
+  return action, params
+end
+
 function Actor:makeAction(sector)
   local action_slot, params = self:behavior(sector)
   local check = self:getAction(action_slot)
   if check then
     local action
     if check == true then
-      action = action_slot
+      if action_slot == 'INTERACT' then
+        action, params = _interact(self)
+      else
+        action = action_slot
+      end
     else
       action = check
     end
