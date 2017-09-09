@@ -12,3 +12,4 @@ function FX.process (actor, sector, params)
 end
 
 return FX
+

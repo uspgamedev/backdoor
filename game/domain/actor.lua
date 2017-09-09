@@ -12,7 +12,7 @@ local BASE_ACTIONS = {
   IDLE = true,
   MOVE = true,
   INTERACT = true,
-  NEWHAND = true
+  NEW_HAND = true
 }
 
 function Actor:init(spec_name)
@@ -26,7 +26,7 @@ function Actor:init(spec_name)
   self.actions = setmetatable({ PRIMARY = "SHOOT" }, { __index = BASE_ACTIONS })
 
   self.hand = {}
-  self.hand_limit = 7
+  self.hand_limit = 5
 
 end
 
@@ -113,6 +113,14 @@ end
 
 function Actor:getHand()
   return self.hand
+end
+
+function Actor:isHandEmpty()
+  return #self.hand == 0
+end
+
+function Actor:getHandLimit()
+  return self.hand_limit
 end
 
 function Actor:tick()
