@@ -15,11 +15,8 @@ local function _generatePlayerActorData(idgenerator, body_id)
     actions = {
       PRIMARY = "DOUBLESHOOT",
       WIDGET_A = "HEAL",
-      WIDGET_B = "DRAW",
-      WIDGET_C = "DRAW",
-      WIDGET_D = "DRAW"
     },
-    hand_limit = 7,
+    hand_limit = 5,
     hand = {}
   }
 end
