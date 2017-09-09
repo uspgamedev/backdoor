@@ -7,17 +7,9 @@ local TILE_H = 80
 local HALF_W = 10
 local HALF_H = 6
 
--- FIXME: Tiles are not gotten from DB right now
--- I just wanted to add code to draw from tiles instead of using rectangles
--- I also tweaked the colors, but it's all provisory still
-local TEXTURE = love.graphics.newImage("assets/imgs/tiles.png")
-TEXTURE:setFilter("nearest", "nearest")
-local TILE_COLORS = {
-  [SCHEMATICS.FLOOR] = love.graphics.newQuad(0, 0, TILE_W, TILE_H, TEXTURE:getDimensions()),
-  [SCHEMATICS.EXIT] = love.graphics.newQuad(80, 0, TILE_W, TILE_H, TEXTURE:getDimensions()),
-  shade = love.graphics.newQuad(160, 0, TILE_W, TILE_H, TEXTURE:getDimensions()),
-}
-local TILES = love.graphics.newSpriteBatch(TEXTURE, 512, "stream")
+local TEXTURE
+local TILE_COLORS
+local TILES
 
 local Cursor
 
@@ -33,6 +25,25 @@ local function _moveCamera(target)
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
+local function _initDrawables()
+
+  -- FIXME: Tiles are not gotten from DB right now
+  local g = love.graphics
+
+  TEXTURE = g.newImage("assets/imgs/tiles.png")
+  TEXTURE:setFilter("nearest", "nearest")
+  local tw, th = TEXTURE:getDimensions()
+
+  TILE_COLORS = {
+    [SCHEMATICS.FLOOR] = g.newQuad(0, 0, TILE_W, TILE_H, tw, th),
+    [SCHEMATICS.EXIT] = g.newQuad(80, 0, TILE_W, TILE_H, tw, th),
+    shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
+  }
+
+  TILES = g.newSpriteBatch(TEXTURE, 512, "stream")
+
+end
+
 function SectorView:init(route)
 
   ELEMENT.init(self)
@@ -41,6 +52,8 @@ function SectorView:init(route)
   self.cursor = nil
 
   self.route = route
+
+  _initDrawables()
 
 end
 
