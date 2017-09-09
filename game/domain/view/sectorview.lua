@@ -7,6 +7,9 @@ local TILE_H = 80
 local HALF_W = 10
 local HALF_H = 6
 
+-- FIXME: Tiles are not gotten from DB right now
+-- I just wanted to add code to draw from tiles instead of using rectangles
+-- I also tweaked the colors, but it's all provisory still
 local TEXTURE = love.graphics.newImage("assets/imgs/tiles.png")
 TEXTURE:setFilter("nearest", "nearest")
 local TILE_COLORS = {
