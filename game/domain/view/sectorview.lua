@@ -7,10 +7,9 @@ local TILE_H = 80
 local HALF_W = 10
 local HALF_H = 6
 
-local TILE_COLORS = {
-  [SCHEMATICS.FLOOR] = COLORS.FLOOR1,
-  [SCHEMATICS.EXIT] = COLORS.EXIT,
-}
+local TEXTURE
+local TILE_COLORS
+local TILES
 
 local Cursor
 
@@ -26,6 +25,25 @@ local function _moveCamera(target)
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
+local function _initDrawables()
+
+  -- FIXME: Tiles are not gotten from DB right now
+  local g = love.graphics
+
+  TEXTURE = g.newImage("assets/imgs/tiles.png")
+  TEXTURE:setFilter("nearest", "nearest")
+  local tw, th = TEXTURE:getDimensions()
+
+  TILE_COLORS = {
+    [SCHEMATICS.FLOOR] = g.newQuad(0, 0, TILE_W, TILE_H, tw, th),
+    [SCHEMATICS.EXIT] = g.newQuad(80, 0, TILE_W, TILE_H, tw, th),
+    shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
+  }
+
+  TILES = g.newSpriteBatch(TEXTURE, 512, "stream")
+
+end
+
 function SectorView:init(route)
 
   ELEMENT.init(self)
@@ -34,6 +52,8 @@ function SectorView:init(route)
   self.cursor = nil
 
   self.route = route
+
+  _initDrawables()
 
 end
 
@@ -48,38 +68,49 @@ function SectorView:draw()
     _moveCamera(self.target)
   end
   local cx, cy = CAM:position()
+  local draw_bodies = {}
   cx = cx / TILE_W
   cy = cy / TILE_H
-  g.setBackgroundColor(50, 80, 80, 255)
+  g.setBackgroundColor(75, 78, 60, 255)
+  g.setColor(COLORS.NEUTRAL)
+  TILES:clear()
   for i = 0, sector.h-1 do
     for j = 0, sector.w-1 do
       if j >= cx - HALF_W and j <= cx + HALF_W and
         i >= cy - HALF_H and i <= cy + HALF_H then
         local tile = sector.tiles[i+1][j+1]
         if tile then
+          -- Add tiles to spritebatch
           local body = sector.bodies[i+1][j+1]
           local x, y = j*TILE_W, i*TILE_H
           g.push()
-          g.translate(x, y)
-          g.setColor(TILE_COLORS[tile.type])
-          g.rectangle("fill", 0, 0, TILE_W, TILE_H)
-          g.setColor(50, 50, 50)
-          g.rectangle("fill", 0, TILE_H, TILE_W, TILE_H/4)
+          TILES:add(TILE_COLORS[tile.type], x, y)
+          TILES:add(TILE_COLORS.shade, x, y+TILE_H)
           if body then
-            g.push()
-            g.translate(TILE_W/2, TILE_H/2)
-            g.scale(TILE_W, TILE_H)
-            g.setColor(200, 100, 100)
-            g.polygon('fill', 0.0, -0.8, -0.25, 0.0, 0.0, 0.2)
-            g.setColor(90, 140, 140)
-            g.polygon('fill', 0.0, -0.8, 0.25, 0.0, 0.0, 0.2)
-            g.pop()
-            g.print(body:getHP(), 0, 0)
+            table.insert(draw_bodies, {body, x, y})
           end
           g.pop()
         end
       end
     end
+  end
+  g.draw(TILES, 0, 0)
+  -- Draw dem bodies
+  for _, bodyinfo in ipairs(draw_bodies) do
+    local body, x, y = unpack(bodyinfo)
+    g.push()
+    g.translate(x, y)
+    g.push()
+    g.translate(TILE_W/2, TILE_H/2)
+    g.scale(TILE_W, TILE_H)
+    g.setColor(200, 100, 100)
+    g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
+    g.setColor(90, 140, 140)
+    g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
+    g.pop()
+    g.setColor(COLORS.NEUTRAL)
+    g.print(body:getHP(), 0, 0)
+    g.pop()
   end
   local c_i, c_j = self:getCursorPos()
   --Draw Cursor, if it exists
