@@ -1,12 +1,17 @@
 {
-  "dummy":{
+  "cure":{
     "type":"ART",
-    "art_action":"SHOOT",
-    "name":"printf"
+    "art_action":"HEAL",
+    "name":"Cure"
   },
-  "dummy2":{
+  "draw":{
     "type":"ART",
     "art_action":"DRAW",
-    "name":"wilson"
+    "name":"Think"
+  },
+  "bolt":{
+    "type":"ART",
+    "art_action":"SHOOT",
+    "name":"Bolt"
   }
 }

@@ -17,7 +17,7 @@
     "operators":[],
     "effects":[{
         "typename":"draw_card",
-        "amount":2
+        "amount":1
       }]
   },
   "CHANGE_SECTOR":{
@@ -43,7 +43,7 @@
         "output":"target",
         "max-range":5
       }],
-    "cost":4,
+    "cost":6,
     "operators":[{
         "typename":"get_attribute",
         "output":"arcana",
@@ -60,6 +60,12 @@
         "target":"par:target",
         "amount":"val:amount"
       }]
+  },
+  "IDLE":{
+    "params":[],
+    "effects":[],
+    "operators":[],
+    "cost":1
   },
   "SHOOT":{
     "params":[{
@@ -81,16 +87,10 @@
         "op":"+",
         "typename":"integer_binop",
         "lhs":"val:attr",
-        "rhs":2,
+        "rhs":3,
         "output":"amount"
       }],
-    "cost":6
-  },
-  "IDLE":{
-    "params":[],
-    "effects":[],
-    "operators":[],
-    "cost":1
+    "cost":10
   },
   "DOUBLESHOOT":{
     "params":[{
@@ -109,11 +109,11 @@
     "effects":[{
         "typename":"deal_damage",
         "target":"par:target",
-        "amount":4
+        "amount":3
       },{
         "typename":"deal_damage",
         "target":"par:target2",
-        "amount":4
+        "amount":3
       }]
   },
   "DEBUG":{

@@ -167,10 +167,13 @@ function Actor:drawCard()
 
   --TODO: Change this so actor draws from his buffer
   local card
-  if RANDOM.generate() >.5 then
-    card = Card("dummy")
+  local roll = RANDOM.generate()
+  if roll > .5 then
+    card = Card("bolt")
+  elseif roll > .3 then
+    card = Card("cure")
   else
-    card = Card("dummy2")
+    card = Card("draw")
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
