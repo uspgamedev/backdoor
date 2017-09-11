@@ -6,11 +6,13 @@ local IDGenerator = require 'common.idgenerator'
 
 local ROUTEBUILDER = {}
 
-local function _generatePlayerActorData(idgenerator, body_id)
+local function _generatePlayerActorData(idgenerator, body_id, background)
+  -- FIXME: ALL PLAYER BACKGROUNDS HAVE THE SAME ACTIONS
+  -- suggestion: have the primary action be registered in the DB
   return {
     id = idgenerator.newID(),
     body_id = body_id,
-    specname = "player",
+    specname = background.title,
     cooldown = 10,
     actions = {
       PRIMARY = "DOUBLESHOOT",
@@ -21,17 +23,17 @@ local function _generatePlayerActorData(idgenerator, body_id)
   }
 end
 
-local function _generatePlayerBodyData(idgenerator)
+local function _generatePlayerBodyData(idgenerator, race)
   return {
     id = idgenerator.newID(),
-    specname = "hearthborn",
+    specname = race.title,
     damage = 0,
     i = 1,
     j = 3,
   }
 end
 
-local function _generateSectorsData(idgenerator)
+local function _generateSectorsData(idgenerator, player_info)
   -- create first sector
   local sectors = {}
   local t = {
@@ -67,8 +69,10 @@ local function _generateSectorsData(idgenerator)
   }
 
   -- generate player
-  local player_body = _generatePlayerBodyData(idgenerator)
-  local player_actor = _generatePlayerActorData(idgenerator, player_body.id)
+  local player_body = _generatePlayerBodyData(idgenerator, player_info.race)
+  local player_actor = _generatePlayerActorData(idgenerator,
+                                                player_body.id,
+                                                player_info.background)
 
   -- populate first sector
   first_sector.bodies[1] = player_body
@@ -80,7 +84,7 @@ local function _generateSectorsData(idgenerator)
   return sectors
 end
 
-local function _generateRouteData(route_id)
+local function _generateRouteData(route_id, player_info)
   RANDOM.setSeed(RANDOM.generateSeed())
   local idgenerator = IDGenerator()
   local data = {}
@@ -88,7 +92,7 @@ local function _generateRouteData(route_id)
   data.id = route_id
   data.rng_seed = RANDOM.getSeed()
   data.rng_state = RANDOM.getState()
-  data.sectors = _generateSectorsData(idgenerator)
+  data.sectors = _generateSectorsData(idgenerator, player_info)
   data.next_id = idgenerator.getNextID()
   data.current_sector_id = data.sectors[1].id
   data.player_name = "Banana"
@@ -96,8 +100,8 @@ local function _generateRouteData(route_id)
   return data
 end
 
-function ROUTEBUILDER.build(route_id)
-  return _generateRouteData(route_id)
+function ROUTEBUILDER.build(route_id, player_info)
+  return _generateRouteData(route_id, player_info)
 end
 
 return ROUTEBUILDER

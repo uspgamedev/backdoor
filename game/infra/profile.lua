@@ -98,9 +98,9 @@ function PROFILE.saveRoute(route_data)
   return file:close()
 end
 
-function PROFILE.newRoute()
+function PROFILE.newRoute(player_info)
   local route_id = ("route%s"):format(_id_generator.newID())
-  local route_data = ROUTEBUILDER.build(route_id)
+  local route_data = ROUTEBUILDER.build(route_id, player_info)
   _metadata.next_id = _id_generator.getNextID()
   print(("Generating %s..."):format(route_id))
   print(("Seed: %d"):format(route_data.rng_seed))

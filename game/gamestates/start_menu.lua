@@ -52,19 +52,13 @@ end
 
 function state:resume(from, player_info)
   if player_info then
-    local route_data = PROFILE.newRoute()
-    local actor_ref = route_data.sectors[1].actors[1]
-    local body_ref = route_data.sectors[1].bodies[1]
+    local route_data = PROFILE.newRoute(player_info)
 
-    -- FIXME: ALL PLAYER BACKGROUNDS HAVE THE SAME ACTIONS
-    -- suggestion: have the primary action be registered in the DB
-    local bg = player_info.background
-    actor_ref.specname = bg.title
+    local race, background
+    race = player_info.race.title
+    background = player_info.background.title
+    print(string.format("selected %s %s", race, background))
 
-    local race = player_info.race
-    body_ref.specname = race.title
-
-    print(string.format("selected %s %s", bg.title, race.title))
     SWITCHER.switch(GS.PLAY, route_data)
   else
     _menu_view:addElement("HUD", nil, "menu_view")
