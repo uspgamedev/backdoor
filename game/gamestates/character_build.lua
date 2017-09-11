@@ -74,7 +74,7 @@ function state:update(dt)
     for name, schema in pairs(_schemas[context_name]) do
       _view:setItem(name, schema)
       if MENU.item(name) then
-        _playerinfo[context_name] = {title = name, spec = schema}
+        _playerinfo[context_name] = name
         _current = _current + 1
       end
     end

@@ -55,8 +55,8 @@ function state:resume(from, player_info)
     local route_data = PROFILE.newRoute(player_info)
 
     local race, background
-    race = player_info.race.title
-    background = player_info.background.title
+    race = player_info.race
+    background = player_info.background
     print(string.format("selected %s %s", race, background))
 
     SWITCHER.switch(GS.PLAY, route_data)

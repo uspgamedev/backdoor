@@ -12,7 +12,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
   return {
     id = idgenerator.newID(),
     body_id = body_id,
-    specname = background.title,
+    specname = background,
     cooldown = 10,
     actions = {
       PRIMARY = "DOUBLESHOOT",
@@ -26,7 +26,7 @@ end
 local function _generatePlayerBodyData(idgenerator, race)
   return {
     id = idgenerator.newID(),
-    specname = race.title,
+    specname = race,
     damage = 0,
     i = 1,
     j = 3,
