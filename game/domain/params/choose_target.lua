@@ -11,5 +11,9 @@ PARAM.schema = {
 
 PARAM.type = 'body'
 
+function PARAM.isValid(sector, actor, value)
+  return true
+end
+
 return PARAM
 
