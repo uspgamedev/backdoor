@@ -139,32 +139,34 @@ local function _interact(self)
   if id then
     action = 'CHANGE_SECTOR'
     params = { sector = exit.id, pos = exit.target_pos }
-  else
-    -- FIXME: actor wastes time when interacting with nothing!
-    action = 'IDLE'
   end
   return action, params
 end
 
 function Actor:makeAction(sector)
-  local action_slot, params = self:behavior(sector)
-  local check = self:getAction(action_slot)
-  if check then
-    local action
-    if check == true then
-      if action_slot == 'INTERACT' then
-        action, params = _interact(self)
+  local success = false
+  repeat
+    local action_slot, params = self:behavior(sector)
+    local check = self:getAction(action_slot)
+    if check then
+      local action
+      if check == true then
+        if action_slot == 'INTERACT' then
+          action, params = _interact(self)
+        else
+          action = action_slot
+        end
       else
-        action = action_slot
+        action = check
       end
-    else
-      action = check
+      if self:isCard(action_slot) then
+        table.remove(self.hand, action_slot)
+      end
+      if action then
+        success = ACTION.run(action, self, sector, params)
+      end
     end
-    if self:isCard(action_slot) then
-      table.remove(self.hand, action_slot)
-    end
-    return ACTION.run(action, self, sector, params)
-  end
+  until success
 end
 
 function Actor:spendTime(n)
