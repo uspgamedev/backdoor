@@ -2,6 +2,7 @@
 local DIR = require 'domain.definitions.dir'
 local FX = require 'lux.pack' 'domain.effects'
 local OP = require 'lux.pack' 'domain.operators'
+local PAR = require 'lux.pack' 'domain.params'
 local DB = require 'database'
 
 local GameElement = require 'domain.gameelement'
@@ -29,6 +30,12 @@ end
 function ACTION.run(action_name, actor, sector, params)
   local spec = DB.loadSpec("action", action_name)
   local values = {}
+  for i,parameter in ipairs(spec.params) do
+    local paramspec = PAR[parameter.typename]
+    if not paramspec.isValid(sector, actor, params[paramspec.output]) then
+      return false
+    end
+  end
   actor:spendTime(spec.cost)
   for i,operation in ipairs(spec.operators) do
     local argvalues = {}
@@ -46,6 +53,7 @@ function ACTION.run(action_name, actor, sector, params)
     end
     FX[fx_name].process(actor, sector, argvalues)
   end
+  return true
 end
 
 return ACTION
