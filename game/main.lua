@@ -1,4 +1,7 @@
 
+-- set libs dir to path
+require 'libs'
+
 -- LUX portability
 require 'lux.portable'
 

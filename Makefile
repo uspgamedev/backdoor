@@ -1,10 +1,11 @@
 
 GAME_DIR=game
+LIBS_DIR=$(GAME_DIR)/libs
 
-LUX_LIB=$(GAME_DIR)/lux
+LUX_LIB=$(LIBS_DIR)/lux
 LUX_REPO=externals/luxproject
 
-STEAMING_LIB=$(GAME_DIR)/steaming
+STEAMING_LIB=$(LIBS_DIR)/steaming
 STEAMING_REPO=externals/STEAMING
 STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
 								 $(STEAMING_REPO)/clean_template/res_manager.lua \
@@ -16,12 +17,12 @@ IMGUI_LIB=imgui.so
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 
-CPML_LIB=$(GAME_DIR)/cpml
+CPML_LIB=$(LIBS_DIR)/cpml
 CPML_REPO=externals/cpml
 
-DKJSON_LIB=$(GAME_DIR)/dkjson.lua
+DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
-LUALZW_LIB=$(GAME_DIR)/lualzw
+LUALZW_LIB=$(LIBS_DIR)/lualzw
 LUALZW_REPO=externals/lualzw
 
 DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(LUALZW_LIB)
