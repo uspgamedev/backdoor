@@ -180,11 +180,16 @@ function Menu.finish()
 
   -- reset actions' states
   for k in pairs(_actions) do _actions[k] = false end
+  return _selection()
 end
 
 function Menu.flush (menu_view)
   while not _renderqueue.isEmpty() do
-    menu_view:push(_renderqueue.pop())
+    if menu_view then
+      menu_view:push(_renderqueue.pop())
+    else
+      _renderqueue.pop()
+    end
   end
 end
 
