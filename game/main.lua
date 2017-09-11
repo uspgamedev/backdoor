@@ -29,11 +29,14 @@ Setup     = require "setup"
 
 -- GAMESTATES
 GS = {
+  -- MENU GAMESTATES
   START_MENU = require "gamestates.start_menu", --The game main menu
-    PLAY = require "gamestates.play",     --Game Gamestate
-    USER_TURN = require "gamestates.user_turn", --User's turn
-    PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
-    CARD_SELECT = require "gamestates.card_select", --Player is selecting a card to use
+  CHARACTER_BUILD = require 'gamestates.character_build',
+  -- PLAYING GAMESTATES
+  PLAY = require "gamestates.play",     --Game Gamestate
+  USER_TURN = require "gamestates.user_turn", --User's turn
+  PICK_TARGET = require "gamestates.pick_target", --Player is choosing targets
+  CARD_SELECT = require "gamestates.card_select", --Player is selecting a card to use
 }
 
 -- GAMESTATE SWITCHER
@@ -49,23 +52,23 @@ local INPUT = require 'infra.input'
 
 function love.load(arg)
 
-    Setup.config() --Configure your game
+  Setup.config() --Configure your game
 
-    RUNFLAGS.init(arg)
+  RUNFLAGS.init(arg)
 
-    SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
+  SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
 
-    PROFILE.init() -- initializes save & load system
+  PROFILE.init() -- initializes save & load system
 
-    -- Setup support for multiple resolutions. Res.init() Must be called after
-    -- Gamestate.registerEvents() so it will properly call the draw function
-    -- applying translations.
-    Res.init()
+  -- Setup support for multiple resolutions. Res.init() Must be called after
+  -- Gamestate.registerEvents() so it will properly call the draw function
+  -- applying translations.
+  Res.init()
 
-    require 'tests'
+  require 'tests'
 
-    INPUT.init()
-    SWITCHER.start(GS.START_MENU) --Jump to the inicial state
+  INPUT.init()
+  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
 end
 
