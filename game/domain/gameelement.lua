@@ -33,7 +33,9 @@ function GameElement:saveState()
 end
 
 function GameElement:getSpec(key)
-  return DB.loadSpec(self.spectype, self.specname)[key]
+  local spec = DB.loadSpec(self.spectype, self.specname)
+  assert(spec, ("Spec %s/%s not found"):format(self.spectype, self.specname))
+  return spec[key]
 end
 
 return GameElement

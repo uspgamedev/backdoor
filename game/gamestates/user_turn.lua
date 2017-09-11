@@ -144,6 +144,10 @@ local function _interact()
   end
 end
 
+local function _newHand()
+  _next_action = {'NEW_HAND'}
+end
+
 local function _saveAndQuit()
   _save_and_quit = true
 end
@@ -172,6 +176,7 @@ end
 function _registerSignals()
   Signal.register("move", _move)
   Signal.register("confirm", _makeSignalHandler(_interact))
+  Signal.register("extra", _newHand)
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))

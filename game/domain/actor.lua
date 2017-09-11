@@ -8,6 +8,13 @@ local Actor = Class{
   __includes = { GameElement }
 }
 
+local BASE_ACTIONS = {
+  IDLE = true,
+  MOVE = true,
+  INTERACT = true,
+  NEW_HAND = true
+}
+
 function Actor:init(spec_name)
 
   GameElement.init(self, 'actor', spec_name)
@@ -16,21 +23,16 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = 10
-  self.actions = {
-    IDLE = true,
-    MOVE = true,
-    INTERACT = true,
-    PRIMARY = "SHOOT"
-  }
+  self.actions = setmetatable({ PRIMARY = "SHOOT" }, { __index = BASE_ACTIONS })
 
   self.hand = {}
-  self.hand_limit = 7
+  self.hand_limit = 5
 
 end
 
 function Actor:loadState(state)
   self.cooldown = state.cooldown
-  self.actions = state.actions
+  self.actions = setmetatable(state.actions, { __index = BASE_ACTIONS })
   self.body_id = state.body_id
   self:setId(state.id)
   self.hand_limit = state.hand_limit
@@ -113,6 +115,14 @@ function Actor:getHand()
   return self.hand
 end
 
+function Actor:isHandEmpty()
+  return #self.hand == 0
+end
+
+function Actor:getHandLimit()
+  return self.hand_limit
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
 end
@@ -167,10 +177,13 @@ function Actor:drawCard()
 
   --TODO: Change this so actor draws from his buffer
   local card
-  if RANDOM.generate() >.5 then
-    card = Card("dummy")
+  local roll = RANDOM.generate()
+  if roll > .5 then
+    card = Card("bolt")
+  elseif roll > .3 then
+    card = Card("cure")
   else
-    card = Card("dummy2")
+    card = Card("draw")
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)

@@ -36,6 +36,7 @@ local _enabled_actions = {
   CONFIRM = true,
   CANCEL = true,
   SPECIAL = true,
+  EXTRA = true,
   MENU = true,
   UP = true,
   RIGHT = true,
