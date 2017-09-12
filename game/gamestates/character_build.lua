@@ -20,28 +20,34 @@ local _schemas
 --LOCAL FUNCTIONS--
 
 local function _initSchemas()
-  local actors_schemas = DB.loadDomain("actor")
-  local body_schemas = DB.loadDomain("body")
+  local background_schemas = DB.loadDomain("background")
+  local species_schemas = DB.loadDomain("species")
   local schemas = {}
 
-  schemas.race = {}
+  schemas.species = {}
   schemas.background = {}
 
-  for bgname, actor in pairs(actors_schemas) do
-    if actor.behavior == "player" then
-      schemas.background[bgname] = actor
-    end
+  for bgname, specs in pairs(background_schemas) do
+    schemas.background[bgname] = {
+      specname = specs.actorspec,
+      description = specs.description,
+      stats = DB.loadSpec("actor", specs.actorspec),
+    }
   end
 
-  for racename, body in pairs(body_schemas) do
-    schemas.race[racename] = body
+  for speciesname, specs in pairs(species_schemas) do
+    schemas.species[speciesname] = {
+      specname = specs.bodyspec,
+      description = specs.description,
+      stats = DB.loadSpec("body", specs.bodyspec),
+    }
   end
 
   return schemas
 end
 
 local function _resetState()
-  _playerinfo.race = false
+  _playerinfo.species = false
   _playerinfo.background = false
   _current = _current == 1 and 0 or 1
   _view:flush()
@@ -56,7 +62,7 @@ function state:init()
     PRESS_LEFT    = MENU.prev,
     PRESS_RIGHT   = MENU.next,
   }
-  _contexts = {"Race", "Background", "Are you sure?"}
+  _contexts = {"Species", "Background", "Are you sure?"}
   _confirm = {"Yes", "No"}
   _schemas = _initSchemas()
   _view = CharaBuildView()
@@ -64,7 +70,7 @@ end
 
 function state:enter()
   _current = 1
-  _playerinfo = {bg = false, race = false}
+  _playerinfo = {bg = false, species = false}
 
   CONTROLS.setMap(_mapping)
 
@@ -94,11 +100,15 @@ function state:update(dt)
         end
       end
     else
-      for name, schema in pairs(_schemas[context_name:lower()]) do
-        _view:setItem(name, schema)
+      local field = context_name:lower()
+      for name, schema in pairs(_schemas[field]) do
+        -- name is Capitalized, specname isn't
+        _view:setItem(name,
+                      { desc = schema.description,
+                        stats = schema.stats })
         if MENU.item(name) then
           _view:save(context_name, name)
-          _playerinfo[context_name:lower()] = name
+          _playerinfo[field] = schema.specname
           _current = _current + 1
         end
       end

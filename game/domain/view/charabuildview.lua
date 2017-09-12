@@ -12,6 +12,7 @@ local FONT_SIZE = 24
 local WIDTH
 local HEIGHT
 local FONT
+local SMOL_FONT
 
 
 --MODULE--
@@ -25,7 +26,9 @@ local function _initGraphicValues()
   local g = love.graphics
   WIDTH, HEIGHT = g.getDimensions()
   FONT = g.newFont(FONT_SIZE)
+  SMOL_FONT = g.setNewFont(FONT_SIZE*0.75)
   FONT:setLineHeight(LH)
+  SMOL_FONT:setLineHeight(4*LH/5)
 end
 
 local function _renderSaved(g, saved)
@@ -56,10 +59,20 @@ local function _renderOptions(g, sel, width, render_queue)
     local name, data = unpack(render_queue.pop())
     count = count + 1
     if count == sel then
+      g.push()
       g.translate(-w/2, 0)
       g.polygon("fill", {0, h-PD/2, 0-PD/2, h, 0, h+PD/2})
       g.polygon("fill", {w, h-PD/2, w+PD/2, h, w, h+PD/2})
       g.printf(name, 0, 0, w, "center")
+      g.pop()
+      if data then
+        g.push()
+        g.translate(2*TILE_W, -FONT_SIZE*2)
+        g.setFont(SMOL_FONT)
+        g.printf(data.desc, 0, 0, 3*TILE_W, "left")
+        g.setFont(FONT)
+        g.pop()
+      end
     end
   end
 end
