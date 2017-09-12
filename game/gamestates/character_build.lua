@@ -21,15 +21,13 @@ local _schemas
 
 local function _initSchemas()
   local background_schemas = DB.loadDomain("background")
-  local race_schemas = DB.loadDomain("race")
+  local species_schemas = DB.loadDomain("species")
   local schemas = {}
 
-  schemas.race = {}
+  schemas.species = {}
   schemas.background = {}
 
-  print("BACKGROUNDS:")
   for bgname, specs in pairs(background_schemas) do
-    print(bgname)
     schemas.background[bgname] = {
       specname = specs.actorspec,
       description = specs.description,
@@ -37,10 +35,8 @@ local function _initSchemas()
     }
   end
 
-  print("RACES:")
-  for racename, specs in pairs(race_schemas) do
-    print(racename)
-    schemas.race[racename] = {
+  for speciesname, specs in pairs(species_schemas) do
+    schemas.species[speciesname] = {
       specname = specs.bodyspec,
       description = specs.description,
       stats = DB.loadSpec("body", specs.bodyspec),
@@ -51,7 +47,7 @@ local function _initSchemas()
 end
 
 local function _resetState()
-  _playerinfo.race = false
+  _playerinfo.species = false
   _playerinfo.background = false
   _current = _current == 1 and 0 or 1
   _view:flush()
@@ -66,7 +62,7 @@ function state:init()
     PRESS_LEFT    = MENU.prev,
     PRESS_RIGHT   = MENU.next,
   }
-  _contexts = {"Race", "Background", "Are you sure?"}
+  _contexts = {"Species", "Background", "Are you sure?"}
   _confirm = {"Yes", "No"}
   _schemas = _initSchemas()
   _view = CharaBuildView()
@@ -74,7 +70,7 @@ end
 
 function state:enter()
   _current = 1
-  _playerinfo = {bg = false, race = false}
+  _playerinfo = {bg = false, species = false}
 
   CONTROLS.setMap(_mapping)
 

@@ -11,13 +11,13 @@ local GUI = Class {
 }
 
 local DOMAINS = {
-  'body', 'actor', 'sector', 'card', 'action', 'race', 'background',
+  'body', 'actor', 'sector', 'card', 'action', 'species', 'background',
   body = "Body Type",
   actor = "Actor Type",
   sector = "Sector Type",
   card = "Card",
   action = "Action",
-  race = "Race",
+  species = "Species",
   background = "Background",
 }
 

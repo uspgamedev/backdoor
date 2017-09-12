@@ -54,10 +54,10 @@ function state:resume(from, player_info)
   if player_info then
     local route_data = PROFILE.newRoute(player_info)
 
-    local race, background
-    race = player_info.race
+    local species, background
+    species = player_info.species
     background = player_info.background
-    print(string.format("selected %s %s", race, background))
+    print(string.format("selected %s %s", species, background))
 
     SWITCHER.switch(GS.PLAY, route_data)
   else

@@ -23,10 +23,10 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
   }
 end
 
-local function _generatePlayerBodyData(idgenerator, race)
+local function _generatePlayerBodyData(idgenerator, species)
   return {
     id = idgenerator.newID(),
-    specname = race,
+    specname = species,
     damage = 0,
     i = 1,
     j = 3,
@@ -69,7 +69,7 @@ local function _generateSectorsData(idgenerator, player_info)
   }
 
   -- generate player
-  local player_body = _generatePlayerBodyData(idgenerator, player_info.race)
+  local player_body = _generatePlayerBodyData(idgenerator, player_info.species)
   local player_actor = _generatePlayerActorData(idgenerator,
                                                 player_body.id,
                                                 player_info.background)
