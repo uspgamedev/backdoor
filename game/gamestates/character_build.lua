@@ -20,26 +20,27 @@ local _schemas
 --LOCAL FUNCTIONS--
 
 local function _initSchemas()
-  local background_schemas = DB.loadDomain("background")
-  local species_schemas = DB.loadDomain("species")
+  local playables = DB.loadSetting("playable")
+  local background_schemas = playables.background
+  local species_schemas = playables.species
   local schemas = {}
 
   schemas.species = {}
   schemas.background = {}
 
-  for bgname, specs in pairs(background_schemas) do
-    local stats = DB.loadSpec("actor", specs.actorspec)
-    schemas.background[bgname] = {
-      specname = specs.actorspec,
+  for _,specname in pairs(background_schemas) do
+    local stats = DB.loadSpec("actor", specname)
+    schemas.background[specname] = {
+      specname = specname,
       description = stats.description,
       stats = stats,
     }
   end
 
-  for speciesname, specs in pairs(species_schemas) do
-    local stats = DB.loadSpec("body", specs.bodyspec)
-    schemas.species[speciesname] = {
-      specname = specs.bodyspec,
+  for _,specname in pairs(species_schemas) do
+    local stats = DB.loadSpec("body", specname)
+    schemas.species[specname] = {
+      specname = specname,
       description = stats.description,
       stats = stats,
     }
@@ -105,6 +106,7 @@ function state:update(dt)
       local field = context_name:lower()
       for name, schema in pairs(_schemas[field]) do
         -- name is Capitalized, specname isn't
+        name = name:sub(1,1):upper() .. name:sub(2)
         _view:setItem(name,
                       { desc = schema.description,
                         stats = schema.stats })
