@@ -54,7 +54,7 @@ local function _loadGroup(category, group_name)
     for k,spec in pairs(group) do
       setmetatable(spec, spec_meta)
     end
-    _dbcache[group_name] = group
+    _dbcache[category][group_name] = group
   end
   return group
 end
