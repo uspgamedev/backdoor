@@ -12,6 +12,7 @@ local state = {}
 local _mapping
 local _context
 local _current
+local _confirm
 local _playerinfo
 local _view
 local _schemas
@@ -39,6 +40,13 @@ local function _initSchemas()
   return schemas
 end
 
+local function _resetState()
+  _playerinfo.race = false
+  _playerinfo.background = false
+  _current = _current == 1 and 0 or 1
+  _view:flush()
+end
+
 --STATE FUNCTIONS--
 
 function state:init()
@@ -48,7 +56,8 @@ function state:init()
     PRESS_LEFT    = MENU.prev,
     PRESS_RIGHT   = MENU.next,
   }
-  _contexts = {"race", "background"}
+  _contexts = {"Race", "Background", "Are you sure?"}
+  _confirm = {"Yes", "No"}
   _schemas = _initSchemas()
   _view = CharaBuildView()
 end
@@ -64,6 +73,7 @@ end
 
 function state:leave()
   CONTROLS.setMap()
+  _view:flush()
   _view:destroy()
 end
 
@@ -71,19 +81,35 @@ function state:update(dt)
   local context_name = _contexts[_current]
   if MENU.begin(context_name) then
     _view:setContext(context_name)
-    for name, schema in pairs(_schemas[context_name]) do
-      _view:setItem(name, schema)
-      if MENU.item(name) then
-        _playerinfo[context_name] = name
-        _current = _current + 1
+    if context_name == "Are you sure?" then
+      for _,yn in ipairs(_confirm) do
+        _view:setItem(yn)
+        if MENU.item(yn) then
+          if yn == "Yes" then
+            _current = _current + 1
+            _view:flush()
+          elseif yn == "No" then
+            _resetState()
+          end
+        end
+      end
+    else
+      for name, schema in pairs(_schemas[context_name:lower()]) do
+        _view:setItem(name, schema)
+        if MENU.item(name) then
+          _view:save(context_name, name)
+          _playerinfo[context_name:lower()] = name
+          _current = _current + 1
+        end
       end
     end
   else
-    SWITCHER.pop()
+    _resetState()
   end
   _view:select(MENU.finish())
   MENU.flush()
-  if _current > 2 then SWITCHER.pop(_playerinfo) end
+  if _current == 0 then SWITCHER.pop() end
+  if _current > 3 then SWITCHER.pop(_playerinfo) end
 end
 
 function state:draw()
