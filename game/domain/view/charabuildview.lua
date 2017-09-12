@@ -26,6 +26,35 @@ local function _initGraphicValues()
   FONT:setLineHeight(LH)
 end
 
+local function _renderSaved(g, saved)
+  g.push()
+  for _,data in ipairs(saved) do
+    local context, name = unpack(data)
+    g.push()
+    g.translate(WIDTH/2 + 160, 0)
+    g.printf(("%s: %s"):format(context, name), 0, 0, WIDTH/4, "left")
+    g.pop()
+    g.translate(0, FONT_SIZE*LH)
+  end
+  g.pop()
+end
+
+local function _renderOptions(g, sel, width, render_queue)
+  local w = width + 2*PD
+  local h = FONT:getHeight()/2
+  local count = 0
+  while not render_queue.isEmpty() do
+    local name, data = unpack(render_queue.pop())
+    count = count + 1
+    if count == sel then
+      g.translate(WIDTH/2 - w/2, 0)
+      g.polygon("fill", {0, h-PD/2, 0-PD/2, h, 0, h+PD/2})
+      g.polygon("fill", {w, h-PD/2, w+PD/2, h, w, h+PD/2})
+      g.printf(name, 0, 0, w, "center")
+    end
+  end
+end
+
 
 --VIEW METHODS--
 function CharaBuildView:init()
@@ -67,45 +96,27 @@ end
 
 function CharaBuildView:draw()
   if not self.context then return end
-  local render_queue = self.render_queue
   local g = love.graphics
-  local count = 0
-  local w = self.width + 2*PD
-  local h = FONT:getHeight()/2
+  local render_queue = self.render_queue
 
   g.push()
+
+  -- reset rendering modifiers
   g.setFont(FONT)
   g.setColor(COLORS.NEUTRAL)
   g.translate(0, HEIGHT/2)
 
   -- saved data
-  g.push()
-  for _,data in ipairs(self.saved) do
-    local context, name = unpack(data)
-    g.push()
-    g.translate(WIDTH/2 + 160, 0)
-    g.printf(("%s: %s"):format(context, name), 0, 0, WIDTH/4, "left")
-    g.pop()
-    g.translate(0, 3*h)
-  end
-  g.pop()
+  _renderSaved(g, self.saved)
 
   -- context name
   g.translate(0, 160)
   g.printf(("%s"):format(self.context), 0, 0, WIDTH, "center")
-  g.translate(0, 3*h)
+  g.translate(0, FONT_SIZE*2)
 
   -- options
-  while not render_queue.isEmpty() do
-    local name, data = unpack(render_queue.pop())
-    count = count + 1
-    if count == self.selection then
-      g.translate(WIDTH/2 - w/2, 0)
-      g.polygon("fill", {0, h-PD/2, 0-PD/2, h, 0, h+PD/2})
-      g.polygon("fill", {w, h-PD/2, w+PD/2, h, w, h+PD/2})
-      g.printf(name, 0, 0, w, "center")
-    end
-  end
+  _renderOptions(g, self.selection, self.width, render_queue)
+
   g.pop()
 
   -- reset width
