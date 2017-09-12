@@ -98,8 +98,6 @@ end
 
 function CharaBuildView:flush()
   for k,v in ipairs(self.saved) do self.saved[k] = nil end
-  self.render_queue.popAll()
-  self.context = false
 end
 
 function CharaBuildView:setContext(context_name)
