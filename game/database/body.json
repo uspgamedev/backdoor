@@ -2,7 +2,16 @@
   "slime":{
     "hp":8
   },
+  "Strong Boi":{
+    "hp":16
+  },
   "hearthborn":{
     "hp":12
+  },
+  "Long Boi":{
+    "hp":12
+  },
+  "Smol boi":{
+    "hp":9
   }
 }
