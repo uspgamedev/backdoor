@@ -61,7 +61,6 @@ function state:resume(from, player_info)
 
     SWITCHER.switch(GS.PLAY, route_data)
   else
-    _menu_view:addElement("HUD", nil, "menu_view")
     _menu_context = "START_MENU"
     CONTROLS.setMap(_mapping)
   end
@@ -71,7 +70,6 @@ function state:update(dt)
   if MENU.begin(_menu_context, 80*4, _height / 2, 3, 160) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
-        _menu_view:destroy()
         SWITCHER.push(GS.CHARACTER_BUILD)
       end
       if MENU.item("Load route") then
