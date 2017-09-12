@@ -5,14 +5,17 @@ local SCHEMA = require 'lux.pack' 'database.schema'
 
 local DB = {}
 
-local domains = {}
+local _dbcache = {
+  domains = {},
+  settings = {},
+}
 
 local spec_meta = {}
 
 function spec_meta:__index(key)
   local extends = rawget(self, "extends")
   if extends then
-    return domains[extends][key]
+    return _dbcache.domains[extends][key]
   end
 end
 
@@ -52,21 +55,25 @@ function DB.schemaFor(domain_name)
   end
 end
 
-function DB.loadDomain(domain_name)
-  local domain = domains[domain_name] if not domain then
+function DB.loadGroup(category, group_name)
+  local group = _dbcache[category][group_name] if not group then
     -- FIXME: hardcoded base path
-    local filepath = ("game/database/%s.json"):format(domain_name)
+    local filepath = ("game/database/%s/%s.json"):format(category, group_name)
     local file = assert(io.open(filepath, 'r'))
     local _, err
-    domain, _, err = json.decode(file:read('*a'))
+    group, _, err = json.decode(file:read('*a'))
     file:close()
-    assert(domain, err)
-    for k,spec in pairs(domain) do
+    assert(group, err)
+    for k,spec in pairs(group) do
       setmetatable(spec, spec_meta)
     end
-    domains[domain_name] = domain
+    _dbcache[group_name] = group
   end
-  return domain
+  return group
+end
+
+function DB.loadDomain(domain_name)
+  return DB.loadGroup("domains", domain_name)
 end
 
 function DB.loadSpec(domain_name, spec_name)
@@ -74,8 +81,8 @@ function DB.loadSpec(domain_name, spec_name)
 end
 
 function DB.save()
-  for name,domain in pairs(domains) do
-    local filepath = ("game/database/%s.json"):format(name)
+  for name,domain in pairs(_dbcache.domains) do
+    local filepath = ("game/database/domains/%s.json"):format(name)
     local file = assert(io.open(filepath, 'w'))
     local data = json.encode(domain, { indent = true })
     file:write(data)
