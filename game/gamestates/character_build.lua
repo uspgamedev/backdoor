@@ -28,18 +28,20 @@ local function _initSchemas()
   schemas.background = {}
 
   for bgname, specs in pairs(background_schemas) do
+    local stats = DB.loadSpec("actor", specs.actorspec)
     schemas.background[bgname] = {
       specname = specs.actorspec,
-      description = specs.description,
-      stats = DB.loadSpec("actor", specs.actorspec),
+      description = stats.description,
+      stats = stats,
     }
   end
 
   for speciesname, specs in pairs(species_schemas) do
+    local stats = DB.loadSpec("body", specs.bodyspec)
     schemas.species[speciesname] = {
       specname = specs.bodyspec,
-      description = specs.description,
-      stats = DB.loadSpec("body", specs.bodyspec),
+      description = stats.description,
+      stats = stats,
     }
   end
 

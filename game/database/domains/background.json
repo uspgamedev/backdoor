@@ -1,14 +1,11 @@
 {
   "Caster":{
-    "actorspec":"Caster",
-    "description":"You like the mystic ways of the world. A spellcaster by nature."
+    "actorspec":"Caster"
   },
   "Bonehead":{
-    "actorspec":"Bonehead",
-    "description":"A bone-headed person. You are stoopid, but hella strong."
+    "actorspec":"Bonehead"
   },
   "Nerd":{
-    "actorspec":"Nerd",
-    "description":"A huge nerd. You like trinkets and such."
+    "actorspec":"Nerd"
   }
 }

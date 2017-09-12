@@ -42,20 +42,7 @@ function _subschemaFor(base, branch)
   return _loadSubschema(base)[branch]
 end
 
-function DB.subschemaTypes(base)
-  return ipairs(_loadSubschema(base))
-end
-
-function DB.schemaFor(domain_name)
-  local base, branch = domain_name:match('^(.+)/(.+)$')
-  if base and branch then
-    return ipairs(_subschemaFor(base, branch))
-  else
-    return ipairs(SCHEMA[domain_name])
-  end
-end
-
-function DB.loadGroup(category, group_name)
+local function _loadGroup(category, group_name)
   local group = _dbcache[category][group_name] if not group then
     -- FIXME: hardcoded base path
     local filepath = ("game/database/%s/%s.json"):format(category, group_name)
@@ -72,12 +59,29 @@ function DB.loadGroup(category, group_name)
   return group
 end
 
+function DB.subschemaTypes(base)
+  return ipairs(_loadSubschema(base))
+end
+
+function DB.schemaFor(domain_name)
+  local base, branch = domain_name:match('^(.+)/(.+)$')
+  if base and branch then
+    return ipairs(_subschemaFor(base, branch))
+  else
+    return ipairs(SCHEMA[domain_name])
+  end
+end
+
 function DB.loadDomain(domain_name)
-  return DB.loadGroup("domains", domain_name)
+  return _loadGroup("domains", domain_name)
 end
 
 function DB.loadSpec(domain_name, spec_name)
   return DB.loadDomain(domain_name)[spec_name]
+end
+
+function DB.loadSetting(setting_name)
+  return _loadGroup("settings", setting_name)
 end
 
 function DB.save()
