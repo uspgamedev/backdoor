@@ -20,21 +20,31 @@ local _schemas
 --LOCAL FUNCTIONS--
 
 local function _initSchemas()
-  local actors_schemas = DB.loadDomain("actor")
-  local body_schemas = DB.loadDomain("body")
+  local background_schemas = DB.loadDomain("background")
+  local race_schemas = DB.loadDomain("race")
   local schemas = {}
 
   schemas.race = {}
   schemas.background = {}
 
-  for bgname, actor in pairs(actors_schemas) do
-    if actor.behavior == "player" then
-      schemas.background[bgname] = actor
-    end
+  print("BACKGROUNDS:")
+  for bgname, specs in pairs(background_schemas) do
+    print(bgname)
+    schemas.background[bgname] = {
+      specname = specs.actorspec,
+      description = specs.description,
+      stats = DB.loadSpec("actor", specs.actorspec),
+    }
   end
 
-  for racename, body in pairs(body_schemas) do
-    schemas.race[racename] = body
+  print("RACES:")
+  for racename, specs in pairs(race_schemas) do
+    print(racename)
+    schemas.race[racename] = {
+      specname = specs.bodyspec,
+      description = specs.description,
+      stats = DB.loadSpec("body", specs.bodyspec),
+    }
   end
 
   return schemas
@@ -94,11 +104,15 @@ function state:update(dt)
         end
       end
     else
-      for name, schema in pairs(_schemas[context_name:lower()]) do
-        _view:setItem(name, schema)
+      local field = context_name:lower()
+      for name, schema in pairs(_schemas[field]) do
+        -- name is Capitalized, specname isn't
+        _view:setItem(name,
+                      { desc = schema.description,
+                        stats = schema.stats })
         if MENU.item(name) then
           _view:save(context_name, name)
-          _playerinfo[context_name:lower()] = name
+          _playerinfo[field] = schema.specname
           _current = _current + 1
         end
       end
