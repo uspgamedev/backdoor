@@ -4,6 +4,8 @@ local COLORS = require 'domain.definitions.colors'
 
 
 --CONSTANTS--
+local TILE_W = 80
+local TILE_H = 80
 local PD = 16
 local LH = 1.5
 local FONT_SIZE = 24
@@ -28,15 +30,22 @@ end
 
 local function _renderSaved(g, saved)
   g.push()
+  g.translate(2*TILE_W, TILE_H/2)
   for _,data in ipairs(saved) do
     local context, name = unpack(data)
     g.push()
-    g.translate(WIDTH/2 + 160, 0)
     g.printf(("%s: %s"):format(context, name), 0, 0, WIDTH/4, "left")
     g.pop()
     g.translate(0, FONT_SIZE*LH)
   end
   g.pop()
+end
+
+local function _renderContext(g, context_name)
+  local w = FONT:getWidth(context_name)
+  g.translate(0, 160)
+  g.printf(context_name, -w/2, 0, w, "center")
+  g.translate(0, FONT_SIZE*2)
 end
 
 local function _renderOptions(g, sel, width, render_queue)
@@ -47,12 +56,24 @@ local function _renderOptions(g, sel, width, render_queue)
     local name, data = unpack(render_queue.pop())
     count = count + 1
     if count == sel then
-      g.translate(WIDTH/2 - w/2, 0)
+      g.translate(-w/2, 0)
       g.polygon("fill", {0, h-PD/2, 0-PD/2, h, 0, h+PD/2})
       g.polygon("fill", {w, h-PD/2, w+PD/2, h, w, h+PD/2})
       g.printf(name, 0, 0, w, "center")
     end
   end
+end
+
+local function _renderPreview(g)
+  g.push()
+  g.translate(0, TILE_H)
+  g.scale(TILE_W, TILE_H)
+  g.setColor(200, 100, 100)
+  g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
+  g.setColor(90, 140, 140)
+  g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
+  g.setColor(COLORS.NEUTRAL)
+  g.pop()
 end
 
 
@@ -99,20 +120,21 @@ function CharaBuildView:draw()
   local g = love.graphics
   local render_queue = self.render_queue
 
-  g.push()
-
   -- reset rendering modifiers
   g.setFont(FONT)
   g.setColor(COLORS.NEUTRAL)
-  g.translate(0, HEIGHT/2)
+
+  g.push()
+  g.translate(WIDTH/2, HEIGHT/2 - TILE_H)
 
   -- saved data
   _renderSaved(g, self.saved)
 
+  -- preview
+  _renderPreview(g)
+
   -- context name
-  g.translate(0, 160)
-  g.printf(("%s"):format(self.context), 0, 0, WIDTH, "center")
-  g.translate(0, FONT_SIZE*2)
+  _renderContext(g, self.context)
 
   -- options
   _renderOptions(g, self.selection, self.width, render_queue)
