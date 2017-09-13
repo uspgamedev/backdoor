@@ -20,33 +20,48 @@ return function(domain_name, title)
     add(list, name)
   end
   sort(list)
+
   local function delete()
     domain[list[selected]] = nil
     table.remove(list, selected)
     list.n = list.n - 1
   end
 
+  local function newvalue(value, spec)
+    local new = spec or {}
+    for _,key in DB.schemaFor(domain_name) do
+      if key.type == 'list' then
+        new[key.id] = new[key.id] or {}
+      end
+    end
+    domain[value] = new
+    add(list, value)
+    sort(list)
+    for i,v in ipairs(list) do
+      if v == value then
+        selected = i
+      end
+    end
+  end
+
+  local function rename(value)
+    local spec = domain[list[selected]]
+    if spec then
+      delete()
+      newvalue(value, spec)
+    end
+  end
+
   return title .. " List", 1, function(self)
     if IMGUI.Button("New "..title) then
-      self:push('name_input', title,
-        function (value)
-          local new = {}
-          for _,key in DB.schemaFor(domain_name) do
-            if key.type == 'list' then
-              new[key.id] = {}
-            end
-          end
-          domain[value] = new
-          add(list, value)
-          sort(list)
-        end)
+      self:push('name_input', title, newvalue)
     end
     IMGUI.Text(("All %ss:"):format(title))
     local changed
     changed, selected = IMGUI.ListBox("", selected, list, list.n, 5)
     if changed then
       self:push('specification_editor', domain[list[selected]], domain_name,
-                title, delete)
+                title, delete, rename)
     end
   end
 

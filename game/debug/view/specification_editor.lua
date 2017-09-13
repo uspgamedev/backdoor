@@ -3,7 +3,7 @@ local IMGUI = require 'imgui'
 local DB    = require 'database'
 local INPUT = require 'debug.view.input'
 
-return function(spec, domain_name, title, delete, parent)
+return function(spec, domain_name, title, delete, rename, parent)
 
   local inputs = {}
   for _,key in DB.schemaFor(domain_name) do
@@ -16,6 +16,10 @@ return function(spec, domain_name, title, delete, parent)
     end
     IMGUI.Spacing()
     IMGUI.Indent(360)
+    if rename and IMGUI.Button("Rename") then
+      self:push('name_input', title, rename)
+      IMGUI.SameLine()
+    end
     if IMGUI.Button("Delete") then
       delete()
       return true
