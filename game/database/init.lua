@@ -10,13 +10,15 @@ local _dbcache = {
   settings = {},
 }
 
-local spec_meta = {}
-
-function spec_meta:__index(key)
-  local extends = rawget(self, "extends")
-  if extends then
-    return _dbcache.domains[extends][key]
-  end
+local function _metaSpec(domain_name)
+  return {
+    __index = function(self, key)
+      local extends = rawget(self, "extends")
+      if extends then
+        return DB.loadSpec(domain_name, extends)[key]
+      end
+    end
+  }
 end
 
 local subschemas = {}
@@ -52,11 +54,15 @@ local function _loadGroup(category, group_name)
     file:close()
     assert(group, err)
     for k,spec in pairs(group) do
-      setmetatable(spec, spec_meta)
+      DB.initSpec(spec, group_name)
     end
     _dbcache[category][group_name] = group
   end
   return group
+end
+
+function DB.initSpec(spec, domain_name)
+  return setmetatable(spec, _metaSpec(domain_name))
 end
 
 function DB.subschemaTypes(base)

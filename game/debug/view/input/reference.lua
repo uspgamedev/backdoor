@@ -67,11 +67,13 @@ inputs['value'] = function(spec, key, parent)
       end
     else
       if key.match == "integer" then
-        value = inputInt(value, key.name, key.range)
+        changed, value = inputInt(value, key.name, key.range)
       elseif key.match == 'string' then
-        value = inputStr(value, key.name)
+        changed, value = inputStr(value, key.name)
       end
-      spec[key.id] = value
+      if changed then
+        spec[key.id] = value
+      end
     end
 
     if key.match == 'integer' or key.match == 'string' then

@@ -28,7 +28,7 @@ return function(domain_name, title)
   end
 
   local function newvalue(value, spec)
-    local new = spec or {}
+    local new = spec or DB.initSpec({}, domain_name)
     for _,key in DB.schemaFor(domain_name) do
       if key.type == 'list' then
         new[key.id] = new[key.id] or {}
