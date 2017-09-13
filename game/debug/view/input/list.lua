@@ -1,6 +1,9 @@
 
 local IMGUI = require 'imgui'
 local DB = require 'database'
+local IDGenerator = require 'common.idgenerator'
+
+local _idgen = IDGenerator()
 
 local inputs = {}
 
@@ -39,7 +42,14 @@ function inputs.list(spec, key)
         'list_picker', key.name, typeoptions,
         function (value)
           if value then
-            table.insert(list, { typename = typeoptions[value] })
+            local new = { typename = typeoptions[value] }
+            local schema = require('domain.'..key.id..'.'..new.typename).schema
+            for _,subkey in ipairs(schema) do
+              if subkey.type == 'output' then
+                new[subkey.id] = 'label'.._idgen.newID()
+              end
+            end
+            table.insert(list, new)
             return true
           end
           return 0
