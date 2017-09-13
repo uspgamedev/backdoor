@@ -1,6 +1,7 @@
 
 return {
-  { id = 'extends', name = "Prototype", type = "enum", options = 'actor' },
+  { id = 'extends', name = "Prototype", type = "enum", options = 'actor',
+    optional = true },
   { id = 'behavior', name = "Behavior", type = "enum",
     options = {'player','random_walk'} },
   { id = 'ath', name = "ATH", type = "integer", range={0} },

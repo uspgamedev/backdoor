@@ -7,7 +7,7 @@ local _inputs = {}
 
 function _inputs.section(spec, key)
 
-  local schema = require('domain.' .. key.schema).schema
+  local schema = key.schema or require('domain.' .. key.schema).schema
   local backup = {}
 
   return function(self)
