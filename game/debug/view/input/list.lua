@@ -34,7 +34,8 @@ function inputs.list(spec, key)
       if IMGUI.Selectable(view, selected == i) then
         selected = i
         self:push('specification_editor', element,
-                  key.id .. '/' .. element.typename, key.name, delete, spec)
+                  key.id .. '/' .. element.typename, key.name, delete, nil,
+                  spec)
       end
     end
     if IMGUI.Button("New " .. key.name) then
