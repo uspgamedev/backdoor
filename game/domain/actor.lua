@@ -28,6 +28,11 @@ function Actor:init(spec_name)
   self.hand = {}
   self.hand_limit = 5
 
+  self.buffers = {}
+  for i=1,3 do
+    self.buffers[i] = {{},{}, current = 1}
+  end
+
 end
 
 function Actor:loadState(state)
@@ -41,6 +46,15 @@ function Actor:loadState(state)
     local card = Card(card_state.specname)
     card:loadState(card_state)
     table.insert(self.hand, card)
+  end
+  self.buffers = {}
+  for i=1,3 do
+    local buffer_state = state.buffers[i]
+    local buffer = {}
+    for j,card_name in ipairs(state.buffers[i]) do
+      buffer[j] = card_name
+    end
+    self.buffers[i] = buffer
   end
 end
 
@@ -56,6 +70,15 @@ function Actor:saveState()
   for _,card in ipairs(self.hand) do
     local card_state = card:saveState()
     table.insert(state.hand, card_state)
+  end
+  state.buffers = {}
+  for i=1,3 do
+    local buffer = self.buffers[i]
+    local buffer_state = {}
+    for k,card_name in ipairs(self.buffers[i]) do
+      buffer_state[k] = card_name
+    end
+    state.buffers[i] = buffer_state
   end
   return state
 end
@@ -157,9 +180,9 @@ function Actor:makeAction(sector)
           action = action_slot
         end
       else
-        action = check
-      end
-      if self:isCard(action_slot) then
+            action = check
+          end
+          if self:isCard(action_slot) then
         table.remove(self.hand, action_slot)
       end
       if action then

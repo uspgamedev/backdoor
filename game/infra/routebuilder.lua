@@ -1,10 +1,23 @@
 
-local SCHEMATICS = require 'domain.definitions.schematics'
-local COLORS = require 'domain.definitions.colors'
-local RANDOM = require 'common.random'
+local DEFS        = require 'domain.definitions'
+local SCHEMATICS  = require 'domain.definitions.schematics'
+local COLORS      = require 'domain.definitions.colors'
+local RANDOM      = require 'common.random'
 local IDGenerator = require 'common.idgenerator'
 
 local ROUTEBUILDER = {}
+
+local function _simpleBuffer()
+  local buffer = {}
+  for i=1,4 do
+    table.insert(buffer, 'bolt')
+    table.insert(buffer, 'cure')
+    table.insert(buffer, 'draw')
+  end
+  RANDOM.shuffle(buffer)
+  table.insert(buffer, DEFS.DONE)
+  return buffer
+end
 
 local function _generatePlayerActorData(idgenerator, body_id, background)
   -- FIXME: ALL PLAYER BACKGROUNDS HAVE THE SAME ACTIONS
@@ -17,6 +30,11 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     actions = {
       PRIMARY = "DOUBLESHOOT",
       WIDGET_A = "HEAL",
+    },
+    buffers = {
+      _simpleBuffer(),
+      _simpleBuffer(),
+      _simpleBuffer(),
     },
     hand_limit = 5,
     hand = {}
