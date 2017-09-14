@@ -1,14 +1,14 @@
 {
   "slime":{
-    "hp":8,
-    "description":""
+    "description":"",
+    "hp":8
   },
   "Strong Boi":{
-    "hp":16,
-    "description":"Sturdier than a human. You are not human."
+    "description":"Sturdier than a human. You are not human.",
+    "hp":16
   },
   "hearthborn":{
-    "hp":12,
-    "description":"A generic human. Pretty standard, nothing special."
+    "description":"A generic human. Pretty standard, nothing special.",
+    "hp":12
   }
 }

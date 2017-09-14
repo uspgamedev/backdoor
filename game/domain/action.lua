@@ -9,7 +9,7 @@ local GameElement = require 'domain.gameelement'
 
 local function unref(params, values, ref)
   if type(ref) == 'string' then
-    local t,n = ref:match '(%w+):(%w+)'
+    local t,n = ref:match '(%w+):(.+)'
     if t and n then
       if t == 'par' then
         return params[n]

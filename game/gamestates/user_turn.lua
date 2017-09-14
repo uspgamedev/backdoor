@@ -22,6 +22,8 @@ local _save_and_quit
 local _exit_sector
 local _lock
 
+local PARAMETER_STATES
+
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
   PRESS_DOWN = {"move", "down"},
@@ -112,6 +114,15 @@ local function _useAction(action_slot)
       else
         return false
       end
+    elseif param.typename == 'choose_buffer' then
+      _lockState()
+      SWITCHER.push(GS.PICK_BUFFER, _route.getControlledActor())
+      local args = coroutine.yield(_task)
+      if args.picked_buffer then
+        params[param.output] = args.picked_buffer
+      else
+        return false
+      end
     end
   end
   _next_action = {action_slot, params}
@@ -145,7 +156,9 @@ local function _interact()
 end
 
 local function _newHand()
-  _next_action = {'NEW_HAND'}
+  if _route.getControlledActor():isHandEmpty() then
+    _useAction('NEW_HAND')
+  end
 end
 
 local function _saveAndQuit()
@@ -176,7 +189,7 @@ end
 function _registerSignals()
   Signal.register("move", _move)
   Signal.register("confirm", _makeSignalHandler(_interact))
-  Signal.register("extra", _newHand)
+  Signal.register("extra", _makeSignalHandler(_newHand))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
@@ -201,6 +214,11 @@ function state:init()
       Signal.emit(unpack(signal_pack))
     end
   end
+
+  PARAMETER_STATES = {
+    [GS.PICK_TARGET] = true,
+    [GS.PICK_BUFFER] = true,
+  }
 
 end
 
@@ -230,7 +248,7 @@ end
 
 function state:resume(state, args)
   _unlockState()
-  if state == GS.PICK_TARGET then
+  if PARAMETER_STATES[state] then
 
     _resumeTask(args)
 

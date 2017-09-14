@@ -1,30 +1,30 @@
 {
-  "Bonehead":{
-    "behavior":"player",
-    "arc":0,
-    "ath":2,
-    "mec":1,
-    "description":"A bone-headed person. You are stoopid, but hella strong."
-  },
-  "Nerd":{
-    "behavior":"player",
-    "arc":1,
-    "ath":0,
-    "mec":2,
-    "description":"A huge nerd. You like trinkets and such."
-  },
-  "Caster":{
-    "behavior":"player",
-    "arc":3,
-    "ath":0,
-    "mec":0,
-    "description":"You like the mystic ways of the world. A spellcaster by nature."
-  },
   "dumb":{
     "arc":0,
-    "behavior":"random_walk",
     "ath":0,
-    "mec":0,
-    "description":"Oh honey..."
+    "behavior":"random_walk",
+    "description":"Oh honey...",
+    "mec":0
+  },
+  "Caster":{
+    "arc":3,
+    "ath":0,
+    "behavior":"player",
+    "description":"You like the mystic ways of the world. A spellcaster by nature.",
+    "mec":0
+  },
+  "Bonehead":{
+    "arc":0,
+    "ath":2,
+    "behavior":"player",
+    "description":"A bone-headed person. You are stoopid, but hella strong.",
+    "mec":1
+  },
+  "Nerd":{
+    "arc":1,
+    "ath":0,
+    "behavior":"player",
+    "description":"A huge nerd. You like trinkets and such.",
+    "mec":2
   }
 }
