@@ -9,6 +9,10 @@ local card_view = {
   h = 200,
 }
 
+local _ACTION_TYPES = {
+  'use', 'remember', 'consume'
+}
+
 --HandView Class--
 
 local HandView = Class{
@@ -22,6 +26,7 @@ function HandView:init(route)
   ELEMENT.init(self)
 
   self.focus_index = -1 --What card is focused. -1 if none
+  self.action_type = -1
   self.x, self.y = 100, O_WIN_H - 30
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
@@ -29,14 +34,71 @@ function HandView:init(route)
 
 end
 
+function HandView:getFocus()
+  return self.focus_index
+end  
+
+function HandView:moveFocus(dir)
+  if dir == "left" then
+    self.focus_index = math.max(1, self.focus_index - 1)
+  elseif dir == "right" then
+    self.focus_index = math.min(#self.hand, self.focus_index + 1)
+  end
+end
+
+function HandView:getActionType()
+  return _ACTION_TYPES[self.action_type]
+end  
+
+function HandView:changeActionType(dir)
+  if dir == 'up' then
+    self.action_type = (self.action_type - 2)%3 + 1
+  elseif dir == 'down' then
+    self.action_type = self.action_type%3 + 1
+  else
+    error(("Unknown dir %s"):format(dir))
+  end
+end
+
+function HandView:activate()
+  self.focus_index = 1
+  self.action_type = 1
+  if self.timers["start"] then
+    MAIN_TIMER:cancel(self.timers["start"])
+  end
+  if self.timers["end"] then
+    MAIN_TIMER:cancel(self.timers["end"])
+  end
+  self.timers["start"] = MAIN_TIMER:tween(0.2, self,
+                                           { y = self.initial_y - 200 },
+                                           'out-cubic')
+end
+
+function HandView:deactivate()
+  self.focus_index = -1
+  self.action_type = -1
+  if self.timers["start"] then
+    MAIN_TIMER:cancel(self.timers["start"])
+  end
+  if self.timers["end"] then
+    MAIN_TIMER:cancel(self.timers["end"])
+  end
+  self.timers["end"] = MAIN_TIMER:tween(0.2, self,
+                                         {y = self.initial_y},
+                                         'out-cubic')
+end
+
 function HandView:draw()
   local x, y = self.x, self.y
   local gap = 150
+  local g = love.graphics
   for i, card in ipairs(self.hand) do
     drawCard(card, x, y, i == self.focus_index)
+    if i == self.focus_index then
+      g.print(self:getActionType(), x, y - 32)
+    end
     x = x + gap
   end
-
 end
 
 function HandView:addCard(actor, card)
@@ -69,22 +131,23 @@ end
 
 --Draw a card starting its upper left corner on given x,y values
 function drawCard(card, x, y, focused)
+  local g = love.graphics
   --Draw card background
   if focused then
-    love.graphics.setColor(244, 164, 66)
+    g.setColor(244, 164, 66)
   else
-    love.graphics.setColor(66, 134, 244)
+    g.setColor(66, 134, 244)
   end
-  love.graphics.rectangle("fill", x, y, card_view.w, card_view.h)
-  love.graphics.setColor(0,0,0)
-  local old_line_w = love.graphics.getLineWidth()
-  love.graphics.setLineWidth(3)
-  love.graphics.rectangle("line", x, y, card_view.w, card_view.h)
-  love.graphics.setLineWidth(old_line_w)
+  g.rectangle("fill", x, y, card_view.w, card_view.h)
+  g.setColor(0,0,0)
+  local old_line_w = g.getLineWidth()
+  g.setLineWidth(3)
+  g.rectangle("line", x, y, card_view.w, card_view.h)
+  g.setLineWidth(old_line_w)
 
   --Draw card info
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.print(card:getName(), x + 5, y + 5)
+  g.setColor(0, 0, 0)
+  g.print(card:getName(), x + 5, y + 5)
 
 end
 

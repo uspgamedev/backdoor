@@ -12,17 +12,14 @@ local _hand_view
 
 local _task
 
-local _timer_handles = {}
-
-local _hand_size
-local _focus_index
-
 local _mapped_signals
 local _previous_control_map
 
 local SIGNALS = {
   PRESS_RIGHT = {"move_focus", "right"},
   PRESS_LEFT = {"move_focus", "left"},
+  PRESS_UP = {"change_action_type", "up"},
+  PRESS_DOWN = {"change_action_type", "down"},
   PRESS_CONFIRM = {"confirm"},
   PRESS_CANCEL = {"cancel"},
   PRESS_SPECIAL = {"cancel"},
@@ -36,21 +33,19 @@ local _registerSignals
 
 --LOCAL FUNCTIONS--
 
-local function _move_focus(dir)
-  if dir == "left" then
-    _focus_index = math.max(1, _focus_index - 1)
-  elseif dir == "right" then
-    _focus_index = math.min(_hand_size, _focus_index + 1)
-  end
-
-  _hand_view.focus_index = _focus_index
-
+local function _moveFocus(dir)
+  _hand_view:moveFocus(dir)
 end
 
-local function _confirm_card()
+local function _changeActionType(dir)
+  _hand_view:changeActionType(dir)
+end
+
+local function _confirmCard()
   local args = {
     chose_a_card = true,
-    card_index = _focus_index,
+    action_type = _hand_view:getActionType(),
+    card_index = _hand_view:getFocus(),
   }
   SWITCHER.pop(args)
 end
@@ -62,27 +57,11 @@ local function _cancel()
   SWITCHER.pop(args)
 end
 
-local function _resumeTask(...)
-  if _task then
-    local _
-    _, _task = assert(coroutine.resume(_task, ...))
-  end
-end
-
-local function _makeSignalHandler(callback)
-  return function (...)
-    local controlled_actor = _route.getControlledActor()
-    if controlled_actor then
-      _task = coroutine.create(callback)
-      return _resumeTask(...)
-    end
-  end
-end
-
 function _registerSignals()
-  Signal.register("move_focus", _makeSignalHandler(_move_focus))
-  Signal.register("confirm", _makeSignalHandler(_confirm_card))
-  Signal.register("cancel", _makeSignalHandler(_cancel))
+  Signal.register("move_focus", _moveFocus)
+  Signal.register("change_action_type", _changeActionType)
+  Signal.register("confirm", _confirmCard)
+  Signal.register("cancel", _cancel)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -109,19 +88,7 @@ function state:enter(_, route, hand_view)
   _route = route
   _hand_view = hand_view
 
-  _focus_index = 1
-  _hand_size = #_hand_view.hand
-  _hand_view.focus_index = 1
-
-  if _timer_handles["start"] then
-    MAIN_TIMER:cancel(_timer_handles["start"])
-  end
-  if _timer_handles["end"] then
-    MAIN_TIMER:cancel(_timer_handles["end"])
-  end
-  _timer_handles["start"] = MAIN_TIMER:tween(0.2, _hand_view,
-                                             { y = _hand_view.initial_y - 200 },
-                                             'out-cubic')
+  _hand_view:activate()
 
   _registerSignals()
 
@@ -134,16 +101,7 @@ end
 
 function state:leave()
 
-  _hand_view.focus_index = -1
-
-
-  if _timer_handles["start"] then
-    MAIN_TIMER:cancel(_timer_handles["start"])
-  end
-  if _timer_handles["end"] then
-    MAIN_TIMER:cancel(_timer_handles["end"])
-  end
-  _timer_handles["end"] = MAIN_TIMER:tween(0.2, _hand_view, {y = _hand_view.initial_y}, 'out-cubic')
+  _hand_view:deactivate()
 
   _unregisterSignals()
 
