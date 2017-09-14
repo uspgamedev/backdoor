@@ -55,7 +55,7 @@ end
 
 local function _renderOptions(g, sel, width, render_queue)
   local w = width + 2*PD
-  local h = FONT:getHeight()/2
+  local h = FONT:getHeight()*3/5
   local count = 0
   while not render_queue.isEmpty() do
     local name, data = unpack(render_queue.pop())
