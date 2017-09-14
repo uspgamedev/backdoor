@@ -86,6 +86,7 @@ function state:update(dt)
           end
         end
       else
+        _menu_view:setItem("[ NO DATA ]")
         if MENU.item("[ NO DATA ]") then
           print("Cannot load no data.")
         end
