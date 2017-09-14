@@ -105,13 +105,12 @@ function StartMenuView:draw()
 
   g.push()
   g.setBackgroundColor(0, 0, 0)
-  g.translate(2*TILE_W, 0)
+  g.translate(4*TILE_W, 0)
 
   _renderTitle()
   _renderOptions(q, self.selection, self.scrolltop)
 
   g.pop()
-  self.queue.popAll()
 end
 
 
