@@ -8,6 +8,7 @@ local DB = {}
 local _dbcache = {
   domains = {},
   settings = {},
+  resources = {},
 }
 
 local function _metaSpec(domain_name)
@@ -78,6 +79,10 @@ function DB.schemaFor(domain_name)
   end
 end
 
+local function _loadResource(resource_type)
+  return _loadGroup("resources", resource_type)
+end
+
 function DB.loadDomain(domain_name)
   return _loadGroup("domains", domain_name)
 end
@@ -88,6 +93,10 @@ end
 
 function DB.loadSetting(setting_name)
   return _loadGroup("settings", setting_name)
+end
+
+function DB.loadFontPath(font_name)
+  return "assets/fonts/" .. _loadResource("fonts")[font_name].filename
 end
 
 function DB.save()
