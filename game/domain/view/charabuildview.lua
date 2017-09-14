@@ -1,4 +1,5 @@
 --CHARACTER BUILDER VIEW--
+local DB = require 'database'
 local Queue = require 'lux.common.Queue'
 local COLORS = require 'domain.definitions.colors'
 
@@ -8,7 +9,7 @@ local TILE_W = 80
 local TILE_H = 80
 local PD = 16
 local LH = 1.5
-local FONT_SIZE = 24
+local FONT_SIZE = 32
 local WIDTH
 local HEIGHT
 local FONT
@@ -24,11 +25,12 @@ local CharaBuildView = Class{
 --LOCAL FUNCTIONS--
 local function _initGraphicValues()
   local g = love.graphics
+  local fontpath = DB.loadFontPath("Saira")
   WIDTH, HEIGHT = g.getDimensions()
-  FONT = g.newFont(FONT_SIZE)
-  SMOL_FONT = g.setNewFont(FONT_SIZE*0.75)
+  FONT = g.newFont(fontpath, FONT_SIZE)
+  SMOL_FONT = g.setNewFont(fontpath, FONT_SIZE*0.75)
   FONT:setLineHeight(LH)
-  SMOL_FONT:setLineHeight(4*LH/5)
+  SMOL_FONT:setLineHeight(3*LH/5)
 end
 
 local function _renderSaved(g, saved)
