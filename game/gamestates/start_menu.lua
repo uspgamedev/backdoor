@@ -3,33 +3,25 @@ local DB = require 'database'
 local MENU = require 'infra.menu'
 local CONTROLS = require 'infra.control'
 local PROFILE = require 'infra.profile'
-local HudView = require 'domain.view.hudview'
+local StartMenuView = require 'domain.view.startmenuview'
 
 local state = {}
 
 --LOCAL VARIABLES--
 
-local _width, _height
 local _menu_view
 local _menu_context
-local _font
 local _mapping
 
 --LOCAL FUNCTIONS--
 
 local function _title()
-  _menu_view:push {"setFont", _font}
-  _menu_view:push {"setColor", 0xff, 0xff, 0xff, 0xff}
-  _menu_view:push {"print", "backdoor", 80*4, _height/4}
 end
 
 --STATE FUNCTIONS--
 
 function state:init()
-  local g = love.graphics
-  _menu_view = HudView()
-  _font = g.newFont(DB.loadFontPath("Anton"), 48)
-  _width, _height = g.getDimensions()
+  _menu_view = StartMenuView()
   _mapping = {
     PRESS_CONFIRM  = MENU.confirm,
     PRESS_SPECIAL  = MENU.cancel,
@@ -41,14 +33,13 @@ function state:init()
 end
 
 function state:enter()
-  love.graphics.setBackgroundColor(0, 0, 0)
   _menu_view:addElement("HUD", nil, "menu_view")
   _menu_context = "START_MENU"
   CONTROLS.setMap(_mapping)
 end
 
 function state:leave()
-  _menu_view:destroy()
+  Util.destroyAll()
 end
 
 function state:resume(from, player_info)
@@ -62,15 +53,17 @@ function state:resume(from, player_info)
 
     SWITCHER.switch(GS.PLAY, route_data)
   else
+    _menu_view:addElement("HUD", nil, "menu_view")
     _menu_context = "START_MENU"
     CONTROLS.setMap(_mapping)
   end
 end
 
 function state:update(dt)
-  if MENU.begin(_menu_context, 80*4, _height / 2, 3, 160) then
+  if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
+        _menu_view:destroy()
         SWITCHER.push(GS.CHARACTER_BUILD)
       end
       if MENU.item("Load route") then
@@ -79,17 +72,22 @@ function state:update(dt)
       if MENU.item("Quit") then
         love.event.quit()
       end
+      _menu_view:setItem("New route")
+      _menu_view:setItem("Load route")
+      _menu_view:setItem("Quit")
     elseif _menu_context == "LOAD_LIST" then
       local savelist = PROFILE.getSaveList()
       if next(savelist) then
         for route_id, route_header in pairs(savelist) do
-          if MENU.item(route_header.player_name .. route_id) then
+          local savename = ("%s %s"):format(route_id, route_header.player_name)
+          _menu_view:setItem(savename)
+          if MENU.item(savename) then
             SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
           end
         end
       else
         if MENU.item("[ NO DATA ]") then
-          _menu_context = "START_MENU"
+          print("Cannot load no data.")
         end
       end
     end
@@ -101,17 +99,14 @@ function state:update(dt)
     end
   end
   MENU.finish()
+  _menu_view:setSelection(MENU.getSelection())
   _title()
-  MENU.flush(_menu_view)
 end
 
 function state:draw()
   Draw.allTables()
 end
 
-function state:getView()
-  return _menu_view
-end
-
 --Return state functions
 return state
+

@@ -121,7 +121,6 @@ function state:update(dt)
     _resetState()
   end
   _view:select(MENU.finish())
-  MENU.flush()
   if _current == 0 then SWITCHER.pop() end
   if _current > 3 then SWITCHER.pop(_playerinfo) end
 end
