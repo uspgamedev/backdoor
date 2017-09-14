@@ -16,7 +16,7 @@ end
 
 local function _invalid(spec, key)
   return function (self)
-    IMGUI.PushStyleColor("Text", 200, 100, 0, 255)
+    IMGUI.PushStyleColor("Text", 0.8, 0.6, 0, 1)
     IMGUI.Text(("Unknown input type: %s"):format(key.type))
     IMGUI.PopStyleColor(1)
   end
