@@ -1,4 +1,5 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
+local DB = require 'database'
 local MENU = require 'infra.menu'
 local CONTROLS = require 'infra.control'
 local PROFILE = require 'infra.profile'
@@ -27,7 +28,7 @@ end
 function state:init()
   local g = love.graphics
   _menu_view = HudView()
-  _font = g.newFont(48)
+  _font = g.newFont(DB.loadFontPath("Anton"), 48)
   _width, _height = g.getDimensions()
   _mapping = {
     PRESS_CONFIRM  = MENU.confirm,
