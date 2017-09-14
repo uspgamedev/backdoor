@@ -39,7 +39,7 @@ function state:enter()
 end
 
 function state:leave()
-  Util.destroyAll()
+  _menu_view:destroy()
 end
 
 function state:resume(from, player_info)
