@@ -134,8 +134,7 @@ local function _usePrimaryAction()
 end
 
 --- Receive a card index from player hands (between 1 and max-hand-size)
-local function _useCardByIndex(index)
-  local card = _view.hand.hand[index]
+local function _useCardByIndex(index, action_type)
   local player = _route.getControlledActor()
 
   if _useAction(index) then
@@ -255,7 +254,7 @@ function state:resume(state, args)
   elseif state == GS.CARD_SELECT then
 
     if args.chose_a_card then
-      _startTask(_useCardByIndex, args.card_index)
+      _startTask(_useCardByIndex, args.card_index, args.action_type)
     end
 
   end
