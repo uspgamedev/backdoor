@@ -1,9 +1,10 @@
 -- DEPENDENCIES --
+local DB = require 'database'
 local Queue = require 'lux.common.Queue'
 
 
 -- CONSTANTS --
-local PD, LH = 32, 20 -- padding, lineheight
+local PD, LH
 
 
 -- PRIVATE VARIABLES --
@@ -17,7 +18,7 @@ local _size
 local _width, _height
 local _itemqueue = Queue(64)
 local _renderqueue = Queue(64)
-local _font = love.graphics.newFont(20)
+local _font = love.graphics.newFont(DB.loadFontPath("Saira"), 24)
 local _actions = {
   confirm = false,
   cancel = false,
@@ -25,6 +26,9 @@ local _actions = {
   prev = false,
 }
 
+_font:setLineHeight(1.5)
+LH = _font:getHeight()
+PD = _font:getHeight() / 2
 
 -- PRIVATE METHODS --
 -- get/set selection
@@ -142,10 +146,10 @@ function Menu.item(item)
     end
 
     -- push item to item queue
-    _itemqueue.push { "print", item, PD, _height }
+    _itemqueue.push { "print", item, 0, _height }
 
     -- update height
-    _height = _height + LH + PD
+    _height = _height + LH
   end
 
   return _isConfirmed()
@@ -163,10 +167,6 @@ function Menu.finish()
 
   -- update scrolling, if there is any
   _updateScroll()
-
-  -- draw menu container
-  _renderqueue.push { "setColor", 0x20, 0x20, 0x20, 0xff }
-  _renderqueue.push { "rectangle", "fill", 0, 0, _width, _height }
 
   -- draw scroll bar
   _indicateScrolling()
