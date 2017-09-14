@@ -1,34 +1,15 @@
--- DEPENDENCIES --
-local DB = require 'database'
-local Queue = require 'lux.common.Queue'
-
-
--- CONSTANTS --
-local PD, LH
-
-
 -- PRIVATE VARIABLES --
 local Menu = {}
 local _registered = {}
-local _scroll_interval
-local _scroll_top
 local _count
 local _current
 local _size
-local _width, _height
-local _itemqueue = Queue(64)
-local _renderqueue = Queue(64)
-local _font = love.graphics.newFont(DB.loadFontPath("Saira"), 24)
 local _actions = {
   confirm = false,
   cancel = false,
   next = false,
   prev = false,
 }
-
-_font:setLineHeight(1.5)
-LH = _font:getHeight()
-PD = _font:getHeight() / 2
 
 -- PRIVATE METHODS --
 -- get/set selection
@@ -49,13 +30,6 @@ local function _checkMovement()
   return true
 end
 
--- check height
-local function _checkDimensions ()
-  _width = math.max(_width, 2*PD)
-  _height = PD
-  return true
-end
-
 -- check if item was selected
 local function _isSelected()
   return _count == _selection()
@@ -66,92 +40,24 @@ local function _isConfirmed()
   return _isSelected() and _actions.confirm
 end
 
--- updates scrolling
-local function _updateScroll()
-  if _scroll_interval then
-    if _scroll_top > _selection() then
-      _scroll_top = _selection()
-    elseif _selection() - _scroll_top >= _scroll_interval then
-      _scroll_top = _selection() - _scroll_interval + 1
-    end
-  end
-end
-
--- indicates if there are more items hidden
-local function _indicateScrolling ()
-  if _scroll_interval then
-    _renderqueue.push { "setColor", 0xff, 0xff, 0xff, 0xff }
-    if _scroll_top > 1 then
-      _renderqueue.push { "polygon", "fill",
-        {
-          _width - 1.00*PD, 1.00*PD,
-          _width - 1.50*PD, 1.00*PD,
-          _width - 1.25*PD, 0.75*PD,
-        }
-      }
-    end
-    if _scroll_top + _scroll_interval <= _size then
-      _renderqueue.push { "polygon", "fill",
-        {
-          _width - 1.00*PD, _height - 1.00*PD,
-          _width - 1.50*PD, _height - 1.00*PD,
-          _width - 1.25*PD, _height - 0.75*PD,
-        }
-      }
-    end
-  end
-end
-
-
 -- start menu
-function Menu.begin(name, x, y, scroll, static_width)
+function Menu.begin(name)
   -- register new menu
   if _current ~= name then
     _registered[name] = 1
     _current = name
-    _scroll_interval = scroll
-    _scroll_top = 1
     _count = 0
     _size = 0
-    _width, _height = static_width or 0, 0
   end
 
-  -- push menu position
-  _renderqueue.push { "translate", x or 0, y or 0 }
-
   -- check menu input and set menu box minimal dimensions
-  return _checkCancel() and _checkMovement() and _checkDimensions()
+  return _checkCancel() and _checkMovement()
 end
 
 -- check menuitem
 function Menu.item(item)
   -- increment item count
   _count = _count + 1
-
-  -- update width to match max item width
-  local linewidth = _font:getWidth(item)
-  _width = _width < linewidth+2*PD and _width+linewidth or _width
-
-  -- scroll item in limitted box
-  if not _scroll_interval or _count >= _scroll_top
-    and _count < _scroll_top + _scroll_interval then
-
-    -- check if selected
-    if _count == _selection() then
-      -- set to look bright if selected
-      _itemqueue.push { "setColor", 0xff, 0xff, 0xff, 0xff }
-    else
-      -- set to look faded if not selected
-      _itemqueue.push { "setColor", 0x80, 0x80, 0x80, 0x80 }
-    end
-
-    -- push item to item queue
-    _itemqueue.push { "print", item, 0, _height }
-
-    -- update height
-    _height = _height + LH
-  end
-
   return _isConfirmed()
 end
 
@@ -165,41 +71,16 @@ function Menu.finish()
   if _selection() > _size then _selection(1)
   elseif _selection() < 1 then _selection(_size) end
 
-  -- update scrolling, if there is any
-  _updateScroll()
-
-  -- draw scroll bar
-  _indicateScrolling()
-
-  -- push items to render queue
-  _renderqueue.push { "setFont", _font }
-  while not _itemqueue.isEmpty() do
-    _renderqueue.push(_itemqueue.pop())
-    _renderqueue.push(_itemqueue.pop())
-  end
-
   -- reset actions' states
   for k in pairs(_actions) do _actions[k] = false end
   return _selection()
 end
-
-function Menu.flush (menu_view)
-  while not _renderqueue.isEmpty() do
-    if menu_view then
-      menu_view:push(_renderqueue.pop())
-    else
-      _renderqueue.pop()
-    end
-  end
-end
-
 
 -- MENU ACTIONS --
 function Menu.confirm() _actions.confirm = true end
 function Menu.cancel() _actions.cancel = true end
 function Menu.next() _actions.next = true end
 function Menu.prev() _actions.prev = true end
-
 
 -- GETTERS --
 function Menu.getSelection ()
@@ -212,16 +93,5 @@ function Menu.getSize ()
   return _size
 end
 
-function Menu.hasItemsAbove ()
-  -- if you can scroll up
-  return _scroll_interval and _scroll_top > 1
-    and _scroll_top - 1
-end
-
-function Menu.hasItemsBelow ()
-  -- if you can scroll down
-  return _scroll_interval and _scroll_top < _size - _scroll_interval
-    and _size - _scroll_top - _scroll_interval
-end
-
 return Menu
+
