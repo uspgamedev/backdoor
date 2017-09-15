@@ -254,7 +254,13 @@ function state:resume(state, args)
   elseif state == GS.CARD_SELECT then
 
     if args.chose_a_card then
-      _startTask(_useCardByIndex, args.card_index, args.action_type)
+      if args.action_type == 'use' then
+        _startTask(_useCardByIndex, args.card_index, args.action_type)
+      elseif args.action_type == 'remember' then
+        _next_action = { "RECALL_CARD", { card_index = args.card_index } }
+      elseif args.action_type == 'consume' then
+        _next_action = { "CONSUME_CARD", { card_index = args.card_index } }
+      end
     end
 
   end

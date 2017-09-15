@@ -13,7 +13,9 @@ local BASE_ACTIONS = {
   IDLE = true,
   MOVE = true,
   INTERACT = true,
-  NEW_HAND = true
+  NEW_HAND = true,
+  RECALL_CARD = true,
+  CONSUME_CARD = true
 }
 
 function Actor:init(spec_name)
@@ -163,6 +165,36 @@ function Actor:getHandLimit()
   return self.hand_limit
 end
 
+--- Draw a card from actor's buffer
+function Actor:drawCard(which)
+  if #self.hand >= self.hand_limit then return end
+  which = which or self.last_buffer
+  -- Empty buffer
+  if #self.buffers[which] == 1 then return end
+
+  local card_name = self.buffers[which][1]
+  table.remove(self.buffers[which], 1)
+  if card_name == DEFS.DONE then
+    RANDOM.shuffle(self.buffers[which])
+    table.insert(self.buffers[which], DEFS.DONE)
+    card_name = self.buffers[which][1]
+    table.remove(self.buffers[which], 1)
+  end
+  local card = Card(card_name)
+  table.insert(self.hand, card)
+  self.last_buffer = which
+  Signal.emit("actor_draw", self, card)
+end
+
+function Actor:recallCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  assert(self.last_buffer)
+  local card = self.hand[index]
+  table.remove(self.hand, index)
+  local buffer = self.buffers[self.last_buffer]
+  table.insert(buffer, card:getSpecName())
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
 end
@@ -207,28 +239,6 @@ end
 
 function Actor:spendTime(n)
   self.cooldown = self.cooldown + n
-end
-
---Draw a card from actor's buffer
-function Actor:drawCard(which)
-  if #self.hand >= self.hand_limit then return end
-  which = which or self.last_buffer
-  -- Empty buffer
-  if #self.buffers[which] == 1 then return end
-
-  local card_name = self.buffers[which][1]
-  table.remove(self.buffers[which], 1)
-  if card_name == DEFS.DONE then
-    RANDOM.shuffle(self.buffers[which])
-    table.insert(self.buffers[which], DEFS.DONE)
-    card_name = self.buffers[which][1]
-    table.remove(self.buffers[which], 1)
-  end
-  local card = Card(card_name)
-  table.insert(self.hand, card)
-  self.last_buffer = which
-  Signal.emit("actor_draw", self, card)
-
 end
 
 return Actor

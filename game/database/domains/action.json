@@ -95,6 +95,21 @@
       }],
     "cost":6
   },
+  "NEW_HAND":{
+    "params":[{
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
+      }],
+    "cost":2,
+    "operators":[],
+    "effects":[{
+        "typename":"new_hand",
+        "which":"par:label#1001"
+      }]
+  },
   "DOUBLESHOOT":{
     "params":[{
         "typename":"choose_target",
@@ -119,25 +134,22 @@
     "operators":[],
     "cost":12
   },
-  "NEW_HAND":{
-    "params":[{
-        "typename":"choose_buffer",
-        "output":"label#1001"
-      },{
-        "typename":"empty_hand",
-        "output":"output"
-      }],
-    "cost":2,
-    "operators":[],
-    "effects":[{
-        "typename":"new_hand",
-        "which":"par:label#1001"
-      }]
-  },
   "IDLE":{
     "params":[],
     "cost":1,
     "operators":[],
     "effects":[]
+  },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
+      }],
+    "effects":[{
+        "typename":"recall_card",
+        "card_index":"par:card_index"
+      }],
+    "operators":[],
+    "cost":2
   }
 }
