@@ -15,6 +15,14 @@ function BufferPickerView:init(actor)
 
   self.actor = actor
   self.select = 1
+  self.secondary_select = nil
+
+  --Varaibles for changing-buffer effect
+  self.is_changing_buffer = false
+  self.current_buffer_x_mod = 0
+  self.current_buffer_a = 255
+  self.secondary_buffer_x_mod = 0
+  self.secondary_buffer_a = 0
 
 end
 
@@ -23,28 +31,85 @@ function BufferPickerView:draw()
   local g = love.graphics
   local w,h = 128,128
   local size = self.actor:getBufferSize(self.select)
+
+  --Draw current selected buffer
   local img = IMG.CARD_BACK_1
   local i_w, i_h = img:getWidth(), img:getHeight() -- Image width and height
   local i_s = 1 --Image scale
-  local i_x, i_y = c_x-i_w/2*i_s, c_y-i_h/2*i_s --Image position
+  local i_x, i_y = c_x-i_w/2*i_s + self.current_buffer_x_mod, c_y-i_h/2*i_s --Image position
   local i_r = 0 --Image rotation
-  g.setColor(255, 255, 255)
+  g.setColor(255, 255, 255, self.current_buffer_a)
   for i = 1, math.floor(size/2) do
     g.draw(img, i_x, i_y, i_r, i_s) --Draw image
     i_x, i_y = i_x + 10, i_y - 10
   end
 
-  --Draw buffer number and remaining cards
+  --Draw secondary selected buffer thas is fading away
+  if self.is_changing_buffer then
+    local size = self.actor:getBufferSize(self.secondary_select)
+    local img = IMG.CARD_BACK_1
+    local i_w, i_h = img:getWidth(), img:getHeight() -- Image width and height
+    local i_s = 1 --Image scale
+    local i_x, i_y = c_x-i_w/2*i_s + self.secondary_buffer_x_mod, c_y-i_h/2*i_s --Image position
+    local i_r = 0 --Image rotation
+    g.setColor(255, 255, 255, self.secondary_buffer_a)
+    for i = 1, math.floor(size/2) do
+      g.draw(img, i_x, i_y, i_r, i_s) --Draw image
+      i_x, i_y = i_x + 10, i_y - 10
+    end
+  end
+
+  --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
   g.print(("%d (%2d)"):format(self.select, size), c_x, c_y + i_h/2 + 40)
 end
 
 function BufferPickerView:moveSelection(dir)
+  local mod_value = 400
+
   local n = #self.actor.buffers
   if dir == 'left' then
+    self.secondary_select = self.select
     self.select = (self.select - 2)%n + 1
+
+    --Create changing-buffer effect
+    self.is_changing_buffer = true
+    if self.timers["change_buffer"] then
+      MAIN_TIMER:cancel(self.timers["change_buffer"])
+    end
+    self.current_buffer_a, self.secondary_buffer_a = 0, 255
+    self.current_buffer_x_mod, self.secondary_buffer_x_mod = mod_value, 0
+    self.timers["change_buffer"] = MAIN_TIMER:tween(.15,
+                                                    self,
+                                                    {current_buffer_a = 255,
+                                                     secondary_buffer_a = 0,
+                                                     current_buffer_x_mod = 0,
+                                                     secondary_buffer_x_mod = -mod_value},
+                                                     'in-linear',
+                                                      function()
+                                                        self.is_changing_buffer = false
+                                                      end)
   elseif dir == 'right' then
+    self.secondary_select = self.select
     self.select = self.select%n + 1
+
+    --Create changing-buffer effect
+    self.is_changing_buffer = true
+    if self.timers["change_buffer"] then
+      MAIN_TIMER:cancel(self.timers["change_buffer"])
+    end
+    self.current_buffer_a, self.secondary_buffer_a = 0, 255
+    self.current_buffer_x_mod, self.secondary_buffer_x_mod = -mod_value, 0
+    self.timers["change_buffer"] = MAIN_TIMER:tween(.15,
+                                                    self,
+                                                    {current_buffer_a = 255,
+                                                     secondary_buffer_a = 0,
+                                                     current_buffer_x_mod = 0,
+                                                     secondary_buffer_x_mod = mod_value},
+                                                     'in-linear',
+                                                      function()
+                                                        self.is_changing_buffer = false
+                                                      end)
   else
     error(("Invalid direction %s!"):format(dir))
   end
