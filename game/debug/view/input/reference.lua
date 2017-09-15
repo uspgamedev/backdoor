@@ -61,7 +61,7 @@ inputs['value'] = function(spec, key, parent)
   return function(self)
     local changed
     if use_ref then
-      changed, idx = IMGUI.Combo(key.name, idx, refs, #refs, 5)
+      changed, idx = IMGUI.Combo(key.name, idx, refs, #refs, 15)
       if changed then
         spec[key.id] = refs[idx]
       end

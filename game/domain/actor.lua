@@ -195,6 +195,14 @@ function Actor:recallCard(index)
   table.insert(buffer, card:getSpecName())
 end
 
+function Actor:consumeCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  assert(self.last_buffer)
+  local card = self.hand[index]
+  table.remove(self.hand, index)
+  -- TODO: gain XP!
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
 end

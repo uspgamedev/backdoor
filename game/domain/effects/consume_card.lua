@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.process (actor, sector, params)
-  actor:recallCard(params.card_index)
+  actor:consumeCard(params.card_index)
 end
 
 return FX
