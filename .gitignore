@@ -3,4 +3,8 @@
 .*
 !.git*
 /imgui*
+/game/cpml*
+/game/dkjson.lua
+/game/lux*
+/game/steaming*
 savedir
