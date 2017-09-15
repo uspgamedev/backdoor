@@ -36,7 +36,7 @@ end
 
 function HandView:getFocus()
   return self.focus_index
-end  
+end
 
 function HandView:moveFocus(dir)
   if dir == "left" then
@@ -48,7 +48,7 @@ end
 
 function HandView:getActionType()
   return _ACTION_TYPES[self.action_type]
-end  
+end
 
 function HandView:changeActionType(dir)
   if dir == 'up' then
