@@ -33,6 +33,14 @@ function RANDOM.generateEven(e, d)
   return e + _rng:random(0, floor((d - e) / 2)) * 2
 end
 
+function RANDOM.shuffle(t)
+  local n = #t
+  for i=1,n do
+    local j = RANDOM.generate(i,n)
+    t[i], t[j] = t[j], t[i]
+  end
+end
+
 function RANDOM.generateSeed()
   return tonumber(tostring(os.time()):sub(-7):reverse())
 end

@@ -27,11 +27,12 @@ function setup.config()
     --INITIALIZING TABLES--
     --Drawing Tables
     DRAW_TABLE = {
-        BG  = {}, --Background (bottom layer, first to draw)
-        L1  = {}, --Layer 1
-        L2  = {}, --Layer 2
-        HUD = {}, --HUD (top layer, second to last to draw)
-        GUI = {}, --Graphic User Interface (top layer, last to draw)
+        BG    = {}, --Background (bottom layer, first to draw)
+        L1    = {}, --Layer 1
+        L2    = {}, --Layer 2
+        HUDl  = {}, --HUD lower (drawn before HUD)
+        HUD   = {}, --HUD (top layer, second to last to draw)
+        GUI   = {}, --Graphic User Interface (top layer, last to draw)
     }
     --Other Tables
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)
@@ -41,7 +42,9 @@ function setup.config()
     CAM = Camera(O_WIN_W/2, O_WIN_H/2) --Set camera position to center of screen
 
     --IMAGES--
+    local path = "assets/imgs/"
     IMG = { --Table containing all the images
+      CARD_BACK_1 = love.graphics.newImage(path.."cards/card_back_1.png")
     }
 
     --AUDIO--

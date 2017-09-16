@@ -35,7 +35,7 @@ function inputs.enum(spec, key)
     end
     if _active then
       local changed,value = IMGUI.Combo(key.name, _current, _options, #_options,
-                                        10)
+                                        15)
       if changed then
         _current = value
         spec[key.id] = _options[value]

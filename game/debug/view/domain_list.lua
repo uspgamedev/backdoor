@@ -58,7 +58,7 @@ return function(domain_name, title)
     end
     IMGUI.Text(("All %ss:"):format(title))
     local changed
-    changed, selected = IMGUI.ListBox("", selected, list, list.n, 5)
+    changed, selected = IMGUI.ListBox("", selected, list, list.n, 15)
     if changed then
       self:push('specification_editor', domain[list[selected]], domain_name,
                 title, delete, rename)

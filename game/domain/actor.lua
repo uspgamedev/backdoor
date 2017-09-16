@@ -3,6 +3,7 @@ local GameElement = require 'domain.gameelement'
 local ACTION      = require 'domain.action'
 local Card        = require 'domain.card'
 local RANDOM      = require 'common.random'
+local DEFS        = require 'domain.definitions'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -12,7 +13,9 @@ local BASE_ACTIONS = {
   IDLE = true,
   MOVE = true,
   INTERACT = true,
-  NEW_HAND = true
+  NEW_HAND = true,
+  RECALL_CARD = true,
+  CONSUME_CARD = true
 }
 
 function Actor:init(spec_name)
@@ -28,6 +31,11 @@ function Actor:init(spec_name)
   self.hand = {}
   self.hand_limit = 5
 
+  self.buffers = {}
+  for i=1,3 do
+    self.buffers[i] = {{},{}, current = 1}
+  end
+
 end
 
 function Actor:loadState(state)
@@ -42,6 +50,16 @@ function Actor:loadState(state)
     card:loadState(card_state)
     table.insert(self.hand, card)
   end
+  self.buffers = {}
+  for i=1,3 do
+    local buffer_state = state.buffers[i]
+    local buffer = {}
+    for j,card_name in ipairs(state.buffers[i]) do
+      buffer[j] = card_name
+    end
+    self.buffers[i] = buffer
+  end
+  self.last_buffer = state.last_buffer
 end
 
 function Actor:saveState()
@@ -57,6 +75,16 @@ function Actor:saveState()
     local card_state = card:saveState()
     table.insert(state.hand, card_state)
   end
+  state.buffers = {}
+  for i=1,3 do
+    local buffer = self.buffers[i]
+    local buffer_state = {}
+    for k,card_name in ipairs(self.buffers[i]) do
+      buffer_state[k] = card_name
+    end
+    state.buffers[i] = buffer_state
+  end
+  state.last_buffer = self.last_buffer
   return state
 end
 
@@ -98,7 +126,12 @@ end
 
 function Actor:getAction(slot)
   if self:isWidget(slot) then
-    return self.actions[slot]
+    local action = self.actions[slot]
+    if action == true then
+      return slot
+    else
+      return action
+    end
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card and card:isArt() then
@@ -119,8 +152,55 @@ function Actor:isHandEmpty()
   return #self.hand == 0
 end
 
+function Actor:getBufferSize(which)
+  which = which or self.last_buffer
+  for i,card in ipairs(self.buffers[which]) do
+    if card == DEFS.DONE then
+      return i-1
+    end
+  end
+end
+
 function Actor:getHandLimit()
   return self.hand_limit
+end
+
+--- Draw a card from actor's buffer
+function Actor:drawCard(which)
+  if #self.hand >= self.hand_limit then return end
+  which = which or self.last_buffer
+  -- Empty buffer
+  if #self.buffers[which] == 1 then return end
+
+  local card_name = self.buffers[which][1]
+  table.remove(self.buffers[which], 1)
+  if card_name == DEFS.DONE then
+    RANDOM.shuffle(self.buffers[which])
+    table.insert(self.buffers[which], DEFS.DONE)
+    card_name = self.buffers[which][1]
+    table.remove(self.buffers[which], 1)
+  end
+  local card = Card(card_name)
+  table.insert(self.hand, card)
+  self.last_buffer = which
+  Signal.emit("actor_draw", self, card)
+end
+
+function Actor:recallCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  assert(self.last_buffer)
+  local card = self.hand[index]
+  table.remove(self.hand, index)
+  local buffer = self.buffers[self.last_buffer]
+  table.insert(buffer, card:getSpecName())
+end
+
+function Actor:consumeCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  assert(self.last_buffer)
+  local card = self.hand[index]
+  table.remove(self.hand, index)
+  -- TODO: gain XP!
 end
 
 function Actor:tick()
@@ -150,12 +230,8 @@ function Actor:makeAction(sector)
     local check = self:getAction(action_slot)
     if check then
       local action
-      if check == true then
-        if action_slot == 'INTERACT' then
-          action, params = _interact(self)
-        else
-          action = action_slot
-        end
+      if action_slot == 'INTERACT' then
+        action, params = _interact(self)
       else
         action = check
       end
@@ -171,25 +247,6 @@ end
 
 function Actor:spendTime(n)
   self.cooldown = self.cooldown + n
-end
-
---Draw a card from actor's buffer
-function Actor:drawCard()
-  if #self.hand >= self.hand_limit then return end
-
-  --TODO: Change this so actor draws from his buffer
-  local card
-  local roll = RANDOM.generate()
-  if roll > .5 then
-    card = Card("bolt")
-  elseif roll > .3 then
-    card = Card("cure")
-  else
-    card = Card("draw")
-  end
-  table.insert(self.hand, card)
-  Signal.emit("actor_draw", self, card)
-
 end
 
 return Actor

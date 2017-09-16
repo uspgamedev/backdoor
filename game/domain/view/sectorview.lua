@@ -109,6 +109,7 @@ function SectorView:draw()
     g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
     g.pop()
     g.setColor(COLORS.NEUTRAL)
+    g.setFont(g.newFont(20))
     g.print(body:getHP(), 0, 0)
     g.pop()
   end

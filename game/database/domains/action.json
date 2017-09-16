@@ -29,11 +29,42 @@
     "operators":[],
     "cost":2
   },
-  "IDLE":{
-    "params":[],
-    "effects":[],
+  "SHOOT":{
+    "params":[{
+        "typename":"choose_target",
+        "filter":"BODY",
+        "output":"target",
+        "max-range":5
+      }],
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"par:target",
+        "amount":"val:amount"
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"attr",
+        "which":"ATH"
+      },{
+        "op":"+",
+        "typename":"integer_binop",
+        "lhs":"val:attr",
+        "rhs":3,
+        "output":"amount"
+      }],
+    "cost":10
+  },
+  "CONSUME_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
+      }],
+    "cost":2,
     "operators":[],
-    "cost":1
+    "effects":[{
+        "typename":"consume_card",
+        "card_index":"par:card_index"
+      }]
   },
   "CHANGE_SECTOR":{
     "params":[{
@@ -76,6 +107,18 @@
         "amount":"val:amount"
       }]
   },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
+      }],
+    "cost":2,
+    "operators":[],
+    "effects":[{
+        "typename":"recall_card",
+        "card_index":"par:card_index"
+      }]
+  },
   "DOUBLESHOOT":{
     "params":[{
         "typename":"choose_target",
@@ -100,37 +143,25 @@
         "amount":3
       }]
   },
-  "SHOOT":{
-    "params":[{
-        "typename":"choose_target",
-        "filter":"BODY",
-        "output":"target",
-        "max-range":5
-      }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"par:target",
-        "amount":"val:amount"
-      }],
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"ATH"
-      },{
-        "op":"+",
-        "typename":"integer_binop",
-        "lhs":"val:attr",
-        "rhs":3,
-        "output":"amount"
-      }],
-    "cost":10
+  "IDLE":{
+    "params":[],
+    "effects":[],
+    "operators":[],
+    "cost":1
   },
   "NEW_HAND":{
-    "params":[],
+    "params":[{
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
+      }],
     "effects":[{
-        "typename":"new_hand"
+        "typename":"new_hand",
+        "which":"par:label#1001"
       }],
     "operators":[],
-    "cost":0
+    "cost":2
   }
 }
