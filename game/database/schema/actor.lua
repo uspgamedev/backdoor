@@ -8,6 +8,6 @@ return {
   { id = 'ath', name = "ATH", type = "integer", range={0} },
   { id = 'arc', name = "ARC", type = "integer", range={0} },
   { id = 'mec', name = "MEC", type = "integer", range={0} },
-  { id = 'description', name = "Description", type = 'string' },
+  { id = 'description', name = "Description", type = 'text' },
 }
 
