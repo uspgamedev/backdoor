@@ -7,8 +7,12 @@ local _inputs = {}
 
 function _inputs.section(spec, key)
 
-  local schema = key.schema or require('domain.' .. key.schema).schema
+  local schema = key.schema
   local backup = {}
+
+  if type(schema) == "string" then
+    schema = require ('domain.'..schema).schema
+  end
 
   return function(self)
     local element = spec[key.id]
