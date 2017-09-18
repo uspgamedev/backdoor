@@ -30,18 +30,20 @@ function inputs.enum(spec, key)
 
   return function(self)
     if key.optional then
+      IMGUI.PushID(key.id .. ".check")
       _active = select(2, IMGUI.Checkbox("", _active))
+      IMGUI.PopID()
       IMGUI.SameLine()
     end
+    IMGUI.Text(key.name)
     if _active then
-      local changed,value = IMGUI.Combo(key.name, _current, _options, #_options,
-                                        15)
+      IMGUI.PushID(key.id)
+      local changed,value = IMGUI.Combo("", _current, _options, #_options, 15)
+      IMGUI.PopID()
       if changed then
         _current = value
         spec[key.id] = _options[value]
       end
-    elseif key.optional then
-      IMGUI.Text(key.name)
     end
   end
 end

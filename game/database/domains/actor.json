@@ -1,30 +1,35 @@
 {
+  "brawler":{
+    "extends":"sentient",
+    "name":"Brawler",
+    "ath":14,
+    "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
+  },
+  "craftsmith":{
+    "extends":"sentient",
+    "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+    "name":"Craftsmith",
+    "mec":14
+  },
+  "sentient":{
+    "arc":10,
+    "ath":10,
+    "mec":10,
+    "behavior":"player",
+    "name":"Sentient",
+    "description":"Any sentient actor, capable of living as one of\nthe 12 civilized species."
+  },
+  "arcanist":{
+    "extends":"sentient",
+    "arc":14,
+    "name":"Arcanist",
+    "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
+  },
   "dumb":{
     "arc":0,
     "ath":0,
     "behavior":"random_walk",
     "description":"Oh honey...",
     "mec":0
-  },
-  "Caster":{
-    "arc":3,
-    "ath":0,
-    "behavior":"player",
-    "description":"You like the mystic ways of the world. A spellcaster by nature.",
-    "mec":0
-  },
-  "Bonehead":{
-    "arc":0,
-    "ath":2,
-    "behavior":"player",
-    "description":"A bone-headed person. You are stoopid, but hella strong.",
-    "mec":1
-  },
-  "Nerd":{
-    "arc":1,
-    "ath":0,
-    "behavior":"player",
-    "description":"A huge nerd. You like trinkets and such.",
-    "mec":2
   }
 }

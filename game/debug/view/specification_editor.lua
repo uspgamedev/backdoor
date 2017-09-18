@@ -21,6 +21,7 @@ return function(spec, domain_name, title, delete, rename, parent)
         IMGUI.PushStyleColor("FrameBg", 0.8, 1, 0.9, 0.1)
         pop = 1
       end
+      IMGUI.Spacing()
       input(self)
       if pop > 0 then
         IMGUI.PopStyleColor(pop)

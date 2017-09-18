@@ -32,7 +32,7 @@ local function _initSchemas()
     local stats = DB.loadSpec("actor", specname)
     schemas.background[specname] = {
       specname = specname,
-      description = stats.description,
+      description = stats.description:gsub("\n"," "),
       stats = stats,
     }
   end
@@ -41,7 +41,7 @@ local function _initSchemas()
     local stats = DB.loadSpec("body", specname)
     schemas.species[specname] = {
       specname = specname,
-      description = stats.description,
+      description = stats.description:gsub("\n"," "),
       stats = stats,
     }
   end

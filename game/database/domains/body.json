@@ -3,12 +3,19 @@
     "description":"",
     "hp":8
   },
-  "Strong Boi":{
-    "description":"Sturdier than a human. You are not human.",
-    "hp":16
+  "hillborn":{
+    "extends":"demihuman",
+    "name":"Hillborn",
+    "description":"With greyish blue skin partially covered by\ndark tattoo-like lines and patterns, these\nhumanoids bear a variety of horns growing from\ntheir temples and are known for their quick legs."
   },
   "hearthborn":{
-    "description":"A generic human. Pretty standard, nothing special.",
-    "hp":12
+    "extends":"demihuman",
+    "name":"Hearthborn",
+    "description":"With dark-orange skin, colorful hair and round\nnoses, these humanoids can boost their muscles for\na few bare seconds by pumping their blood faster\nand hotter, unleashing steam from their bodies."
+  },
+  "demihuman":{
+    "hp":20,
+    "name":"Demihuman",
+    "description":"Humanoid people in general."
   }
 }
