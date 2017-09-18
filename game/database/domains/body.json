@@ -1,14 +1,20 @@
 {
   "slime":{
-    "description":"",
-    "hp":8
+    "hp":8,
+    "description":""
   },
   "Strong Boi":{
-    "description":"Sturdier than a human. You are not human.",
-    "hp":16
+    "hp":16,
+    "description":"Sturdier than a human. You are not human."
+  },
+  "demihuman":{
+    "hp":20,
+    "name":"Demihuman",
+    "description":"Humanoid people in general."
   },
   "hearthborn":{
-    "description":"A generic human. Pretty standard, nothing special.",
-    "hp":12
+    "extends":"demihuman",
+    "name":"Hearthborn",
+    "description":"Orange-skinned, colorfully-haired"
   }
 }
