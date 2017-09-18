@@ -28,6 +28,7 @@ inputs.boolean = _makeCommon(
 inputs.integer = _makeCommon(
   nil,
   function(value, key)
+    value = value or (key.range or {0})[1]
     local range = key.range
     local changed, newvalue = IMGUI.InputInt("", value, 1, 10)
     if range then
