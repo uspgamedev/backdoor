@@ -58,7 +58,9 @@ return function(domain_name, title)
     end
     IMGUI.Text(("All %ss:"):format(title))
     local changed
+    IMGUI.PushItemWidth(208)
     changed, selected = IMGUI.ListBox("", selected, list, list.n, 15)
+    IMGUI.PopItemWidth()
     if changed then
       self:push('specification_editor', domain[list[selected]], domain_name,
                 title, delete, rename)

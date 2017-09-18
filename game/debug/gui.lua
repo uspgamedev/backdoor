@@ -57,7 +57,7 @@ function GUI:push(viewname, ...)
   local width = MENU_WIDTH * size
   local x = tween.start(
     (length-size)*MENU_WIDTH,
-    length*MENU_WIDTH + #self.stack * 8,
+    8 + length*MENU_WIDTH + #self.stack * 8,
     5
   )
   self.stack[level] = {
@@ -65,12 +65,15 @@ function GUI:push(viewname, ...)
     draw = function (self)
       IMGUI.SetNextWindowPos(x(), 40, "Always")
       IMGUI.SetNextWindowSizeConstraints(width, 80, width, MENU_MAX_HEIGHT)
+      IMGUI.PushStyleVar("WindowPadding", 16, 16)
       local _,open = IMGUI.Begin(title, true,
-                                 { "NoCollapse", "AlwaysAutoResize" })
+                                 { "NoCollapse", "AlwaysAutoResize",
+                                 "AlwaysUseWindowPadding" })
       if open then
         open = not render(self)
       end
       IMGUI.End()
+      IMGUI.PopStyleVar()
       return open
     end
   }
