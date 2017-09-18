@@ -71,7 +71,7 @@ local function _renderOptions(g, sel, width, render_queue)
         g.push()
         g.translate(2*TILE_W, -FONT_SIZE*2)
         g.setFont(SMOL_FONT)
-        g.printf(data.desc, 0, 0, 3*TILE_W, "left")
+        g.printf(data.desc, 0, 0, 5*TILE_W, "left")
         g.setFont(FONT)
         g.pop()
       end
