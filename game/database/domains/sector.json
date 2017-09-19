@@ -1,5 +1,9 @@
 {
   "sector01":{
+    "fillings":[],
+    "connections":{
+      "loops":24
+    },
     "encounters":{
       "max":30,
       "recipes":[{
@@ -11,34 +15,17 @@
         }],
       "min":10
     },
-    "deadends":{
-      "amount":128
-    },
     "rooms":{
-      "minh":3,
-      "minw":3,
+      "rmar":1,
       "tries":256,
+      "minw":3,
+      "minh":3,
       "maxh":9,
       "count":24,
-      "maxw":9,
-      "rmar":1
+      "maxw":9
     },
-    "bootstrap":{
-      "mh":2,
-      "h":40,
-      "w":40,
-      "mw":2
-    },
-    "exits":{
-      "exits":[{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        }]
+    "maze":{
+      "double":false
     },
     "transformers":[{
         "w":40,
@@ -47,12 +34,12 @@
         "mh":2,
         "mw":2
       },{
-        "typename":"rooms",
-        "minh":3,
-        "minw":3,
         "tries":256,
-        "maxh":9,
         "count":24,
+        "minw":3,
+        "typename":"rooms",
+        "maxh":9,
+        "minh":3,
         "maxw":9
       },{
         "typename":"maze"
@@ -74,11 +61,25 @@
             "target_specname":"sector01"
           }]
       }],
-    "connections":{
-      "loops":24
+    "exits":{
+      "exits":[{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        }]
     },
-    "maze":{
-      "double":false
+    "bootstrap":{
+      "mh":2,
+      "h":40,
+      "mw":2,
+      "w":40
+    },
+    "deadends":{
+      "amount":128
     }
   }
 }
