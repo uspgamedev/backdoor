@@ -28,22 +28,24 @@ local function _initSchemas()
   schemas.species = {}
   schemas.background = {}
 
-  for _,specname in pairs(background_schemas) do
+  for _,specname in ipairs(background_schemas) do
     local stats = DB.loadSpec("actor", specname)
-    schemas.background[specname] = {
+    table.insert(schemas.background, {
       specname = specname,
+      fullname = stats.name,
       description = stats.description:gsub("\n"," "),
       stats = stats,
-    }
+    })
   end
 
-  for _,specname in pairs(species_schemas) do
+  for _,specname in ipairs(species_schemas) do
     local stats = DB.loadSpec("body", specname)
-    schemas.species[specname] = {
+    table.insert(schemas.species, {
       specname = specname,
+      fullname = stats.name,
       description = stats.description:gsub("\n"," "),
       stats = stats,
-    }
+    })
   end
 
   return schemas
@@ -104,9 +106,9 @@ function state:update(dt)
       end
     else
       local field = context_name:lower()
-      for name, schema in pairs(_schemas[field]) do
+      for _,schema in pairs(_schemas[field]) do
         -- name is Capitalized, specname isn't
-        name = name:sub(1,1):upper() .. name:sub(2)
+        local name = schema.fullname
         _view:setItem(name,
                       { desc = schema.description,
                         stats = schema.stats })
