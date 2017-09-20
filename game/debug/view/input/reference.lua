@@ -32,7 +32,8 @@ end
 
 inputs['output'] = function(spec, key, parent)
   return function(self)
-    local changed, value = IMGUI.InputText(key.name, spec[key.id] or key.id, 64)
+    IMGUI.Text(key.name)
+    local changed, value = IMGUI.InputText("", spec[key.id] or key.id, 64)
     if changed then
       spec[key.id] = value
     end
@@ -59,6 +60,7 @@ inputs['value'] = function(spec, key, parent)
   end
 
   return function(self)
+    IMGUI.Text(key.name)
     local changed
     if use_ref then
       changed, idx = IMGUI.Combo(key.name, idx, refs, #refs, 15)
@@ -67,9 +69,9 @@ inputs['value'] = function(spec, key, parent)
       end
     else
       if key.match == "integer" then
-        changed, value = inputInt(value, key.name, key.range)
+        changed, value = inputInt(value, "", key.range)
       elseif key.match == 'string' then
-        changed, value = inputStr(value, key.name)
+        changed, value = inputStr(value, "")
       end
       if changed then
         spec[key.id] = value

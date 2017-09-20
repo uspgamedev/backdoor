@@ -12,7 +12,7 @@ return function (actor, sector)
   else
     local body = sector:getBodyAt(i,j)
     if body then
-      return 'PRIMARY', { target = body }
+      return 'PRIMARY', { target = {i,j} }
     else
       return 'IDLE', {}
     end

@@ -16,12 +16,12 @@
       "min":10
     },
     "rooms":{
-      "rmar":1,
-      "tries":256,
-      "minw":3,
       "minh":3,
-      "maxh":9,
       "count":24,
+      "minw":3,
+      "tries":256,
+      "maxh":9,
+      "rmar":1,
       "maxw":9
     },
     "maze":{
@@ -34,12 +34,12 @@
         "mh":2,
         "mw":2
       },{
+        "typename":"rooms",
+        "minh":3,
+        "minw":3,
         "tries":256,
         "count":24,
-        "minw":3,
-        "typename":"rooms",
         "maxh":9,
-        "minh":3,
         "maxw":9
       },{
         "typename":"maze"
@@ -61,6 +61,15 @@
             "target_specname":"sector01"
           }]
       }],
+    "deadends":{
+      "amount":128
+    },
+    "bootstrap":{
+      "mh":2,
+      "h":40,
+      "w":40,
+      "mw":2
+    },
     "exits":{
       "exits":[{
           "target_specname":"sector01"
@@ -71,15 +80,6 @@
         },{
           "target_specname":"sector01"
         }]
-    },
-    "bootstrap":{
-      "mh":2,
-      "h":40,
-      "mw":2,
-      "w":40
-    },
-    "deadends":{
-      "amount":128
     }
   }
 }

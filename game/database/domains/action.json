@@ -31,14 +31,15 @@
   },
   "SHOOT":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
     "effects":[{
         "typename":"deal_damage",
-        "target":"par:target",
+        "target":"val:body",
         "amount":"val:amount"
       }],
     "operators":[{
@@ -51,6 +52,10 @@
         "lhs":"val:attr",
         "rhs":3,
         "output":"amount"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body"
       }],
     "cost":10
   },
@@ -84,10 +89,11 @@
   },
   "HEAL":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
     "cost":6,
     "operators":[{
@@ -100,10 +106,14 @@
         "lhs":"val:arcana",
         "rhs":2,
         "output":"amount"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body"
       }],
     "effects":[{
         "typename":"heal",
-        "target":"par:target",
+        "target":"val:body",
         "amount":"val:amount"
       }]
   },
@@ -121,25 +131,35 @@
   },
   "DOUBLESHOOT":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":6,
         "output":"target",
-        "max-range":10
+        "body-only":true
       },{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":6,
         "output":"target2",
-        "max-range":10
+        "body-only":true
       }],
     "cost":12,
-    "operators":[],
+    "operators":[{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body1"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target2",
+        "output":"body2"
+      }],
     "effects":[{
         "typename":"deal_damage",
-        "target":"par:target",
+        "target":"val:body1",
         "amount":3
       },{
         "typename":"deal_damage",
-        "target":"par:target2",
+        "target":"val:body2",
         "amount":3
       }]
   },

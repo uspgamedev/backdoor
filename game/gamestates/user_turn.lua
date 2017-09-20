@@ -1,11 +1,11 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
-local DIR       = require 'domain.definitions.dir'
-local ACTION    = require 'domain.action'
-local CONTROL   = require 'infra.control'
-local INPUT     = require 'infra.input'
+local DIR           = require 'domain.definitions.dir'
+local ACTION        = require 'domain.action'
+local CONTROL       = require 'infra.control'
+local INPUT         = require 'infra.input'
 
-local HandView  = require 'domain.view.handview'
+local HandView      = require 'domain.view.handview'
 
 local state = {}
 
@@ -102,15 +102,20 @@ local function _useAction(action_slot)
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
-          valid_position_func = function(i, j)
-            return current_sector:isInside(i,j) and
-                   current_sector:getBodyAt(i,j)
+          range_checker = function(i, j)
+            return ACTION.param('choose_target')
+                         .isWithinRange(current_sector, controlled_actor,
+                                        param, {i,j})
+          end,
+          validator = function(i, j)
+            return ACTION.validate('choose_target', current_sector,
+                                   controlled_actor, param, {i,j})
           end
         }
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        params[param.output] = current_sector:getBodyAt(unpack(args.pos))
+        params[param.output] = args.pos
       else
         return false
       end
