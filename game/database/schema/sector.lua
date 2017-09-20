@@ -10,6 +10,8 @@ return  {
     schema = 'transformers.connections' },
   { id = 'deadends', name = "Deadend Settings", type = 'section',
     schema = 'transformers.deadends' },
+  { id = 'fillings', name = "Fillings Settings", type = 'section',
+    schema = 'transformers.fillings' },
   { id = 'exits', name = "Exit Settings", type = 'section',
     schema = 'transformers.exits' },
   { id = 'encounters', name = "Encounter Settings", type = 'section',
