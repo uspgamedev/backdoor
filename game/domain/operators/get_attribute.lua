@@ -1,4 +1,5 @@
---Get an attribute value of user
+
+--- Get an attribute value of user
 
 local OP = {}
 
@@ -15,3 +16,4 @@ function OP.process(actor, sector, params)
 end
 
 return OP
+

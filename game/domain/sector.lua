@@ -318,12 +318,12 @@ end
 
 function Sector:isInside(i, j)
   return (i >= 1 and i <= self.h) and
-  (j >= 1 and j <= self.w)
+         (j >= 1 and j <= self.w)
 end
 
 function Sector:isValid(i, j)
   return self:isInside(i,j) and
-  self.tiles[i][j] and not self.bodies[i][j]
+         self.tiles[i][j] and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()

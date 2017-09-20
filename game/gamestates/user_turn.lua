@@ -110,7 +110,7 @@ local function _useAction(action_slot)
       )
       local args = coroutine.yield(_task)
       if args.target_is_valid then
-        params[param.output] = current_sector:getBodyAt(unpack(args.pos))
+        params[param.output] = args.pos
       else
         return false
       end

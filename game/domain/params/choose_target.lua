@@ -1,4 +1,6 @@
 
+local TILE = require 'common.tile'
+
 local PARAM = {}
 
 PARAM.schema = {
@@ -9,7 +11,7 @@ PARAM.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'body'
+PARAM.type = 'pos'
 
 function PARAM.isValid(sector, actor, value)
   return true
