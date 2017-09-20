@@ -31,10 +31,11 @@
   },
   "SHOOT":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
     "effects":[{
         "typename":"deal_damage",
@@ -88,10 +89,11 @@
   },
   "HEAL":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
     "cost":6,
     "operators":[{
@@ -129,15 +131,17 @@
   },
   "DOUBLESHOOT":{
     "params":[{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":6,
         "output":"target",
-        "max-range":10
+        "body-only":true
       },{
-        "typename":"choose_target",
         "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":6,
         "output":"target2",
-        "max-range":10
+        "body-only":true
       }],
     "cost":12,
     "operators":[{

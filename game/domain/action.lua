@@ -27,12 +27,17 @@ function ACTION.paramsOf(action_name)
   return ipairs(DB.loadSpec("action", action_name).params)
 end
 
+function ACTION.validate(param_name, sector, actor, param, value)
+  return PAR[param_name].isValid(sector, actor, param, value)
+end
+
 function ACTION.run(action_name, actor, sector, params)
   local spec = DB.loadSpec("action", action_name)
   local values = {}
   for i,parameter in ipairs(spec.params) do
     local paramspec = PAR[parameter.typename]
-    if not paramspec.isValid(sector, actor, params[paramspec.output]) then
+    if not paramspec.isValid(sector, actor, parameter,
+                             params[parameter.output]) then
       return false
     end
   end

@@ -7,6 +7,7 @@ local Sector = require 'domain.sector'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local SectorView = require 'domain.view.sectorview'
+
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'
 
@@ -29,14 +30,14 @@ function state:enter(_, sector_view, target_opt)
 
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
-  _sector_view:newCursor(i, j, target_opt.valid_position_func)
+  _sector_view:newCursor(i, j, target_opt.validator)
 
   local move_cursor = function (dir)
       _sector_view:moveCursor(unpack(DIR[dir]))
   end
 
   local confirm = function ()
-    if _sector_view.cursor.valid_position_func(_sector_view:getCursorPos()) then
+    if _sector_view.cursor.validator(_sector_view:getCursorPos()) then
         local args = {
           target_is_valid = true,
           pos = {_sector_view:getCursorPos()}

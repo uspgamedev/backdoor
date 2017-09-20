@@ -1,11 +1,11 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
-local DIR       = require 'domain.definitions.dir'
-local ACTION    = require 'domain.action'
-local CONTROL   = require 'infra.control'
-local INPUT     = require 'infra.input'
+local DIR           = require 'domain.definitions.dir'
+local ACTION        = require 'domain.action'
+local CONTROL       = require 'infra.control'
+local INPUT         = require 'infra.input'
 
-local HandView  = require 'domain.view.handview'
+local HandView      = require 'domain.view.handview'
 
 local state = {}
 
@@ -102,9 +102,9 @@ local function _useAction(action_slot)
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
-          valid_position_func = function(i, j)
-            return current_sector:isInside(i,j) and
-                   current_sector:getBodyAt(i,j)
+          validator = function(i, j)
+            return ACTION.validate('choose_target', current_sector,
+                                   controlled_actor, param, {i,j})
           end
         }
       )
