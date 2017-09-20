@@ -27,6 +27,10 @@ function ACTION.paramsOf(action_name)
   return ipairs(DB.loadSpec("action", action_name).params)
 end
 
+function ACTION.param(param_name)
+  return PAR[param_name]
+end
+
 function ACTION.validate(param_name, sector, actor, param, value)
   return PAR[param_name].isValid(sector, actor, param, value)
 end

@@ -69,6 +69,7 @@ function SectorView:draw()
   end
   local cx, cy = CAM:position()
   local draw_bodies = {}
+  local highlights = {}
   cx = cx / TILE_W
   cy = cy / TILE_H
   g.setBackgroundColor(75, 78, 60, 255)
@@ -86,15 +87,45 @@ function SectorView:draw()
           g.push()
           TILES:add(TILE_COLORS[tile.type], x, y)
           TILES:add(TILE_COLORS.shade, x, y+TILE_H)
+          g.pop()
+          if self.cursor and self.cursor.range_checker(i+1, j+1) then
+            table.insert(highlights, {x, y, TILE_W, TILE_H, {100, 200, 200}})
+          end
+          if self.cursor and self.cursor.validator(i+1, j+1) then
+            table.insert(highlights, {x, y, TILE_W, TILE_H, {200, 200, 100}})
+          end
           if body then
             table.insert(draw_bodies, {body, x, y})
           end
-          g.pop()
         end
       end
     end
   end
   g.draw(TILES, 0, 0)
+  -- Draw highlights
+  for _, highlight in ipairs(highlights) do
+    local x,y,w,h,color = unpack(highlight)
+    color[4] = 100
+    g.setColor(color)
+    g.rectangle('fill', x, y, w, h)
+  end
+  --Draw Cursor, if it exists
+  if self.cursor then
+    local c_i, c_j = self:getCursorPos()
+    local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
+    g.push()
+    g.translate(x, y)
+    if self.cursor.validator(c_i,c_j) then
+      g.setColor(250, 250, 250)
+    else
+      g.setColor(255,0,0)
+    end
+    local line_w = love.graphics.getLineWidth()
+    love.graphics.setLineWidth(4)
+    g.rectangle("line", 0, 0, TILE_W, TILE_H)
+    love.graphics.setLineWidth(line_w)
+    g.pop()
+  end
   -- Draw dem bodies
   for _, bodyinfo in ipairs(draw_bodies) do
     local body, x, y = unpack(bodyinfo)
@@ -113,31 +144,14 @@ function SectorView:draw()
     g.print(body:getHP(), 0, 0)
     g.pop()
   end
-  local c_i, c_j = self:getCursorPos()
-  --Draw Cursor, if it exists
-  if self.cursor then
-    local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
-    g.push()
-    g.translate(x, y)
-    if self.cursor.validator(c_i,c_j) then
-      g.setColor(250, 250, 250)
-    else
-      g.setColor(255,0,0)
-    end
-    local line_w = love.graphics.getLineWidth()
-    love.graphics.setLineWidth(4)
-    g.rectangle("line", 0, 0, TILE_W, TILE_H)
-    love.graphics.setLineWidth(line_w)
-    g.pop()
-  end
 
 end
 
 --CURSOR FUNCTIONS
 
-function SectorView:newCursor(i,j,validator)
+function SectorView:newCursor(i,j,validator,range_checker)
   i, j = i or 1, j or 1
-  self.cursor = Cursor(i,j,validator)
+  self.cursor = Cursor(i,j,validator,range_checker)
 end
 
 function SectorView:removeCursor()
@@ -176,11 +190,12 @@ Cursor = Class{
   __includes = { ELEMENT }
 }
 
-function Cursor:init(i, j, validator)
+function Cursor:init(i, j, validator, range_checker)
   self.i = i
   self.j = j
 
   self.validator = validator
+  self.range_checker = range_checker
 end
 
 function Cursor:getPos()

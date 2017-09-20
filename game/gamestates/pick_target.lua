@@ -30,7 +30,7 @@ function state:enter(_, sector_view, target_opt)
 
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
-  _sector_view:newCursor(i, j, target_opt.validator)
+  _sector_view:newCursor(i, j, target_opt.validator, target_opt.range_checker)
 
   local move_cursor = function (dir)
       _sector_view:moveCursor(unpack(DIR[dir]))

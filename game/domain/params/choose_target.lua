@@ -12,6 +12,17 @@ PARAM.schema = {
 
 PARAM.type = 'pos'
 
+function PARAM.isWithinRange(sector, actor, parameter, value)
+  local max = parameter['max-range'] if max then
+    local i,j = actor:getPos()
+    local dist = TILE.dist(i,j,unpack(value))
+    if dist > max then
+      return false
+    end
+  end
+  return true
+end
+
 function PARAM.isValid(sector, actor, parameter, value)
   if not sector:isInside(unpack(value)) then
     return false
@@ -19,12 +30,8 @@ function PARAM.isValid(sector, actor, parameter, value)
   if parameter['body-only'] and not sector:getBodyAt(unpack(value)) then
     return false
   end
-  local max = parameter['max-range'] if max then
-    local i,j = actor:getPos()
-    local dist = TILE.dist(i,j,unpack(value))
-    if dist > max then
-      return false
-    end
+  if not PARAM.isWithinRange(sector, actor, parameter, value) then
+    return false
   end
   return true
 end

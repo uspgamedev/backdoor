@@ -102,6 +102,11 @@ local function _useAction(action_slot)
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
+          range_checker = function(i, j)
+            return ACTION.param('choose_target')
+                         .isWithinRange(current_sector, controlled_actor,
+                                        param, {i,j})
+          end,
           validator = function(i, j)
             return ACTION.validate('choose_target', current_sector,
                                    controlled_actor, param, {i,j})
