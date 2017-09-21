@@ -31,5 +31,9 @@ function Card:getUpgradesList()
   return self:getSpec('upgrade').list
 end
 
+function Card:getUpgradeCost()
+  return self:getSpec('upgrade').cost
+end
+
 return Card
 
