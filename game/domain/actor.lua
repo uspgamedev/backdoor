@@ -30,6 +30,7 @@ function Actor:init(spec_name)
 
   self.hand = {}
   self.hand_limit = 5
+  self.exp = 0
 
   self.buffers = {}
   for i=1,3 do
@@ -43,6 +44,7 @@ function Actor:loadState(state)
   self.actions = setmetatable(state.actions, { __index = BASE_ACTIONS })
   self.body_id = state.body_id
   self:setId(state.id)
+  self.exp = state.exp
   self.hand_limit = state.hand_limit
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -69,6 +71,7 @@ function Actor:saveState()
   state.actions = self.actions
   state.body_id = self.body_id
   state.id = self.id
+  state.exp = self.exp
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
