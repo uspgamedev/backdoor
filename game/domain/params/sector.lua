@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'sector'
 
-function PARAM.isValid(sector, actor, params)
+function PARAM.isValid(sector, actor, parameter, value)
   return true
 end
 

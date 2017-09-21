@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'none'
 
-function PARAM.isValid(sector, actor, value)
+function PARAM.isValid(sector, actor, parameter, value)
   return actor:isHandEmpty()
 end
 

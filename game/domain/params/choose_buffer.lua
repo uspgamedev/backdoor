@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'integer'
 
-function PARAM.isValid(sector, actor, value)
+function PARAM.isValid(sector, actor, parameter, value)
   return true
 end
 

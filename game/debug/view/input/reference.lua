@@ -68,11 +68,13 @@ inputs['value'] = function(spec, key, parent)
         spec[key.id] = refs[idx]
       end
     else
+      IMGUI.PushID(key.id)
       if key.match == "integer" then
         changed, value = inputInt(value, "", key.range)
       elseif key.match == 'string' then
         changed, value = inputStr(value, "")
       end
+      IMGUI.PopID()
       if changed then
         spec[key.id] = value
       end

@@ -115,6 +115,10 @@ function Actor:getExp()
   return self.exp
 end
 
+function Actor:modifyExpBy(n)
+  self.exp = math.max(0, self.exp + n)
+end
+
 function Actor:getATH()
   return self:getSpec('ath') + self.upgrades.ATH
 end
@@ -165,7 +169,10 @@ function Actor:getAction(slot)
       if card:isArt() then
         return card:getArtAction()
       elseif card:isUpgrade() then
-        return 'UPGRADE', { list = card:getUpgradesList() }
+        local cost = card:getUpgradeCost()
+        if self.exp >= cost then
+          return 'UPGRADE', { list = card:getUpgradesList(), ["exp-cost"] = cost }
+        end
       end
     end
   end
@@ -270,6 +277,7 @@ function Actor:makeAction(sector)
     local action_slot, params = self:behavior(sector)
     local check, alt_params = self:getAction(action_slot)
     if alt_params then params = alt_params end
+    print(check, params)
     if check then
       local action
       if action_slot == 'INTERACT' then
