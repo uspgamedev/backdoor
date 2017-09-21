@@ -16,7 +16,11 @@ function Card:getName()
 end
 
 function Card:isArt()
-  return self:getSpec('type') == "ART"
+  return not not self:getSpec('art')
+end
+
+function Card:isUpgrade()
+  return not not self:getSpec('upgrade')
 end
 
 function Card:getArtAction()

@@ -13,6 +13,7 @@ local function _simpleBuffer()
     table.insert(buffer, 'bolt')
     table.insert(buffer, 'cure')
     table.insert(buffer, 'draw')
+    table.insert(buffer, 'ath +1')
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)

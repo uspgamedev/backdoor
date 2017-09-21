@@ -9,6 +9,11 @@
     "art_action":"DRAW",
     "name":"Think"
   },
+  "ath +1":{
+    "type":"UPGRADE",
+    "art_action":"ATH +1",
+    "name":"Athletics +1"
+  },
   "bolt":{
     "type":"ART",
     "art_action":"SHOOT",

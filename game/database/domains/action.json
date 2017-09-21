@@ -32,8 +32,8 @@
   "SHOOT":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":5,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       }],
@@ -71,6 +71,14 @@
         "card_index":"par:card_index"
       }]
   },
+  "ATH +1":{
+    "params":[],
+    "operators":[],
+    "effects":[{
+        "typename":"upgrade_attribute",
+        "upgrade_value":1
+      }]
+  },
   "CHANGE_SECTOR":{
     "params":[{
         "typename":"sector",
@@ -90,8 +98,8 @@
   "HEAL":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":5,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       }],
@@ -132,14 +140,14 @@
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":6,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       },{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":6,
+        "typename":"choose_target",
         "output":"target2",
         "body-only":true
       }],
