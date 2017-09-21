@@ -37,7 +37,7 @@ function Actor:init(spec_name)
   self.exp = 0
 
   self.buffers = {}
-  for i=1,3 do
+  for i=1,DEFS.ACTOR_BUFFER_NUM do
     self.buffers[i] = {{},{}, current = 1}
   end
 
@@ -58,7 +58,7 @@ function Actor:loadState(state)
     table.insert(self.hand, card)
   end
   self.buffers = {}
-  for i=1,3 do
+  for i=1,DEFS.ACTOR_BUFFER_NUM do
     local buffer_state = state.buffers[i]
     local buffer = {}
     for j,card_name in ipairs(state.buffers[i]) do
@@ -85,7 +85,7 @@ function Actor:saveState()
     table.insert(state.hand, card_state)
   end
   state.buffers = {}
-  for i=1,3 do
+  for i=1,DEFS.ACTOR_BUFFER_NUM do
     local buffer = self.buffers[i]
     local buffer_state = {}
     for k,card_name in ipairs(self.buffers[i]) do
