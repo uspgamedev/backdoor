@@ -24,7 +24,7 @@ function draw.allTables()
 
     CAM:detach() --Stop tracking camera
 
-    DrawTable(DRAW_TABLE.HUDl)
+    DrawTable(DRAW_TABLE.HUD_BG)
 
     DrawTable(DRAW_TABLE.HUD)
 
