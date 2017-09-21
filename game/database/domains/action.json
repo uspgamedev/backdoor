@@ -4,44 +4,40 @@
         "typename":"direction",
         "output":"pos"
       }],
+    "cost":3,
+    "operators":[],
     "effects":[{
         "typename":"move_to",
         "pos":"par:pos"
-      }],
-    "operators":[],
-    "cost":3
+      }]
   },
   "DRAW":{
     "params":[],
-    "cost":4,
-    "operators":[],
     "effects":[{
         "typename":"draw_card",
         "amount":1
-      }]
+      }],
+    "operators":[],
+    "cost":4
   },
   "DEBUG":{
     "params":[],
+    "cost":2,
+    "operators":[],
     "effects":[{
         "typename":"print",
         "text":42
-      }],
-    "operators":[],
-    "cost":2
+      }]
   },
   "SHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
         "typename":"choose_target",
+        "body-only":true,
         "output":"target",
-        "body-only":true
+        "max-range":5
       }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"val:body",
-        "amount":"val:amount"
-      }],
+    "cost":10,
     "operators":[{
         "typename":"get_attribute",
         "output":"attr",
@@ -49,34 +45,45 @@
       },{
         "op":"+",
         "typename":"integer_binop",
-        "lhs":"val:attr",
+        "output":"amount",
         "rhs":3,
-        "output":"amount"
+        "lhs":"val:attr"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"body"
       }],
-    "cost":10
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"val:body",
+        "amount":"val:amount"
+      }]
   },
   "CONSUME_CARD":{
     "params":[{
         "typename":"card_index",
         "output":"card_index"
       }],
-    "cost":2,
-    "operators":[],
     "effects":[{
         "typename":"consume_card",
         "card_index":"par:card_index"
-      }]
+      }],
+    "operators":[],
+    "cost":2
   },
-  "ATH +1":{
-    "params":[],
+  "NEW_HAND":{
+    "params":[{
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
+      }],
+    "cost":2,
     "operators":[],
     "effects":[{
-        "typename":"upgrade_attribute",
-        "upgrade_value":1
+        "typename":"new_hand",
+        "which":"par:label#1001"
       }]
   },
   "CHANGE_SECTOR":{
@@ -87,23 +94,27 @@
         "typename":"direction",
         "output":"pos"
       }],
+    "cost":1,
+    "operators":[],
     "effects":[{
         "typename":"change_sector",
         "target_sector":"par:sector",
         "target_pos":"par:pos"
-      }],
-    "operators":[],
-    "cost":1
+      }]
   },
   "HEAL":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
         "typename":"choose_target",
+        "body-only":true,
         "output":"target",
-        "body-only":true
+        "max-range":5
       }],
-    "cost":6,
+    "effects":[{
+        "typename":"heal",
+        "target":"val:body",
+        "amount":"val:amount"
+      }],
     "operators":[{
         "typename":"get_attribute",
         "output":"arcana",
@@ -111,55 +122,35 @@
       },{
         "op":"+",
         "typename":"integer_binop",
-        "lhs":"val:arcana",
+        "output":"amount",
         "rhs":2,
-        "output":"amount"
+        "lhs":"val:arcana"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"body"
       }],
-    "effects":[{
-        "typename":"heal",
-        "target":"val:body",
-        "amount":"val:amount"
-      }]
+    "cost":6
   },
-  "RECALL_CARD":{
-    "params":[{
-        "typename":"card_index",
-        "output":"card_index"
-      }],
-    "cost":2,
+  "IDLE":{
+    "params":[],
+    "cost":1,
     "operators":[],
-    "effects":[{
-        "typename":"recall_card",
-        "card_index":"par:card_index"
-      }]
+    "effects":[]
   },
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":6,
         "typename":"choose_target",
+        "body-only":true,
         "output":"target",
-        "body-only":true
+        "max-range":6
       },{
         "filter":"BODY",
-        "max-range":6,
         "typename":"choose_target",
+        "body-only":true,
         "output":"target2",
-        "body-only":true
-      }],
-    "cost":12,
-    "operators":[{
-        "typename":"get_body_at",
-        "pos":"par:target",
-        "output":"body1"
-      },{
-        "typename":"get_body_at",
-        "pos":"par:target2",
-        "output":"body2"
+        "max-range":6
       }],
     "effects":[{
         "typename":"deal_damage",
@@ -169,25 +160,26 @@
         "typename":"deal_damage",
         "target":"val:body2",
         "amount":3
-      }]
-  },
-  "IDLE":{
-    "params":[],
-    "effects":[],
-    "operators":[],
-    "cost":1
-  },
-  "NEW_HAND":{
-    "params":[{
-        "typename":"choose_buffer",
-        "output":"label#1001"
+      }],
+    "operators":[{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body1"
       },{
-        "typename":"empty_hand",
-        "output":"output"
+        "typename":"get_body_at",
+        "pos":"par:target2",
+        "output":"body2"
+      }],
+    "cost":12
+  },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
       }],
     "effects":[{
-        "typename":"new_hand",
-        "which":"par:label#1001"
+        "typename":"recall_card",
+        "card_index":"par:card_index"
       }],
     "operators":[],
     "cost":2

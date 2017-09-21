@@ -24,7 +24,7 @@ function Card:isUpgrade()
 end
 
 function Card:getArtAction()
-  return self:getSpec('art_action')
+  return self:getSpec('art').art_action
 end
 
 return Card
