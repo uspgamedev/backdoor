@@ -14,6 +14,7 @@
   "sentient":{
     "arc":10,
     "ath":10,
+    "collection":"adventurer",
     "mec":10,
     "behavior":"player",
     "name":"Sentient",
@@ -28,6 +29,7 @@
   "dumb":{
     "arc":0,
     "ath":0,
+    "collection":"adventurer",
     "behavior":"random_walk",
     "description":"Oh honey...",
     "mec":0

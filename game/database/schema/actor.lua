@@ -8,6 +8,8 @@ return {
   { id = 'ath', name = "ATH", type = "integer", range={0} },
   { id = 'arc', name = "ARC", type = "integer", range={0} },
   { id = 'mec', name = "MEC", type = "integer", range={0} },
+  { id = 'collection', name = "Card Collection", type = 'enum',
+    options = 'collection' },
   { id = 'description', name = "Description", type = 'text' },
 }
 
