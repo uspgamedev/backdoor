@@ -280,7 +280,6 @@ function Actor:makeAction(sector)
     local action_slot, params = self:behavior(sector)
     local check, alt_params = self:getAction(action_slot)
     if alt_params then params = alt_params end
-    print(check, params)
     if check then
       local action
       if action_slot == 'INTERACT' then
