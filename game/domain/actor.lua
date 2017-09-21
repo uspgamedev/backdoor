@@ -31,6 +31,11 @@ function Actor:init(spec_name)
 
   self.hand = {}
   self.hand_limit = 5
+  self.upgrades = {
+    ATH = 0,
+    ARC = 0,
+    MEC = 0
+  }
   self.exp = 0
 
   self.buffers = {}
@@ -46,6 +51,7 @@ function Actor:loadState(state)
   self.body_id = state.body_id
   self:setId(state.id)
   self.exp = state.exp
+  self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -73,6 +79,7 @@ function Actor:saveState()
   state.body_id = self.body_id
   state.id = self.id
   state.exp = self.exp
+  state.upgrades = self.upgrades
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
@@ -109,15 +116,27 @@ function Actor:getExp()
 end
 
 function Actor:getATH()
-  return self:getSpec('ath')
+  return self:getSpec('ath') + self.upgrades.ATH
+end
+
+function Actor:upgradeATH(n)
+  self.upgrades.ATH = self.upgrades.ATH + n
 end
 
 function Actor:getARC()
-  return self:getSpec('arc')
+  return self:getSpec('arc') + self.upgrades.ARC
+end
+
+function Actor:upgradeARC(n)
+  self.upgrades.ARC = self.upgrades.ARC + n
 end
 
 function Actor:getMEC()
-  return self:getSpec('mec')
+  return self:getSpec('mec') + self.upgrades.MEC
+end
+
+function Actor:upgradeMEC(n)
+  self.upgrades.MEC = self.upgrades.MEC + n
 end
 
 function Actor:getPos()
