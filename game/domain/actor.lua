@@ -249,11 +249,8 @@ function Actor:removeHandCard(index)
   table.remove(self.hand, index)
 end
 
-function Actor:recallCard(index)
-  assert(index >= 1 and index <= #self.hand)
+function Actor:addCardToBackbuffer(card)
   assert(self.last_buffer)
-  local card = self.hand[index]
-  table.remove(self.hand, index)
   local buffer = self.buffers[self.last_buffer]
   table.insert(buffer, card:getSpecName())
 end
