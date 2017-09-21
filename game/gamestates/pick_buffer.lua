@@ -56,7 +56,8 @@ function state:enter(_, controlled_actor)
   end
 
   _filter = Filter(0,0,0, initial_a, 180)
-  _filter:addElement('HUDl')
+  _filter:addElement('HUD_BG')
+
 
   --Create buffer view
   _buffer_picker_view = BufferPickerView(_controlled_actor)
