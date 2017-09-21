@@ -20,7 +20,8 @@
       "list":[{
           "attr":"ATH",
           "val":1
-        }]
+        }],
+      "cost":2
     },
     "type":"UPGRADE",
     "art_action":"ATH +1",

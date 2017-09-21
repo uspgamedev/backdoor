@@ -12,6 +12,7 @@ return {
     id = 'upgrade', name = "Upgrade",
     type = 'section',
     schema = {
+      { id = 'cost', name = "Exp Cost", type = 'integer', range = {1} },
       {
         id = 'list', name = "Attribute Change", type = 'array',
         schema = {
