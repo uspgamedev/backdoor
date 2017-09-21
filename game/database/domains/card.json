@@ -15,6 +15,24 @@
       "art_action":"DRAW"
     }
   },
+  "bolt":{
+    "type":"ART",
+    "art_action":"SHOOT",
+    "name":"Bolt",
+    "art":{
+      "art_action":"SHOOT"
+    }
+  },
+  "arc +1":{
+    "upgrade":{
+      "list":[{
+          "attr":"ARC",
+          "val":1
+        }],
+      "cost":2
+    },
+    "name":"Arcana +1"
+  },
   "ath +1":{
     "upgrade":{
       "list":[{
@@ -27,12 +45,14 @@
     "art_action":"ATH +1",
     "name":"Athletics +1"
   },
-  "bolt":{
-    "type":"ART",
-    "art_action":"SHOOT",
-    "name":"Bolt",
-    "art":{
-      "art_action":"SHOOT"
+  "mec +1":{
+    "name":"Mechanics +1",
+    "upgrade":{
+      "list":[{
+          "attr":"MEC",
+          "val":1
+        }],
+      "cost":2
     }
   }
 }

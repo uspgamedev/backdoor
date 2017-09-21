@@ -14,6 +14,8 @@ local function _simpleBuffer()
     table.insert(buffer, 'cure')
     table.insert(buffer, 'draw')
     table.insert(buffer, 'ath +1')
+    table.insert(buffer, 'arc +1')
+    table.insert(buffer, 'mec +1')
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
