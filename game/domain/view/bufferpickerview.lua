@@ -96,9 +96,7 @@ function BufferPickerView:moveSelection(dir)
 
     --Create changing-buffer effect
     self.is_changing_buffer = true
-    if self.timers[MAIN_TIMER]["change_buffer"] then
-      MAIN_TIMER:cancel(self.timers[MAIN_TIMER]["change_buffer"])
-    end
+    self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
     self.current_buffer_x_mod, self.secondary_buffer_x_mod = x_mod_value, 0
     self:addTimer("change_buffer", MAIN_TIMER, "tween",
@@ -118,9 +116,7 @@ function BufferPickerView:moveSelection(dir)
 
     --Create changing-buffer effect
     self.is_changing_buffer = true
-    if self.timers[MAIN_TIMER]["change_buffer"] then
-      MAIN_TIMER:cancel(self.timers[MAIN_TIMER]["change_buffer"])
-    end
+    self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
     self.current_buffer_x_mod, self.secondary_buffer_x_mod = -x_mod_value, 0
     self:addTimer("change_buffer", MAIN_TIMER, "tween",
