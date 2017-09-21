@@ -32,8 +32,8 @@
   "SHOOT":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":5,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       }],
@@ -65,10 +65,22 @@
         "output":"card_index"
       }],
     "cost":2,
-    "operators":[],
+    "operators":[{
+        "typename":"self",
+        "output":"self"
+      },{
+        "typename":"get_hand_card",
+        "card-index":"par:card_index",
+        "output":"card",
+        "actor":"val:self"
+      }],
     "effects":[{
         "typename":"consume_card",
-        "card_index":"par:card_index"
+        "card_index":"par:card_index",
+        "card":"val:card"
+      },{
+        "typename":"remove_hand_card",
+        "card-index":"par:card_index"
       }]
   },
   "UPGRADE":{
@@ -113,8 +125,8 @@
   "HEAL":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":5,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       }],
@@ -155,14 +167,14 @@
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":6,
+        "typename":"choose_target",
         "output":"target",
         "body-only":true
       },{
         "filter":"BODY",
-        "typename":"choose_target",
         "max-range":6,
+        "typename":"choose_target",
         "output":"target2",
         "body-only":true
       }],

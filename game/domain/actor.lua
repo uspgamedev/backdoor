@@ -239,6 +239,16 @@ function Actor:drawCard(which)
   Signal.emit("actor_draw", self, card)
 end
 
+function Actor:getHandCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  return self.hand[index]
+end
+
+function Actor:removeHandCard(index)
+  assert(index >= 1 and index <= #self.hand)
+  table.remove(self.hand, index)
+end
+
 function Actor:recallCard(index)
   assert(index >= 1 and index <= #self.hand)
   assert(self.last_buffer)
@@ -248,13 +258,9 @@ function Actor:recallCard(index)
   table.insert(buffer, card:getSpecName())
 end
 
-function Actor:consumeCard(index)
-  assert(index >= 1 and index <= #self.hand)
-  assert(self.last_buffer)
-  local card = self.hand[index]
-  table.remove(self.hand, index)
-  self.exp = self.exp + DEFS.CONSUME_EXP
+function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
+  self.exp = self.exp + DEFS.CONSUME_EXP
 end
 
 function Actor:tick()
