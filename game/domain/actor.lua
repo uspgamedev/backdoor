@@ -171,7 +171,10 @@ function Actor:getAction(slot)
       elseif card:isUpgrade() then
         local cost = card:getUpgradeCost()
         if self.exp >= cost then
-          return 'UPGRADE', { list = card:getUpgradesList(), ["exp-cost"] = cost }
+          return 'UPGRADE', {
+            list = card:getUpgradesList(),
+            ["exp-cost"] = cost
+          }
         end
       end
     end
