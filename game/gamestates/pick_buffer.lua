@@ -30,7 +30,7 @@ function Filter:init(_r, _g, _b, _a)
   self.a = 0
 
   --Fade-in effect
-  self.timers["start"] = MAIN_TIMER:tween(.2, self, {a = _a}, 'out-quad')
+  ELEMENT.addTimer(self,"start", MAIN_TIMER, "tween",.2, self, {a = _a}, 'out-quad')
 
 end
 
@@ -95,7 +95,7 @@ function state:leave()
     Signal.clear("confirm")
     Signal.clear("cancel")
     _buffer_picker_view:destroy()
-    _filter.timers["end"] = MAIN_TIMER:tween(.2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
+    _filter:addTimer("end", MAIN_TIMER, "tween", .2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
 
     CONTROL.setMap(_previous_control_map)
 end

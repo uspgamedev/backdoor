@@ -161,6 +161,15 @@ function Actor:getBufferSize(which)
   end
 end
 
+function Actor:getBackBufferSize(which)
+  which = which or self.last_buffer
+  for i,card in ipairs(self.buffers[which]) do
+    if card == DEFS.DONE then
+      return #self.buffers[which] - i
+    end
+  end
+end
+
 function Actor:getHandLimit()
   return self.hand_limit
 end
@@ -250,4 +259,3 @@ function Actor:spendTime(n)
 end
 
 return Actor
-
