@@ -17,7 +17,7 @@
   },
   "ath +1":{
     "upgrade":{
-      "upgrade_list":[{
+      "list":[{
           "attr":"ATH",
           "val":1
         }]

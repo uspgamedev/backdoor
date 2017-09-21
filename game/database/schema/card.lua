@@ -13,7 +13,7 @@ return {
     type = 'section',
     schema = {
       {
-        id = 'upgrade_item', name = "Attribute Change", type = 'array',
+        id = 'list', name = "Attribute Change", type = 'array',
         schema = {
           { id = 'attr', name = "Attribute", type = 'enum', options = {"ATH", "ARC", "MEC"} },
           { id = 'val', name = "Value", type = 'integer' },

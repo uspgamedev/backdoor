@@ -161,8 +161,12 @@ function Actor:getAction(slot)
     end
   elseif self:isCard(slot) then
     local card = self.hand[slot]
-    if card and card:isArt() then
-      return card:getArtAction()
+    if card then
+      if card:isArt() then
+        return card:getArtAction()
+      elseif card:isUpgrade() then
+        return 'UPGRADE', { list = card:getUpgradesList() }
+      end
     end
   end
 end
@@ -264,7 +268,8 @@ function Actor:makeAction(sector)
   local success = false
   repeat
     local action_slot, params = self:behavior(sector)
-    local check = self:getAction(action_slot)
+    local check, alt_params = self:getAction(action_slot)
+    if alt_params then params = alt_params end
     if check then
       local action
       if action_slot == 'INTERACT' then
