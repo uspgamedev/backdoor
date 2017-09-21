@@ -104,6 +104,10 @@ function Actor:getBody()
   return Util.findId(self.body_id)
 end
 
+function Actor:getExp()
+  return self.exp
+end
+
 function Actor:getATH()
   return self:getSpec('ath')
 end
