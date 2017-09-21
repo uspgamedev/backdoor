@@ -4,6 +4,7 @@ local ACTION      = require 'domain.action'
 local Card        = require 'domain.card'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
+local VALUES      = require 'domain.definitions.values'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -212,7 +213,8 @@ function Actor:consumeCard(index)
   assert(self.last_buffer)
   local card = self.hand[index]
   table.remove(self.hand, index)
-  -- TODO: gain XP!
+  self.exp = self.exp + VALUES.CONSUME_EXP
+  --FIXME: add card rarity modifier!
 end
 
 function Actor:tick()
