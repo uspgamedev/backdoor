@@ -30,7 +30,7 @@ function BufferPickerView:init(actor)
   self.secondary_buffer_a = 0
 
   --Arrows
-  self.right_arrow_x = O_WIN_W/2 + 80
+  self.right_arrow_x = O_WIN_W/2 + 120
   self.left_arrow_x = O_WIN_W/2 - 80
   self.arrows_y = 3*O_WIN_H/4 - 10
 
@@ -51,7 +51,7 @@ function BufferPickerView:draw()
   local i_x, i_y = c_x-i_w/2*i_s + self.current_buffer_x_mod, c_y-i_h/2*i_s --Image position
   local i_r = 0 --Image rotation
   g.setColor(255, 255, 255, self.current_buffer_a)
-  for i = 1, math.floor(size/2) do
+  for i = 1, math.ceil(size/2) do
     g.draw(img, i_x, i_y, i_r, i_s) --Draw image
     i_x, i_y = i_x + 10, i_y - 10
   end
@@ -65,7 +65,7 @@ function BufferPickerView:draw()
     local i_x, i_y = c_x-i_w/2*i_s + self.secondary_buffer_x_mod, c_y-i_h/2*i_s --Image position
     local i_r = 0 --Image rotation
     g.setColor(255, 255, 255, self.secondary_buffer_a)
-    for i = 1, math.floor(size/2) do
+    for i = 1, math.ceil(size/2) do
       g.draw(img, i_x, i_y, i_r, i_s) --Draw image
       i_x, i_y = i_x + 10, i_y - 10
     end
@@ -74,7 +74,8 @@ function BufferPickerView:draw()
   --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
   g.setFont(g.newFont(20))
-  g.print(("%d (%2d)"):format(self.select, size), c_x, c_y + i_h/2 + 40)
+  local back_buffer_size = self.actor:getBackBufferSize(self.select)
+  g.print(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size), c_x, c_y + i_h/2 + 40)
 
   --Draw arrows
   g.setColor(239, 40, 103)
@@ -95,12 +96,11 @@ function BufferPickerView:moveSelection(dir)
 
     --Create changing-buffer effect
     self.is_changing_buffer = true
-    if self.timers["change_buffer"] then
-      MAIN_TIMER:cancel(self.timers["change_buffer"])
-    end
+    self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
     self.current_buffer_x_mod, self.secondary_buffer_x_mod = x_mod_value, 0
-    self.timers["change_buffer"] = MAIN_TIMER:tween(.2,
+    self:addTimer("change_buffer", MAIN_TIMER, "tween",
+                                                    .2,
                                                     self,
                                                     {current_buffer_a = 255,
                                                      secondary_buffer_a = 0,
@@ -116,12 +116,11 @@ function BufferPickerView:moveSelection(dir)
 
     --Create changing-buffer effect
     self.is_changing_buffer = true
-    if self.timers["change_buffer"] then
-      MAIN_TIMER:cancel(self.timers["change_buffer"])
-    end
+    self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
     self.current_buffer_x_mod, self.secondary_buffer_x_mod = -x_mod_value, 0
-    self.timers["change_buffer"] = MAIN_TIMER:tween(.2,
+    self:addTimer("change_buffer", MAIN_TIMER, "tween",
+                                                    .2,
                                                     self,
                                                     {current_buffer_a = 255,
                                                      secondary_buffer_a = 0,
@@ -145,7 +144,8 @@ end
 function expandArrows(b)
   local mod_value = 10
 
-  b.timers["arrow_effect"] = MAIN_TIMER:tween(.5,
+  b:addTimer("arrow_effect", MAIN_TIMER, "tween",
+                                              .5,
                                               b,
                                               {left_arrow_x = b.left_arrow_x - mod_value,
                                                right_arrow_x = b.right_arrow_x + mod_value},
@@ -158,7 +158,8 @@ end
 function closeArrows(b)
   local mod_value = 10
 
-  b.timers["arrow_effect"] = MAIN_TIMER:tween(.5,
+  b:addTimer("arrow_effect", MAIN_TIMER, "tween",
+                                              .5,
                                               b,
                                               {left_arrow_x = b.left_arrow_x + mod_value,
                                                right_arrow_x = b.right_arrow_x - mod_value},

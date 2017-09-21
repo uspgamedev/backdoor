@@ -21,16 +21,16 @@ local Filter = Class{
   __includes = {ELEMENT}
 }
 
-function Filter:init(_r, _g, _b, _a)
+function Filter:init(_r, _g, _b, _a, _target_a)
   ELEMENT.init(self)
 
   self.r = _r
   self.g = _g
   self.b = _b
-  self.a = 0
+  self.a = _a
 
   --Fade-in effect
-  self.timers["start"] = MAIN_TIMER:tween(.2, self, {a = _a}, 'out-quad')
+  ELEMENT.addTimer(self,"start", MAIN_TIMER, "tween",.2, self, {a = _target_a}, 'out-quad')
 
 end
 
@@ -48,7 +48,14 @@ function state:enter(_, controlled_actor)
   _controlled_actor = controlled_actor
 
   --Create filter effect
-  _filter = Filter(0,0,0,180)
+  local initial_a = 0
+  if _filter then
+    _filter:removeTimer("end", MAIN_TIMER)
+    initial_a = _filter.a
+    _filter:destroy()
+  end
+
+  _filter = Filter(0,0,0, initial_a, 180)
   _filter:addElement('HUDl')
 
   --Create buffer view
@@ -95,7 +102,7 @@ function state:leave()
     Signal.clear("confirm")
     Signal.clear("cancel")
     _buffer_picker_view:destroy()
-    _filter.timers["end"] = MAIN_TIMER:tween(.2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
+    _filter:addTimer("end", MAIN_TIMER, "tween", .2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
 
     CONTROL.setMap(_previous_control_map)
 end

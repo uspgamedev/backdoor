@@ -63,13 +63,11 @@ end
 function HandView:activate()
   self.focus_index = 1
   self.action_type = 1
-  if self.timers["start"] then
-    MAIN_TIMER:cancel(self.timers["start"])
-  end
-  if self.timers["end"] then
-    MAIN_TIMER:cancel(self.timers["end"])
-  end
-  self.timers["start"] = MAIN_TIMER:tween(0.2, self,
+  self:removeTimer("start", MAIN_TIMER)
+  self:removeTimer("end", MAIN_TIMER)
+  self:addTimer("start", MAIN_TIMER, "tween",
+                                           0.2,
+                                           self,
                                            { y = self.initial_y - 200 },
                                            'out-cubic')
 end
@@ -77,14 +75,14 @@ end
 function HandView:deactivate()
   self.focus_index = -1
   self.action_type = -1
-  if self.timers["start"] then
-    MAIN_TIMER:cancel(self.timers["start"])
-  end
-  if self.timers["end"] then
-    MAIN_TIMER:cancel(self.timers["end"])
-  end
-  self.timers["end"] = MAIN_TIMER:tween(0.2, self,
-                                         {y = self.initial_y},
+
+  self:removeTimer("start", MAIN_TIMER)
+  self:removeTimer("end", MAIN_TIMER)
+
+  self:addTimer("end", MAIN_TIMER, "tween",
+                                        0.2,
+                                        self,
+                                        {y = self.initial_y},
                                          'out-cubic')
 end
 
