@@ -110,7 +110,7 @@ local function _useAction(action_slot)
           validator = function(i, j)
             return ACTION.validate('choose_target', current_sector,
                                    controlled_actor, param, {i,j})
-                               end
+          end
         }
       )
       local args = coroutine.yield(_task)
