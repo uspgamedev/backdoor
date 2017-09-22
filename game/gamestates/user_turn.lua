@@ -34,6 +34,7 @@ local SIGNALS = {
   PRESS_SPECIAL = {"start_card_selection"},
   PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"primary_action"},
+  PRESS_ACTION_3 = {"open_pack"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -171,6 +172,14 @@ local function _newHand()
   end
 end
 
+local function _openPack()
+  local controlled_actor = _route.getControlledActor()
+  if not controlled_actor:hasOpenPack() then
+    _unregisterSignals()
+    SWITCHER.push(GS.OPEN_PACK, _route)
+  end
+end
+
 local function _saveAndQuit()
   _save_and_quit = true
 end
@@ -203,6 +212,7 @@ function _registerSignals()
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("open_pack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -274,6 +284,9 @@ function state:resume(state, args)
       end
     end
 
+  elseif state == GS.OPEN_PACK then
+
+    print("gratz")
   end
 end
 

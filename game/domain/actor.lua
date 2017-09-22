@@ -4,6 +4,7 @@ local Card        = require 'domain.card'
 local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
+local PACK        = require 'domain.pack'
 local Actor = Class{
   __includes = { GameElement }
 }
@@ -275,9 +276,18 @@ function Actor:consumeCard(card)
   self.exp = self.exp + DEFS.CONSUME_EXP
 end
 
+function Actor:hasOpenPack()
+  return not not self.pack
+end
+
 function Actor:openPack()
   assert(not self.pack)
   self.pack = PACK.open(self:getBasicCollection())
+end
+
+function Actor:iteratePack()
+  assert(self.pack)
+  return ipairs(self.pack)
 end
 
 function Actor:getPackCard(idx)

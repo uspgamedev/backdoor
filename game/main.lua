@@ -39,6 +39,7 @@ GS = {
   PICK_BUFFER = require "gamestates.pick_buffer", -- Player is choosing buffers
   CARD_SELECT = require "gamestates.card_select", -- Player is selecting a card
                                                   -- to use
+  OPEN_PACK = require "gamestates.open_pack",     -- Player opens a pack
 }
 
 -- GAMESTATE SWITCHER
