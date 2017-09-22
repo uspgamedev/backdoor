@@ -13,6 +13,9 @@ local function _simpleBuffer()
     table.insert(buffer, 'bolt')
     table.insert(buffer, 'cure')
     table.insert(buffer, 'draw')
+    table.insert(buffer, 'ath +1')
+    table.insert(buffer, 'arc +1')
+    table.insert(buffer, 'mec +1')
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -27,6 +30,8 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     body_id = body_id,
     specname = background,
     cooldown = 10,
+    exp = 0,
+    upgrades = {ATH=0,ARC=0,MEC=0},
     actions = {
       PRIMARY = "DOUBLESHOOT",
       WIDGET_A = "HEAL",

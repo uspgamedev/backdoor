@@ -16,11 +16,23 @@ function Card:getName()
 end
 
 function Card:isArt()
-  return self:getSpec('type') == "ART"
+  return not not self:getSpec('art')
+end
+
+function Card:isUpgrade()
+  return not not self:getSpec('upgrade')
 end
 
 function Card:getArtAction()
-  return self:getSpec('art_action')
+  return self:getSpec('art').art_action
+end
+
+function Card:getUpgradesList()
+  return self:getSpec('upgrade').list
+end
+
+function Card:getUpgradeCost()
+  return self:getSpec('upgrade').cost
 end
 
 return Card

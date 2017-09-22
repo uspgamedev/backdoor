@@ -4,7 +4,6 @@ local ACTION      = require 'domain.action'
 local Card        = require 'domain.card'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
-
 local Actor = Class{
   __includes = { GameElement }
 }
@@ -30,6 +29,12 @@ function Actor:init(spec_name)
 
   self.hand = {}
   self.hand_limit = 5
+  self.upgrades = {
+    ATH = 0,
+    ARC = 0,
+    MEC = 0
+  }
+  self.exp = 0
 
   self.buffers = {}
   for i=1,3 do
@@ -43,6 +48,8 @@ function Actor:loadState(state)
   self.actions = setmetatable(state.actions, { __index = BASE_ACTIONS })
   self.body_id = state.body_id
   self:setId(state.id)
+  self.exp = state.exp
+  self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -69,6 +76,8 @@ function Actor:saveState()
   state.actions = self.actions
   state.body_id = self.body_id
   state.id = self.id
+  state.exp = self.exp
+  state.upgrades = self.upgrades
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
@@ -100,16 +109,36 @@ function Actor:getBody()
   return Util.findId(self.body_id)
 end
 
+function Actor:getExp()
+  return self.exp
+end
+
+function Actor:modifyExpBy(n)
+  self.exp = math.max(0, self.exp + n)
+end
+
 function Actor:getATH()
-  return self:getSpec('ath')
+  return self:getSpec('ath') + self.upgrades.ATH
+end
+
+function Actor:upgradeATH(n)
+  self.upgrades.ATH = self.upgrades.ATH + n
 end
 
 function Actor:getARC()
-  return self:getSpec('arc')
+  return self:getSpec('arc') + self.upgrades.ARC
+end
+
+function Actor:upgradeARC(n)
+  self.upgrades.ARC = self.upgrades.ARC + n
 end
 
 function Actor:getMEC()
-  return self:getSpec('mec')
+  return self:getSpec('mec') + self.upgrades.MEC
+end
+
+function Actor:upgradeMEC(n)
+  self.upgrades.MEC = self.upgrades.MEC + n
 end
 
 function Actor:getPos()
@@ -134,8 +163,18 @@ function Actor:getAction(slot)
     end
   elseif self:isCard(slot) then
     local card = self.hand[slot]
-    if card and card:isArt() then
-      return card:getArtAction()
+    if card then
+      if card:isArt() then
+        return card:getArtAction()
+      elseif card:isUpgrade() then
+        local cost = card:getUpgradeCost()
+        if self.exp >= cost then
+          return 'UPGRADE', {
+            list = card:getUpgradesList(),
+            ["exp-cost"] = cost
+          }
+        end
+      end
     end
   end
 end
@@ -209,7 +248,8 @@ function Actor:consumeCard(index)
   assert(self.last_buffer)
   local card = self.hand[index]
   table.remove(self.hand, index)
-  -- TODO: gain XP!
+  self.exp = self.exp + DEFS.CONSUME_EXP
+  --FIXME: add card rarity modifier!
 end
 
 function Actor:tick()
@@ -236,7 +276,8 @@ function Actor:makeAction(sector)
   local success = false
   repeat
     local action_slot, params = self:behavior(sector)
-    local check = self:getAction(action_slot)
+    local check, alt_params = self:getAction(action_slot)
+    if alt_params then params = alt_params end
     if check then
       local action
       if action_slot == 'INTERACT' then

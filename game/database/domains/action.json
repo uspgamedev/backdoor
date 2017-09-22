@@ -71,21 +71,44 @@
         "card_index":"par:card_index"
       }]
   },
-  "CHANGE_SECTOR":{
+  "UPGRADE":{
     "params":[{
-        "typename":"sector",
-        "output":"sector"
+        "typename":"upgrade_list",
+        "output":"list"
       },{
-        "typename":"direction",
-        "output":"pos"
+        "typename":"upgrade_cost",
+        "output":"exp-cost"
+      }],
+    "cost":2,
+    "operators":[{
+        "op":"*",
+        "typename":"integer_binop",
+        "lhs":"par:exp-cost",
+        "output":"modify-by-this",
+        "rhs":-1
       }],
     "effects":[{
-        "typename":"change_sector",
-        "target_sector":"par:sector",
-        "target_pos":"par:pos"
+        "typename":"upgrade_attribute",
+        "upgrade_list":"par:list"
+      },{
+        "typename":"modify_exp",
+        "value":"val:modify-by-this"
+      }]
+  },
+  "NEW_HAND":{
+    "params":[{
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
+      }],
+    "effects":[{
+        "typename":"new_hand",
+        "which":"par:label#1001"
       }],
     "operators":[],
-    "cost":1
+    "cost":2
   },
   "HEAL":{
     "params":[{
@@ -169,19 +192,20 @@
     "operators":[],
     "cost":1
   },
-  "NEW_HAND":{
+  "CHANGE_SECTOR":{
     "params":[{
-        "typename":"choose_buffer",
-        "output":"label#1001"
+        "typename":"sector",
+        "output":"sector"
       },{
-        "typename":"empty_hand",
-        "output":"output"
+        "typename":"direction",
+        "output":"pos"
       }],
     "effects":[{
-        "typename":"new_hand",
-        "which":"par:label#1001"
+        "typename":"change_sector",
+        "target_sector":"par:sector",
+        "target_pos":"par:pos"
       }],
     "operators":[],
-    "cost":2
+    "cost":1
   }
 }
