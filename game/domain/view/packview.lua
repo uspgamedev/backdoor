@@ -1,9 +1,5 @@
 
---[[ CARDVIEW PROPERTIES ]]--
-
-local _ACTION_TYPES = {
-  'get', 'consume'
-}
+local DEFS = require 'domain.definitions'
 
 --PackView Class--
 
@@ -17,8 +13,8 @@ function PackView:init(actor)
 
   ELEMENT.init(self)
 
-  self.focus_index = 1 --What card is focused. -1 if none
-  self.action_type = 1
+  self.focus_index = 1  -- What card is focused
+  self.target = 0       -- Buffer index (zero is "consume")
   self.actor = actor
   self.pack = {}
 
@@ -49,16 +45,20 @@ function PackView:moveFocus(dir)
   end
 end
 
-function PackView:getActionType()
-  return _ACTION_TYPES[self.action_type]
+function PackView:getTarget()
+  if self.target == 0 then
+    return 'consume', 0
+  else
+    return 'get', self.target
+  end
 end
 
-function PackView:changeActionType(dir)
-  local N = #_ACTION_TYPES
+function PackView:changeTarget(dir)
+  local N = DEFS.ACTOR_BUFFER_NUM+1
   if dir == 'up' then
-    self.action_type = (self.action_type - 2)%N + 1
+    self.target = (self.target - 1) % N
   elseif dir == 'down' then
-    self.action_type = self.action_type%N + 1
+    self.target = (self.target + 1) % N
   else
     error(("Unknown dir %s"):format(dir))
   end
@@ -72,7 +72,8 @@ function PackView:draw()
     local view = ("%s [%d/%d]"):format(card.specname, self.focus_index,
                                        #self.pack)
     g.print(view, x, y)
-    g.print(_ACTION_TYPES[self.action_type], x, y + 50)
+    local t, n = self:getTarget()
+    g.print(("%s %d"):format(t, n), x, y + 50)
   end
 end
 

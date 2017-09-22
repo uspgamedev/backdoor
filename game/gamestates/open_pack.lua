@@ -17,8 +17,8 @@ local _previous_control_map
 local SIGNALS = {
   PRESS_RIGHT = {"move_focus", "right"},
   PRESS_LEFT = {"move_focus", "left"},
-  PRESS_UP = {"change_action_type", "up"},
-  PRESS_DOWN = {"change_action_type", "down"},
+  PRESS_UP = {"change_target", "up"},
+  PRESS_DOWN = {"change_target", "down"},
   PRESS_CONFIRM = {"confirm"},
   PRESS_CANCEL = {"cancel"}
 }
@@ -34,13 +34,15 @@ local function _moveFocus(dir)
   _pack_view:moveFocus(dir)
 end
 
-local function _changeActionType(dir)
-  _pack_view:changeActionType(dir)
+local function _changeTarget(dir)
+  _pack_view:changeTarget(dir)
 end
 
 local function _confirmCard()
+  local action_type, buffer_index = _pack_view:getTarget()
   table.insert(_picks, {
-    action_type = _pack_view:getActionType(),
+    action_type = action_type,
+    buffer_index = buffer_index,
     card_index = _pack_view:getFocus(),
   })
   _pack_view:removeCurrent()
@@ -52,7 +54,7 @@ end
 
 function _registerSignals()
   Signal.register("move_focus", _moveFocus)
-  Signal.register("change_action_type", _changeActionType)
+  Signal.register("change_target", _changeTarget)
   Signal.register("confirm", _confirmCard)
   CONTROL.setMap(_mapped_signals)
 end

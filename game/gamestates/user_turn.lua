@@ -297,7 +297,8 @@ function state:resume(state, args)
         t = 'CONSUME_PACK_CARD'
       end
       assert(t)
-      _action_queue.push({ t, { index = pick.card_index } })
+      _action_queue.push({ t, { index = pick.card_index,
+                                buffer = pick.buffer_index } })
     end
   end
 end
