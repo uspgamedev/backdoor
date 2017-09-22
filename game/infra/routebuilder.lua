@@ -81,6 +81,7 @@ local function _generateSectorsData(idgenerator, player_info)
     },
     w = 3,
     h = 3,
+    depth = 0,
     bodies = {},
     actors = {},
     exits = {

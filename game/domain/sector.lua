@@ -41,6 +41,7 @@ function Sector:init(spec_name, route)
   self.tiles = {{ false }}
   self.bodies = _initBodies(1,1)
   self.actors = {}
+  self.depth = 0
   self.exits = {}
   self.actors_queue = {}
 
@@ -52,6 +53,7 @@ function Sector:loadState(state, register)
   self.w = state.w or self.w
   self.h = state.h or self.h
   self.id = state.id
+  self.depth = state.depth
   self.exits = state.exits
   self:setId(state.id)
   if state.tiles then
@@ -88,6 +90,7 @@ function Sector:saveState()
   state.w = self.w
   state.h = self.h
   state.id = self.id
+  state.depth = self.depth
   state.exits = self.exits
   state.tiles = self.tiles
   state.actors = {}
@@ -314,6 +317,14 @@ end
 
 function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
+end
+
+function Sector:getDepth()
+  return self.depth
+end
+
+function Sector:setDepth(n)
+  self.depth = n
 end
 
 function Sector:isInside(i, j)

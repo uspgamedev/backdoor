@@ -105,6 +105,7 @@ function Route:instance(obj)
       local id, to_sector = obj.makeSector(exit.specname)
       local entry = to_sector:getExit(1)
       to_sector:link(1, from_sector.id, unpack(exit.pos))
+      to_sector:setDepth(from_sector:getDepth() + 1)
       from_sector:link(idx, id, unpack(entry.pos))
     end
   end

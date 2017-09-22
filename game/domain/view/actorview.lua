@@ -7,7 +7,7 @@ local ActorView = Class{
 }
 
 local _initialized = false
-local _exptext, _statstext
+local _exptext, _statstext, _depthtext
 local WIDTH, HEIGHT, FONT
 
 local function _initGraphicValues()
@@ -16,6 +16,7 @@ local function _initGraphicValues()
   FONT:setLineHeight(1)
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d"
+  _depthtext = "DEPTH: %d"
   _initialized = true
 end
 
@@ -35,6 +36,7 @@ function ActorView:draw()
   local ath = actor:getATH()
   local arc = actor:getARC()
   local mec = actor:getMEC()
+  local sector = self.route.getCurrentSector()
 
   g.push()
 
@@ -46,6 +48,15 @@ function ActorView:draw()
 
   g.translate(0, 1.5*FONT:getHeight())
   g.print(_statstext:format(ath, arc, mec))
+
+  g.pop()
+
+  g.push()
+
+  local str = _depthtext:format(sector:getDepth())
+  local w = FONT:getWidth(str)
+  g.translate(WIDTH - 40 - w, 40)
+  g.printf(str, 0, 0, w, "right")
 
   g.pop()
 end
