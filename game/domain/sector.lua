@@ -315,6 +315,10 @@ function Sector:getBodyPos(body)
   return unpack(self.bodies[body])
 end
 
+function Sector:getActors()
+  return self.actors
+end
+
 function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
 end

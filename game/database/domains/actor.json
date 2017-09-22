@@ -1,15 +1,15 @@
 {
-  "brawler":{
-    "extends":"sentient",
-    "name":"Brawler",
-    "ath":14,
-    "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
-  },
   "craftsmith":{
     "extends":"sentient",
-    "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+    "mec":14,
     "name":"Craftsmith",
-    "mec":14
+    "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
+  },
+  "brawler":{
+    "extends":"sentient",
+    "ath":14,
+    "name":"Brawler",
+    "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
   },
   "sentient":{
     "arc":10,
@@ -18,7 +18,7 @@
     "collection":"adventurer",
     "behavior":"player",
     "name":"Sentient",
-    "description":"Any sentient actor, capable of living as one of\nthe 12 civilized species."
+    "mec":10
   },
   "arcanist":{
     "extends":"sentient",
@@ -30,8 +30,8 @@
     "arc":0,
     "ath":0,
     "description":"Oh honey...",
-    "behavior":"random_walk",
     "collection":"adventurer",
+    "behavior":"aggro",
     "mec":0
   }
 }
