@@ -6,7 +6,7 @@ local Route = require 'domain.route'
 local Sector = require 'domain.sector'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
-local SectorView = require 'domain.view.sectorview'
+local SectorView = require 'domain.view.sector'
 
 local ACTION = require 'domain.action'
 local CONTROL = require 'infra.control'

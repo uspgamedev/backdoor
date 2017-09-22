@@ -6,7 +6,7 @@ local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
 local Queue         = require 'lux.common.Queue'
-local HandView      = require 'domain.view.handview'
+local HandView      = require 'domain.view.hand'
 
 local state = {}
 

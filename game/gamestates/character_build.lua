@@ -2,7 +2,7 @@
 local DB = require 'database'
 local MENU = require 'infra.menu'
 local CONTROLS = require 'infra.control'
-local CharaBuildView = require 'domain.view.charabuildview'
+local CharaBuildView = require 'domain.view.charabuild'
 
 
 local state = {}
