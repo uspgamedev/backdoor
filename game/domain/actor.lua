@@ -209,6 +209,11 @@ function Actor:getBackBufferSize(which)
   end
 end
 
+function Actor:isBufferEmpty(which)
+  which = which or self.last_buffer
+  return #self.buffers[which] == 1
+end
+
 function Actor:getHandLimit()
   return self.hand_limit
 end
@@ -218,7 +223,7 @@ function Actor:drawCard(which)
   if #self.hand >= self.hand_limit then return end
   which = which or self.last_buffer
   -- Empty buffer
-  if #self.buffers[which] == 1 then return end
+  if self:isBufferEmpty(which) then return end
 
   local card_name = self.buffers[which][1]
   table.remove(self.buffers[which], 1)
