@@ -15,7 +15,9 @@ local BASE_ACTIONS = {
   INTERACT = true,
   NEW_HAND = true,
   RECALL_CARD = true,
-  CONSUME_CARD = true
+  CONSUME_CARD = true,
+  GET_PACK_CARD = true,
+  CONSUME_PACK_CARD = true
 }
 
 --[[ Setup methods ]]--
@@ -293,7 +295,7 @@ end
 function Actor:getPackCard(idx)
   assert(self.pack)
   assert(idx >= 1 and idx <= #self.pack)
-  return self.pack[idx]
+  return Card(self.pack[idx])
 end
 
 function Actor:removePackCard(idx)

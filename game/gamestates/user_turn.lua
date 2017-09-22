@@ -5,6 +5,7 @@ local ACTION        = require 'domain.action'
 local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
+local Queue         = require 'lux.common.Queue'
 local HandView      = require 'domain.view.handview'
 
 local state = {}
@@ -15,6 +16,7 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
+local _action_queue
 local _view
 
 local _previous_control_map
@@ -240,6 +242,8 @@ function state:init()
     [GS.PICK_BUFFER] = true,
   }
 
+  _action_queue = Queue(32)
+
 end
 
 function state:enter(_, route, view)
@@ -285,8 +289,16 @@ function state:resume(state, args)
     end
 
   elseif state == GS.OPEN_PACK then
-
-    print("gratz")
+    for _,pick in ipairs(args) do
+      local t
+      if pick.action_type == 'get' then
+        t = 'GET_PACK_CARD'
+      elseif pick.action_type == 'consume' then
+        t = 'CONSUME_PACK_CARD'
+      end
+      assert(t)
+      _action_queue.push({ t, { index = pick.card_index } })
+    end
   end
 end
 
@@ -304,6 +316,10 @@ function state:update(dt)
       _view.widget:show()
     else
       _view.widget:hide()
+    end
+    
+    if not _next_action and not _action_queue.isEmpty() then
+      _next_action = _action_queue.pop()
     end
 
     if _next_action then
