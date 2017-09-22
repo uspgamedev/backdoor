@@ -110,7 +110,7 @@ local function _useAction(action_slot)
           validator = function(i, j)
             return ACTION.validate('choose_target', current_sector,
                                    controlled_actor, param, {i,j})
-          end
+                               end
         }
       )
       local args = coroutine.yield(_task)
@@ -121,7 +121,13 @@ local function _useAction(action_slot)
       end
     elseif param.typename == 'choose_buffer' then
       _lockState()
-      SWITCHER.push(GS.PICK_BUFFER, _route.getControlledActor())
+      SWITCHER.push(
+        GS.PICK_BUFFER, _route.getControlledActor(),
+        function (which_buffer)
+          return ACTION.validate('choose_buffer', current_sector,
+                                 controlled_actor, param, which_buffer)
+        end
+      )
       local args = coroutine.yield(_task)
       if args.picked_buffer then
         params[param.output] = args.picked_buffer

@@ -43,7 +43,7 @@ end
 
 --STATE FUNCTIONS--
 
-function state:enter(_, controlled_actor)
+function state:enter(_, controlled_actor, is_valid_buffer)
 
   _controlled_actor = controlled_actor
 
@@ -68,8 +68,10 @@ function state:enter(_, controlled_actor)
   end
 
   local confirm = function ()
+    local selection = _buffer_picker_view:getSelection()
+    if not is_valid_buffer(selection) then return end
     local args = {
-      picked_buffer = _buffer_picker_view:getSelection()
+      picked_buffer = selection
     }
     SWITCHER.pop(args)
   end
