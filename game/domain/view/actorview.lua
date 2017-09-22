@@ -33,6 +33,7 @@ end
 function ActorView:draw()
   local g = love.graphics
   local actor = self.route.getControlledActor()
+  if not actor then return end
   local ath = actor:getATH()
   local arc = actor:getARC()
   local mec = actor:getMEC()
