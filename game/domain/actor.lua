@@ -1,7 +1,6 @@
 
 local GameElement = require 'domain.gameelement'
 local Card        = require 'domain.card'
-local PACK        = require 'domain.pack'
 local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
