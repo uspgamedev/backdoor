@@ -22,14 +22,29 @@
   },
   "GET_PACK_CARD":{
     "params":[{
-        "typename":"pack_card",
-        "output":"card"
+        "typename":"card_index",
+        "output":"index",
+        "source":"PACK"
       }],
     "cost":1,
-    "operators":[],
+    "operators":[{
+        "typename":"self",
+        "output":"actor"
+      },{
+        "source":"PACK",
+        "typename":"get_actor_card",
+        "card-index":"par:index",
+        "output":"card",
+        "actor":"val:actor"
+      }],
     "effects":[{
         "typename":"add_card_to_backbuffer",
-        "card":"par:card"
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:index",
+        "source":"PACK",
+        "actor":"val:actor"
       }]
   },
   "DEBUG":{
@@ -44,10 +59,10 @@
   "SHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target",
-        "typename":"choose_target"
+        "max-range":5
       }],
     "cost":10,
     "operators":[{
@@ -81,30 +96,36 @@
         "card_index":"par:card_index",
         "card":"val:card"
       },{
-        "typename":"remove_hand_card",
-        "card-index":"par:card_index"
+        "typename":"remove_actor_card",
+        "card-index":"par:card_index",
+        "source":"HAND",
+        "actor":"val:self"
       }],
     "operators":[{
         "typename":"self",
         "output":"self"
       },{
-        "typename":"get_hand_card",
+        "source":"HAND",
+        "typename":"get_actor_card",
         "card-index":"par:card_index",
         "output":"card",
         "actor":"val:self"
       }],
     "cost":2
   },
-  "CONSUME_PACK_CARD":{
+  "NEW_HAND":{
     "params":[{
-        "typename":"pack_card",
-        "output":"card"
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
       }],
-    "cost":1,
+    "cost":2,
     "operators":[],
     "effects":[{
-        "typename":"consume_card",
-        "card":"par:card"
+        "typename":"new_hand",
+        "which":"par:label#1001"
       }]
   },
   "UPGRADE":{
@@ -167,10 +188,10 @@
   "HEAL":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target",
-        "typename":"choose_target"
+        "max-range":5
       }],
     "effects":[{
         "typename":"heal",
@@ -194,34 +215,19 @@
       }],
     "cost":6
   },
-  "NEW_HAND":{
-    "params":[{
-        "typename":"choose_buffer",
-        "output":"label#1001"
-      },{
-        "typename":"empty_hand",
-        "output":"output"
-      }],
-    "cost":2,
-    "operators":[],
-    "effects":[{
-        "typename":"new_hand",
-        "which":"par:label#1001"
-      }]
-  },
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":6,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target",
-        "typename":"choose_target"
+        "max-range":6
       },{
         "filter":"BODY",
-        "max-range":6,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target2",
-        "typename":"choose_target"
+        "max-range":6
       }],
     "effects":[{
         "typename":"deal_damage",
@@ -242,6 +248,33 @@
         "output":"body2"
       }],
     "cost":12
+  },
+  "CONSUME_PACK_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"index",
+        "source":"PACK"
+      }],
+    "cost":1,
+    "operators":[{
+        "typename":"self",
+        "output":"actor"
+      },{
+        "source":"PACK",
+        "typename":"get_actor_card",
+        "card-index":"par:index",
+        "output":"card",
+        "actor":"val:actor"
+      }],
+    "effects":[{
+        "typename":"consume_card",
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:index",
+        "source":"PACK",
+        "actor":"val:actor"
+      }]
   },
   "IDLE":{
     "params":[],
@@ -265,7 +298,8 @@
         "typename":"self",
         "output":"self"
       },{
-        "typename":"get_hand_card",
+        "source":"HAND",
+        "typename":"get_actor_card",
         "card-index":"par:card_index",
         "output":"card",
         "actor":"val:self"

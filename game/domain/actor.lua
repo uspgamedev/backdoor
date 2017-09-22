@@ -1,7 +1,8 @@
 
 local GameElement = require 'domain.gameelement'
-local ACTION      = require 'domain.action'
 local Card        = require 'domain.card'
+local PACK        = require 'domain.pack'
+local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 local Actor = Class{
@@ -16,6 +17,8 @@ local BASE_ACTIONS = {
   RECALL_CARD = true,
   CONSUME_CARD = true
 }
+
+--[[ Setup methods ]]--
 
 function Actor:init(spec_name)
 
@@ -35,6 +38,7 @@ function Actor:init(spec_name)
     MEC = 0
   }
   self.exp = 0
+  self.pack = nil
 
   self.buffers = {}
   for i=1,DEFS.ACTOR_BUFFER_NUM do
@@ -97,16 +101,14 @@ function Actor:saveState()
   return state
 end
 
+--[[ Spec methods ]]--
+
 function Actor:isPlayer()
   return self:getSpec('behavior') == 'player'
 end
 
-function Actor:setBody(body_id)
-  self.body_id = body_id
-end
-
-function Actor:getBody()
-  return Util.findId(self.body_id)
+function Actor:getBasicCollection()
+  return self:getSpec('collection')
 end
 
 function Actor:getExp()
@@ -141,9 +143,21 @@ function Actor:upgradeMEC(n)
   self.upgrades.MEC = self.upgrades.MEC + n
 end
 
+--[[ Body methods ]]--
+
+function Actor:setBody(body_id)
+  self.body_id = body_id
+end
+
+function Actor:getBody()
+  return Util.findId(self.body_id)
+end
+
 function Actor:getPos()
   return self:getBody():getPos()
 end
+
+--[[ Action methods ]]--
 
 function Actor:isWidget(slot)
   return type(slot) == 'string'
@@ -182,6 +196,8 @@ end
 function Actor:setAction(name, id)
   self.actions[name] = id
 end
+
+--[[ Card methods ]]--
 
 function Actor:getHand()
   return self.hand
@@ -259,6 +275,28 @@ function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
   self.exp = self.exp + DEFS.CONSUME_EXP
 end
+
+function Actor:openPack()
+  assert(not self.pack)
+  self.pack = PACK.open(self:getBasicCollection())
+end
+
+function Actor:getPackCard(idx)
+  assert(self.pack)
+  assert(idx >= 1 and idx <= #self.pack)
+  return self.pack[idx]
+end
+
+function Actor:removePackCard(idx)
+  assert(self.pack)
+  assert(idx >= 1 and idx <= #self.pack)
+  table.remove(self.pack, idx)
+  if #self.pack == 0 then
+    self.pack = nil
+  end
+end
+
+--[[ Turn methods ]]--
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - 1)
