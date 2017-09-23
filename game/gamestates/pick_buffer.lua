@@ -3,7 +3,7 @@
 local DIR = require 'domain.definitions.dir'
 local CONTROL = require 'infra.control'
 
-local BufferPickerView = require 'domain.view.bufferpickerview'
+local BufferPickerView = require 'view.bufferpicker'
 
 local state = {}
 

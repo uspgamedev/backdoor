@@ -5,10 +5,10 @@ local GUI         = require 'debug.gui'
 local PROFILE     = require 'infra.profile'
 
 local Route       = require 'domain.route'
-local SectorView  = require 'domain.view.sectorview'
-local HandView    = require 'domain.view.handview'
-local WidgetView  = require 'domain.view.widgetview'
-local ActorView   = require 'domain.view.actorview'
+local SectorView  = require 'view.sector'
+local HandView    = require 'view.hand'
+local WidgetView  = require 'view.widget'
+local ActorView   = require 'view.actor'
 
 local state = {}
 

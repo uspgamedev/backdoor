@@ -2,7 +2,7 @@
 --- GAMESTATE: Opening a card pack
 
 local CONTROL   = require 'infra.control'
-local PackView  = require 'domain.view.packview'
+local PackView  = require 'view.pack'
 
 local state = {}
 
