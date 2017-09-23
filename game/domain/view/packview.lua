@@ -1,5 +1,6 @@
 
-local DEFS = require 'domain.definitions'
+local DB    = require 'database'
+local DEFS  = require 'domain.definitions'
 
 --PackView Class--
 
@@ -67,9 +68,9 @@ end
 function PackView:draw()
   local x, y = 800,400
   local g = love.graphics
-  local card = self.pack[self.focus_index]
+  local card = DB.loadSpec('card', self.pack[self.focus_index].specname)
   if card then
-    local view = ("%s [%d/%d]"):format(card.specname, self.focus_index,
+    local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
     g.print(view, x, y)
     local t, n = self:getTarget()
