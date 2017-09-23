@@ -14,23 +14,26 @@ local function get_path(start, goal, sector)
   local path = {}
   local found = false
 
+  --FIXME: add priority sorting to the frontier vector
   came_from[_hash(start)] = start
-
   while head <= #frontier do
     local current = frontier[head]
     head = head + 1
 
+    -- if you found your goal, quit loop
     if TILE.distUniform(goal[1], goal[2], unpack(current)) == 1 then
       found = true
       goal = current
       break
     end
 
+    -- look at neighbors
     for n = 1, 4 do
       local i, j = unpack(current)
       local di, dj = unpack(DIR[DIR[n]])
       local next_pos = { i+di, j+dj }
 
+      -- is it a valid and not yet checked neighbor?
       if not came_from[_hash(next_pos)]
         and sector:isValid(unpack(next_pos)) then
         came_from[_hash(next_pos)] = current
