@@ -4,9 +4,17 @@ local Action = require 'domain.action'
 local TILE = require 'common.tile'
 local Heap = require 'common.heap'
 
+local abs = math.abs
+
 local function _hash(pos)
   if not pos then return "none" end
   return string.format("%d:%d", unpack(pos))
+end
+
+local function _heuristic(pos1, pos2)
+  local i1, j1 = unpack(pos1)
+  local i2, j2 = unpack(pos2)
+  return abs(i1 - i2) + abs(j2 - j2)
 end
 
 local function _findPath(start, goal, sector)
@@ -31,10 +39,10 @@ local function _findPath(start, goal, sector)
     end
 
     -- look at neighbors
-    for n = 1, 4 do
+    for _,dir in ipairs(DIR) do
+      local di, dj = unpack(DIR[dir])
       local i, j = unpack(current)
       local ti, tj = unpack(goal)
-      local di, dj = unpack(DIR[DIR[n]])
       local next_pos = { i+di, j+dj }
       if sector:isValid(unpack(next_pos)) then
         local new_cost = cost_so_far[_hash(current)] + 1
@@ -42,7 +50,7 @@ local function _findPath(start, goal, sector)
         -- is it a valid and not yet checked neighbor?
         if not cost_so_far[_hash(next_pos)]
           or new_cost < cost_so_far[_hash(next_pos)] then
-          local new_rank = new_cost + TILE.dist(ti, tj, unpack(next_pos))
+          local new_rank = new_cost + 2 * _heuristic(goal, next_pos)
           cost_so_far[_hash(next_pos)] = new_cost
           came_from[_hash(next_pos)] = current
           frontier:add(next_pos, new_rank)
@@ -82,7 +90,7 @@ return function (actor, sector)
   if dist == 1 then
     -- attack if close!
     return 'PRIMARY', { target = {target:getPos()} }
-  elseif dist <= 8 then
+  else--if dist <= 8 then
     -- chase if far away!
     local pos = _findPath({i,j}, {target:getPos()}, sector)
     if pos then
