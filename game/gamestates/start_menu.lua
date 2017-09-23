@@ -3,7 +3,7 @@ local DB = require 'database'
 local MENU = require 'infra.menu'
 local CONTROLS = require 'infra.control'
 local PROFILE = require 'infra.profile'
-local StartMenuView = require 'domain.view.startmenu'
+local StartMenuView = require 'view.startmenu'
 
 local state = {}
 
