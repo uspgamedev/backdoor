@@ -12,7 +12,7 @@ return function (actor, sector)
   for _,opponent in ipairs(actorlist) do
     if opponent:isPlayer() then
       local k, l = opponent:getPos()
-      local d = TILE.dist(i, j, k, l)
+      local d = TILE.distUniform(i, j, k, l)
       if not target or not dist or d < dist then
         target = opponent
         dist = d
@@ -23,7 +23,7 @@ return function (actor, sector)
   if dist == 1 then
     -- attack if close!
     return 'PRIMARY', { target = {target:getPos()} }
-  else
+  elseif dist <= 4 then
     -- chase if far away!
     local ni, nj = i, j
     for n = 1, 4 do
