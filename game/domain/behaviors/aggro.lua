@@ -82,11 +82,9 @@ return function (actor, sector)
   if dist == 1 then
     -- attack if close!
     return 'PRIMARY', { target = {target:getPos()} }
-  else
+  elseif dist <= 8 then
     -- chase if far away!
-    local start = os.clock()
     local pos = _findPath({i,j}, {target:getPos()}, sector)
-    print(("%.10f"):format(os.clock() - start))
     if pos then
       return 'MOVE', { pos = pos }
     end
