@@ -93,11 +93,37 @@
         "actor":"val:self"
       }]
   },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
+      }],
+    "cost":2,
+    "operators":[{
+        "typename":"self",
+        "output":"self"
+      },{
+        "source":"HAND",
+        "typename":"get_actor_card",
+        "card-index":"par:card_index",
+        "output":"card",
+        "actor":"val:self"
+      }],
+    "effects":[{
+        "typename":"add_card_to_backbuffer",
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:card_index",
+        "source":"HAND",
+        "actor":"val:self"
+      }]
+  },
   "SHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
         "typename":"choose_target",
+        "max-range":5,
         "output":"target",
         "body-only":true
       }],
@@ -123,51 +149,26 @@
       }],
     "cost":10
   },
-  "RECALL_CARD":{
+  "NEW_HAND":{
     "params":[{
-        "typename":"card_index",
-        "output":"card_index"
+        "typename":"choose_buffer",
+        "output":"label#1001"
+      },{
+        "typename":"empty_hand",
+        "output":"output"
       }],
     "cost":2,
-    "operators":[{
-        "typename":"self",
-        "output":"self"
-      },{
-        "source":"HAND",
-        "typename":"get_actor_card",
-        "card-index":"par:card_index",
-        "output":"card",
-        "actor":"val:self"
-      }],
-    "effects":[{
-        "typename":"add_card_to_backbuffer",
-        "card":"val:card"
-      },{
-        "typename":"remove_hand_card",
-        "card-index":"par:card_index"
-      }]
-  },
-  "CHANGE_SECTOR":{
-    "params":[{
-        "typename":"sector",
-        "output":"sector"
-      },{
-        "typename":"direction",
-        "output":"pos"
-      }],
-    "cost":1,
     "operators":[],
     "effects":[{
-        "typename":"change_sector",
-        "target_sector":"par:sector",
-        "target_pos":"par:pos"
+        "typename":"new_hand",
+        "which":"par:label#1001"
       }]
   },
   "HEAL":{
     "params":[{
         "filter":"BODY",
-        "max-range":5,
         "typename":"choose_target",
+        "max-range":5,
         "output":"target",
         "body-only":true
       }],
@@ -223,14 +224,14 @@
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":6,
         "typename":"choose_target",
+        "max-range":6,
         "output":"target",
         "body-only":true
       },{
         "filter":"BODY",
-        "max-range":6,
         "typename":"choose_target",
+        "max-range":6,
         "output":"target2",
         "body-only":true
       }],
@@ -254,19 +255,20 @@
         "amount":3
       }]
   },
-  "NEW_HAND":{
+  "CHANGE_SECTOR":{
     "params":[{
-        "typename":"choose_buffer",
-        "output":"label#1001"
+        "typename":"sector",
+        "output":"sector"
       },{
-        "typename":"empty_hand",
-        "output":"output"
+        "typename":"direction",
+        "output":"pos"
       }],
-    "cost":2,
+    "cost":1,
     "operators":[],
     "effects":[{
-        "typename":"new_hand",
-        "which":"par:label#1001"
+        "typename":"change_sector",
+        "target_sector":"par:sector",
+        "target_pos":"par:pos"
       }]
   },
   "UPGRADE":{

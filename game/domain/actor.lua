@@ -268,7 +268,10 @@ function Actor:removeHandCard(index)
 end
 
 function Actor:addCardToBackbuffer(card, buffer_idx)
-  assert(buffer_idx >= 1 and buffer_idx <= DEFS.ACTOR_BUFFER_NUM)
+  assert(buffer_idx >= 0 and buffer_idx <= DEFS.ACTOR_BUFFER_NUM)
+  if buffer_idx == 0 then
+    buffer_idx = self.last_buffer
+  end
   local buffer = self.buffers[buffer_idx]
   table.insert(buffer, card:getSpecName())
 end
