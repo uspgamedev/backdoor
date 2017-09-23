@@ -68,8 +68,9 @@ end
 function PackView:draw()
   local x, y = 800,400
   local g = love.graphics
-  local card = DB.loadSpec('card', self.pack[self.focus_index].specname)
-  if card then
+  local card_data = self.pack[self.focus_index]
+  if card_data then
+    local card = DB.loadSpec('card', card_data.specname)
     local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
     g.print(view, x, y)
