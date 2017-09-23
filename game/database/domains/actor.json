@@ -15,6 +15,7 @@
     "arc":10,
     "ath":10,
     "mec":10,
+    "collection":"adventurer",
     "behavior":"player",
     "name":"Sentient",
     "description":"Any sentient actor, capable of living as one of\nthe 12 civilized species."
@@ -28,8 +29,9 @@
   "dumb":{
     "arc":0,
     "ath":0,
-    "behavior":"random_walk",
     "description":"Oh honey...",
+    "behavior":"random_walk",
+    "collection":"adventurer",
     "mec":0
   }
 }

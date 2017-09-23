@@ -2,12 +2,11 @@
 local FX = {}
 
 FX.schema = {
-  { id = 'card_index', name = "Card position in hand", type = 'value',
-    match = 'integer', range = {1} }, 
+  { id = 'card', name = "Consumed card", type = 'value', match = 'card' }, 
 }
 
 function FX.process (actor, sector, params)
-  actor:consumeCard(params.card_index)
+  actor:consumeCard(params['card'])
 end
 
 return FX

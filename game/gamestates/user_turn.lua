@@ -5,6 +5,7 @@ local ACTION        = require 'domain.action'
 local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
+local Queue         = require 'lux.common.Queue'
 local HandView      = require 'domain.view.handview'
 
 local state = {}
@@ -15,6 +16,7 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
+local _action_queue
 local _view
 
 local _previous_control_map
@@ -34,6 +36,7 @@ local SIGNALS = {
   PRESS_SPECIAL = {"start_card_selection"},
   PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"primary_action"},
+  PRESS_ACTION_3 = {"open_pack"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -171,6 +174,14 @@ local function _newHand()
   end
 end
 
+local function _openPack()
+  local controlled_actor = _route.getControlledActor()
+  if not controlled_actor:hasOpenPack() then
+    _unregisterSignals()
+    SWITCHER.push(GS.OPEN_PACK, _route)
+  end
+end
+
 local function _saveAndQuit()
   _save_and_quit = true
 end
@@ -203,6 +214,7 @@ function _registerSignals()
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("open_pack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -229,6 +241,8 @@ function state:init()
     [GS.PICK_TARGET] = true,
     [GS.PICK_BUFFER] = true,
   }
+
+  _action_queue = Queue(32)
 
 end
 
@@ -274,6 +288,18 @@ function state:resume(state, args)
       end
     end
 
+  elseif state == GS.OPEN_PACK then
+    for _,pick in ipairs(args) do
+      local t
+      if pick.action_type == 'get' then
+        t = 'GET_PACK_CARD'
+      elseif pick.action_type == 'consume' then
+        t = 'CONSUME_PACK_CARD'
+      end
+      assert(t)
+      _action_queue.push({ t, { index = pick.card_index,
+                                buffer = pick.buffer_index } })
+    end
   end
 end
 
@@ -291,6 +317,10 @@ function state:update(dt)
       _view.widget:show()
     else
       _view.widget:hide()
+    end
+    
+    if not _next_action and not _action_queue.isEmpty() then
+      _next_action = _action_queue.pop()
     end
 
     if _next_action then
