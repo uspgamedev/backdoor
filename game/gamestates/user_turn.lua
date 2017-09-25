@@ -28,7 +28,11 @@ local PARAMETER_STATES
 
 local SIGNALS = {
   PRESS_UP = {"move", "up"},
+  PRESS_UPLEFT = {"move", "upleft"},
+  PRESS_UPRIGHT = {"move", "upright"},
   PRESS_DOWN = {"move", "down"},
+  PRESS_DOWNLEFT = {"move", "downleft"},
+  PRESS_DOWNRIGHT = {"move", "downright"},
   PRESS_RIGHT = {"move", "right"},
   PRESS_LEFT = {"move", "left"},
   PRESS_CONFIRM = {"confirm"},
@@ -84,6 +88,7 @@ local function _move(dir)
     local current_sector = _route.getCurrentSector()
     local controlled_actor = _route.getControlledActor()
     local i, j = controlled_actor:getPos()
+    print(dir)
     dir = DIR[dir]
     i, j = i+dir[1], j+dir[2]
     if current_sector:isValid(i,j) then
