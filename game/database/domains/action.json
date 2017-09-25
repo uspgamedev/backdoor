@@ -4,21 +4,21 @@
         "typename":"direction",
         "output":"pos"
       }],
-    "cost":3,
-    "operators":[],
     "effects":[{
         "typename":"move_to",
         "pos":"par:pos"
-      }]
+      }],
+    "operators":[],
+    "cost":3
   },
   "DRAW":{
     "params":[],
+    "cost":4,
+    "operators":[],
     "effects":[{
         "typename":"draw_card",
         "amount":1
-      }],
-    "operators":[],
-    "cost":4
+      }]
   },
   "GET_PACK_CARD":{
     "params":[{
@@ -29,7 +29,16 @@
         "typename":"choose_buffer",
         "output":"buffer"
       }],
-    "cost":1,
+    "effects":[{
+        "typename":"add_card_to_backbuffer",
+        "buffer":"par:buffer",
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:index",
+        "source":"PACK",
+        "actor":"val:actor"
+      }],
     "operators":[{
         "typename":"self",
         "output":"actor"
@@ -40,39 +49,34 @@
         "output":"card",
         "actor":"val:actor"
       }],
-    "effects":[{
-        "typename":"add_card_to_backbuffer",
-        "buffer":"par:buffer",
-        "card":"val:card"
-      },{
-        "typename":"remove_actor_card",
-        "card-index":"par:index",
-        "source":"PACK",
-        "actor":"val:actor"
-      }]
+    "cost":1
   },
   "DEBUG":{
     "params":[],
-    "cost":2,
-    "operators":[],
     "effects":[{
         "typename":"print",
         "text":42
-      }]
+      }],
+    "operators":[],
+    "cost":2
   },
   "SHOOT":{
     "params":[{
         "filter":"BODY",
         "typename":"choose_target",
-        "body-only":true,
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
-    "cost":10,
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"val:body",
+        "amount":"val:damage_total"
+      }],
     "operators":[{
         "typename":"get_attribute",
         "output":"attr",
-        "which":"ATH"
+        "which":"ARC"
       },{
         "typename":"dice_throw",
         "rolls":1,
@@ -81,35 +85,22 @@
       },{
         "lhs":"val:attr",
         "typename":"integer_binop",
-        "output":"damage_total",
+        "op":"+",
         "rhs":"val:damage_roll",
-        "op":"+"
+        "output":"damage_total"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"body"
       }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"val:body",
-        "amount":"val:damage_total"
-      }]
+    "cost":10
   },
   "CONSUME_CARD":{
     "params":[{
         "typename":"card_index",
         "output":"card_index"
       }],
-    "effects":[{
-        "typename":"consume_card",
-        "card_index":"par:card_index",
-        "card":"val:card"
-      },{
-        "typename":"remove_actor_card",
-        "card-index":"par:card_index",
-        "source":"HAND",
-        "actor":"val:self"
-      }],
+    "cost":2,
     "operators":[{
         "typename":"self",
         "output":"self"
@@ -120,31 +111,48 @@
         "output":"card",
         "actor":"val:self"
       }],
-    "cost":2
-  },
-  "UPGRADE":{
-    "params":[{
-        "typename":"upgrade_list",
-        "output":"list"
+    "effects":[{
+        "typename":"consume_card",
+        "card_index":"par:card_index",
+        "card":"val:card"
       },{
-        "typename":"upgrade_cost",
-        "output":"exp-cost"
+        "typename":"remove_actor_card",
+        "card-index":"par:card_index",
+        "source":"HAND",
+        "actor":"val:self"
+      }]
+  },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
       }],
-    "cost":1,
+    "cost":2,
     "operators":[{
-        "lhs":"par:exp-cost",
-        "typename":"integer_binop",
-        "rhs":-1,
-        "output":"final-cost",
-        "op":"*"
+        "typename":"self",
+        "output":"self"
+      },{
+        "source":"HAND",
+        "typename":"get_actor_card",
+        "card-index":"par:card_index",
+        "output":"card",
+        "actor":"val:self"
       }],
     "effects":[{
-        "typename":"upgrade_attribute",
-        "upgrade_list":"par:list"
+        "typename":"add_card_to_backbuffer",
+        "card":"val:card"
       },{
-        "typename":"modify_exp",
-        "value":"val:final-cost"
+        "typename":"remove_actor_card",
+        "card-index":"par:card_index",
+        "source":"HAND",
+        "actor":"val:self"
       }]
+  },
+  "IDLE":{
+    "params":[],
+    "effects":[],
+    "operators":[],
+    "cost":1
   },
   "NEW_HAND":{
     "params":[{
@@ -154,42 +162,22 @@
         "typename":"empty_hand",
         "output":"output"
       }],
+    "cost":2,
+    "operators":[],
     "effects":[{
         "typename":"new_hand",
         "which":"par:label#1001"
-      }],
-    "operators":[],
-    "cost":2
-  },
-  "CHANGE_SECTOR":{
-    "params":[{
-        "typename":"sector",
-        "output":"sector"
-      },{
-        "typename":"direction",
-        "output":"pos"
-      }],
-    "effects":[{
-        "typename":"change_sector",
-        "target_sector":"par:sector",
-        "target_pos":"par:pos"
-      }],
-    "operators":[],
-    "cost":1
+      }]
   },
   "HEAL":{
     "params":[{
         "filter":"BODY",
         "typename":"choose_target",
-        "body-only":true,
+        "max-range":5,
         "output":"target",
-        "max-range":5
+        "body-only":true
       }],
-    "effects":[{
-        "typename":"heal",
-        "target":"val:body",
-        "amount":"val:amount"
-      }],
+    "cost":6,
     "operators":[{
         "typename":"get_attribute",
         "output":"arcana",
@@ -197,39 +185,62 @@
       },{
         "op":"+",
         "typename":"integer_binop",
-        "output":"amount",
+        "lhs":"val:arcana",
         "rhs":2,
-        "lhs":"val:arcana"
+        "output":"amount"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"body"
       }],
-    "cost":6
+    "effects":[{
+        "typename":"heal",
+        "target":"val:body",
+        "amount":"val:amount"
+      }]
+  },
+  "CONSUME_PACK_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"index",
+        "source":"PACK"
+      }],
+    "effects":[{
+        "typename":"consume_card",
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:index",
+        "source":"PACK",
+        "actor":"val:actor"
+      }],
+    "operators":[{
+        "typename":"self",
+        "output":"actor"
+      },{
+        "source":"PACK",
+        "typename":"get_actor_card",
+        "card-index":"par:index",
+        "output":"card",
+        "actor":"val:actor"
+      }],
+    "cost":1
   },
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
         "typename":"choose_target",
-        "body-only":true,
+        "max-range":6,
         "output":"target",
-        "max-range":6
+        "body-only":true
       },{
         "filter":"BODY",
         "typename":"choose_target",
-        "body-only":true,
+        "max-range":6,
         "output":"target2",
-        "max-range":6
+        "body-only":true
       }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"val:body1",
-        "amount":"val:dmg1"
-      },{
-        "typename":"deal_damage",
-        "target":"val:body2",
-        "amount":"val:dmg2"
-      }],
+    "cost":12,
     "operators":[{
         "typename":"get_body_at",
         "pos":"par:target",
@@ -253,65 +264,54 @@
         "output":"dmg2",
         "sides":"val:athletics"
       }],
-    "cost":12
-  },
-  "CONSUME_PACK_CARD":{
-    "params":[{
-        "typename":"card_index",
-        "output":"index",
-        "source":"PACK"
-      }],
-    "cost":1,
-    "operators":[{
-        "typename":"self",
-        "output":"actor"
-      },{
-        "source":"PACK",
-        "typename":"get_actor_card",
-        "card-index":"par:index",
-        "output":"card",
-        "actor":"val:actor"
-      }],
     "effects":[{
-        "typename":"consume_card",
-        "card":"val:card"
+        "typename":"deal_damage",
+        "target":"val:body1",
+        "amount":"val:dmg1"
       },{
-        "typename":"remove_actor_card",
-        "card-index":"par:index",
-        "source":"PACK",
-        "actor":"val:actor"
+        "typename":"deal_damage",
+        "target":"val:body2",
+        "amount":"val:dmg2"
       }]
   },
-  "IDLE":{
-    "params":[],
+  "CHANGE_SECTOR":{
+    "params":[{
+        "typename":"sector",
+        "output":"sector"
+      },{
+        "typename":"direction",
+        "output":"pos"
+      }],
     "cost":1,
     "operators":[],
-    "effects":[]
+    "effects":[{
+        "typename":"change_sector",
+        "target_sector":"par:sector",
+        "target_pos":"par:pos"
+      }]
   },
-  "RECALL_CARD":{
+  "UPGRADE":{
     "params":[{
-        "typename":"card_index",
-        "output":"card_index"
+        "typename":"upgrade_list",
+        "output":"list"
+      },{
+        "typename":"upgrade_cost",
+        "output":"exp-cost"
       }],
     "effects":[{
-        "typename":"add_card_to_backbuffer",
-        "card":"val:card"
+        "typename":"upgrade_attribute",
+        "upgrade_list":"par:list"
       },{
-        "typename":"remove_actor_card",
-        "card-index":"par:card_index",
-        "source":"HAND",
-        "actor":"val:self"
+        "typename":"modify_exp",
+        "value":"val:final-cost"
       }],
     "operators":[{
-        "typename":"self",
-        "output":"self"
-      },{
-        "source":"HAND",
-        "typename":"get_actor_card",
-        "card-index":"par:card_index",
-        "output":"card",
-        "actor":"val:self"
+        "lhs":"par:exp-cost",
+        "typename":"integer_binop",
+        "op":"*",
+        "output":"final-cost",
+        "rhs":-1
       }],
-    "cost":2
+    "cost":1
   }
 }
