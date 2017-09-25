@@ -76,10 +76,10 @@ function WidgetView:draw()
   local enter = self.enter[1]
   g.push()
   g.translate(W/2, H/2 - 20)
-  local rot = pi/2 * (enter - 1)
+  local rot = pi/2 * (enter - 1) + pi/2
   for i=0,3 do
     g.push()
-    local x,y = cos(rot + i/4*2*pi), -sin(rot + i/4*2*pi)
+    local x,y = cos(rot - i/4*2*pi), -sin(rot - i/4*2*pi)
     g.translate(128*x, 128*y)
     if self.selected == i+1 then
       g.scale(1.5, 1.5)

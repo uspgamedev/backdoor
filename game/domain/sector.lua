@@ -111,6 +111,10 @@ function Sector:saveState()
   return state
 end
 
+function Sector:getDimensions()
+  return self.w, self.h
+end
+
 function Sector:generate(register)
 
   -- load sector's specs
@@ -313,6 +317,10 @@ end
 
 function Sector:getBodyPos(body)
   return unpack(self.bodies[body])
+end
+
+function Sector:iterateActors()
+  return ipairs(self.actors)
 end
 
 function Sector:getActorPos(actor)
