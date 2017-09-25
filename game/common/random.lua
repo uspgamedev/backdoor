@@ -33,6 +33,14 @@ function RANDOM.generateEven(e, d)
   return e + _rng:random(0, floor((d - e) / 2)) * 2
 end
 
+function RANDOM.rollDice(n, d)
+  local sum = 0
+  for i = 1, n do
+    sum = sum + d == 1 and 1 or RANDOM.generate(1, d)
+  end
+  return sum
+end
+
 function RANDOM.shuffle(t)
   local n = #t
   for i=1,n do
