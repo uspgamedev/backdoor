@@ -8,44 +8,30 @@ local function cmp(a, b)
   return a[2] < b[2]
 end
 
-local function maintain(self, i)
-  local higher = false
-  local left = 2*i
-  local right = left+1
+local function maintain(array, i)
+  local parent = math.floor(i/2)
 
-  if left <= self.size and cmp(self.items[left], self.items[i]) then
-    higher = left
-  else
-    higher = i
-  end
-
-  if right <= self.size and cmp(self.items[right], self.items[higher]) then
-    higher = right
-  end
-
-  if higher ~= i then
-    local swap = self.items[i]
-    self.items[i] = self.items[higher]
-    self.items[higher] = swap
-    maintain(self, higher)
+  if parent > 0 and cmp(array[parent], array[i]) then
+    local swap = array[i]
+    array[i] = array[parent]
+    array[parent] = swap
+    maintain(array, parent)
   end
 end
 
 function Heap:getNext()
-  local item = self.items[1]
-  self.items[1] = self.items[self.size]
+  local item = self.items[self.size]
   self.items[self.size] = nil
   self.size = self.size - 1
-  maintain(self, 1)
+  maintain(self.items, self.size)
   return unpack(item)
 end
 
 function Heap:add(e, rank)
   rank = rank or 0
   self.size = self.size + 1
-  self.items[self.size] = self.items[1]
-  self.items[1] = {e, rank}
-  maintain(self, 1)
+  self.items[self.size] = {e, rank}
+  maintain(self.items, self.size)
 end
 
 function Heap:isEmpty()

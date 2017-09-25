@@ -5,6 +5,8 @@ local TILE = require 'common.tile'
 local Heap = require 'common.heap'
 
 local abs = math.abs
+local VISION = 20 -- high value to test heap efficiency
+local DEDICATION = math.floor(VISION * math.sqrt(2))
 
 local function _hash(pos)
   if not pos then return "none" end
@@ -23,12 +25,14 @@ local function _findPath(start, goal, sector)
   local cost_so_far = {}
   local path = {}
   local found = false
+  local count = 0
 
   frontier:add(start, 0)
   came_from[_hash(start)] = true
   cost_so_far[_hash(start)] = 0
 
   while not frontier:isEmpty() do
+    count = count + 1
     local current, rank = frontier:getNext()
 
     -- if you found your goal, quit loop
@@ -44,13 +48,15 @@ local function _findPath(start, goal, sector)
       local i, j = unpack(current)
       local ti, tj = unpack(goal)
       local next_pos = { i+di, j+dj }
-      if sector:isValid(unpack(next_pos)) then
+      local distance = _heuristic(goal, next_pos)
+
+      if sector:isValid(unpack(next_pos)) and distance < DEDICATION then
         local new_cost = cost_so_far[_hash(current)] + 1
 
         -- is it a valid and not yet checked neighbor?
         if not cost_so_far[_hash(next_pos)]
           or new_cost < cost_so_far[_hash(next_pos)] then
-          local new_rank = new_cost + 2 * _heuristic(goal, next_pos)
+          local new_rank = new_cost + 2 * distance
           cost_so_far[_hash(next_pos)] = new_cost
           came_from[_hash(next_pos)] = current
           frontier:add(next_pos, new_rank)
@@ -65,9 +71,9 @@ local function _findPath(start, goal, sector)
       table.insert(path, current)
       current = came_from[_hash(current)]
     end
-    return path[#path]
+    return path[#path], count
   end
-  return false
+  return false, count
 end
 
 return function (actor, sector)
@@ -90,9 +96,11 @@ return function (actor, sector)
   if dist == 1 then
     -- attack if close!
     return 'PRIMARY', { target = {target:getPos()} }
-  else--if dist <= 8 then
+  elseif dist <= VISION then
     -- chase if far away!
-    local pos = _findPath({i,j}, {target:getPos()}, sector)
+    local start = os.clock()
+    local pos, operations = _findPath({i,j}, {target:getPos()}, sector)
+    print(("%.10f, %d operations"):format(os.clock() - start, operations))
     if pos then
       return 'MOVE', { pos = pos }
     end
