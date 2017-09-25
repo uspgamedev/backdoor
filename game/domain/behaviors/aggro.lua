@@ -29,7 +29,7 @@ local function _findPath(start, goal, sector)
   local path = {}
   local found = false
   local iterations = 0
-  WIDTH = sector.w
+  WIDTH = sector:getDimensions()
 
   frontier:add(start, 0)
   came_from[_hash(start)] = true
@@ -83,12 +83,11 @@ local function _findPath(start, goal, sector)
 end
 
 return function (actor, sector)
-  local actorlist = sector:getActors()
   local target, dist
   local i, j = actor:getPos()
 
   -- create list of opponents
-  for _,opponent in ipairs(actorlist) do
+  for _,opponent in sector:iterateActors() do
     if opponent:isPlayer() then
       local k, l = opponent:getPos()
       local d = _heuristic({i, j}, {k, l})
