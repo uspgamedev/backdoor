@@ -32,11 +32,13 @@ end
 
 inputs['output'] = function(spec, key, parent)
   return function(self)
+    IMGUI.PushID(key.id)
     IMGUI.Text(key.name)
     local changed, value = IMGUI.InputText("", spec[key.id] or key.id, 64)
     if changed then
       spec[key.id] = value
     end
+    IMGUI.PopID()
   end
 end
 

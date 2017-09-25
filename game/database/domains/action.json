@@ -60,11 +60,40 @@
     "operators":[],
     "cost":2
   },
-  "IDLE":{
-    "params":[],
-    "effects":[],
-    "operators":[],
-    "cost":1
+  "SHOOT":{
+    "params":[{
+        "filter":"BODY",
+        "typename":"choose_target",
+        "max-range":5,
+        "output":"target",
+        "body-only":true
+      }],
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"val:body",
+        "amount":"val:damage_total"
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"attr",
+        "which":"ARC"
+      },{
+        "typename":"dice_throw",
+        "rolls":1,
+        "output":"damage_roll",
+        "sides":8
+      },{
+        "lhs":"val:attr",
+        "typename":"integer_binop",
+        "op":"+",
+        "rhs":"val:damage_roll",
+        "output":"damage_total"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body"
+      }],
+    "cost":10
   },
   "CONSUME_CARD":{
     "params":[{
@@ -119,35 +148,11 @@
         "actor":"val:self"
       }]
   },
-  "SHOOT":{
-    "params":[{
-        "filter":"BODY",
-        "typename":"choose_target",
-        "max-range":5,
-        "output":"target",
-        "body-only":true
-      }],
-    "effects":[{
-        "typename":"deal_damage",
-        "target":"val:body",
-        "amount":"val:amount"
-      }],
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"ATH"
-      },{
-        "op":"+",
-        "typename":"integer_binop",
-        "lhs":"val:attr",
-        "rhs":3,
-        "output":"amount"
-      },{
-        "typename":"get_body_at",
-        "pos":"par:target",
-        "output":"body"
-      }],
-    "cost":10
+  "IDLE":{
+    "params":[],
+    "effects":[],
+    "operators":[],
+    "cost":1
   },
   "NEW_HAND":{
     "params":[{
@@ -244,15 +249,29 @@
         "typename":"get_body_at",
         "pos":"par:target2",
         "output":"body2"
+      },{
+        "typename":"get_attribute",
+        "output":"athletics",
+        "which":"ATH"
+      },{
+        "typename":"dice_throw",
+        "rolls":1,
+        "output":"dmg1",
+        "sides":"val:athletics"
+      },{
+        "typename":"dice_throw",
+        "rolls":1,
+        "output":"dmg2",
+        "sides":"val:athletics"
       }],
     "effects":[{
         "typename":"deal_damage",
         "target":"val:body1",
-        "amount":3
+        "amount":"val:dmg1"
       },{
         "typename":"deal_damage",
         "target":"val:body2",
-        "amount":3
+        "amount":"val:dmg2"
       }]
   },
   "CHANGE_SECTOR":{
