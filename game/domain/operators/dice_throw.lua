@@ -13,7 +13,7 @@ OP.schema = {
 OP.type = 'integer'
 
 function OP.process(actor, sector, params)
-  return RANDOM.diceThrow(params.rolls, params.sides)
+  return RANDOM.rollDice(params.rolls, params.sides)
 end
 
 return OP
