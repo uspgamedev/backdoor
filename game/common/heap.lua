@@ -11,7 +11,7 @@ end
 local function maintain_up(array, i)
   local parent = math.floor(i/2)
 
-  if parent > 0 and cmp(array[parent], array[i]) then
+  if parent > 0 and cmp(array[i], array[parent]) then
     local swap = array[i]
     array[i] = array[parent]
     array[parent] = swap
