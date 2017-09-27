@@ -88,7 +88,7 @@ local function _move(dir)
     local current_sector = _route.getCurrentSector()
     local controlled_actor = _route.getControlledActor()
     local i, j = controlled_actor:getPos()
-    print(dir)
+
     dir = DIR[dir]
     i, j = i+dir[1], j+dir[2]
     if current_sector:isValid(i,j) then
