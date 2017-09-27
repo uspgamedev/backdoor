@@ -20,7 +20,7 @@
     "art_action":"SHOOT",
     "name":"Bolt",
     "art":{
-      "art_action":"SHOOT"
+      "art_action":"BOLT"
     }
   },
   "arc +1":{
@@ -34,6 +34,8 @@
     "name":"Arcana +1"
   },
   "ath +1":{
+    "type":"UPGRADE",
+    "art_action":"ATH +1",
     "upgrade":{
       "list":[{
           "attr":"ATH",
@@ -41,8 +43,6 @@
         }],
       "cost":2
     },
-    "type":"UPGRADE",
-    "art_action":"ATH +1",
     "name":"Athletics +1"
   },
   "mec +1":{

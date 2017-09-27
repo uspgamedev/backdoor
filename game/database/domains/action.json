@@ -60,11 +60,34 @@
         "text":42
       }]
   },
-  "IDLE":{
-    "params":[],
-    "cost":1,
-    "operators":[],
-    "effects":[]
+  "SHOOT":{
+    "params":[{
+        "filter":"BODY",
+        "typename":"choose_target",
+        "body-only":true,
+        "output":"target",
+        "max-range":5
+      }],
+    "cost":10,
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"attr",
+        "which":"ATH"
+      },{
+        "typename":"dice_throw",
+        "rolls":1,
+        "output":"damage_roll",
+        "sides":"val:attr"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body"
+      }],
+    "effects":[{
+        "typename":"deal_damage",
+        "target":"val:body",
+        "amount":"val:damage_roll"
+      }]
   },
   "CONSUME_CARD":{
     "params":[{
@@ -117,22 +140,6 @@
         "value":"val:final-cost"
       }]
   },
-  "CHANGE_SECTOR":{
-    "params":[{
-        "typename":"sector",
-        "output":"sector"
-      },{
-        "typename":"direction",
-        "output":"pos"
-      }],
-    "effects":[{
-        "typename":"change_sector",
-        "target_sector":"par:sector",
-        "target_pos":"par:pos"
-      }],
-    "operators":[],
-    "cost":1
-  },
   "NEW_HAND":{
     "params":[{
         "typename":"choose_buffer",
@@ -148,49 +155,19 @@
     "operators":[],
     "cost":2
   },
-  "HEAL":{
-    "params":[{
-        "filter":"BODY",
-        "max-range":5,
-        "body-only":true,
-        "output":"target",
-        "typename":"choose_target"
-      }],
-    "effects":[{
-        "typename":"heal",
-        "target":"val:body",
-        "amount":"val:amount"
-      }],
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"arcana",
-        "which":"ARC"
-      },{
-        "op":"+",
-        "typename":"integer_binop",
-        "output":"amount",
-        "rhs":2,
-        "lhs":"val:arcana"
-      },{
-        "typename":"get_body_at",
-        "pos":"par:target",
-        "output":"body"
-      }],
-    "cost":6
-  },
   "DOUBLESHOOT":{
     "params":[{
         "filter":"BODY",
-        "max-range":6,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target",
-        "typename":"choose_target"
+        "max-range":6
       },{
         "filter":"BODY",
-        "max-range":6,
+        "typename":"choose_target",
         "body-only":true,
         "output":"target2",
-        "typename":"choose_target"
+        "max-range":6
       }],
     "effects":[{
         "typename":"deal_damage",
@@ -214,17 +191,95 @@
         "output":"athletics",
         "which":"ATH"
       },{
-        "typename":"dice_throw",
-        "rolls":1,
-        "output":"dmg1",
-        "sides":"val:athletics"
+        "op":"/",
+        "typename":"integer_binop",
+        "lhs":"val:athletics",
+        "output":"half-ath",
+        "rhs":2
       },{
         "typename":"dice_throw",
-        "rolls":1,
+        "rolls":2,
+        "output":"dmg1",
+        "sides":"val:half-ath"
+      },{
+        "typename":"dice_throw",
+        "rolls":2,
         "output":"dmg2",
-        "sides":"val:athletics"
+        "sides":"val:half-ath"
       }],
     "cost":12
+  },
+  "CHANGE_SECTOR":{
+    "params":[{
+        "typename":"sector",
+        "output":"sector"
+      },{
+        "typename":"direction",
+        "output":"pos"
+      }],
+    "effects":[{
+        "typename":"change_sector",
+        "target_sector":"par:sector",
+        "target_pos":"par:pos"
+      }],
+    "operators":[],
+    "cost":1
+  },
+  "HEAL":{
+    "params":[{
+        "filter":"BODY",
+        "typename":"choose_target",
+        "body-only":true,
+        "output":"target",
+        "max-range":5
+      }],
+    "effects":[{
+        "typename":"heal",
+        "target":"val:body",
+        "amount":"val:amount"
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"arcana",
+        "which":"ARC"
+      },{
+        "op":"+",
+        "typename":"integer_binop",
+        "output":"amount",
+        "rhs":2,
+        "lhs":"val:arcana"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body"
+      }],
+    "cost":6
+  },
+  "RECALL_CARD":{
+    "params":[{
+        "typename":"card_index",
+        "output":"card_index"
+      }],
+    "effects":[{
+        "typename":"add_card_to_backbuffer",
+        "card":"val:card"
+      },{
+        "typename":"remove_actor_card",
+        "card-index":"par:card_index",
+        "source":"HAND",
+        "actor":"val:self"
+      }],
+    "operators":[{
+        "typename":"self",
+        "output":"self"
+      },{
+        "source":"HAND",
+        "typename":"get_actor_card",
+        "card-index":"par:card_index",
+        "output":"card",
+        "actor":"val:self"
+      }],
+    "cost":2
   },
   "CONSUME_PACK_CARD":{
     "params":[{
@@ -253,65 +308,44 @@
         "actor":"val:actor"
       }]
   },
-  "RECALL_CARD":{
+  "BOLT":{
     "params":[{
-        "typename":"card_index",
-        "output":"card_index"
-      }],
-    "effects":[{
-        "typename":"add_card_to_backbuffer",
-        "card":"val:card"
-      },{
-        "typename":"remove_actor_card",
-        "card-index":"par:card_index",
-        "source":"HAND",
-        "actor":"val:self"
-      }],
-    "operators":[{
-        "typename":"self",
-        "output":"self"
-      },{
-        "source":"HAND",
-        "typename":"get_actor_card",
-        "card-index":"par:card_index",
-        "output":"card",
-        "actor":"val:self"
-      }],
-    "cost":2
-  },
-  "SHOOT":{
-    "params":[{
-        "filter":"BODY",
+        "typename":"choose_target",
         "max-range":5,
         "body-only":true,
-        "output":"target",
-        "typename":"choose_target"
-      }],
-    "cost":10,
-    "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"ARC"
-      },{
-        "typename":"dice_throw",
-        "rolls":1,
-        "output":"damage_roll",
-        "sides":8
-      },{
-        "lhs":"val:attr",
-        "typename":"integer_binop",
-        "output":"damage_total",
-        "rhs":"val:damage_roll",
-        "op":"+"
-      },{
-        "typename":"get_body_at",
-        "pos":"par:target",
-        "output":"body"
+        "output":"target"
       }],
     "effects":[{
         "typename":"deal_damage",
-        "target":"val:body",
-        "amount":"val:damage_total"
-      }]
+        "target":"val:target_body",
+        "amount":"val:dmg"
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"arcana",
+        "which":"ARC"
+      },{
+        "op":"/",
+        "typename":"integer_binop",
+        "lhs":"val:arcana",
+        "output":"half-arcana",
+        "rhs":2
+      },{
+        "typename":"dice_throw",
+        "rolls":3,
+        "output":"dmg",
+        "sides":"val:half-arcana"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"target_body"
+      }],
+    "cost":14
+  },
+  "IDLE":{
+    "params":[],
+    "cost":1,
+    "operators":[],
+    "effects":[]
   }
 }
