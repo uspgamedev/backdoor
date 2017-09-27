@@ -1,5 +1,6 @@
 
 local DB    = require 'database'
+local RES   = require 'resources'
 local DEFS  = require 'domain.definitions'
 
 --PackView Class--
@@ -7,6 +8,9 @@ local DEFS  = require 'domain.definitions'
 local PackView = Class{
   __includes = { ELEMENT }
 }
+
+--CONSTS--
+local FONT = RES.loadFont("Text", 24)
 
 --CLASS FUNCTIONS--
 
@@ -75,7 +79,7 @@ function PackView:draw()
                                        #self.pack)
     g.print(view, x, y)
     local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + 50)
+    g.print(("%s %d"):format(t, n), x, y + FONT:getHeight())
   end
 end
 
