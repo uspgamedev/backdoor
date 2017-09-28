@@ -35,9 +35,9 @@ function BufferPickerView:init(actor)
   self.secondary_buffer_a = 0
 
   --Arrows
-  self.right_arrow_x = O_WIN_W/2 + 120 - SMALL_FONT:getWidth(">")
+  self.right_arrow_x = O_WIN_W/2 + 120 - _font():getWidth(">")
   self.left_arrow_x = O_WIN_W/2 - 80
-  self.arrows_y = 3*O_WIN_H/4 + SMALL_FONT:getHeight()/2
+  self.arrows_y = 3*O_WIN_H/4 + _font():getHeight()/2
 
   expandArrows(self)
 
