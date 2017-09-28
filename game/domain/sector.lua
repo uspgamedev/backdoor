@@ -392,7 +392,7 @@ function _turnLoop(self, ...)
       actor = table.remove(actors_queue)
 
       actor:tick()
-      if actor:ready() then
+      while actor:ready() do
         actor:makeAction(self)
       end
 
