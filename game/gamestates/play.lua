@@ -21,16 +21,25 @@ local _next_action
 local _view
 local _gui
 
+local _switch_to
+
 --LOCAL FUNCTION--
 
 local function _playTurns(...)
-  local request = _route.playTurns(...)
+  local request,extra = _route.playTurns(...)
 
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
-    SWITCHER.push(GS.USER_TURN, _route, _view)
+    if _view.sector:hasPendingVFX() then
+      SWITCHER.push(GS.ANIMATION, _view.sector)
+    else
+      SWITCHER.push(GS.USER_TURN, _route, _view)
+    end
   elseif request == "changeSector" then
+    return _playTurns()
+  elseif request == "animation" then
+    _view.sector:addVFX(extra.body, unpack(extra.origin))
     return _playTurns()
   end
   _next_action = nil
@@ -125,6 +134,9 @@ function state:resume(state, args)
     if args == "SAVE_AND_QUIT" then return _saveAndQuit() end
     if args == "EXIT_SECTOR" then return _exitSector() end
     _next_action = args.next_action
+  elseif state == GS.ANIMATION then
+    SWITCHER.push(GS.USER_TURN, _route, _view)
+    _next_action = nil
   end
 
 end

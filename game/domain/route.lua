@@ -136,7 +136,7 @@ function Route:instance(obj)
     _checkSector()
     local request, extra = _current_sector:playTurns(...)
     _controlled_actor = (request == "userTurn") and extra or nil
-    return request
+    return request, extra
   end
 
   function obj.destroyAll()

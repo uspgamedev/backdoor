@@ -317,7 +317,7 @@ function Actor:tick()
 end
 
 function Actor:ready()
-  return self.cooldown <= 0
+  return self:getBody():isAlive() and self.cooldown <= 0
 end
 
 local function _interact(self)
@@ -333,7 +333,7 @@ local function _interact(self)
 end
 
 function Actor:makeAction(sector)
-  local success = false
+  local success,log = false
   repeat
     local action_slot, params = self:behavior(sector)
     local check, alt_params = self:getAction(action_slot)
@@ -349,10 +349,11 @@ function Actor:makeAction(sector)
         table.remove(self.hand, action_slot)
       end
       if action then
-        success = ACTION.run(action, self, sector, params)
+        success,log = ACTION.run(action, self, sector, params)
       end
     end
   until success
+  return log
 end
 
 function Actor:spendTime(n)

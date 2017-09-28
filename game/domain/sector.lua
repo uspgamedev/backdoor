@@ -393,10 +393,9 @@ function _turnLoop(self, ...)
 
       actor:tick()
       while actor:ready() do
-        actor:makeAction(self)
+        local log = actor:makeAction(self)
+        manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
       end
-
-      manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
 
       if actor:isPlayer() and actor:getBody():getSector() ~= self then
         coroutine.yield('changeSector')

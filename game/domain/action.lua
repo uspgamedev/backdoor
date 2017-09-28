@@ -36,6 +36,7 @@ function ACTION.validate(param_name, sector, actor, param, value)
 end
 
 function ACTION.run(action_name, actor, sector, params)
+  local log = {}
   local spec = DB.loadSpec("action", action_name)
   local values = {}
   for i,parameter in ipairs(spec.params) do
@@ -60,9 +61,9 @@ function ACTION.run(action_name, actor, sector, params)
     for _,arg in DB.schemaFor('effects/'..fx_name) do
       argvalues[arg.id] = unref(params, values, effect_spec[arg.id])
     end
-    FX[fx_name].process(actor, sector, argvalues)
+    FX[fx_name].process(actor, sector, argvalues, log)
   end
-  return true
+  return true, log
 end
 
 return ACTION
