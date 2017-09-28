@@ -34,7 +34,7 @@ local function _initDrawables()
 
   FONT = RES.loadFont("Text", 24)
 
-  TEXTURE = g.newImage("assets/image/tiles.png")
+  TEXTURE = RES.loadTexture("bare-tiles")
   TEXTURE:setFilter("nearest", "nearest")
   local tw, th = TEXTURE:getDimensions()
 

@@ -11,6 +11,7 @@ local BufferPickerView = Class {
 --CONSTS--
 
 local _font = function () return RES.loadFont("Text", 24) end
+local _img = function () return RES.loadTexture("buffer-card") end
 
 --LOCAL FUNCTIOKNS DECLARATIONS--
 
@@ -50,28 +51,26 @@ function BufferPickerView:draw()
   local size = self.actor:getBufferSize(self.select)
 
   --Draw current selected buffer
-  local img = IMG.CARD_BACK_1
-  local i_w, i_h = img:getWidth(), img:getHeight() -- Image width and height
+  local i_w, i_h = _img():getWidth(), _img():getHeight() -- Image width and height
   local i_s = 1 --Image scale
   local i_x, i_y = c_x-i_w/2*i_s + self.current_buffer_x_mod, c_y-i_h/2*i_s --Image position
   local i_r = 0 --Image rotation
   g.setColor(255, 255, 255, self.current_buffer_a)
   for i = 1, math.ceil(size/2) do
-    g.draw(img, i_x, i_y, i_r, i_s) --Draw image
+    g.draw(_img(), i_x, i_y, i_r, i_s) --Draw image
     i_x, i_y = i_x + 10, i_y - 10
   end
 
   --Draw secondary selected buffer that's is fading away
   if self.is_changing_buffer then
     local size = self.actor:getBufferSize(self.secondary_select)
-    local img = IMG.CARD_BACK_1
-    local i_w, i_h = img:getWidth(), img:getHeight() -- Image width and height
+    local i_w, i_h = _img():getWidth(), _img():getHeight() -- Image width and height
     local i_s = 1 --Image scale
     local i_x, i_y = c_x-i_w/2*i_s + self.secondary_buffer_x_mod, c_y-i_h/2*i_s --Image position
     local i_r = 0 --Image rotation
     g.setColor(255, 255, 255, self.secondary_buffer_a)
     for i = 1, math.ceil(size/2) do
-      g.draw(img, i_x, i_y, i_r, i_s) --Draw image
+      g.draw(_img(), i_x, i_y, i_r, i_s) --Draw image
       i_x, i_y = i_x + 10, i_y - 10
     end
   end
