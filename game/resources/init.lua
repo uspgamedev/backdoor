@@ -34,20 +34,24 @@ function _loadResource(rtype, name, ...)
   return res
 end
 
-function RES.loadFont(font_name, size)
-  return _loadResource('font', font_name, size)
+function RES.loadFont(name, size)
+  return _loadResource('font', name, size)
 end
 
-function RES.loadTexture(texture_name)
-  return _loadResource('texture', texture_name)
+function RES.loadTexture(name)
+  return _loadResource('texture', name)
 end
 
-function RES.loadSFX(sfx_name)
-  return _loadResource('sfx', sfx_name)
+function RES.loadSFX(name)
+  return _loadResource('sfx', name)
 end
 
-function RES.loadBGM(bgm_name)
-  return _loadResource('bgm', bgm_name)
+function RES.loadBGM(name)
+  return _loadResource('bgm', name)
+end
+
+function RES.loadSprite(name)
+  local metadata = DB.loadResource('sprite', name)
 end
 
 return RES
