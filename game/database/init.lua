@@ -100,6 +100,10 @@ function DB.loadResourcePath(resource_type, resource_name)
   return "assets/"..resource_type.."/"..filename
 end
 
+function DB.loadResource(resource_type, resource_name)
+  return _loadResource(resource_type)[resource_name]
+end
+
 function DB.save()
   for name,domain in pairs(_dbcache.domains) do
     local filepath = ("game/database/domains/%s.json"):format(name)
