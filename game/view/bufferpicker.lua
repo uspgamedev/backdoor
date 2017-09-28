@@ -10,8 +10,7 @@ local BufferPickerView = Class {
 
 --CONSTS--
 
-local SMALL_FONT = RES.loadFont("Text", 24)
-local BIG_FONT = RES.loadFont("Text", 24)
+local _font = function () return RES.loadFont("Text", 24) end
 
 --LOCAL FUNCTIOKNS DECLARATIONS--
 
@@ -79,14 +78,14 @@ function BufferPickerView:draw()
 
   --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
-  g.setFont(BIG_FONT)
+  g.setFont(_font())
   local back_buffer_size = self.actor:getBackBufferSize(self.select)
   g.printf(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size),
            c_x-80, c_y + i_h/2 + 40, 200, "center")
 
   --Draw arrows
   g.setColor(239, 40, 103)
-  g.setFont(SMALL_FONT)
+  g.setFont(_font())
   g.print(">", self.right_arrow_x, self.arrows_y)
   g.print("<", self.left_arrow_x, self.arrows_y)
 

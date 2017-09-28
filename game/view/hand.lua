@@ -12,7 +12,7 @@ local card_view = {
   h = 200,
 }
 
-local FONT = RES.loadFont("Text", 24)
+local _font = function () return RES.loadFont("Text", 24) end
 local _ACTION_TYPES = {
   'use', 'remember', 'consume'
 }
@@ -94,7 +94,7 @@ function HandView:draw()
   local x, y = self.x, self.y
   local gap = 150
   local g = love.graphics
-  g.setFont(FONT)
+  g.setFont(_font())
   for i, card in ipairs(self.hand) do
     _drawCard(card, x, y, i == self.focus_index)
     if i == self.focus_index then
