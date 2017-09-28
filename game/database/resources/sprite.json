@@ -9,6 +9,6 @@
       { "time":0.15, "quad":[160, 0, 80, 120], "offset":[0, 40] },
       { "time":0.15, "quad":[80, 0, 80, 120], "offset":[0, 40] }
     ],
-    "repeat": true
+    "reapeat": true
   }
 }

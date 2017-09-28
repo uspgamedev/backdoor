@@ -50,8 +50,20 @@ function RES.loadBGM(name)
   return _loadResource('bgm', name)
 end
 
-function RES.loadSprite(name)
+function RES.loadSprite(name, buffer, usage)
+  local g = love.graphics
   local metadata = DB.loadResource('sprite', name)
+  local texture = RES.loadTexture(metadata.texture)
+  local w, h = texture:getDimension()
+  local batch = g.newSpriteBatch(texture, buffer, usage)
+  local animation = {}
+  for i, info in ipairs(metadata.animation) do
+    local x, y, qw, qh = unpack(info.quad)
+    animation[i].quad = g.newQuad(x, y, qw, qh, w, h)
+    animation[i].time = info.time
+    animation[i].offset = { unpack(info.offset) }
+  end
+  return batch, animation
 end
 
 return RES
