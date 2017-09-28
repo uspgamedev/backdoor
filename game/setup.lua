@@ -42,7 +42,7 @@ function setup.config()
     CAM = Camera(O_WIN_W/2, O_WIN_H/2) --Set camera position to center of screen
 
     --IMAGES--
-    local path = "assets/imgs/"
+    local path = "assets/image/"
     IMG = { --Table containing all the images
       CARD_BACK_1 = love.graphics.newImage(path.."cards/card_back_1.png")
     }

@@ -1,6 +1,9 @@
+
+local RES = require 'resources'
+
 --LOCAL FUNCTIONS DECLARATIONS--
 
-local drawCard
+local _drawCard
 
 --CARDVIEW PROPERTIES--
 
@@ -9,6 +12,7 @@ local card_view = {
   h = 200,
 }
 
+local _font = function () return RES.loadFont("Text", 24) end
 local _ACTION_TYPES = {
   'use', 'remember', 'consume'
 }
@@ -90,8 +94,9 @@ function HandView:draw()
   local x, y = self.x, self.y
   local gap = 150
   local g = love.graphics
+  g.setFont(_font())
   for i, card in ipairs(self.hand) do
-    drawCard(card, x, y, i == self.focus_index)
+    _drawCard(card, x, y, i == self.focus_index)
     if i == self.focus_index then
       g.print(self:getActionType(), x, y - 32)
     end
@@ -128,7 +133,7 @@ end
   --LOCAL FUNCTIONS--
 
 --Draw a card starting its upper left corner on given x,y values
-function drawCard(card, x, y, focused)
+function _drawCard(card, x, y, focused)
   local g = love.graphics
   --Draw card background
   if focused then

@@ -1,5 +1,5 @@
 
-local DB = require 'database'
+local RES = require 'resources'
 local COLORS = require 'domain.definitions.colors'
 
 local ActorView = Class{
@@ -12,7 +12,7 @@ local WIDTH, HEIGHT, FONT
 
 local function _initGraphicValues()
   WIDTH, HEIGHT = love.graphics.getDimensions()
-  FONT = love.graphics.newFont(DB.loadFontPath("Saira"), 24)
+  FONT = RES.loadFont("Text", 24)
   FONT:setLineHeight(1)
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d"

@@ -1,4 +1,5 @@
 
+local RES         = require 'resources'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 
@@ -10,6 +11,7 @@ local HALF_H = 6
 local TEXTURE
 local TILE_COLORS
 local TILES
+local FONT
 
 local Cursor
 
@@ -30,7 +32,9 @@ local function _initDrawables()
   -- FIXME: Tiles are not gotten from DB right now
   local g = love.graphics
 
-  TEXTURE = g.newImage("assets/imgs/tiles.png")
+  FONT = RES.loadFont("Text", 24)
+
+  TEXTURE = g.newImage("assets/image/tiles.png")
   TEXTURE:setFilter("nearest", "nearest")
   local tw, th = TEXTURE:getDimensions()
 
@@ -140,7 +144,7 @@ function SectorView:draw()
     g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
     g.pop()
     g.setColor(COLORS.NEUTRAL)
-    g.setFont(g.newFont(20))
+    g.setFont(FONT)
     g.print(body:getHP(), 0, 0)
     g.pop()
   end

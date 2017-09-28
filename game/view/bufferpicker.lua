@@ -1,4 +1,5 @@
 
+local RES = require 'resources'
 local DIR = require 'domain.definitions.dir'
 
 --BufferPickerView Class--
@@ -6,6 +7,10 @@ local DIR = require 'domain.definitions.dir'
 local BufferPickerView = Class {
   __includes = { ELEMENT }
 }
+
+--CONSTS--
+
+local _font = function () return RES.loadFont("Text", 24) end
 
 --LOCAL FUNCTIOKNS DECLARATIONS--
 
@@ -30,9 +35,9 @@ function BufferPickerView:init(actor)
   self.secondary_buffer_a = 0
 
   --Arrows
-  self.right_arrow_x = O_WIN_W/2 + 120
+  self.right_arrow_x = O_WIN_W/2 + 120 - _font():getWidth(">")
   self.left_arrow_x = O_WIN_W/2 - 80
-  self.arrows_y = 3*O_WIN_H/4 - 10
+  self.arrows_y = 3*O_WIN_H/4 + _font():getHeight()/2
 
   expandArrows(self)
 
@@ -73,13 +78,14 @@ function BufferPickerView:draw()
 
   --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
-  g.setFont(g.newFont(20))
+  g.setFont(_font())
   local back_buffer_size = self.actor:getBackBufferSize(self.select)
-  g.print(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size), c_x, c_y + i_h/2 + 40)
+  g.printf(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size),
+           c_x-80, c_y + i_h/2 + 40, 200, "center")
 
   --Draw arrows
   g.setColor(239, 40, 103)
-  g.setFont(g.newFont(60))
+  g.setFont(_font())
   g.print(">", self.right_arrow_x, self.arrows_y)
   g.print("<", self.left_arrow_x, self.arrows_y)
 

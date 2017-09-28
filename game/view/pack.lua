@@ -1,5 +1,6 @@
 
 local DB    = require 'database'
+local RES   = require 'resources'
 local DEFS  = require 'domain.definitions'
 
 --PackView Class--
@@ -7,6 +8,9 @@ local DEFS  = require 'domain.definitions'
 local PackView = Class{
   __includes = { ELEMENT }
 }
+
+--CONSTS--
+local _font = function () return RES.loadFont("Text", 24) end
 
 --CLASS FUNCTIONS--
 
@@ -73,9 +77,10 @@ function PackView:draw()
     local card = DB.loadSpec('card', card_data.specname)
     local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
+    g.setFont(_font())
     g.print(view, x, y)
     local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + 50)
+    g.print(("%s %d"):format(t, n), x, y + _font():getHeight())
   end
 end
 

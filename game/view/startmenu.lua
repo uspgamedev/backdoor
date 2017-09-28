@@ -1,5 +1,5 @@
 --DEPENDENCIES--
-local DB = require 'database'
+local RES = require 'resources'
 local COLORS = require 'domain.definitions.colors'
 local Queue = require 'lux.common.Queue'
 
@@ -9,9 +9,6 @@ local StartMenuView = Class{
   __includes = { ELEMENT }
 }
 
-
-local TITLE_FONT_PATH = DB.loadFontPath("Anton")
-local MENU_FONT_PATH = DB.loadFontPath("Saira")
 local TITLE_TEXT = "backdoor"
 local TITLE_FONT_SIZE = 48
 local MENU_FONT_SIZE = 24
@@ -26,9 +23,9 @@ local WIDTH, HEIGHT
 
 local function _initFontValues()
   local g = love.graphics
-  TITLE_FONT = g.newFont(TITLE_FONT_PATH, TITLE_FONT_SIZE)
+  TITLE_FONT = RES.loadFont("Title", TITLE_FONT_SIZE)
   TITLE_FONT:setLineHeight(LH)
-  MENU_FONT = g.newFont(MENU_FONT_PATH, MENU_FONT_SIZE)
+  MENU_FONT = RES.loadFont("Text", MENU_FONT_SIZE)
   MENU_FONT:setLineHeight(LH)
   WIDTH, HEIGHT = g.getDimensions()
 end

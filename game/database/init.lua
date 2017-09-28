@@ -95,8 +95,9 @@ function DB.loadSetting(setting_name)
   return _loadGroup("settings", setting_name)
 end
 
-function DB.loadFontPath(font_name)
-  return "assets/fonts/" .. _loadResource("fonts")[font_name].filename
+function DB.loadResourcePath(resource_type, resource_name)
+  local filename = _loadResource(resource_type)[resource_name].filename
+  return "assets/"..resource_type.."/"..filename
 end
 
 function DB.save()
