@@ -144,7 +144,7 @@ function SectorView:draw()
     draw_sprite(x, y)
     g.translate(x, y)
     g.setFont(FONT)
-    g.print(body:getHP(), 0, 0)
+    g.print(body:getHP(), TILE_W/8, 0)
     g.pop()
   end
 
