@@ -2,13 +2,13 @@
   "demobody-idle": {
     "texture": "demobody",
     "animation": [
-      { "time":0.15, "quad":[0, 0, 80, 120], "offset":[0, 40] },
-      { "time":0.15, "quad":[80, 0, 80, 120], "offset":[0, 40] },
-      { "time":0.15, "quad":[160, 0, 80, 120], "offset":[0, 40] },
-      { "time":0.15, "quad":[240, 0, 80, 120], "offset":[0, 40] },
-      { "time":0.15, "quad":[160, 0, 80, 120], "offset":[0, 40] },
-      { "time":0.15, "quad":[80, 0, 80, 120], "offset":[0, 40] }
+      { "time":100, "quad":[0, 0, 80, 120], "offset":[0, 40] },
+      { "time":100, "quad":[80, 0, 80, 120], "offset":[0, 40] },
+      { "time":100, "quad":[160, 0, 80, 120], "offset":[0, 40] },
+      { "time":100, "quad":[240, 0, 80, 120], "offset":[0, 40] },
+      { "time":100, "quad":[160, 0, 80, 120], "offset":[0, 40] },
+      { "time":100, "quad":[80, 0, 80, 120], "offset":[0, 40] }
     ],
-    "reapeat": true
+    "loop": true
   }
 }
