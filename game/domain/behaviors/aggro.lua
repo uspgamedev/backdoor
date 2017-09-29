@@ -6,8 +6,8 @@ local Heap = require 'common.heap'
 
 local abs = math.abs
 local VISION = 8
-local DEDICATION = VISION * 2
-local LIMIT = VISION * 3
+local DEDICATION = VISION * 4
+local LIMIT = DEDICATION * 2
 local WIDTH = 1
 
 local function _hash(pos)
