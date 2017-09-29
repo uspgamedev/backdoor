@@ -48,6 +48,8 @@ function setup.config()
     BGM = { --Table containing all the background music tracks
     }
 
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
     --SHADERS--
         --
 

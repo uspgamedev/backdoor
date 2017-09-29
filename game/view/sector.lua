@@ -56,6 +56,7 @@ function SectorView:init(route)
   self.cursor = nil
 
   self.route = route
+  self.body_sprites = {}
 
   _initDrawables()
 
@@ -133,17 +134,15 @@ function SectorView:draw()
   -- Draw dem bodies
   for _, bodyinfo in ipairs(draw_bodies) do
     local body, x, y = unpack(bodyinfo)
+    local id = body:getId()
+    local draw_sprite = self.body_sprites[id] if not draw_sprite then
+      draw_sprite = RES.loadSprite(body:getAppearance())
+      self.body_sprites[id] = draw_sprite
+    end
     g.push()
-    g.translate(x, y)
-    g.push()
-    g.translate(TILE_W/2, TILE_H/2)
-    g.scale(TILE_W, TILE_H)
-    g.setColor(200, 100, 100)
-    g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
-    g.setColor(90, 140, 140)
-    g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
-    g.pop()
     g.setColor(COLORS.NEUTRAL)
+    draw_sprite(x, y)
+    g.translate(x, y)
     g.setFont(FONT)
     g.print(body:getHP(), 0, 0)
     g.pop()
