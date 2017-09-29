@@ -127,12 +127,7 @@ function SectorView:draw()
     else
       g.setColor(255, 0, 0)
     end
-    local line_w = love.graphics.getLineWidth()
-    love.graphics.setLineWidth(4)
-    --g.rectangle("fill", 0, 0, TILE_W, TILE_H)
-    --g.setColor(COLORS.NEUTRAL)
     _cursor_sprite(0, 0)
-    love.graphics.setLineWidth(line_w)
     g.pop()
   end
   -- Draw dem bodies
