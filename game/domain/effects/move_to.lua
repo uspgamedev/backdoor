@@ -8,7 +8,8 @@ FX.schema = {
 function FX.process (actor, sector, params)
   local pos = {actor:getPos()}
   sector:putBody(actor:getBody(), unpack(params.pos))
-  coroutine.yield('animation', {
+  coroutine.yield('report', {
+    type = 'body_moved',
     body = actor:getBody(),
     origin = pos
   })

@@ -38,8 +38,8 @@ local function _playTurns(...)
     end
   elseif request == "changeSector" then
     return _playTurns()
-  elseif request == "animation" then
-    _view.sector:addVFX(extra.body, unpack(extra.origin))
+  elseif request == "report" then
+    _view.sector:addVFX(extra)
     return _playTurns()
   end
   _next_action = nil

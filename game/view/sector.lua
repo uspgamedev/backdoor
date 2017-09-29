@@ -72,13 +72,16 @@ function SectorView:lookAt(target)
   self.target = target
 end
 
-function SectorView:addVFX(body, i, j)
-  if self.vfx[body] then return end
-  local i0, j0 = body:getPos()
-  local offset = {i - i0, j - j0}
-  self.vfx[body] = offset
-  self:addTimer(nil, MAIN_TIMER, "tween", 0.1, offset, {0, 0}, "in-out-quad",
-                function() self.vfx[body] = nil end)
+function SectorView:addVFX(extra)
+  if extra.type == 'body_moved' then
+    local body, i, j = extra.body, unpack(extra.origin)
+    if self.vfx[body] then return end
+    local i0, j0 = body:getPos()
+    local offset = {i - i0, j - j0}
+    self.vfx[body] = offset
+    self:addTimer(nil, MAIN_TIMER, "tween", 0.1, offset, {0, 0}, "in-out-quad",
+                  function() self.vfx[body] = nil end)
+  end
 end
 
 function SectorView:draw()
