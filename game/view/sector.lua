@@ -12,6 +12,7 @@ local TEXTURE
 local TILE_COLORS
 local TILES
 local FONT
+local _cursor_sprite
 
 local Cursor
 
@@ -118,16 +119,19 @@ function SectorView:draw()
   if self.cursor then
     local c_i, c_j = self:getCursorPos()
     local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
+    _cursor_sprite = _cursor_sprite or RES.loadSprite("cursor")
     g.push()
     g.translate(x, y)
     if self.cursor.validator(c_i,c_j) then
       g.setColor(250, 250, 250)
     else
-      g.setColor(255,0,0)
+      g.setColor(255, 0, 0)
     end
     local line_w = love.graphics.getLineWidth()
     love.graphics.setLineWidth(4)
-    g.rectangle("line", 0, 0, TILE_W, TILE_H)
+    --g.rectangle("fill", 0, 0, TILE_W, TILE_H)
+    --g.setColor(COLORS.NEUTRAL)
+    _cursor_sprite(0, 0)
     love.graphics.setLineWidth(line_w)
     g.pop()
   end
