@@ -61,4 +61,8 @@ function Body:heal(amount)
   self.damage = math.max(0, self.damage - amount)
 end
 
+function Body:getAppearance()
+  return self:getSpec('appearance')
+end
+
 return Body
