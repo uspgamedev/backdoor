@@ -393,7 +393,7 @@ function _turnLoop(self, ...)
 
       actor:tick()
       while actor:ready() do
-        local log = actor:makeAction(self)
+        actor:makeAction(self)
         manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
       end
 

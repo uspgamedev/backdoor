@@ -333,7 +333,7 @@ local function _interact(self)
 end
 
 function Actor:makeAction(sector)
-  local success,log = false
+  local success = false
   repeat
     local action_slot, params = self:behavior(sector)
     local check, alt_params = self:getAction(action_slot)
@@ -349,11 +349,11 @@ function Actor:makeAction(sector)
         table.remove(self.hand, action_slot)
       end
       if action then
-        success,log = ACTION.run(action, self, sector, params)
+        success = ACTION.run(action, self, sector, params)
       end
     end
   until success
-  return log
+  return true
 end
 
 function Actor:spendTime(n)
