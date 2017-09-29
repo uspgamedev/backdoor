@@ -1,4 +1,6 @@
+
 local DB = require 'database'
+local Sprite = require 'resources.sprite'
 
 local RES = {}
 
@@ -7,6 +9,7 @@ local _rescache = {
   texture = {},
   sfx = {},
   bgm = {},
+  frames = {},
 }
 
 local _initResource = {
@@ -21,7 +24,7 @@ local _initResource = {
   end,
   bgm = function(path)
     return love.audio.newSource(path, "stream")
-  end
+  end,
 }
 
 function _loadResource(rtype, name, ...)
@@ -29,7 +32,7 @@ function _loadResource(rtype, name, ...)
   local res = _rescache[rtype][name..sufix] if not res then
     local path = DB.loadResourcePath(rtype, name)
     res = _initResource[rtype](path, ...)
-    _rescache[rtype][name..sufix] = texture
+    _rescache[rtype][name..sufix] = res
   end
   return res
 end
@@ -50,20 +53,10 @@ function RES.loadBGM(name)
   return _loadResource('bgm', name)
 end
 
-function RES.loadSprite(name, buffer, usage)
-  local g = love.graphics
-  local metadata = DB.loadResource('sprite', name)
-  local texture = RES.loadTexture(metadata.texture)
-  local w, h = texture:getDimension()
-  local batch = g.newSpriteBatch(texture, buffer, usage)
-  local animation = {}
-  for i, info in ipairs(metadata.animation) do
-    local x, y, qw, qh = unpack(info.quad)
-    animation[i].quad = g.newQuad(x, y, qw, qh, w, h)
-    animation[i].time = info.time
-    animation[i].offset = { unpack(info.offset) }
-  end
-  return batch, animation
+function RES.loadSprite(name)
+  local info = DB.loadResource('sprite', name)
+  local texture = RES.loadTexture(info.texture)
+  return Sprite.new(texture, info)
 end
 
 return RES
