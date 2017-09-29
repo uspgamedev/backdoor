@@ -1,4 +1,6 @@
+
 local DB = require 'database'
+local Sprite = require 'resources.sprite'
 
 local RES = {}
 
@@ -7,6 +9,7 @@ local _rescache = {
   texture = {},
   sfx = {},
   bgm = {},
+  frames = {},
 }
 
 local _initResource = {
@@ -21,7 +24,7 @@ local _initResource = {
   end,
   bgm = function(path)
     return love.audio.newSource(path, "stream")
-  end
+  end,
 }
 
 function _loadResource(rtype, name, ...)
@@ -29,25 +32,31 @@ function _loadResource(rtype, name, ...)
   local res = _rescache[rtype][name..sufix] if not res then
     local path = DB.loadResourcePath(rtype, name)
     res = _initResource[rtype](path, ...)
-    _rescache[rtype][name..sufix] = texture
+    _rescache[rtype][name..sufix] = res
   end
   return res
 end
 
-function RES.loadFont(font_name, size)
-  return _loadResource('font', font_name, size)
+function RES.loadFont(name, size)
+  return _loadResource('font', name, size)
 end
 
-function RES.loadTexture(texture_name)
-  return _loadResource('texture', texture_name)
+function RES.loadTexture(name)
+  return _loadResource('texture', name)
 end
 
-function RES.loadSFX(sfx_name)
-  return _loadResource('sfx', sfx_name)
+function RES.loadSFX(name)
+  return _loadResource('sfx', name)
 end
 
-function RES.loadBGM(bgm_name)
-  return _loadResource('bgm', bgm_name)
+function RES.loadBGM(name)
+  return _loadResource('bgm', name)
+end
+
+function RES.loadSprite(name)
+  local info = DB.loadResource('sprite', name)
+  local texture = RES.loadTexture(info.texture)
+  return Sprite.new(texture, info)
 end
 
 return RES

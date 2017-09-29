@@ -12,6 +12,7 @@ local TEXTURE
 local TILE_COLORS
 local TILES
 local FONT
+local _cursor_sprite
 
 local Cursor
 
@@ -56,6 +57,7 @@ function SectorView:init(route)
   self.cursor = nil
 
   self.route = route
+  self.body_sprites = {}
 
   _initDrawables()
 
@@ -117,35 +119,31 @@ function SectorView:draw()
   if self.cursor then
     local c_i, c_j = self:getCursorPos()
     local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
+    _cursor_sprite = _cursor_sprite or RES.loadSprite("cursor")
     g.push()
     g.translate(x, y)
     if self.cursor.validator(c_i,c_j) then
       g.setColor(250, 250, 250)
     else
-      g.setColor(255,0,0)
+      g.setColor(255, 0, 0)
     end
-    local line_w = love.graphics.getLineWidth()
-    love.graphics.setLineWidth(4)
-    g.rectangle("line", 0, 0, TILE_W, TILE_H)
-    love.graphics.setLineWidth(line_w)
+    _cursor_sprite(0, 0)
     g.pop()
   end
   -- Draw dem bodies
   for _, bodyinfo in ipairs(draw_bodies) do
     local body, x, y = unpack(bodyinfo)
+    local id = body:getId()
+    local draw_sprite = self.body_sprites[id] if not draw_sprite then
+      draw_sprite = RES.loadSprite(body:getAppearance())
+      self.body_sprites[id] = draw_sprite
+    end
     g.push()
-    g.translate(x, y)
-    g.push()
-    g.translate(TILE_W/2, TILE_H/2)
-    g.scale(TILE_W, TILE_H)
-    g.setColor(200, 100, 100)
-    g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
-    g.setColor(90, 140, 140)
-    g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
-    g.pop()
     g.setColor(COLORS.NEUTRAL)
+    draw_sprite(x, y)
+    g.translate(x, y)
     g.setFont(FONT)
-    g.print(body:getHP(), 0, 0)
+    g.print(body:getHP(), TILE_W/8, 0)
     g.pop()
   end
 
