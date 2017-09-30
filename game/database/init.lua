@@ -1,6 +1,7 @@
 
 local json = require 'dkjson'
 local SCHEMA = require 'lux.pack' 'database.schema'
+local DEFS = require 'domain.definitions'
 
 local DB = {}
 
@@ -49,6 +50,24 @@ local function _loadSetting(setting)
   return _loadGroup('settings', setting)
 end
 
+local function _listFilesIn(relpath)
+  local list = love.filesystem.getDirectoryItems(relpath)
+  local entries = {}
+  for i, filename in ipairs(list) do
+    local basename = filename:match("^(.+)%.json$")
+    if basename then
+      table.insert(entries, basename)
+    end
+  end
+  return ipairs(entries)
+end
+
+local function _deleteFile(relpath)
+  if love.filesystem.exists(relpath) then
+    return os.remove(_fullpath(relpath))
+  end
+end
+
 local function _loadFile(relpath)
   local file = assert(io.open(_fullpath(relpath), 'r'))
   local data, _, err = json.decode(file:read('*a'))
@@ -64,16 +83,23 @@ local function _writeFile(relpath, rawdata)
 end
 
 local function _save(cache, basepath)
+  -- check if file is marked to be deleted
+  if cache[DEFS.DELETE] then
+    return _deleteFile(basepath..".json")
+  end
+  -- check whether we are saving a group of files or a file
   if getmetatable(cache).group then
+    -- save group
     for group, subcache in pairs(cache) do
       local meta = getmetatable(subcache) or {}
       local item = meta.group or group
       local newbasepath = basepath.."/"..item
-      _save(subcache, newbasepath)
+      return _save(subcache, newbasepath)
     end
   else
+    -- save file
     local filepath = basepath..".json"
-    _writeFile(filepath, cache)
+    return _writeFile(filepath, cache)
   end
 end
 
@@ -106,8 +132,14 @@ function DB.schemaFor(domain_name)
   end
 end
 
-function DB.loadDomain(name)
-  return _loadDomainGroup(name)
+function DB.loadDomain(domain_name)
+  return _loadDomainGroup(domain_name)
+end
+
+function DB.listDomainItems(domain_name)
+  local domain_info = getmetatable(_loadDomainGroup(domain_name))
+  local relpath = domain_info.relpath
+  if relpath then return _listFilesIn(relpath) end
 end
 
 function DB.loadSpec(domain_name, spec_name)
