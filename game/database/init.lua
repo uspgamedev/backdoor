@@ -1,32 +1,20 @@
 
 local json = require 'dkjson'
-local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 local SCHEMA = require 'lux.pack' 'database.schema'
 
 local DB = {}
 
-local _dbcache = {
-  domains = {},
-  settings = {},
-  resources = {},
-}
+local _dbcache = {}
+local _subschemas = {}
 
-local function _metaSpec(domain_name)
-  return {
-    __index = function(self, key)
-      local extends = rawget(self, "extends")
-      if extends then
-        return DB.loadSpec(domain_name, extends)[key]
-      end
-    end
-  }
+local function _fullpath(relpath)
+  local srcpath = love.filesystem.getSource()
+  return ("%s/%s"):format(srcpath, relpath)
 end
-
-local subschemas = {}
 
 function _loadSubschema(base)
   local fs = love.filesystem
-  local sub = subschemas[base]
+  local sub = _subschemas[base]
   if not sub then
     sub = {}
     for _,file in ipairs(fs.getDirectoryItems("domain/" .. base)) do
@@ -36,7 +24,7 @@ function _loadSubschema(base)
         table.insert(sub, file)
       end
     end
-    subschemas[base] = sub
+    _subschemas[base] = sub
   end
   return sub
 end
@@ -46,24 +34,63 @@ function _subschemaFor(base, branch)
 end
 
 local function _loadGroup(category, group_name)
-  local group = _dbcache[category][group_name] if not group then
-    -- FIXME: hardcoded base path
-    local filepath = ("game/database/%s/%s.json"):format(category, group_name)
-    local file = assert(io.open(filepath, 'r'))
-    local _, err
-    group, _, err = json.decode(file:read('*a'))
-    file:close()
-    assert(group, err)
-    for k,spec in pairs(group) do
-      DB.initSpec(spec, group_name)
-    end
-    _dbcache[category][group_name] = group
-  end
-  return group
+  return _dbcache[category][group_name]
 end
 
-function DB.initSpec(spec, domain_name)
-  return setmetatable(spec, _metaSpec(domain_name))
+local function _loadDomainGroup(group)
+  return _loadGroup('domains', group)
+end
+
+local function _loadResourceGroup(group)
+  return _loadGroup('resources', group)
+end
+
+local function _loadSetting(setting)
+  return _loadGroup('settings', setting)
+end
+
+local function _loadFile(relpath)
+  local file = assert(io.open(_fullpath(relpath), 'r'))
+  local data, _, err = json.decode(file:read('*a'))
+  file:close()
+  return assert(data, err)
+end
+
+local function _writeFile(relpath, rawdata)
+  local file = assert(io.open(_fullpath(relpath), 'w'))
+  local data = json.encode(rawdata, {indent = true})
+  file:write(data)
+  return file:close()
+end
+
+local function _save(cache, basepath)
+  if getmetatable(cache).group then
+    for group, subcache in pairs(cache) do
+      local meta = getmetatable(subcache) or {}
+      local item = meta.group or group
+      local newbasepath = basepath.."/"..item
+      _save(subcache, newbasepath)
+    end
+  else
+    local filepath = basepath..".json"
+    _writeFile(filepath, cache)
+  end
+end
+
+local function _metaSpec(container)
+  return {
+    is_leaf = true,
+    __index = function(self, key)
+      local extends = rawget(self, "extends")
+      if extends then
+        return container[extends][key]
+      end
+    end
+  }
+end
+
+function DB.initSpec(spec, container)
+  return setmetatable(spec, _metaSpec(container))
 end
 
 function DB.subschemaTypes(base)
@@ -79,12 +106,8 @@ function DB.schemaFor(domain_name)
   end
 end
 
-local function _loadResource(resource_type)
-  return _loadGroup("resources", resource_type)
-end
-
-function DB.loadDomain(domain_name)
-  return _loadGroup("domains", domain_name)
+function DB.loadDomain(name)
+  return _loadDomainGroup(name)
 end
 
 function DB.loadSpec(domain_name, spec_name)
@@ -92,26 +115,53 @@ function DB.loadSpec(domain_name, spec_name)
 end
 
 function DB.loadSetting(setting_name)
-  return _loadGroup("settings", setting_name)
+  return _loadSetting(setting_name)
 end
 
-function DB.loadResourcePath(resource_type, resource_name)
-  local filename = _loadResource(resource_type)[resource_name].filename
-  return "assets/"..resource_type.."/"..filename
+function DB.loadResource(res_type, res_name)
+  return _loadResourceGroup(res_type)[res_name]
 end
 
-function DB.loadResource(resource_type, resource_name)
-  return _loadResource(resource_type)[resource_name]
+function DB.loadResourcePath(res_type, res_name)
+  local path = "assets/%s/%s"
+  local filename = DB.loadResource(res_type, res_name).filename
+  return path:format(res_type, filename)
 end
 
 function DB.save()
-  for name,domain in pairs(_dbcache.domains) do
-    local filepath = ("game/database/domains/%s.json"):format(name)
-    local file = assert(io.open(filepath, 'w'))
-    local data = json.encode(domain, { indent = true })
-    file:write(data)
-    file:close()
+  local basepath = getmetatable(_dbcache).relpath
+  _save(_dbcache, basepath)
+end
+
+function DB.init()
+  local fs = love.filesystem
+  local function get(self, key)
+    local path = ("%s/%s"):format(getmetatable(self).relpath, key)
+    local meta = {relpath = path, group = key}
+    local obj = setmetatable({}, meta)
+
+    -- if directory
+    if fs.isDirectory(path) then
+      meta.__index = get
+      self[key] = obj
+      return obj
+    end
+
+    -- if json file
+    local filepath = path..".json"
+    if fs.exists(filepath) then
+      obj = _loadFile(filepath)
+      DB.initSpec(obj, self)
+      self[key] = obj
+      return obj
+    end
   end
+  local meta = {
+    relpath = "database",
+    group = "database",
+    __index = get,
+  }
+  setmetatable(_dbcache, meta)
 end
 
 return DB
