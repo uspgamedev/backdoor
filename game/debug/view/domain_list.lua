@@ -13,21 +13,11 @@ local function sort(list)
 end
 
 return function(domain_name, title)
-
   local domain = DB.loadDomain(domain_name)
   local list = { n = 0 }
   local selected = 0
-  local found = {}
-  for _,name in DB.listDomainItems(domain_name) do
-    if domain[name] and domain[name] ~= DEFS.DELETE then
-      found[name] = true
-      add(list, name)
-    end
-  end
-  for name,spec in pairs(domain) do
-    if not found[name] and spec ~= DEFS.DELETE then
-      add(list, name)
-    end
+  for name in DB.listDomainItems(domain_name) do
+    add(list, name)
   end
   sort(list)
 

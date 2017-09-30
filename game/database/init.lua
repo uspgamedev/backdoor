@@ -143,9 +143,21 @@ function DB.loadDomain(domain_name)
 end
 
 function DB.listDomainItems(domain_name)
-  local domain_info = getmetatable(_loadDomainGroup(domain_name))
-  local relpath = domain_info.relpath
-  if relpath then return _listFilesIn(relpath) end
+  print(domain_name)
+  local domain = _loadDomainGroup(domain_name)
+  local relpath = getmetatable(domain).relpath
+  local found = {}
+  for _,name in _listFilesIn(relpath) do
+    if domain[name] and domain[name] ~= DEFS.DELETE then
+      found[name] = true
+    end
+  end
+  for name,spec in pairs(domain) do
+    if spec ~= DEFS.DELETE then
+      found[name] = true
+    end
+  end
+  return pairs(found)
 end
 
 function DB.loadSpec(domain_name, spec_name)
