@@ -77,11 +77,10 @@ end
 function SectorView:addVFX(extra)
   if extra.type == 'body_moved' then
     local body, i, j = extra.body, unpack(extra.origin)
-    if self.vfx.offset[body] then return end
     local i0, j0 = body:getPos()
     local offset = {i - i0, j - j0}
     self.vfx.offset[body] = offset
-    self:addTimer(nil, MAIN_TIMER, "tween", 0.05, offset, {0, 0}, "in-out-quad",
+    self:addTimer(nil, MAIN_TIMER, "tween", 0.10, offset, {0, 0}, "in-out-quad",
                   function() self.vfx.offset[body] = nil end)
   end
 end

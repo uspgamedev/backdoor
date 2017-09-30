@@ -31,16 +31,12 @@ local function _playTurns(...)
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
-    if _view.sector:hasPendingVFX() then
-      SWITCHER.push(GS.ANIMATION, _view.sector)
-    else
-      SWITCHER.push(GS.USER_TURN, _route, _view)
-    end
+    SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
     return _playTurns()
   elseif request == "report" then
     _view.sector:addVFX(extra)
-    return _playTurns()
+    SWITCHER.push(GS.ANIMATION, _view.sector)
   end
   _next_action = nil
 end
@@ -135,8 +131,7 @@ function state:resume(state, args)
     if args == "EXIT_SECTOR" then return _exitSector() end
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
-    SWITCHER.push(GS.USER_TURN, _route, _view)
-    _next_action = nil
+    _playTurns()
   end
 
 end
