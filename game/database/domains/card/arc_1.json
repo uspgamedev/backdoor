@@ -1,10 +1,10 @@
 {
+  "name":"Arcana +1",
   "upgrade":{
     "list":[{
-        "attr":"MEC",
+        "attr":"ARC",
         "val":1
       }],
     "cost":2
-  },
-  "name":"Mechanics +1"
+  }
 }

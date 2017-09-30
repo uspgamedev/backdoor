@@ -6,7 +6,7 @@
       }],
     "cost":2
   },
-  "art_action":"ATH +1",
   "type":"UPGRADE",
+  "art_action":"ATH +1",
   "name":"Athletics +1"
 }
