@@ -1,6 +1,7 @@
 
 local IMGUI = require 'imgui'
 local DB = require 'database'
+local DEFS = require 'domain.definitions'
 
 local function add(list, value)
   table.insert(list, value)
@@ -16,19 +17,29 @@ return function(domain_name, title)
   local domain = DB.loadDomain(domain_name)
   local list = { n = 0 }
   local selected = 0
+  local found = {}
+  for _,name in DB.listDomainItems(domain_name) do
+    if domain[name] and domain[name] ~= DEFS.DELETE then
+      found[name] = true
+      add(list, name)
+    end
+  end
   for name,spec in pairs(domain) do
-    add(list, name)
+    if not found[name] and spec ~= DEFS.DELETE then
+      add(list, name)
+    end
   end
   sort(list)
 
   local function delete()
-    domain[list[selected]] = nil
+    local item_name = list[selected]
+    domain[item_name] = DEFS.DELETE
     table.remove(list, selected)
     list.n = list.n - 1
   end
 
   local function newvalue(value, spec)
-    local new = spec or DB.initSpec({}, domain_name)
+    local new = spec or DB.initSpec({}, DB.loadDomain(domain_name))
     for _,key in DB.schemaFor(domain_name) do
       if key.type == 'list' then
         new[key.id] = new[key.id] or {}
@@ -37,8 +48,8 @@ return function(domain_name, title)
     domain[value] = new
     add(list, value)
     sort(list)
-    for i,v in ipairs(list) do
-      if v == value then
+    for i,name in DB.listDomainItems(domain_name) do
+      if name == value then
         selected = i
       end
     end

@@ -64,6 +64,7 @@ end
 
 local function _deleteFile(relpath)
   if love.filesystem.exists(relpath) then
+    local path = _fullpath(relpath)
     return os.remove(_fullpath(relpath))
   end
 end
@@ -78,14 +79,14 @@ end
 local function _writeFile(relpath, rawdata)
   local file = assert(io.open(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true})
-  file:write(data)
+  assert(file:write(data))
   return file:close()
 end
 
 local function _save(cache, basepath)
   -- check if file is marked to be deleted
-  if cache[DEFS.DELETE] then
-    return _deleteFile(basepath..".json")
+  if cache == DEFS.DELETE then
+    return assert()
   end
   -- check whether we are saving a group of files or a file
   if getmetatable(cache).group then
@@ -94,12 +95,17 @@ local function _save(cache, basepath)
       local meta = getmetatable(subcache) or {}
       local item = meta.group or group
       local newbasepath = basepath.."/"..item
-      return _save(subcache, newbasepath)
+      if subcache == DEFS.DELETE then
+        cache[group] = nil
+        _deleteFile(newbasepath..".json")
+      else
+        _save(subcache, newbasepath)
+      end
     end
   else
     -- save file
     local filepath = basepath..".json"
-    return _writeFile(filepath, cache)
+    return assert(_writeFile(filepath, cache))
   end
 end
 
