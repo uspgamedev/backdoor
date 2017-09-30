@@ -1,0 +1,9 @@
+{
+  "cost":2,
+  "effects":[{
+      "text":42,
+      "typename":"print"
+    }],
+  "operators":[],
+  "params":[]
+}

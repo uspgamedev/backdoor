@@ -1,0 +1,9 @@
+{
+  "effects":[{
+      "amount":1,
+      "typename":"draw_card"
+    }],
+  "cost":4,
+  "operators":[],
+  "params":[]
+}

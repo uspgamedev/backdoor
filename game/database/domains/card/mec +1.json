@@ -1,0 +1,10 @@
+{
+  "upgrade":{
+    "list":[{
+        "attr":"MEC",
+        "val":1
+      }],
+    "cost":2
+  },
+  "name":"Mechanics +1"
+}

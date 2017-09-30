@@ -1,0 +1,12 @@
+{
+  "upgrade":{
+    "list":[{
+        "attr":"ATH",
+        "val":1
+      }],
+    "cost":2
+  },
+  "art_action":"ATH +1",
+  "type":"UPGRADE",
+  "name":"Athletics +1"
+}
