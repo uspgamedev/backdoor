@@ -1,6 +1,4 @@
 {
-  "background": ["brawler", "arcanist", "craftsmith"],
-  "species": ["hearthborn", "hillborn"]
+  "species":["hearthborn","hillborn"],
+  "background":["brawler","arcanist","craftsmith"]
 }
-
-

@@ -1,0 +1,11 @@
+{
+  "cards":[{
+      "card":"bolt"
+    },{
+      "card":"cure"
+    },{
+      "card":"draw"
+    }],
+  "description":"The basic needs of your typical adventurer.",
+  "name":"Adventurer's Cunning"
+}

@@ -1,0 +1,10 @@
+{
+  "name":"Arcana +1",
+  "upgrade":{
+    "list":[{
+        "attr":"ARC",
+        "val":1
+      }],
+    "cost":2
+  }
+}

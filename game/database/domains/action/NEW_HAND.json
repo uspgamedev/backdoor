@@ -1,0 +1,15 @@
+{
+  "effects":[{
+      "which":"par:label#1001",
+      "typename":"new_hand"
+    }],
+  "cost":2,
+  "operators":[],
+  "params":[{
+      "output":"label#1001",
+      "typename":"choose_buffer"
+    },{
+      "output":"output",
+      "typename":"empty_hand"
+    }]
+}

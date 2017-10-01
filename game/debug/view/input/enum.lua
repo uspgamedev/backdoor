@@ -9,9 +9,9 @@ function inputs.enum(spec, key)
   -- Build option list from given array or from a database domain
   local _options = key.options
   if type(_options) == 'string' then
-    local domain = DB.loadDomain(_options)
+    local domain_name = _options
     _options = {}
-    for k,v in pairs(domain) do
+    for k,v in DB.listDomainItems(domain_name) do
       table.insert(_options,k)
     end
     table.sort(_options)

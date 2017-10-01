@@ -1,0 +1,8 @@
+{
+  "art":{
+    "art_action":"HEAL"
+  },
+  "art_action":"HEAL",
+  "type":"ART",
+  "name":"Cure"
+}
