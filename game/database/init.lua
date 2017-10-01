@@ -182,6 +182,10 @@ function DB.loadCategory(category)
   return _loadCategory(category)
 end
 
+function DB.loadGroup(category, group_name)
+  return _loadGroup(category, group_name)
+end
+
 function DB.loadDomain(domain_name)
   return _loadDomainGroup(domain_name)
 end

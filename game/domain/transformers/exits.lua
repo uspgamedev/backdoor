@@ -10,7 +10,7 @@ transformer.schema = {
     schema = {
       {
         id = "target_specname", name = "Target Sector Spec", type = 'enum',
-        options = "sector"
+        options = "domains.sector"
       }
     }
   },

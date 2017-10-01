@@ -129,7 +129,7 @@ function GUI:draw()
       for _,name in ipairs(DOMAINS) do
         local title = DOMAINS[name]
         if IMGUI.MenuItem(title.."s") then
-          self:push("domain_list", name, title)
+          self:push("category_list", 'domains', name, title)
         end
       end
       IMGUI.Separator()
@@ -142,7 +142,7 @@ function GUI:draw()
       for _,name in ipairs(RESOURCES) do
         local title = RESOURCES[name]
         if IMGUI.MenuItem(title.."s") then
-          self:push("resource_list", name, title)
+          self:push("category_list", 'resources', name, title)
         end
       end
       IMGUI.Separator()

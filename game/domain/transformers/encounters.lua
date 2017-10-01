@@ -12,9 +12,9 @@ transformer.schema = {
   { id = 'recipes', name = "Encounter recipe", type = 'array',
     schema = {
       { id = 'actorspec', name = "Actor Specification", type = 'enum',
-        options = 'actor' },
+        options = 'domains.actor' },
       { id = 'bodyspec', name = "Body Specification", type = 'enum',
-        options = 'body' },
+        options = 'domains.body' },
     } }
 }
 

@@ -11,7 +11,6 @@ function inputs.enum(spec, key)
   if type(_options) == 'string' then
     local group_name = _options
     local category, group = group_name:match("(.-)[%./](.+)")
-    print(group_name, category, group)
     _options = {}
     for k,v in DB.listItemsIn(category, group) do
       table.insert(_options, k)

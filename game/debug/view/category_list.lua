@@ -12,33 +12,33 @@ local function sort(list)
   table.sort(list)
 end
 
-return function(domain_name, title)
-  local domain = DB.loadDomain(domain_name)
+return function(category_name, group_name, title)
+  local group = DB.loadGroup(category_name, group_name)
   local list = { n = 0 }
   local selected = 0
-  for name in DB.listDomainItems(domain_name) do
+  for name in DB.listItemsIn(category_name, group_name) do
     add(list, name)
   end
   sort(list)
 
   local function delete()
     local item_name = list[selected]
-    domain[item_name] = DEFS.DELETE
+    group[item_name] = DEFS.DELETE
     table.remove(list, selected)
     list.n = list.n - 1
   end
 
   local function newvalue(value, spec)
-    local new = spec or DB.initSpec({}, domain)
-    for _,key in DB.schemaFor(domain_name) do
+    local new = spec or DB.initSpec({}, group)
+    for _,key in DB.schemaFor(group_name) do
       if key.type == 'list' then
         new[key.id] = new[key.id] or {}
       end
     end
-    domain[value] = new
+    group[value] = new
     add(list, value)
     sort(list)
-    for i,name in DB.listDomainItems(domain_name) do
+    for i,name in DB.listItemsIn(category_name, group_name) do
       if name == value then
         selected = i
       end
@@ -46,7 +46,7 @@ return function(domain_name, title)
   end
 
   local function rename(value)
-    local spec = domain[list[selected]]
+    local spec = group[list[selected]]
     if spec then
       delete()
       newvalue(value, spec)
@@ -61,7 +61,7 @@ return function(domain_name, title)
     local changed
     changed, selected = IMGUI.ListBox("", selected, list, list.n, 15)
     if changed then
-      self:push('specification_editor', domain[list[selected]], domain_name,
+      self:push('specification_editor', group[list[selected]], group_name,
                 title, delete, rename)
     end
   end
