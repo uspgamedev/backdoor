@@ -3,11 +3,11 @@ local IMGUI = require 'imgui'
 local DB    = require 'database'
 local INPUT = require 'debug.view.input'
 
-return function(spec, domain_name, title, delete, rename, parent)
+return function(spec, group_name, title, delete, rename, parent)
 
   local inputs = {}
   local keys = {}
-  for _,key in DB.schemaFor(domain_name) do
+  for _,key in DB.schemaFor(group_name) do
     table.insert(keys, key)
     table.insert(inputs, INPUT(key.type, spec, key, parent))
   end

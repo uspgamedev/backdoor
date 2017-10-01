@@ -34,8 +34,12 @@ function _subschemaFor(base, branch)
   return _loadSubschema(base)[branch]
 end
 
+local function _loadCategory(category)
+  return _dbcache[category]
+end
+
 local function _loadGroup(category, group_name)
-  return _dbcache[category][group_name]
+  return _loadCategory(category)[group_name]
 end
 
 local function _loadDomainGroup(group)
@@ -105,6 +109,23 @@ local function _save(cache, basepath)
   end
 end
 
+function _listItemsIn(category, group_name)
+  local group = _loadGroup(category, group_name)
+  local relpath = getmetatable(group).relpath
+  local found = {}
+  for _,name in _listFilesIn(relpath) do
+    if group[name] and group[name] ~= DEFS.DELETE then
+      found[name] = true
+    end
+  end
+  for name,spec in pairs(group) do
+    if spec ~= DEFS.DELETE then
+      found[name] = true
+    end
+  end
+  return pairs(found)
+end
+
 local function _metaSpec(container)
   return {
     is_leaf = true,
@@ -157,25 +178,16 @@ function DB.schemaFor(domain_name)
   end
 end
 
+function DB.loadCategory(category)
+  return _loadCategory(category)
+end
+
 function DB.loadDomain(domain_name)
   return _loadDomainGroup(domain_name)
 end
 
 function DB.listDomainItems(domain_name)
-  local domain = _loadDomainGroup(domain_name)
-  local relpath = getmetatable(domain).relpath
-  local found = {}
-  for _,name in _listFilesIn(relpath) do
-    if domain[name] and domain[name] ~= DEFS.DELETE then
-      found[name] = true
-    end
-  end
-  for name,spec in pairs(domain) do
-    if spec ~= DEFS.DELETE then
-      found[name] = true
-    end
-  end
-  return pairs(found)
+  return _listItemsIn('domains', domain_name)
 end
 
 function DB.loadSpec(domain_name, spec_name)
@@ -184,6 +196,10 @@ end
 
 function DB.loadSetting(setting_name)
   return _loadSetting(setting_name)
+end
+
+function DB.loadResourceGroup(res_type)
+  return _loadResourceGroup(res_type)
 end
 
 function DB.loadResource(res_type, res_name)
@@ -196,9 +212,18 @@ function DB.loadResourcePath(res_type, res_name)
   return path:format(res_type, filename)
 end
 
-function DB.save()
-  local basepath = getmetatable(_dbcache).relpath
-  _save(_dbcache, basepath)
+function DB.listResourceItems(res_name)
+  return _listItemsIn('resources', res_name)
+end
+
+function DB.listItemsIn(category, group)
+  return _listItemsIn(category, group)
+end
+
+function DB.save(container)
+  container = container or _dbcache
+  local basepath = getmetatable(container).relpath
+  _save(container, basepath)
 end
 
 function DB.init()
