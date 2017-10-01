@@ -1,29 +1,29 @@
 {
-  "loop":true,
-  "texture":"cursor",
   "animation":[{
       "time":100,
-      "quad":[0,0,96,96],
-      "offset":[8,8]
+      "offset":[8,8],
+      "quad":[0,0,96,96]
     },{
       "time":100,
-      "quad":[96,0,96,96],
-      "offset":[8,8]
+      "offset":[8,8],
+      "quad":[96,0,96,96]
     },{
       "time":100,
-      "quad":[192,0,96,96],
-      "offset":[8,8]
+      "offset":[8,8],
+      "quad":[192,0,96,96]
     },{
       "time":100,
-      "quad":[288,0,96,96],
-      "offset":[8,8]
+      "offset":[8,8],
+      "quad":[288,0,96,96]
     },{
       "time":100,
-      "quad":[192,0,96,96],
-      "offset":[8,8]
+      "offset":[8,8],
+      "quad":[192,0,96,96]
     },{
       "time":100,
-      "quad":[96,0,96,96],
-      "offset":[8,8]
-    }]
+      "offset":[8,8],
+      "quad":[96,0,96,96]
+    }],
+  "loop":true,
+  "texture":"cursor"
 }
