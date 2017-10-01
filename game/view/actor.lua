@@ -25,14 +25,23 @@ function ActorView:init(route)
   ELEMENT.init(self)
 
   self.route = route
+  self.actor = false
 
   if not _initialized then _initGraphicValues() end
 
 end
 
+function ActorView:loadActor()
+  local newactor = self.route.getControlledActor()
+  if self.actor ~= newactor and newactor then
+    self.actor = newactor
+  end
+  return self.actor
+end
+
 function ActorView:draw()
   local g = love.graphics
-  local actor = self.route.getControlledActor()
+  local actor = self:loadActor()
   if not actor then return end
   local ath = actor:getATH()
   local arc = actor:getARC()
