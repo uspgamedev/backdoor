@@ -55,6 +55,9 @@ function SectorView:init(route)
 
   self.target = nil
   self.cursor = nil
+  self.vfx = {
+    offset = {}
+  }
 
   self.route = route
   self.body_sprites = {}
@@ -63,8 +66,23 @@ function SectorView:init(route)
 
 end
 
+function SectorView:hasPendingVFX()
+  return not Util.tableEmpty(self.vfx.offset)
+end
+
 function SectorView:lookAt(target)
   self.target = target
+end
+
+function SectorView:addVFX(extra)
+  if extra.type == 'body_moved' then
+    local body, i, j = extra.body, unpack(extra.origin)
+    local i0, j0 = body:getPos()
+    local offset = {i - i0, j - j0}
+    self.vfx.offset[body] = offset
+    self:addTimer(nil, MAIN_TIMER, "tween", 0.05, offset, {0, 0}, "in-out-quad",
+                  function() self.vfx.offset[body] = nil end)
+  end
 end
 
 function SectorView:draw()
@@ -138,6 +156,9 @@ function SectorView:draw()
       draw_sprite = RES.loadSprite(body:getAppearance())
       self.body_sprites[id] = draw_sprite
     end
+    local di, dj = unpack(self.vfx.offset[body] or {0,0})
+    local dx, dy = dj*TILE_W, di*TILE_H
+    x, y = x+dx, y+dy
     g.push()
     g.setColor(COLORS.NEUTRAL)
     draw_sprite(x, y)

@@ -317,7 +317,7 @@ function Actor:tick()
 end
 
 function Actor:ready()
-  return self.cooldown <= 0
+  return self:getBody():isAlive() and self.cooldown <= 0
 end
 
 local function _interact(self)
@@ -353,6 +353,7 @@ function Actor:makeAction(sector)
       end
     end
   until success
+  return true
 end
 
 function Actor:spendTime(n)
