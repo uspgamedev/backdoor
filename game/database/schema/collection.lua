@@ -5,7 +5,7 @@ return {
   {
     id = 'cards', name = "Cards", type = 'array',
     schema = {
-      { id = 'card', name = "Card", type = 'enum', options = 'card' }
+      { id = 'card', name = "Card", type = 'enum', options = 'domains.card' }
     }
   }
 }

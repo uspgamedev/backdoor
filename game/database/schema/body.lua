@@ -1,6 +1,6 @@
 
 return {
-  { id = 'extends', name = "Prototype", type = "enum", options = 'body',
+  { id = 'extends', name = "Prototype", type = "enum", options = 'domains.body',
     optional = true},
   { id = 'name', name = "Full Name", type = "string" },
   { id = 'appearance', name = "Appearance", type = "string" },
