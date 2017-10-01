@@ -84,10 +84,6 @@ local function _writeFile(relpath, rawdata)
 end
 
 local function _save(cache, basepath)
-  -- check if file is marked to be deleted
-  if cache == DEFS.DELETE then
-    return assert()
-  end
   -- check whether we are saving a group of files or a file
   if getmetatable(cache).group then
     -- save group
@@ -121,6 +117,29 @@ local function _metaSpec(container)
   }
 end
 
+local function _get(self, key)
+  local fs = love.filesystem
+  local path = ("%s/%s"):format(getmetatable(self).relpath, key)
+  local meta = {relpath = path, group = key}
+  local obj = setmetatable({}, meta)
+
+  -- if directory
+  if fs.isDirectory(path) then
+    meta.__index = _get
+    self[key] = obj
+    return obj
+  end
+
+  -- if json file
+  local filepath = path..".json"
+  if fs.exists(filepath) then
+    obj = _loadFile(filepath)
+    DB.initSpec(obj, self)
+    self[key] = obj
+    return obj
+  end
+end
+
 function DB.initSpec(spec, container)
   return setmetatable(spec, _metaSpec(container))
 end
@@ -143,7 +162,6 @@ function DB.loadDomain(domain_name)
 end
 
 function DB.listDomainItems(domain_name)
-  print(domain_name)
   local domain = _loadDomainGroup(domain_name)
   local relpath = getmetatable(domain).relpath
   local found = {}
@@ -184,32 +202,10 @@ function DB.save()
 end
 
 function DB.init()
-  local fs = love.filesystem
-  local function get(self, key)
-    local path = ("%s/%s"):format(getmetatable(self).relpath, key)
-    local meta = {relpath = path, group = key}
-    local obj = setmetatable({}, meta)
-
-    -- if directory
-    if fs.isDirectory(path) then
-      meta.__index = get
-      self[key] = obj
-      return obj
-    end
-
-    -- if json file
-    local filepath = path..".json"
-    if fs.exists(filepath) then
-      obj = _loadFile(filepath)
-      DB.initSpec(obj, self)
-      self[key] = obj
-      return obj
-    end
-  end
   local meta = {
     relpath = "database",
     group = "database",
-    __index = get,
+    __index = _get,
   }
   setmetatable(_dbcache, meta)
 end
