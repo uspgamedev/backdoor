@@ -24,21 +24,31 @@ function inputs.vector(spec, key)
     local subkey = {
       id = i,
       name = signature[i],
-      type = 'integer',
-      range = range,
     }
     subschemas[i] = subkey
   end
 
+  local function check_range(new)
+    if range then
+      new = math.max(range[1],
+        range[2] and math.min(range[2], new) or new)
+    end
+    return new
+  end
+
   return function(self)
     IMGUI.Text(("%s"):format(key.name))
-    IMGUI.Indent(20)
+    IMGUI.Columns(2, key.id, false)
     for i, subkey in ipairs(subschemas) do
       IMGUI.PushID(("%s#%d"):format(key.name, subkey.id))
-      INPUT('integer', vector, subkey)(self)
+      IMGUI.Text(("%s"):format(subkey.name))
+      IMGUI.SameLine()
+      local changed, new = IMGUI.InputInt("", vector[i])
       IMGUI.PopID()
+      if changed then vector[i] = check_range(new) end
+      if i % 2 == 0 then IMGUI.NextColumn() end
     end
-    IMGUI.Unindent(20)
+    IMGUI.Columns(1)
   end
 end
 
