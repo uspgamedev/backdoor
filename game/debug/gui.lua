@@ -19,6 +19,13 @@ local DOMAINS = {
   collection = "Collection",
   action = "Action",
 }
+local RESOURCES = {
+  'font', 'texture', 'sprite',
+  font = "Font",
+  texture = "Texture",
+  sprite = "Animated Sprite",
+}
+
 
 local view = {}
 
@@ -118,16 +125,29 @@ function GUI:draw()
       end
       IMGUI.EndMenu()
     end
-    if IMGUI.BeginMenu("Database") then
+    if IMGUI.BeginMenu("Domains") then
       for _,name in ipairs(DOMAINS) do
         local title = DOMAINS[name]
         if IMGUI.MenuItem(title.."s") then
-          self:push("domain_list", name, title)
+          self:push("category_list", 'domains', name, title)
         end
       end
       IMGUI.Separator()
       if IMGUI.MenuItem("Save") then
-        DB.save()
+        DB.save(DB.loadCategory('domains'))
+      end
+      IMGUI.EndMenu()
+    end
+    if IMGUI.BeginMenu("Resources") then
+      for _,name in ipairs(RESOURCES) do
+        local title = RESOURCES[name]
+        if IMGUI.MenuItem(title.."s") then
+          self:push("category_list", 'resources', name, title)
+        end
+      end
+      IMGUI.Separator()
+      if IMGUI.MenuItem("Save") then
+        DB.save(DB.loadCategory('resources'))
       end
       IMGUI.EndMenu()
     end

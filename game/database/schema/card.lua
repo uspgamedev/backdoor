@@ -5,7 +5,7 @@ return {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
-      { id = 'art_action', name = "Art Action", type = 'enum', options = 'action' },
+      { id = 'art_action', name = "Art Action", type = 'enum', options = 'domains.action' },
     }
   },
   {

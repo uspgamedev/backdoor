@@ -1,29 +1,29 @@
 {
   "animation":[{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[0,0,80,120]
     },{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[80,0,80,120]
     },{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[160,0,80,120]
     },{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[240,0,80,120]
     },{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[160,0,80,120]
     },{
+      "offset":[0,48],
       "time":100,
-      "offset":[0,40],
       "quad":[80,0,80,120]
     }],
-  "loop":true,
-  "texture":"demobody"
+  "texture":"demobody",
+  "loop":true
 }

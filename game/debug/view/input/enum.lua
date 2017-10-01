@@ -9,10 +9,11 @@ function inputs.enum(spec, key)
   -- Build option list from given array or from a database domain
   local _options = key.options
   if type(_options) == 'string' then
-    local domain_name = _options
+    local group_name = _options
+    local category, group = group_name:match("(.-)[%./](.+)")
     _options = {}
-    for k,v in DB.listDomainItems(domain_name) do
-      table.insert(_options,k)
+    for k,v in DB.listItemsIn(category, group) do
+      table.insert(_options, k)
     end
     table.sort(_options)
   end
