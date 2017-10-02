@@ -103,14 +103,14 @@ function BufferPickerView:moveSelection(dir)
     self.is_changing_buffer = true
     self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
-    self.current_buffer_x_mod, self.secondary_buffer_x_mod = x_mod_value, 0
+    self.current_buffer_x_mod, self.secondary_buffer_x_mod = -x_mod_value, 0
     self:addTimer("change_buffer", MAIN_TIMER, "tween",
                                                     .2,
                                                     self,
                                                     {current_buffer_a = 255,
                                                      secondary_buffer_a = 0,
                                                      current_buffer_x_mod = 0,
-                                                     secondary_buffer_x_mod = -x_mod_value},
+                                                     secondary_buffer_x_mod = x_mod_value},
                                                      'out-quad',
                                                       function()
                                                         self.is_changing_buffer = false
@@ -123,14 +123,14 @@ function BufferPickerView:moveSelection(dir)
     self.is_changing_buffer = true
     self:removeTimer("change_buffer", MAIN_TIMER)
     self.current_buffer_a, self.secondary_buffer_a = 0, 255
-    self.current_buffer_x_mod, self.secondary_buffer_x_mod = -x_mod_value, 0
+    self.current_buffer_x_mod, self.secondary_buffer_x_mod = x_mod_value, 0
     self:addTimer("change_buffer", MAIN_TIMER, "tween",
                                                     .2,
                                                     self,
                                                     {current_buffer_a = 255,
                                                      secondary_buffer_a = 0,
                                                      current_buffer_x_mod = 0,
-                                                     secondary_buffer_x_mod = x_mod_value},
+                                                     secondary_buffer_x_mod = -x_mod_value},
                                                      'out-quad',
                                                       function()
                                                         self.is_changing_buffer = false
