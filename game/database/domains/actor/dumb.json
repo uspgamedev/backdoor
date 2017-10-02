@@ -1,8 +1,9 @@
 {
-  "description":"Oh honey...",
-  "behavior":"aggro",
-  "ath":6,
-  "mec":3,
   "arc":3,
-  "collection":"adventurer"
+  "ath":6,
+  "spd":1,
+  "collection":"adventurer",
+  "behavior":"aggro",
+  "description":"Oh honey...",
+  "mec":3
 }
