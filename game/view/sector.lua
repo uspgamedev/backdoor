@@ -1,6 +1,7 @@
 
 local DB          = require 'database'
 local RES         = require 'resources'
+local HSV         = require 'common.color'.hsv
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 
@@ -8,6 +9,9 @@ local TILE_W = 80
 local TILE_H = 80
 local HALF_W = 10
 local HALF_H = 6
+
+local HEALTHBAR_WIDTH = 64
+local HEALTHBAR_HEIGHT = 8
 
 local TEXTURE
 local TILE_COLORS
@@ -165,15 +169,14 @@ function SectorView:draw()
     g.setColor(COLORS.NEUTRAL)
     draw_sprite(x, y)
     g.translate(x, y)
-    local lineLifeSize = 100;
-    local actualLineLifeSize = lineLifeSize;
-    local actualFillLifeSize = (actualLineLifeSize * body:getHP())/body:getMaxHP();
-    g.setColor( 0, 0, 0)
-    g.rectangle("line", -10, -40, actualLineLifeSize, 5)
-    g.setColor( 0, 255, 0)
-    g.rectangle("fill", -8, -38, actualFillLifeSize, 2)
-    g.setFont(FONT)
-    g.print(body:getHP(), TILE_W/8, 0)
+    local hp_percent = body:getHP()/body:getMaxHP()
+    g.setColor(0, 20, 0)
+    g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48, HEALTHBAR_WIDTH,
+                HEALTHBAR_HEIGHT)
+    local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
+    g.setColor(HSV(unpack(hsvcol)))
+    g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48,
+                hp_percent*HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
     g.pop()
   end
 
