@@ -16,7 +16,7 @@ return {
       {
         id = 'list', name = "Attribute Change", type = 'array',
         schema = {
-          { id = 'attr', name = "Attribute", type = 'enum', options = {"ATH", "ARC", "MEC"} },
+          { id = 'attr', name = "Attribute", type = 'enum', options = {"ATH", "ARC", "MEC", "SPD"} },
           { id = 'val', name = "Value", type = 'integer' },
         }
       },
