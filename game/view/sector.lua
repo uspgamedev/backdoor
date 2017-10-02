@@ -154,7 +154,6 @@ function SectorView:draw()
     local body, x, y = unpack(bodyinfo)
     local id = body:getId()
     local draw_sprite = self.body_sprites[id] if not draw_sprite then
-      print(body:getAppearance())
       local idle = DB.loadSpec('appearance', body:getAppearance()).idle
       draw_sprite = RES.loadSprite(idle)
       self.body_sprites[id] = draw_sprite
