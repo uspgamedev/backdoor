@@ -1,4 +1,5 @@
 
+local DB          = require 'database'
 local RES         = require 'resources'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
@@ -153,7 +154,8 @@ function SectorView:draw()
     local body, x, y = unpack(bodyinfo)
     local id = body:getId()
     local draw_sprite = self.body_sprites[id] if not draw_sprite then
-      draw_sprite = RES.loadSprite(body:getAppearance())
+      local idle = DB.loadSpec('appearance', body:getAppearance()).idle
+      draw_sprite = RES.loadSprite(idle)
       self.body_sprites[id] = draw_sprite
     end
     local di, dj = unpack(self.vfx.offset[body] or {0,0})
