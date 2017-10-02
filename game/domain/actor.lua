@@ -37,7 +37,8 @@ function Actor:init(spec_name)
   self.upgrades = {
     ATH = 0,
     ARC = 0,
-    MEC = 0
+    MEC = 0,
+    SPD = 0,
   }
   self.exp = 0
   self.pack = nil
@@ -143,6 +144,10 @@ end
 
 function Actor:upgradeMEC(n)
   self.upgrades.MEC = self.upgrades.MEC + n
+end
+
+function Actor:getSPD()
+  return self:getSpec('spd') + self.upgrades.SPD
 end
 
 --[[ Body methods ]]--
@@ -313,7 +318,7 @@ end
 --[[ Turn methods ]]--
 
 function Actor:tick()
-  self.cooldown = math.max(0, self.cooldown - 1)
+  self.cooldown = math.max(0, self.cooldown - self:getSPD())
 end
 
 function Actor:ready()
