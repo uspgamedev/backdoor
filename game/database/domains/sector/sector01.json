@@ -1,5 +1,10 @@
 {
+  "fillings":[],
+  "connections":{
+    "loops":24
+  },
   "encounters":{
+    "max":30,
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime"
@@ -7,23 +12,66 @@
         "actorspec":"dumb",
         "bodyspec":"hearthborn"
       }],
-    "min":10,
-    "max":30
+    "min":10
   },
-  "fillings":[],
+  "rooms":{
+    "tries":256,
+    "count":24,
+    "rmar":1,
+    "minh":3,
+    "maxh":9,
+    "minw":3,
+    "maxw":9
+  },
   "maze":{
     "double":false
   },
-  "bootstrap":{
-    "mw":2,
-    "w":40,
-    "h":40,
-    "mh":2
-  },
+  "transformers":[{
+      "w":40,
+      "typename":"bootstrap",
+      "h":40,
+      "mh":2,
+      "mw":2
+    },{
+      "count":24,
+      "tries":256,
+      "minw":3,
+      "minh":3,
+      "maxh":9,
+      "typename":"rooms",
+      "maxw":9
+    },{
+      "typename":"maze"
+    },{
+      "typename":"connections",
+      "loops":24
+    },{
+      "amount":128,
+      "typename":"deadends"
+    },{
+      "typename":"exits",
+      "exits":[{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        },{
+          "target_specname":"sector01"
+        }]
+    }],
   "deadends":{
     "amount":128
   },
+  "bootstrap":{
+    "mh":2,
+    "h":40,
+    "mw":2,
+    "w":40
+  },
   "exits":{
+    "distance":5,
+    "threshold":2,
     "exits":[{
         "target_specname":"sector01"
       },{
@@ -33,51 +81,5 @@
       },{
         "target_specname":"sector01"
       }]
-  },
-  "connections":{
-    "loops":24
-  },
-  "transformers":[{
-      "w":40,
-      "h":40,
-      "typename":"bootstrap",
-      "mw":2,
-      "mh":2
-    },{
-      "maxw":9,
-      "minh":3,
-      "minw":3,
-      "maxh":9,
-      "typename":"rooms",
-      "tries":256,
-      "count":24
-    },{
-      "typename":"maze"
-    },{
-      "loops":24,
-      "typename":"connections"
-    },{
-      "amount":128,
-      "typename":"deadends"
-    },{
-      "exits":[{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        }],
-      "typename":"exits"
-    }],
-  "rooms":{
-    "maxw":9,
-    "minh":3,
-    "minw":3,
-    "rmar":1,
-    "maxh":9,
-    "count":24,
-    "tries":256
   }
 }
