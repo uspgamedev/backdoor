@@ -342,7 +342,8 @@ end
 
 function Sector:isValid(i, j)
   return self:isInside(i,j) and
-         self.tiles[i][j] and not self.bodies[i][j]
+         (self.tiles[i][j] and self.tiles[i][j].type ~= SCHEMATICS.WALL)
+         and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()

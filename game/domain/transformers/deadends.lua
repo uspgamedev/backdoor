@@ -50,9 +50,9 @@ function transformer.process(sectorinfo, params)
   end
 
   local function cleanCorner(corner)
-    local NAUGHT = SCHEMATICS.NAUGHT
+    local WALL = SCHEMATICS.WALL
     while corner and isCorner(corner) do
-      _sectorgrid.set(corner.x, corner.y, NAUGHT)
+      _sectorgrid.set(corner.x, corner.y, WALL)
       corner = isCorner(corner)
     end
   end

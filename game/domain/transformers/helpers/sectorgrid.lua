@@ -12,7 +12,7 @@ function SectorGrid:instance(obj, w, h, mw, mh)
   for i = 1, h do
     _grid[i] = {}
     for j = 1, w do
-      _grid[i][j] = SCHEMATICS.NAUGHT
+      _grid[i][j] = SCHEMATICS.WALL
     end
   end
 
@@ -79,6 +79,16 @@ function SectorGrid:instance(obj, w, h, mw, mh)
     return s
   end
 
+end
+
+function SectorGrid:copy(from)
+  local w, h = from.getDim()
+  local mw, mh = from.getMargins()
+  local newgrid = SectorGrid(w, h, mw, mh)
+  for x, y, tile in from.iterate() do
+    newgrid.set(x, y, tile)
+  end
+  return newgrid
 end
 
 return SectorGrid
