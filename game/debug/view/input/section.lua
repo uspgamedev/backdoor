@@ -27,7 +27,9 @@ function _inputs.section(spec, key)
     if element then
       IMGUI.Indent(20)
       for _,subkey in ipairs(schema) do
+        IMGUI.PushID(("%s:%s"):format(key.id, subkey.id))
         INPUT(subkey.type, element, subkey)(self)
+        IMGUI.PopID()
       end
       IMGUI.Unindent(20)
     end
