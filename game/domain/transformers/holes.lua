@@ -2,6 +2,7 @@
 local RANDOM = require 'common.random'
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local SCHEMATICS = require 'domain.definitions.schematics'
+local DIR        = require 'domain.definitions.dir'
 
 local transformer = {}
 
@@ -19,7 +20,6 @@ function transformer.process(sectorinfo, params)
   local min_x, min_y = mw + 1, mh + 1
   local max_x, max_y = w - min_x, h - min_y
 
-  -- setup
   do
     for n = 1, params.count do
       local x, y
@@ -30,9 +30,6 @@ function transformer.process(sectorinfo, params)
       to_grid.set(x, y, SCHEMATICS.NAUGHT)
     end
   end
-
-  print("START")
-  print(to_grid)
   from_grid, to_grid = to_grid, from_grid
 
   -- iterations
@@ -40,30 +37,27 @@ function transformer.process(sectorinfo, params)
     for n = 1, params.iter do
       for x, y, tile in from_grid.iterate() do
         local count = 0
-        for dx = -1, 1 do
-          for dy = -1, 1 do
-            local nx, ny = x+dx, y+dx
-            if (x ~= ny or y ~= ny) then
-              if from_grid.get(nx, ny) == SCHEMATICS.NAUGHT then
-                count = count + 1
-              end
+        for _,dir in ipairs(DIR) do
+          local dx, dy = unpack(DIR[dir])
+          local nx, ny = x+dx, y+dy
+          if (x ~= ny or y ~= ny) then
+            if from_grid.get(nx, ny) == SCHEMATICS.NAUGHT then
+              count = count + 1
             end
           end
         end
-        if count >= 1 and count <= 8 and tile == SCHEMATICS.WALL then
-          to_grid.set(x, y, SCHEMATICS.NAUGHT)
-        elseif tile ~= SCHEMATICS.NAUGHT then
-          to_grid.set(x, y, from_grid.get(x, y))
+        if count > 3 and tile == SCHEMATICS.WALL then
+          if RANDOM.generate() > .5 then
+            to_grid.set(x, y, SCHEMATICS.NAUGHT)
+          end
+        else
+          to_grid.set(x, y, tile)
         end
       end
-      print("STEP", n)
-      print(to_grid)
       to_grid, from_grid = from_grid, to_grid
     end
   end
 
-  print("DONE")
-  print(to_grid)
   sectorinfo.grid = to_grid
   return sectorinfo
 end

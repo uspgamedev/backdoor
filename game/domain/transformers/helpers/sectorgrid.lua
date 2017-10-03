@@ -12,7 +12,12 @@ function SectorGrid:instance(obj, w, h, mw, mh)
   for i = 1, h do
     _grid[i] = {}
     for j = 1, w do
-      _grid[i][j] = SCHEMATICS.WALL
+      if (j > mw and j <= w - mw) and
+         (i > mh and i <= h - mh) then
+        _grid[i][j] = SCHEMATICS.WALL
+      else
+        _grid[i][j] = SCHEMATICS.NAUGHT
+      end
     end
   end
 
