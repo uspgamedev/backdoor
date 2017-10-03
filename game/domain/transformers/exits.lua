@@ -60,8 +60,8 @@ function transformer.process(sectorinfo, params)
   local possible_exits = {}
   local chosen_exits = {}
 
-  FLOOR_THRESHOLD = params.threshold
-  EXIT_THRESHOLD = params.distance
+  FLOOR_THRESHOLD = params.threshold or FLOOR_THRESHOLD
+  EXIT_THRESHOLD = params.distance or EXIT_THRESHOLD
 
   -- construct list of possible exits
   do
