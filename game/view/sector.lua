@@ -105,14 +105,15 @@ function SectorView:draw()
     _moveCamera(self.target)
   end
   local cx, cy = CAM:position()
-  local draw_bodies = {}
-  local highlights = {}
   cx = cx / TILE_W
   cy = cy / TILE_H
   g.setBackgroundColor(75, 78, 60, 255)
   g.setColor(COLORS.NEUTRAL)
   TILES:clear()
+  g.push()
   for i = 0, sector.h-1 do
+    local draw_bodies = {}
+    local highlights = {}
     for j = 0, sector.w-1 do
       if j >= cx - HALF_W and j <= cx + HALF_W and
         i >= cy - HALF_H and i <= cy + HALF_H then
@@ -120,33 +121,66 @@ function SectorView:draw()
         if tile then
           -- Add tiles to spritebatch
           local body = sector.bodies[i+1][j+1]
-          local x, y = j*TILE_W, i*TILE_H
+          local x = j*TILE_W
           g.push()
-          TILES:add(TILE_QUADS[tile.type], x, y,
+          TILES:add(TILE_QUADS[tile.type], x, 0,
                     0, 1, 1, unpack(TILE_OFFSET[tile.type]))
-          TILES:add(TILE_QUADS.shade, x, y+TILE_H)
+          TILES:add(TILE_QUADS.shade, x, TILE_H)
           g.pop()
-          if self.cursor and self.cursor.range_checker(i+1, j+1) then
-            table.insert(highlights, {x, y, TILE_W, TILE_H, {100, 200, 200}})
-          end
-          if self.cursor and self.cursor.validator(i+1, j+1) then
-            table.insert(highlights, {x, y, TILE_W, TILE_H, {200, 200, 100}})
-          end
-          if body then
-            table.insert(draw_bodies, {body, x, y})
+          if tile.type ~= SCHEMATICS.WALL then
+            if self.cursor and self.cursor.range_checker(i+1, j+1) then
+              table.insert(highlights, {x, 0, TILE_W, TILE_H, {100, 200, 200}})
+            end
+            if self.cursor and self.cursor.validator(i+1, j+1) then
+              table.insert(highlights, {x, 0, TILE_W, TILE_H, {200, 200, 100}})
+            end
+            if body then
+              table.insert(draw_bodies, {body, x, 0})
+            end
           end
         end
       end
     end
+    g.setColor(COLORS.NEUTRAL)
+    g.draw(TILES, 0, 0)
+    TILES:clear()
+    -- Draw highlights
+    for _, highlight in ipairs(highlights) do
+      local x,y,w,h,color = unpack(highlight)
+      color[4] = 100
+      g.setColor(color)
+      g.rectangle('fill', x, y, w, h)
+    end
+    -- Draw dem bodies
+    for _, bodyinfo in ipairs(draw_bodies) do
+      local body, x, y = unpack(bodyinfo)
+      local id = body:getId()
+      local draw_sprite = self.body_sprites[id] if not draw_sprite then
+        local idle = DB.loadSpec('appearance', body:getAppearance()).idle
+        draw_sprite = RES.loadSprite(idle)
+        self.body_sprites[id] = draw_sprite
+      end
+      local di, dj = unpack(self.vfx.offset[body] or {0,0})
+      local dx, dy = dj*TILE_W, di*TILE_H
+      x, y = x+dx, y+dy
+      g.push()
+      g.setColor(COLORS.NEUTRAL)
+      draw_sprite(x, dy)
+      g.translate(x, dy)
+      local hp_percent = body:getHP()/body:getMaxHP()
+      g.setColor(0, 20, 0)
+      g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48, HEALTHBAR_WIDTH,
+                  HEALTHBAR_HEIGHT)
+      local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
+      g.setColor(HSV(unpack(hsvcol)))
+      g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48,
+                  hp_percent*HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
+      g.pop()
+    end
+    g.translate(0, TILE_H)
   end
-  g.draw(TILES, 0, 0)
-  -- Draw highlights
-  for _, highlight in ipairs(highlights) do
-    local x,y,w,h,color = unpack(highlight)
-    color[4] = 100
-    g.setColor(color)
-    g.rectangle('fill', x, y, w, h)
-  end
+  g.pop()
+
   --Draw Cursor, if it exists
   if self.cursor then
     local c_i, c_j = self:getCursorPos()
@@ -160,32 +194,6 @@ function SectorView:draw()
       g.setColor(255, 0, 0)
     end
     _cursor_sprite(0, 0)
-    g.pop()
-  end
-  -- Draw dem bodies
-  for _, bodyinfo in ipairs(draw_bodies) do
-    local body, x, y = unpack(bodyinfo)
-    local id = body:getId()
-    local draw_sprite = self.body_sprites[id] if not draw_sprite then
-      local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-      draw_sprite = RES.loadSprite(idle)
-      self.body_sprites[id] = draw_sprite
-    end
-    local di, dj = unpack(self.vfx.offset[body] or {0,0})
-    local dx, dy = dj*TILE_W, di*TILE_H
-    x, y = x+dx, y+dy
-    g.push()
-    g.setColor(COLORS.NEUTRAL)
-    draw_sprite(x, y)
-    g.translate(x, y)
-    local hp_percent = body:getHP()/body:getMaxHP()
-    g.setColor(0, 20, 0)
-    g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48, HEALTHBAR_WIDTH,
-                HEALTHBAR_HEIGHT)
-    local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
-    g.setColor(HSV(unpack(hsvcol)))
-    g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48,
-                hp_percent*HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
     g.pop()
   end
 
