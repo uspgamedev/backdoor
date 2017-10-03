@@ -141,9 +141,12 @@ function SectorView:draw()
         end
       end
     end
+
+    -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
     g.draw(TILES, 0, 0)
     TILES:clear()
+
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
       local x,y,w,h,color = unpack(highlight)
@@ -151,6 +154,7 @@ function SectorView:draw()
       g.setColor(color)
       g.rectangle('fill', x, y, w, h)
     end
+
     -- Draw dem bodies
     for _, bodyinfo in ipairs(draw_bodies) do
       local body, x, y = unpack(bodyinfo)
@@ -189,9 +193,9 @@ function SectorView:draw()
     g.push()
     g.translate(x, y)
     if self.cursor.validator(c_i,c_j) then
-      g.setColor(250, 250, 250)
+      g.setColor(COLORS.NEUTRAL)
     else
-      g.setColor(255, 0, 0)
+      g.setColor(255, 50, 50)
     end
     _cursor_sprite(0, 0)
     g.pop()
