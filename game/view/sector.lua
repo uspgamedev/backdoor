@@ -14,7 +14,8 @@ local HEALTHBAR_WIDTH = 64
 local HEALTHBAR_HEIGHT = 8
 
 local TEXTURE
-local TILE_COLORS
+local TILE_OFFSET
+local TILE_QUADS
 local TILES
 local FONT
 local _cursor_sprite
@@ -44,9 +45,16 @@ local function _initDrawables()
   TEXTURE:setFilter("nearest", "nearest")
   local tw, th = TEXTURE:getDimensions()
 
-  TILE_COLORS = {
+  TILE_OFFSET = {
+    [SCHEMATICS.FLOOR] = {},
+    [SCHEMATICS.EXIT]  = {},
+    [SCHEMATICS.WALL]  = {0, 60},
+  }
+
+  TILE_QUADS = {
     [SCHEMATICS.FLOOR] = g.newQuad(0, 0, TILE_W, TILE_H, tw, th),
     [SCHEMATICS.EXIT] = g.newQuad(80, 0, TILE_W, TILE_H, tw, th),
+    [SCHEMATICS.WALL] = g.newQuad(240, 0, TILE_W, 140, tw, th),
     shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
   }
 
@@ -114,8 +122,9 @@ function SectorView:draw()
           local body = sector.bodies[i+1][j+1]
           local x, y = j*TILE_W, i*TILE_H
           g.push()
-          TILES:add(TILE_COLORS[tile.type], x, y)
-          TILES:add(TILE_COLORS.shade, x, y+TILE_H)
+          TILES:add(TILE_QUADS[tile.type], x, y,
+                    0, 1, 1, unpack(TILE_OFFSET[tile.type]))
+          TILES:add(TILE_QUADS.shade, x, y+TILE_H)
           g.pop()
           if self.cursor and self.cursor.range_checker(i+1, j+1) then
             table.insert(highlights, {x, y, TILE_W, TILE_H, {100, 200, 200}})
