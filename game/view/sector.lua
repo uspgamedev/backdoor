@@ -155,6 +155,24 @@ function SectorView:draw()
       g.rectangle('fill', x, y, w, h)
     end
 
+    --Draw Cursor, if it exists
+    if self.cursor then
+      local c_i, c_j = self:getCursorPos()
+      if c_i == i+1 then
+        local x = (c_j-1)*TILE_W
+        _cursor_sprite = _cursor_sprite or RES.loadSprite("cursor")
+        g.push()
+        g.translate(x, 0)
+        if self.cursor.validator(c_i, c_j) then
+          g.setColor(COLORS.NEUTRAL)
+        else
+          g.setColor(255, 50, 50)
+        end
+        _cursor_sprite(0, 0)
+        g.pop()
+      end
+    end
+
     -- Draw dem bodies
     for _, bodyinfo in ipairs(draw_bodies) do
       local body, x, y = unpack(bodyinfo)
@@ -184,22 +202,6 @@ function SectorView:draw()
     g.translate(0, TILE_H)
   end
   g.pop()
-
-  --Draw Cursor, if it exists
-  if self.cursor then
-    local c_i, c_j = self:getCursorPos()
-    local x, y = (c_j-1)*TILE_W, (c_i-1)*TILE_H
-    _cursor_sprite = _cursor_sprite or RES.loadSprite("cursor")
-    g.push()
-    g.translate(x, y)
-    if self.cursor.validator(c_i,c_j) then
-      g.setColor(COLORS.NEUTRAL)
-    else
-      g.setColor(255, 50, 50)
-    end
-    _cursor_sprite(0, 0)
-    g.pop()
-  end
 
 end
 
