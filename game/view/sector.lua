@@ -13,11 +13,10 @@ local HALF_H = 6
 local HEALTHBAR_WIDTH = 64
 local HEALTHBAR_HEIGHT = 8
 
-local TEXTURE
-local TILE_OFFSET
-local TILE_QUADS
-local TILES
-local FONT
+local _texture
+local _tile_offset
+local _tile_quads
+local _batch
 local _cursor_sprite
 
 local Cursor
@@ -39,27 +38,24 @@ local function _initDrawables()
   -- FIXME: Tiles are not gotten from DB right now
   local g = love.graphics
 
-  FONT = RES.loadFont("Text", 24)
+  _texture = RES.loadTexture("bare-tiles")
+  _texture:setFilter("nearest", "nearest")
+  local tw, th = _texture:getDimensions()
 
-  TEXTURE = RES.loadTexture("bare-tiles")
-  TEXTURE:setFilter("nearest", "nearest")
-  local tw, th = TEXTURE:getDimensions()
-
-  TILE_OFFSET = {
+  _tile_offset = {
     [SCHEMATICS.FLOOR] = {},
     [SCHEMATICS.EXIT]  = {},
     [SCHEMATICS.WALL]  = {0, 60},
   }
 
-  TILE_QUADS = {
+  _tile_quads = {
     [SCHEMATICS.FLOOR] = g.newQuad(0, 0, TILE_W, TILE_H, tw, th),
     [SCHEMATICS.EXIT] = g.newQuad(80, 0, TILE_W, TILE_H, tw, th),
     [SCHEMATICS.WALL] = g.newQuad(240, 0, TILE_W, 140, tw, th),
     shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
   }
 
-  TILES = g.newSpriteBatch(TEXTURE, 512, "dynamic")
-  --FIXME: Draw walls separately from floor
+  _batch = g.newSpriteBatch(_texture, 512, "dynamic")
   --FIXME: Get tile info from resource cache or something
 
 end
@@ -111,11 +107,11 @@ function SectorView:draw()
   cy = cy / TILE_H
   g.setBackgroundColor(75, 78, 60, 255)
   g.setColor(COLORS.NEUTRAL)
-  TILES:clear()
   g.push()
   for i = 0, sector.h-1 do
     local draw_bodies = {}
     local highlights = {}
+    _batch:clear()
     for j = 0, sector.w-1 do
       if j >= cx - HALF_W and j <= cx + HALF_W and
         i >= cy - HALF_H and i <= cy + HALF_H then
@@ -124,11 +120,6 @@ function SectorView:draw()
           -- Add tiles to spritebatch
           local body = sector.bodies[i+1][j+1]
           local x = j*TILE_W
-          g.push()
-          TILES:add(TILE_QUADS[tile.type], x, 0,
-                    0, 1, 1, unpack(TILE_OFFSET[tile.type]))
-          TILES:add(TILE_QUADS.shade, x, TILE_H)
-          g.pop()
           if tile.type ~= SCHEMATICS.WALL then
             if self.cursor and self.cursor.range_checker(i+1, j+1) then
               table.insert(highlights, {x, 0, TILE_W, TILE_H, {100, 200, 200}})
@@ -140,14 +131,18 @@ function SectorView:draw()
               table.insert(draw_bodies, {body, x, 0})
             end
           end
+          g.push()
+          _batch:add(_tile_quads[tile.type], x, 0,
+                    0, 1, 1, unpack(_tile_offset[tile.type]))
+          _batch:add(_tile_quads.shade, x, TILE_H)
+          g.pop()
         end
       end
     end
 
     -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
-    g.draw(TILES, 0, 0)
-    TILES:clear()
+    g.draw(_batch, 0, 0)
 
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
@@ -204,7 +199,6 @@ function SectorView:draw()
     g.translate(0, TILE_H)
   end
   g.pop()
-
 end
 
 --CURSOR FUNCTIONS
