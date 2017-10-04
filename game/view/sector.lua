@@ -55,7 +55,7 @@ local function _initDrawables()
     shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
   }
 
-  _batch = g.newSpriteBatch(_texture, 512, "dynamic")
+  _batch = g.newSpriteBatch(_texture, 512, "stream")
   --FIXME: Get tile info from resource cache or something
 
 end
