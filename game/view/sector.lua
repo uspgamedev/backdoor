@@ -58,7 +58,9 @@ local function _initDrawables()
     shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
   }
 
-  TILES = g.newSpriteBatch(TEXTURE, 512, "stream")
+  TILES = g.newSpriteBatch(TEXTURE, 512, "dynamic")
+  --FIXME: Draw walls separately from floor
+  --FIXME: Get tile info from resource cache or something
 
 end
 
