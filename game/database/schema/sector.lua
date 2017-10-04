@@ -2,6 +2,8 @@
 return  {
   { id = 'bootstrap', name = "Base Settings", type = 'section',
     schema = 'transformers.bootstrap', required = true },
+  { id = 'holes', name = "Holes Settings", type = 'section',
+    schema = 'transformers.holes' },
   { id = 'rooms', name = "Room Settings", type = 'section',
     schema = 'transformers.rooms' },
   { id = 'maze', name = "Maze Settings", type = 'section',

@@ -5,6 +5,10 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 local transformer = {}
 
 transformer.schema = {
+  { id = 'threshold', name = "Threshold spacing", type = 'integer',
+    range = {0} },
+  { id = 'distance', name = "Distance between exits", type = 'integer',
+    range = {1} },
   {
     id = 'exits', name = "Exit", type = 'array', preview = {1},
     schema = {
@@ -16,8 +20,8 @@ transformer.schema = {
   },
 }
 
-local FLOOR_THRESHOLD = 2
-local EXIT_THRESHOLD = 5
+local FLOOR_THRESHOLD = 1
+local EXIT_THRESHOLD = 1
 
 local function _hasSpaceForExit(grid, x, y)
   local f = SCHEMATICS.FLOOR
@@ -55,6 +59,9 @@ function transformer.process(sectorinfo, params)
 
   local possible_exits = {}
   local chosen_exits = {}
+
+  FLOOR_THRESHOLD = params.threshold or FLOOR_THRESHOLD
+  EXIT_THRESHOLD = params.distance or EXIT_THRESHOLD
 
   -- construct list of possible exits
   do

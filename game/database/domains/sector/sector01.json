@@ -1,5 +1,10 @@
 {
+  "fillings":[],
+  "connections":{
+    "loops":24
+  },
   "encounters":{
+    "max":30,
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime"
@@ -7,59 +12,45 @@
         "actorspec":"dumb",
         "bodyspec":"hearthborn"
       }],
-    "min":10,
-    "max":30
+    "min":10
   },
-  "fillings":[],
+  "rooms":{
+    "minh":3,
+    "minw":3,
+    "rmar":1,
+    "tries":256,
+    "maxh":9,
+    "count":24,
+    "maxw":9
+  },
+  "holes":false,
   "maze":{
     "double":false
   },
-  "bootstrap":{
-    "mw":2,
-    "w":40,
-    "h":40,
-    "mh":2
-  },
-  "deadends":{
-    "amount":128
-  },
-  "exits":{
-    "exits":[{
-        "target_specname":"sector01"
-      },{
-        "target_specname":"sector01"
-      },{
-        "target_specname":"sector01"
-      },{
-        "target_specname":"sector01"
-      }]
-  },
-  "connections":{
-    "loops":24
-  },
   "transformers":[{
       "w":40,
-      "h":40,
       "typename":"bootstrap",
-      "mw":2,
-      "mh":2
+      "h":40,
+      "mh":2,
+      "mw":2
     },{
-      "maxw":9,
       "minh":3,
-      "minw":3,
-      "maxh":9,
       "typename":"rooms",
+      "minw":3,
       "tries":256,
-      "count":24
+      "maxh":9,
+      "count":24,
+      "maxw":9
     },{
       "typename":"maze"
     },{
-      "loops":24,
-      "typename":"connections"
+      "typename":"connections",
+      "loops":24
     },{
       "amount":128,
       "typename":"deadends"
     },{
+      "typename":"exits",
       "exits":[{
           "target_specname":"sector01"
         },{
@@ -68,16 +59,28 @@
           "target_specname":"sector01"
         },{
           "target_specname":"sector01"
-        }],
-      "typename":"exits"
+        }]
     }],
-  "rooms":{
-    "maxw":9,
-    "minh":3,
-    "minw":3,
-    "rmar":1,
-    "maxh":9,
-    "count":24,
-    "tries":256
+  "exits":{
+    "distance":5,
+    "exits":[{
+        "target_specname":"sector01"
+      },{
+        "target_specname":"sector01"
+      },{
+        "target_specname":"sector01"
+      },{
+        "target_specname":"sector01"
+      }],
+    "threshold":2
+  },
+  "bootstrap":{
+    "mh":2,
+    "h":40,
+    "w":40,
+    "mw":2
+  },
+  "deadends":{
+    "amount":128
   }
 }
