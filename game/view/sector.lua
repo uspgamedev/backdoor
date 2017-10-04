@@ -131,11 +131,9 @@ function SectorView:draw()
               table.insert(draw_bodies, {body, x, 0})
             end
           end
-          g.push()
           _batch:add(_tile_quads[tile.type], x, 0,
                     0, 1, 1, unpack(_tile_offset[tile.type]))
           _batch:add(_tile_quads.shade, x, TILE_H)
-          g.pop()
         end
       end
     end
