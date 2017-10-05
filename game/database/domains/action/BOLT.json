@@ -1,10 +1,4 @@
 {
-  "effects":[{
-      "typename":"deal_damage",
-      "target":"val:target_body",
-      "amount":"val:dmg"
-    }],
-  "cost":14,
   "operators":[{
       "typename":"get_body_at",
       "pos":"par:target",
@@ -15,26 +9,32 @@
       "which":"ARC"
     },{
       "op":"/",
-      "rhs":2,
       "typename":"integer_binop",
+      "lhs":"val:arcana",
       "output":"half-arcana",
-      "lhs":"val:arcana"
+      "rhs":2
     },{
-      "sides":"val:half-arcana",
       "typename":"dice_throw",
+      "rolls":2,
       "output":"throw",
-      "rolls":2
+      "sides":"val:half-arcana"
     },{
       "op":"+",
-      "rhs":"val:throw",
       "typename":"integer_binop",
+      "lhs":"val:half-arcana",
       "output":"dmg",
-      "lhs":"val:half-arcana"
+      "rhs":"val:throw"
     }],
   "params":[{
       "max-range":5,
-      "typename":"choose_target",
+      "body-only":true,
       "output":"target",
-      "body-only":true
-    }]
+      "typename":"choose_target"
+    }],
+  "effects":[{
+      "typename":"deal_damage",
+      "target":"val:target_body",
+      "amount":"val:dmg"
+    }],
+  "cost":14
 }

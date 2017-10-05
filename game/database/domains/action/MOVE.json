@@ -1,12 +1,12 @@
 {
   "operators":[],
+  "effects":[{
+      "typename":"move_to",
+      "pos":"par:pos"
+    }],
   "params":[{
       "output":"pos",
       "typename":"direction"
     }],
-  "cost":3,
-  "effects":[{
-      "typename":"move_to",
-      "pos":"par:pos"
-    }]
+  "cost":3
 }
