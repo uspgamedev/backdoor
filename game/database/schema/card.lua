@@ -1,4 +1,6 @@
 
+local DEFS = require 'lux.pack' 'domain.definitions'
+
 return {
   { id = 'name', name = "Name", type = 'string' },
   {
@@ -22,4 +24,23 @@ return {
       },
     }
   },
+  {
+    id = 'widget', name = "Widget",
+    type = 'section',
+    schema = {
+      { id = 'charges', name = "Charges", type = 'integer', range = {1} },
+      {
+        id = 'placement', name = "Placement", type = 'enum',
+        options = DEFS.widgets, optional = true
+      },
+      {
+        id = 'expend_trigger', name = "Expend Trigger", type = 'enum',
+        options = DEFS.triggers
+      },
+      {
+        id = 'widget_action', name = "Action", type = 'enum',
+        options = "domains.action"
+      }
+    },
+  }
 }
