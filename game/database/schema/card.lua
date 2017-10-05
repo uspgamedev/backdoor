@@ -31,7 +31,7 @@ return {
       { id = 'charges', name = "Charges", type = 'integer', range = {1} },
       {
         id = 'placement', name = "Placement", type = 'enum',
-        options = DEFS.widgets, optional = true
+        options = DEFS.placements, optional = true
       },
       {
         id = 'expend_trigger', name = "Expend Trigger", type = 'enum',
