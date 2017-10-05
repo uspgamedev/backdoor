@@ -32,10 +32,6 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     cooldown = 10,
     exp = 0,
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
-    actions = {
-      PRIMARY = "DOUBLESHOOT",
-      WIDGET_A = "HEAL",
-    },
     buffers = {
       _simpleBuffer(),
       _simpleBuffer(),

@@ -30,7 +30,8 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = 10
-  self.actions = setmetatable({ PRIMARY = "SHOOT" }, { __index = BASE_ACTIONS })
+  self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
+                              { __index = BASE_ACTIONS })
 
   self.hand = {}
   self.hand_limit = 5
@@ -52,7 +53,6 @@ end
 
 function Actor:loadState(state)
   self.cooldown = state.cooldown
-  self.actions = setmetatable(state.actions, { __index = BASE_ACTIONS })
   self.body_id = state.body_id
   self:setId(state.id)
   self.exp = state.exp
@@ -80,7 +80,6 @@ function Actor:saveState()
   local state = {}
   state.specname = self.specname
   state.cooldown = self.cooldown
-  state.actions = self.actions
   state.body_id = self.body_id
   state.id = self.id
   state.exp = self.exp

@@ -7,11 +7,13 @@ do
 end
 
 return {
-  { id = 'extends', name = "Prototype", type = "enum", options = 'domains.actor',
+  { id = 'extends', name = "Prototype", type = 'enum', options = 'domains.actor',
     optional = true },
-  { id = 'name', name = "Full Name", type = "string" },
-  { id = 'behavior', name = "Behavior", type = "enum",
+  { id = 'name', name = "Full Name", type = 'string' },
+  { id = 'behavior', name = "Behavior", type = 'enum',
     options = behaviors },
+  { id = 'primary', name = "Primary", type = 'enum',
+    options = 'domains.action' },
   { id = 'ath', name = "ATH", type = 'integer', range = {0} },
   { id = 'arc', name = "ARC", type = 'integer', range = {0} },
   { id = 'mec', name = "MEC", type = 'integer', range = {0} },
