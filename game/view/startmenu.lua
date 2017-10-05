@@ -1,5 +1,6 @@
 --DEPENDENCIES--
 local RES = require 'resources'
+local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
 local Queue = require 'lux.common.Queue'
 
@@ -10,23 +11,23 @@ local StartMenuView = Class{
 }
 
 local TITLE_TEXT = "backdoor"
-local TITLE_FONT_SIZE = 48
-local MENU_FONT_SIZE = 24
 local LH = 1.5
 local TILE_W, TILE_H = 80, 80
 
 local SCROLL_THRESHOLD = 4
-
-local MENU_FONT, TITLE_FONT
+local _title_font_size = 48
+local _menu_font_size = 24
+local _menu_font, _title_font
 local WIDTH, HEIGHT
+
 
 
 local function _initFontValues()
   local g = love.graphics
-  TITLE_FONT = RES.loadFont("Title", TITLE_FONT_SIZE)
-  TITLE_FONT:setLineHeight(LH)
-  MENU_FONT = RES.loadFont("Text", MENU_FONT_SIZE)
-  MENU_FONT:setLineHeight(LH)
+  _title_font = FONT.get("Title", _title_font_size)
+  _title_font:setLineHeight(LH)
+  _menu_font = FONT.get("Text", _menu_font_size)
+  _menu_font:setLineHeight(LH)
   WIDTH, HEIGHT = g.getDimensions()
 end
 
@@ -35,7 +36,7 @@ local function _renderTitle()
   local g = love.graphics
   g.push()
   g.translate(0, HEIGHT/4)
-  g.setFont(TITLE_FONT)
+  FONT.set(_title_font)
   g.setColor(COLORS.NEUTRAL)
   g.print(TITLE_TEXT, 0, 0)
   g.pop()
@@ -46,7 +47,7 @@ local function _renderOptions(q, selection, scrolltop)
   local g = love.graphics
   g.push()
   g.translate(0, HEIGHT/2)
-  g.setFont(MENU_FONT)
+  FONT.set(_menu_font)
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
@@ -58,7 +59,7 @@ local function _renderOptions(q, selection, scrolltop)
       end
       g.setColor(color)
       g.print(item_text, 0, 0)
-      g.translate(0, LH*MENU_FONT_SIZE)
+      g.translate(0, LH*_menu_font_size)
     end
   end
   g.pop()
@@ -112,4 +113,3 @@ end
 
 
 return StartMenuView
-

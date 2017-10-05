@@ -1,5 +1,6 @@
 
 local RES = require 'resources'
+local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
 
 local ActorView = Class{
@@ -8,12 +9,13 @@ local ActorView = Class{
 
 local _initialized = false
 local _exptext, _statstext, _depthtext
-local WIDTH, HEIGHT, FONT
+local _width, _height, _font
+
 
 local function _initGraphicValues()
-  WIDTH, HEIGHT = love.graphics.getDimensions()
-  FONT = RES.loadFont("Text", 24)
-  FONT:setLineHeight(1)
+  _width, _height = love.graphics.getDimensions()
+  _font = FONT.get("Text", 24)
+  _font:setLineHeight(1)
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d"
   _depthtext = "DEPTH: %d"
@@ -50,13 +52,13 @@ function ActorView:draw()
 
   g.push()
 
-  g.setFont(FONT)
+  FONT.set(_font)
   g.setColor(COLORS.NEUTRAL)
 
   g.translate(40, 40)
   g.print(_exptext:format(actor:getExp()), 0, 0)
 
-  g.translate(0, 1.5*FONT:getHeight())
+  g.translate(0, 1.5*_font:getHeight())
   g.print(_statstext:format(ath, arc, mec))
 
   g.pop()
@@ -64,12 +66,11 @@ function ActorView:draw()
   g.push()
 
   local str = _depthtext:format(sector:getDepth())
-  local w = FONT:getWidth(str)
-  g.translate(WIDTH - 40 - w, 40)
+  local w = _font:getWidth(str)
+  g.translate(_width - 40 - w, 40)
   g.printf(str, 0, 0, w, "right")
 
   g.pop()
 end
 
 return ActorView
-
