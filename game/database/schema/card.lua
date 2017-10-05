@@ -39,7 +39,7 @@ return {
       },
       {
         id = 'widget_action', name = "Action", type = 'enum',
-        options = "domains.action"
+        options = "domains.action", optional = true
       }
     },
   }

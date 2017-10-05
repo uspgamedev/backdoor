@@ -20,6 +20,8 @@ local BASE_ACTIONS = {
   CONSUME_PACK_CARD = true
 }
 
+local WIDGET_LIMIT = 4
+
 --[[ Setup methods ]]--
 
 function Actor:init(spec_name)
@@ -33,6 +35,7 @@ function Actor:init(spec_name)
   self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
                               { __index = BASE_ACTIONS })
 
+  self.widgets = {}
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
@@ -58,6 +61,7 @@ function Actor:loadState(state)
   self.exp = state.exp
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
+  self.widgets = state.widgets
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
@@ -84,6 +88,7 @@ function Actor:saveState()
   state.id = self.id
   state.exp = self.exp
   state.upgrades = self.upgrades
+  state.widgets = self.widgets
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
