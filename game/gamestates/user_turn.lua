@@ -19,6 +19,7 @@ local _next_action
 local _action_queue
 local _view
 
+local _status_hud
 local _previous_control_map
 local _save_and_quit
 local _exit_sector
@@ -41,8 +42,6 @@ local SIGNALS = {
   PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"primary_action"},
   PRESS_ACTION_3 = {"open_pack"},
-  PRESS_ACTION_4 = {"show_hud"},
-  RELEASE_ACTION_4 = {"hide_hud"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -246,8 +245,6 @@ function _registerSignals()
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
   Signal.register("open_pack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
-  Signal.register("show_hud", _makeSignalHandler(_showHUD))
-  Signal.register("hide_hud", _makeSignalHandler(_hideHUD))
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -345,6 +342,14 @@ function state:update(dt)
     _view.sector:lookAt(_route.getControlledActor())
 
     MAIN_TIMER:update(dt)
+
+    if _status_hud and not INPUT.isDown("ACTION_4") then
+      _status_hud = false
+      _hideHUD()
+    elseif not _statusHUD and INPUT.isDown("ACTION_4") then
+      _status_hud = true
+      _showHUD()
+    end
 
     if _showWidgets() then
       _view.widget:show()
