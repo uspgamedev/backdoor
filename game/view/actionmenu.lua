@@ -7,7 +7,7 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'playcard', 'drawhand', 'wait'
+  'interact', 'primary', 'widget', 'playcard', 'drawhand', 'openpack', 'wait'
 }
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
@@ -65,6 +65,7 @@ function ActionMenu:draw()
   local enter = self.enter
   local switch = self.switch
   local cos, sin, pi = math.cos, math.sin, math.pi
+  local min, max, abs = math.min, math.max, math.abs
   CAM:zoomTo(1 + enter)
   g.push()
   g.translate(_W/2, _H/2 - 40)
@@ -74,13 +75,14 @@ function ActionMenu:draw()
     g.push()
     local x,y = cos(rot - _ANGLE*k), -sin(rot - _ANGLE*k)
     g.translate(_RADIUS*x, _RADIUS*y)
-    local fade = (i == self.current) and (1 - math.abs(switch)/2) or 0.5
+    local size = (i == self.current) and (1 - abs(switch)/2) or 0.5
+    local fade = max(0, min(1, (3 - abs(k))/3))
     g.setColor(80, 10, 50, enter*fade*100)
-    g.circle("fill", 8, 8, 64*fade)
+    g.circle("fill", 8, 8, 64*size)
     g.setColor(230, 180, 60, enter*fade*255)
-    g.circle("fill", 0, 0, 64*fade)
-    g.setColor(255, 255, 255, enter*255)
-    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4*fade, 1/4*fade,
+    g.circle("fill", 0, 0, 64*size)
+    g.setColor(255, 255, 255, enter*fade*255)
+    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4*size, 1/4*size,
            256, 256)
     g.pop()
   end

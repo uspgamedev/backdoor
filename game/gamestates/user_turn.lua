@@ -40,8 +40,8 @@ local SIGNALS = {
   PRESS_CANCEL = {"wait"},
   PRESS_SPECIAL = {"open_action_menu"},
   PRESS_EXTRA = {"drawhand"},
-  PRESS_ACTION_1 = {"primary_action"},
-  PRESS_ACTION_3 = {"open_pack"},
+  PRESS_ACTION_1 = {"primary"},
+  PRESS_ACTION_3 = {"openpack"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -251,8 +251,8 @@ function _registerSignals()
                   _makeSignalHandler(_openActionMenu))
   Signal.register("playcard",
                   _makeSignalHandler(_changeToCardSelectScreen))
-  Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("open_pack", _openPack)
+  Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
