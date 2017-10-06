@@ -275,7 +275,9 @@ function Actor:getAction(slot)
           }
         end
       elseif card:isWidget() then
-        return 'PLACE_WIDGET', card:getSpecName()
+        return 'PLACE_WIDGET', {
+          cardspec = card:getSpecName()
+        }
       end
     end
   end
