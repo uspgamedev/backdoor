@@ -18,8 +18,8 @@ return {
   { id = 'arc', name = "ARC", type = 'integer', range = {0} },
   { id = 'mec', name = "MEC", type = 'integer', range = {0} },
   { id = 'spd', name = "SPD", type = 'integer', range = {0} },
-  { id = 'buf_qnt', name = "Buffer Quantity", type = 'integer', range = {0} },
   { id = 'collection', name = "Card Collection", type = 'enum',
     options = 'domains.collection' },
   { id = 'description', name = "Description", type = 'text' },
 }
+

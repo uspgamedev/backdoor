@@ -1,4 +1,10 @@
 {
+  "effects":[{
+      "typename":"change_sector",
+      "target_pos":"par:pos",
+      "target_sector":"par:sector"
+    }],
+  "cost":1,
   "operators":[],
   "params":[{
       "output":"sector",
@@ -6,11 +12,5 @@
     },{
       "output":"pos",
       "typename":"direction"
-    }],
-  "effects":[{
-      "typename":"change_sector",
-      "target_pos":"par:pos",
-      "target_sector":"par:sector"
-    }],
-  "cost":1
+    }]
 }
