@@ -1,10 +1,11 @@
 {
   "primary":"DOUBLESHOOT",
-  "arc":10,
-  "ath":10,
-  "mec":10,
-  "collection":"adventurer",
   "behavior":"player",
+  "mec":10,
+  "arc":10,
+  "collection":"adventurer",
+  "buf_qnt":3,
+  "ath":10,
   "name":"Sentient",
   "spd":2
 }
