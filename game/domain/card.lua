@@ -47,5 +47,13 @@ function Card:getWidgetPlacement()
   return self:getSpec('widget').placement
 end
 
+function Card:getWidgetCharges()
+  return self:getSpec('widget').charges
+end
+
+function Card:getWidgetTrigger()
+  return self:getSpec('widget').expend_trigger
+end
+
 return Card
 

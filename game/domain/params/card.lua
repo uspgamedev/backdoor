@@ -7,10 +7,10 @@ PARAM.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'cardspec'
+PARAM.type = 'card'
 
 function PARAM.isValid(sector, actor, parameter, value)
-  return value and not not DB.loadSpec('card', value)
+  return true
 end
 
 return PARAM

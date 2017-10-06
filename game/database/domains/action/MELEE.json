@@ -1,14 +1,14 @@
 {
   "params":[{
       "typename":"choose_target",
-      "output":"target",
       "body-only":true,
+      "output":"target",
       "max-range":1
     }],
   "effects":[{
       "typename":"deal_damage",
       "target":"val:target_body",
-      "amount":"val:3d(ath)"
+      "amount":"val:4d(ath/2)"
     }],
   "operators":[{
       "typename":"get_attribute",
@@ -22,8 +22,8 @@
       "lhs":"val:ath"
     },{
       "typename":"dice_throw",
-      "rolls":3,
-      "output":"3d(ath)",
+      "rolls":4,
+      "output":"4d(ath/2)",
       "sides":"val:ath/2"
     },{
       "typename":"get_body_at",

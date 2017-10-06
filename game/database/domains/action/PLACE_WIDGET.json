@@ -3,8 +3,8 @@
       "typename":"choose_widget_slot",
       "output":"widget_slot"
     },{
-      "typename":"cardspec",
-      "output":"cardspec"
+      "typename":"card",
+      "output":"card"
     }],
   "cost":0,
   "operators":[{
@@ -12,9 +12,9 @@
       "output":"actor"
     }],
   "effects":[{
+      "card":"par:card",
       "typename":"place_widget_slot",
       "widget_slot":"par:widget_slot",
-      "cardspec":"par:cardspec",
       "actor":"val:actor"
     }]
 }
