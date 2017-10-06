@@ -152,7 +152,9 @@ local function _useAction(action_slot)
         end
       )
       local args = coroutine.yield(_task)
+      print("success:", args.picked_slot)
       if args.picked_slot then
+        print(param.output, args.picked_slot)
         params[param.output] = args.picked_slot
       else
         return false
@@ -260,6 +262,7 @@ function state:init()
   PARAMETER_STATES = {
     [GS.PICK_TARGET] = true,
     [GS.PICK_BUFFER] = true,
+    [GS.PICK_WIDGET_SLOT] = true,
   }
 
   _action_queue = Queue(32)

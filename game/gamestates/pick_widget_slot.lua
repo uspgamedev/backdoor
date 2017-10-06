@@ -34,13 +34,14 @@ function state:init()
 end
 
 function state:enter(from, actor, validator)
-  _view = PickWidgetView(actor)
-  _view:addElement("HUD")
   _target = actor
   _validate = validator
   _selection = 1
+
   CONTROLS.setMap(_mapping)
 
+  _view = PickWidgetView(actor)
+  _view:addElement("HUD")
   _view:fadeIn()
 end
 

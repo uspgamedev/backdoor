@@ -51,7 +51,7 @@ function PickWidgetView:draw()
     if not cardspec then
       name = "[ EMPTY ]"
     else
-      name = DB.loadSpec('card', cardspec)['name']
+      name = self.target:getWidgetNameAt(slot)
     end
     if self.selection == slot then
       g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)

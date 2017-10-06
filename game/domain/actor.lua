@@ -212,6 +212,12 @@ function Actor:allSlots()
   return ipairs(self.widgets)
 end
 
+function Actor:getWidgetNameAt(slot)
+  local id = self.widgets[slot]
+  local specname = self.widgets[id].specname
+  return DB.loadSpec('card', specname)['name']
+end
+
 function Actor:degradeWidgets(trigger)
   for slot = 1, DEFS.WIDGET_LIMIT do
     local id = self.widgets[slot]
@@ -231,7 +237,7 @@ end
 
 function _idgen(specname)
   _base_id = _base_id and _base_id + 1 or RANDOM.generate(0, 2^16)
-  local id = ("%s:%d"):format(specname, _base_id)
+  return ("%s:%d"):format(specname, _base_id)
 end
 
 --[[ Body methods ]]--
@@ -260,11 +266,11 @@ end
 
 function Actor:getAction(slot)
   if self.actions[slot] then
-    return slot
-  elseif self.widgets[slot] then
-    local specname = self.widgets[slot].specname
-    local action = DB.loadSpec('card', specname)['action']
-    return action
+    if slot == 'PRIMARY' then
+      return self.actions[slot]
+    else
+      return slot
+    end
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card then

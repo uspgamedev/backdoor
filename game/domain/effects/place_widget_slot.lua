@@ -8,7 +8,7 @@ FX.schema = {
 }
 
 function FX.process(actor, sector, params)
-  params.actor:setSlot(params.widget_slot, params.cardspec)
+  actor:setSlot(params.widget_slot, params.cardspec)
 end
 
 return FX
