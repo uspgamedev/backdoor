@@ -23,7 +23,7 @@ function state:init()
     PRESS_CONFIRM = function()
       if _validate(_selection) then
         _view:fadeOut()
-        SWITCHER.pop({ picked_slot = _selection })
+        SWITCHER.pop({ picked_slot = DEFS.WIDGETS[_selection] })
       end
     end,
     PRESS_CANCEL = function()

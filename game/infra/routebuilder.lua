@@ -40,7 +40,12 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
       accessory = false,
     },
     equipped_cards = {},
-    widgets = {false, false, false, false},
+    widgets = {
+      WIDGET_A = false,
+      WIDGET_B = false,
+      WIDGET_C = false,
+      WIDGET_D = false,
+    },
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffers = {
       _simpleBuffer(),

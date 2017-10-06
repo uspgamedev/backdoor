@@ -1,6 +1,6 @@
 
-local DB = require 'database'
 local RES = require 'resources'
+local DEFS = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
 
 local PickWidgetView = Class{
@@ -11,7 +11,8 @@ local _FONT_SIZE = 24
 local _BLOCK_HEIGHT = 48
 local _MARGIN = 16
 local _PADDING = 4
-local _FMT = "SLOT #%d: %s"
+local _SLOTS = {'A', 'B', 'C', 'D'}
+local _FMT = "SLOT %s: %s"
 
 local _width, _height
 local _font, _text_width, _pd
@@ -46,26 +47,27 @@ function PickWidgetView:draw()
 
   g.translate(_width/8, _height/2-2*(_BLOCK_HEIGHT+_MARGIN))
   -- draw stuff
-  for slot, cardspec in self.target:allSlots() do
+  for index, slot in pairs(DEFS.WIDGETS) do
     local name, pd
-    if not cardspec then
-      name = "[ EMPTY ]"
-    else
+    if self.target:isSlotOccupied(slot) then
       name = self.target:getWidgetNameAt(slot)
+    else
+      name = "[ EMPTY ]"
     end
-    if self.selection == slot then
+    local selected = self.selection == index
+    if selected then
       g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)
     else
       g.setColor(0x16, 0x16, 0x16, self.alpha*0xff)
     end
     g.rectangle("fill", 0, 0, _text_width, _BLOCK_HEIGHT)
     _font()
-    if self.selection == slot then
+    if selected then
       g.setColor(0x00, 0x00, 0x00, self.alpha*0xff)
     else
       g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)
     end
-    g.print(_FMT:format(slot, name), 4*_PADDING, _PADDING)
+    g.print(_FMT:format(_SLOTS[index], name), 4*_PADDING, _PADDING)
     g.translate(0, _BLOCK_HEIGHT + _MARGIN)
   end
 
