@@ -39,7 +39,6 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
       tool = false,
       accessory = false,
     },
-    equipped_cards = {},
     widgets = {
       WIDGET_A = false,
       WIDGET_B = false,

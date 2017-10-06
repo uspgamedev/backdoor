@@ -15,10 +15,10 @@ local _mapping
 function state:init()
   _mapping = {
     PRESS_UP = function()
-      _selection = (_selection - 2) % DEFS.WIDGET_LIMIT + 1
+      _selection = (_selection - 2) % #DEFS.WIDGETS + 1
     end,
     PRESS_DOWN = function()
-      _selection = _selection % DEFS.WIDGET_LIMIT + 1
+      _selection = _selection % #DEFS.WIDGETS + 1
     end,
     PRESS_CONFIRM = function()
       if _validate(_selection) then
