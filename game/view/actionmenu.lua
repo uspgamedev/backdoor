@@ -83,7 +83,7 @@ function ActionMenu:draw()
   local cos, sin, pi = math.cos, math.sin, math.pi
   g.push()
   g.translate(_W/2, _H/2 - 40)
-  local rot = math.pi/6
+  local rot = 0
   for i,action_name in ipairs(_ACTIONS) do
     local k = i - self.current
     g.push()
@@ -95,13 +95,11 @@ function ActionMenu:draw()
     --rgb(229, 181, 59)
     local fade = (i == self.current) and 1 or 0.2
     g.setColor(80, 10, 50, fade*100)
-    g.circle("fill", 8, 8, 32)
+    g.circle("fill", 8, 8, 64)
     g.setColor(230, 180, 60, fade*255)
-    g.circle("fill", 0, 0, 32)
-    g.translate(-32, -32)
-    g.scale(1/8, 1/8)
+    g.circle("fill", 0, 0, 64)
     g.setColor(255, 255, 255, 255)
-    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0)
+    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4, 1/4, 256, 256)
     g.pop()
   end
   g.pop()
