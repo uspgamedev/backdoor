@@ -87,7 +87,6 @@ function Actor:loadState(state)
     end
     card_info.card = card
     self.equipped_cards[id] = card_info
-    print(id, card)
   end
   self.buffers = {}
   for i=1,DEFS.ACTOR_BUFFER_NUM do
@@ -238,7 +237,6 @@ end
 
 function Actor:getWidgetNameAt(slot)
   local id = self.widgets[slot]
-  print(id, self.equipped_cards[id])
   local card = self.equipped_cards[id].card
   return card:getName()
 end
