@@ -39,7 +39,7 @@ local SIGNALS = {
   PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
   PRESS_SPECIAL = {"open_action_menu"},
-  PRESS_EXTRA = {"extra"},
+  PRESS_EXTRA = {"drawhand"},
   PRESS_ACTION_1 = {"primary_action"},
   PRESS_ACTION_3 = {"open_pack"},
   PRESS_PAUSE = {"pause"},
@@ -246,10 +246,10 @@ end
 function _registerSignals()
   Signal.register("move", _move)
   Signal.register("interact", _makeSignalHandler(_interact))
-  Signal.register("extra", _makeSignalHandler(_newHand))
+  Signal.register("drawhand", _makeSignalHandler(_newHand))
   Signal.register("open_action_menu",
                   _makeSignalHandler(_openActionMenu))
-  Signal.register("start_card_selection",
+  Signal.register("playcard",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
   Signal.register("open_pack", _openPack)
