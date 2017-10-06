@@ -41,6 +41,8 @@ local SIGNALS = {
   PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"primary_action"},
   PRESS_ACTION_3 = {"open_pack"},
+  PRESS_ACTION_4 = {"show_hud"},
+  RELEASE_ACTION_4 = {"hide_hud"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -176,6 +178,14 @@ local function _useCardByIndex(index, action_type)
   end
 end
 
+local function _showHUD()
+  _view.actor:show()
+end
+
+local function _hideHUD()
+  _view.actor:hide()
+end
+
 local function _interact()
   if _showWidgets() then
     local selected = _view.widget:getSelected()
@@ -236,6 +246,8 @@ function _registerSignals()
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
   Signal.register("open_pack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
+  Signal.register("show_hud", _makeSignalHandler(_showHUD))
+  Signal.register("hide_hud", _makeSignalHandler(_hideHUD))
   CONTROL.setMap(_mapped_signals)
 end
 
