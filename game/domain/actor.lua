@@ -4,6 +4,7 @@ local Card        = require 'domain.card'
 local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
+local PLACEMENTS  = require 'domain.definitions.placements'
 local PACK        = require 'domain.pack'
 local Actor = Class{
   __includes = { GameElement }
@@ -22,6 +23,9 @@ local BASE_ACTIONS = {
 
 local WIDGET_LIMIT = 4
 
+local _base_id
+local _idgen -- forward declaration
+
 --[[ Setup methods ]]--
 
 function Actor:init(spec_name)
@@ -34,6 +38,11 @@ function Actor:init(spec_name)
   self.cooldown = 10
   self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
                               { __index = BASE_ACTIONS })
+
+  self.equipped = {}
+  for placement in ipairs(PLACEMENTS) do
+    self.equipped[placement] = false
+  end
 
   self.widgets = {}
   self.hand = {}
@@ -62,6 +71,7 @@ function Actor:loadState(state)
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.widgets = state.widgets
+  self.equipped = state.equipped
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
@@ -154,6 +164,72 @@ function Actor:getSPD()
   return self:getSpec('spd') + self.upgrades.SPD
 end
 
+function Actor:isEquipped(place)
+  if not place then return end
+  return self.equipped[place]
+end
+
+function Actor:equip(place)
+  if not place then return end
+  assert(not self:isEquipped(place),
+         "Tried to equip widget in already used placement!")
+  self.equipped[place] = true
+end
+
+function Actor:unequip(place)
+  if not place then return end
+  self.equipped[place] = false
+end
+
+function Actor:isSlotOccupied(slot)
+  return not not self.widgets[slot]
+end
+
+function Actor:clearSlot(slot)
+  local id = self.widgets[slot]
+  local specname = self.widgets[id].specname
+  local placement = DB.loadSpec('card', specname)['placement']
+  self:unequip(placement)
+  self.widgets[id] = nil
+  self.widgets[slot] = false
+end
+
+function Actor:setSlot(slot, specname)
+  if self:isSlotOccupied(slot) then
+    self:clearSlot(slot)
+  end
+  local id = _idgen(specname)
+  local placement = DB.loadSpec('card', specname)['placement']
+  self:equip(placement)
+  self.widgets[slot] = id
+  self.widgets[id] = {
+    specname = specname,
+    spent = 0,
+  }
+end
+
+function Actor:degradeWidgets(trigger)
+  for slot = 1, WIDGET_LIMIT do
+    local id = self.widgets[slot]
+    if id then
+      local widget = self.widgets[id]
+      local specname = widget.specname
+      local cardspec = DB.loadSpec('card', specname)
+      if cardspec.expend_trigger == trigger then
+        widget.spent = widget.spent + 1
+        if widget.spent > cardspec.charges then
+          self:clearSlot(slot)
+        end
+      end
+    end
+  end
+end
+
+function _idgen(specname)
+  _base_id = _base_id and _base_id + 1 or 1
+  local id = ("%s:%d"):format(specname, _base_id)
+end
+
 --[[ Body methods ]]--
 
 function Actor:setBody(body_id)
@@ -179,13 +255,12 @@ function Actor:isCard(slot)
 end
 
 function Actor:getAction(slot)
-  if self:isWidget(slot) then
-    local action = self.actions[slot]
-    if action == true then
-      return slot
-    else
-      return action
-    end
+  if self.actions[slot] then
+    return slot
+  elseif self.widgets[slot] then
+    local specname = self.widgets[slot].specname
+    local action = DB.loadSpec('card', specname)['action']
+    return action
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card then
@@ -199,6 +274,8 @@ function Actor:getAction(slot)
             ["exp-cost"] = cost
           }
         end
+      elseif card:isWidget() then
+        return 'PLACE_WIDGET', card:getSpecName()
       end
     end
   end
@@ -345,8 +422,13 @@ function Actor:makeAction(sector)
   local success = false
   repeat
     local action_slot, params = self:behavior(sector)
-    local check, alt_params = self:getAction(action_slot)
-    if alt_params then params = alt_params end
+    local check, extra = self:getAction(action_slot)
+    if extra then
+      -- merge extra onto params
+      for k,v in pairs(extra) do
+        params[k] = v
+      end
+    end
     if check then
       local action
       if action_slot == 'INTERACT' then
