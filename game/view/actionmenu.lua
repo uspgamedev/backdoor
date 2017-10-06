@@ -32,20 +32,20 @@ function ActionMenu:init()
 end
 
 function ActionMenu:moveFocus(dir)
-  if dir == "up" then
+  local last = self.current
+  if dir == 'up' or dir == 'right' then
     self.current = math.max(1, self.current - 1)
-    self.switch = 1
-  elseif dir == "down" then
+  elseif dir == 'down' or dir == 'left' then
     self.current = math.min(#_ACTIONS, self.current + 1)
-    self.switch = -1
-  else
-    return
   end
-  if self.tween then
-    MAIN_TIMER:cancel(self.tween)
+  if last ~= self.current then
+    self.switch = last - self.current
+    if self.tween then
+      MAIN_TIMER:cancel(self.tween)
+    end
+    self.tween = MAIN_TIMER:tween(0.3, self, { switch = 0 }, 'out-back',
+                                  function () self.tween = nil end)
   end
-  self.tween = MAIN_TIMER:tween(0.3, self, { switch = 0 }, 'out-back',
-                                function () self.tween = nil end)
 end
 
 function ActionMenu:getSelected()
