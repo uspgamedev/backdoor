@@ -32,7 +32,7 @@ function Actor:init(spec_name)
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
   self.body_id = nil
-  self.cooldown = 10
+  self.cooldown = DEFS.COOLDOWN
   self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
                               { __index = BASE_ACTIONS })
 
@@ -226,7 +226,7 @@ function Actor:setSlot(slot, card)
   self.widgets[slot] = id
   self.equipped_cards[id] = {
     card = card,
-    tick = 10,
+    tick = DEFS.COOLDOWN,
     spent = 0,
   }
 end
@@ -241,13 +241,21 @@ function Actor:getWidgetNameAt(slot)
   return card:getName()
 end
 
-function Actor:degradeWidgets(trigger, slot)
+function Actor:degradeWidget(trigger, slot)
   local id = self.widgets[slot]
   if id then
     local card_info = self.equipped_cards[id]
     local card = card_info.card
     if card:getWidgetTrigger() == trigger then
-      card_info.spent = card_info.spent + 1
+      if trigger == "on_tick" then
+        card_info.tick = card_info.tick - 1
+        if card_info.tick <= 0 then
+          card_info.spent = card_info.spent + 1
+          card_info.tick = DEFS.COOLDOWN
+        end
+      else
+        card_info.spent = card_info.spent + 1
+      end
       if card_info.spent > card:getWidgetCharges() then
         self:clearSlot(slot)
       end
@@ -431,6 +439,9 @@ end
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  for slot in self:allSlots() do
+    self:degradeWidget("on_tick", slot)
+  end
 end
 
 function Actor:ready()
