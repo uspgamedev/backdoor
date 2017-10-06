@@ -1,4 +1,6 @@
 
+local DB = require 'database'
+
 local PARAM = {}
 
 PARAM.schema = {
@@ -7,8 +9,8 @@ PARAM.schema = {
 
 PARAM.type = 'cardspec'
 
-function PARAM.isValid(sector, actor, parameter, params)
-  return true
+function PARAM.isValid(sector, actor, parameter, value)
+  return value and not not DB.loadSpec('card', value)
 end
 
 return PARAM

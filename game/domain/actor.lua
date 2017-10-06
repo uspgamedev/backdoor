@@ -1,11 +1,13 @@
 
 local GameElement = require 'domain.gameelement'
+local DB          = require 'database'
 local Card        = require 'domain.card'
 local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local PACK        = require 'domain.pack'
+
 local Actor = Class{
   __includes = { GameElement }
 }
@@ -20,8 +22,6 @@ local BASE_ACTIONS = {
   GET_PACK_CARD = true,
   CONSUME_PACK_CARD = true
 }
-
-local WIDGET_LIMIT = 4
 
 local _base_id
 local _idgen -- forward declaration
@@ -208,8 +208,12 @@ function Actor:setSlot(slot, specname)
   }
 end
 
+function Actor:allSlots()
+  return ipairs(self.widgets)
+end
+
 function Actor:degradeWidgets(trigger)
-  for slot = 1, WIDGET_LIMIT do
+  for slot = 1, DEFS.WIDGET_LIMIT do
     local id = self.widgets[slot]
     if id then
       local widget = self.widgets[id]
@@ -226,7 +230,7 @@ function Actor:degradeWidgets(trigger)
 end
 
 function _idgen(specname)
-  _base_id = _base_id and _base_id + 1 or 1
+  _base_id = _base_id and _base_id + 1 or RANDOM.generate(0, 2^16)
   local id = ("%s:%d"):format(specname, _base_id)
 end
 

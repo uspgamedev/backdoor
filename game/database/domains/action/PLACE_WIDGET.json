@@ -6,6 +6,7 @@
       "typename":"cardspec",
       "output":"cardspec"
     }],
+  "cost":0,
   "operators":[{
       "typename":"self",
       "output":"actor"

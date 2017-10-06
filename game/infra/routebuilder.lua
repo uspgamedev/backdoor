@@ -12,6 +12,7 @@ local function _simpleBuffer()
   for i=1,4 do
     table.insert(buffer, 'bolt')
     table.insert(buffer, 'cure')
+    table.insert(buffer, 'sord')
     table.insert(buffer, 'draw')
     table.insert(buffer, 'ath_1')
     table.insert(buffer, 'arc_1')
