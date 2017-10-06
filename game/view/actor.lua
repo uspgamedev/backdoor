@@ -12,7 +12,7 @@ local _TILE_W = 8
 local _TILE_H = 8
 
 local _initialized = false
-local _exptext, _statstext, _depthtext
+local _exptext, _statstext, _depthtext, _buffertext
 local _width, _height, _font
 local _display_handle
 local _tile_colors = {}
@@ -27,6 +27,7 @@ local function _initGraphicValues()
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d"
   _depthtext = "DEPTH: %d"
+  _buffertext = "BUFFER #%d: %d cards [%d remembered]"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
     [SCHEMATICS.WALL] = {200, 128, 50},
@@ -85,6 +86,7 @@ function ActorView:draw()
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
     self:drawAttributes(g, actor)
+    self:drawBuffers(g, actor)
     self:drawDepth(g)
     self:drawMiniMap(g, actor)
   end
@@ -114,7 +116,17 @@ function ActorView:drawDepth(g)
 end
 
 function ActorView:drawBuffers(g, actor)
-
+  local buffer_count = actor:getBufferCount()
+  g.push()
+  g.translate(160, 40)
+  for which = 1, buffer_count do
+    local buffer_size = actor:getBufferSize(which)
+    local back_buffer_size = actor:getBackBufferSize(which)
+    local str = _buffertext:format(which, buffer_size, back_buffer_size)
+    g.print(str, 0, 0)
+    g.translate(0, _font:getHeight()*_font:getLineHeight())
+  end
+  g.pop()
 end
 
 function ActorView:drawMiniMap(g, actor)
