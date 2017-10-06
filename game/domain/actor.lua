@@ -253,7 +253,7 @@ function Actor:degradeWidget(trigger, slot)
       else
         card_info.spent = card_info.spent + 1
       end
-      if card_info.spent > card:getWidgetCharges() then
+      if card_info.spent >= card:getWidgetCharges() then
         self:clearSlot(slot)
       end
     end
