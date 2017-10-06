@@ -58,7 +58,7 @@ function Actor:init(spec_name)
   self.pack = nil
 
   self.buffers = {}
-  for i=1,DEFS.ACTOR_BUFFER_NUM do
+  for i=1,self:getSpec('buf_qnt') do
     self.buffers[i] = {{},{}, current = 1}
   end
 
@@ -94,7 +94,7 @@ function Actor:loadState(state)
     end
   end
   self.buffers = {}
-  for i=1,DEFS.ACTOR_BUFFER_NUM do
+  for i=1,self:getSpec('buf_qnt') do
     local buffer_state = state.buffers[i]
     local buffer = {}
     for j,card_name in ipairs(state.buffers[i]) do
@@ -135,7 +135,7 @@ function Actor:saveState()
     end
   end
   state.buffers = {}
-  for i=1,DEFS.ACTOR_BUFFER_NUM do
+  for i=1,self:getSpec('buf_qnt') do
     local buffer = self.buffers[i]
     local buffer_state = {}
     for k,card_name in ipairs(self.buffers[i]) do
@@ -392,7 +392,7 @@ function Actor:removeHandCard(index)
 end
 
 function Actor:addCardToBackbuffer(card, buffer_idx)
-  assert(buffer_idx >= 0 and buffer_idx <= DEFS.ACTOR_BUFFER_NUM)
+  assert(buffer_idx >= 0 and buffer_idx <= self:getSpec('buf_qnt'))
   if buffer_idx == 0 then
     buffer_idx = self.last_buffer
   end
