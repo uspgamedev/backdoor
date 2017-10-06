@@ -40,7 +40,8 @@ function ActionMenu:getSelected()
   return _ACTIONS[self.current]
 end
 
-function ActionMenu:show()
+function ActionMenu:open()
+  CAM:zoomTo(2)
   --if self.fadeout then
   --  MAIN_TIMER:cancel(self.fadeout)
   --  self.fadeout = false
@@ -60,7 +61,8 @@ function ActionMenu:show()
   --)
 end
 
-function ActionMenu:hide()
+function ActionMenu:close()
+  CAM:zoomTo(1)
   --if self.fadein then
   --  MAIN_TIMER:cancel(self.fadein)
   --  self.fadein = false

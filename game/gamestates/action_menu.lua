@@ -68,6 +68,7 @@ function state:enter(_, route)
 
   _menu_view = ActionMenuView()
   _menu_view:addElement('HUD')
+  _menu_view:open()
 
   _registerSignals()
 
@@ -78,6 +79,7 @@ end
 
 function state:leave()
 
+  _menu_view:close()
   _menu_view:kill()
   _menu_view = nil
 
