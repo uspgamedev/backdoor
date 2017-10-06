@@ -228,25 +228,25 @@ end
 
 --Function checks if a target position is inside "target cone" given desired direction {di,dj}
 function _isInCone(origin_i, origin_j, target_i, target_j, dir)
-  local delta_i = target_i - origin_i
-  local delta_j = target_j - origin_j
+  local i = target_i - origin_i
+  local j = target_j - origin_j
 
   if     dir == "up" then   --UP
-    return (2*delta_j <= -delta_i and 2*delta_j >= delta_i)
+    return j >= i and j <= -i
   elseif dir == "right" then   --RIGHT
-    return (2*delta_i >= -delta_j and 2*delta_i <= delta_j)
+    return i >= -j and i <= j
   elseif dir == "down" then   --DOWN
-    return (2*delta_j >= -delta_i and 2*delta_j <= delta_i)
+    return j <= i and j >= -i
   elseif dir == "left" then     --LEFT
-    return (2*delta_i <= -delta_j and 2*delta_i >= delta_j)
+    return i <= -j and i >= j
   elseif dir == "upright" then   --UPRIGHT
-    return (delta_i > -2*delta_j and 2*delta_i < -delta_j)
+    return i <= 0 and j >= 0
   elseif dir == "downright" then   --DOWNRIGHT
-    return (2*delta_i > delta_j and delta_i < 2*delta_j)
+    return i >= 0 and j >= 0
   elseif dir == "downleft" then   --DOWNLEFT
-    return (delta_i < -2*delta_j and 2*delta_i > -delta_j)
+    return i >= 0 and j <= 0
   elseif dir == "upleft" then   --UPLEFT
-    return (delta_i > 2*delta_j and 2*delta_i < delta_j)
+    return i <= 0 and j <= 0
   else
     return error(("Not valid direction for cone function: %s"):format(dir))
   end
