@@ -84,13 +84,13 @@ function ActorView:draw()
   FONT.set(_font)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
-    self:drawStatus(g, actor)
+    self:drawAttributes(g, actor)
     self:drawDepth(g)
     self:drawMiniMap(g, actor)
   end
 end
 
-function ActorView:drawStatus(g, actor)
+function ActorView:drawAttributes(g, actor)
   g.push()
   local ath = actor:getATH()
   local arc = actor:getARC()
@@ -111,6 +111,10 @@ function ActorView:drawDepth(g)
   g.translate(_width - 40 - w, 40)
   g.printf(str, 0, 0, w, "right")
   g.pop()
+end
+
+function ActorView:drawBuffers(g, actor)
+
 end
 
 function ActorView:drawMiniMap(g, actor)
