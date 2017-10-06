@@ -1,14 +1,4 @@
 {
-  "effects":[{
-      "typename":"deal_damage",
-      "target":"val:body1",
-      "amount":"val:dmg1"
-    },{
-      "typename":"deal_damage",
-      "target":"val:body2",
-      "amount":"val:dmg2"
-    }],
-  "cost":12,
   "operators":[{
       "typename":"get_body_at",
       "pos":"par:target",
@@ -23,32 +13,42 @@
       "which":"ATH"
     },{
       "op":"/",
-      "rhs":2,
+      "typename":"integer_binop",
       "lhs":"val:athletics",
       "output":"half-ath",
-      "typename":"integer_binop"
+      "rhs":2
     },{
-      "sides":"val:half-ath",
       "typename":"dice_throw",
+      "rolls":2,
       "output":"dmg1",
-      "rolls":2
+      "sides":"val:half-ath"
     },{
-      "sides":"val:half-ath",
       "typename":"dice_throw",
+      "rolls":2,
       "output":"dmg2",
-      "rolls":2
+      "sides":"val:half-ath"
     }],
   "params":[{
-      "body-only":true,
-      "max-range":6,
-      "typename":"choose_target",
       "filter":"BODY",
-      "output":"target"
+      "max-range":6,
+      "output":"target",
+      "body-only":true,
+      "typename":"choose_target"
     },{
-      "body-only":true,
-      "max-range":6,
-      "typename":"choose_target",
       "filter":"BODY",
-      "output":"target2"
-    }]
+      "max-range":6,
+      "output":"target2",
+      "body-only":true,
+      "typename":"choose_target"
+    }],
+  "effects":[{
+      "typename":"deal_damage",
+      "target":"val:body1",
+      "amount":"val:dmg1"
+    },{
+      "typename":"deal_damage",
+      "target":"val:body2",
+      "amount":"val:dmg2"
+    }],
+  "cost":12
 }

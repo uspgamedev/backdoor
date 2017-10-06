@@ -1,18 +1,10 @@
 {
-  "cost":1,
-  "effects":[{
-      "upgrade_list":"par:list",
-      "typename":"upgrade_attribute"
-    },{
-      "value":"val:final-cost",
-      "typename":"modify_exp"
-    }],
   "operators":[{
       "op":"*",
-      "rhs":-1,
+      "typename":"integer_binop",
       "lhs":"par:exp-cost",
       "output":"final-cost",
-      "typename":"integer_binop"
+      "rhs":-1
     }],
   "params":[{
       "output":"list",
@@ -20,5 +12,13 @@
     },{
       "output":"exp-cost",
       "typename":"upgrade_cost"
+    }],
+  "cost":1,
+  "effects":[{
+      "upgrade_list":"par:list",
+      "typename":"upgrade_attribute"
+    },{
+      "typename":"modify_exp",
+      "value":"val:final-cost"
     }]
 }

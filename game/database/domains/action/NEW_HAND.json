@@ -1,9 +1,4 @@
 {
-  "effects":[{
-      "which":"par:label#1001",
-      "typename":"new_hand"
-    }],
-  "cost":2,
   "operators":[],
   "params":[{
       "output":"label#1001",
@@ -11,5 +6,10 @@
     },{
       "output":"output",
       "typename":"empty_hand"
-    }]
+    }],
+  "effects":[{
+      "which":"par:label#1001",
+      "typename":"new_hand"
+    }],
+  "cost":2
 }

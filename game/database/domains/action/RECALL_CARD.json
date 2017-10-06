@@ -1,26 +1,26 @@
 {
+  "operators":[{
+      "output":"self",
+      "typename":"self"
+    },{
+      "source":"HAND",
+      "card-index":"par:card_index",
+      "typename":"get_actor_card",
+      "output":"card",
+      "actor":"val:self"
+    }],
+  "params":[{
+      "output":"card_index",
+      "typename":"card_index"
+    }],
   "effects":[{
-      "card":"val:card",
-      "typename":"add_card_to_backbuffer"
+      "typename":"add_card_to_backbuffer",
+      "card":"val:card"
     },{
       "card-index":"par:card_index",
       "typename":"remove_actor_card",
       "source":"HAND",
       "actor":"val:self"
     }],
-  "cost":2,
-  "operators":[{
-      "output":"self",
-      "typename":"self"
-    },{
-      "card-index":"par:card_index",
-      "actor":"val:self",
-      "source":"HAND",
-      "typename":"get_actor_card",
-      "output":"card"
-    }],
-  "params":[{
-      "output":"card_index",
-      "typename":"card_index"
-    }]
+  "cost":2
 }

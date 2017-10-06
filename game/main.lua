@@ -85,3 +85,13 @@ function love.quit()
   imgui.ShutDown();
   PROFILE.quit()
 end
+
+local _cont = 0
+local _max = .2
+function love.update(dt)
+  _cont = _cont + dt
+  if _cont >= _max then
+    _cont = _cont - _max
+    collectgarbage()
+  end
+end
