@@ -1,4 +1,6 @@
 
+local DB = require 'database'
+
 local PARAM = {}
 
 PARAM.schema = {

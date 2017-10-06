@@ -12,6 +12,7 @@ local function _simpleBuffer()
   for i=1,4 do
     table.insert(buffer, 'bolt')
     table.insert(buffer, 'cure')
+    table.insert(buffer, 'sord')
     table.insert(buffer, 'draw')
     table.insert(buffer, 'ath_1')
     table.insert(buffer, 'arc_1')
@@ -31,6 +32,19 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     specname = background,
     cooldown = 10,
     exp = 0,
+    equipped = {
+      weapon = false,
+      offhand = false,
+      suit = false,
+      tool = false,
+      accessory = false,
+    },
+    widgets = {
+      WIDGET_A = false,
+      WIDGET_B = false,
+      WIDGET_C = false,
+      WIDGET_D = false,
+    },
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffers = {
       _simpleBuffer(),

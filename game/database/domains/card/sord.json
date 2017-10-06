@@ -1,0 +1,9 @@
+{
+  "name":"Sord",
+  "widget":{
+    "charges":12,
+    "widget_action":"MELEE",
+    "expend_trigger":"on_use",
+    "placement":"weapon"
+  }
+}

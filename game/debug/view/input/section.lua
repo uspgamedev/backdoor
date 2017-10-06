@@ -9,9 +9,21 @@ function _inputs.section(spec, key)
 
   local schema = key.schema
   local backup = {}
+  local inside_schema = {}
 
   if type(schema) == "string" then
     schema = require ('domain.'..schema).schema
+  end
+
+  for i, subkey in ipairs(schema) do
+    local input_lambda
+    inside_schema[i] = {
+      id = ("%s:%s"):format(key.id, subkey.id),
+      input = function(section_spec)
+        input_lambda = input_lambda or INPUT(subkey.type, section_spec, subkey)
+        return input_lambda
+      end
+    }
   end
 
   return function(self)
@@ -26,9 +38,9 @@ function _inputs.section(spec, key)
     end
     if element then
       IMGUI.Indent(20)
-      for _,subkey in ipairs(schema) do
-        IMGUI.PushID(("%s:%s"):format(key.id, subkey.id))
-        INPUT(subkey.type, element, subkey)(self)
+      for i, subkey in ipairs(schema) do
+        IMGUI.PushID(inside_schema[i].id)
+        inside_schema[i].input(element)(self)
         IMGUI.PopID()
       end
       IMGUI.Unindent(20)

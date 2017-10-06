@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'pos'
 
-function PARAM.isValid(sector, actor, parameter, params)
+function PARAM.isValid(sector, actor, parameter, value)
   return true
 end
 

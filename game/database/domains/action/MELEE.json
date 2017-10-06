@@ -1,0 +1,34 @@
+{
+  "params":[{
+      "typename":"choose_target",
+      "body-only":true,
+      "output":"target",
+      "max-range":1
+    }],
+  "effects":[{
+      "typename":"deal_damage",
+      "target":"val:target_body",
+      "amount":"val:4d(ath/2)"
+    }],
+  "operators":[{
+      "typename":"get_attribute",
+      "output":"ath",
+      "which":"ATH"
+    },{
+      "op":"/",
+      "typename":"integer_binop",
+      "rhs":2,
+      "output":"ath/2",
+      "lhs":"val:ath"
+    },{
+      "typename":"dice_throw",
+      "rolls":4,
+      "output":"4d(ath/2)",
+      "sides":"val:ath/2"
+    },{
+      "typename":"get_body_at",
+      "pos":"par:target",
+      "output":"target_body"
+    }],
+  "cost":6
+}

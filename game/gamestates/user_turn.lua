@@ -142,6 +142,21 @@ local function _useAction(action_slot)
       else
         return false
       end
+    elseif param.typename == "choose_widget_slot" then
+      _lockState()
+      SWITCHER.push(
+        GS.PICK_WIDGET_SLOT, controlled_actor,
+        function (which_slot)
+          return ACTION.validate('choose_widget_slot', current_sector,
+                                 controlled_actor, param, which_slot)
+        end
+      )
+      local args = coroutine.yield(_task)
+      if args.picked_slot then
+        params[param.output] = args.picked_slot
+      else
+        return false
+      end
     end
   end
   _next_action = {action_slot, params}
@@ -245,6 +260,7 @@ function state:init()
   PARAMETER_STATES = {
     [GS.PICK_TARGET] = true,
     [GS.PICK_BUFFER] = true,
+    [GS.PICK_WIDGET_SLOT] = true,
   }
 
   _action_queue = Queue(32)
@@ -275,13 +291,13 @@ function state:leave()
 
 end
 
-function state:resume(state, args)
+function state:resume(from, args)
   _unlockState()
-  if PARAMETER_STATES[state] then
+  if PARAMETER_STATES[from] then
 
     _resumeTask(args)
 
-  elseif state == GS.CARD_SELECT then
+  elseif from == GS.CARD_SELECT then
 
     if args.chose_a_card then
       if args.action_type == 'use' then
@@ -293,7 +309,7 @@ function state:resume(state, args)
       end
     end
 
-  elseif state == GS.OPEN_PACK then
+  elseif from == GS.OPEN_PACK then
     for _,pick in ipairs(args) do
       local t
       if pick.action_type == 'get' then
@@ -323,7 +339,7 @@ function state:update(dt)
     else
       _view.widget:hide()
     end
-    
+
     if not _next_action and not _action_queue.isEmpty() then
       _next_action = _action_queue.pop()
     end
