@@ -283,7 +283,7 @@ function SectorView:moveCursor(di, dj)
 
   --Initialize queue with first valid position
   sector_map[self.cursor.i][self.cursor.j] = true
-  queue.push({self.cursor.i + di, self.cursor.j + dj})
+  queue.push({self.cursor.i, self.cursor.j})
 
   --Start "custom-bfs"
   while not queue.isEmpty() do

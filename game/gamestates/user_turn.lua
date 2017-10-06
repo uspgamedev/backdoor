@@ -19,6 +19,7 @@ local _next_action
 local _action_queue
 local _view
 
+local _status_hud
 local _previous_control_map
 local _save_and_quit
 local _exit_sector
@@ -174,6 +175,14 @@ local function _useCardByIndex(index, action_type)
   if _useAction(index) then
     Signal.emit("actor_used_card", player, index)
   end
+end
+
+local function _showHUD()
+  _view.actor:show()
+end
+
+local function _hideHUD()
+  _view.actor:hide()
 end
 
 local function _interact()
@@ -333,6 +342,14 @@ function state:update(dt)
     _view.sector:lookAt(_route.getControlledActor())
 
     MAIN_TIMER:update(dt)
+
+    if _status_hud and not INPUT.isDown("ACTION_4") then
+      _status_hud = false
+      _hideHUD()
+    elseif not _statusHUD and INPUT.isDown("ACTION_4") then
+      _status_hud = true
+      _showHUD()
+    end
 
     if _showWidgets() then
       _view.widget:show()
