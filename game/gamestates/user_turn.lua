@@ -339,7 +339,7 @@ function state:resume(from, args)
       _action_queue.push({ t, { index = pick.card_index,
                                 buffer = pick.buffer_index } })
     end
-  elseif state == GS.ACTION_MENU and args.action then
+  elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
   end
 end
