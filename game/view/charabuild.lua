@@ -1,5 +1,6 @@
 --CHARACTER BUILDER VIEW--
 local RES = require 'resources'
+local FONT = require 'view.helpers.font'
 local Queue = require 'lux.common.Queue'
 local COLORS = require 'domain.definitions.colors'
 
@@ -9,11 +10,11 @@ local TILE_W = 80
 local TILE_H = 80
 local PD = 16
 local LH = 1.5
-local FONT_SIZE = 32
+local _font_size = 32
 local WIDTH
 local HEIGHT
-local FONT
-local SMOL_FONT
+local _font
+local _smol_font
 
 
 --MODULE--
@@ -26,10 +27,10 @@ local CharaBuildView = Class{
 local function _initGraphicValues()
   local g = love.graphics
   WIDTH, HEIGHT = g.getDimensions()
-  FONT = RES.loadFont("Text", FONT_SIZE)
-  SMOL_FONT = RES.loadFont("Text", FONT_SIZE*0.75)
-  FONT:setLineHeight(LH)
-  SMOL_FONT:setLineHeight(3*LH/5)
+  _font = FONT.get("Text", _font_size)
+  _smol_font = FONT.get("Text", _font_size*0.75)
+  _font:setLineHeight(LH)
+  _smol_font:setLineHeight(3*LH/5)
 end
 
 local function _renderSaved(g, saved)
@@ -40,21 +41,21 @@ local function _renderSaved(g, saved)
     g.push()
     g.printf(("%s: %s"):format(context, name), 0, 0, WIDTH/4, "left")
     g.pop()
-    g.translate(0, FONT_SIZE*LH)
+    g.translate(0, _font_size*LH)
   end
   g.pop()
 end
 
 local function _renderContext(g, context_name)
-  local w = FONT:getWidth(context_name)
+  local w = _font:getWidth(context_name)
   g.translate(0, 160)
   g.printf(context_name, -w/2, 0, w, "center")
-  g.translate(0, FONT_SIZE*2)
+  g.translate(0, _font_size*2)
 end
 
 local function _renderOptions(g, sel, width, render_queue)
   local w = width + 2*PD
-  local h = FONT:getHeight()*3/5
+  local h = _font:getHeight()*3/5
   local count = 0
   while not render_queue.isEmpty() do
     local name, data = unpack(render_queue.pop())
@@ -68,10 +69,10 @@ local function _renderOptions(g, sel, width, render_queue)
       g.pop()
       if data then
         g.push()
-        g.translate(2*TILE_W, -FONT_SIZE*2)
-        g.setFont(SMOL_FONT)
+        g.translate(2*TILE_W, -_font_size*2)
+        FONT.set(_smol_font)
         g.printf(data.desc, 0, 0, 5*TILE_W, "left")
-        g.setFont(FONT)
+        FONT.set(_font)
         g.pop()
       end
     end
@@ -120,7 +121,7 @@ end
 
 function CharaBuildView:setItem(name, data)
   self.render_queue.push {name, data}
-  self.width = math.max(self.width, FONT:getWidth(name))
+  self.width = math.max(self.width, _font:getWidth(name))
 end
 
 function CharaBuildView:select(n)
@@ -133,7 +134,7 @@ function CharaBuildView:draw()
   local render_queue = self.render_queue
 
   -- reset rendering modifiers
-  g.setFont(FONT)
+  FONT.set(_font)
   g.setColor(COLORS.NEUTRAL)
 
   g.push()
@@ -158,5 +159,3 @@ function CharaBuildView:draw()
 end
 
 return CharaBuildView
-
-

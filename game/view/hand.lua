@@ -1,5 +1,4 @@
-
-local RES = require 'resources'
+local FONT = require 'view.helpers.font'
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
@@ -12,7 +11,9 @@ local card_view = {
   h = 200,
 }
 
-local _font = function () return RES.loadFont("Text", 24) end
+--CONSTS--
+local _f_name = "Text" --Font name
+local _f_size = 24 --Font size
 local _ACTION_TYPES = {
   'use', 'remember', 'consume'
 }
@@ -94,7 +95,7 @@ function HandView:draw()
   local x, y = self.x, self.y
   local gap = 150
   local g = love.graphics
-  g.setFont(_font())
+  FONT.set(_f_name,_f_size)
   for i, card in ipairs(self.hand) do
     _drawCard(card, x, y, i == self.focus_index)
     if i == self.focus_index then
