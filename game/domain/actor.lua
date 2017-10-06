@@ -272,7 +272,7 @@ function Actor:getAction(slot)
   elseif self.equipped_cards[slot] then
     local card_info = self.equipped_cards[slot]
     local spec = DB.loadSpec('card', card_info.specname)
-    return spec.widget_action
+    return spec.widget.widget_action
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card then

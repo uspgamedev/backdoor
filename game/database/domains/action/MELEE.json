@@ -1,23 +1,19 @@
 {
   "params":[{
       "typename":"choose_target",
-      "body-only":true,
       "output":"target",
+      "body-only":true,
       "max-range":1
     }],
   "effects":[{
       "typename":"deal_damage",
-      "target":"val:body_target",
-      "amount":"val:dmg"
+      "target":"val:target_body",
+      "amount":"val:3d(ath)"
     }],
   "operators":[{
       "typename":"get_attribute",
-      "output":"ath"
-    },{
-      "typename":"dice_throw",
-      "rolls":1,
-      "output":"1d(ath)",
-      "sides":"val:ath"
+      "output":"ath",
+      "which":"ATH"
     },{
       "op":"/",
       "typename":"integer_binop",
@@ -25,14 +21,14 @@
       "output":"ath/2",
       "lhs":"val:ath"
     },{
-      "typename":"integer_binop",
-      "lhs":"val:ath/2",
-      "rhs":"val:1d(ath)",
-      "output":"dmg"
+      "typename":"dice_throw",
+      "rolls":3,
+      "output":"3d(ath)",
+      "sides":"val:ath/2"
     },{
       "typename":"get_body_at",
       "pos":"par:target",
-      "output":"body_target"
+      "output":"target_body"
     }],
   "cost":6
 }
