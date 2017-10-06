@@ -48,11 +48,16 @@ function ActionMenu:moveFocus(dir)
   end
 end
 
+function ActionMenu:getCurrentFocus()
+  return self.current
+end
+
 function ActionMenu:getSelected()
   return _ACTIONS[self.current]
 end
 
-function ActionMenu:open()
+function ActionMenu:open(last_focus)
+  self.current = last_focus or self.current
   MAIN_TIMER:tween(0.2, self, { enter = 1 }, 'out-circ')
 end
 

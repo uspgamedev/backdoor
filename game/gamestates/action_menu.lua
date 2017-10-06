@@ -9,6 +9,7 @@ local state = {}
 --[[ LOCAL VARIABLES ]]--
 
 local _menu_view
+local _last_focus
 
 local _mapped_signals
 local _previous_control_map
@@ -34,7 +35,8 @@ end
 local function _confirm()
   _menu_view:close(
     function()
-      SWITCHER.pop({ action = _menu_view:getSelected()})
+      _last_focus = _menu_view:getCurrentFocus()
+      SWITCHER.pop({ action = _menu_view:getSelected() })
     end
   )
 end
@@ -42,6 +44,7 @@ end
 local function _cancel()
   _menu_view:close(
     function()
+      _last_focus = _menu_view:getCurrentFocus()
       SWITCHER.pop({})
     end
   )
@@ -76,7 +79,7 @@ function state:enter(_, route)
 
   _menu_view = ActionMenuView()
   _menu_view:addElement('HUD')
-  _menu_view:open()
+  _menu_view:open(_last_focus)
 
   _registerSignals()
 
