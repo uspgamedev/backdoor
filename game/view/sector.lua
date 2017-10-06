@@ -4,6 +4,8 @@ local RES         = require 'resources'
 local HSV         = require 'common.color'.hsv
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
+local DIR         = require 'domain.definitions.dir'
+local Queue       = require "lux.common.Queue"
 
 local TILE_W = 80
 local TILE_H = 80
@@ -18,6 +20,7 @@ local _tile_offset
 local _tile_quads
 local _batch
 local _cursor_sprite
+local _isInCone
 
 local Cursor
 
@@ -223,11 +226,103 @@ function SectorView:setCursorPos(i,j)
   self.cursor.j = j
 end
 
-function SectorView:moveCursor(di,dj)
+--Function checks if a target position is inside "target cone" given desired direction {di,dj}
+function _isInCone(origin_i, origin_j, target_i, target_j, dir)
+  local i = target_i - origin_i
+  local j = target_j - origin_j
+
+  if     dir == "up" then   --UP
+    return j >= i and j <= -i
+  elseif dir == "right" then   --RIGHT
+    return i >= -j and i <= j
+  elseif dir == "down" then   --DOWN
+    return j <= i and j >= -i
+  elseif dir == "left" then     --LEFT
+    return i <= -j and i >= j
+  elseif dir == "upright" then   --UPRIGHT
+    return i <= 0 and j >= 0
+  elseif dir == "downright" then   --DOWNRIGHT
+    return i >= 0 and j >= 0
+  elseif dir == "downleft" then   --DOWNLEFT
+    return i >= 0 and j <= 0
+  elseif dir == "upleft" then   --UPLEFT
+    return i <= 0 and j <= 0
+  else
+    return error(("Not valid direction for cone function: %s"):format(dir))
+  end
+
+end
+
+function SectorView:moveCursor(di, dj)
   if not self.cursor then return end
 
-  self.cursor.i = self.cursor.i + di
-  self.cursor.j = self.cursor.j + dj
+  local sector = self.route.getCurrentSector()
+  local queue = Queue(128)
+  local chosen = false
+  local sector_map = {}
+
+  if not sector:isInside(self.cursor.i + di, self.cursor.j + dj) then
+    return
+  end
+
+  -- get direction's name
+  local dirname
+  for _,dir in ipairs(DIR) do
+    local i, j = unpack(DIR[dir])
+    dirname = dir
+    if di == i and dj == j then break end
+  end
+
+  --Reset all sector position to "not-seen"
+  for i = 1, sector.h do
+    sector_map[i] = {}
+    for j = 1, sector.w do
+      sector_map[i][j] = false
+    end
+  end
+
+  --Initialize queue with first valid position
+  sector_map[self.cursor.i][self.cursor.j] = true
+  queue.push({self.cursor.i + di, self.cursor.j + dj})
+
+  --Start "custom-bfs"
+  while not queue.isEmpty() do
+    if chosen then break end
+    local pos = queue.pop()
+
+    --Else add all other valid positions to the queue
+    for _,dir in ipairs(DIR) do
+      local i, j = unpack(DIR[dir])
+      local target_pos = {pos[1] + i, pos[2] + j}
+      --Check if position is inside sector
+      if sector:isInside(unpack(target_pos))
+         --Check if position hasn't been "seen"
+         and not sector_map[target_pos[1]][target_pos[2]]
+         --Check if position is inside desired cone
+         and _isInCone(self.cursor.i, self.cursor.j,
+                       target_pos[1], target_pos[2], dirname)
+         -- Check if position is within range
+         and self.cursor.range_checker(unpack(target_pos)) then
+
+        -- if it's a valid target use it!
+        if self.cursor.validator(unpack(target_pos)) then
+          chosen = target_pos
+          break
+        end
+
+        --Mark position as "seen"
+        sector_map[target_pos[1]][target_pos[2]] = true
+        queue.push(target_pos)
+      end
+    end
+    pos = nil
+  end
+
+  if chosen then
+    self.cursor.i = chosen[1]
+    self.cursor.j = chosen[2]
+  end
+
 end
 
 function SectorView:lookAtCursor()
@@ -255,4 +350,3 @@ function Cursor:getPos()
 end
 
 return SectorView
-
