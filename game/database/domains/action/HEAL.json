@@ -1,30 +1,30 @@
 {
+  "effects":[{
+      "typename":"heal",
+      "target":"val:body",
+      "amount":"val:amount"
+    }],
+  "cost":6,
   "operators":[{
       "typename":"get_attribute",
       "output":"arcana",
       "which":"ARC"
     },{
       "op":"+",
+      "rhs":2,
       "typename":"integer_binop",
-      "lhs":"val:arcana",
       "output":"amount",
-      "rhs":2
+      "lhs":"val:arcana"
     },{
       "typename":"get_body_at",
       "pos":"par:target",
       "output":"body"
     }],
   "params":[{
-      "filter":"BODY",
-      "max-range":5,
-      "output":"target",
       "body-only":true,
-      "typename":"choose_target"
-    }],
-  "effects":[{
-      "typename":"heal",
-      "target":"val:body",
-      "amount":"val:amount"
-    }],
-  "cost":6
+      "max-range":5,
+      "typename":"choose_target",
+      "filter":"BODY",
+      "output":"target"
+    }]
 }

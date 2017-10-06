@@ -1,29 +1,29 @@
 {
+  "cost":10,
+  "effects":[{
+      "typename":"deal_damage",
+      "target":"val:body",
+      "amount":"val:damage_roll"
+    }],
   "operators":[{
       "typename":"get_attribute",
       "output":"attr",
       "which":"ATH"
     },{
+      "sides":"val:attr",
       "typename":"dice_throw",
-      "rolls":1,
       "output":"damage_roll",
-      "sides":"val:attr"
+      "rolls":1
     },{
       "typename":"get_body_at",
       "pos":"par:target",
       "output":"body"
     }],
   "params":[{
-      "filter":"BODY",
-      "max-range":5,
-      "output":"target",
       "body-only":true,
-      "typename":"choose_target"
-    }],
-  "cost":10,
-  "effects":[{
-      "typename":"deal_damage",
-      "target":"val:body",
-      "amount":"val:damage_roll"
+      "max-range":5,
+      "typename":"choose_target",
+      "filter":"BODY",
+      "output":"target"
     }]
 }
