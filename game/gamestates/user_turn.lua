@@ -152,9 +152,7 @@ local function _useAction(action_slot)
         end
       )
       local args = coroutine.yield(_task)
-      print("success:", args.picked_slot)
       if args.picked_slot then
-        print(param.output, args.picked_slot)
         params[param.output] = args.picked_slot
       else
         return false

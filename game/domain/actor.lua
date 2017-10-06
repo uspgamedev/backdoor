@@ -23,9 +23,6 @@ local BASE_ACTIONS = {
   CONSUME_PACK_CARD = true
 }
 
-local _base_id
-local _idgen -- forward declaration
-
 --[[ Setup methods ]]--
 
 function Actor:init(spec_name)
@@ -40,7 +37,7 @@ function Actor:init(spec_name)
                               { __index = BASE_ACTIONS })
 
 
-  self.equipped_actions = {}
+  self.equipped_cards = {}
   self.equipped = {}
   for placement in ipairs(PLACEMENTS) do
     self.equipped[placement] = false
@@ -73,7 +70,7 @@ function Actor:loadState(state)
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.widgets = state.widgets
-  self.equipped_actions = state.equipped_actions
+  self.equipped_cards = state.equipped_cards
   self.equipped = state.equipped
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -102,7 +99,7 @@ function Actor:saveState()
   state.exp = self.exp
   state.upgrades = self.upgrades
   state.widgets = self.widgets
-  state.equipped_actions = self.equipped_actions
+  state.equipped_cards = self.equipped_cards
   state.equipped = self.equipped
   state.hand_limit = self.hand_limit
   state.hand = {}
@@ -192,10 +189,10 @@ end
 
 function Actor:clearSlot(slot)
   local id = self.widgets[slot]
-  local specname = self.equipped_actions[id].specname
+  local specname = self.equipped_cards[id].specname
   local placement = DB.loadSpec('card', specname)['placement']
   self:unequip(placement)
-  self.equipped_actions[id] = nil
+  self.equipped_cards[id] = nil
   self.widgets[slot] = false
 end
 
@@ -203,11 +200,12 @@ function Actor:setSlot(slot, specname)
   if self:isSlotOccupied(slot) then
     self:clearSlot(slot)
   end
-  local id = _idgen(specname)
+  local enum = {'A', 'B', 'C', 'D'}
+  local id = ("WIDGET_%s"):format(enum[slot])
   local placement = DB.loadSpec('card', specname)['placement']
   self:equip(placement)
   self.widgets[slot] = id
-  self.equipped_actions[id] = {
+  self.equipped_cards[id] = {
     specname = specname,
     spent = 0,
   }
@@ -219,7 +217,7 @@ end
 
 function Actor:getWidgetNameAt(slot)
   local id = self.widgets[slot]
-  local specname = self.equipped_actions[id].specname
+  local specname = self.equipped_cards[id].specname
   return DB.loadSpec('card', specname)['name']
 end
 
@@ -227,7 +225,7 @@ function Actor:degradeWidgets(trigger)
   for slot = 1, DEFS.WIDGET_LIMIT do
     local id = self.widgets[slot]
     if id then
-      local card_info = self.equipped_actions[id]
+      local card_info = self.equipped_cards[id]
       local specname = card_info.specname
       local cardspec = DB.loadSpec('card', specname)
       if cardspec.expend_trigger == trigger then
@@ -238,11 +236,6 @@ function Actor:degradeWidgets(trigger)
       end
     end
   end
-end
-
-function _idgen(specname)
-  _base_id = _base_id and _base_id + 1 or RANDOM.generate(0, 2^16)
-  return ("%s:%d"):format(specname, _base_id)
 end
 
 --[[ Body methods ]]--
@@ -276,6 +269,10 @@ function Actor:getAction(slot)
     else
       return slot
     end
+  elseif self.equipped_cards[slot] then
+    local card_info = self.equipped_cards[slot]
+    local spec = DB.loadSpec('card', card_info.specname)
+    return spec.widget_action
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card then
