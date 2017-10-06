@@ -32,6 +32,14 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     specname = background,
     cooldown = 10,
     exp = 0,
+    equipped = {
+      weapon = false,
+      offhand = false,
+      suit = false,
+      tool = false,
+      accessory = false,
+    },
+    equipped_actions = {},
     widgets = {false, false, false, false},
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffers = {

@@ -39,12 +39,14 @@ function Actor:init(spec_name)
   self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
                               { __index = BASE_ACTIONS })
 
+
+  self.equipped_actions = {}
   self.equipped = {}
   for placement in ipairs(PLACEMENTS) do
     self.equipped[placement] = false
   end
 
-  self.widgets = {}
+  self.widgets = {false, false, false, false}
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
@@ -71,6 +73,7 @@ function Actor:loadState(state)
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.widgets = state.widgets
+  self.equipped_actions = state.equipped_actions
   self.equipped = state.equipped
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -99,6 +102,8 @@ function Actor:saveState()
   state.exp = self.exp
   state.upgrades = self.upgrades
   state.widgets = self.widgets
+  state.equipped_actions = self.equipped_actions
+  state.equipped = self.equipped
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
@@ -187,10 +192,10 @@ end
 
 function Actor:clearSlot(slot)
   local id = self.widgets[slot]
-  local specname = self.widgets[id].specname
+  local specname = self.equipped_actions[id].specname
   local placement = DB.loadSpec('card', specname)['placement']
   self:unequip(placement)
-  self.widgets[id] = nil
+  self.equipped_actions[id] = nil
   self.widgets[slot] = false
 end
 
@@ -202,7 +207,7 @@ function Actor:setSlot(slot, specname)
   local placement = DB.loadSpec('card', specname)['placement']
   self:equip(placement)
   self.widgets[slot] = id
-  self.widgets[id] = {
+  self.equipped_actions[id] = {
     specname = specname,
     spent = 0,
   }
@@ -214,7 +219,7 @@ end
 
 function Actor:getWidgetNameAt(slot)
   local id = self.widgets[slot]
-  local specname = self.widgets[id].specname
+  local specname = self.equipped_actions[id].specname
   return DB.loadSpec('card', specname)['name']
 end
 
@@ -222,12 +227,12 @@ function Actor:degradeWidgets(trigger)
   for slot = 1, DEFS.WIDGET_LIMIT do
     local id = self.widgets[slot]
     if id then
-      local widget = self.widgets[id]
-      local specname = widget.specname
+      local card_info = self.equipped_actions[id]
+      local specname = card_info.specname
       local cardspec = DB.loadSpec('card', specname)
       if cardspec.expend_trigger == trigger then
-        widget.spent = widget.spent + 1
-        if widget.spent > cardspec.charges then
+        card_info.spent = card_info.spent + 1
+        if card_info.spent > cardspec.charges then
           self:clearSlot(slot)
         end
       end
