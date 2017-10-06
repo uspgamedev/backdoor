@@ -24,6 +24,7 @@ function ActionMenu:init()
 
   ELEMENT.init(self)
   self.current = 1
+  self.enter = 0
   _W, _H = love.graphics.getDimensions()
 
 end
@@ -41,7 +42,6 @@ function ActionMenu:getSelected()
 end
 
 function ActionMenu:open()
-  CAM:zoomTo(2)
   --if self.fadeout then
   --  MAIN_TIMER:cancel(self.fadeout)
   --  self.fadeout = false
@@ -53,16 +53,11 @@ function ActionMenu:open()
   --self.selected = false
   --self.invisible = false
   --self.enter = self.enter or { 0 }
-  --self.fadein = MAIN_TIMER:tween(
-  --  0.5, self.enter, { 1 }, 'out-cubic',
-  --  function ()
-  --    self.fadein = false
-  --  end
-  --)
+  MAIN_TIMER:tween(0.1, self, { enter = 1 }, 'in-circ')
 end
 
-function ActionMenu:close()
-  CAM:zoomTo(1)
+function ActionMenu:close(after)
+  MAIN_TIMER:tween(0.1, self, { enter = 0 }, 'out-circ', after)
   --if self.fadein then
   --  MAIN_TIMER:cancel(self.fadein)
   --  self.fadein = false
@@ -82,7 +77,9 @@ end
 
 function ActionMenu:draw()
   local g = love.graphics
+  local enter = self.enter
   local cos, sin, pi = math.cos, math.sin, math.pi
+  CAM:zoomTo(1 + enter)
   g.push()
   g.translate(_W/2, _H/2 - 40)
   local rot = 0
@@ -96,11 +93,11 @@ function ActionMenu:draw()
     --end
     --rgb(229, 181, 59)
     local fade = (i == self.current) and 1 or 0.5
-    g.setColor(80, 10, 50, fade*100)
+    g.setColor(80, 10, 50, enter*fade*100)
     g.circle("fill", 8, 8, 64*fade)
-    g.setColor(230, 180, 60, fade*255)
+    g.setColor(230, 180, 60, enter*fade*255)
     g.circle("fill", 0, 0, 64*fade)
-    g.setColor(255, 255, 255, 255)
+    g.setColor(255, 255, 255, enter*255)
     g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4*fade, 1/4*fade,
            256, 256)
     g.pop()

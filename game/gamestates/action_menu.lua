@@ -32,11 +32,19 @@ local function _moveFocus(dir)
 end
 
 local function _confirm()
-  SWITCHER.pop({ action = _menu_view:getSelected()})
+  _menu_view:close(
+    function()
+      SWITCHER.pop({ action = _menu_view:getSelected()})
+    end
+  )
 end
 
 local function _cancel()
-  SWITCHER.pop({})
+  _menu_view:close(
+    function()
+      SWITCHER.pop({})
+    end
+  )
 end
 
 function _registerSignals()
@@ -79,7 +87,6 @@ end
 
 function state:leave()
 
-  _menu_view:close()
   _menu_view:kill()
   _menu_view = nil
 
