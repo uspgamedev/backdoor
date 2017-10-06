@@ -3,8 +3,9 @@ local RES = require 'resources'
 
 -- CONSTANTS -------------------------------------------------------------------
 
-local ANGLE = math.pi/6
-local ACTIONS = {
+local _W, _H
+local _ANGLE = math.pi/6
+local _ACTIONS = {
   'interact', 'playcard', 'drawhand', 'wait'
 }
 
@@ -21,26 +22,24 @@ local ActionMenu = Class {
 function ActionMenu:init()
 
   ELEMENT.init(self)
-
-  self.invisible = true
   self.current = 1
+  _W, _H = love.graphics.getDimensions()
 
 end
 
-function ActionMenu:move(dir)
+function ActionMenu:moveFocus(dir)
   if dir == "up" then
     self.current = math.max(1, self.current - 1)
   elseif dir == "down" then
-    self.current = math.min(#ACTIONS, self.current + 1)
+    self.current = math.min(#_ACTIONS, self.current + 1)
   end
 end
 
 function ActionMenu:getSelected()
-  return ACTIONS[self.current]
+  return _ACTIONS[self.current]
 end
 
 function ActionMenu:show()
-  self.invisible = false
   --if self.fadeout then
   --  MAIN_TIMER:cancel(self.fadeout)
   --  self.fadeout = false
@@ -61,7 +60,6 @@ function ActionMenu:show()
 end
 
 function ActionMenu:hide()
-  self.invisible = true
   --if self.fadein then
   --  MAIN_TIMER:cancel(self.fadein)
   --  self.fadein = false
@@ -84,11 +82,11 @@ function ActionMenu:draw()
   local cos, sin, pi = math.cos, math.sin, math.pi
   local enter = 1 --self.enter[1]
   g.push()
-  g.translate(W/2, H/2 - 20)
-  local rot = ANGLE * (enter - 1) + ANGLE
-  for i,action_name in ipairs(ACTIONS) do
+  g.translate(_W/2, _H/2)
+  local rot = _ANGLE * (enter - 1) + _ANGLE
+  for i,action_name in ipairs(_ACTIONS) do
     g.push()
-    local x,y = cos(rot - ANGLE*i*2*pi), -sin(rot - ANGLE*i*2*pi)
+    local x,y = cos(rot - _ANGLE*i*2*pi), -sin(rot - _ANGLE*i*2*pi)
     g.translate(128*x, 128*y)
     --if self.selected == i+1 then
     --  g.scale(1.5, 1.5)
@@ -98,7 +96,7 @@ function ActionMenu:draw()
     g.setColor(20, 100, 80, enter*255)
     g.circle("fill", 0, 0, 32)
     g.scale(1/16, 1/16)
-    g.draw(RES.loadTexture(action_name), 16, 16)
+    g.draw(RES.loadTexture('icon-' .. action_name), 16, 16)
     g.pop()
   end
   g.pop()

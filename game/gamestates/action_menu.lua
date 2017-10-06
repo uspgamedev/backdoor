@@ -8,17 +8,14 @@ local state = {}
 
 --[[ LOCAL VARIABLES ]]--
 
-local _pack_view
-local _picks
+local _menu_view
 
 local _mapped_signals
 local _previous_control_map
 
 local SIGNALS = {
-  PRESS_RIGHT = {"move_focus", "right"},
-  PRESS_LEFT = {"move_focus", "left"},
-  PRESS_UP = {"change_target", "up"},
-  PRESS_DOWN = {"change_target", "down"},
+  PRESS_UP = {"move_focus", "up"},
+  PRESS_DOWN = {"move_focus", "down"},
   PRESS_CONFIRM = {"confirm"},
   PRESS_CANCEL = {"cancel"}
 }
@@ -31,31 +28,21 @@ local _registerSignals
 --[[ LOCAL FUNCTIONS ]]--
 
 local function _moveFocus(dir)
-  _pack_view:moveFocus(dir)
+  _menu_view:moveFocus(dir)
 end
 
-local function _changeTarget(dir)
-  _pack_view:changeTarget(dir)
+local function _confirm()
+  SWITCHER.pop({ action = _menu_view:getSelected()})
 end
 
-local function _confirmCard()
-  local action_type, buffer_index = _pack_view:getTarget()
-  table.insert(_picks, {
-    action_type = action_type,
-    buffer_index = buffer_index,
-    card_index = _pack_view:getFocus(),
-  })
-  _pack_view:removeCurrent()
-  if _pack_view:isEmpty() then
-    SWITCHER.pop(_picks)
-    _picks = nil
-  end
+local function _cancel()
+  SWITCHER.pop({})
 end
 
 function _registerSignals()
   Signal.register("move_focus", _moveFocus)
-  Signal.register("change_target", _changeTarget)
-  Signal.register("confirm", _confirmCard)
+  Signal.register("confirm", _confirm)
+  Signal.register("cancel", _cancel)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -79,13 +66,8 @@ end
 
 function state:enter(_, route)
 
-  local controlled_actor = route:getControlledActor()
-
-  controlled_actor:openPack()
-
-  _pack_view = PackView(controlled_actor)
-  _pack_view:addElement('HUD')
-  _picks = {}
+  _menu_view = ActionMenuView()
+  _menu_view:addElement('HUD')
 
   _registerSignals()
 
@@ -96,8 +78,8 @@ end
 
 function state:leave()
 
-  _pack_view:kill()
-  _pack_view = nil
+  _menu_view:kill()
+  _menu_view = nil
 
   Util.destroyAll()
 

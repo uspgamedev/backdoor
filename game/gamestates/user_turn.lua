@@ -36,9 +36,9 @@ local SIGNALS = {
   PRESS_DOWNRIGHT = {"move", "downright"},
   PRESS_RIGHT = {"move", "right"},
   PRESS_LEFT = {"move", "left"},
-  PRESS_CONFIRM = {"confirm"},
+  PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
-  PRESS_SPECIAL = {"start_card_selection"},
+  PRESS_SPECIAL = {"open_action_menu"},
   PRESS_EXTRA = {"extra"},
   PRESS_ACTION_1 = {"primary_action"},
   PRESS_ACTION_3 = {"open_pack"},
@@ -66,6 +66,13 @@ end
 
 local function _showWidgets()
   return not _next_action and INPUT.isDown('ACTION_2')
+end
+
+local function _openActionMenu()
+
+  _unregisterSignals()
+  SWITCHER.push(GS.ACTION_MENU, _route)
+
 end
 
 local function _changeToCardSelectScreen()
@@ -238,8 +245,10 @@ end
 
 function _registerSignals()
   Signal.register("move", _move)
-  Signal.register("confirm", _makeSignalHandler(_interact))
+  Signal.register("interact", _makeSignalHandler(_interact))
   Signal.register("extra", _makeSignalHandler(_newHand))
+  Signal.register("open_action_menu",
+                  _makeSignalHandler(_openActionMenu))
   Signal.register("start_card_selection",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
@@ -330,6 +339,8 @@ function state:resume(from, args)
       _action_queue.push({ t, { index = pick.card_index,
                                 buffer = pick.buffer_index } })
     end
+  elseif state == GS.ACTION_MENU and args.action then
+    Signal.emit(args.action)
   end
 end
 
