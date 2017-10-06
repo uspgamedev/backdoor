@@ -3,6 +3,7 @@ local DB    = require 'database'
 local RES   = require 'resources'
 local FONT = require 'view.helpers.font'
 local DEFS  = require 'domain.definitions'
+local COLORS = require 'domain.definitions.colors'
 
 --PackView Class--
 
@@ -80,6 +81,9 @@ function PackView:draw()
     local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
     FONT.set(_f_name,_f_size)
+    g.setColor(0x16, 0x16, 0x16, 0x80)
+    g.rectangle("fill", x-16, y-16, 160, 160)
+    g.setColor(COLORS.NEUTRAL)
     g.print(view, x, y)
     local t, n = self:getTarget()
     g.print(("%s %d"):format(t, n), x, y + FONT.get(_f_name,_f_size):getHeight())
