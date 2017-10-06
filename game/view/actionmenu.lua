@@ -93,13 +93,14 @@ function ActionMenu:draw()
     --  g.scale(1.5, 1.5)
     --end
     --rgb(229, 181, 59)
-    local fade = (i == self.current) and 1 or 0.2
+    local fade = (i == self.current) and 1 or 0.5
     g.setColor(80, 10, 50, fade*100)
-    g.circle("fill", 8, 8, 64)
+    g.circle("fill", 8, 8, 64*fade)
     g.setColor(230, 180, 60, fade*255)
-    g.circle("fill", 0, 0, 64)
+    g.circle("fill", 0, 0, 64*fade)
     g.setColor(255, 255, 255, 255)
-    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4, 1/4, 256, 256)
+    g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4*fade, 1/4*fade,
+           256, 256)
     g.pop()
   end
   g.pop()
