@@ -57,16 +57,11 @@ local _registerSignals
 local function _lockState()
   _lock = true
   _unregisterSignals()
-  _view.widget:hide()
 end
 
 local function _unlockState()
   _lock = false
   _registerSignals()
-end
-
-local function _showWidgets()
-  return not _next_action and INPUT.isDown('ACTION_2')
 end
 
 local function _openActionMenu()
@@ -86,23 +81,14 @@ local function _changeToCardSelectScreen()
 end
 
 local function _move(dir)
-  if _showWidgets() then
-    for i,d in ipairs(DIR) do
-      if d == dir then
-        _view.widget:select(i)
-        break
-      end
-    end
-  else
-    local current_sector = _route.getCurrentSector()
-    local controlled_actor = _route.getControlledActor()
-    local i, j = controlled_actor:getPos()
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
 
-    dir = DIR[dir]
-    i, j = i+dir[1], j+dir[2]
-    if current_sector:isValid(i,j) then
-      _next_action = {'MOVE', { pos = {i,j} }}
-    end
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if current_sector:isValid(i,j) then
+    _next_action = {'MOVE', { pos = {i,j} }}
   end
 end
 
@@ -209,11 +195,7 @@ local function _useWidget()
 end
 
 local function _interact()
-  if _showWidgets() then
-    local selected = _view.widget:getSelected()
-    if selected then
-    end
-  elseif not _next_action then
+  if not _next_action then
     _next_action = { 'INTERACT' }
   end
 end
@@ -375,12 +357,6 @@ function state:update(dt)
     elseif not _statusHUD and INPUT.isDown("ACTION_4") then
       _status_hud = true
       _showHUD()
-    end
-
-    if _showWidgets() then
-      _view.widget:show()
-    else
-      _view.widget:hide()
     end
 
     if not _next_action and not _action_queue.isEmpty() then

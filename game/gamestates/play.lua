@@ -83,10 +83,6 @@ function state:enter(pre, route_data)
     end
   )
 
-  -- Widget view
-  _view.widget = WidgetView(_route)
-  _view.widget:addElement("GUI")
-
   -- Actor view
   _view.actor = ActorView(_route)
   _view.actor:addElement("HUD")
