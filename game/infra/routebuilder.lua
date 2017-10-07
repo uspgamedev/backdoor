@@ -61,6 +61,7 @@ local function _generatePlayerBodyData(idgenerator, species)
     id = idgenerator.newID(),
     specname = species,
     damage = 0,
+    defence = 0,
     i = 1,
     j = 3,
   }
