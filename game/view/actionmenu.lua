@@ -56,9 +56,9 @@ function ActionMenu:getSelected()
   return _ACTIONS[self.current]
 end
 
-function ActionMenu:open(last_focus)
+function ActionMenu:open(last_focus, after)
   self.current = last_focus or self.current
-  MAIN_TIMER:tween(0.2, self, { enter = 1 }, 'out-circ')
+  MAIN_TIMER:tween(0.2, self, { enter = 1 }, 'out-circ', after)
 end
 
 function ActionMenu:close(after)

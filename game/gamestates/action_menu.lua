@@ -81,12 +81,15 @@ function state:enter(_, route)
 
   _menu_view = ActionMenuView()
   _menu_view:addElement('HUD')
-  _menu_view:open(_last_focus)
+  _menu_view:open(
+    _last_focus,
+    function ()
+      _registerSignals()
 
-  _registerSignals()
-
-  _previous_control_map = CONTROL.getMap()
-  CONTROL.setMap(_mapped_signals)
+      _previous_control_map = CONTROL.getMap()
+      CONTROL.setMap(_mapped_signals)
+    end
+  )
 
 end
 
