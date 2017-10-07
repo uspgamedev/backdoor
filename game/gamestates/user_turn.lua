@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
+local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local CONTROL       = require 'infra.control'
@@ -192,12 +193,25 @@ local function _hideHUD()
   _view.actor:hide()
 end
 
+local function _useWidget()
+  local controlled_actor = _route.getControlledActor()
+  _lockState()
+  SWITCHER.push(
+    GS.PICK_WIDGET_SLOT, controlled_actor,
+    function (which_slot)
+      return not not controlled_actor:getAction(DEFS.WIDGETS[which_slot])
+    end
+  )
+  local args = coroutine.yield(_task)
+  if args.picked_slot then
+    _useAction(args.picked_slot)
+  end
+end
+
 local function _interact()
   if _showWidgets() then
     local selected = _view.widget:getSelected()
     if selected then
-      local widget = { 'A', 'B', 'C', 'D' }
-      _useAction(('WIDGET_%s'):format(widget[selected]))
     end
   elseif not _next_action then
     _next_action = { 'INTERACT' }
@@ -252,6 +266,7 @@ function _registerSignals()
   Signal.register("playcard",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("widget", _makeSignalHandler(_useWidget))
   Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)

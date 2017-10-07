@@ -39,6 +39,7 @@ local function _confirm()
       SWITCHER.pop({ action = _menu_view:getSelected() })
     end
   )
+  _unregisterSignals()
 end
 
 local function _cancel()
@@ -48,6 +49,7 @@ local function _cancel()
       SWITCHER.pop({})
     end
   )
+  _unregisterSignals()
 end
 
 function _registerSignals()
@@ -94,8 +96,6 @@ function state:leave()
   _menu_view = nil
 
   Util.destroyAll()
-
-  _unregisterSignals()
 
 end
 
