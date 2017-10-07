@@ -8,6 +8,8 @@
       "card":"draw"
     },{
       "card":"sord"
+    },{
+      "card":"gun"
     }],
   "description":"The basic needs of your typical adventurer."
 }

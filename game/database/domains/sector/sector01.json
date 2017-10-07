@@ -9,7 +9,7 @@
         "actorspec":"dumb",
         "bodyspec":"slime"
       },{
-        "actorspec":"dumb",
+        "actorspec":"strong",
         "bodyspec":"hearthborn"
       }],
     "min":10
@@ -19,8 +19,8 @@
     "minw":3,
     "rmar":1,
     "tries":256,
-    "maxh":9,
     "count":24,
+    "maxh":9,
     "maxw":9
   },
   "holes":false,
@@ -38,8 +38,8 @@
       "typename":"rooms",
       "minw":3,
       "tries":256,
-      "maxh":9,
       "count":24,
+      "maxh":9,
       "maxw":9
     },{
       "typename":"maze"

@@ -1,4 +1,6 @@
 {
+  "def":2,
+  "def_die":4,
   "appearance":"demobody",
   "hp":20,
   "name":"Demihuman",

@@ -1,4 +1,5 @@
 
+local RANDOM = require 'common.random'
 local GameElement = require 'domain.gameelement'
 
 local Body = Class{
@@ -10,12 +11,14 @@ function Body:init(specname)
   GameElement.init(self, 'body', specname)
 
   self.damage = 0
+  self.def_bonus = 0
   self.sector_id = nil
 
 end
 
 function Body:loadState(state)
   self.damage = state.damage
+  self.def_bonus = state.def_bonus
   self.sector_id = state.sector_id
   self:setId(state.id)
 end
@@ -24,6 +27,7 @@ function Body:saveState()
   local state = {}
   state.specname = self.specname
   state.damage = self.damage
+  state.def_bonus = self.def_bonus
   state.sector_id = self.sector_id
   state.id = self.id
   return state
@@ -61,8 +65,18 @@ function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
 
+function Body:getDef()
+  return self:getSpec('def') + self.def_bonus
+end
+
+function Body:getDefDie()
+  return self:getSpec('def_die')
+end
+
 function Body:takeDamage(amount)
-  self.damage = math.min(self:getMaxHP(), self.damage + amount)
+  local defroll = RANDOM.rollDice(self:getDef(), self:getDefDie())
+  local dmg = math.max(math.min(1, amount), amount - defroll)
+  self.damage = math.min(self:getMaxHP(), self.damage + dmg)
 end
 
 function Body:heal(amount)

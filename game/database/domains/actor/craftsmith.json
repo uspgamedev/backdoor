@@ -1,6 +1,6 @@
 {
   "extends":"sentient",
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+  "mec":14,
   "name":"Craftsmith",
-  "mec":14
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

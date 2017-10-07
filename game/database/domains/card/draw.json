@@ -1,8 +1,8 @@
 {
+  "type":"ART",
+  "art_action":"DRAW",
+  "name":"Think",
   "art":{
     "art_action":"DRAW"
-  },
-  "art_action":"DRAW",
-  "type":"ART",
-  "name":"Think"
+  }
 }

@@ -1,11 +1,11 @@
 {
-  "primary":"SHOOT",
+  "ath":6,
   "behavior":"aggro",
   "mec":3,
-  "arc":3,
+  "buf_qnt":2,
   "collection":"adventurer",
   "description":"Oh honey...",
-  "ath":6,
-  "buf_qnt":2,
+  "primary":"MELEE",
+  "arc":3,
   "spd":1
 }

@@ -4,8 +4,8 @@
   "mec":10,
   "arc":10,
   "collection":"adventurer",
-  "buf_qnt":3,
   "ath":10,
+  "buf_qnt":3,
   "name":"Sentient",
   "spd":2
 }
