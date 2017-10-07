@@ -7,16 +7,25 @@ local IDGenerator = require 'common.idgenerator'
 
 local ROUTEBUILDER = {}
 
-local function _simpleBuffer()
+local function _simpleBuffer(n)
   local buffer = {}
-  for i=1,4 do
-    table.insert(buffer, 'bolt')
-    table.insert(buffer, 'cure')
-    table.insert(buffer, 'sord')
-    table.insert(buffer, 'draw')
-    table.insert(buffer, 'ath_1')
-    table.insert(buffer, 'arc_1')
-    table.insert(buffer, 'mec_1')
+  if n == 1 then
+    for i=1,4 do
+      table.insert(buffer, 'draw')
+      table.insert(buffer, 'bolt')
+      table.insert(buffer, 'cure')
+    end
+  elseif n == 2 then
+    for i=1,4 do
+      table.insert(buffer, 'sord')
+      table.insert(buffer, 'gun')
+    end
+  elseif n == 3 then
+    for i=1,4 do
+      table.insert(buffer, 'ath_1')
+      table.insert(buffer, 'arc_1')
+      table.insert(buffer, 'mec_1')
+    end
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -24,8 +33,6 @@ local function _simpleBuffer()
 end
 
 local function _generatePlayerActorData(idgenerator, body_id, background)
-  -- FIXME: ALL PLAYER BACKGROUNDS HAVE THE SAME ACTIONS
-  -- suggestion: have the primary action be registered in the DB
   return {
     id = idgenerator.newID(),
     body_id = body_id,
@@ -47,9 +54,9 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     },
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffers = {
-      _simpleBuffer(),
-      _simpleBuffer(),
-      _simpleBuffer(),
+      _simpleBuffer(1),
+      _simpleBuffer(2),
+      _simpleBuffer(3),
     },
     hand_limit = 5,
     hand = {}
@@ -61,7 +68,7 @@ local function _generatePlayerBodyData(idgenerator, species)
     id = idgenerator.newID(),
     specname = species,
     damage = 0,
-    defence = 0,
+    def_bonus = 0,
     i = 1,
     j = 3,
   }

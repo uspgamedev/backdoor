@@ -11,14 +11,14 @@ function Body:init(specname)
   GameElement.init(self, 'body', specname)
 
   self.damage = 0
-  self.defence = 0
+  self.def_bonus = 0
   self.sector_id = nil
 
 end
 
 function Body:loadState(state)
   self.damage = state.damage
-  self.defence = state.defence
+  self.def_bonus = state.def_bonus
   self.sector_id = state.sector_id
   self:setId(state.id)
 end
@@ -27,7 +27,7 @@ function Body:saveState()
   local state = {}
   state.specname = self.specname
   state.damage = self.damage
-  state.defence = self.defence
+  state.def_bonus = self.def_bonus
   state.sector_id = self.sector_id
   state.id = self.id
   return state
@@ -66,7 +66,7 @@ function Body:setHP(hp)
 end
 
 function Body:getDefence()
-  return self:getSpec('def') + self.defence
+  return self:getSpec('def') + self.def_bonus
 end
 
 function Body:getDefenceDie()
@@ -75,7 +75,7 @@ end
 
 function Body:takeDamage(amount)
   local defroll = RANDOM.rollDice(self:getDefence(), self:getDefenceDie())
-  local dmg = math.max(0, amount - defroll)
+  local dmg = math.max(math.min(1, amount), amount - defroll)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   print(("%s took %d of damage."):format(self:getSpec('name'), dmg))
 end

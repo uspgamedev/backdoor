@@ -1,8 +1,8 @@
 {
+  "type":"ART",
+  "art_action":"SHOOT",
+  "name":"Bolt",
   "art":{
     "art_action":"BOLT"
-  },
-  "art_action":"SHOOT",
-  "type":"ART",
-  "name":"Bolt"
+  }
 }

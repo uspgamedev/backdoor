@@ -1,0 +1,6 @@
+{
+  "extends":"sentient",
+  "behavior":"aggro",
+  "primary":"MELEE",
+  "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers."
+}
