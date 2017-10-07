@@ -2,10 +2,10 @@
   "primary":"SHOOT",
   "behavior":"aggro",
   "mec":3,
-  "arc":3,
-  "collection":"adventurer",
-  "description":"Oh honey...",
-  "ath":6,
   "buf_qnt":2,
-  "spd":1
+  "collection":"adventurer",
+  "spd":1,
+  "arc":3,
+  "ath":6,
+  "description":"Oh honey..."
 }
