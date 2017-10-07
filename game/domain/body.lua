@@ -65,19 +65,18 @@ function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
 
-function Body:getDefence()
+function Body:getDef()
   return self:getSpec('def') + self.def_bonus
 end
 
-function Body:getDefenceDie()
+function Body:getDefDie()
   return self:getSpec('def_die')
 end
 
 function Body:takeDamage(amount)
-  local defroll = RANDOM.rollDice(self:getDefence(), self:getDefenceDie())
+  local defroll = RANDOM.rollDice(self:getDef(), self:getDefDie())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
-  print(("%s took %d of damage."):format(self:getSpec('name'), dmg))
 end
 
 function Body:heal(amount)

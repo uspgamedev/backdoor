@@ -261,7 +261,6 @@ function Actor:degradeWidget(trigger, slot)
         card_info.spent = card_info.spent + 1
       end
       if card_info.spent >= card:getWidgetCharges() then
-        print(("%s has broken"):format(card:getName()))
         self:clearSlot(slot)
       end
     end
