@@ -39,10 +39,8 @@ local SIGNALS = {
   PRESS_LEFT = {"move", "left"},
   PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
-  PRESS_SPECIAL = {"open_action_menu"},
-  PRESS_EXTRA = {"drawhand"},
-  PRESS_ACTION_1 = {"primary"},
-  PRESS_ACTION_3 = {"openpack"},
+  PRESS_SPECIAL = {"primary"},
+  PRESS_EXTRA = {"open_action_menu"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }

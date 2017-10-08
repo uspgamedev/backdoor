@@ -7,7 +7,6 @@ local PROFILE     = require 'infra.profile'
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
 local HandView    = require 'view.hand'
-local WidgetView  = require 'view.widget'
 local ActorView   = require 'view.actor'
 
 local state = {}
