@@ -83,7 +83,7 @@ function ActorView:draw()
   if not actor then return end
   local cr,cg,cb = unpack(COLORS.NEUTRAL)
 
-  _font.set()
+  _font:set()
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
     self:drawAttributes(g, actor)
@@ -101,7 +101,7 @@ function ActorView:drawAttributes(g, actor)
   local spd = actor:getSPD()
   g.translate(40, 40)
   g.print(_exptext:format(actor:getExp()), 0, 0)
-  g.translate(0, 1.5*_font.getHeight())
+  g.translate(0, 1.5*_font:getHeight())
   g.print(_statstext:format(ath, arc, mec, spd))
   g.pop()
 end
@@ -109,7 +109,7 @@ end
 function ActorView:drawDepth(g)
   local sector = self.route.getCurrentSector()
   local str = _depthtext:format(sector:getDepth())
-  local w = _font.getWidth(str)
+  local w = _font:getWidth(str)
   g.push()
   g.translate(_width - 40 - w, 40)
   g.printf(str, 0, 0, w, "right")
@@ -125,7 +125,7 @@ function ActorView:drawBuffers(g, actor)
     local back_buffer_size = actor:getBackBufferSize(which)
     local str = _buffertext:format(which, buffer_size, back_buffer_size)
     g.print(str, 0, 0)
-    g.translate(0, _font.getHeight()*_font.getLineHeight())
+    g.translate(0, _font:getHeight()*_font:getLineHeight())
   end
   g.pop()
 end

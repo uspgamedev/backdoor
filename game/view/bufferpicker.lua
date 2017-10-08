@@ -44,9 +44,9 @@ function BufferPickerView:init(actor)
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
   --Arrows
-  self.right_arrow_x = O_WIN_W/2 + 120 - _font.getWidth(">")
+  self.right_arrow_x = O_WIN_W/2 + 120 - _font:getWidth(">")
   self.left_arrow_x = O_WIN_W/2 - 80
-  self.arrows_y = 3*O_WIN_H/4 + _font.getHeight()/2
+  self.arrows_y = 3*O_WIN_H/4 + _font:getHeight()/2
 
   _expandArrows(self)
 
@@ -85,7 +85,7 @@ function BufferPickerView:draw()
 
   --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
-  _font.set()
+  _font:set()
   local back_buffer_size = self.actor:getBackBufferSize(self.select)
   g.printf(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size),
            c_x-80, c_y + i_h/2 + 40, 200, "center")

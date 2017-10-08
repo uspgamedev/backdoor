@@ -63,7 +63,7 @@ function PickWidgetView:draw()
       g.setColor(0x16, 0x16, 0x16, self.alpha*0xff)
     end
     g.rectangle("fill", 0, 0, _text_width, _BLOCK_HEIGHT)
-    _font.set()
+    _font:set()
     if selected then
       g.setColor(0x00, 0x00, 0x00, self.alpha*0xff)
     else

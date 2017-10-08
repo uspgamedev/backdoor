@@ -25,9 +25,9 @@ local _width, _height
 local function _initFontValues()
   local g = love.graphics
   _title_font = _title_font or FONT.get("Title", _TITLE_FONT_SIZE)
-  _title_font.setLineHeight(_LH)
+  _title_font:setLineHeight(_LH)
   _menu_font = _menu_font or FONT.get("Text", _MENU_FONT_SIZE)
-  _menu_font.setLineHeight(_LH)
+  _menu_font:setLineHeight(_LH)
   _width, _height = g.getDimensions()
 end
 
@@ -36,7 +36,7 @@ local function _renderTitle()
   local g = love.graphics
   g.push()
   g.translate(0, _height/4)
-  _title_font.set()
+  _title_font:set()
   g.setColor(COLORS.NEUTRAL)
   g.print(_TITLE_TEXT, 0, 0)
   g.pop()
@@ -47,7 +47,7 @@ local function _renderOptions(q, selection, scrolltop)
   local g = love.graphics
   g.push()
   g.translate(0, _height/2)
-  _menu_font.set()
+  _menu_font:set()
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
@@ -59,7 +59,7 @@ local function _renderOptions(q, selection, scrolltop)
       end
       g.setColor(color)
       g.print(item_text, 0, 0)
-      g.translate(0, _menu_font.getHeight())
+      g.translate(0, _menu_font:getHeight())
     end
   end
   g.pop()

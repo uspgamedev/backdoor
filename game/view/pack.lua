@@ -86,13 +86,13 @@ function PackView:draw()
     local card = DB.loadSpec('card', card_data.specname)
     local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
-    _font.set()
+    _font:set()
     g.setColor(0x16, 0x16, 0x16, 0x80)
     g.rectangle("fill", x-16, y-16, 160, 160)
     g.setColor(COLORS.NEUTRAL)
     g.print(view, x, y)
     local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + _font.getHeight())
+    g.print(("%s %d"):format(t, n), x, y + _font:getHeight())
   end
 end
 

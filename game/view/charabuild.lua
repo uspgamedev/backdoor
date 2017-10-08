@@ -32,8 +32,8 @@ local function _initGraphicValues()
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("Text", _FONT_SIZE)
   _smol_font = FONT.get("Text", _FONT_SIZE*0.75)
-  _font.setLineHeight(_LH)
-  _smol_font.setLineHeight(3*_LH/5)
+  _font:setLineHeight(_LH)
+  _smol_font:setLineHeight(3*_LH/5)
 end
 
 local function _renderSaved(g, saved)
@@ -50,7 +50,7 @@ local function _renderSaved(g, saved)
 end
 
 local function _renderContext(g, context_name)
-  local w = _font.getWidth(context_name)
+  local w = _font:getWidth(context_name)
   g.translate(0, 160)
   g.printf(context_name, -w/2, 0, w, "center")
   g.translate(0, _FONT_SIZE*2)
@@ -58,7 +58,7 @@ end
 
 local function _renderOptions(g, sel, width, render_queue)
   local w = width + 2*_PD
-  local h = _font.getHeight()*3/5
+  local h = _font:getHeight()*3/5
   local count = 0
   while not render_queue.isEmpty() do
     local name, data = unpack(render_queue.pop())
@@ -73,9 +73,9 @@ local function _renderOptions(g, sel, width, render_queue)
       if data then
         g.push()
         g.translate(2*_TILE_W, -_FONT_SIZE*2)
-        _smol_font.set()
+        _smol_font:set()
         g.printf(data.desc, 0, 0, 5*_TILE_W, "left")
-        _font.set()
+        _font:set()
         g.pop()
       end
     end
@@ -124,7 +124,7 @@ end
 
 function CharaBuildView:setItem(name, data)
   self.render_queue.push {name, data}
-  self.width = math.max(self.width, _font.getWidth(name))
+  self.width = math.max(self.width, _font:getWidth(name))
 end
 
 function CharaBuildView:select(n)
@@ -137,7 +137,7 @@ function CharaBuildView:draw()
   local render_queue = self.render_queue
 
   -- reset rendering modifiers
-  _font.set()
+  _font:set()
   g.setColor(COLORS.NEUTRAL)
 
   g.push()
