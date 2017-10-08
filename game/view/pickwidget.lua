@@ -2,11 +2,13 @@
 local RES = require 'resources'
 local DEFS = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
+local FONT = require 'view.helpers.font'
 
 local PickWidgetView = Class{
   __includes = { ELEMENT }
 }
 
+local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
 local _BLOCK_HEIGHT = 48
 local _MARGIN = 16
@@ -21,7 +23,7 @@ local _alpha
 local function _initGraphicValues()
   local g = love.graphics
   _width, _height = g.getDimensions()
-  _font = function () g.setFont(RES.loadFont("Text", _FONT_SIZE)) end
+  _font = _font or FONT.get(_FONT_NAME, _FONT_SIZE)
   _text_width = _width/4
 end
 
@@ -61,7 +63,7 @@ function PickWidgetView:draw()
       g.setColor(0x16, 0x16, 0x16, self.alpha*0xff)
     end
     g.rectangle("fill", 0, 0, _text_width, _BLOCK_HEIGHT)
-    _font()
+    _font.set()
     if selected then
       g.setColor(0x00, 0x00, 0x00, self.alpha*0xff)
     else
