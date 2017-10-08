@@ -42,6 +42,7 @@ GS = {
                                                   -- slot to equip widget
   CARD_SELECT = require "gamestates.card_select", -- Player is selecting a card
                                                   -- to use
+  ACTION_MENU = require "gamestates.action_menu", -- Player's action menu
   OPEN_PACK = require "gamestates.open_pack",     -- Player opens a pack
   ANIMATION = require "gamestates.animation",     -- Play animations
 }

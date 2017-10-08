@@ -7,7 +7,6 @@ local PROFILE     = require 'infra.profile'
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
 local HandView    = require 'view.hand'
-local WidgetView  = require 'view.widget'
 local ActorView   = require 'view.actor'
 
 local state = {}
@@ -82,10 +81,6 @@ function state:enter(pre, route_data)
       _view.hand:removeCard(actor,card_index)
     end
   )
-
-  -- Widget view
-  _view.widget = WidgetView(_route)
-  _view.widget:addElement("GUI")
 
   -- Actor view
   _view.actor = ActorView(_route)

@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: PLAYER TURN--
 
+local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local CONTROL       = require 'infra.control'
@@ -36,12 +37,10 @@ local SIGNALS = {
   PRESS_DOWNRIGHT = {"move", "downright"},
   PRESS_RIGHT = {"move", "right"},
   PRESS_LEFT = {"move", "left"},
-  PRESS_CONFIRM = {"confirm"},
+  PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
-  PRESS_SPECIAL = {"start_card_selection"},
-  PRESS_EXTRA = {"extra"},
-  PRESS_ACTION_1 = {"primary_action"},
-  PRESS_ACTION_3 = {"open_pack"},
+  PRESS_SPECIAL = {"primary"},
+  PRESS_EXTRA = {"open_action_menu"},
   PRESS_PAUSE = {"pause"},
   PRESS_QUIT = {"quit"}
 }
@@ -56,7 +55,6 @@ local _registerSignals
 local function _lockState()
   _lock = true
   _unregisterSignals()
-  _view.widget:hide()
 end
 
 local function _unlockState()
@@ -64,8 +62,11 @@ local function _unlockState()
   _registerSignals()
 end
 
-local function _showWidgets()
-  return not _next_action and INPUT.isDown('ACTION_2')
+local function _openActionMenu()
+
+  _unregisterSignals()
+  SWITCHER.push(GS.ACTION_MENU, _route)
+
 end
 
 local function _changeToCardSelectScreen()
@@ -78,23 +79,14 @@ local function _changeToCardSelectScreen()
 end
 
 local function _move(dir)
-  if _showWidgets() then
-    for i,d in ipairs(DIR) do
-      if d == dir then
-        _view.widget:select(i)
-        break
-      end
-    end
-  else
-    local current_sector = _route.getCurrentSector()
-    local controlled_actor = _route.getControlledActor()
-    local i, j = controlled_actor:getPos()
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
 
-    dir = DIR[dir]
-    i, j = i+dir[1], j+dir[2]
-    if current_sector:isValid(i,j) then
-      _next_action = {'MOVE', { pos = {i,j} }}
-    end
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if current_sector:isValid(i,j) then
+    _next_action = {'MOVE', { pos = {i,j} }}
   end
 end
 
@@ -185,14 +177,23 @@ local function _hideHUD()
   _view.actor:hide()
 end
 
-local function _interact()
-  if _showWidgets() then
-    local selected = _view.widget:getSelected()
-    if selected then
-      local widget = { 'A', 'B', 'C', 'D' }
-      _useAction(('WIDGET_%s'):format(widget[selected]))
+local function _useWidget()
+  local controlled_actor = _route.getControlledActor()
+  _lockState()
+  SWITCHER.push(
+    GS.PICK_WIDGET_SLOT, controlled_actor,
+    function (which_slot)
+      return not not controlled_actor:getAction(DEFS.WIDGETS[which_slot])
     end
-  elseif not _next_action then
+  )
+  local args = coroutine.yield(_task)
+  if args.picked_slot then
+    _useAction(args.picked_slot)
+  end
+end
+
+local function _interact()
+  if not _next_action then
     _next_action = { 'INTERACT' }
   end
 end
@@ -238,12 +239,15 @@ end
 
 function _registerSignals()
   Signal.register("move", _move)
-  Signal.register("confirm", _makeSignalHandler(_interact))
-  Signal.register("extra", _makeSignalHandler(_newHand))
-  Signal.register("start_card_selection",
+  Signal.register("interact", _makeSignalHandler(_interact))
+  Signal.register("drawhand", _makeSignalHandler(_newHand))
+  Signal.register("open_action_menu",
+                  _makeSignalHandler(_openActionMenu))
+  Signal.register("playcard",
                   _makeSignalHandler(_changeToCardSelectScreen))
-  Signal.register("primary_action", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("open_pack", _openPack)
+  Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
+  Signal.register("widget", _makeSignalHandler(_useWidget))
+  Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -330,6 +334,8 @@ function state:resume(from, args)
       _action_queue.push({ t, { index = pick.card_index,
                                 buffer = pick.buffer_index } })
     end
+  elseif from == GS.ACTION_MENU and args.action then
+    Signal.emit(args.action)
   end
 end
 
@@ -349,12 +355,6 @@ function state:update(dt)
     elseif not _statusHUD and INPUT.isDown("ACTION_4") then
       _status_hud = true
       _showHUD()
-    end
-
-    if _showWidgets() then
-      _view.widget:show()
-    else
-      _view.widget:hide()
     end
 
     if not _next_action and not _action_queue.isEmpty() then
