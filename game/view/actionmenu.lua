@@ -114,11 +114,12 @@ function ActionMenu:draw()
   local rot = (enter - 1) * pi + switch * _ANGLE
   for i,action_name in ipairs(_ACTIONS) do
     local k = i - self.current
-    g.push()
-    local x,y = cos(rot - _ANGLE*k), -sin(rot - _ANGLE*k)
-    g.translate(_RADIUS*x, _RADIUS*y)
+    local angle = rot - _ANGLE*k
+    local x,y = cos(angle), -sin(angle)
     local size = (i == self.current) and (1 - abs(switch)/2) or 0.5
-    local fade = max(0, min(1, (3 - abs(k))/3))
+    local fade = max(0, min(1, 1 - abs(angle)/(pi*0.6)))
+    g.push()
+    g.translate(_RADIUS*x, _RADIUS*y)
     g.setColor(80, 10, 50, enter*fade*100)
     g.circle("fill", 8, 8, 64*size)
     g.setColor(230, 180, 60, enter*fade*255)
