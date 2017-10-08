@@ -1,5 +1,6 @@
 
 local RES = require 'resources'
+local FONT = require 'view.helpers.font'
 
 -- CONSTANTS -------------------------------------------------------------------
 
@@ -7,7 +8,14 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'primary', 'widget', 'playcard', 'drawhand', 'openpack', 'wait'
+  'interact', 'primary', 'widget', 'playcard', 'drawhand', 'openpack', 'wait',
+  interact = "Interact",
+  primary = "Primary Arte",
+  widget = "Use Widget",
+  playcard = "Play Card",
+  drawhand = "Draw New Hand",
+  openpack = "Open Card Pack",
+  wait = "Wait"
 }
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
@@ -26,9 +34,33 @@ function ActionMenu:init()
   self.current = 1
   self.enter = 0
   self.switch = 0
-  self.tween = nil
+  self.switch_tween = nil
+  self.text = 0
+  self.text_tween = nil
   _W, _H = love.graphics.getDimensions()
 
+end
+
+function ActionMenu:showLabel()
+  local len = #_ACTIONS[_ACTIONS[self.current]]
+  self.text = 0
+  if self.text_tween then
+    MAIN_TIMER:cancel(self.text_tween)
+  end
+  self.text_tween = MAIN_TIMER:tween(
+    0.03 * len, self, { text = len+1 }, 'linear',
+    function () self.text_tween = nil end
+  )
+end
+
+function ActionMenu:hideLabel()
+  if self.text_tween then
+    MAIN_TIMER:cancel(self.text_tween)
+  end
+  self.text_tween = MAIN_TIMER:tween(
+    0.01 * self.text, self, { text = 0 }, 'linear',
+    function () self.text_tween = nil end
+  )
 end
 
 function ActionMenu:moveFocus(dir)
@@ -40,11 +72,14 @@ function ActionMenu:moveFocus(dir)
   end
   if last ~= self.current then
     self.switch = last - self.current
-    if self.tween then
-      MAIN_TIMER:cancel(self.tween)
+    if self.switch_tween then
+      MAIN_TIMER:cancel(self.switch_tween)
     end
-    self.tween = MAIN_TIMER:tween(0.3, self, { switch = 0 }, 'out-back',
-                                  function () self.tween = nil end)
+    self.switch_tween = MAIN_TIMER:tween(
+      0.3, self, { switch = 0 }, 'out-back',
+      function () self.switch_tween = nil end
+    )
+    self:showLabel()
   end
 end
 
@@ -59,10 +94,12 @@ end
 function ActionMenu:open(last_focus, after)
   self.current = last_focus or self.current
   MAIN_TIMER:tween(0.2, self, { enter = 1 }, 'out-circ', after)
+  self:showLabel()
 end
 
 function ActionMenu:close(after)
   MAIN_TIMER:tween(0.2, self, { enter = 0 }, 'out-circ', after)
+  self:hideLabel()
 end
 
 function ActionMenu:draw()
@@ -91,6 +128,13 @@ function ActionMenu:draw()
            256, 256)
     g.pop()
   end
+  g.push()
+  FONT.set('Text', 32)
+  g.translate(_RADIUS, 0)
+  g.setColor(255, 255, 255, 255)
+  local label = _ACTIONS[_ACTIONS[self.current]]
+  g.print(label:sub(1, self.text), 64, 64)
+  g.pop()
   g.pop()
 end
 
