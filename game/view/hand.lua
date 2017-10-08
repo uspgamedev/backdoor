@@ -12,8 +12,8 @@ local card_view = {
 }
 
 --CONSTS--
-local _f_name = "Text" --Font name
-local _f_size = 24 --Font size
+local _F_NAME = "Text" --Font name
+local _F_SIZE = 24 --Font size
 local _ACTION_TYPES = {
   'use', 'remember', 'consume'
 }
@@ -95,7 +95,7 @@ function HandView:draw()
   local x, y = self.x, self.y
   local gap = 150
   local g = love.graphics
-  FONT.set(_f_name,_f_size)
+  FONT.set(_F_NAME,_F_SIZE)
   for i, card in ipairs(self.hand) do
     _drawCard(card, x, y, i == self.focus_index)
     if i == self.focus_index then

@@ -10,6 +10,8 @@ local ActorView = Class{
 
 local _TILE_W = 8
 local _TILE_H = 8
+local _FONT_NAME = "Text"
+local _FONT_SIZE = 24
 
 local _initialized = false
 local _exptext, _statstext, _depthtext, _buffertext
@@ -22,8 +24,7 @@ local _tile_mesh
 local function _initGraphicValues()
   local g = love.graphics
   _width, _height = g.getDimensions()
-  _font = FONT.get("Text", 24)
-  _font:setLineHeight(1)
+  _font = FONT.get(_FONT_NAME, _FONT_SIZE)
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d"
   _depthtext = "DEPTH: %d"
@@ -82,7 +83,7 @@ function ActorView:draw()
   if not actor then return end
   local cr,cg,cb = unpack(COLORS.NEUTRAL)
 
-  FONT.set(_font)
+  _font:set()
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
     self:drawAttributes(g, actor)

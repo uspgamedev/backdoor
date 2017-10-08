@@ -10,14 +10,18 @@ local BufferPickerView = Class {
 }
 
 --CONSTS--
-local _f_name = "Text" --Font name
-local _f_size = 24 --Font size
-local _img = function () return RES.loadTexture("buffer-card") end
+local _F_NAME = "Text" --Font name
+local _F_SIZE = 24 --Font size
+local _BUFFER_TEXTURE = function () return RES.loadTexture("buffer-card") end
 
 --LOCAL FUNCTIOKNS DECLARATIONS--
 
-local expandArrows
-local closeArrows
+local _expandArrows
+local _closeArrows
+
+--LOCAL VARIABLES--
+
+local _font
 
 --CLASS FUNCTIONS--
 
@@ -36,12 +40,15 @@ function BufferPickerView:init(actor)
   self.secondary_buffer_x_mod = 0
   self.secondary_buffer_a = 0
 
-  --Arrows
-  self.right_arrow_x = O_WIN_W/2 + 120 - FONT.get(_f_name,_f_size):getWidth(">")
-  self.left_arrow_x = O_WIN_W/2 - 80
-  self.arrows_y = 3*O_WIN_H/4 + FONT.get(_f_name,_f_size):getHeight()/2
+  --Init font
+  _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
-  expandArrows(self)
+  --Arrows
+  self.right_arrow_x = O_WIN_W/2 + 120 - _font:getWidth(">")
+  self.left_arrow_x = O_WIN_W/2 - 80
+  self.arrows_y = 3*O_WIN_H/4 + _font:getHeight()/2
+
+  _expandArrows(self)
 
 end
 
@@ -52,40 +59,39 @@ function BufferPickerView:draw()
   local size = self.actor:getBufferSize(self.select)
 
   --Draw current selected buffer
-  local i_w, i_h = _img():getWidth(), _img():getHeight() -- Image width and height
+  local i_w, i_h = _BUFFER_TEXTURE():getWidth(), _BUFFER_TEXTURE():getHeight() -- Image width and height
   local i_s = 1 --Image scale
   local i_x, i_y = c_x-i_w/2*i_s + self.current_buffer_x_mod, c_y-i_h/2*i_s --Image position
   local i_r = 0 --Image rotation
   g.setColor(255, 255, 255, self.current_buffer_a)
   for i = 1, math.ceil(size/2) do
-    g.draw(_img(), i_x, i_y, i_r, i_s) --Draw image
+    g.draw(_BUFFER_TEXTURE(), i_x, i_y, i_r, i_s) --Draw image
     i_x, i_y = i_x + 10, i_y - 10
   end
 
   --Draw secondary selected buffer that's is fading away
   if self.is_changing_buffer then
     local size = self.actor:getBufferSize(self.secondary_select)
-    local i_w, i_h = _img():getWidth(), _img():getHeight() -- Image width and height
+    local i_w, i_h = _BUFFER_TEXTURE():getWidth(), _BUFFER_TEXTURE():getHeight() -- Image width and height
     local i_s = 1 --Image scale
     local i_x, i_y = c_x-i_w/2*i_s + self.secondary_buffer_x_mod, c_y-i_h/2*i_s --Image position
     local i_r = 0 --Image rotation
     g.setColor(255, 255, 255, self.secondary_buffer_a)
     for i = 1, math.ceil(size/2) do
-      g.draw(_img(), i_x, i_y, i_r, i_s) --Draw image
+      g.draw(_BUFFER_TEXTURE(), i_x, i_y, i_r, i_s) --Draw image
       i_x, i_y = i_x + 10, i_y - 10
     end
   end
 
   --Draw current buffer number and remaining cards
   g.setColor(255, 255, 200)
-  FONT.set(_f_name, _f_size)
+  _font:set()
   local back_buffer_size = self.actor:getBackBufferSize(self.select)
   g.printf(("%d (%2d) [%d]"):format(self.select, size, back_buffer_size),
            c_x-80, c_y + i_h/2 + 40, 200, "center")
 
   --Draw arrows
   g.setColor(239, 40, 103)
-  FONT.set(_f_name,_f_size)
   g.print(">", self.right_arrow_x, self.arrows_y)
   g.print("<", self.left_arrow_x, self.arrows_y)
 
@@ -147,7 +153,7 @@ end
 
 --LOCAL FUNCTIONS--
 
-function expandArrows(b)
+function _expandArrows(b)
   local mod_value = 10
 
   b:addTimer("arrow_effect", MAIN_TIMER, "tween",
@@ -157,11 +163,11 @@ function expandArrows(b)
                                                right_arrow_x = b.right_arrow_x + mod_value},
                                               'in-linear',
                                                function()
-                                                 closeArrows(b)
+                                                 _closeArrows(b)
                                                end)
 end
 
-function closeArrows(b)
+function _closeArrows(b)
   local mod_value = 10
 
   b:addTimer("arrow_effect", MAIN_TIMER, "tween",
@@ -171,7 +177,7 @@ function closeArrows(b)
                                                right_arrow_x = b.right_arrow_x - mod_value},
                                               'in-linear',
                                                function()
-                                                 expandArrows(b)
+                                                 _expandArrows(b)
                                                end)
 
 end

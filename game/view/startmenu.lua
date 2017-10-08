@@ -10,35 +10,35 @@ local StartMenuView = Class{
   __includes = { ELEMENT }
 }
 
-local TITLE_TEXT = "backdoor"
-local LH = 1.5
-local TILE_W, TILE_H = 80, 80
+local _TITLE_TEXT = "backdoor"
+local _LH = 1.5
+local _TILE_W, _TILE_H = 80, 80
 
-local SCROLL_THRESHOLD = 4
-local _title_font_size = 48
-local _menu_font_size = 24
+local _SCROLL_THRESHOLD = 4
+local _TITLE_FONT_SIZE = 48
+local _MENU_FONT_SIZE = 24
+
+
 local _menu_font, _title_font
-local WIDTH, HEIGHT
-
-
+local _width, _height
 
 local function _initFontValues()
   local g = love.graphics
-  _title_font = FONT.get("Title", _title_font_size)
-  _title_font:setLineHeight(LH)
-  _menu_font = FONT.get("Text", _menu_font_size)
-  _menu_font:setLineHeight(LH)
-  WIDTH, HEIGHT = g.getDimensions()
+  _title_font = _title_font or FONT.get("Title", _TITLE_FONT_SIZE)
+  _title_font:setLineHeight(_LH)
+  _menu_font = _menu_font or FONT.get("Text", _MENU_FONT_SIZE)
+  _menu_font:setLineHeight(_LH)
+  _width, _height = g.getDimensions()
 end
 
 
 local function _renderTitle()
   local g = love.graphics
   g.push()
-  g.translate(0, HEIGHT/4)
-  FONT.set(_title_font)
+  g.translate(0, _height/4)
+  _title_font:set()
   g.setColor(COLORS.NEUTRAL)
-  g.print(TITLE_TEXT, 0, 0)
+  g.print(_TITLE_TEXT, 0, 0)
   g.pop()
 end
 
@@ -46,20 +46,20 @@ end
 local function _renderOptions(q, selection, scrolltop)
   local g = love.graphics
   g.push()
-  g.translate(0, HEIGHT/2)
-  FONT.set(_menu_font)
+  g.translate(0, _height/2)
+  _menu_font:set()
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
     local color = COLORS.BACKGROUND
     count = count + 1
-    if count >= scrolltop and count < scrolltop + SCROLL_THRESHOLD then
+    if count >= scrolltop and count < scrolltop + _SCROLL_THRESHOLD then
       if selection == count then
         color = COLORS.NEUTRAL
       end
       g.setColor(color)
       g.print(item_text, 0, 0)
-      g.translate(0, LH*_menu_font_size)
+      g.translate(0, _menu_font:getHeight())
     end
   end
   g.pop()
@@ -89,8 +89,8 @@ function StartMenuView:setSelection(n)
   if n < self.scrolltop then
     self.scrolltop = n
   end
-  if n >= self.scrolltop + SCROLL_THRESHOLD then
-    self.scrolltop = n - SCROLL_THRESHOLD + 1
+  if n >= self.scrolltop + _SCROLL_THRESHOLD then
+    self.scrolltop = n - _SCROLL_THRESHOLD + 1
   end
   self.selection = n
 end
@@ -103,7 +103,7 @@ function StartMenuView:draw()
 
   g.push()
   g.setBackgroundColor(0, 0, 0)
-  g.translate(4*TILE_W, 0)
+  g.translate(4*_TILE_W, 0)
 
   _renderTitle()
   _renderOptions(q, self.selection, self.scrolltop)

@@ -12,8 +12,12 @@ local PackView = Class{
 }
 
 --CONSTS--
-local _f_name = "Text" --Font name
-local _f_size = 24 --Font size
+local _F_NAME = "Text" --Font name
+local _F_SIZE = 24 --Font size
+
+
+--LOCAL--
+local _font
 
 --CLASS FUNCTIONS--
 
@@ -29,6 +33,8 @@ function PackView:init(actor)
   for _,card_specname in actor:iteratePack() do
     table.insert(self.pack, { specname = card_specname })
   end
+
+  _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
 end
 
@@ -80,13 +86,13 @@ function PackView:draw()
     local card = DB.loadSpec('card', card_data.specname)
     local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
                                        #self.pack)
-    FONT.set(_f_name,_f_size)
+    _font:set()
     g.setColor(0x16, 0x16, 0x16, 0x80)
     g.rectangle("fill", x-16, y-16, 160, 160)
     g.setColor(COLORS.NEUTRAL)
     g.print(view, x, y)
     local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + FONT.get(_f_name,_f_size):getHeight())
+    g.print(("%s %d"):format(t, n), x, y + _font:getHeight())
   end
 end
 
