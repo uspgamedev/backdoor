@@ -1,8 +1,11 @@
 
-local DEFS = require 'lux.pack' 'domain.definitions'
+local DEFS_PACK = require 'lux.pack' 'domain.definitions'
+local DEFS = require 'domain.definitions'
 
 return {
   { id = 'name', name = "Name", type = 'string' },
+  { id = 'attr', name = "Type (attr)", type = 'enum',
+    options = DEFS.PRIMARY_ATTRIBUTES },
   {
     id = 'art', name = "Art",
     type = 'section',
@@ -18,7 +21,8 @@ return {
       {
         id = 'list', name = "Attribute Change", type = 'array',
         schema = {
-          { id = 'attr', name = "Attribute", type = 'enum', options = {"ATH", "ARC", "MEC", "SPD"} },
+          { id = 'attr', name = "Attribute", type = 'enum',
+            options = DEFS.ATTRIBUTES },
           { id = 'val', name = "Value", type = 'integer' },
         }
       },
@@ -31,11 +35,11 @@ return {
       { id = 'charges', name = "Charges", type = 'integer', range = {1} },
       {
         id = 'placement', name = "Placement", type = 'enum',
-        options = DEFS.placements, optional = true
+        options = DEFS_PACK.placements, optional = true
       },
       {
         id = 'expend_trigger', name = "Expend Trigger", type = 'enum',
-        options = DEFS.triggers
+        options = DEFS_PACK.triggers
       },
       {
         id = 'widget_action', name = "Action", type = 'enum',

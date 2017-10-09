@@ -1,5 +1,6 @@
 {
-  "name":"Arcana +1",
+  "attr":"ARC",
+  "name":"ARC +1",
   "upgrade":{
     "list":[{
         "attr":"ARC",

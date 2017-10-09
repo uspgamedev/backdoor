@@ -15,6 +15,10 @@ function Card:getName()
   return self:getSpec('name')
 end
 
+function Card:getRelatedAttr()
+  return self:getSpec('attr')
+end
+
 function Card:isArt()
   return not not self:getSpec('art')
 end
