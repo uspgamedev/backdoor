@@ -2,11 +2,10 @@
 local DEFS_PACK = require 'lux.pack' 'domain.definitions'
 local DEFS = require 'domain.definitions'
 
-
 return {
   { id = 'name', name = "Name", type = 'string' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
-    options = DEFS.ATTRIBUTES},
+    options = DEFS.PRIMARY_ATTRIBUTES },
   {
     id = 'art', name = "Art",
     type = 'section',
