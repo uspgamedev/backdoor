@@ -26,12 +26,13 @@ function FONT.get(name, size)
     }, {
       __index = function(t, key)
         local self = _getFont(name, size)
-        if type(self[key]) == 'function' then
-          return function (_self, ...)
-            return self[key](self, ...)
+        local method = self[key]
+        if type(method) == 'function' then
+          return function (_, ...)
+            return method(self, ...)
           end
         else
-          return self[key]
+          return method
         end
       end
     }

@@ -1,8 +1,8 @@
 
-local DB    = require 'database'
-local RES   = require 'resources'
-local FONT = require 'view.helpers.font'
-local DEFS  = require 'domain.definitions'
+local DB     = require 'database'
+local RES    = require 'resources'
+local FONT   = require 'view.helpers.font'
+local DEFS   = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
 
 --PackView Class--
