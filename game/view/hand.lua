@@ -1,4 +1,7 @@
+
 local FONT = require 'view.helpers.font'
+local COLORS = require 'domain.definitions.colors'
+
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
@@ -7,16 +10,18 @@ local _drawCard
 --CARDVIEW PROPERTIES--
 
 local card_view = {
-  w = 130,
-  h = 200,
+  w = 90,
+  h = 150,
 }
 
 --CONSTS--
 local _F_NAME = "Text" --Font name
-local _F_SIZE = 24 --Font size
+local _F_SIZE = 21 --Font size
 local _ACTION_TYPES = {
   'use', 'remember', 'consume'
 }
+
+local _font
 
 --HandView Class--
 
@@ -36,6 +41,8 @@ function HandView:init(route)
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self:reset()
+
+  _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
 end
 
@@ -73,7 +80,7 @@ function HandView:activate()
   self:addTimer("start", MAIN_TIMER, "tween",
                                            0.2,
                                            self,
-                                           { y = self.initial_y - 200 },
+                                           { y = self.initial_y - card_view.h },
                                            'out-cubic')
 end
 
@@ -93,13 +100,14 @@ end
 
 function HandView:draw()
   local x, y = self.x, self.y
-  local gap = 150
+  local gap = card_view.w + 20
   local g = love.graphics
-  FONT.set(_F_NAME,_F_SIZE)
+  _font.set()
   for i, card in ipairs(self.hand) do
     _drawCard(card, x, y, i == self.focus_index)
     if i == self.focus_index then
-      g.print(self:getActionType(), x, y - 32)
+      g.setColor(COLORS.NEUTRAL)
+      g.print(self:getActionType(), x + 2, y - 1.5*_font:getHeight())
     end
     x = x + gap
   end
@@ -135,24 +143,32 @@ end
 
 --Draw a card starting its upper left corner on given x,y values
 function _drawCard(card, x, y, focused)
-  local g = love.graphics
   --Draw card background
+  local g = love.graphics
+  local cr, cg, cb = unpack(COLORS[card:getRelatedAttr()])
+  g.push()
+
+  g.translate(x, y)
+
   if focused then
-    g.setColor(244, 164, 66)
-  else
-    g.setColor(66, 134, 244)
+    g.scale(1.1)
+    g.translate(-0.05*card_view.w, -0.05*card_view.h)
+    cr, cg, cb = cr+80, cg+80, cb+80
   end
-  g.rectangle("fill", x, y, card_view.w, card_view.h)
-  g.setColor(0,0,0)
-  local old_line_w = g.getLineWidth()
-  g.setLineWidth(3)
-  g.rectangle("line", x, y, card_view.w, card_view.h)
-  g.setLineWidth(old_line_w)
+  --shadow
+  g.setColor(0, 0, 0, 0x80)
+  g.rectangle("fill", 4, 4, card_view.w, card_view.h)
+
+  --card
+  g.setColor(cr, cg, cb)
+  g.rectangle("fill", 0, 0, card_view.w, card_view.h)
 
   --Draw card info
-  g.setColor(0, 0, 0)
-  g.print(card:getName(), x + 5, y + 5)
+  local pd = 8
+  g.setColor(0x20, 0x20, 0x20)
+  g.printf(card:getName(), pd, pd, card_view.w-pd, "left")
 
+  g.pop()
 end
 
 return HandView
