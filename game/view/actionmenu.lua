@@ -39,7 +39,6 @@ function ActionMenu:init()
   self.current = 1
   self.enter = 0
   self.switch = 0
-  self.switch_tween = nil
   self.text = 0
   _W, _H = love.graphics.getDimensions()
 
