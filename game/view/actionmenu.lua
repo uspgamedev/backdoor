@@ -17,6 +17,11 @@ local _ACTIONS = {
   openpack = "Open Card Pack",
   wait = "Wait"
 }
+local _TWEEN = {
+  OPEN_CLOSE = "__OPEN_CLOSE__",
+  TEXT = "__TEXT__",
+  SWITCH = "__SWITCH__",
+}
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
 
@@ -36,7 +41,6 @@ function ActionMenu:init()
   self.switch = 0
   self.switch_tween = nil
   self.text = 0
-  self.text_tween = nil
   _W, _H = love.graphics.getDimensions()
 
 end
@@ -44,23 +48,15 @@ end
 function ActionMenu:showLabel()
   local len = #_ACTIONS[_ACTIONS[self.current]]
   self.text = 0
-  if self.text_tween then
-    MAIN_TIMER:cancel(self.text_tween)
-  end
-  self.text_tween = MAIN_TIMER:tween(
-    0.03 * len, self, { text = len+1 }, 'linear',
-    function () self.text_tween = nil end
-  )
+  self:removeTimer(_TWEEN.TEXT, MAIN_TIMER)
+  self:addTimer(_TWEEN.TEXT, MAIN_TIMER, "tween",
+    0.03 * len, self, { text = len+1 }, 'linear')
 end
 
 function ActionMenu:hideLabel()
-  if self.text_tween then
-    MAIN_TIMER:cancel(self.text_tween)
-  end
-  self.text_tween = MAIN_TIMER:tween(
-    0.01 * self.text, self, { text = 0 }, 'linear',
-    function () self.text_tween = nil end
-  )
+  self:removeTimer(_TWEEN.TEXT, MAIN_TIMER)
+  self:addTimer(_TWEEN.TEXT, MAIN_TIMER, "tween",
+    0.01 * self.text, self, { text = 0 }, 'linear')
 end
 
 function ActionMenu:moveFocus(dir)
@@ -72,13 +68,9 @@ function ActionMenu:moveFocus(dir)
   end
   if last ~= self.current then
     self.switch = last - self.current
-    if self.switch_tween then
-      MAIN_TIMER:cancel(self.switch_tween)
-    end
-    self.switch_tween = MAIN_TIMER:tween(
-      0.3, self, { switch = 0 }, 'out-back',
-      function () self.switch_tween = nil end
-    )
+    self:removeTimer(_TWEEN.SWITCH, MAIN_TIMER)
+    self:addTimer(_TWEEN.SWITCH, MAIN_TIMER, "tween",
+                  0.3, self, { switch = 0 }, 'out-back')
     self:showLabel()
   end
 end
@@ -91,14 +83,20 @@ function ActionMenu:getSelected()
   return _ACTIONS[self.current]
 end
 
-function ActionMenu:open(last_focus, after)
+function ActionMenu:open(last_focus)
+  self.invisible = false
   self.current = last_focus or self.current
-  MAIN_TIMER:tween(0.2, self, { enter = 1 }, 'out-circ', after)
+  self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
+  self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
+                0.2, self, { enter = 1 }, 'out-circ')
   self:showLabel()
 end
 
-function ActionMenu:close(after)
-  MAIN_TIMER:tween(0.2, self, { enter = 0 }, 'out-circ', after)
+function ActionMenu:close()
+  self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
+  self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
+                0.2, self, { enter = 0 }, 'out-circ',
+                function() self.invisible = true end)
   self:hideLabel()
 end
 
@@ -132,7 +130,7 @@ function ActionMenu:draw()
   g.push()
   FONT.set('Text', 32)
   g.translate(_RADIUS, 0)
-  g.setColor(255, 255, 255, 255)
+  g.setColor(255, 255, 255, enter*255)
   local label = _ACTIONS[_ACTIONS[self.current]]
   g.print(label:sub(1, self.text), 64, 64)
   g.pop()
