@@ -76,6 +76,8 @@ end
 function Body:takeDamage(amount)
   local defroll = RANDOM.rollDice(self:getDef(), self:getDefDie())
   local dmg = math.max(math.min(1, amount), amount - defroll)
+  -- this calculus above makes values below the minimum stay below the minimum
+  -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
 end
 

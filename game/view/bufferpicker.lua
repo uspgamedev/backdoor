@@ -1,6 +1,7 @@
 
 local RES = require 'resources'
 local FONT = require 'view.helpers.font'
+local TEX = require 'view.helpers.texture'
 local DIR = require 'domain.definitions.dir'
 
 --BufferPickerView Class--
@@ -12,7 +13,7 @@ local BufferPickerView = Class {
 --CONSTS--
 local _F_NAME = "Text" --Font name
 local _F_SIZE = 24 --Font size
-local _BUFFER_TEXTURE = function () return RES.loadTexture("buffer-card") end
+local _BUFFER_TEXTURE = TEX.get("buffer-card")
 
 --LOCAL FUNCTIOKNS DECLARATIONS--
 
@@ -59,26 +60,26 @@ function BufferPickerView:draw()
   local size = self.actor:getBufferSize(self.select)
 
   --Draw current selected buffer
-  local i_w, i_h = _BUFFER_TEXTURE():getWidth(), _BUFFER_TEXTURE():getHeight() -- Image width and height
+  local i_w, i_h = _BUFFER_TEXTURE:getDimensions() -- Image width and height
   local i_s = 1 --Image scale
   local i_x, i_y = c_x-i_w/2*i_s + self.current_buffer_x_mod, c_y-i_h/2*i_s --Image position
   local i_r = 0 --Image rotation
   g.setColor(255, 255, 255, self.current_buffer_a)
   for i = 1, math.ceil(size/2) do
-    g.draw(_BUFFER_TEXTURE(), i_x, i_y, i_r, i_s) --Draw image
+    _BUFFER_TEXTURE:draw(i_x, i_y, i_r, i_s) --Draw image
     i_x, i_y = i_x + 10, i_y - 10
   end
 
   --Draw secondary selected buffer that's is fading away
   if self.is_changing_buffer then
     local size = self.actor:getBufferSize(self.secondary_select)
-    local i_w, i_h = _BUFFER_TEXTURE():getWidth(), _BUFFER_TEXTURE():getHeight() -- Image width and height
+    local i_w, i_h = _BUFFER_TEXTURE:getDimensions() -- Image width and height
     local i_s = 1 --Image scale
     local i_x, i_y = c_x-i_w/2*i_s + self.secondary_buffer_x_mod, c_y-i_h/2*i_s --Image position
     local i_r = 0 --Image rotation
     g.setColor(255, 255, 255, self.secondary_buffer_a)
     for i = 1, math.ceil(size/2) do
-      g.draw(_BUFFER_TEXTURE(), i_x, i_y, i_r, i_s) --Draw image
+      _BUFFER_TEXTURE:draw(i_x, i_y, i_r, i_s) --Draw image
       i_x, i_y = i_x + 10, i_y - 10
     end
   end

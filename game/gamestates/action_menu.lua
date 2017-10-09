@@ -18,7 +18,8 @@ local SIGNALS = {
   PRESS_UP = {"move_focus", "up"},
   PRESS_DOWN = {"move_focus", "down"},
   PRESS_CONFIRM = {"confirm"},
-  PRESS_CANCEL = {"cancel"}
+  PRESS_CANCEL = {"cancel"},
+  PRESS_EXTRA = {"cancel"},
 }
 
 --[[ LOCAL FUNCTIONS DECLARATIONS ]]--
@@ -33,29 +34,22 @@ local function _moveFocus(dir)
 end
 
 local function _confirm()
-  _menu_view:close(
-    function()
-      _last_focus = _menu_view:getCurrentFocus()
-      SWITCHER.pop({ action = _menu_view:getSelected() })
-    end
-  )
-  _unregisterSignals()
+  _last_focus = _menu_view:getCurrentFocus()
+  _menu_view:close()
+  SWITCHER.pop({ action = _menu_view:getSelected() })
 end
 
 local function _cancel()
-  _menu_view:close(
-    function()
-      _last_focus = _menu_view:getCurrentFocus()
-      SWITCHER.pop({})
-    end
-  )
-  _unregisterSignals()
+  _last_focus = _menu_view:getCurrentFocus()
+  _menu_view:close()
+  SWITCHER.pop({})
 end
 
 function _registerSignals()
   Signal.register("move_focus", _moveFocus)
   Signal.register("confirm", _confirm)
   Signal.register("cancel", _cancel)
+  _previous_control_map = CONTROL.getMap()
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -75,29 +69,20 @@ function state:init()
       Signal.emit(unpack(signal_pack))
     end
   end
+  _menu_view = ActionMenuView()
+  _menu_view:addElement('HUD')
 end
 
 function state:enter(_, route)
 
-  _menu_view = ActionMenuView()
-  _menu_view:addElement('HUD')
-  _menu_view:open(
-    _last_focus,
-    function ()
-      _registerSignals()
-
-      _previous_control_map = CONTROL.getMap()
-      CONTROL.setMap(_mapped_signals)
-    end
-  )
+  _menu_view:open(_last_focus)
+  _registerSignals()
 
 end
 
 function state:leave()
 
-  _menu_view:kill()
-  _menu_view = nil
-
+  _unregisterSignals()
   Util.destroyAll()
 
 end
@@ -114,7 +99,7 @@ end
 
 function state:draw()
 
-    Draw.allTables()
+  Draw.allTables()
 
 end
 
