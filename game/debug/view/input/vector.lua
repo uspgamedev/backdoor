@@ -13,6 +13,7 @@ local signature_mt = {
 function inputs.vector(spec, key)
 
   local vector = spec[key.id] or {}
+  spec[key.id] = vector
   local selected = nil
   local size = key.size
   local range = key.range
@@ -21,6 +22,7 @@ function inputs.vector(spec, key)
                                  signature_mt)
   local subschemas = {}
   for i=1, size do
+    vector[i] = vector[i] or 0
     local subkey = {
       id = i,
       name = signature[i],
@@ -31,7 +33,7 @@ function inputs.vector(spec, key)
   local function check_range(new)
     if range then
       new = math.max(range[1],
-        range[2] and math.min(range[2], new) or new)
+                     range[2] and math.min(range[2], new) or new)
     end
     return new
   end
