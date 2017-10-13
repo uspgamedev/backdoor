@@ -5,6 +5,7 @@ local HSV         = require 'common.color'.hsv
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
+local TEX         = require 'view.helpers.texture'
 local Queue       = require "lux.common.Queue"
 
 local _TILE_W = 80
@@ -45,8 +46,7 @@ local function _initDrawables()
   local g = love.graphics
 
   _tileset = RES.loadTileSet("demo")
-  _texture = _tileset.texture
-  _texture:setFilter("nearest", "nearest")
+  _texture = RES.loadTexture(_tileset.texture)
 
   _tile_offset = _tileset.offsets
   _tile_quads = _tileset.quads

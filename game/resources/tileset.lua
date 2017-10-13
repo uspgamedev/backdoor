@@ -17,7 +17,7 @@ local function _initTileset(info, texture)
     end
   end
   return {
-    texture = texture,
+    texture = info.texture,
     quads = quads,
     offsets = offsets,
   }

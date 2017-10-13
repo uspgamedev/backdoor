@@ -73,6 +73,7 @@ function love.load(arg)
   -- Gamestate.registerEvents() so it will properly call the draw function
   -- applying translations.
   Res.init()
+  love.graphics.setDefaultFilter("nearest", "nearest")
 
   require 'tests'
 
