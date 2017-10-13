@@ -89,7 +89,7 @@ end
 
 local function _save(cache, basepath)
   -- check whether we are saving a group of files or a file
-  if getmetatable(cache).group then
+  if not getmetatable(cache).is_leaf then
     -- save group
     for group, subcache in pairs(cache) do
       local meta = getmetatable(subcache) or {}
@@ -126,9 +126,12 @@ function _listItemsIn(category, group_name)
   return pairs(found)
 end
 
-local function _metaSpec(container)
+local function _metaSpec(spec, container, name)
+  local path = ("%s/%s"):format(getmetatable(container).relpath, name)
   return {
     is_leaf = true,
+    relpath = path,
+    group = name,
     __index = function(self, key)
       local extends = rawget(self, "extends")
       if extends then
@@ -155,14 +158,14 @@ local function _get(self, key)
   local filepath = path..".json"
   if fs.exists(filepath) then
     obj = _loadFile(filepath)
-    DB.initSpec(obj, self)
+    DB.initSpec(obj, self, meta.group)
     self[key] = obj
     return obj
   end
 end
 
-function DB.initSpec(spec, container)
-  return setmetatable(spec, _metaSpec(container))
+function DB.initSpec(spec, container, name)
+  return setmetatable(spec, _metaSpec(spec, container, name))
 end
 
 function DB.subschemaTypes(base)

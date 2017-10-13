@@ -13,6 +13,7 @@ return function(spec, group_name, title, delete, rename, parent)
   end
 
   return title .. " Editor", 2, function(self)
+    IMGUI.Text(("%s"):format(getmetatable(spec).relpath))
     for i,input in ipairs(inputs) do
       local pop = 0
       local keyid = keys[i].id
@@ -34,6 +35,9 @@ return function(spec, group_name, title, delete, rename, parent)
     end
     IMGUI.Spacing()
     IMGUI.Indent(360)
+    if IMGUI.Button("Save") then
+      DB.save(spec)
+    end
     if rename and IMGUI.Button("Rename") then
       self:push('name_input', title, rename)
       IMGUI.SameLine()

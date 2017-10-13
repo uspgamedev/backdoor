@@ -49,8 +49,11 @@ function inputs.vector(spec, key)
       IMGUI.PopID()
       if changed then vector[i] = check_range(new) end
       if i % 2 == 0 then IMGUI.NextColumn() end
+      if i % 4 == 0 then IMGUI.Spacing() end
     end
     IMGUI.Columns(1)
+    IMGUI.Spacing()
+    IMGUI.Spacing()
   end
 end
 
