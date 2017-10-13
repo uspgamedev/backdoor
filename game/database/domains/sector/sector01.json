@@ -11,6 +11,9 @@
       },{
         "actorspec":"strong",
         "bodyspec":"hearthborn"
+      },{
+        "actorspec":"strong",
+        "bodyspec":"corgi"
       }],
     "min":10
   },
