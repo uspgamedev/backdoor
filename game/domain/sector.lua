@@ -115,6 +115,10 @@ function Sector:getDimensions()
   return self.w, self.h
 end
 
+function Sector:getTileSet()
+  return self:getSpec('bootstrap').tileset
+end
+
 function Sector:generate(register)
 
   -- load sector's specs
