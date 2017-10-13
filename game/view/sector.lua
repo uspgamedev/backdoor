@@ -42,20 +42,6 @@ local function _moveCamera(target)
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
-local function _initDrawables()
-  local g = love.graphics
-
-  _tileset = RES.loadTileSet("demo")
-  _texture = RES.loadTexture(_tileset.texture)
-
-  _tile_offset = _tileset.offsets
-  _tile_quads = _tileset.quads
-
-  _batch = g.newSpriteBatch(_texture, 512, "stream")
-  _flat_batch = g.newSpriteBatch(_texture, 512, "stream")
-  _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
-  --FIXME: Get tile info from resource cache or something
-end
 
 local function _isInFrame(i, j)
   local cx, cy = CAM:position()
@@ -79,9 +65,25 @@ function SectorView:init(route)
 
   self.route = route
   self.body_sprites = {}
+  self.sector = false
 
-  _initDrawables()
+end
 
+function SectorView:initSector(sector)
+  if sector and sector ~= self.sector then
+    local g = love.graphics
+    self.sector = sector
+
+    _tileset = RES.loadTileSet(sector:getTileSet())
+    _texture = RES.loadTexture(_tileset.texture)
+
+    _tile_offset = _tileset.offsets
+    _tile_quads = _tileset.quads
+
+    _flat_batch = g.newSpriteBatch(_texture, 512, "stream")
+    _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
+    --FIXME: Get tile info from resource cache or something
+  end
 end
 
 function SectorView:hasPendingVFX()
@@ -104,8 +106,10 @@ function SectorView:addVFX(extra)
 end
 
 function SectorView:draw()
-  local sector = self.route.getCurrentSector()
   local g = love.graphics
+  local sector = self.route.getCurrentSector()
+  self:initSector(sector)
+  if not self.sector then return end
   if self.target then
     _moveCamera(self.target)
   end
