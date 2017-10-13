@@ -7,19 +7,24 @@ local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
 local Queue       = require "lux.common.Queue"
 
-local TILE_W = 80
-local TILE_H = 80
-local HALF_W = 10
-local HALF_H = 6
+local _TILE_W = 80
+local _TILE_H = 80
+local _HALF_W = 10
+local _HALF_H = 6
 
-local HEALTHBAR_WIDTH = 64
-local HEALTHBAR_HEIGHT = 8
+local _HEALTHBAR_WIDTH = 64
+local _HEALTHBAR_HEIGHT = 8
 
 local _texture
 local _tile_offset
 local _tile_quads
 local _batch
+local _flat_batch
+local _tall_batch
+local _tileset
 local _cursor_sprite
+
+
 local _isInCone
 
 local Cursor
@@ -31,36 +36,35 @@ local SectorView = Class{
 local function _moveCamera(target)
   local x, y = CAM:position()
   local i, j = target:getPos()
-  local tx, ty = (j-0.5)*TILE_W, (i-0.5)*TILE_H
+  local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
   local smooth = 1/12
   CAM:move((tx - x)*smooth,(ty - y)*smooth)
 end
 
 local function _initDrawables()
-
-  -- FIXME: Tiles are not gotten from DB right now
   local g = love.graphics
 
-  _texture = RES.loadTexture("bare-tiles")
+  _tileset = RES.loadTileSet("demo")
+  _texture = _tileset.texture
   _texture:setFilter("nearest", "nearest")
-  local tw, th = _texture:getDimensions()
 
-  _tile_offset = {
-    [SCHEMATICS.FLOOR] = {},
-    [SCHEMATICS.EXIT]  = {},
-    [SCHEMATICS.WALL]  = {0, 60},
-  }
-
-  _tile_quads = {
-    [SCHEMATICS.FLOOR] = g.newQuad(0, 0, TILE_W, TILE_H, tw, th),
-    [SCHEMATICS.EXIT] = g.newQuad(80, 0, TILE_W, TILE_H, tw, th),
-    [SCHEMATICS.WALL] = g.newQuad(240, 0, TILE_W, 140, tw, th),
-    shade = g.newQuad(160, 0, TILE_W, TILE_H, tw, th),
-  }
+  _tile_offset = _tileset.offsets
+  _tile_quads = _tileset.quads
 
   _batch = g.newSpriteBatch(_texture, 512, "stream")
+  _flat_batch = g.newSpriteBatch(_texture, 512, "stream")
+  _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
   --FIXME: Get tile info from resource cache or something
+end
 
+local function _isInFrame(i, j)
+  local cx, cy = CAM:position()
+  cx = cx / _TILE_W
+  cy = cy / _TILE_H
+  return     j >= cx - _HALF_W
+         and j <= cx + _HALF_W
+         and i >= cy - _HALF_H
+         and i <= cy + _HALF_H
 end
 
 function SectorView:init(route)
@@ -105,50 +109,59 @@ function SectorView:draw()
   if self.target then
     _moveCamera(self.target)
   end
-  local cx, cy = CAM:position()
-  cx = cx / TILE_W
-  cy = cy / TILE_H
   g.setBackgroundColor(75, 78, 60, 255)
   g.setColor(COLORS.NEUTRAL)
   g.push()
+
+  -- draw flat tiles
+  _flat_batch:clear()
+  for i = 0, sector.h-1 do
+    for j = 0, sector.w-1 do
+      local tile = sector.tiles[i+1][j+1]
+      if _isInFrame(i, j) and tile and tile.type ~= SCHEMATICS.WALL then
+        local x, y = j*_TILE_W, i*_TILE_H
+        _flat_batch:add(_tile_quads[tile.type], x, y,
+                        0, 1, 1, unpack(_tile_offset[tile.type]))
+      end
+    end
+  end
+  g.draw(_flat_batch, 0, 0)
+
+  -- draw tall things
   for i = 0, sector.h-1 do
     local draw_bodies = {}
     local highlights = {}
-    _batch:clear()
+    _tall_batch:clear()
     for j = 0, sector.w-1 do
-      if j >= cx - HALF_W and j <= cx + HALF_W and
-        i >= cy - HALF_H and i <= cy + HALF_H then
-        local tile = sector.tiles[i+1][j+1]
-        if tile then
-          -- Add tiles to spritebatch
-          local body = sector.bodies[i+1][j+1]
-          local x = j*TILE_W
-          if tile.type ~= SCHEMATICS.WALL then
-            if self.cursor and self.cursor.range_checker(i+1, j+1) then
-              table.insert(highlights, {x, 0, TILE_W, TILE_H, {100, 200, 200}})
-            end
-            if self.cursor and self.cursor.validator(i+1, j+1) then
-              table.insert(highlights, {x, 0, TILE_W, TILE_H, {200, 200, 100}})
-            end
-            if body then
-              table.insert(draw_bodies, {body, x, 0})
-            end
+      local tile = sector.tiles[i+1][j+1]
+      if _isInFrame(i, j) and tile then
+        -- Add tiles to spritebatch
+        local body = sector.bodies[i+1][j+1]
+        local x = j*_TILE_W
+        if tile.type == SCHEMATICS.WALL then
+          _tall_batch:add(_tile_quads[tile.type], x, 0,
+                          0, 1, 1, unpack(_tile_offset[tile.type]))
+        elseif self.cursor then
+          if self.cursor.range_checker(i+1, j+1) then
+            table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {100, 200, 200, 100}})
           end
-          _batch:add(_tile_quads[tile.type], x, 0,
-                    0, 1, 1, unpack(_tile_offset[tile.type]))
-          _batch:add(_tile_quads.shade, x, TILE_H)
+          if self.cursor.validator(i+1, j+1) then
+            table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {200, 200, 100, 100}})
+          end
+        end
+        if body then
+          table.insert(draw_bodies, {body, x, 0})
         end
       end
     end
 
     -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
-    g.draw(_batch, 0, 0)
+    g.draw(_tall_batch, 0, 0)
 
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
       local x,y,w,h,color = unpack(highlight)
-      color[4] = 100
       g.setColor(color)
       g.rectangle('fill', x, y, w, h)
     end
@@ -157,7 +170,7 @@ function SectorView:draw()
     if self.cursor then
       local c_i, c_j = self:getCursorPos()
       if c_i == i+1 then
-        local x = (c_j-1)*TILE_W
+        local x = (c_j-1)*_TILE_W
         _cursor_sprite = _cursor_sprite or RES.loadSprite("cursor")
         g.push()
         g.translate(x, 0)
@@ -181,7 +194,7 @@ function SectorView:draw()
         self.body_sprites[id] = draw_sprite
       end
       local di, dj = unpack(self.vfx.offset[body] or {0,0})
-      local dx, dy = dj*TILE_W, di*TILE_H
+      local dx, dy = dj*_TILE_W, di*_TILE_H
       x, y = x+dx, y+dy
       g.push()
       g.setColor(COLORS.NEUTRAL)
@@ -189,15 +202,15 @@ function SectorView:draw()
       g.translate(x, dy)
       local hp_percent = body:getHP()/body:getMaxHP()
       g.setColor(0, 20, 0)
-      g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48, HEALTHBAR_WIDTH,
-                  HEALTHBAR_HEIGHT)
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48, _HEALTHBAR_WIDTH,
+                  _HEALTHBAR_HEIGHT)
       local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
       g.setColor(HSV(unpack(hsvcol)))
-      g.rectangle("fill", (TILE_W - HEALTHBAR_WIDTH)/2, -48,
-                  hp_percent*HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
       g.pop()
     end
-    g.translate(0, TILE_H)
+    g.translate(0, _TILE_H)
   end
   g.pop()
 end
