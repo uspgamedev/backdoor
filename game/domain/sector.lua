@@ -327,6 +327,14 @@ function Sector:iterateActors()
   return ipairs(self.actors)
 end
 
+function Sector:getActorFromBody(body)
+  for _,actor in self:iterateActors() do
+    if actor:getBody() == body then
+      return actor
+    end
+  end
+end
+
 function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
 end

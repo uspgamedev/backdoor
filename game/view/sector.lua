@@ -5,7 +5,7 @@ local HSV         = require 'common.color'.hsv
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
-local TEX         = require 'view.helpers.texture'
+local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 
 local _TILE_W = 80
@@ -19,12 +19,11 @@ local _HEALTHBAR_HEIGHT = 8
 local _texture
 local _tile_offset
 local _tile_quads
-local _batch
 local _flat_batch
 local _tall_batch
 local _tileset
 local _cursor_sprite
-
+local _font
 
 local _isInCone
 
@@ -66,6 +65,8 @@ function SectorView:init(route)
   self.route = route
   self.body_sprites = {}
   self.sector = false
+
+  _font = _font or FONT.get("Text", 16)
 
 end
 
@@ -179,6 +180,17 @@ function SectorView:draw()
         g.push()
         g.translate(x, 0)
         if self.cursor.validator(c_i, c_j) then
+          -- NAME
+          local body = sector:getBodyAt(c_i, c_j)
+          if body then
+            local name = body:getSpec('name')
+            local actor = sector:getActorFromBody(body)
+            if actor then name = ("%s %s"):format(actor:getSpec('name'), name) end
+            _font.set()
+            _font:setLineHeight(.8)
+            g.setColor(COLORS.NEUTRAL)
+            g.printf(name, -0.5*_TILE_W, -_TILE_H, 2*_TILE_W, "center")
+          end
           g.setColor(COLORS.NEUTRAL)
         else
           g.setColor(255, 50, 50)
@@ -203,6 +215,8 @@ function SectorView:draw()
       g.push()
       g.setColor(COLORS.NEUTRAL)
       draw_sprite(x, dy)
+
+      -- HP
       g.translate(x, dy)
       local hp_percent = body:getHP()/body:getMaxHP()
       g.setColor(0, 20, 0)
