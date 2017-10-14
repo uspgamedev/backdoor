@@ -1,0 +1,7 @@
+{
+  "extends":"strong",
+  "buf_qnt":1,
+  "ath":12,
+  "name":"Newbie Killer",
+  "description":"The newbie's nightmares..."
+}

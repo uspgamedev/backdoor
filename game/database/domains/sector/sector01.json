@@ -11,6 +11,9 @@
       },{
         "actorspec":"strong",
         "bodyspec":"hearthborn"
+      },{
+        "actorspec":"newbieslayer",
+        "bodyspec":"rewasvat"
       }],
     "min":10
   },
@@ -19,48 +22,14 @@
     "minw":3,
     "rmar":1,
     "tries":256,
-    "count":24,
     "maxh":9,
+    "count":24,
     "maxw":9
   },
   "holes":false,
   "maze":{
     "double":false
   },
-  "transformers":[{
-      "w":40,
-      "typename":"bootstrap",
-      "h":40,
-      "mh":2,
-      "mw":2
-    },{
-      "minh":3,
-      "typename":"rooms",
-      "minw":3,
-      "tries":256,
-      "count":24,
-      "maxh":9,
-      "maxw":9
-    },{
-      "typename":"maze"
-    },{
-      "typename":"connections",
-      "loops":24
-    },{
-      "amount":128,
-      "typename":"deadends"
-    },{
-      "typename":"exits",
-      "exits":[{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        },{
-          "target_specname":"sector01"
-        }]
-    }],
   "exits":{
     "distance":5,
     "exits":[{
@@ -75,9 +44,10 @@
     "threshold":2
   },
   "bootstrap":{
-    "mh":2,
-    "h":40,
     "w":40,
+    "mh":2,
+    "tileset":"demo",
+    "h":40,
     "mw":2
   },
   "deadends":{

@@ -115,6 +115,10 @@ function Sector:getDimensions()
   return self.w, self.h
 end
 
+function Sector:getTileSet()
+  return self:getSpec('bootstrap').tileset
+end
+
 function Sector:generate(register)
 
   -- load sector's specs
@@ -321,6 +325,14 @@ end
 
 function Sector:iterateActors()
   return ipairs(self.actors)
+end
+
+function Sector:getActorFromBody(body)
+  for _,actor in self:iterateActors() do
+    if actor:getBody() == body then
+      return actor
+    end
+  end
 end
 
 function Sector:getActorPos(actor)

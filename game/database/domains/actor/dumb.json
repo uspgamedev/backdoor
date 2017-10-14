@@ -2,10 +2,11 @@
   "ath":6,
   "behavior":"aggro",
   "mec":3,
-  "buf_qnt":2,
-  "collection":"adventurer",
-  "description":"Oh honey...",
-  "primary":"MELEE",
   "arc":3,
-  "spd":1
+  "collection":"adventurer",
+  "primary":"MELEE",
+  "spd":1,
+  "buf_qnt":2,
+  "name":"Dumb",
+  "description":"Oh honey..."
 }

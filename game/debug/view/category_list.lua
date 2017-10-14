@@ -29,7 +29,7 @@ return function(category_name, group_name, title)
   end
 
   local function newvalue(value, spec)
-    local new = spec or DB.initSpec({}, group)
+    local new = spec or DB.initSpec({}, group, value)
     for _,key in DB.schemaFor(group_name) do
       if key.type == 'list' then
         new[key.id] = new[key.id] or {}
@@ -47,6 +47,9 @@ return function(category_name, group_name, title)
 
   local function rename(value)
     local spec = group[list[selected]]
+    local meta = getmetatable(spec)
+    meta.relpath = meta.relpath:gsub(meta.group, value)
+    meta.group = value
     if spec then
       delete()
       newvalue(value, spec)

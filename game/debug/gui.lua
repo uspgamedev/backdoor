@@ -21,10 +21,11 @@ local DOMAINS = {
   action = "Action",
 }
 local RESOURCES = {
-  'font', 'texture', 'sprite',
+  'font', 'texture', 'sprite', 'tileset',
   font = "Font",
   texture = "Texture",
   sprite = "Animated Sprite",
+  tileset = "TileSet",
 }
 
 
