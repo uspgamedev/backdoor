@@ -2,6 +2,7 @@
 local DB          = require 'database'
 local RES         = require 'resources'
 local HSV         = require 'common.color'.hsv
+local math        = require 'common.math'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
@@ -33,12 +34,13 @@ local SectorView = Class{
   __includes = { ELEMENT }
 }
 
+
 local function _moveCamera(target)
   local x, y = CAM:position()
   local i, j = target:getPos()
   local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
   local smooth = 1/12
-  CAM:move((tx - x)*smooth,(ty - y)*smooth)
+  CAM:move(math.round((tx - x)*smooth), math.round((ty - y)*smooth))
 end
 
 
