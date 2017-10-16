@@ -8,7 +8,22 @@ local Card = Class{
 function Card:init(specname)
 
   GameElement.init(self, 'card', specname)
+  self.usages = 0
 
+end
+
+function Card:loadState(state)
+  self:setId(state.id)
+  self.specname = state.specname
+  self.usages = state.usages
+end
+
+function Card:saveState()
+  local state = {}
+  state.id = self:getId()
+  state.specname = self.specname
+  state.usages = self.usages
+  return state
 end
 
 function Card:getName()
@@ -55,8 +70,17 @@ function Card:getWidgetCharges()
   return self:getSpec('widget').charges
 end
 
-function Card:getWidgetTrigger()
-  return self:getSpec('widget').expend_trigger
+function Card:addUsages(n)
+  self.usages = self.usages + (n or 1)
+end
+
+function Card:getUsages()
+  return self.usages
+end
+
+function Card:isSpent()
+  local max = self:getWidgetCharges()
+  return max > 0 and self:getUsages() >= max
 end
 
 return Card
