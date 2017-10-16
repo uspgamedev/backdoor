@@ -80,7 +80,7 @@ end
 
 function Card:isSpent()
   local max = self:getWidgetCharges()
-  return max > 0 and self.usages >= max
+  return max > 0 and self:getUsages() >= max
 end
 
 return Card
