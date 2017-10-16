@@ -79,16 +79,11 @@ function Actor:loadState(state)
     table.insert(self.hand, card)
   end
   self.widgets = {}
-  for slot, card_info_state in pairs(state.widgets) do
-    if card_info_state then
-      local card = Card(card_info_state.card.specname)
-      card:loadState(card_info_state.card)
-      local card_info = {}
-      for k, data in pairs(card_info_state) do
-        card_info[k] = data
-      end
-      card_info.card = card
-      self.widgets[slot] = card_info
+  for slot, card_state in pairs(state.widgets) do
+    if card_state then
+      local card = Card(card_state.specname)
+      card:loadState(card_state)
+      self.widgets[slot] = card
     else
       self.widgets[slot] = false
     end
@@ -121,15 +116,10 @@ function Actor:saveState()
     table.insert(state.hand, card_state)
   end
   state.widgets = {}
-  for slot, card_info in pairs(self.widgets) do
-    if card_info then
-      local card_state = card_info.card:saveState()
-      local card_info_state = {}
-      for k, data in pairs(card_info) do
-        card_info_state[k] = data
-      end
-      card_info_state.card = card_state
-      state.widgets[slot] = card_info_state
+  for slot, card in pairs(self.widgets) do
+    if card then
+      local card_state = card:saveState()
+      state.widgets[slot] = card_state
     else
       state.widgets[slot] = false
     end
@@ -219,7 +209,7 @@ function Actor:isSlotOccupied(slot)
 end
 
 function Actor:clearSlot(slot)
-  local card = self.widgets[slot].card
+  local card = self.widgets[slot]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
   self.widgets[slot] = false
@@ -231,38 +221,20 @@ function Actor:setSlot(slot, card)
   end
   local placement = card:getWidgetPlacement()
   self:equip(placement)
-  self.widgets[slot] = {
-    card = card,
-    tick = DEFS.TIME_UNITS_PER_CHARGE,
-    spent = 0,
-  }
+  self.widgets[slot] = card
 end
 
 function Actor:getWidgetNameAt(slot)
-  local card_info = self.widgets[slot]
-  if card_info then
-    local card = card_info.card
-    return card:getName()
-  end
+  local card = self.widgets[slot]
+  if card then return card:getName() end
 end
 
-function Actor:degradeWidget(trigger, slot)
-  local card_info = self.widgets[slot]
-  if card_info then
-    local card = card_info.card
-    if card:getWidgetTrigger() == trigger then
-      if trigger == "on_tick" then
-        card_info.tick = card_info.tick - 1
-        if card_info.tick <= 0 then
-          card_info.spent = card_info.spent + 1
-          card_info.tick = DEFS.TIME_UNITS_PER_CHARGE
-        end
-      else
-        card_info.spent = card_info.spent + 1
-      end
-      if card_info.spent >= card:getWidgetCharges() then
-        self:clearSlot(slot)
-      end
+function Actor:spendWidget(slot)
+  local card = self.widgets[slot]
+  if card then
+    card:addUsages()
+    if card:isSpent() then
+      self:clearSlot(slot)
     end
   end
 end
@@ -300,7 +272,7 @@ function Actor:getAction(slot)
       return slot
     end
   elseif self.widgets[slot] then
-    return self.widgets[slot].card:getWidgetAction()
+    return self.widgets[slot]:getWidgetAction()
   elseif self:isCard(slot) then
     local card = self.hand[slot]
     if card then
@@ -442,9 +414,6 @@ end
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
-  for _,slot in pairs(DEFS.WIDGETS) do
-    self:degradeWidget("on_tick", slot)
-  end
 end
 
 function Actor:ready()
@@ -484,7 +453,7 @@ function Actor:makeAction(sector)
       if self:isCard(action_slot) then
         table.remove(self.hand, action_slot)
       elseif self:isWidget(action_slot) then
-        self:degradeWidget("on_use", action_slot)
+        self:spendWidget(action_slot)
       end
       if action then
         success = ACTION.run(action, self, sector, params)
