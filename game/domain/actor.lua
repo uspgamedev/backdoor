@@ -192,11 +192,15 @@ function Actor:isEquipped(place)
   return self.equipped[place]
 end
 
-function Actor:equip(place)
+function Actor:equip(place, slot)
   if not place then return end
-  assert(not self:isEquipped(place),
-         "Tried to equip widget in already used placement!")
-  self.equipped[place] = true
+  -- check if placement is being used
+  -- if it is, then remove card from that slot
+  -- FIXME: put card back on buffer
+  local equipped_slot = self:isEquipped(place)
+  if equipped_slot then self:clearSlot(equipped_slot) end
+  -- equip new thing on slot
+  self.equipped[place] = slot
 end
 
 function Actor:unequip(place)
@@ -220,7 +224,7 @@ function Actor:setSlot(slot, card)
     self:clearSlot(slot)
   end
   local placement = card:getWidgetPlacement()
-  self:equip(placement)
+  self:equip(placement, slot)
   self.widgets[slot] = card
 end
 
