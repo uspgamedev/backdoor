@@ -33,12 +33,15 @@ local SectorView = Class{
   __includes = { ELEMENT }
 }
 
+local floor = math.floor
+local function _round(n) return floor(n+.5) end
+
 local function _moveCamera(target)
   local x, y = CAM:position()
   local i, j = target:getPos()
   local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
   local smooth = 1/12
-  CAM:move((tx - x)*smooth,(ty - y)*smooth)
+  CAM:move(_round((tx - x)*smooth), _round((ty - y)*smooth))
 end
 
 
