@@ -122,7 +122,10 @@ function Actor:saveState()
   end
   state.buffer = {}
   for i,card in ipairs(self.buffer) do
-    local card_state = card:saveState()
+    local card_state = DEFS.DONE
+    if card ~= card_state then
+      card_state = card:saveState()
+    end
     state.buffer[i] = card_state
   end
   return state

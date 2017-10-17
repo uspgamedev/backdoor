@@ -64,42 +64,37 @@ local function _generatePlayerBodyData(idgenerator, species)
     specname = species,
     damage = 0,
     def_bonus = 0,
-    i = 1,
-    j = 3,
+    i = 3,
+    j = 5,
   }
 end
 
 local function _generateSectorsData(idgenerator, player_info)
   -- create first sector
   local sectors = {}
-  local t = {
-    type = SCHEMATICS.FLOOR,
-    unpack(COLORS.FLOOR1)
-  }
-  local r = {
-    type = SCHEMATICS.FLOOR,
-    unpack(COLORS.FLOOR2)
-  }
-  local e = {
-    type = SCHEMATICS.EXIT,
-    unpack(COLORS.EXIT)
-  }
+  local n = false
+  local f = {type = SCHEMATICS.FLOOR}
+  local e = {type = SCHEMATICS.EXIT}
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
-      { t, r, t, },
-      { r, e, r, },
-      { t, r, t, },
+      { n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, },
+      { n, n, f, f, f, n, n, },
+      { n, n, f, e, f, n, n, },
+      { n, n, f, f, f, n, n, },
+      { n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, },
     },
-    w = 3,
-    h = 3,
+    w = 7,
+    h = 7,
     depth = 0,
     bodies = {},
     actors = {},
     exits = {
       {
-        pos = {2, 2},
+        pos = {4, 4},
         target_specname = "sector01",
       },
     }

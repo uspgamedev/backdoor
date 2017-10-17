@@ -84,6 +84,7 @@ function ActorView:draw()
   local cr,cg,cb = unpack(COLORS.NEUTRAL)
 
   _font:set()
+  _font:setLineHeight(1)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
     self:drawAttributes(g, actor)
@@ -101,7 +102,7 @@ function ActorView:drawAttributes(g, actor)
   local spd = actor:getSPD()
   g.translate(40, 40)
   g.print(_statstext:format(ath, arc, mec, spd))
-  g.translate(0, 5*_font:getHeight())
+  g.translate(0, 5.5*_font:getHeight())
   g.print(_exptext:format(actor:getExp()), 0, 0)
   g.pop()
 end
@@ -118,7 +119,7 @@ end
 
 function ActorView:drawBuffers(g, actor)
   g.push()
-  g.translate(40, 40 + 6.5*_font:getHeight())
+  g.translate(40, 40 + 7*_font:getHeight())
   local buffer_size = actor:getBufferSize()
   local back_buffer_size = actor:getBackBufferSize()
   local str = _buffertext:format(buffer_size, back_buffer_size)
