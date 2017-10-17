@@ -32,6 +32,10 @@ function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
 
+function Card:isOneTimeOnly()
+  return self:isUpgrade() or self:getSpec('one_time')
+end
+
 function Card:isArt()
   return not not self:getSpec('art')
 end

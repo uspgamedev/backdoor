@@ -146,10 +146,6 @@ function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end
 
-function Actor:getBufferCount()
-  return self:getSpec('buf_qnt')
-end
-
 function Actor:getATH()
   return self:getSpec('ath') + self.upgrades.ATH
 end
@@ -187,7 +183,6 @@ function Actor:equip(place, slot)
   if not place then return end
   -- check if placement is being used
   -- if it is, then remove card from that slot
-  -- FIXME: put card back on buffer
   local equipped_slot = self:isEquipped(place)
   if equipped_slot then self:clearSlot(equipped_slot) end
   -- equip new thing on slot
@@ -207,6 +202,9 @@ function Actor:clearSlot(slot)
   local card = self.widgets[slot]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
+  if not card:isOneTimeOnly() then
+    self:addCardToBackbuffer(card)
+  end
   self.widgets[slot] = false
 end
 
@@ -433,7 +431,10 @@ function Actor:makeAction(sector)
         action = check
       end
       if self:isCard(action_slot) then
-        table.remove(self.hand, action_slot)
+        local card = table.remove(self.hand, action_slot)
+        if not card:isOneTimeOnly() and not card:isWidget() then
+          self:addCardToBackbuffer(card)
+        end
       elseif self:isWidget(action_slot) then
         self:spendWidget(action_slot)
       end
@@ -450,3 +451,4 @@ function Actor:spendTime(n)
 end
 
 return Actor
+
