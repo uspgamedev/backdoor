@@ -28,7 +28,7 @@ local function _initGraphicValues()
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d"
   _depthtext = "DEPTH: %d"
-  _buffertext = "BUFFER #%d: %d cards [%d remembered]"
+  _buffertext = "DECK: %d cards [%d in discard pile]"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
     [SCHEMATICS.WALL] = {200, 128, 50},
@@ -100,9 +100,9 @@ function ActorView:drawAttributes(g, actor)
   local mec = actor:getMEC()
   local spd = actor:getSPD()
   g.translate(40, 40)
-  g.print(_exptext:format(actor:getExp()), 0, 0)
-  g.translate(0, 1.5*_font:getHeight())
   g.print(_statstext:format(ath, arc, mec, spd))
+  g.translate(0, 5*_font:getHeight())
+  g.print(_exptext:format(actor:getExp()), 0, 0)
   g.pop()
 end
 
@@ -117,16 +117,12 @@ function ActorView:drawDepth(g)
 end
 
 function ActorView:drawBuffers(g, actor)
-  local buffer_count = actor:getBufferCount()
   g.push()
-  g.translate(160, 40)
-  for which = 1, buffer_count do
-    local buffer_size = actor:getBufferSize(which)
-    local back_buffer_size = actor:getBackBufferSize(which)
-    local str = _buffertext:format(which, buffer_size, back_buffer_size)
-    g.print(str, 0, 0)
-    g.translate(0, _font:getHeight()*_font:getLineHeight())
-  end
+  g.translate(40, 40 + 6.5*_font:getHeight())
+  local buffer_size = actor:getBufferSize()
+  local back_buffer_size = actor:getBackBufferSize()
+  local str = _buffertext:format(buffer_size, back_buffer_size)
+  g.print(str, 0, 0)
   g.pop()
 end
 

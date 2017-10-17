@@ -5,7 +5,7 @@ PARAM.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'none'
+PARAM.type = 'boolean'
 
 function PARAM.isValid(sector, actor, parameter, value)
   return actor:isHandEmpty()

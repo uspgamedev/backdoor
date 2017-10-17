@@ -120,21 +120,6 @@ local function _useAction(action_slot)
       else
         return false
       end
-    elseif param.typename == 'choose_buffer' then
-      _lockState()
-      SWITCHER.push(
-        GS.PICK_BUFFER, _route.getControlledActor(),
-        function (which_buffer)
-          return ACTION.validate('choose_buffer', current_sector,
-                                 controlled_actor, param, which_buffer)
-        end
-      )
-      local args = coroutine.yield(_task)
-      if args.picked_buffer then
-        params[param.output] = args.picked_buffer
-      else
-        return false
-      end
     elseif param.typename == "choose_widget_slot" then
       _lockState()
       SWITCHER.push(
@@ -272,7 +257,6 @@ function state:init()
 
   PARAMETER_STATES = {
     [GS.PICK_TARGET] = true,
-    [GS.PICK_BUFFER] = true,
     [GS.PICK_WIDGET_SLOT] = true,
   }
 
@@ -315,7 +299,7 @@ function state:resume(from, args)
     if args.chose_a_card then
       if args.action_type == 'use' then
         _startTask(_useCardByIndex, args.card_index, args.action_type)
-      elseif args.action_type == 'remember' then
+      elseif args.action_type == 'stash' then
         _next_action = { "RECALL_CARD", { card_index = args.card_index } }
       elseif args.action_type == 'consume' then
         _next_action = { "CONSUME_CARD", { card_index = args.card_index } }

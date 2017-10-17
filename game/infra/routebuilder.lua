@@ -7,25 +7,24 @@ local IDGenerator = require 'common.idgenerator'
 
 local ROUTEBUILDER = {}
 
-local function _simpleBuffer(n)
+local function _card(specname)
+  return {
+    specname = specname,
+    usages = 0,
+  }
+end
+
+local function _simpleBuffer()
   local buffer = {}
-  if n == 1 then
-    for i=1,4 do
-      table.insert(buffer, 'draw')
-      table.insert(buffer, 'bolt')
-      table.insert(buffer, 'cure')
-    end
-  elseif n == 2 then
-    for i=1,4 do
-      table.insert(buffer, 'sord')
-      table.insert(buffer, 'gun')
-    end
-  elseif n == 3 then
-    for i=1,4 do
-      table.insert(buffer, 'ath_1')
-      table.insert(buffer, 'arc_1')
-      table.insert(buffer, 'mec_1')
-    end
+  for i=1,4 do
+    table.insert(buffer, _card('draw'))
+    table.insert(buffer, _card('bolt'))
+    table.insert(buffer, _card('cure'))
+    table.insert(buffer, _card('sord'))
+    table.insert(buffer, _card('gun'))
+    table.insert(buffer, _card('ath_1'))
+    table.insert(buffer, _card('arc_1'))
+    table.insert(buffer, _card('mec_1'))
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -53,11 +52,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
       WIDGET_D = false,
     },
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
-    buffers = {
-      _simpleBuffer(1),
-      _simpleBuffer(2),
-      _simpleBuffer(3),
-    },
+    buffer = _simpleBuffer(),
     hand_limit = 5,
     hand = {}
   }

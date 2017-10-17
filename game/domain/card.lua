@@ -13,14 +13,12 @@ function Card:init(specname)
 end
 
 function Card:loadState(state)
-  self:setId(state.id)
   self.specname = state.specname
   self.usages = state.usages
 end
 
 function Card:saveState()
   local state = {}
-  state.id = self:getId()
   state.specname = self.specname
   state.usages = self.usages
   return state

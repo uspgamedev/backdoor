@@ -18,7 +18,7 @@ local card_view = {
 local _F_NAME = "Text" --Font name
 local _F_SIZE = 21 --Font size
 local _ACTION_TYPES = {
-  'use', 'remember', 'consume'
+  'use', 'stash', 'consume'
 }
 
 local _font
