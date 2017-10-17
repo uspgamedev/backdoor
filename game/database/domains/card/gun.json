@@ -4,7 +4,6 @@
   "widget":{
     "charges":12,
     "widget_action":"SHOOT",
-    "expend_trigger":"on_use",
     "placement":"weapon"
   }
 }
