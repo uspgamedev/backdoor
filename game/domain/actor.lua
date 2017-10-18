@@ -301,6 +301,10 @@ function Actor:getHand()
   return self.hand
 end
 
+function Actor:getHandSize()
+  return #self.hand
+end
+
 function Actor:isHandEmpty()
   return #self.hand == 0
 end

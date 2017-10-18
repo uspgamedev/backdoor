@@ -12,6 +12,7 @@ local _TILE_W = 8
 local _TILE_H = 8
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
+local _MINIMAP_ALPHA = 0x40
 
 local _initialized = false
 local _exptext, _statstext, _depthtext, _buffertext
@@ -28,7 +29,7 @@ local function _initGraphicValues()
   _exptext = "EXP: %d"
   _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d"
   _depthtext = "DEPTH: %d"
-  _buffertext = "DECK: %d cards [%d in discard pile]"
+  _buffertext = "%d cards in buffer\n%d in discard pile\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
     [SCHEMATICS.WALL] = {200, 128, 50},
@@ -38,10 +39,10 @@ local function _initGraphicValues()
   _tile_mesh = g.newMesh(4,
     --{ {0, 0}, {_TILE_W, 0}, {_TILE_W, _TILE_H}, {0, _TILE_H} },
     "fan", "dynamic")
-  _tile_mesh:setVertex(1, 0, 0, 0, 0, 255, 255, 255, 128)
-  _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 255, 255, 255, 128)
-  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 255, 255, 255, 128)
-  _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 255, 255, 255, 128)
+  _tile_mesh:setVertex(1, 0, 0, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
   _initialized = true
 end
 
@@ -122,7 +123,9 @@ function ActorView:drawBuffers(g, actor)
   g.translate(40, 40 + 7*_font:getHeight())
   local buffer_size = actor:getBufferSize()
   local back_buffer_size = actor:getBackBufferSize()
-  local str = _buffertext:format(buffer_size, back_buffer_size)
+  local hand_size = actor:getHandSize()
+  local str = _buffertext:format(buffer_size, back_buffer_size, hand_size,
+                                 buffer_size + back_buffer_size + hand_size)
   g.print(str, 0, 0)
   g.pop()
 end
@@ -133,9 +136,9 @@ function ActorView:drawMiniMap(g, actor)
   local ai, aj = actor:getPos()
   local tiles = sector.tiles
   g.push()
-  g.translate(40, 3*_height/4-h*_TILE_H/2)
+  g.translate(_width/2 - (w/2 + 1) * _TILE_W, _height/4 - (h/2 + 1) * _TILE_H)
   for n=1,4 do
-    _tile_mesh:setVertexAttribute(n, 3, 255, 255, 255, 128*self.alpha)
+    _tile_mesh:setVertexAttribute(n, 3, 255, 255, 255, _MINIMAP_ALPHA*self.alpha)
   end
   for i = 0, h-1 do
     for j = 0, w-1 do
