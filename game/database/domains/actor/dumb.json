@@ -6,7 +6,6 @@
   "collection":"adventurer",
   "primary":"MELEE",
   "spd":1,
-  "buf_qnt":2,
   "name":"Dumb",
   "description":"Oh honey..."
 }

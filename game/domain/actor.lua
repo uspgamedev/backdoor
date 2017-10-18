@@ -57,10 +57,7 @@ function Actor:init(spec_name)
   self.exp = 0
   self.pack = nil
 
-  self.buffers = {}
-  for i=1,self:getBufferCount() do
-    self.buffers[i] = {{},{}, current = 1}
-  end
+  self.buffer = {}
 
 end
 
@@ -88,16 +85,15 @@ function Actor:loadState(state)
       self.widgets[slot] = false
     end
   end
-  self.buffers = {}
-  for i=1,self:getBufferCount() do
-    local buffer_state = state.buffers[i]
-    local buffer = {}
-    for j,card_name in ipairs(state.buffers[i]) do
-      buffer[j] = card_name
+  self.buffer = {}
+  for i,card_state in ipairs(state.buffer) do
+    local card = DEFS.DONE
+    if card_state ~= card then
+      card = Card(state.buffer.specname)
+      card:loadState(card_state)
     end
-    self.buffers[i] = buffer
+    self.buffer[i] = card
   end
-  self.last_buffer = state.last_buffer
 end
 
 function Actor:saveState()
@@ -124,16 +120,14 @@ function Actor:saveState()
       state.widgets[slot] = false
     end
   end
-  state.buffers = {}
-  for i=1,self:getBufferCount() do
-    local buffer = self.buffers[i]
-    local buffer_state = {}
-    for k,card_name in ipairs(self.buffers[i]) do
-      buffer_state[k] = card_name
+  state.buffer = {}
+  for i,card in ipairs(self.buffer) do
+    local card_state = DEFS.DONE
+    if card ~= card_state then
+      card_state = card:saveState()
     end
-    state.buffers[i] = buffer_state
+    state.buffer[i] = card_state
   end
-  state.last_buffer = self.last_buffer
   return state
 end
 
@@ -153,10 +147,6 @@ end
 
 function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
-end
-
-function Actor:getBufferCount()
-  return self:getSpec('buf_qnt')
 end
 
 function Actor:getATH()
@@ -196,7 +186,6 @@ function Actor:equip(place, slot)
   if not place then return end
   -- check if placement is being used
   -- if it is, then remove card from that slot
-  -- FIXME: put card back on buffer
   local equipped_slot = self:isEquipped(place)
   if equipped_slot then self:clearSlot(equipped_slot) end
   -- equip new thing on slot
@@ -216,6 +205,9 @@ function Actor:clearSlot(slot)
   local card = self.widgets[slot]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
+  if not card:isOneTimeOnly() then
+    self:addCardToBackbuffer(card)
+  end
   self.widgets[slot] = false
 end
 
@@ -309,31 +301,32 @@ function Actor:getHand()
   return self.hand
 end
 
+function Actor:getHandSize()
+  return #self.hand
+end
+
 function Actor:isHandEmpty()
   return #self.hand == 0
 end
 
-function Actor:getBufferSize(which)
-  which = which or self.last_buffer
-  for i,card in ipairs(self.buffers[which]) do
+function Actor:getBufferSize()
+  for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
       return i-1
     end
   end
 end
 
-function Actor:getBackBufferSize(which)
-  which = which or self.last_buffer
-  for i,card in ipairs(self.buffers[which]) do
+function Actor:getBackBufferSize()
+  for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
-      return #self.buffers[which] - i
+      return #self.buffer - i
     end
   end
 end
 
-function Actor:isBufferEmpty(which)
-  which = which or self.last_buffer
-  return #self.buffers[which] == 1
+function Actor:isBufferEmpty()
+  return #self.buffer == 1
 end
 
 function Actor:getHandLimit()
@@ -341,23 +334,18 @@ function Actor:getHandLimit()
 end
 
 --- Draw a card from actor's buffer
-function Actor:drawCard(which)
+function Actor:drawCard()
   if #self.hand >= self.hand_limit then return end
-  which = which or self.last_buffer
   -- Empty buffer
-  if self:isBufferEmpty(which) then return end
+  if self:isBufferEmpty() then return end
 
-  local card_name = self.buffers[which][1]
-  table.remove(self.buffers[which], 1)
-  if card_name == DEFS.DONE then
-    RANDOM.shuffle(self.buffers[which])
-    table.insert(self.buffers[which], DEFS.DONE)
-    card_name = self.buffers[which][1]
-    table.remove(self.buffers[which], 1)
+  local card = table.remove(self.buffer, 1)
+  if card == DEFS.DONE then
+    RANDOM.shuffle(self.buffer)
+    table.insert(self.buffer, DEFS.DONE)
+    card = table.remove(self.buffer, 1)
   end
-  local card = Card(card_name)
   table.insert(self.hand, card)
-  self.last_buffer = which
   Signal.emit("actor_draw", self, card)
 end
 
@@ -371,13 +359,8 @@ function Actor:removeHandCard(index)
   table.remove(self.hand, index)
 end
 
-function Actor:addCardToBackbuffer(card, buffer_idx)
-  assert(buffer_idx >= 0 and buffer_idx <= self:getBufferCount())
-  if buffer_idx == 0 then
-    buffer_idx = self.last_buffer
-  end
-  local buffer = self.buffers[buffer_idx]
-  table.insert(buffer, card:getSpecName())
+function Actor:addCardToBackbuffer(card)
+  table.insert(self.buffer, card)
 end
 
 function Actor:consumeCard(card)
@@ -455,7 +438,10 @@ function Actor:makeAction(sector)
         action = check
       end
       if self:isCard(action_slot) then
-        table.remove(self.hand, action_slot)
+        local card = table.remove(self.hand, action_slot)
+        if not card:isOneTimeOnly() and not card:isWidget() then
+          self:addCardToBackbuffer(card)
+        end
       elseif self:isWidget(action_slot) then
         self:spendWidget(action_slot)
       end
@@ -472,3 +458,4 @@ function Actor:spendTime(n)
 end
 
 return Actor
+

@@ -32,8 +32,6 @@ local function _initGraphicValues()
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("Text", _FONT_SIZE)
   _smol_font = FONT.get("Text", _FONT_SIZE*0.75)
-  _font:setLineHeight(_LH)
-  _smol_font:setLineHeight(3*_LH/5)
 end
 
 local function _renderSaved(g, saved)
@@ -74,6 +72,7 @@ local function _renderOptions(g, sel, width, render_queue)
         g.push()
         g.translate(2*_TILE_W, -_FONT_SIZE*2)
         _smol_font:set()
+        _smol_font:setLineHeight(3*_LH/5)
         g.printf(data.desc, 0, 0, 5*_TILE_W, "left")
         _font:set()
         g.pop()
@@ -138,6 +137,8 @@ function CharaBuildView:draw()
 
   -- reset rendering modifiers
   _font:set()
+  _font:setLineHeight(_LH)
+
   g.setColor(COLORS.NEUTRAL)
 
   g.push()

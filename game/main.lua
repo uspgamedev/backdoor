@@ -36,7 +36,6 @@ GS = {
   PLAY = require "gamestates.play",               -- Game Gamestate
   USER_TURN = require "gamestates.user_turn",     -- User's turn
   PICK_TARGET = require "gamestates.pick_target", -- Player is choosing targets
-  PICK_BUFFER = require "gamestates.pick_buffer", -- Player is choosing buffers
   PICK_WIDGET_SLOT = require "gamestates.pick_widget_slot",
                                                   -- Player is choosing widget
                                                   -- slot to equip widget

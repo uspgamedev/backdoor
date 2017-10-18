@@ -2,14 +2,13 @@
 local FX = {}
 
 FX.schema = {
-  { id = 'which', name = "Buffer", type = 'value', match = 'integer',
-    range = {1} }
+  {id='nothing', type='none', name = "NO PARAM"}
 }
 
 function FX.process (actor, sector, params)
   if actor:isHandEmpty() then
     for i = 1,actor:getHandLimit() do
-      actor:drawCard(params.which)
+      actor:drawCard()
     end 
   end
 end
