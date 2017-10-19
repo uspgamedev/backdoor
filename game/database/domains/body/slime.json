@@ -2,7 +2,7 @@
   "name":"Slime",
   "def_die":4,
   "appearance":"demobody",
-  "hp":8,
-  "def":1,
+  "hp":50,
+  "def":4,
   "description":""
 }

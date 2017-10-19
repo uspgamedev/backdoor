@@ -25,6 +25,8 @@ local function _simpleBuffer()
     table.insert(buffer, _card('ath_1'))
     table.insert(buffer, _card('arc_1'))
     table.insert(buffer, _card('mec_1'))
+    table.insert(buffer, _card('def_1'))
+    table.insert(buffer, _card('hp_5'))
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -63,7 +65,7 @@ local function _generatePlayerBodyData(idgenerator, species)
     id = idgenerator.newID(),
     specname = species,
     damage = 0,
-    def_bonus = 0,
+    upgrades = {DEF=0,HP=0},
     i = 3,
     j = 5,
   }

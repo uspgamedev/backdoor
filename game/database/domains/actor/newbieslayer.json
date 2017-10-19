@@ -1,6 +1,6 @@
 {
   "extends":"strong",
-  "ath":12,
   "name":"Newbie Killer",
+  "ath":8,
   "description":"The newbie's nightmares..."
 }

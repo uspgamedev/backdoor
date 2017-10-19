@@ -11,14 +11,17 @@ function Body:init(specname)
   GameElement.init(self, 'body', specname)
 
   self.damage = 0
-  self.def_bonus = 0
+  self.upgrades = {
+    DEF = 0,
+    HP = 0,
+  }
   self.sector_id = nil
 
 end
 
 function Body:loadState(state)
   self.damage = state.damage
-  self.def_bonus = state.def_bonus
+  self.upgrades = state.upgrades
   self.sector_id = state.sector_id
   self:setId(state.id)
 end
@@ -27,7 +30,7 @@ function Body:saveState()
   local state = {}
   state.specname = self.specname
   state.damage = self.damage
-  state.def_bonus = self.def_bonus
+  state.upgrades = self.upgrades
   state.sector_id = self.sector_id
   state.id = self.id
   return state
@@ -50,7 +53,11 @@ function Body:getHP()
 end
 
 function Body:getMaxHP()
-  return self:getSpec('hp')
+  return self:getSpec('hp') + self.upgrades.HP
+end
+
+function Body:upgradeHP(val)
+  self.upgrades.HP = self.upgrades.HP + val
 end
 
 function Body:isDead()
@@ -65,16 +72,20 @@ function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
 
-function Body:getDef()
-  return self:getSpec('def') + self.def_bonus
+function Body:getDEF()
+  return self:getSpec('def') + self.upgrades.DEF
 end
 
-function Body:getDefDie()
+function Body:getBaseDEF()
   return self:getSpec('def_die')
 end
 
+function Body:upgradeDEF(val)
+  self.upgrades.DEF = self.upgrades.DEF + val
+end
+
 function Body:takeDamage(amount)
-  local defroll = RANDOM.rollDice(self:getDef(), self:getDefDie())
+  local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers

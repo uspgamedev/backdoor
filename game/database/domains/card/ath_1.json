@@ -1,7 +1,8 @@
 {
   "attr":"ATH",
   "upgrade":{
-    "list":[{
+    "body_list":[],
+    "actor_list":[{
         "attr":"ATH",
         "val":1
       }],

@@ -20,10 +20,18 @@ return {
     schema = {
       { id = 'cost', name = "Exp Cost", type = 'integer', range = {1} },
       {
-        id = 'list', name = "Attribute Change", type = 'array',
+        id = 'actor_list', name = "Actor Attribute", type = 'array',
         schema = {
           { id = 'attr', name = "Attribute", type = 'enum',
             options = DEFS.ATTRIBUTES },
+          { id = 'val', name = "Value", type = 'integer' },
+        }
+      },
+      {
+        id = 'body_list', name = "Body Attribute", type = 'array',
+        schema = {
+          { id = 'attr', name = "Attribute", type = 'enum',
+            options = DEFS.BODY_ATTRIBUTES },
           { id = 'val', name = "Value", type = 'integer' },
         }
       },

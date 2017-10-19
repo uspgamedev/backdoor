@@ -36,7 +36,7 @@ end
 function RANDOM.rollDice(n, d)
   local sum = 0
   for i = 1, n do
-    sum = sum + d == 1 and 1 or RANDOM.generate(1, d)
+    sum = sum + (d == 1 and 1 or RANDOM.generate(1, d))
   end
   return sum
 end
