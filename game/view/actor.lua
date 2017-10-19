@@ -27,7 +27,8 @@ local function _initGraphicValues()
   _width, _height = g.getDimensions()
   _font = FONT.get(_FONT_NAME, _FONT_SIZE)
   _exptext = "EXP: %d"
-  _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d"
+  _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d\nDEF: %dd%d"
+  _actor_text = "HP: %d/%d"
   _depthtext = "DEPTH: %d"
   _buffertext = "%d cards in buffer\n%d in discard pile\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
@@ -88,11 +89,25 @@ function ActorView:draw()
   _font:setLineHeight(1)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
+    self:drawHP(g, actor)
     self:drawAttributes(g, actor)
     self:drawBuffers(g, actor)
     self:drawDepth(g)
     self:drawMiniMap(g, actor)
   end
+end
+
+function ActorView:drawHP(g, actor)
+  g.push()
+  local cr, cg, cb = unpack(COLORS.NEUTRAL)
+  local body = actor:getBody()
+  local hp, max_hp = body:getHP(), body:getMaxHP()
+  local str = _actor_text:format(hp, max_hp)
+  local w = _font:getWidth(str) + _font:getHeight()
+  g.translate(_width/2 - w/2, _height/2 + 60)
+  g.setColor(cr, cg, cb, self.alpha*0xff)
+  g.printf(str, 0, 0, w, "center")
+  g.pop()
 end
 
 function ActorView:drawAttributes(g, actor)
@@ -101,9 +116,11 @@ function ActorView:drawAttributes(g, actor)
   local arc = actor:getARC()
   local mec = actor:getMEC()
   local spd = actor:getSPD()
+  local def = actor:getBody():getDEF()
+  local base_def = actor:getBody():getBaseDEF()
   g.translate(40, 40)
-  g.print(_statstext:format(ath, arc, mec, spd))
-  g.translate(0, 5.5*_font:getHeight())
+  g.print(_statstext:format(ath, arc, mec, spd, def, base_def))
+  g.translate(0, 7*_font:getHeight())
   g.print(_exptext:format(actor:getExp()), 0, 0)
   g.pop()
 end
@@ -120,7 +137,7 @@ end
 
 function ActorView:drawBuffers(g, actor)
   g.push()
-  g.translate(40, 40 + 7*_font:getHeight())
+  g.translate(40, 40 + 8.5*_font:getHeight())
   local buffer_size = actor:getBufferSize()
   local back_buffer_size = actor:getBackBufferSize()
   local hand_size = actor:getHandSize()
