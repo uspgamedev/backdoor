@@ -89,7 +89,6 @@ function Body:takeDamage(amount)
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
-  print(("%s has taken %d hitpoints of damage"):format(self:getSpec('name'), dmg))
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
 end
 
