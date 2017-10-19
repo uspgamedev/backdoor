@@ -4,6 +4,10 @@ local RES    = require 'resources'
 local FONT   = require 'view.helpers.font'
 local DEFS   = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
+local CARD   = require 'view.helpers.card'
+
+local Card   = require 'domain.card'
+
 
 --PackView Class--
 
@@ -26,12 +30,11 @@ function PackView:init(actor)
   ELEMENT.init(self)
 
   self.focus_index = 1  -- What card is focused
-  self.target = 0       -- Buffer index (zero is "consume")
   self.actor = actor
   self.pack = {}
 
-  for _,card_specname in actor:iteratePack() do
-    table.insert(self.pack, { specname = card_specname })
+  for i,card_specname in actor:iteratePack() do
+    table.insert(self.pack, {card = Card(card_specname), index = i})
   end
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
@@ -47,6 +50,11 @@ function PackView:isEmpty()
   return #self.pack == 0
 end
 
+function PackView:getFocusedCardIndex()
+  assert(self.focus_index >= 1 and self.focus_index <= #self.pack)
+  return self.pack[self.focus_index].index
+end
+
 function PackView:getFocus()
   return self.focus_index
 end
@@ -59,41 +67,26 @@ function PackView:moveFocus(dir)
   end
 end
 
-function PackView:getTarget()
-  if self.target == 0 then
-    return 'consume', 0
-  else
-    return 'get', self.target
-  end
-end
-
-function PackView:changeTarget(dir)
-  local N = DEFS.ACTOR_BUFFER_NUM+1
-  if dir == 'up' then
-    self.target = (self.target - 1) % N
-  elseif dir == 'down' then
-    self.target = (self.target + 1) % N
-  else
-    error(("Unknown dir %s"):format(dir))
-  end
+function PackView:consumeCard()
+  self:removeCurrent()
 end
 
 function PackView:draw()
-  local x, y = 800,400
   local g = love.graphics
+  local x, y = g.getWidth()/2, 400
+
+  --Draw current focused card
   local card_data = self.pack[self.focus_index]
   if card_data then
-    local card = DB.loadSpec('card', card_data.specname)
-    local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
-                                       #self.pack)
+    CARD.draw(card_data.card, x, y + 100)
+
     _font:set()
-    g.setColor(0x16, 0x16, 0x16, 0x80)
-    g.rectangle("fill", x-16, y-16, 160, 160)
     g.setColor(COLORS.NEUTRAL)
-    g.print(view, x, y)
-    local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + _font:getHeight())
+    local info = ("[%d/%d]"):format(self.focus_index,
+    #self.pack)
+    g.print(info, x, y)
   end
+
 end
 
 return PackView

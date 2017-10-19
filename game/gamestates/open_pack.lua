@@ -17,10 +17,8 @@ local _previous_control_map
 local SIGNALS = {
   PRESS_RIGHT = {"move_focus", "right"},
   PRESS_LEFT = {"move_focus", "left"},
-  PRESS_UP = {"change_target", "up"},
-  PRESS_DOWN = {"change_target", "down"},
+  PRESS_UP = {"consume_card"},
   PRESS_CONFIRM = {"confirm"},
-  PRESS_CANCEL = {"cancel"}
 }
 
 --[[ LOCAL FUNCTIONS DECLARATIONS ]]--
@@ -34,28 +32,36 @@ local function _moveFocus(dir)
   _pack_view:moveFocus(dir)
 end
 
-local function _changeTarget(dir)
-  _pack_view:changeTarget(dir)
-end
-
-local function _confirmCard()
-  local action_type, buffer_index = _pack_view:getTarget()
+local function _consumeCard()
   table.insert(_picks, {
-    action_type = action_type,
-    buffer_index = buffer_index,
-    card_index = _pack_view:getFocus(),
+    action_type = "consume",
+    buffer_index = 0,
+    card_index = _pack_view:getFocusedCardIndex(),
   })
-  _pack_view:removeCurrent()
+  _pack_view:consumeCard()
   if _pack_view:isEmpty() then
     SWITCHER.pop(_picks)
     _picks = nil
   end
 end
 
+local function _confirm()
+  while not _pack_view:isEmpty() do
+    table.insert(_picks, {
+      action_type = "get",
+      buffer_index = 1,
+      card_index = _pack_view:getFocusedCardIndex(),
+    })
+    _pack_view:removeCurrent()
+  end
+  SWITCHER.pop(_picks)
+  _picks = nil
+end
+
 function _registerSignals()
   Signal.register("move_focus", _moveFocus)
-  Signal.register("change_target", _changeTarget)
-  Signal.register("confirm", _confirmCard)
+  Signal.register("consume_card", _consumeCard)
+  Signal.register("confirm", _confirm)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -122,4 +128,3 @@ function state:draw()
 end
 
 return state
-
