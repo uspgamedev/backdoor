@@ -107,6 +107,8 @@ function ActorView:drawHP(g, actor)
   g.translate(_width/2 - w/2, _height/2 + 60)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   g.printf(str, 0, 0, w, "center")
+  g.translate(0, _font:getHeight())
+  g.printf(("%d PP"):format(actor:getPP()), 0, 0, w, "center")
   g.pop()
 end
 

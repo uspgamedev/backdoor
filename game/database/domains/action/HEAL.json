@@ -6,7 +6,7 @@
     },{
       "op":"*",
       "typename":"integer_binop",
-      "rhs":4,
+      "rhs":8,
       "output":"amount",
       "lhs":"val:arcana"
     },{
@@ -14,11 +14,11 @@
       "pos":"par:target",
       "output":"body"
     }],
-  "cost":6,
+  "playpoints":3,
   "params":[{
       "filter":"BODY",
-      "max-range":5,
       "typename":"choose_target",
+      "max-range":5,
       "body-only":true,
       "output":"target"
     }],
@@ -26,5 +26,6 @@
       "typename":"heal",
       "target":"val:body",
       "amount":"val:amount"
-    }]
+    }],
+  "cost":6
 }

@@ -8,17 +8,18 @@
       "output":"arcana",
       "which":"ARC"
     }],
+  "playpoints":3,
   "params":[{
       "max-range":5,
+      "typename":"choose_target",
       "body-only":true,
-      "output":"target",
-      "typename":"choose_target"
+      "output":"target"
     }],
   "effects":[{
       "typename":"dmg_formula",
       "target":"val:target_body",
-      "base":6,
-      "attr":"val:arcana"
+      "attr":"val:arcana",
+      "base":6
     }],
   "cost":10
 }

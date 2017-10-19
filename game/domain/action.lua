@@ -46,6 +46,7 @@ function ACTION.run(action_name, actor, sector, params)
     end
   end
   actor:spendTime(spec.cost)
+  actor:rewardPP(spec.playpoints or 0)
   for i,operation in ipairs(spec.operators) do
     local argvalues = {}
     local opname, valname = operation.typename, operation.output

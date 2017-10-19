@@ -8,18 +8,19 @@
       "pos":"par:target",
       "output":"body"
     }],
+  "playpoints":3,
   "params":[{
       "filter":"BODY",
       "max-range":5,
-      "output":"target",
+      "typename":"choose_target",
       "body-only":true,
-      "typename":"choose_target"
+      "output":"target"
     }],
   "cost":10,
   "effects":[{
       "typename":"dmg_formula",
       "target":"val:body",
-      "base":8,
-      "attr":"val:attr"
+      "attr":"val:attr",
+      "base":8
     }]
 }

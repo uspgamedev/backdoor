@@ -1,16 +1,4 @@
 {
-  "params":[{
-      "typename":"choose_target",
-      "output":"target",
-      "body-only":true,
-      "max-range":1
-    }],
-  "effects":[{
-      "typename":"dmg_formula",
-      "target":"val:target_body",
-      "base":4,
-      "attr":"val:ath"
-    }],
   "operators":[{
       "typename":"get_attribute",
       "output":"ath",
@@ -19,6 +7,19 @@
       "typename":"get_body_at",
       "pos":"par:target",
       "output":"target_body"
+    }],
+  "playpoints":3,
+  "params":[{
+      "typename":"choose_target",
+      "max-range":1,
+      "output":"target",
+      "body-only":true
+    }],
+  "effects":[{
+      "typename":"dmg_formula",
+      "target":"val:target_body",
+      "attr":"val:ath",
+      "base":4
     }],
   "cost":6
 }
