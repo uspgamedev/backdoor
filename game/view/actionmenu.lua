@@ -8,7 +8,7 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'primary', 'widget', 'playcard', 'drawhand', 'openpack', 'wait',
+  'interact', 'primary', 'widget', 'drawhand', 'openpack', 'wait',
   interact = "Interact",
   primary = "Primary Arte",
   widget = "Use Widget",
@@ -22,6 +22,7 @@ local _TWEEN = {
   TEXT = "__TEXT__",
   SWITCH = "__SWITCH__",
 }
+local _DRAWHAND = 4
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
 
@@ -42,6 +43,10 @@ function ActionMenu:init()
   self.text = 0
   _W, _H = love.graphics.getDimensions()
 
+end
+
+function ActionMenu:setCardAction(action_name)
+  _ACTIONS[_DRAWHAND] = action_name
 end
 
 function ActionMenu:showLabel()
