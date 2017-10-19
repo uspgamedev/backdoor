@@ -34,7 +34,7 @@ function PackView:init(actor)
   self.pack = {}
 
   for i,card_specname in actor:iteratePack() do
-    table.insert(self.pack, {card = Card(card_specname), index = i})
+    table.insert(self.pack, Card(card_specname))
   end
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
@@ -48,11 +48,6 @@ end
 
 function PackView:isEmpty()
   return #self.pack == 0
-end
-
-function PackView:getFocusedCardIndex()
-  assert(self.focus_index >= 1 and self.focus_index <= #self.pack)
-  return self.pack[self.focus_index].index
 end
 
 function PackView:getFocus()
@@ -73,17 +68,18 @@ end
 
 function PackView:draw()
   local g = love.graphics
-  local x, y = g.getWidth()/2, 400
 
   --Draw current focused card
-  local card_data = self.pack[self.focus_index]
-  if card_data then
-    CARD.draw(card_data.card, x, y + 100)
+  local card = self.pack[self.focus_index]
+  if card then
+    local x, y = O_WIN_W/2 - CARD.getWidth()/2, O_WIN_H/2 - CARD.getHeight()/2
+    CARD.draw(card, x, y)
 
     _font:set()
     g.setColor(COLORS.NEUTRAL)
     local info = ("[%d/%d]"):format(self.focus_index,
     #self.pack)
+    x, y = O_WIN_W/2 - _font:getWidth(info)/2, y - _font:getHeight(info) - 20
     g.print(info, x, y)
   end
 
