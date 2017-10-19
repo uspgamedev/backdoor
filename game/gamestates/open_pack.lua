@@ -10,6 +10,7 @@ local state = {}
 
 local _pack_view
 local _picks
+local _filter
 
 local _mapped_signals
 local _previous_control_map
@@ -20,6 +21,33 @@ local SIGNALS = {
   PRESS_UP = {"consume_card"},
   PRESS_CONFIRM = {"confirm"},
 }
+
+--FILTER CLASS--
+
+local Filter = Class{
+  __includes = {ELEMENT}
+}
+
+function Filter:init(_r, _g, _b, _a, _target_a)
+  ELEMENT.init(self)
+
+  self.r = _r
+  self.g = _g
+  self.b = _b
+  self.a = _a
+
+  --Fade-in effect
+  ELEMENT.addTimer(self,"start", MAIN_TIMER, "tween",.2, self, {a = _target_a}, 'out-quad')
+
+end
+
+function Filter:draw()
+  local f = self
+  local g = love.graphics
+  g.setColor(f.r,f.g,f.b,f.a)
+  g.rectangle("fill", 0, 0, O_WIN_W, O_WIN_H)
+end
+
 
 --[[ LOCAL FUNCTIONS DECLARATIONS ]]--
 
@@ -89,6 +117,17 @@ function state:enter(_, route)
 
   controlled_actor:openPack()
 
+  --Create filter effect
+  local initial_a = 0
+  if _filter then
+    _filter:removeTimer("end", MAIN_TIMER)
+    initial_a = _filter.a
+    _filter:destroy()
+  end
+
+  _filter = Filter(0,0,0, initial_a, 180)
+  _filter:addElement('HUD_BG')
+
   _pack_view = PackView(controlled_actor)
   _pack_view:addElement('HUD')
   _picks = {}
@@ -104,6 +143,9 @@ function state:leave()
 
   _pack_view:kill()
   _pack_view = nil
+
+  --Add fade-out effect to filter
+  _filter:addTimer("end", MAIN_TIMER, "tween", .2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
 
   Util.destroyAll()
 
