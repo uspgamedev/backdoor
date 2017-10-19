@@ -1,8 +1,8 @@
 {
-  "def":2,
-  "def_die":4,
+  "def":4,
+  "def_die":5,
   "appearance":"demobody",
-  "hp":20,
+  "hp":80,
   "name":"Demihuman",
   "description":"Humanoid people in general."
 }

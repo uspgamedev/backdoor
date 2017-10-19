@@ -1,11 +1,11 @@
 {
-  "ath":6,
+  "ath":4,
   "behavior":"aggro",
-  "mec":3,
-  "arc":3,
+  "mec":2,
+  "arc":2,
   "collection":"adventurer",
+  "description":"Oh honey...",
   "primary":"MELEE",
-  "spd":1,
   "name":"Dumb",
-  "description":"Oh honey..."
+  "spd":1
 }
