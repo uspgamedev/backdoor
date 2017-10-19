@@ -69,6 +69,20 @@ end
 function PackView:draw()
   local g = love.graphics
 
+  --Draw all cards previous to focused card
+  local alpha = 1
+  local x = O_WIN_W/2 - 3*CARD.getWidth()/2 - 65
+  local y = O_WIN_H/2 - CARD.getHeight()/2 + 30
+  for i = self.focus_index-1, 1, -1 do
+    local card_gap = 30
+    local card = self.pack[i]
+    if card then
+      CARD.draw(card, x, y, false, alpha)
+    end
+    x = x - card_gap - CARD.getWidth()
+    alpha = math.max(0, alpha - .4)
+  end
+
   --Draw current focused card
   local card = self.pack[self.focus_index]
   if card then
@@ -85,7 +99,7 @@ function PackView:draw()
     g.setLineWidth(3)
     local t_size = 25
     x = O_WIN_W/2
-    y = O_WIN_H/2 - CARD.getHeight()/2 - 15
+    y = O_WIN_H/2 - CARD.getHeight()/2 - 24
     g.polygon("line", x - t_size/2, y,
                       x + t_size/2, y,
                       x, y - t_size*math.sqrt(3)/2)
@@ -104,21 +118,39 @@ function PackView:draw()
     g.print(info, x, y)
 
     --Draw left arrow
-    local t_size = 30
-    x = O_WIN_W/2 - CARD.getWidth()/2 - 15
-    y = O_WIN_H/2
-    g.polygon("line", x, y - t_size/2,
-                      x, y + t_size/2,
-                      x - t_size*math.sqrt(3)/2, y)
+    if self.focus_index > 1 then
+      local t_size = 30
+      x = O_WIN_W/2 - CARD.getWidth()/2 - 15
+      y = O_WIN_H/2
+      g.polygon("line", x, y - t_size/2,
+                        x, y + t_size/2,
+                        x - t_size*math.sqrt(3)/2, y)
+    end
 
-    --Draw right arrow
-    local t_size = 30
-    x = O_WIN_W/2 + CARD.getWidth()/2 + 15
-    y = O_WIN_H/2
-    g.polygon("line", x, y - t_size/2,
-                      x, y + t_size/2,
-                      x + t_size*math.sqrt(3)/2, y)
+    if self.focus_index < #self.pack then
+      --Draw right arrow
+      local t_size = 30
+      x = O_WIN_W/2 + CARD.getWidth()/2 + 15
+      y = O_WIN_H/2
+      g.polygon("line", x, y - t_size/2,
+                        x, y + t_size/2,
+                        x + t_size*math.sqrt(3)/2, y)
+    end
 
+  end
+
+  --Draw all cards after focused card
+  local alpha = 1
+  local x = O_WIN_W/2 + CARD.getWidth()/2 + 65
+  local y = O_WIN_H/2 - CARD.getHeight()/2 + 30
+  for i = self.focus_index+1, #self.pack do
+    local card_gap = 30
+    local card = self.pack[i]
+    if card then
+      CARD.draw(card, x, y, false, alpha)
+    end
+    x = x + card_gap + CARD.getWidth()
+    alpha = math.max(0, alpha - .4)
   end
 
 end

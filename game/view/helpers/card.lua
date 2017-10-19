@@ -11,7 +11,9 @@ local card_view = {
 local CARD = {}
 
 --Draw a card starting its upper left corner on given x,y values
-function CARD.draw(card, x, y, focused)
+--Alpha is a float value between [0,1] applied to all graphics
+function CARD.draw(card, x, y, focused, alpha)
+  alpha = alpha or 1
   --Draw card background
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[card:getRelatedAttr()])
@@ -25,16 +27,16 @@ function CARD.draw(card, x, y, focused)
     cr, cg, cb = cr+80, cg+80, cb+80
   end
   --shadow
-  g.setColor(0, 0, 0, 0x80)
+  g.setColor(0, 0, 0, alpha*0x80)
   g.rectangle("fill", 4, 4, card_view.w, card_view.h)
 
   --card
-  g.setColor(cr, cg, cb)
+  g.setColor(cr, cg, cb, alpha*255)
   g.rectangle("fill", 0, 0, card_view.w, card_view.h)
 
   --Draw card info
   local pd = 8
-  g.setColor(0x20, 0x20, 0x20)
+  g.setColor(0x20, 0x20, 0x20, alpha*255)
   FONT.set("Text", 21)
   g.printf(card:getName(), pd, pd, card_view.w-pd, "left")
 
