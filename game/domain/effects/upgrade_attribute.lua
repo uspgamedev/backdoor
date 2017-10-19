@@ -6,10 +6,17 @@ FX.schema = {
 }
 
 function FX.process(actor, sector, params)
-  for _,upgrade in ipairs(params.upgrade_list) do
+  for _,upgrade in ipairs(params.upgrade_list.actor) do
     local attr = upgrade.attr
     local val = upgrade.val
     actor["upgrade"..attr](actor, val)
+  end
+  local body = actor:getBody() if body then
+    for _,upgrade in ipairs(params.upgrade_list.body) do
+      local attr = upgrade.attr
+      local val = upgrade.val
+      body["upgrade"..attr](body, val)
+    end
   end
 end
 
