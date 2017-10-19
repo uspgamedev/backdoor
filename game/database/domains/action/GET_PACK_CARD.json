@@ -1,7 +1,6 @@
 {
   "cost":0,
   "effects":[{
-      "buffer":"par:buffer",
       "typename":"add_card_to_backbuffer",
       "card":"val:card"
     },{
@@ -24,8 +23,5 @@
       "typename":"card_index",
       "output":"index",
       "source":"PACK"
-    },{
-      "output":"buffer",
-      "typename":"choose_buffer"
     }]
 }

@@ -36,7 +36,7 @@ local function _consumeCard()
   table.insert(_picks, {
     action_type = "consume",
     buffer_index = 0,
-    card_index = _pack_view:getFocusedCardIndex(),
+    card_index = _pack_view:getFocus(),
   })
   _pack_view:consumeCard()
   if _pack_view:isEmpty() then
@@ -50,7 +50,7 @@ local function _confirm()
     table.insert(_picks, {
       action_type = "get",
       buffer_index = 1,
-      card_index = _pack_view:getFocusedCardIndex(),
+      card_index = _pack_view:getFocus(),
     })
     _pack_view:removeCurrent()
   end
