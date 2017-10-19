@@ -55,6 +55,7 @@ function Actor:init(spec_name)
     SPD = 0,
   }
   self.exp = 0
+  self.playpoints = 10
   self.pack = nil
 
   self.buffer = {}
@@ -66,6 +67,7 @@ function Actor:loadState(state)
   self.body_id = state.body_id
   self:setId(state.id)
   self.exp = state.exp
+  self.playpoints = state.playpoints
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
   self.equipped = state.equipped
@@ -103,6 +105,7 @@ function Actor:saveState()
   state.body_id = self.body_id
   state.id = self.id
   state.exp = self.exp
+  state.playpoints = self.playpoints
   state.upgrades = self.upgrades
   state.equipped = self.equipped
   state.hand_limit = self.hand_limit
@@ -455,6 +458,18 @@ end
 
 function Actor:spendTime(n)
   self.cooldown = self.cooldown + n
+end
+
+function Actor:rewardPP(n)
+  self.playpoints = math.min(self.playpoints + n, DEFS.MAX_PP)
+end
+
+function Actor:spendPP(n)
+  self.playpoints = math.max(self.playpoints - n, 0)
+end
+
+function Actor:getPP()
+  return self.playpoints
 end
 
 return Actor
