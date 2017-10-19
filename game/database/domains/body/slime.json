@@ -1,8 +1,8 @@
 {
-  "name":"Slime",
-  "def_die":4,
-  "appearance":"demobody",
-  "hp":50,
   "def":4,
+  "def_die":4,
+  "appearance":"slime",
+  "hp":50,
+  "name":"Slime",
   "description":""
 }
