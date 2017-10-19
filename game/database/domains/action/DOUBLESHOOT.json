@@ -12,29 +12,30 @@
       "output":"athletics",
       "which":"ATH"
     }],
+  "playpoints":3,
   "params":[{
       "filter":"BODY",
       "max-range":6,
-      "output":"target",
+      "typename":"choose_target",
       "body-only":true,
-      "typename":"choose_target"
+      "output":"target"
     },{
       "filter":"BODY",
       "max-range":6,
-      "output":"target2",
+      "typename":"choose_target",
       "body-only":true,
-      "typename":"choose_target"
+      "output":"target2"
     }],
   "effects":[{
       "typename":"dmg_formula",
       "target":"val:body1",
-      "base":3,
-      "attr":"val:athletics"
+      "attr":"val:athletics",
+      "base":3
     },{
       "typename":"dmg_formula",
       "target":"val:body2",
-      "attr":"val:athletics",
-      "base":3
+      "base":3,
+      "attr":"val:athletics"
     }],
   "cost":12
 }

@@ -1,8 +1,13 @@
 {
   "operators":[],
-  "cost":2,
-  "params":[],
   "effects":[{
       "typename":"new_hand"
-    }]
+    },{
+      "typename":"spend_pp"
+    }],
+  "params":[{
+      "typename":"has_enough_pp",
+      "output":"has_enough_PP"
+    }],
+  "cost":2
 }
