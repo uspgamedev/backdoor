@@ -72,15 +72,53 @@ function PackView:draw()
   --Draw current focused card
   local card = self.pack[self.focus_index]
   if card then
+
+    --Draw consume text above indication arrow
+    _font:set()
+    g.setColor(COLORS.NEUTRAL)
+    local text_to_draw = "consume"
+    x = O_WIN_W/2 - _font:getWidth(text_to_draw)/2
+    y = O_WIN_H/2 - CARD.getHeight()/2 - 50 - _font:getHeight(text_to_draw)
+    g.print(text_to_draw, x, y)
+
+    --Draw consume indication arrow
+    g.setLineWidth(3)
+    local t_size = 25
+    x = O_WIN_W/2
+    y = O_WIN_H/2 - CARD.getHeight()/2 - 15
+    g.polygon("line", x - t_size/2, y,
+                      x + t_size/2, y,
+                      x, y - t_size*math.sqrt(3)/2)
+
+
+    --Draw card
     local x, y = O_WIN_W/2 - CARD.getWidth()/2, O_WIN_H/2 - CARD.getHeight()/2
     CARD.draw(card, x, y)
 
-    _font:set()
-    g.setColor(COLORS.NEUTRAL)
+    --Draw pack info below card
     local info = ("[%d/%d]"):format(self.focus_index,
     #self.pack)
-    x, y = O_WIN_W/2 - _font:getWidth(info)/2, y - _font:getHeight(info) - 20
+    x, y = O_WIN_W/2 - _font:getWidth(info)/2, y + CARD.getHeight() + 20
+    _font:set()
+    g.setColor(COLORS.NEUTRAL)
     g.print(info, x, y)
+
+    --Draw left arrow
+    local t_size = 30
+    x = O_WIN_W/2 - CARD.getWidth()/2 - 15
+    y = O_WIN_H/2
+    g.polygon("line", x, y - t_size/2,
+                      x, y + t_size/2,
+                      x - t_size*math.sqrt(3)/2, y)
+
+    --Draw right arrow
+    local t_size = 30
+    x = O_WIN_W/2 + CARD.getWidth()/2 + 15
+    y = O_WIN_H/2
+    g.polygon("line", x, y - t_size/2,
+                      x, y + t_size/2,
+                      x + t_size*math.sqrt(3)/2, y)
+
   end
 
 end
