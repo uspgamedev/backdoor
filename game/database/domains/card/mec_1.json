@@ -1,11 +1,12 @@
 {
   "attr":"MEC",
-  "name":"MEC +1",
   "upgrade":{
-    "list":[{
+    "body_list":[],
+    "actor_list":[{
         "attr":"MEC",
         "val":1
       }],
     "cost":2
-  }
+  },
+  "name":"MEC +1"
 }
