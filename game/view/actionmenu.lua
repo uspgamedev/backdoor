@@ -1,5 +1,6 @@
 
 local RES = require 'resources'
+local CAM = require 'common.camera'
 local FONT = require 'view.helpers.font'
 local DEFS = require 'domain.definitions'
 
