@@ -14,7 +14,6 @@ local _TILE_W = 80
 local _TILE_H = 80
 local _HALF_W = 10
 local _HALF_H = 6
-local _EPSILON = 0.1
 
 local _HEALTHBAR_WIDTH = 64
 local _HEALTHBAR_HEIGHT = 8
