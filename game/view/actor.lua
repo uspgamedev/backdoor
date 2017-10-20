@@ -89,26 +89,11 @@ function ActorView:draw()
   _font:setLineHeight(1)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
-
     self:drawHP(g, actor)
     self:drawAttributes(g, actor)
     self:drawBuffers(g, actor)
     self:drawDepth(g)
     self:drawMiniMap(g, actor)
-
-    do
-      local CAM = require 'common.camera'
-      local x, y = CAM:position()
-      local campos = ("[%.3f, %.3f]"):format(x, y)
-      g.push()
-      g.translate(_width-40-_font:getWidth(campos), 40 + _font:getHeight())
-      g.setColor(cr, cg, cb, self.alpha*0xff)
-      g.printf(campos, 0, 0, _font:getWidth(campos), "right")
-      g.pop()
-      g.setColor(0, 0, 0, self.alpha*0x40)
-      g.rectangle("fill", 0, 0, _width/2, _height)
-    end
-
   end
 end
 
