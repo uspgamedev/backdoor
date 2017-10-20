@@ -13,6 +13,7 @@ local _TILE_W = 80
 local _TILE_H = 80
 local _HALF_W = 10
 local _HALF_H = 6
+local _EPSILON = 0.1
 
 local _HEALTHBAR_WIDTH = 64
 local _HEALTHBAR_HEIGHT = 8
@@ -34,13 +35,25 @@ local SectorView = Class{
   __includes = { ELEMENT }
 }
 
-
 local function _moveCamera(target)
   local x, y = CAM:position()
   local i, j = target:getPos()
-  local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
   local smooth = 1/12
-  CAM:move(math.round((tx - x)*smooth), math.round((ty - y)*smooth))
+  local vx, vy = smooth*((j-0.5)*_TILE_W-x), smooth*((i-0.5)*_TILE_H-y)
+  local size = math.sqrt(vx*vx+vy*vy)
+  if size < 1 and size > 0 then
+    if math.abs(vx) < math.abs(vy) then
+      vx = 0
+      vy = vy>0 and 1 or -1
+    elseif math.abs(vx) > math.abs(vy) then
+      vx = vx>0 and 1 or -1
+      vy = 0
+    else
+      vx = vx>0 and 1 or -1
+      vy = vy>0 and 1 or -1
+    end
+  end
+  CAM:move(math.round(vx), math.round(vy))
 end
 
 
