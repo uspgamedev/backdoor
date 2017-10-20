@@ -3,6 +3,7 @@ local DB          = require 'database'
 local RES         = require 'resources'
 local HSV         = require 'common.color'.hsv
 local math        = require 'common.math'
+local CAM         = require 'common.camera'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
@@ -36,24 +37,9 @@ local SectorView = Class{
 }
 
 local function _moveCamera(target)
-  local x, y = CAM:position()
   local i, j = target:getPos()
-  local smooth = 1/12
-  local vx, vy = smooth*((j-0.5)*_TILE_W-x), smooth*((i-0.5)*_TILE_H-y)
-  local size = math.sqrt(vx*vx+vy*vy)
-  if size < 1 and size > 0 then
-    if math.abs(vx) < math.abs(vy) then
-      vx = 0
-      vy = vy>0 and 1 or -1
-    elseif math.abs(vx) > math.abs(vy) then
-      vx = vx>0 and 1 or -1
-      vy = 0
-    else
-      vx = vx>0 and 1 or -1
-      vy = vy>0 and 1 or -1
-    end
-  end
-  CAM:move(math.round(vx), math.round(vy))
+  local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
+  CAM:lockPosition(tx, ty)
 end
 
 
