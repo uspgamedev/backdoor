@@ -38,9 +38,6 @@ function setup.config()
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)
     ID_TABLE = {} --Table with elements with Ids (for fast lookup)
 
-    --CAMERA--
-    CAM = Camera(O_WIN_W/2, O_WIN_H/2) --Set camera position to center of screen
-
     --AUDIO--
     SFX = { --Table containing all the sound fx
     }

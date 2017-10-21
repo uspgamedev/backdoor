@@ -154,8 +154,15 @@ function ActorView:drawMiniMap(g, actor)
   local w, h = sector:getDimensions()
   local ai, aj = actor:getPos()
   local tiles = sector.tiles
+  local sectorname = sector:getSpecName()
+  local nr, ng, nb = unpack(COLORS.NEUTRAL)
   g.push()
-  g.translate(_width/2 - (w/2 + 1) * _TILE_W, _height/4 - (h/2 + 1) * _TILE_H)
+  g.setColor(nr, ng, nb, self.alpha*0xff)
+  g.translate(_width/2, _height/4)
+  g.printf(sectorname,
+           -_font:getWidth(sectorname)/2, 0,
+           _font:getWidth(sectorname), "center")
+  g.translate(- (w/2) * _TILE_W, _font:getHeight())
   for n=1,4 do
     _tile_mesh:setVertexAttribute(n, 3, 255, 255, 255, _MINIMAP_ALPHA*self.alpha)
   end

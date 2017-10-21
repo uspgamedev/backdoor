@@ -1,6 +1,8 @@
 
 local RES = require 'resources'
+local CAM = require 'common.camera'
 local FONT = require 'view.helpers.font'
+local DEFS = require 'domain.definitions'
 
 -- CONSTANTS -------------------------------------------------------------------
 
@@ -13,7 +15,7 @@ local _ACTIONS = {
   primary = "Primary Arte",
   widget = "Use Widget",
   playcard = "Play Card",
-  drawhand = "Draw New Hand",
+  drawhand = "Draw New Hand\n(-"..DEFS.NEW_HAND_COST.." PP)",
   openpack = "Open Card Pack",
   wait = "Wait"
 }
@@ -23,6 +25,10 @@ local _TWEEN = {
   SWITCH = "__SWITCH__",
 }
 local _DRAWHAND = 4
+
+-- LOCAL VARIABLES -------------------------------------------------------------
+
+local _font
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
 
@@ -42,6 +48,7 @@ function ActionMenu:init()
   self.switch = 0
   self.text = 0
   _W, _H = love.graphics.getDimensions()
+  _font = _font or FONT.get("Text", 32)
 
 end
 
@@ -132,7 +139,8 @@ function ActionMenu:draw()
     g.pop()
   end
   g.push()
-  FONT.set('Text', 32)
+  _font:setLineHeight(1)
+  _font.set()
   g.translate(_RADIUS, 0)
   g.setColor(255, 255, 255, enter*255)
   local label = _ACTIONS[_ACTIONS[self.current]]
