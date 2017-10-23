@@ -1,0 +1,6 @@
+{
+  "extends":"grinful",
+  "arc":9,
+  "name":"Fiendish",
+  "description":"Stronger spellcaster monster, evil by nature."
+}
