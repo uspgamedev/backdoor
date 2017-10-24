@@ -208,15 +208,16 @@ function Actor:clearSlot(slot)
   local card = self.widgets[slot]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
-  if not card:isOneTimeOnly() then
-    self:addCardToBackbuffer(card)
-  end
   self.widgets[slot] = false
+  return card
 end
 
 function Actor:setSlot(slot, card)
   if self:isSlotOccupied(slot) then
-    self:clearSlot(slot)
+    local card = self:clearSlot(slot)
+    if not card:isOneTimeOnly() then
+      self:addCardToBackbuffer(card)
+    end
   end
   local placement = card:getWidgetPlacement()
   self:equip(placement, slot)
@@ -233,7 +234,7 @@ function Actor:spendWidget(slot)
   if card then
     card:addUsages()
     if card:isSpent() then
-      self:clearSlot(slot)
+      return self:clearSlot(slot)
     end
   end
 end
