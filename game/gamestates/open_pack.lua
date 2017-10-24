@@ -63,7 +63,6 @@ end
 local function _consumeCard()
   table.insert(_picks, {
     action_type = "consume",
-    buffer_index = 0,
     card_index = _pack_view:getFocus(),
   })
   _pack_view:consumeCard()
@@ -77,7 +76,6 @@ local function _confirm()
   while not _pack_view:isEmpty() do
     table.insert(_picks, {
       action_type = "get",
-      buffer_index = 1,
       card_index = _pack_view:getFocus(),
     })
     _pack_view:removeCurrent()
