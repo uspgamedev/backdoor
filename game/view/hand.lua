@@ -1,18 +1,12 @@
 
 local FONT = require 'view.helpers.font'
+local CARD = require 'view.helpers.card'
 local COLORS = require 'domain.definitions.colors'
 
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
 local _drawCard
-
---CARDVIEW PROPERTIES--
-
-local card_view = {
-  w = 90,
-  h = 150,
-}
 
 --CONSTS--
 local _F_NAME = "Text" --Font name
@@ -80,7 +74,7 @@ function HandView:activate()
   self:addTimer("start", MAIN_TIMER, "tween",
                                            0.2,
                                            self,
-                                           { y = self.initial_y - card_view.h },
+                                           { y = self.initial_y - CARD.getHeight() },
                                            'out-cubic')
 end
 
@@ -100,11 +94,11 @@ end
 
 function HandView:draw()
   local x, y = self.x, self.y
-  local gap = card_view.w + 20
+  local gap = CARD.getWidth() + 20
   local g = love.graphics
   _font.set()
   for i, card in ipairs(self.hand) do
-    _drawCard(card, x, y, i == self.focus_index)
+    CARD.draw(card, x, y, i == self.focus_index)
     if i == self.focus_index then
       g.setColor(COLORS.NEUTRAL)
       g.print(self:getActionType(), x + 2, y - 1.5*_font:getHeight())
@@ -136,39 +130,6 @@ function HandView:reset()
     end
   end
 
-end
-
-
-  --LOCAL FUNCTIONS--
-
---Draw a card starting its upper left corner on given x,y values
-function _drawCard(card, x, y, focused)
-  --Draw card background
-  local g = love.graphics
-  local cr, cg, cb = unpack(COLORS[card:getRelatedAttr()])
-  g.push()
-
-  g.translate(x, y)
-
-  if focused then
-    g.scale(1.1)
-    g.translate(-0.05*card_view.w, -0.05*card_view.h)
-    cr, cg, cb = cr+80, cg+80, cb+80
-  end
-  --shadow
-  g.setColor(0, 0, 0, 0x80)
-  g.rectangle("fill", 4, 4, card_view.w, card_view.h)
-
-  --card
-  g.setColor(cr, cg, cb)
-  g.rectangle("fill", 0, 0, card_view.w, card_view.h)
-
-  --Draw card info
-  local pd = 8
-  g.setColor(0x20, 0x20, 0x20)
-  g.printf(card:getName(), pd, pd, card_view.w-pd, "left")
-
-  g.pop()
 end
 
 return HandView

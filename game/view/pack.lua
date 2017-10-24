@@ -4,6 +4,10 @@ local RES    = require 'resources'
 local FONT   = require 'view.helpers.font'
 local DEFS   = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
+local CARD   = require 'view.helpers.card'
+
+local Card   = require 'domain.card'
+
 
 --PackView Class--
 
@@ -26,12 +30,11 @@ function PackView:init(actor)
   ELEMENT.init(self)
 
   self.focus_index = 1  -- What card is focused
-  self.target = 0       -- Buffer index (zero is "consume")
   self.actor = actor
   self.pack = {}
 
-  for _,card_specname in actor:iteratePack() do
-    table.insert(self.pack, { specname = card_specname })
+  for i,card_specname in actor:iteratePack() do
+    table.insert(self.pack, Card(card_specname))
   end
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
@@ -59,41 +62,97 @@ function PackView:moveFocus(dir)
   end
 end
 
-function PackView:getTarget()
-  if self.target == 0 then
-    return 'consume', 0
-  else
-    return 'get', self.target
-  end
-end
-
-function PackView:changeTarget(dir)
-  local N = DEFS.ACTOR_BUFFER_NUM+1
-  if dir == 'up' then
-    self.target = (self.target - 1) % N
-  elseif dir == 'down' then
-    self.target = (self.target + 1) % N
-  else
-    error(("Unknown dir %s"):format(dir))
-  end
+function PackView:consumeCard()
+  self:removeCurrent()
 end
 
 function PackView:draw()
-  local x, y = 800,400
   local g = love.graphics
-  local card_data = self.pack[self.focus_index]
-  if card_data then
-    local card = DB.loadSpec('card', card_data.specname)
-    local view = ("%s [%d/%d]"):format(card.name, self.focus_index,
-                                       #self.pack)
-    _font:set()
-    g.setColor(0x16, 0x16, 0x16, 0x80)
-    g.rectangle("fill", x-16, y-16, 160, 160)
-    g.setColor(COLORS.NEUTRAL)
-    g.print(view, x, y)
-    local t, n = self:getTarget()
-    g.print(("%s %d"):format(t, n), x, y + _font:getHeight())
+
+  --Draw all cards previous to focused card
+  local alpha = 1
+  local x = O_WIN_W/2 - 3*CARD.getWidth()/2 - 65
+  local y = O_WIN_H/2 - CARD.getHeight()/2 + 30
+  for i = self.focus_index-1, 1, -1 do
+    local card_gap = 30
+    local card = self.pack[i]
+    if card then
+      CARD.draw(card, x, y, false, alpha)
+    end
+    x = x - card_gap - CARD.getWidth()
+    alpha = math.max(0, alpha - .4)
   end
+
+  --Draw current focused card
+  local card = self.pack[self.focus_index]
+  if card then
+
+    --Draw consume text above indication arrow
+    _font:set()
+    g.setColor(COLORS.NEUTRAL)
+    local text_to_draw = "consume"
+    x = O_WIN_W/2 - _font:getWidth(text_to_draw)/2
+    y = O_WIN_H/2 - CARD.getHeight()/2 - 50 - _font:getHeight(text_to_draw)
+    g.print(text_to_draw, x, y)
+
+    --Draw consume indication arrow
+    g.setLineWidth(3)
+    local t_size = 25
+    x = O_WIN_W/2
+    y = O_WIN_H/2 - CARD.getHeight()/2 - 24
+    g.polygon("line", x - t_size/2, y,
+                      x + t_size/2, y,
+                      x, y - t_size*math.sqrt(3)/2)
+
+
+    --Draw card
+    local x, y = O_WIN_W/2 - CARD.getWidth()/2, O_WIN_H/2 - CARD.getHeight()/2
+    CARD.draw(card, x, y)
+
+    --Draw pack info below card
+    local info = ("[%d/%d]"):format(self.focus_index,
+    #self.pack)
+    x, y = O_WIN_W/2 - _font:getWidth(info)/2, y + CARD.getHeight() + 20
+    _font:set()
+    g.setColor(COLORS.NEUTRAL)
+    g.print(info, x, y)
+
+    --Draw left arrow
+    if self.focus_index > 1 then
+      local t_size = 30
+      x = O_WIN_W/2 - CARD.getWidth()/2 - 15
+      y = O_WIN_H/2
+      g.polygon("line", x, y - t_size/2,
+                        x, y + t_size/2,
+                        x - t_size*math.sqrt(3)/2, y)
+    end
+
+    if self.focus_index < #self.pack then
+      --Draw right arrow
+      local t_size = 30
+      x = O_WIN_W/2 + CARD.getWidth()/2 + 15
+      y = O_WIN_H/2
+      g.polygon("line", x, y - t_size/2,
+                        x, y + t_size/2,
+                        x + t_size*math.sqrt(3)/2, y)
+    end
+
+  end
+
+  --Draw all cards after focused card
+  local alpha = 1
+  local x = O_WIN_W/2 + CARD.getWidth()/2 + 65
+  local y = O_WIN_H/2 - CARD.getHeight()/2 + 30
+  for i = self.focus_index+1, #self.pack do
+    local card_gap = 30
+    local card = self.pack[i]
+    if card then
+      CARD.draw(card, x, y, false, alpha)
+    end
+    x = x + card_gap + CARD.getWidth()
+    alpha = math.max(0, alpha - .4)
+  end
+
 end
 
 return PackView

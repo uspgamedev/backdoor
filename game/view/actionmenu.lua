@@ -61,7 +61,7 @@ function ActionMenu:showLabel()
   self.text = 0
   self:removeTimer(_TWEEN.TEXT, MAIN_TIMER)
   self:addTimer(_TWEEN.TEXT, MAIN_TIMER, "tween",
-    0.03 * len, self, { text = len+1 }, 'linear')
+    0.05 * len, self, { text = len+1 }, 'linear')
 end
 
 function ActionMenu:hideLabel()
@@ -150,4 +150,3 @@ function ActionMenu:draw()
 end
 
 return ActionMenu
-
