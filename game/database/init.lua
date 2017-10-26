@@ -173,6 +173,7 @@ function DB.subschemaTypes(base)
 end
 
 function DB.schemaFor(domain_name)
+  print('schemaFor', domain_name)
   local base, branch = domain_name:match('^(.+)/(.+)$')
   if base and branch then
     return ipairs(_subschemaFor(base, branch))
