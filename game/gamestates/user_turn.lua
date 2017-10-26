@@ -3,6 +3,7 @@
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
+local ABILITY       = require 'domain.ability'
 local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
@@ -104,13 +105,13 @@ local function _useAction(action_slot)
         {
           pos = { controlled_actor:getPos() },
           range_checker = function(i, j)
-            return ACTION.param('choose_target')
-                         .isWithinRange(current_sector, controlled_actor,
+            return ABILITY.param('choose_target')
+                          .isWithinRange(current_sector, controlled_actor,
                                         param, {i,j})
           end,
           validator = function(i, j)
-            return ACTION.validate('choose_target', current_sector,
-                                   controlled_actor, param, {i,j})
+            return ABILITY.validate('choose_target', current_sector,
+                                    controlled_actor, param, {i,j})
           end
         }
       )
@@ -125,8 +126,8 @@ local function _useAction(action_slot)
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
-          return ACTION.validate('choose_widget_slot', current_sector,
-                                 controlled_actor, param, which_slot)
+          return ABILITY.validate('choose_widget_slot', current_sector,
+                                  controlled_actor, param, which_slot)
         end
       )
       local args = coroutine.yield(_task)
