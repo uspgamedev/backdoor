@@ -57,10 +57,12 @@ local _registerSignals
 --[[ LOCAL FUNCTIONS ]]--
 
 local function _moveFocus(dir)
+  if _pack_view:isLocked() then return end
   _pack_view:moveFocus(dir)
 end
 
 local function _consumeCard()
+  if _pack_view:isLocked() then return end
   table.insert(_picks, {
     action_type = "consume",
     card_index = _pack_view:getFocus(),
@@ -73,12 +75,13 @@ local function _consumeCard()
 end
 
 local function _confirm()
+  if _pack_view:isLocked() then return end
   while not _pack_view:isEmpty() do
     table.insert(_picks, {
       action_type = "get",
       card_index = _pack_view:getFocus(),
     })
-    _pack_view:removeCurrent()
+    _pack_view:removeCurrent("get")
   end
   SWITCHER.pop(_picks)
   _picks = nil
