@@ -28,12 +28,16 @@ local function _init()
   _dummy.push(DEFS.IDENTITY)
 end
 
+local function _initMod(mod)
+  return setmetatable(mod, {__call = MODS[mod.type](mod.strength)})
+end
+
 local function _newMod(type, strength, duration)
-  return setmetatable({
+  return _initMod({
+    type = type,
     tick = 0,
     lifetime = duration,
-  }, {
-    __call = MODS[type](strength)
+    strength = strength,
   })
 end
 
@@ -108,10 +112,44 @@ function MOD.tick(target)
   _tick(_effects.relative[id])
 end
 
-function MOD:saveState()
+function MOD.saveState()
+  local state = {}
+  for fx_type, targets in pairs(_effects) do
+    state[fx_type] = {}
+    for target_id, attrs in pairs(targets) do
+      state[fx_type][target_id] = {}
+      for attr, fxqueue in pairs(attrs) do
+        state[fx_type][target_id][attr] = {}
+        fxqueue.push(DEFS.DONE)
+        local mod
+        repeat
+          mod = fxqueue.pop()
+          if mod ~= DEFS.DONE then
+            table.insert(state[fx_type][target_id][attr], mod)
+            fxqueue.push(mod)
+          end
+        until mod == DEFS.DONE
+      end
+    end
+  end
+  return state
 end
 
-function MOD:loadState(state)
+function MOD.loadState(state)
+  _init()
+  for fx_type, targets_state in pairs(state) do
+    _effects[fx_type] = {}
+    for target_id, attrs_state in pairs(targets_state) do
+      _effects[fx_type][target_id] = {}
+      for attr, fxqueue_state in pairs(attrs_state) do
+        local fxqueue = Queue(_QUEUE_LIMIT)
+        _effects[fx_type][target_id][attr] = fxqueue
+        for _,mod in ipairs(fxqueue_state) do
+          fxqueue.push(_initMod(mod))
+        end
+      end
+    end
+  end
 end
 
 return MOD
