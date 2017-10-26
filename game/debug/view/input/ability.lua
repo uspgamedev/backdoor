@@ -4,8 +4,8 @@ local DB          = require 'database'
 local IDGenerator = require 'common.idgenerator'
 
 local _CMDTYPES = {
-  'inputs', 'operators', 'effects',
-  inputs = "Input",
+  'params', 'operators', 'effects',
+  params = "Parameter",
   operators = "Value",
   effects = "Effect"
 }
@@ -60,6 +60,7 @@ local function _commandList(self, ability, cmdtype, selected, delete)
             end
           end
           table.insert(list, new)
+          ability[cmdtype] = list
           return true
         end
         return 0
@@ -72,20 +73,31 @@ end
 
 function inputs.ability(spec, key)
 
-  local ability = spec[key.id] or { inputs = {}, operators = {}, effects = {} }
+  local ability = spec[key.id] or { params = {}, operators = {}, effects = {} }
   local selected = nil
 
   local function delete()
     table.remove(ability[selected.cmdtype], selected.idx)
   end
 
+  local _active = not (not spec[key.id] and key.optional)
+
   return function(self)
-    IMGUI.Text(("%s"):format(key.name))
-    IMGUI.Indent(20)
-    for _,cmdtype in ipairs(_CMDTYPES) do
-      selected = _commandList(self, ability, cmdtype, selected, delete)
+    if key.optional then
+      IMGUI.PushID(key.id .. ".check")
+      _active = select(2, IMGUI.Checkbox("", _active))
+      IMGUI.PopID()
+      IMGUI.SameLine()
     end
-    IMGUI.Unindent(20)
+    IMGUI.Text(("%s"):format(key.name))
+    if _active then
+      IMGUI.Indent(20)
+      for _,cmdtype in ipairs(_CMDTYPES) do
+        selected = _commandList(self, ability, cmdtype, selected, delete)
+      end
+      spec[key.id] = ability
+      IMGUI.Unindent(20)
+    end
   end
 end
 

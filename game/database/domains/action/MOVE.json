@@ -4,9 +4,20 @@
       "output":"pos",
       "typename":"direction"
     }],
-  "cost":3,
+  "ability":{
+    "params":[{
+        "typename":"direction",
+        "output":"pos"
+      }],
+    "operators":[],
+    "effects":[{
+        "typename":"move_to",
+        "pos":"par:pos"
+      }]
+  },
   "effects":[{
       "typename":"move_to",
       "pos":"par:pos"
-    }]
+    }],
+  "cost":3
 }

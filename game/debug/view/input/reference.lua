@@ -17,7 +17,7 @@ end
 
 local function _getRefs(spec, key, parent)
   local refs = {}
-  if _appendRefs(parent.inputs, refs, 'params', 'par', spec, key.match) then
+  if _appendRefs(parent.params, refs, 'params', 'par', spec, key.match) then
     _appendRefs(parent.operators, refs, 'operators', 'val', spec, key.match)
   end
   local idx = 0
