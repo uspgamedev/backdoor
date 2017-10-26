@@ -26,11 +26,10 @@ Works only in Unix systems (Linux and MacOS) for now. Dependencies:
 + löve
 + wget
 
-If all the above are pproperly installed, the command
+If all the above are properly installed, the command
 
 ```bash
 $ make
 ```
 
 Should be enough to download, setup, and run the game.
-

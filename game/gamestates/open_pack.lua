@@ -56,35 +56,38 @@ local _registerSignals
 
 --[[ LOCAL FUNCTIONS ]]--
 
+local function _leaveState()
+    SWITCHER.pop(_picks)
+    _picks = nil
+end
+
 local function _moveFocus(dir)
+  if _pack_view:isLocked() then return end
   _pack_view:moveFocus(dir)
 end
 
 local function _consumeCard()
+  if _pack_view:isLocked() then return end
   table.insert(_picks, {
     action_type = "consume",
     card_index = _pack_view:getFocus(),
   })
   _pack_view:consumeCard()
-  if _pack_view:isEmpty() then
-    SWITCHER.pop(_picks)
-    _picks = nil
-  end
 end
 
 local function _confirm()
-  while not _pack_view:isEmpty() do
+  if _pack_view:isLocked() then return end
+  local focus_index = _pack_view:getRemainingCards()
+  for _, i in ipairs(focus_index) do
     table.insert(_picks, {
       action_type = "get",
-      card_index = _pack_view:getFocus(),
+      card_index = focus_index[i],
     })
-    _pack_view:removeCurrent()
   end
-  SWITCHER.pop(_picks)
-  _picks = nil
 end
 
 function _registerSignals()
+  Signal.register("end_pack_state", _leaveState)
   Signal.register("move_focus", _moveFocus)
   Signal.register("consume_card", _consumeCard)
   Signal.register("confirm", _confirm)
@@ -95,6 +98,7 @@ function _unregisterSignals()
   for _,signal_pack in pairs(SIGNALS) do
     Signal.clear(signal_pack[1])
   end
+  Signal.clear("end_pack_state")
   CONTROL.setMap(_previous_control_map)
 end
 
