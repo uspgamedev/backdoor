@@ -19,7 +19,11 @@ end
 local ACTION = {}
 
 function ACTION.paramsOf(action_name)
-  return ABILITY.paramsOf(DB.loadSpec('action', action_name).ability)
+  return ABILITY.paramsOf(ACTION.ability(action_name))
+end
+
+function ACTION.ability(action_name)
+  return (DB.loadSpec('action', action_name) or {}).ability
 end
 
 function ACTION.run(action_name, actor, sector, params)

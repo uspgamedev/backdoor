@@ -3,6 +3,7 @@ local GameElement = require 'domain.gameelement'
 local DB          = require 'database'
 local Card        = require 'domain.card'
 local ACTION      = require 'domain.action'
+local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 local PLACEMENTS  = require 'domain.definitions.placements'
@@ -277,7 +278,7 @@ function Actor:getAction(slot)
     local card = self.hand[slot]
     if card then
       if card:isArt() then
-        return card:getArtAction()
+        return true
       elseif card:isUpgrade() then
         local cost = card:getUpgradeCost()
         if self.exp >= cost then
@@ -303,6 +304,10 @@ end
 
 function Actor:getHand()
   return self.hand
+end
+
+function Actor:getCard(index)
+  return self.hand[index]
 end
 
 function Actor:getHandSize()
@@ -423,6 +428,19 @@ local function _interact(self)
   return action, params
 end
 
+function Actor:playCard(card_index, sector, params)
+  local card = assert(self.hand[card_index])
+  local art_played = false
+  if card:isArt() and not card:checkArtParams(actor, sector, params) then
+    return false
+  end
+  table.remove(self.hand, card_index)
+  if not card:isOneTimeOnly() and not card:isWidget() then
+    self:addCardToBackbuffer(card)
+  end
+  return card
+end
+
 function Actor:makeAction(sector)
   local success = false
   repeat
@@ -435,21 +453,21 @@ function Actor:makeAction(sector)
       end
     end
     if check then
-      local action
-      if action_slot == 'INTERACT' then
-        action, params = _interact(self)
-      else
-        action = check
-      end
+      local action, card
       if self:isCard(action_slot) then
-        local card = table.remove(self.hand, action_slot)
-        if not card:isOneTimeOnly() and not card:isWidget() then
-          self:addCardToBackbuffer(card)
-        end
+        card = self:playCard(action_slot, sector, params)
       elseif self:isWidget(action_slot) then
         self:spendWidget(action_slot)
+      else
+        if action_slot == 'INTERACT' then
+          action, params = _interact(self)
+        else
+          action = check
+        end
       end
-      if action then
+      if card and card:isArt() then
+        success = ABILITY.execute(card:getArtAbility(), self, sector, params)
+      elseif action and type(action) ~= 'boolean' then
         success = ACTION.run(action, self, sector, params)
       end
     end

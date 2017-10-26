@@ -94,10 +94,19 @@ end
 local function _useAction(action_slot)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
-  local action_name = controlled_actor:getAction(action_slot)
-  if not action_name then return false end
+  local ability
+  if controlled_actor:isCard(action_slot) then
+    local card = controlled_actor:getCard(action_slot)
+    if card:isArt() then
+      ability = card:getArtAbility()
+    end
+  else
+    local action_name = controlled_actor:getAction(action_slot)
+    ability = ACTION.ability(action_name)
+  end
+  if not ability then return false end
   local params = {}
-  for _,param in ACTION.paramsOf(action_name) do
+  for _,param in ABILITY.paramsOf(ability) do
     if param.typename == 'choose_target' then
       _lockState()
       SWITCHER.push(

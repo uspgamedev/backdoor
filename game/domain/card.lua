@@ -1,4 +1,5 @@
 
+local ABILITY     = require 'domain.ability'
 local GameElement = require 'domain.gameelement'
 
 local Card = Class{
@@ -48,8 +49,12 @@ function Card:isWidget()
   return not not self:getSpec('widget')
 end
 
-function Card:getArtAction()
-  return self:getSpec('art').art_action
+function Card:getArtAbility()
+  return self:getSpec('art').art_ability
+end
+
+function Card:checkArtParams(actor, sector, params)
+  return ABILITY.checkParams(self:getArtAbility(), actor, sector, params)
 end
 
 function Card:getUpgradesList()
