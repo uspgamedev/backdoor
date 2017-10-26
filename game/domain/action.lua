@@ -2,20 +2,6 @@
 local ABILITY = require 'domain.ability'
 local DB      = require 'database'
 
-local function unref(params, values, ref)
-  if type(ref) == 'string' then
-    local t,n = ref:match '(%w+):(.+)'
-    if t and n then
-      if t == 'par' then
-        return params[n]
-      elseif t == 'val' then
-        return values[n]
-      end
-    end
-  end
-  return ref
-end
-
 local ACTION = {}
 
 function ACTION.paramsOf(action_name)
@@ -26,10 +12,42 @@ function ACTION.ability(action_name)
   return (DB.loadSpec('action', action_name) or {}).ability
 end
 
-function ACTION.run(action_name, actor, sector, params)
+--------------------------------------------------------------------------------
+
+function ACTION.castArt(art_card_index, actor, sector, params)
+  local art_card = actor:getCard(art_card_index)
+  local art_ability = art_card:getArtAbility()
+  if not ABILITY.checkParams(art_ability, actor, sector, params) then
+    return false
+  end
+  actor:playCard(art_card_index)
+  ABILITY.execute(art_ability, actor, sector, params)
+  return true
+end
+
+function ACTION.activateWidget(widget_card_slot, actor, sector, params)
+  local widget_card = actor:getWidget(widget_card_slot)
+  local widget_ability = widget_card:getWidgetAbility()
+  if not ABILITY.checkParams(widget_ability, actor, sector, params) then
+    return false
+  end
+  self:spendWidget(action_slot)
+  ABILITY.execute(widget_ability, actor, sector, params)
+  return true
+end
+
+function ACTION.useSignature(actor, sector, params)
+  return ACTION.makeManeuver('PRIMARY', actor, sector, params)
+end
+
+function ACTION.makeManeuver(action_slot, actor, sector, params)
+  local action_name = actor:getAction(action_slot)
   local spec = DB.loadSpec("action", action_name)
   if not ABILITY.checkParams(spec.ability, actor, sector, params) then
     return false
+  end
+  if actor:isCard(action_slot) then
+    actor:playCard(action_slot)
   end
   actor:spendTime(spec.cost)
   actor:rewardPP(spec.playpoints or 0)

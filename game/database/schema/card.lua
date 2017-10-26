@@ -49,6 +49,10 @@ return {
         options = DEFS_PACK.placements,
       },
       {
+        id = 'activated_ability', name = "Activated Ability", type = 'ability',
+        optional = true
+      },
+      {
         id = 'widget_action', name = "Action", type = 'enum',
         options = "domains.action", optional = true
       }

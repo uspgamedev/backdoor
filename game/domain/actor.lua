@@ -225,6 +225,10 @@ function Actor:setSlot(slot, card)
   self.widgets[slot] = card
 end
 
+function Actor:getWidget(slot)
+  return self.widgets[slot]
+end
+
 function Actor:getWidgetNameAt(slot)
   local card = self.widgets[slot]
   if card then return card:getName() end
@@ -265,35 +269,8 @@ function Actor:isCard(slot)
   return type(slot) == 'number'
 end
 
-function Actor:getAction(slot)
-  if self.actions[slot] then
-    if slot == 'PRIMARY' then
-      return self.actions[slot]
-    else
-      return slot
-    end
-  elseif self.widgets[slot] then
-    return self.widgets[slot]:getWidgetAction()
-  elseif self:isCard(slot) then
-    local card = self.hand[slot]
-    if card then
-      if card:isArt() then
-        return true
-      elseif card:isUpgrade() then
-        local cost = card:getUpgradeCost()
-        if self.exp >= cost then
-          return 'UPGRADE', {
-            list = card:getUpgradesList(),
-            ["exp-cost"] = cost
-          }
-        end
-      elseif card:isWidget() then
-        return 'PLACE_WIDGET', {
-          card = card
-        }
-      end
-    end
-  end
+function Actor:getSignature()
+  return self.actions.PRIMARY
 end
 
 function Actor:setAction(name, id)
@@ -428,13 +405,41 @@ local function _interact(self)
   return action, params
 end
 
-function Actor:playCard(card_index, sector, params)
-  local card = assert(self.hand[card_index])
-  local art_played = false
-  if card:isArt() and not card:checkArtParams(actor, sector, params) then
-    return false
+function Actor:getAction(slot)
+  if self.actions[slot] then
+    if slot == 'PRIMARY' then
+      return self.actions[slot]
+    elseif slot == 'INTERACT' then
+      return _interact(self)
+    else
+      return slot
+    end
+  elseif self.widgets[slot] then
+    return self.widgets[slot]:getWidgetAbility()
+  elseif self:isCard(slot) then
+    local card = self.hand[slot]
+    if card then
+      if card:isArt() then
+        return true
+      elseif card:isUpgrade() then
+        local cost = card:getUpgradeCost()
+        if self.exp >= cost then
+          return 'UPGRADE', {
+            list = card:getUpgradesList(),
+            ["exp-cost"] = cost
+          }
+        end
+      elseif card:isWidget() then
+        return 'PLACE_WIDGET', {
+          card = card
+        }
+      end
+    end
   end
-  table.remove(self.hand, card_index)
+end
+
+function Actor:playCard(card_index, sector, params)
+  local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
@@ -453,22 +458,16 @@ function Actor:makeAction(sector)
       end
     end
     if check then
-      local action, card
-      if self:isCard(action_slot) then
-        card = self:playCard(action_slot, sector, params)
-      elseif self:isWidget(action_slot) then
-        self:spendWidget(action_slot)
-      else
-        if action_slot == 'INTERACT' then
-          action, params = _interact(self)
-        else
-          action = check
-        end
-      end
+      local card = self:getCard(action_slot)
+      local widget = self:getWidget(action_slot)
       if card and card:isArt() then
-        success = ABILITY.execute(card:getArtAbility(), self, sector, params)
-      elseif action then
-        success = ACTION.run(action, self, sector, params)
+        success = ACTION.castArt(action_slot, actor, sector, params)
+      elseif widget then
+        success = ACTION.activateWidget(action_slot, actor, sector, params)
+      elseif action_slot == 'PRIMARY' then
+        success = ACTION.useSignature(actor, sector, params)
+      else
+        success = ACTION.makeManeuver(action_slot, actor, sector, params)
       end
     end
   until success

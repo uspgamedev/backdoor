@@ -68,6 +68,10 @@ function Card:getUpgradeCost()
   return self:getSpec('upgrade').cost
 end
 
+function Card:getWidgetAbility()
+  return self:getSpec('widget').activated_ability
+end
+
 function Card:getWidgetAction()
   return self:getSpec('widget').widget_action
 end
