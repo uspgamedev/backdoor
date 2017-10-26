@@ -4,12 +4,13 @@
   "art_action":"SHOOT",
   "name":"Bolt",
   "art":{
+    "art_action":"BOLT",
     "art_ability":{
       "params":[{
           "typename":"choose_target",
+          "max-range":5,
           "body-only":true,
-          "output":"target",
-          "max-range":5
+          "output":"target"
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -23,10 +24,9 @@
       "effects":[{
           "typename":"dmg_formula",
           "target":"val:target_body",
-          "base":6,
-          "attr":"val:arcana"
+          "attr":"val:arcana",
+          "base":6
         }]
-    },
-    "art_action":"BOLT"
+    }
   }
 }

@@ -467,7 +467,7 @@ function Actor:makeAction(sector)
       end
       if card and card:isArt() then
         success = ABILITY.execute(card:getArtAbility(), self, sector, params)
-      elseif action and type(action) ~= 'boolean' then
+      elseif action then
         success = ACTION.run(action, self, sector, params)
       end
     end

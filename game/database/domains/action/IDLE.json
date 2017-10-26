@@ -1,6 +1,11 @@
 {
-  "cost":1,
-  "effects":[],
   "operators":[],
-  "params":[]
+  "params":[],
+  "ability":{
+    "params":[],
+    "operators":[],
+    "effects":[]
+  },
+  "effects":[],
+  "cost":10
 }
