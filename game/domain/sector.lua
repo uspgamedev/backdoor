@@ -404,11 +404,12 @@ function _turnLoop(self, ...)
     while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)
 
-      actor:tick()
       while actor:ready() do
         actor:makeAction(self)
         manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
       end
+
+      actor:tick()
 
       if actor:isPlayer() and actor:getBody():getSector() ~= self then
         coroutine.yield('changeSector')

@@ -8,6 +8,7 @@ local PROFILE = require 'infra.profile'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
+local MOD = require 'domain.modifier'
 
 function Route:instance(obj)
 
@@ -16,6 +17,7 @@ function Route:instance(obj)
   local _id_generator = IDGenerator()
   local _player_name = "Unknown"
   local _player_id
+  local _modifiers = MOD
   local _sectors = {}
   local _current_sector = nil
   local _controlled_actor = nil
@@ -42,6 +44,8 @@ function Route:instance(obj)
     -- setState is theoretically enough to reproduce seed as well
     RANDOM.setState(state.rng_state)
 
+    _modifiers.loadState(state.modifiers)
+
     -- sectors
     _sectors = {}
     for _,sector_state in ipairs(state.sectors) do
@@ -66,6 +70,8 @@ function Route:instance(obj)
     -- rng
     state.rng_state = RANDOM.getState()
     state.rng_seed = RANDOM.getSeed()
+    -- modifiers
+    state.modifiers = _modifiers.saveState()
     -- sectors
     state.sectors = {}
     for _,sector in ipairs(_sectors) do
