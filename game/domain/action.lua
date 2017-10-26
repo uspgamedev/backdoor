@@ -38,7 +38,7 @@ end
 function ACTION.run(action_name, actor, sector, params)
   local spec = DB.loadSpec("action", action_name)
   local values = {}
-  for i,parameter in ipairs(spec.params) do
+  for i,parameter in ipairs(spec.ability.params) do
     local paramspec = PAR[parameter.typename]
     if not paramspec.isValid(sector, actor, parameter,
                              params[parameter.output]) then
@@ -47,7 +47,7 @@ function ACTION.run(action_name, actor, sector, params)
   end
   actor:spendTime(spec.cost)
   actor:rewardPP(spec.playpoints or 0)
-  for i,operation in ipairs(spec.operators) do
+  for i,operation in ipairs(spec.ability.operators) do
     local argvalues = {}
     local opname, valname = operation.typename, operation.output
     for _,arg in DB.schemaFor('operators/'..opname) do
@@ -55,7 +55,7 @@ function ACTION.run(action_name, actor, sector, params)
     end
     values[valname] = OP[opname].process(actor, sector, argvalues)
   end
-  for i,effect_spec in ipairs(spec.effects) do
+  for i,effect_spec in ipairs(spec.ability.effects) do
     local argvalues = {}
     local fx_name = effect_spec.typename
     for _,arg in DB.schemaFor('effects/'..fx_name) do
