@@ -1,6 +1,8 @@
 
 local DEFS = {}
 
+DEFS.NOTHING = function() end
+DEFS.IDENTITY = function(...) return ... end
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
 DEFS.CONSUME_EXP = 1
