@@ -22,10 +22,7 @@ CPML_REPO=externals/cpml
 
 DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
-LUALZW_LIB=$(LIBS_DIR)/lualzw
-LUALZW_REPO=externals/lualzw
-
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(LUALZW_LIB)
+DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB)
 
 ## MAIN TARGETS
 
@@ -79,16 +76,6 @@ $(CPML_REPO):
 
 $(DKJSON_LIB):
 	wget -O $(DKJSON_LIB) -- http://dkolf.de/src/dkjson-lua.fsl/raw/dkjson.lua?name=16cbc26080996d9da827df42cb0844a25518eeb3
-
-## LUALZW
-
-$(LUALZW_LIB): $(LUALZW_REPO)
-	mkdir $(LUALZW_LIB)
-	cp -r $(LUALZW_REPO)/* $(LUALZW_LIB)
-	echo "return require 'lualzw.lualzw'" >$(LUALZW_LIB)/init.lua
-
-$(LUALZW_REPO):
-	git clone https://github.com/Rochet2/lualzw.git $(LUALZW_REPO)
 
 ## CLEAN UP
 

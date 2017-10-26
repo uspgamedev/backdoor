@@ -1,10 +1,10 @@
 
 local json = require 'dkjson'
-local lzw = require 'lualzw'
 local IDGenerator = require 'common.idgenerator'
 local RUNFLAGS = require 'infra.runflags'
 local ROUTEBUILDER = require 'infra.routebuilder'
 local INPUT = require 'infra.input'
+local ZIP = love.math
 
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
@@ -23,12 +23,12 @@ local _metadata
 
 local function _compress(str) --> str
   if not __COMPRESS__ then return str end
-  return assert(lzw.compress(str))
+  return assert(ZIP.compress(str:gsub(" ", ""), "lz4", 9))
 end
 
 local function _decompress(str) --> str
   if not __COMPRESS__ then return str end
-  return assert(lzw.decompress(str))
+  return assert(ZIP.decompress(str, "lz4"))
 end
 
 local function _encode(t) --> str
