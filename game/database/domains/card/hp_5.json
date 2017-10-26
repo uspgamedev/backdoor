@@ -1,6 +1,5 @@
 {
   "attr":"ATH",
-  "name":"HP +5",
   "upgrade":{
     "body_list":[{
         "attr":"HP",
@@ -8,5 +7,7 @@
       }],
     "actor_list":[],
     "cost":2
-  }
+  },
+  "desc":"Upgrades your Max HP by 5.",
+  "name":"HP +5"
 }

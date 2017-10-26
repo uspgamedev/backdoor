@@ -8,5 +8,6 @@
     "actor_list":[],
     "cost":2
   },
+  "desc":"Upgrades your Defense Die count by 1.",
   "name":"DEF +1"
 }

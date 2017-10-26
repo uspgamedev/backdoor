@@ -1,6 +1,5 @@
 {
   "attr":"MEC",
-  "name":"Gun",
   "widget":{
     "activated_ability":{
       "params":[{
@@ -29,5 +28,7 @@
     "widget_action":"SHOOT",
     "activation_cost":30,
     "placement":"weapon"
-  }
+  },
+  "desc":"Equip as a Widget. One shot is hella strong.\nThe push back, however, is quite strong,\nand it may take you some time to act again\nafter shooting.",
+  "name":"Gun"
 }

@@ -1,5 +1,6 @@
 {
   "attr":"MEC",
+  "desc":"Draws another card from the buffer.\nUseless waste of space.",
   "type":"ART",
   "art_action":"DRAW",
   "name":"Think",

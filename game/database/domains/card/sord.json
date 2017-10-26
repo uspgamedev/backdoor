@@ -1,6 +1,5 @@
 {
   "attr":"ATH",
-  "name":"Sord",
   "widget":{
     "activated_ability":{
       "params":[{
@@ -29,5 +28,7 @@
     "widget_action":"MELEE",
     "activation_cost":10,
     "placement":"weapon"
-  }
+  },
+  "desc":"Equip as a Widget. An ugly blunt sord.\nNo, not \"sword\". It says \"sord\" right there,\ninscribed on the hilt.",
+  "name":"Sord"
 }

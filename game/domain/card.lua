@@ -29,6 +29,10 @@ function Card:getName()
   return self:getSpec('name')
 end
 
+function Card:getDescription()
+  return self:getSpec('desc')
+end
+
 function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
