@@ -1,6 +1,7 @@
 
 local GameElement = require 'domain.gameelement'
 local DB          = require 'database'
+local MOD         = require 'domain.modifier'
 local Card        = require 'domain.card'
 local ACTION      = require 'domain.action'
 local RANDOM      = require 'common.random'
@@ -153,7 +154,7 @@ function Actor:modifyExpBy(n)
 end
 
 function Actor:getATH()
-  return self:getSpec('ath') + self.upgrades.ATH
+  return MOD.apply(self, 'ATH', self:getSpec('ath') + self.upgrades.ATH)
 end
 
 function Actor:upgradeATH(n)
@@ -161,7 +162,7 @@ function Actor:upgradeATH(n)
 end
 
 function Actor:getARC()
-  return self:getSpec('arc') + self.upgrades.ARC
+  return MOD.apply(self, 'ARC', self:getSpec('arc') + self.upgrades.ARC)
 end
 
 function Actor:upgradeARC(n)
@@ -169,7 +170,7 @@ function Actor:upgradeARC(n)
 end
 
 function Actor:getMEC()
-  return self:getSpec('mec') + self.upgrades.MEC
+  return MOD.apply(self, 'MEC', self:getSpec('mec') + self.upgrades.MEC)
 end
 
 function Actor:upgradeMEC(n)
@@ -177,7 +178,7 @@ function Actor:upgradeMEC(n)
 end
 
 function Actor:getSPD()
-  return self:getSpec('spd') + self.upgrades.SPD
+  return MOD.apply(self, 'SPD', self:getSpec('spd') + self.upgrades.SPD)
 end
 
 function Actor:isEquipped(place)
@@ -405,6 +406,9 @@ end
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  MOD.tick(self)
+  local body = self:getBody()
+  if body then MOD.tick(body) end
 end
 
 function Actor:ready()
