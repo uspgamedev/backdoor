@@ -1,31 +1,42 @@
 {
   "fillings":[],
   "connections":{
-    "loops":24
+    "loops":16
   },
   "encounters":{
-    "max":6,
+    "max":8,
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime"
       },{
         "actorspec":"grinful",
         "bodyspec":"imp"
+      },{
+        "actorspec":"fiendish",
+        "bodyspec":"eye"
       }],
-    "min":2
+    "min":3
   },
   "rooms":{
-    "minh":3,
-    "minw":3,
     "rmar":1,
     "tries":256,
-    "count":24,
+    "minw":3,
+    "minh":3,
     "maxh":9,
+    "count":24,
     "maxw":9
   },
   "holes":false,
-  "maze":{
-    "double":false
+  "maze":[],
+  "deadends":{
+    "amount":12
+  },
+  "bootstrap":{
+    "w":40,
+    "mh":2,
+    "tileset":"demo",
+    "h":24,
+    "mw":2
   },
   "exits":{
     "distance":5,
@@ -34,18 +45,8 @@
       },{
         "target_specname":"sector02"
       },{
-        "target_specname":"sector02"
+        "target_specname":"sector03"
       }],
     "threshold":2
-  },
-  "bootstrap":{
-    "w":40,
-    "mh":2,
-    "tileset":"demo",
-    "h":40,
-    "mw":2
-  },
-  "deadends":{
-    "amount":128
   }
 }
