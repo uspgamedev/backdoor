@@ -1,11 +1,6 @@
 
-local DIR = require 'domain.definitions.dir'
-local FX = require 'lux.pack' 'domain.effects'
-local OP = require 'lux.pack' 'domain.operators'
-local PAR = require 'lux.pack' 'domain.params'
-local DB = require 'database'
-
-local GameElement = require 'domain.gameelement'
+local ABILITY = require 'domain.ability'
+local DB      = require 'database'
 
 local function unref(params, values, ref)
   if type(ref) == 'string' then
@@ -24,46 +19,19 @@ end
 local ACTION = {}
 
 function ACTION.paramsOf(action_name)
-  return ipairs(DB.loadSpec("action", action_name).params)
-end
-
-function ACTION.param(param_name)
-  return PAR[param_name]
-end
-
-function ACTION.validate(param_name, sector, actor, param, value)
-  return PAR[param_name].isValid(sector, actor, param, value)
+  return ABILITY.paramsOf(DB.loadSpec('action', action_name).ability)
 end
 
 function ACTION.run(action_name, actor, sector, params)
   local spec = DB.loadSpec("action", action_name)
-  local values = {}
-  for i,parameter in ipairs(spec.ability.params) do
-    local paramspec = PAR[parameter.typename]
-    if not paramspec.isValid(sector, actor, parameter,
-                             params[parameter.output]) then
-      return false
-    end
+  if not ABILITY.checkParams(spec.ability, actor, sector, params) then
+    return false
   end
   actor:spendTime(spec.cost)
   actor:rewardPP(spec.playpoints or 0)
-  for i,operation in ipairs(spec.ability.operators) do
-    local argvalues = {}
-    local opname, valname = operation.typename, operation.output
-    for _,arg in DB.schemaFor('operators/'..opname) do
-      argvalues[arg.id] = unref(params, values, operation[arg.id])
-    end
-    values[valname] = OP[opname].process(actor, sector, argvalues)
-  end
-  for i,effect_spec in ipairs(spec.ability.effects) do
-    local argvalues = {}
-    local fx_name = effect_spec.typename
-    for _,arg in DB.schemaFor('effects/'..fx_name) do
-      argvalues[arg.id] = unref(params, values, effect_spec[arg.id])
-    end
-    FX[fx_name].process(actor, sector, argvalues)
-  end
+  ABILITY.execute(spec.ability, actor, sector, params)
   return true
 end
 
 return ACTION
+
