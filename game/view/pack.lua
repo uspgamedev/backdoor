@@ -54,7 +54,7 @@ function PackView:init(actor)
 
   --Start intro animation
   ELEMENT.addTimer(
-    self, "start_animation", MAIN_TIMER, "tween", 1, self,
+    self, "start_animation", MAIN_TIMER, "tween", .6, self,
     {packview_x_offset = 0, info_elements_alpha = 256}, "in-out-quad",
    function()
      self.is_locked = false
@@ -82,12 +82,12 @@ function PackView:getRemainingCards()
     self:addTimer("getting_card_timer_"..i,
                   MAIN_TIMER,
                   "after",
-                  (i-1)*.1,
+                  (i-1)*.06,
                   function()
                     self:addTimer("getting_card_"..i,
                                   MAIN_TIMER,
                                   "tween",
-                                  .5,
+                                  .4,
                                   self.cards_y_offset,
                                   {[i] = 500},
                                   "in-quad",
