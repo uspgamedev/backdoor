@@ -43,7 +43,8 @@ GS = {
                                                   -- to use
   ACTION_MENU = require "gamestates.action_menu", -- Player's action menu
   OPEN_PACK = require "gamestates.open_pack",     -- Player opens a pack
-  MANAGE_BUFFER = require "gamestates.manage_buffer",     -- Player opens a pack
+  MANAGE_BUFFER = require "gamestates.manage_buffer",
+                                                  -- Player manages their buffer
   ANIMATION = require "gamestates.animation",     -- Play animations
 }
 
