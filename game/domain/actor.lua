@@ -321,20 +321,13 @@ function Actor:removeBufferCard(i)
   return table.remove(self.buffer, i)
 end
 
-function Actor:getOrganizedBackBuffer()
-  local ordered_backbuffer = {}
-  if self:getBackBufferSize() == 0 then return ordered_backbuffer end
-
+function Actor:copyBackBuffer()
+  local copy = {}
   for i = self:getBufferSize()+2, #self.buffer do
-    local cardinfo = {idx = i, card = self.buffer[i]}
-    table.insert(ordered_backbuffer, cardinfo)
+    print(i, self.buffer[i])
+    table.insert(copy, self.buffer[i])
   end
-
-  table.sort(ordered_backbuffer, function(a, b)
-    return string.byte(a.card:getName(), 1) < string.byte(b.card:getName(), 1)
-  end)
-
-  return ordered_backbuffer
+  return copy
 end
 
 function Actor:countCardInBuffer(specname)

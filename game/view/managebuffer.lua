@@ -98,12 +98,8 @@ function View:updateSelection()
   self.selection = math.min(selection, buffer_size)
 end
 
-function View:updateBuffer(newbuffer)
-  self.backbuffer = newbuffer
-end
-
 function View:popSelectedCard()
-  return table.remove(self.backbuffer, self.selection)
+  return self.selection, table.remove(self.backbuffer, self.selection)
 end
 
 function View:isBufferEmpty()
@@ -130,7 +126,6 @@ end
 
 function View:drawCards(g, enter)
   local _PD = 40
-  local range = 3
   local selection = self.selection
   local buffer = self.backbuffer
   local buffer_size = #buffer
@@ -150,7 +145,7 @@ function View:drawCards(g, enter)
   for i = 1, buffer_size do
     g.push()
     local focus = selection == i
-    local dist = (selection-i)^2
+    local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
 
     -- smooth offset when consuming cards
@@ -158,7 +153,8 @@ function View:drawCards(g, enter)
     self.offsets[i] = offset
     g.translate((_cw+_PD)*(i-1+offset), 0)
 
-    CARD.draw(buffer[i].card, 0, 0, focus, dist>0 and enter/dist or enter)
+    CARD.draw(buffer[i], 0, 0, focus,
+              dist>0 and enter/dist or enter)
     g.pop()
   end
   g.pop()
@@ -169,7 +165,7 @@ function View:drawCards(g, enter)
               math.round(3*_height/7-_ch/2))
   self:drawArrow(g, enter)
   if buffer[selection] then
-    self:drawCardDesc(g, buffer[selection].card, enter)
+    self:drawCardDesc(g, buffer[selection], enter)
   end
   g.pop()
 end
