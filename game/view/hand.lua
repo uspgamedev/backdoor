@@ -12,7 +12,7 @@ local _drawCard
 local _F_NAME = "Text" --Font name
 local _F_SIZE = 21 --Font size
 local _ACTION_TYPES = {
-  'use', 'stash', 'consume'
+  'use', 'stash',
 }
 
 local _font
@@ -58,9 +58,9 @@ end
 
 function HandView:changeActionType(dir)
   if dir == 'up' then
-    self.action_type = (self.action_type - 2)%3 + 1
+    self.action_type = (self.action_type - 2) % #self.action_type + 1
   elseif dir == 'down' then
-    self.action_type = self.action_type%3 + 1
+    self.action_type = self.action_type % #self.action_type + 1
   else
     error(("Unknown dir %s"):format(dir))
   end

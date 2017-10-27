@@ -283,10 +283,6 @@ function Actor:getHand()
   return self.hand
 end
 
-function Actor:getCard(index)
-  return self.hand[index]
-end
-
 function Actor:getHandSize()
   return #self.hand
 end
@@ -371,7 +367,7 @@ end
 
 function Actor:removeHandCard(index)
   assert(index >= 1 and index <= #self.hand)
-  table.remove(self.hand, index)
+  return table.remove(self.hand, index)
 end
 
 function Actor:addCardToBackbuffer(card)
