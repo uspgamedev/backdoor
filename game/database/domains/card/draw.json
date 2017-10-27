@@ -4,6 +4,8 @@
   "art_action":"DRAW",
   "name":"Think",
   "art":{
+    "art_action":"DRAW",
+    "cost":5,
     "art_ability":{
       "params":[],
       "operators":[],
@@ -11,7 +13,6 @@
           "typename":"draw_card",
           "amount":1
         }]
-    },
-    "art_action":"DRAW"
+    }
   }
 }

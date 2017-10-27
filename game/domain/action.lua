@@ -21,6 +21,7 @@ function ACTION.castArt(art_card_index, actor, sector, params)
     return false
   end
   actor:playCard(art_card_index)
+  actor:spendTime(art_card:getArtCost())
   ABILITY.execute(art_ability, actor, sector, params)
   return true
 end
@@ -32,6 +33,7 @@ function ACTION.activateWidget(widget_card_slot, actor, sector, params)
     return false
   end
   actor:spendWidget(action_slot)
+  actor:spendTime(widget_card:getWidgetActivationCost())
   ABILITY.execute(widget_ability, actor, sector, params)
   return true
 end

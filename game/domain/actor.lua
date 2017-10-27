@@ -451,6 +451,7 @@ function Actor:makeAction(sector)
   repeat
     local action_slot, params = self:behavior(sector)
     local check, extra = self:getAction(action_slot)
+    params = params or {}
     if extra then
       -- merge extra onto params
       for k,v in pairs(extra) do

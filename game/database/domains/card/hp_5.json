@@ -2,11 +2,11 @@
   "attr":"ATH",
   "name":"HP +5",
   "upgrade":{
-    "cost":2,
-    "actor_list":[],
     "body_list":[{
         "attr":"HP",
         "val":5
-      }]
+      }],
+    "actor_list":[],
+    "cost":2
   }
 }

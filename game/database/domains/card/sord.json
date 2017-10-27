@@ -2,14 +2,12 @@
   "attr":"ATH",
   "name":"Sord",
   "widget":{
-    "charges":12,
-    "widget_action":"MELEE",
     "activated_ability":{
       "params":[{
           "typename":"choose_target",
-          "max-range":1,
+          "body-only":true,
           "output":"target",
-          "body-only":true
+          "max-range":1
         }],
       "operators":[{
           "typename":"get_attribute",
@@ -23,10 +21,13 @@
       "effects":[{
           "typename":"dmg_formula",
           "target":"val:target_body",
-          "attr":"val:ath",
-          "base":4
+          "base":4,
+          "attr":"val:ath"
         }]
     },
+    "charges":12,
+    "widget_action":"MELEE",
+    "activation_cost":10,
     "placement":"weapon"
   }
 }

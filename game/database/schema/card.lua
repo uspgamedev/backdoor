@@ -11,6 +11,7 @@ return {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
+      { id = 'cost', name = "Cost", type = 'integer', range = {0} },
       { id = 'art_ability', name = "Art Ability", type = 'ability' },
     }
   },
@@ -42,14 +43,12 @@ return {
     type = 'section',
     schema = {
       { id = 'charges', name = "Charges", type = 'integer', range = {1} },
-      {
-        id = 'placement', name = "Placement", type = 'enum',
-        options = DEFS_PACK.placements,
-      },
-      {
-        id = 'activated_ability', name = "Activated Ability", type = 'ability',
-        optional = true
-      }
+      { id = 'placement', name = "Placement", type = 'enum',
+        options = DEFS_PACK.placements },
+      { id = 'activation_cost', name = "Activation Cost", type = 'integer',
+        range = {0} },
+      { id = 'activated_ability', name = "Activated Ability", type = 'ability',
+        optional = true }
     },
   }
 }

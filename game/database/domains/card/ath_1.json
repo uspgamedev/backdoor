@@ -1,12 +1,12 @@
 {
   "attr":"ATH",
   "upgrade":{
-    "body_list":[],
+    "cost":2,
     "actor_list":[{
         "attr":"ATH",
         "val":1
       }],
-    "cost":2
+    "body_list":[]
   },
   "type":"UPGRADE",
   "art_action":"ATH +1",

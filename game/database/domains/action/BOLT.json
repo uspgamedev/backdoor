@@ -1,0 +1,27 @@
+{
+  "ability":{
+    "operators":[{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"target_body"
+      },{
+        "typename":"get_attribute",
+        "output":"arcana",
+        "which":"ARC"
+      }],
+    "params":[{
+        "max-range":5,
+        "typename":"choose_target",
+        "body-only":true,
+        "output":"target"
+      }],
+    "effects":[{
+        "typename":"dmg_formula",
+        "target":"val:target_body",
+        "attr":"val:arcana",
+        "base":6
+      }]
+  },
+  "playpoints":3,
+  "cost":10
+}

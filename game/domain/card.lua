@@ -53,8 +53,8 @@ function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
 
-function Card:checkArtParams(actor, sector, params)
-  return ABILITY.checkParams(self:getArtAbility(), actor, sector, params)
+function Card:getArtCost()
+  return self:getSpec('art').cost
 end
 
 function Card:getUpgradesList()
@@ -72,8 +72,8 @@ function Card:getWidgetAbility()
   return self:getSpec('widget').activated_ability
 end
 
-function Card:getWidgetAction()
-  return self:getSpec('widget').widget_action
+function Card:getWidgetActivationCost()
+  return self:getSpec('widget').activation_cost
 end
 
 function Card:getWidgetPlacement()
