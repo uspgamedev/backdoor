@@ -51,6 +51,7 @@ function View:init(actor)
   self.selection = 1
   self.cursor = 0
   self.move = self.selection
+  self.offsets = {}
   self.actor = actor
   self.backbuffer = false
 
@@ -91,10 +92,8 @@ end
 function View:updateSelection()
   local selection = self.selection
   local buffer_size = #self.backbuffer
-  if selection == 1 and buffer_size > 1 then
-    self.move = -1
-  elseif selection < buffer_size then
-    self.move = selection - 1
+  for i = selection, buffer_size do
+    self.offsets[i] = 1
   end
   self.selection = math.min(selection, buffer_size)
 end
@@ -148,17 +147,19 @@ function View:drawCards(g, enter)
   g.translate(math.round(-(_cw+_PD)*(self.move-1)), 0)
 
   -- draw each card
-  --[[
-  --  local i = _prev_circular(selection, buffer_size, range)
-  --  local limit = _next_circular(selection, buffer_size, range)
-  --  while i ~= limit do
-  --]]
   for i = 1, buffer_size do
+    g.push()
     local focus = selection == i
     local dist = (selection-i)^2
+    local offset = self.offsets[i] or 0
+
+    -- smooth offset when consuming cards
+    offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
+    self.offsets[i] = offset
+    g.translate((_cw+_PD)*(i-1+offset), 0)
+
     CARD.draw(buffer[i].card, 0, 0, focus, dist>0 and enter/dist or enter)
-    g.translate(_cw+_PD, 0)
-    --i = _next_circular(i, buffer_size, 1)
+    g.pop()
   end
   g.pop()
 
@@ -175,7 +176,8 @@ end
 
 function View:drawArrow(g, enter)
   local text_width = _font:getWidth(_CONSUME_TEXT)
-  local text_height = _font:getHeight()*_font:getLineHeight()
+  local lh = 1.25
+  local text_height
   local senoid
 
   g.push()
@@ -186,8 +188,10 @@ function View:drawArrow(g, enter)
   while self.cursor > 1 do self.cursor = self.cursor - 1 end
   senoid = (_ARRSIZE/2)*math.sin(self.cursor*_PI)
 
-  _font:setLineHeight(1.25)
+  _font:setLineHeight(lh)
   _font.set()
+  text_height = _font:getHeight()*lh
+
   g.translate(0, -_PD - text_height)
   g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
 
