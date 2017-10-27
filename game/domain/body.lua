@@ -1,6 +1,7 @@
 
 local RANDOM = require 'common.random'
 local GameElement = require 'domain.gameelement'
+local MOD = require 'domain.modifier'
 
 local Body = Class{
   __includes = { GameElement }
@@ -53,7 +54,7 @@ function Body:getHP()
 end
 
 function Body:getMaxHP()
-  return self:getSpec('hp') + self.upgrades.HP
+  return MOD.apply(self, 'MaxHP', self:getSpec('hp') + self.upgrades.HP)
 end
 
 function Body:upgradeHP(val)
@@ -73,7 +74,7 @@ function Body:setHP(hp)
 end
 
 function Body:getDEF()
-  return self:getSpec('def') + self.upgrades.DEF
+  return MOD.apply(self, 'DEF', self:getSpec('def') + self.upgrades.DEF)
 end
 
 function Body:getBaseDEF()
