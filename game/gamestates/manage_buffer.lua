@@ -6,22 +6,30 @@ local ManageBufferView = require 'view.managebuffer'
 local state = {}
 
 local _view
-local _selection
 local _mapping
 local _actor
+local _leave
 
 function state:init()
   _mapping = {
     PRESS_LEFT = function()
-      _selection = (_selection - 2) % #DEFS.WIDGETS + 1
+      _view:selectPrev()
     end,
     PRESS_RIGHT = function()
-      _selection = _selection % #DEFS.WIDGETS + 1
+      _view:selectNext()
+    end,
+    PRESS_UP = function()
+      local cardinfo = _view:popSelectedCard()
+      _actor:consumeCard(cardinfo.card)
+      _actor:removeBufferCard(cardinfo.idx)
+      _view:updateBuffer(_actor:getOrganizedBackBuffer())
+      _view:updateSelection()
+      if _view:isBufferEmpty() then SWITCHER.pop() end
     end,
     PRESS_CONFIRM = function()
+      SWITCHER.pop({})
     end,
     PRESS_CANCEL = function()
-      _view:fadeOut()
       SWITCHER.pop({})
     end,
   }
@@ -30,19 +38,26 @@ end
 
 function state:enter(from, actor)
   _actor = actor
-  _selection = 1
 
-  CONTROLS.setMap(_mapping)
+  if _actor:getBackBufferSize() > 0 then
+    CONTROLS.setMap(_mapping)
+    _view:addElement("HUD")
+    _view:open(_actor:getOrganizedBackBuffer())
+    _leave = false
+  else
+    _leave = true
+  end
+end
 
-  _view:addElement("HUD")
-  _view:fadeIn()
+function state:leave()
+  _view:close()
 end
 
 function state:update(dt)
   if not DEBUG then
+    if _leave then SWITCHER.pop() end
     MAIN_TIMER:update(dt)
   end
-  _view:setSelection(_selection)
 end
 
 function state:draw()
