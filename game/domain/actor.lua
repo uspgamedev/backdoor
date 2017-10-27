@@ -311,6 +311,20 @@ function Actor:getBackBufferSize()
   end
 end
 
+function Actor:getBackBufferCard(i)
+  return self.buffer[self:getBufferSize()-1+i]
+end
+
+function Actor:countCardInBuffer(specname)
+  local count = 0
+  for i,card in ipairs(self.buffer) do
+    if card:getSpecName() == specname then
+      count = count + 1
+    end
+  end
+  return count
+end
+
 function Actor:isBufferEmpty()
   return #self.buffer == 1
 end
