@@ -175,6 +175,12 @@ local function _hideHUD()
   _view.actor:hide()
 end
 
+local function _manageBuffer()
+  local controlled_actor = _route.getControlledActor()
+  _lockState()
+  SWITCHER.push(GS.MANAGE_BUFFER, controlled_actor)
+end
+
 local function _useWidget()
   local controlled_actor = _route.getControlledActor()
   _lockState()
@@ -245,6 +251,7 @@ function _registerSignals()
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
   Signal.register("widget", _makeSignalHandler(_useWidget))
+  Signal.register("managebuffer", _makeSignalHandler(_manageBuffer))
   Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)

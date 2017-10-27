@@ -311,6 +311,42 @@ function Actor:getBackBufferSize()
   end
 end
 
+function Actor:getBackBufferCard(i)
+  return self.buffer[self:getBufferSize()+1+i]
+end
+
+function Actor:removeBufferCard(i)
+  assert(self.buffer[i] and self.buffer[i] ~= DEFS.DONE,
+         "Invalid card index to remove")
+  return table.remove(self.buffer, i)
+end
+
+function Actor:getOrganizedBackBuffer()
+  local ordered_backbuffer = {}
+  if self:getBackBufferSize() == 0 then return ordered_backbuffer end
+
+  for i = self:getBufferSize()+2, #self.buffer do
+    local cardinfo = {idx = i, card = self.buffer[i]}
+    table.insert(ordered_backbuffer, cardinfo)
+  end
+
+  table.sort(ordered_backbuffer, function(a, b)
+    return string.byte(a.card:getName(), 1) < string.byte(b.card:getName(), 1)
+  end)
+
+  return ordered_backbuffer
+end
+
+function Actor:countCardInBuffer(specname)
+  local count = 0
+  for i,card in ipairs(self.buffer) do
+    if card:getSpecName() == specname then
+      count = count + 1
+    end
+  end
+  return count
+end
+
 function Actor:isBufferEmpty()
   return #self.buffer == 1
 end

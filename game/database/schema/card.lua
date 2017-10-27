@@ -5,6 +5,7 @@ local DEFS = require 'domain.definitions'
 return {
   { id = 'one_time', name = "Is One Time Usage", type = 'boolean' },
   { id = 'name', name = "Name", type = 'string' },
+  { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.PRIMARY_ATTRIBUTES },
   {

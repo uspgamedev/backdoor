@@ -1,5 +1,6 @@
 {
   "attr":"ATH",
+  "desc":"Upgrades your Athletics attribute by 1.",
   "upgrade":{
     "cost":2,
     "actor_list":[{

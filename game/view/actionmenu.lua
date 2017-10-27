@@ -10,11 +10,12 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'primary', 'widget', 'drawhand', 'openpack', 'wait',
+  'interact', 'primary', 'widget', 'drawhand', 'managebuffer', 'openpack', 'wait',
   interact = "Interact",
   primary = "Primary Arte",
   widget = "Use Widget",
   playcard = "Play Card",
+  managebuffer = "Manage Back Buffer",
   drawhand = "Draw New Hand\n(-"..DEFS.NEW_HAND_COST.." PP)",
   openpack = "Open Card Pack",
   wait = "Wait"
