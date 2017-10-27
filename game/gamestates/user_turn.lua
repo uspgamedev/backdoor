@@ -100,7 +100,10 @@ local function _useAction(action_slot)
     if card:isArt() then
       ability = card:getArtAbility()
     end
-  else
+  elseif controlled_actor:isWidget(action_slot) then
+    ability = actor:getWidget(action_slot):getWidgetAbility()
+  end
+  if not ability then
     local action_name = controlled_actor:getAction(action_slot)
     ability = ACTION.ability(action_name)
   end
