@@ -1,12 +1,12 @@
 {
   "attr":"ATH",
   "upgrade":{
-    "cost":2,
-    "actor_list":[],
     "body_list":[{
         "attr":"DEF",
         "val":1
-      }]
+      }],
+    "actor_list":[],
+    "cost":2
   },
   "name":"DEF +1"
 }

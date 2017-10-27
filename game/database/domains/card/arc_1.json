@@ -1,12 +1,12 @@
 {
   "attr":"ARC",
+  "name":"ARC +1",
   "upgrade":{
-    "body_list":[],
+    "cost":2,
     "actor_list":[{
         "attr":"ARC",
         "val":1
       }],
-    "cost":2
-  },
-  "name":"ARC +1"
+    "body_list":[]
+  }
 }

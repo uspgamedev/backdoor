@@ -1,12 +1,17 @@
 {
   "operators":[],
-  "params":[{
-      "output":"pos",
-      "typename":"direction"
-    }],
-  "cost":3,
-  "effects":[{
-      "typename":"move_to",
-      "pos":"par:pos"
-    }]
+  "params":[],
+  "ability":{
+    "params":[{
+        "typename":"direction",
+        "output":"pos"
+      }],
+    "operators":[],
+    "effects":[{
+        "typename":"move_to",
+        "pos":"par:pos"
+      }]
+  },
+  "effects":[],
+  "cost":3
 }

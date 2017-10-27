@@ -17,8 +17,8 @@ end
 local function _simpleBuffer()
   local buffer = {}
   for i=1,4 do
-    table.insert(buffer, _card('draw'))
     table.insert(buffer, _card('bolt'))
+    table.insert(buffer, _card('draw'))
     table.insert(buffer, _card('cure'))
     table.insert(buffer, _card('sord'))
     table.insert(buffer, _card('gun'))

@@ -3,6 +3,7 @@
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
+local ABILITY       = require 'domain.ability'
 local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
@@ -93,10 +94,22 @@ end
 local function _useAction(action_slot)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
-  local action_name = controlled_actor:getAction(action_slot)
-  if not action_name then return false end
+  local ability
+  if controlled_actor:isCard(action_slot) then
+    local card = controlled_actor:getCard(action_slot)
+    if card:isArt() then
+      ability = card:getArtAbility()
+    end
+  elseif controlled_actor:isWidget(action_slot) then
+    ability = actor:getWidget(action_slot):getWidgetAbility()
+  end
+  if not ability then
+    local action_name = controlled_actor:getAction(action_slot)
+    ability = ACTION.ability(action_name)
+  end
+  if not ability then return false end
   local params = {}
-  for _,param in ACTION.paramsOf(action_name) do
+  for _,param in ABILITY.paramsOf(ability) do
     if param.typename == 'choose_target' then
       _lockState()
       SWITCHER.push(
@@ -104,13 +117,13 @@ local function _useAction(action_slot)
         {
           pos = { controlled_actor:getPos() },
           range_checker = function(i, j)
-            return ACTION.param('choose_target')
-                         .isWithinRange(current_sector, controlled_actor,
+            return ABILITY.param('choose_target')
+                          .isWithinRange(current_sector, controlled_actor,
                                         param, {i,j})
           end,
           validator = function(i, j)
-            return ACTION.validate('choose_target', current_sector,
-                                   controlled_actor, param, {i,j})
+            return ABILITY.validate('choose_target', current_sector,
+                                    controlled_actor, param, {i,j})
           end
         }
       )
@@ -125,8 +138,8 @@ local function _useAction(action_slot)
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
-          return ACTION.validate('choose_widget_slot', current_sector,
-                                 controlled_actor, param, which_slot)
+          return ABILITY.validate('choose_widget_slot', current_sector,
+                                  controlled_actor, param, which_slot)
         end
       )
       local args = coroutine.yield(_task)

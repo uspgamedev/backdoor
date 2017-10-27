@@ -16,26 +16,63 @@
   "params":[{
       "filter":"BODY",
       "max-range":6,
-      "typename":"choose_target",
+      "output":"target",
       "body-only":true,
-      "output":"target"
+      "typename":"choose_target"
     },{
       "filter":"BODY",
       "max-range":6,
-      "typename":"choose_target",
+      "output":"target2",
       "body-only":true,
-      "output":"target2"
+      "typename":"choose_target"
     }],
+  "ability":{
+    "params":[{
+        "typename":"choose_target",
+        "output":"target",
+        "body-only":true,
+        "max-range":6
+      },{
+        "typename":"choose_target",
+        "output":"target2",
+        "body-only":true,
+        "max-range":6
+      }],
+    "operators":[{
+        "typename":"get_body_at",
+        "pos":"par:target",
+        "output":"body1"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:target2",
+        "output":"body2"
+      },{
+        "typename":"get_attribute",
+        "output":"arcana",
+        "which":"ARC"
+      }],
+    "effects":[{
+        "typename":"dmg_formula",
+        "target":"val:body1",
+        "base":3,
+        "attr":"val:arcana"
+      },{
+        "typename":"dmg_formula",
+        "target":"val:body2",
+        "base":3,
+        "attr":"val:arcana"
+      }]
+  },
+  "cost":12,
   "effects":[{
       "typename":"dmg_formula",
       "target":"val:body1",
-      "attr":"val:athletics",
-      "base":3
+      "base":3,
+      "attr":"val:athletics"
     },{
       "typename":"dmg_formula",
       "target":"val:body2",
-      "base":3,
-      "attr":"val:athletics"
-    }],
-  "cost":12
+      "attr":"val:athletics",
+      "base":3
+    }]
 }

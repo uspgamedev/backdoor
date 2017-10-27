@@ -1,9 +1,9 @@
 {
-  "cost":2,
-  "effects":[{
-      "text":42,
-      "typename":"print"
-    }],
   "operators":[],
-  "params":[]
+  "effects":[{
+      "typename":"print",
+      "text":42
+    }],
+  "params":[],
+  "cost":2
 }
