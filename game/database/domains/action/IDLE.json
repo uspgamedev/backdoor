@@ -1,11 +1,11 @@
 {
   "operators":[],
   "params":[],
+  "effects":[],
+  "cost":10,
   "ability":{
     "params":[],
     "operators":[],
     "effects":[]
-  },
-  "effects":[],
-  "cost":10
+  }
 }

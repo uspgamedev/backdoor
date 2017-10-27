@@ -1,6 +1,8 @@
 {
   "operators":[],
   "params":[],
+  "cost":2,
+  "effects":[],
   "ability":{
     "params":[{
         "typename":"card_index",
@@ -26,7 +28,5 @@
         "source":"HAND",
         "actor":"val:self"
       }]
-  },
-  "cost":2,
-  "effects":[]
+  }
 }

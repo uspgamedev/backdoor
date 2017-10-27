@@ -1,7 +1,6 @@
 {
   "operators":[],
   "params":[],
-  "cost":2,
   "ability":{
     "params":[{
         "typename":"has_enough_pp",
@@ -14,5 +13,6 @@
         "typename":"spend_pp"
       }]
   },
-  "effects":[]
+  "effects":[],
+  "cost":2
 }

@@ -31,7 +31,7 @@ function ACTION.activateWidget(widget_card_slot, actor, sector, params)
   if not ABILITY.checkParams(widget_ability, actor, sector, params) then
     return false
   end
-  self:spendWidget(action_slot)
+  actor:spendWidget(action_slot)
   ABILITY.execute(widget_ability, actor, sector, params)
   return true
 end

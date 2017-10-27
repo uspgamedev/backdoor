@@ -1,7 +1,6 @@
 {
   "operators":[],
   "params":[],
-  "cost":3,
   "ability":{
     "params":[{
         "typename":"direction",
@@ -13,5 +12,6 @@
         "pos":"par:pos"
       }]
   },
-  "effects":[]
+  "effects":[],
+  "cost":3
 }

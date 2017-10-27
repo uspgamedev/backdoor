@@ -4,6 +4,29 @@
   "widget":{
     "charges":12,
     "widget_action":"MELEE",
+    "activated_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "max-range":1,
+          "output":"target",
+          "body-only":true
+        }],
+      "operators":[{
+          "typename":"get_attribute",
+          "output":"ath",
+          "which":"ATH"
+        },{
+          "typename":"get_body_at",
+          "pos":"par:target",
+          "output":"target_body"
+        }],
+      "effects":[{
+          "typename":"dmg_formula",
+          "target":"val:target_body",
+          "attr":"val:ath",
+          "base":4
+        }]
+    },
     "placement":"weapon"
   }
 }

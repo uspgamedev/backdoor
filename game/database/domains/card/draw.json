@@ -4,6 +4,14 @@
   "art_action":"DRAW",
   "name":"Think",
   "art":{
+    "art_ability":{
+      "params":[],
+      "operators":[],
+      "effects":[{
+          "typename":"draw_card",
+          "amount":1
+        }]
+    },
     "art_action":"DRAW"
   }
 }

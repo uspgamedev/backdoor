@@ -9,8 +9,8 @@
       "params":[{
           "typename":"choose_target",
           "max-range":5,
-          "body-only":true,
-          "output":"target"
+          "output":"target",
+          "body-only":true
         }],
       "operators":[{
           "typename":"get_body_at",

@@ -12,8 +12,6 @@ return {
     type = 'section',
     schema = {
       { id = 'art_ability', name = "Art Ability", type = 'ability' },
-      { id = 'art_action', name = "Art Action", type = 'enum',
-        options = 'domains.action' },
     }
   },
   {
@@ -51,10 +49,6 @@ return {
       {
         id = 'activated_ability', name = "Activated Ability", type = 'ability',
         optional = true
-      },
-      {
-        id = 'widget_action', name = "Action", type = 'enum',
-        options = "domains.action", optional = true
       }
     },
   }
