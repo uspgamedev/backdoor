@@ -17,7 +17,7 @@ local BASE_ACTIONS = {
   IDLE = true,
   MOVE = true,
   INTERACT = true,
-  NEW_HAND = true,
+  DRAW_NEW_HAND = true,
   STASH_CARD = true,
   CONSUME_CARD = true,
   RECEIVE_PACK = true,
@@ -320,8 +320,6 @@ end
 function Actor:copyBackBuffer()
   local copy = {}
   for i = self:getBufferSize()+2, #self.buffer do
-    print(("%d/%d -> %d"):format(i-self:getBufferSize()-1,
-                                 self:getBackBufferSize(), i))
     table.insert(copy, self.buffer[i])
   end
   return copy

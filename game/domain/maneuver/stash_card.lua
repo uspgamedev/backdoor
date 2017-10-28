@@ -10,7 +10,7 @@ function maneuver.validate(actor, sector, params)
 end
 
 function maneuver.perform(actor, sector, params)
-  actor:addCardToBackBuffer(actor:removeHandCard(params.card_index))
+  actor:addCardToBackbuffer(actor:removeHandCard(params.card_index))
   --FIXME: BUFF ACTOR!
 end
 

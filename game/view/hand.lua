@@ -58,9 +58,9 @@ end
 
 function HandView:changeActionType(dir)
   if dir == 'up' then
-    self.action_type = (self.action_type - 2) % #self.action_type + 1
+    self.action_type = (self.action_type - 2) % #_ACTION_TYPES + 1
   elseif dir == 'down' then
-    self.action_type = self.action_type % #self.action_type + 1
+    self.action_type = self.action_type % #_ACTION_TYPES + 1
   else
     error(("Unknown dir %s"):format(dir))
   end

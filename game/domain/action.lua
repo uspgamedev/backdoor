@@ -40,7 +40,7 @@ function ACTION.activateWidget(widget_card_slot, actor, sector, params)
 end
 
 function ACTION.useSignature(actor, sector, params)
-  return ACTION.makeManeuver('PRIMARY', actor, sector, params)
+  return ACTION.useBasicAblity('PRIMARY', actor, sector, params)
 end
 
 function ACTION.useBasicAblity(action_slot, actor, sector, params)

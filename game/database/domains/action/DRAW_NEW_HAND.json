@@ -1,0 +1,18 @@
+{
+  "operators":[],
+  "params":[],
+  "cost":2,
+  "ability":{
+    "params":[{
+        "typename":"has_enough_pp",
+        "output":"has_enough_pp"
+      }],
+    "operators":[],
+    "effects":[{
+        "typename":"new_hand"
+      },{
+        "typename":"spend_pp"
+      }]
+  },
+  "effects":[]
+}
