@@ -2,7 +2,7 @@
 local CONTROLS = require 'infra.control'
 local DEFS = require 'domain.definitions'
 local Card = require 'domain.card'
-local ManageBufferView = require 'view.managebuffer'
+local PackView = require 'view.cardlist'
 
 local state = {}
 
@@ -37,7 +37,7 @@ function state:init()
       _view:collectCards(function() _leave = true end)
     end,
   }
-  _view = ManageBufferView(actor)
+  _view = PackView(actor)
   _view:addElement("HUD")
 end
 

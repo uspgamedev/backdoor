@@ -1,7 +1,7 @@
 
 local DEFS = require 'domain.definitions'
 local CONTROLS = require 'infra.control'
-local ManageBufferView = require 'view.managebuffer'
+local ManageBufferView = require 'view.cardlist'
 
 local state = {}
 
