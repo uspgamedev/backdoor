@@ -21,6 +21,7 @@ local BASE_ACTIONS = {
   STASH_CARD = true,
   CONSUME_CARD = true,
   RECEIVE_PACK = true,
+  CONSUME_CARDS_FROM_BUFFER = true,
 }
 
 --[[ Setup methods ]]--
@@ -319,7 +320,8 @@ end
 function Actor:copyBackBuffer()
   local copy = {}
   for i = self:getBufferSize()+2, #self.buffer do
-    print(i, self.buffer[i])
+    print(("%d/%d -> %d"):format(i-self:getBufferSize()-1,
+                                 self:getBackBufferSize(), i))
     table.insert(copy, self.buffer[i])
   end
   return copy

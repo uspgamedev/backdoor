@@ -321,27 +321,20 @@ function state:resume(from, args)
         _startTask(_useCardByIndex, args.card_index, args.action_type)
       elseif args.action_type == 'stash' then
         _next_action = {
-          "STASH_CARD",
-          { card_index = args.card_index }
+          "STASH_CARD", { card_index = args.card_index }
         }
       end
     end
 
   elseif from == GS.OPEN_PACK then
     _next_action = {
-      'RECEIVE_PACK',
-      {
-        consume = args.consumed,
-        pack = args.pack,
-      }
+      'RECEIVE_PACK', { consumed = args.consumed, pack = args.pack }
     }
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
   elseif from == GS.MANAGE_BUFFER then
-    local consumed = args
     _next_action = {
-      'CONSUME_CARDS_FROM_BUFFER',
-      { consumed = args.consumed }
+      'CONSUME_CARDS_FROM_BUFFER', { consumed = args.consumed }
     }
   end
 end

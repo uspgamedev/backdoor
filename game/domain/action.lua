@@ -60,10 +60,13 @@ end
 
 function ACTION.makeManeuver(action_slot, actor, sector, params)
   local maneuver = MANEUVERS[action_slot:lower()]
-  print(maneuver)
+
+  print(action_slot)
   if not maneuver or not maneuver.validate(actor, sector, params) then
+    print("action failed!", maneuver.validate(actor, sector, params))
     return false
   end
+  print("action is valid!")
   maneuver.perform(actor, sector, params)
 
   return true

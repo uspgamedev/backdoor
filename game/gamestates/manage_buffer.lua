@@ -7,7 +7,6 @@ local state = {}
 
 local _view
 local _mapping
-local _actor
 local _consumed
 local _leave
 
@@ -21,9 +20,15 @@ function state:init()
     end,
     PRESS_UP = function()
       local idx, card = _view:popSelectedCard()
+      CONTROLS.setMap()
       table.insert(_consumed, idx)
       _view:updateSelection()
-      if _view:isCardListEmpty() then _leave = true end
+      if _view:isCardListEmpty() then
+        _leave = true
+      else
+        _view:addTimer("consuming_lock", MAIN_TIMER, "after", .2,
+                       function() CONTROLS.setMap(_mapping) end)
+      end
     end,
     PRESS_CONFIRM = function()
       _leave = true
@@ -32,17 +37,16 @@ function state:init()
       _leave = true
     end,
   }
-  _view = ManageBufferView(actor)
+  _view = ManageBufferView()
   _view:addElement("HUD")
 end
 
 function state:enter(from, actor)
-  _actor = actor
   _consumed = {}
 
-  if _actor:getBackBufferSize() > 0 then
+  if actor:getBackBufferSize() > 0 then
     _leave = false
-    _view:open(_actor:copyBackBuffer())
+    _view:open(actor:copyBackBuffer())
     CONTROLS.setMap(_mapping)
   else
     _leave = true
