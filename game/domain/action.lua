@@ -23,6 +23,7 @@ function ACTION.castArt(art_card_index, actor, sector, params)
   end
   actor:playCard(art_card_index)
   actor:spendTime(art_card:getArtCost())
+  actor:rewardPP(art_card:getPPReward())
   ABILITY.execute(art_ability, actor, sector, params)
   return true
 end
@@ -35,6 +36,7 @@ function ACTION.activateWidget(widget_card_slot, actor, sector, params)
   end
   actor:spendWidget(action_slot)
   actor:spendTime(widget_card:getWidgetActivationCost())
+  actor:rewardPP(widget_card:getPPReward())
   ABILITY.execute(widget_ability, actor, sector, params)
   return true
 end
@@ -62,11 +64,9 @@ function ACTION.makeManeuver(action_slot, actor, sector, params)
   local action_name = actor:getAction(action_slot)
   local maneuver = MANEUVERS[action_name:lower()]
 
-  print(action_name)
   if not maneuver or not maneuver.validate(actor, sector, params) then
     return false
   end
-  print("action is valid!")
   maneuver.perform(actor, sector, params)
 
   return true

@@ -6,6 +6,7 @@ return {
   { id = 'one_time', name = "Is One Time Usage", type = 'boolean' },
   { id = 'name', name = "Name", type = 'string' },
   { id = 'desc', name = "Description", type = 'text' },
+  { id = 'pp', name = "PlayPoint Reward", type = 'integer' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.PRIMARY_ATTRIBUTES },
   {

@@ -482,9 +482,6 @@ function Actor:makeAction(sector)
         params[k] = v
       end
     end
-    print("PARAMS FOR: "..tostring(action_slot).."/"..tostring(check))
-    for k,v in pairs(params) do print(("> %s: %s"):format(k,v)) end
-    print()
     if check then
       local card = self:getCard(action_slot)
       local widget = self:getWidget(action_slot)
@@ -501,7 +498,6 @@ function Actor:makeAction(sector)
       end
     end
   until success
-  print(self:getId().." has finished their action.\n")
   return true
 end
 
