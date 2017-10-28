@@ -18,10 +18,9 @@ local BASE_ACTIONS = {
   MOVE = true,
   INTERACT = true,
   NEW_HAND = true,
-  RECALL_CARD = true,
+  STASH_CARD = true,
   CONSUME_CARD = true,
-  GET_PACK_CARD = true,
-  CONSUME_PACK_CARD = true
+  RECEIVE_PACK = true,
 }
 
 --[[ Setup methods ]]--
@@ -358,6 +357,10 @@ function Actor:drawCard()
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
+end
+
+function Actor:getCard(index)
+  return self.hand[index]
 end
 
 function Actor:getHandCard(index)

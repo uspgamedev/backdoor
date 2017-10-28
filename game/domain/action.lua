@@ -1,4 +1,5 @@
 
+local MANEUVERS = require 'lux.pack' 'domain.maneuver'
 local ABILITY = require 'domain.ability'
 local DB      = require 'database'
 
@@ -42,7 +43,7 @@ function ACTION.useSignature(actor, sector, params)
   return ACTION.makeManeuver('PRIMARY', actor, sector, params)
 end
 
-function ACTION.makeManeuver(action_slot, actor, sector, params)
+function ACTION.useBasicAblity(action_slot, actor, sector, params)
   local action_name = actor:getAction(action_slot)
   local spec = DB.loadSpec("action", action_name)
   if not ABILITY.checkParams(spec.ability, actor, sector, params) then
@@ -54,6 +55,17 @@ function ACTION.makeManeuver(action_slot, actor, sector, params)
   actor:spendTime(spec.cost)
   actor:rewardPP(spec.playpoints or 0)
   ABILITY.execute(spec.ability, actor, sector, params)
+  return true
+end
+
+function ACTION.makeManeuver(action_slot, actor, sector, params)
+  local maneuver = MANEUVERS[action_slot:lower()]
+  print(maneuver)
+  if not maneuver or not maneuver.validate(actor, sector, params) then
+    return false
+  end
+  maneuver.perform(actor, sector, params)
+
   return true
 end
 

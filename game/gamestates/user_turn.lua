@@ -212,7 +212,7 @@ local function _openPack()
   local controlled_actor = _route.getControlledActor()
   if not controlled_actor:hasOpenPack() then
     _unregisterSignals()
-    SWITCHER.push(GS.OPEN_PACK, _route)
+    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
   end
 end
 
@@ -329,8 +329,11 @@ function state:resume(from, args)
 
   elseif from == GS.OPEN_PACK then
     _next_action = {
-      'RECEIVE_PACK'
-      args
+      'RECEIVE_PACK',
+      {
+        consume = args.consumed,
+        pack = args.pack,
+      }
     }
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
