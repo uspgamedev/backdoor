@@ -204,7 +204,7 @@ end
 
 local function _newHand()
   if _route.getControlledActor():isHandEmpty() then
-    _useAction('NEW_HAND')
+    _useAction('DRAW_NEW_HAND')
   end
 end
 
@@ -320,24 +320,26 @@ function state:resume(from, args)
       if args.action_type == 'use' then
         _startTask(_useCardByIndex, args.card_index, args.action_type)
       elseif args.action_type == 'stash' then
-        _next_action = { "RECALL_CARD", { card_index = args.card_index } }
+        _next_action = {
+          "STASH_CARD",
+          { card_index = args.card_index }
+        }
       end
     end
 
   elseif from == GS.OPEN_PACK then
-    for _,pick in ipairs(args) do
-      local t
-      if pick.action_type == 'get' then
-        t = 'GET_PACK_CARD'
-      elseif pick.action_type == 'consume' then
-        t = 'CONSUME_PACK_CARD'
-      end
-      assert(t)
-      _action_queue.push({ t, { index = pick.card_index,
-                                buffer = pick.buffer_index } })
-    end
+    _next_action = {
+      'RECEIVE_PACK'
+      args
+    }
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
+  elseif from == GS.MANAGE_BUFFER then
+    local consumed = args
+    _next_action = {
+      'CONSUME_CARDS_FROM_BUFFER',
+      { consumed = args.consumed }
+    }
   end
 end
 

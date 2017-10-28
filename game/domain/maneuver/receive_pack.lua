@@ -11,12 +11,11 @@ function maneuver.validate(actor, sector, params)
 end
 
 function maneuver.perform(actor, sector, params)
-  for _,idx in ipairs(params.consumed) do
-    local card = table.remove(params.pack, idx)
+  for _,card in ipairs(params.consumed) do
     actor:consumeCard(card)
   end
-  for _,cardspec in ipairs(params.pack) do
-    actor:addCardToBackbuffer(cardspec)
+  for _,card in ipairs(params.pack) do
+    actor:addCardToBackbuffer(card)
   end
 end
 

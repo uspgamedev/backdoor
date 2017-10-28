@@ -6,7 +6,7 @@ local maneuver = {}
 maneuver.schema = {}
 
 function maneuver.validate(actor, sector, params)
-  return actor:getPP() >= DEFS.NEW_HAND_COST
+  return actor:isHandEmpty() and actor:getPP() >= DEFS.NEW_HAND_COST
 end
 
 function maneuver.perform(actor, sector, params)

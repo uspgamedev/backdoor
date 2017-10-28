@@ -23,7 +23,7 @@ function state:init()
       local idx, card = _view:popSelectedCard()
       table.insert(_consumed, idx)
       _view:updateSelection()
-      if _view:isBufferEmpty() then _leave = true end
+      if _view:isCardListEmpty() then _leave = true end
     end,
     PRESS_CONFIRM = function()
       _leave = true
@@ -55,7 +55,7 @@ end
 
 function state:update(dt)
   if not DEBUG then
-    if _leave then SWITCHER.pop(_consumed) end
+    if _leave then SWITCHER.pop({consumed = _consumed}) end
     MAIN_TIMER:update(dt)
   end
 end

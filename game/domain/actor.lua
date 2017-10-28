@@ -463,7 +463,7 @@ function Actor:getAction(slot)
   end
 end
 
-function Actor:playCard(card_index, sector, params)
+function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
@@ -492,6 +492,8 @@ function Actor:makeAction(sector)
         success = ACTION.activateWidget(action_slot, actor, sector, params)
       elseif action_slot == 'PRIMARY' then
         success = ACTION.useSignature(actor, sector, params)
+      elseif DEFS.BASIC_ABILITIES[action_slot] then
+        sucesss = ACTION.useBasicAblity(action_slot, actor, sector, params)
       else
         success = ACTION.makeManeuver(action_slot, actor, sector, params)
       end

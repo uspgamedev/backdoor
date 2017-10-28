@@ -2,16 +2,19 @@
 local maneuver = {}
 
 maneuver.schema = {
-  { id = 'upgrades', type = 'upgrade_list' },
-  { id = 'cost', type = 'exp_cost' }
+  { id = 'card_index', type = 'card_index' }
 }
 
 function maneuver.validate(actor, sector, params)
-  return params.upgrades and params.cost and params.cost >= actor:getExp()
+  local card = actor:getHandCard(params.card_index)
+  return actor:getExp() >= card:getUpgradeCost()
 end
 
 function maneuver.perform(actor, sector, params)
-  actor:modifyExpBy(-params.cost)
+  local card = actor:getHandCard(params.card_index)
+  actor:playCard(params.card_index)
+  actor:modifyExpBy(-card:getUpgradeCost())
+  local upgrades = card:getUpgradesList()
   for _,upgrade in ipairs(params.upgrades.actor) do
     local attr = upgrade.attr
     local val = upgrade.val

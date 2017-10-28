@@ -1,174 +1,82 @@
 
---- GAMESTATE: Opening a card pack
-
-local CONTROL   = require 'infra.control'
-local PackView  = require 'view.pack'
+local CONTROLS = require 'infra.control'
+local DEFS = require 'domain.definitions'
+local Card = require 'domain.card'
+local ManageBufferView = require 'view.managebuffer'
 
 local state = {}
 
---[[ LOCAL VARIABLES ]]--
-
-local _pack_view
-local _picks
-local _filter
-
-local _mapped_signals
-local _previous_control_map
-
-local SIGNALS = {
-  PRESS_RIGHT = {"move_focus", "right"},
-  PRESS_LEFT = {"move_focus", "left"},
-  PRESS_UP = {"consume_card"},
-  PRESS_CONFIRM = {"confirm"},
-}
-
---FILTER CLASS--
-
-local Filter = Class{
-  __includes = {ELEMENT}
-}
-
-function Filter:init(_r, _g, _b, _a, _target_a)
-  ELEMENT.init(self)
-
-  self.r = _r
-  self.g = _g
-  self.b = _b
-  self.a = _a
-
-  --Fade-in effect
-  ELEMENT.addTimer(self,"start", MAIN_TIMER, "tween",.2, self, {a = _target_a}, 'out-quad')
-
-end
-
-function Filter:draw()
-  local f = self
-  local g = love.graphics
-  g.setColor(f.r,f.g,f.b,f.a)
-  g.rectangle("fill", 0, 0, O_WIN_W, O_WIN_H)
-end
-
-
---[[ LOCAL FUNCTIONS DECLARATIONS ]]--
-
-local _unregisterSignals
-local _registerSignals
-
---[[ LOCAL FUNCTIONS ]]--
-
-local function _leaveState()
-    SWITCHER.pop(_picks)
-    _picks = nil
-end
-
-local function _moveFocus(dir)
-  if _pack_view:isLocked() then return end
-  _pack_view:moveFocus(dir)
-end
-
-local function _consumeCard()
-  if _pack_view:isLocked() then return end
-  table.insert(_picks, {
-    action_type = "consume",
-    card_index = _pack_view:getFocus(),
-  })
-  _pack_view:consumeCard()
-end
-
-local function _confirm()
-  if _pack_view:isLocked() then return end
-  local focus_index = _pack_view:getRemainingCards()
-  for _, i in ipairs(focus_index) do
-    table.insert(_picks, {
-      action_type = "get",
-      card_index = focus_index[i],
-    })
-  end
-end
-
-function _registerSignals()
-  Signal.register("end_pack_state", _leaveState)
-  Signal.register("move_focus", _moveFocus)
-  Signal.register("consume_card", _consumeCard)
-  Signal.register("confirm", _confirm)
-  CONTROL.setMap(_mapped_signals)
-end
-
-function _unregisterSignals()
-  for _,signal_pack in pairs(SIGNALS) do
-    Signal.clear(signal_pack[1])
-  end
-  Signal.clear("end_pack_state")
-  CONTROL.setMap(_previous_control_map)
-end
-
---[[ STATE FUNCTIONS ]]--
+local _view
+local _mapping
+local _consumed
+local _pack
+local _leave
 
 function state:init()
-  _mapped_signals = {}
-  for input_name, signal_pack in pairs(SIGNALS) do
-    _mapped_signals[input_name] = function ()
-      Signal.emit(unpack(signal_pack))
-    end
-  end
+  _mapping = {
+    PRESS_LEFT = function()
+      _view:selectPrev()
+    end,
+    PRESS_RIGHT = function()
+      _view:selectNext()
+    end,
+    PRESS_UP = function()
+      local idx, card = _view:popSelectedCard()
+      CONTROLS.setMap()
+      table.insert(_consumed, card)
+      _view:updateSelection()
+      if _view:isCardListEmpty() then
+        _leave = true
+      else
+        _view:addTimer("consuming_lock", MAIN_TIMER, "after", .2,
+                       function() CONTROLS.setMap(_mapping) end)
+      end
+    end,
+    PRESS_CONFIRM = function()
+      CONTROLS.setMap()
+      _view:collectCards(function() _leave = true end)
+    end,
+  }
+  _view = ManageBufferView(actor)
+  _view:addElement("HUD")
 end
 
-function state:enter(_, route)
+function state:enter(from, actor)
+  _consumed = {}
+  _pack = {}
 
-  local controlled_actor = route:getControlledActor()
-
-  controlled_actor:openPack()
-
-  --Create filter effect
-  local initial_a = 0
-  if _filter then
-    _filter:removeTimer("end", MAIN_TIMER)
-    initial_a = _filter.a
-    _filter:destroy()
+  actor:openPack()
+  for i,card_specname in actor:iteratePack() do
+    local card = Card(card_specname)
+    table.insert(_pack, card)
   end
+  while actor:hasOpenPack() do actor:removePackCard(1) end
 
-  _filter = Filter(0,0,0, initial_a, 180)
-  _filter:addElement('HUD_BG')
-
-  _pack_view = PackView(controlled_actor)
-  _pack_view:addElement('HUD')
-  _picks = {}
-
-  _registerSignals()
-
-  _previous_control_map = CONTROL.getMap()
-  CONTROL.setMap(_mapped_signals)
-
+  CONTROLS.setMap(_mapping)
+  _view:open(_pack)
 end
 
 function state:leave()
-
-  _pack_view:kill()
-  _pack_view = nil
-
-  --Add fade-out effect to filter
-  _filter:addTimer("end", MAIN_TIMER, "tween", .2, _filter, {a = 0}, 'in-linear', function() _filter:destroy() end)
-
-  Util.destroyAll()
-
-  _unregisterSignals()
-
+  _leave = false
+  _view:close()
 end
 
 function state:update(dt)
-
   if not DEBUG then
+    if _leave then SWITCHER.pop({
+        consumed = _consumed,
+        pack = _pack
+      })
+    end
     MAIN_TIMER:update(dt)
   end
-
-  Util.destroyAll()
-
 end
 
 function state:draw()
-
-    Draw.allTables()
-
+  Draw.allTables()
 end
 
 return state
+
+
+
