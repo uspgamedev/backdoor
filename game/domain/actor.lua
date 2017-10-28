@@ -446,22 +446,18 @@ function Actor:getAction(slot)
     return self.widgets[slot]:getWidgetAbility()
   elseif self:isCard(slot) then
     local card = self.hand[slot]
+    local card_type
     if card then
       if card:isArt() then
         return true
       elseif card:isUpgrade() then
-        local cost = card:getUpgradeCost()
-        if self.exp >= cost then
-          return 'UPGRADE', {
-            list = card:getUpgradesList(),
-            ["exp-cost"] = cost
-          }
-        end
+        card_type = "UPGRADE"
       elseif card:isWidget() then
-        return 'PLACE_WIDGET', {
-          card = card
-        }
+        card_type = "WIDGET"
       end
+      return 'PLAY_'..card_type..'_CARD', {
+        card_index = slot
+      }
     end
   end
 end
@@ -486,6 +482,9 @@ function Actor:makeAction(sector)
         params[k] = v
       end
     end
+    print("PARAMS FOR: "..tostring(action_slot).."/"..tostring(check))
+    for k,v in pairs(params) do print(("> %s: %s"):format(k,v)) end
+    print()
     if check then
       local card = self:getCard(action_slot)
       local widget = self:getWidget(action_slot)
@@ -496,12 +495,13 @@ function Actor:makeAction(sector)
       elseif action_slot == 'PRIMARY' then
         success = ACTION.useSignature(actor, sector, params)
       elseif DEFS.BASIC_ABILITIES[action_slot] then
-        sucesss = ACTION.useBasicAblity(action_slot, actor, sector, params)
+        success = ACTION.useBasicAblity(action_slot, actor, sector, params)
       else
         success = ACTION.makeManeuver(action_slot, actor, sector, params)
       end
     end
   until success
+  print(self:getId().." has finished their action.\n")
   return true
 end
 

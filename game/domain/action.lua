@@ -59,11 +59,11 @@ function ACTION.useBasicAblity(action_slot, actor, sector, params)
 end
 
 function ACTION.makeManeuver(action_slot, actor, sector, params)
-  local maneuver = MANEUVERS[action_slot:lower()]
+  local action_name = actor:getAction(action_slot)
+  local maneuver = MANEUVERS[action_name:lower()]
 
-  print(action_slot)
+  print(action_name)
   if not maneuver or not maneuver.validate(actor, sector, params) then
-    print("action failed!", maneuver.validate(actor, sector, params))
     return false
   end
   print("action is valid!")

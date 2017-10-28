@@ -1,0 +1,25 @@
+{
+  "operators":[],
+  "params":[],
+  "ability":{
+    "params":[{
+        "typename":"choose_widget_slot",
+        "output":"widget_slot"
+      },{
+        "typename":"card",
+        "output":"card"
+      }],
+    "operators":[{
+        "typename":"self",
+        "output":"actor"
+      }],
+    "effects":[{
+        "typename":"place_widget_slot",
+        "actor":"val:actor",
+        "widget_slot":"par:widget_slot",
+        "card":"par:card"
+      }]
+  },
+  "cost":0,
+  "effects":[]
+}

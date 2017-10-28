@@ -15,13 +15,13 @@ function maneuver.perform(actor, sector, params)
   actor:playCard(params.card_index)
   actor:modifyExpBy(-card:getUpgradeCost())
   local upgrades = card:getUpgradesList()
-  for _,upgrade in ipairs(params.upgrades.actor) do
+  for _,upgrade in ipairs(upgrades.actor) do
     local attr = upgrade.attr
     local val = upgrade.val
     actor["upgrade"..attr](actor, val)
   end
   local body = actor:getBody() if body then
-    for _,upgrade in ipairs(params.upgrades.body) do
+    for _,upgrade in ipairs(upgrades.body) do
       local attr = upgrade.attr
       local val = upgrade.val
       body["upgrade"..attr](body, val)
