@@ -169,7 +169,7 @@ end
 local function _useCardByIndex(index)
   local player = _route.getControlledActor()
 
-  if _useAction(index) then
+  if _useAction('CARD/' .. index) then
     Signal.emit("actor_used_card", player, index)
   end
 end
@@ -199,7 +199,7 @@ local function _useWidget()
   )
   local args = coroutine.yield(_task)
   if args.picked_slot then
-    _useAction(args.picked_slot)
+    _useAction('WIDGET/' .. args.picked_slot)
   end
 end
 

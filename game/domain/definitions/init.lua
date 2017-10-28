@@ -1,6 +1,18 @@
 
 local DEFS = {}
 
+-- + [ ] Xform BACKBUFFER CONSUMPTION into MANEUVER
+-- + [ ] Xform all basic actions into MANEUVERS
+-- + [ ] Smarter slots + endless widgets
+-- + [ ] Move widgets to body
+-- + [ ] Widget buffs
+-- + [ ] Stashed widgets
+
+-- + [ ] ???
+-- + [ ] Write action names down as definitions
+-- + [ ] Change slot -> index in all params,operators,effects,actions...
+-- + [ ] Join Actor:getCard() and Actor:getHandCard()
+
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
 DEFS.CONSUME_EXP = 1
@@ -27,4 +39,7 @@ DEFS.BASIC_ABILITIES = {
   CHANGE_SECTOR = true,
 }
 
+DEFS.ACTION = require 'domain.definitions.action'
+
 return DEFS
+
