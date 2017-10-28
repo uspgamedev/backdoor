@@ -1,4 +1,5 @@
 
+local MANEUVERS = require 'lux.pack' 'domain.maneuver'
 local ABILITY = require 'domain.ability'
 local DB      = require 'database'
 
@@ -22,6 +23,7 @@ function ACTION.castArt(art_card_index, actor, sector, params)
   end
   actor:playCard(art_card_index)
   actor:spendTime(art_card:getArtCost())
+  actor:rewardPP(art_card:getPPReward())
   ABILITY.execute(art_ability, actor, sector, params)
   return true
 end
@@ -34,15 +36,16 @@ function ACTION.activateWidget(widget_card_slot, actor, sector, params)
   end
   actor:spendWidget(action_slot)
   actor:spendTime(widget_card:getWidgetActivationCost())
+  actor:rewardPP(widget_card:getPPReward())
   ABILITY.execute(widget_ability, actor, sector, params)
   return true
 end
 
 function ACTION.useSignature(actor, sector, params)
-  return ACTION.makeManeuver('PRIMARY', actor, sector, params)
+  return ACTION.useBasicAblity('PRIMARY', actor, sector, params)
 end
 
-function ACTION.makeManeuver(action_slot, actor, sector, params)
+function ACTION.useBasicAblity(action_slot, actor, sector, params)
   local action_name = actor:getAction(action_slot)
   local spec = DB.loadSpec("action", action_name)
   if not ABILITY.checkParams(spec.ability, actor, sector, params) then
@@ -54,6 +57,18 @@ function ACTION.makeManeuver(action_slot, actor, sector, params)
   actor:spendTime(spec.cost)
   actor:rewardPP(spec.playpoints or 0)
   ABILITY.execute(spec.ability, actor, sector, params)
+  return true
+end
+
+function ACTION.makeManeuver(action_slot, actor, sector, params)
+  local action_name = actor:getAction(action_slot)
+  local maneuver = MANEUVERS[action_name:lower()]
+
+  if not maneuver or not maneuver.validate(actor, sector, params) then
+    return false
+  end
+  maneuver.perform(actor, sector, params)
+
   return true
 end
 

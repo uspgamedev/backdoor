@@ -9,28 +9,32 @@ local View = Class({
 })
 
 -- CONSTS -----------------------------------
-local _ENTER_TIMER = "manage_buffer_enter"
+local _EMPTY = {}
+local _ENTER_TIMER = "manage_card_list_enter"
+local _TEXT_TIMER = "manage_card_list_text"
+local _CONSUMED_TIMER = "consumed_card:"
 local _ENTER_SPEED = .2
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
+local _MAX_Y_OFFSET = 500
 local _PI = math.pi
 local _CONSUME_TEXT = "consume"
+local _WIDTH, _HEIGHT
+local _CW, _CH
 
 -- LOCAL VARS
-local _width, _height
-local _cw, _ch
 local _font
 
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
-  _width, _height = g.getDimensions()
+  _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("TextBold", 21)
-  _cw = CARD.getWidth()
-  _ch = CARD.getHeight()
+  _CW = CARD.getWidth()
+  _CH = CARD.getHeight()
 end
 
 local function _next_circular(i, len, n)
@@ -44,45 +48,63 @@ local function _prev_circular(i, len, n)
 end
 
 -- PUBLIC METHODS ---------------------------
-function View:init(actor)
+function View:init()
   ELEMENT.init(self)
 
   self.enter = 0
+  self.text = 0
   self.selection = 1
   self.cursor = 0
+  self.y_offset = {}
   self.move = self.selection
   self.offsets = {}
-  self.actor = actor
-  self.backbuffer = false
+  self.card_list = _EMPTY
+  self.consumed = {}
 
   _initGraphicValues()
 end
 
-function View:open(backbuffer)
-  self.selection = 1
-  self.backbuffer = backbuffer
+function View:open(card_list)
   self.invisible = false
+  self.card_list = card_list
+  self.selection = math.ceil(#card_list/2)
+  for i=1,#card_list do self.y_offset[i] = 0 end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
-                _ENTER_SPEED, self, { enter = 1 }, "out-quad")
+                _ENTER_SPEED, self, { enter=1, text=1 }, "out-quad")
 end
 
 function View:close()
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
-                _ENTER_SPEED, self, { enter = 0 }, "out-quad",
+                _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
                 function ()
                   self.invisible = true
-                  self.backbuffer = false
+                  self.card_list = _EMPTY
                 end)
 end
 
+function View:collectCards(finish)
+  self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
+                self, {text=0}, "in-quad")
+  for i = 1, #self.card_list do
+    self:addTimer("collect_card_"..i, MAIN_TIMER, "after", (i-1)*.06,
+                  function()
+                    self:addTimer("getting_card_"..i, MAIN_TIMER,
+                                  "tween", .3, self.y_offset,
+                                  {[i] = _MAX_Y_OFFSET}, "in-quad")
+                  end)
+  end
+  self:addTimer("finish_collection", MAIN_TIMER, "after",
+                #self.card_list*.06+.3, finish)
+end
+
 function View:selectPrev()
-  self.selection = _prev_circular(self.selection, #self.backbuffer, 1)
+  self.selection = _prev_circular(self.selection, #self.card_list, 1)
 end
 
 function View:selectNext()
-  self.selection = _next_circular(self.selection, #self.backbuffer, 1)
+  self.selection = _next_circular(self.selection, #self.card_list, 1)
 end
 
 function View:setSelection(n)
@@ -91,23 +113,29 @@ end
 
 function View:updateSelection()
   local selection = self.selection
-  local buffer_size = #self.backbuffer
-  for i = selection, buffer_size do
+  local card_list_size = #self.card_list
+  for i = selection, card_list_size do
     self.offsets[i] = 1
   end
-  self.selection = math.min(selection, buffer_size)
-end
-
-function View:updateBuffer(newbuffer)
-  self.backbuffer = newbuffer
+  self.selection = math.min(selection, card_list_size)
 end
 
 function View:popSelectedCard()
-  return table.remove(self.backbuffer, self.selection)
+  local card = table.remove(self.card_list, self.selection)
+  table.insert(self.consumed, {
+    card = card,
+    consumation = 0,
+  })
+  local index = #self.consumed
+  self:addTimer(_CONSUMED_TIMER..index, MAIN_TIMER, "tween",
+                _ENTER_SPEED, self.consumed[index], {consumation=1},
+                "out-quad", function() table.remove(self.consumed, index) end)
+
+  return self.selection, card
 end
 
-function View:isBufferEmpty()
-  return #self.backbuffer == 0
+function View:isCardListEmpty()
+  return #self.card_list == 0
 end
 
 function View:draw()
@@ -118,6 +146,7 @@ function View:draw()
   if enter > 0 then
     self:drawBG(g, enter)
     self:drawCards(g, enter)
+    self:drawConsumed(g, enter)
   end
 
   g.pop()
@@ -125,51 +154,54 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0x80)
-  g.rectangle("fill", 0, 0, _width, _height)
+  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
 
 function View:drawCards(g, enter)
   local _PD = 40
-  local range = 3
   local selection = self.selection
-  local buffer = self.backbuffer
-  local buffer_size = #buffer
+  local card_list = self.card_list
+  local card_list_size = #card_list
 
   g.push()
 
   -- smooth enter!
-  g.translate(math.round((_width/2)*(1-enter)+_width/2-_cw/2),
-              math.round(3*_height/7-_ch/2))
+  g.translate(math.round((_WIDTH/2)*(1-enter)+_WIDTH/2-_CW/2),
+              math.round(3*_HEIGHT/7-_CH/2))
 
   -- smooth movement!
   self.move = self.move + (selection - self.move)*_MOVE_SMOOTH
   if (self.move-selection)^2 <= _EPSILON then self.move = selection end
-  g.translate(math.round(-(_cw+_PD)*(self.move-1)), 0)
+  g.translate(math.round(-(_CW+_PD)*(self.move-1)), 0)
 
   -- draw each card
-  for i = 1, buffer_size do
+  for i = 1, card_list_size do
     g.push()
     local focus = selection == i
-    local dist = (selection-i)^2
+    local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
 
     -- smooth offset when consuming cards
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
     self.offsets[i] = offset
-    g.translate((_cw+_PD)*(i-1+offset), 0)
-
-    CARD.draw(buffer[i].card, 0, 0, focus, dist>0 and enter/dist or enter)
+    g.translate((_CW+_PD)*(i-1+offset), 0)
+    g.translate(0, self.y_offset[i])
+    CARD.draw(card_list[i], 0, 0, focus,
+              dist>0 and enter/dist or enter)
     g.pop()
   end
   g.pop()
 
   -- draw selection
   g.push()
-  g.translate(math.round(_width/2),
-              math.round(3*_height/7-_ch/2))
-  self:drawArrow(g, enter)
-  if buffer[selection] then
-    self:drawCardDesc(g, buffer[selection].card, enter)
+  g.translate(math.round(_WIDTH/2),
+              math.round(3*_HEIGHT/7-_CH/2))
+  enter = self.text
+  if enter > 0 then
+    self:drawArrow(g, enter)
+    if card_list[selection] then
+      self:drawCardDesc(g, card_list[selection], enter)
+    end
   end
   g.pop()
 end
@@ -203,10 +235,27 @@ end
 
 function View:drawCardDesc(g, card, enter)
   g.push()
-  g.translate(-1.5*_cw, _ch+_PD)
-  CARD.drawInfo(card, 0, 0, 4*_cw, enter)
+  g.translate(-1.5*_CW, _CH+_PD)
+  CARD.drawInfo(card, 0, 0, 4*_CW, enter)
   g.pop()
 end
+
+function View:drawConsumed(g, enter)
+  local consumed = self.consumed
+
+  g.push()
+
+  -- smooth enter!
+  g.translate(math.round(_WIDTH/2-_CW/2), math.round(3*_HEIGHT/7-_CH/2))
+
+  for i, info in ipairs(consumed) do
+    local consumation = info.consumation
+    CARD.draw(info.card, 0, -_CH*info.consumation, false, enter*(1-info.consumation))
+  end
+
+  g.pop()
+end
+
 
 return View
 

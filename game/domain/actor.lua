@@ -17,11 +17,11 @@ local BASE_ACTIONS = {
   IDLE = true,
   MOVE = true,
   INTERACT = true,
-  NEW_HAND = true,
-  RECALL_CARD = true,
+  DRAW_NEW_HAND = true,
+  STASH_CARD = true,
   CONSUME_CARD = true,
-  GET_PACK_CARD = true,
-  CONSUME_PACK_CARD = true
+  RECEIVE_PACK = true,
+  CONSUME_CARDS_FROM_BUFFER = true,
 }
 
 --[[ Setup methods ]]--
@@ -283,10 +283,6 @@ function Actor:getHand()
   return self.hand
 end
 
-function Actor:getCard(index)
-  return self.hand[index]
-end
-
 function Actor:getHandSize()
   return #self.hand
 end
@@ -321,20 +317,12 @@ function Actor:removeBufferCard(i)
   return table.remove(self.buffer, i)
 end
 
-function Actor:getOrganizedBackBuffer()
-  local ordered_backbuffer = {}
-  if self:getBackBufferSize() == 0 then return ordered_backbuffer end
-
+function Actor:copyBackBuffer()
+  local copy = {}
   for i = self:getBufferSize()+2, #self.buffer do
-    local cardinfo = {idx = i, card = self.buffer[i]}
-    table.insert(ordered_backbuffer, cardinfo)
+    table.insert(copy, self.buffer[i])
   end
-
-  table.sort(ordered_backbuffer, function(a, b)
-    return string.byte(a.card:getName(), 1) < string.byte(b.card:getName(), 1)
-  end)
-
-  return ordered_backbuffer
+  return copy
 end
 
 function Actor:countCardInBuffer(specname)
@@ -371,6 +359,10 @@ function Actor:drawCard()
   Signal.emit("actor_draw", self, card)
 end
 
+function Actor:getCard(index)
+  return self.hand[index]
+end
+
 function Actor:getHandCard(index)
   assert(index >= 1 and index <= #self.hand)
   return self.hand[index]
@@ -378,7 +370,7 @@ end
 
 function Actor:removeHandCard(index)
   assert(index >= 1 and index <= #self.hand)
-  table.remove(self.hand, index)
+  return table.remove(self.hand, index)
 end
 
 function Actor:addCardToBackbuffer(card)
@@ -454,27 +446,23 @@ function Actor:getAction(slot)
     return self.widgets[slot]:getWidgetAbility()
   elseif self:isCard(slot) then
     local card = self.hand[slot]
+    local card_type
     if card then
       if card:isArt() then
         return true
       elseif card:isUpgrade() then
-        local cost = card:getUpgradeCost()
-        if self.exp >= cost then
-          return 'UPGRADE', {
-            list = card:getUpgradesList(),
-            ["exp-cost"] = cost
-          }
-        end
+        card_type = "UPGRADE"
       elseif card:isWidget() then
-        return 'PLACE_WIDGET', {
-          card = card
-        }
+        card_type = "WIDGET"
       end
+      return 'PLAY_'..card_type..'_CARD', {
+        card_index = slot
+      }
     end
   end
 end
 
-function Actor:playCard(card_index, sector, params)
+function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
@@ -503,6 +491,8 @@ function Actor:makeAction(sector)
         success = ACTION.activateWidget(action_slot, actor, sector, params)
       elseif action_slot == 'PRIMARY' then
         success = ACTION.useSignature(actor, sector, params)
+      elseif DEFS.BASIC_ABILITIES[action_slot] then
+        success = ACTION.useBasicAblity(action_slot, actor, sector, params)
       else
         success = ACTION.makeManeuver(action_slot, actor, sector, params)
       end

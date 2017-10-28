@@ -94,12 +94,20 @@ end
 local function _useAction(action_slot)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
+  local params = {}
   local ability
   if controlled_actor:isCard(action_slot) then
     local card = controlled_actor:getCard(action_slot)
+    local card_type
     if card:isArt() then
       ability = card:getArtAbility()
+    elseif card:isWidget() then
+      card_type = "WIDGET"
+    elseif card:isUpgrade() then
+      card_type = "UPGRADE"
     end
+    params.card_index = action_slot
+    ability = ability or ACTION.ability("PLAY_"..card_type.."_CARD")
   elseif controlled_actor:isWidget(action_slot) then
     ability = actor:getWidget(action_slot):getWidgetAbility()
   end
@@ -108,7 +116,6 @@ local function _useAction(action_slot)
     ability = ACTION.ability(action_name)
   end
   if not ability then return false end
-  local params = {}
   for _,param in ABILITY.paramsOf(ability) do
     if param.typename == 'choose_target' then
       _lockState()
@@ -159,7 +166,7 @@ local function _usePrimaryAction()
 end
 
 --- Receive a card index from player hands (between 1 and max-hand-size)
-local function _useCardByIndex(index, action_type)
+local function _useCardByIndex(index)
   local player = _route.getControlledActor()
 
   if _useAction(index) then
@@ -202,9 +209,15 @@ local function _interact()
   end
 end
 
+local function _wait()
+  if not _next_action then
+    _next_action = { 'IDLE' }
+  end
+end
+
 local function _newHand()
   if _route.getControlledActor():isHandEmpty() then
-    _useAction('NEW_HAND')
+    _useAction('DRAW_NEW_HAND')
   end
 end
 
@@ -212,7 +225,7 @@ local function _openPack()
   local controlled_actor = _route.getControlledActor()
   if not controlled_actor:hasOpenPack() then
     _unregisterSignals()
-    SWITCHER.push(GS.OPEN_PACK, _route)
+    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
   end
 end
 
@@ -254,6 +267,7 @@ function _registerSignals()
   Signal.register("managebuffer", _makeSignalHandler(_manageBuffer))
   Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
+  Signal.register("wait", _wait)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -318,28 +332,24 @@ function state:resume(from, args)
 
     if args.chose_a_card then
       if args.action_type == 'use' then
-        _startTask(_useCardByIndex, args.card_index, args.action_type)
+        _startTask(_useCardByIndex, args.card_index)
       elseif args.action_type == 'stash' then
-        _next_action = { "RECALL_CARD", { card_index = args.card_index } }
-      elseif args.action_type == 'consume' then
-        _next_action = { "CONSUME_CARD", { card_index = args.card_index } }
+        _next_action = {
+          "STASH_CARD", { card_index = args.card_index }
+        }
       end
     end
 
   elseif from == GS.OPEN_PACK then
-    for _,pick in ipairs(args) do
-      local t
-      if pick.action_type == 'get' then
-        t = 'GET_PACK_CARD'
-      elseif pick.action_type == 'consume' then
-        t = 'CONSUME_PACK_CARD'
-      end
-      assert(t)
-      _action_queue.push({ t, { index = pick.card_index,
-                                buffer = pick.buffer_index } })
-    end
+    _next_action = {
+      'RECEIVE_PACK', { consumed = args.consumed, pack = args.pack }
+    }
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
+  elseif from == GS.MANAGE_BUFFER then
+    _next_action = {
+      'CONSUME_CARDS_FROM_BUFFER', { consumed = args.consumed }
+    }
   end
 end
 

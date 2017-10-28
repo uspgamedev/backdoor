@@ -33,6 +33,10 @@ function Card:getDescription()
   return self:getSpec('desc')
 end
 
+function Card:getPPReward()
+  return self:getSpec('pp') or 0
+end
+
 function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
