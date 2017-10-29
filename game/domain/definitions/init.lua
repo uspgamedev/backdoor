@@ -1,16 +1,15 @@
 
 local DEFS = {}
 
--- + [ ] Xform BACKBUFFER CONSUMPTION into MANEUVER
--- + [ ] Xform all basic actions into MANEUVERS
--- + [ ] Smarter slots + endless widgets
+-- + [x] Xform BACKBUFFER CONSUMPTION into MANEUVER
+-- + [x] Xform all basic actions into MANEUVERS
+-- + [x] Smarter slots + endless widgets
 -- + [ ] Move widgets to body
 -- + [ ] Widget buffs
 -- + [ ] Stashed widgets
 
--- + [ ] ???
--- + [ ] Write action names down as definitions
--- + [ ] Change slot -> index in all params,operators,effects,actions...
+-- + [x] Write action names down as definitions
+-- + [ ] Adapt widget selector view to new reality
 -- + [ ] Join Actor:getCard() and Actor:getHandCard()
 
 DEFS.DONE = "__DONE_VALUE__"
