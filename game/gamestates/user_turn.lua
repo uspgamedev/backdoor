@@ -320,9 +320,7 @@ function state:resume(from, args)
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
   elseif from == GS.MANAGE_BUFFER then
-    _next_action = {
-      'CONSUME_CARDS_FROM_BUFFER', { consumed = args.consumed }
-    }
+    _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end
 end
 
