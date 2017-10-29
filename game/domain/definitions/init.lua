@@ -9,7 +9,7 @@ local DEFS = {}
 -- + [ ] Stashed widgets
 
 -- + [x] Write action names down as definitions
--- + [ ] Adapt widget selector view to new reality
+-- + [x] Adapt widget selector view to new reality
 -- + [ ] Remove Actor.actions since it only needs Action.signature now
 -- + [ ] Join Actor:getCard() and Actor:getHandCard()
 
