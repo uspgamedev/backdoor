@@ -201,7 +201,7 @@ end
 
 local function _newHand()
   if _route.getControlledActor():isHandEmpty() then
-    _useAction('DRAW_NEW_HAND')
+    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
   end
 end
 
