@@ -14,6 +14,7 @@ ACTION.RECEIVE_PACK     = 'receive_pack'
 
 ACTION.IDLE_TIME      = 20
 ACTION.MOVE_TIME      = 20
+ACTION.NEW_HAND_COST  = 10
 
 return ACTION
 
