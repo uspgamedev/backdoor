@@ -13,17 +13,6 @@ local Actor = Class{
   __includes = { GameElement }
 }
 
-local BASE_ACTIONS = {
-  IDLE = true,
-  MOVE = true,
-  INTERACT = true,
-  DRAW_NEW_HAND = true,
-  STASH_CARD = true,
-  CONSUME_CARD = true,
-  RECEIVE_PACK = true,
-  CONSUME_CARDS_FROM_BUFFER = true,
-}
-
 --[[ Setup methods ]]--
 
 function Actor:init(spec_name)
@@ -34,8 +23,7 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = DEFS.TIME_UNIT
-  self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
-                              { __index = BASE_ACTIONS })
+  self.actions = { PRIMARY = self:getSpec('primary') }
 
 
   self.equipped = {}
