@@ -180,13 +180,25 @@ function Actor:isEquipped(place)
   return place and self.equipped[place]
 end
 
-function Actor:equip(place, index)
+function Actor:equip(place, card)
   if not place then return end
   -- check if placement is being used
   -- if it is, then remove card from that slot
-  if self:isEquipped(place) then self:removeWidget(index) end
+  if self:isEquipped(place) then
+    local index
+    for i,widget in ipairs(self.widgets) do
+      if widget == self.equipped[place] then
+        index = i
+        break
+      end
+    end
+    local card = self:removeWidget(index)
+    if not card:isOneTimeOnly() then
+      self:addCardToBackbuffer(card)
+    end
+  end
   -- equip new thing on index
-  self.equipped[place] = self.widgets[index]
+  self.equipped[place] = card
 end
 
 function Actor:unequip(place)
@@ -202,20 +214,14 @@ function Actor:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
-  self.widgets[index] = false
+  table.remove(self.widgets, index)
   return card
 end
 
-function Actor:placeWidget(index, card)
-  if self:hasWidgetAt(index) then
-    local card = self:removeWidget(index)
-    if not card:isOneTimeOnly() then
-      self:addCardToBackbuffer(card)
-    end
-  end
+function Actor:placeWidget(card)
   local placement = card:getWidgetPlacement()
-  self.widgets[index] = card
-  self:equip(placement, index)
+  table.insert(self.widgets, card)
+  self:equip(placement, card)
 end
 
 function Actor:getWidget(index)

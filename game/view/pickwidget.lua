@@ -51,8 +51,8 @@ function PickWidgetView:draw()
   -- draw stuff
   for index, slot in pairs(DEFS.WIDGETS) do
     local name, pd
-    if self.target:isSlotOccupied(slot) then
-      name = self.target:getWidgetNameAt(slot)
+    if self.target:hasWidgetAt(index) then
+      name = self.target:getWidgetNameAt(index)
     else
       name = "[ EMPTY ]"
     end

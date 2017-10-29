@@ -39,7 +39,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     body_id = body_id,
     specname = background,
     cooldown = 10,
-    exp = 0,
+    exp = 20,
     playpoints = 10,
     equipped = {
       weapon = false,
