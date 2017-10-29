@@ -178,12 +178,14 @@ local function _useWidget()
   SWITCHER.push(
     GS.PICK_WIDGET_SLOT, controlled_actor,
     function (which_slot)
-      return not not controlled_actor:getAction(DEFS.WIDGETS[which_slot])
+      local widget = controlled_actor:getWidget(which_slot)
+      local ability = widget and widget:getWidgetAbility()
+      return not not ability
     end
   )
   local args = coroutine.yield(_task)
   if args.picked_slot then
-    _useAction('WIDGET', { widget_index = args.picked_slot })
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widget_slot = args.picked_slot })
   end
 end
 
