@@ -146,7 +146,7 @@ local function _move(dir)
 end
 
 local function _usePrimaryAction()
-  return _useAction('PRIMARY')
+  return _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
 --- Receive a card index from player hands (between 1 and max-hand-size)

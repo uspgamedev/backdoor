@@ -264,7 +264,7 @@ function Actor:isCard(slot)
 end
 
 function Actor:getSignature()
-  return self.actions.PRIMARY
+  return DB.loadSpec("action", self.actions.PRIMARY)
 end
 
 function Actor:setAction(name, id)
