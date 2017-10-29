@@ -309,9 +309,7 @@ function state:resume(from, args)
       if args.action_type == 'use' then
         _startTask(_useCardByIndex, args.card_index)
       elseif args.action_type == 'stash' then
-        _next_action = {
-          "STASH_CARD", { card_index = args.card_index }
-        }
+        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
       end
     end
 
