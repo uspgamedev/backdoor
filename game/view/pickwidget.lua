@@ -49,13 +49,9 @@ function PickWidgetView:draw()
 
   g.translate(_width/8, _height/2-2*(_BLOCK_HEIGHT+_MARGIN))
   -- draw stuff
-  for index, slot in pairs(DEFS.WIDGETS) do
+  for index, widget in self.target:eachWidget() do
     local name, pd
-    if self.target:hasWidgetAt(index) then
-      name = self.target:getWidgetNameAt(index)
-    else
-      name = "[ EMPTY ]"
-    end
+    name = widget:getName()
     local selected = self.selection == index
     if selected then
       g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)

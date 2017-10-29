@@ -231,6 +231,10 @@ function Actor:spendWidget(index)
   end
 end
 
+function Actor:eachWidget()
+  return ipairs(self.widgets)
+end
+
 --[[ Body methods ]]--
 
 function Actor:setBody(body_id)
