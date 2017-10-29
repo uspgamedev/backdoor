@@ -17,6 +17,7 @@ end
 function SIGNATURE.perform(actor, sector, params)
   local signature = actor:getSignature()
   actor:spendTime(signature.cost)
+  actor:rewardPP(signature.playpoints or 0)
   ABILITY.execute(signature.ability, actor, sector, params)
 end
 
