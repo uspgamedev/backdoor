@@ -195,7 +195,7 @@ end
 
 local function _wait()
   if not _next_action then
-    _next_action = { 'IDLE' }
+    _useAction(DEFS.ACTION.IDLE)
   end
 end
 

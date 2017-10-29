@@ -15,7 +15,7 @@ function MOVE.validate(actor, sector, params)
 end
 
 function MOVE.perform(actor, sector, params)
-  actor:spendTime(ACTIONDEFS.MOVE_COST)
+  actor:spendTime(ACTIONDEFS.MOVE_TIME)
   local pos = {actor:getPos()}
   sector:putBody(actor:getBody(), unpack(params.pos))
   coroutine.yield('report', {

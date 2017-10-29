@@ -12,7 +12,7 @@ ACTION.CONSUME_CARDS  = 'consume_cards_from_buffer'
 ACTION.RECEIVE_PACK   = 'receive_pack'
 
 ACTION.IDLE_TIME      = 20
-ACTION.MOVE_COST      = 20
+ACTION.MOVE_TIME      = 20
 
 return ACTION
 

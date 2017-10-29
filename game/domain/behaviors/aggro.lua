@@ -1,5 +1,6 @@
 
 local DIR = require 'domain.definitions.dir'
+local ACTIONDEFS = require 'domain.definitions.action'
 local Action = require 'domain.action'
 local TILE = require 'common.tile'
 local Heap = require 'common.heap'
@@ -105,10 +106,10 @@ return function (actor, sector)
     -- chase if far away!
     local pos = _findPath({i,j}, {target:getPos()}, sector)
     if pos then
-      return 'MOVE', { pos = pos }
+      return ACTIONDEFS.MOVE, { pos = pos }
     end
   end
 
-  return 'IDLE', {}
+  return ACTIONDEFS.IDLE, {}
 end
 
