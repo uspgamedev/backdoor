@@ -1,12 +1,7 @@
 
 local ACTION = {}
 
-function ACTION.unpack(slot)
-  local kind, index = slot:match("^(%w+)/(%d+)$")
-  kind = kind or slot
-  return kind, index
-end
-
+ACTION.IDLE           = 'idle'
 ACTION.MOVE           = 'move'
 ACTION.INTERACT       = 'interact'
 ACTION.USE_SIGNATURE  = 'use_signature'
@@ -16,6 +11,7 @@ ACTION.STASH_CARD     = 'stash_card'
 ACTION.CONSUME_CARDS  = 'consume_cards_from_buffer'
 ACTION.RECEIVE_PACK   = 'receive_pack'
 
+ACTION.IDLE_TIME      = 20
 ACTION.MOVE_COST      = 20
 
 return ACTION

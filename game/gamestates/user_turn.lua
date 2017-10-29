@@ -189,7 +189,7 @@ end
 
 local function _interact()
   if not _next_action then
-    _next_action = { 'INTERACT' }
+    _useAction(DEFS.ACTION.INTERACT)
   end
 end
 
