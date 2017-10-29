@@ -22,11 +22,11 @@ local function _simpleBuffer()
     table.insert(buffer, _card('cure'))
     table.insert(buffer, _card('sord'))
     table.insert(buffer, _card('gun'))
-    --table.insert(buffer, _card('ath_1'))
-    --table.insert(buffer, _card('arc_1'))
-    --table.insert(buffer, _card('mec_1'))
-    --table.insert(buffer, _card('def_1'))
-    --table.insert(buffer, _card('hp_5'))
+    table.insert(buffer, _card('ath_1'))
+    table.insert(buffer, _card('arc_1'))
+    table.insert(buffer, _card('mec_1'))
+    table.insert(buffer, _card('def_1'))
+    table.insert(buffer, _card('hp_5'))
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -39,7 +39,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     body_id = body_id,
     specname = background,
     cooldown = 10,
-    exp = 20,
+    exp = 0,
     playpoints = 10,
     equipped = {
       weapon = false,

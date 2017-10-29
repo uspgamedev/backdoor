@@ -173,19 +173,8 @@ local function _manageBuffer()
 end
 
 local function _useWidget()
-  local controlled_actor = _route.getControlledActor()
-  _lockState()
-  SWITCHER.push(
-    GS.PICK_WIDGET_SLOT, controlled_actor,
-    function (which_slot)
-      local widget = controlled_actor:getWidget(which_slot)
-      local ability = widget and widget:getWidgetAbility()
-      return not not ability
-    end
-  )
-  local args = coroutine.yield(_task)
-  if args.picked_slot then
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widget_slot = args.picked_slot })
+  if not _next_action then
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
   end
 end
 
