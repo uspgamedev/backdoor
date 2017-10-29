@@ -5,8 +5,25 @@ local DB      = require 'database'
 
 local ACTION = {}
 
-function ACTION.paramsOf(action_name)
-  return ABILITY.paramsOf(ACTION.ability(action_name))
+function ACTION.exists(action_name)
+  return not not MANEUVERS[action_name]
+end
+
+function ACTION.pendingParam(action_name, actor, sector, params)
+  local maneuver = MANEUVERS[action_name]
+  for _,param_spec in ipairs(maneuver.param_specs) do
+    if not params[param_spec.output] then
+      return param_spec
+    end
+  end
+  local activated_ability = maneuver.activatedAbility(actor, sector, params)
+  if activated_ability then
+    for _,param_spec in ABILITY.paramsOf(activated_ability) do
+      if not params[param_spec.output] then
+        return param_spec
+      end
+    end
+  end
 end
 
 function ACTION.ability(action_name)
@@ -60,15 +77,12 @@ function ACTION.useBasicAblity(action_slot, actor, sector, params)
   return true
 end
 
-function ACTION.makeManeuver(action_slot, actor, sector, params)
-  local action_name = actor:getAction(action_slot)
-  local maneuver = MANEUVERS[action_name:lower()]
-
+function ACTION.execute(action_slot, actor, sector, params)
+  local maneuver = MANEUVERS[action_slot]
   if not maneuver or not maneuver.validate(actor, sector, params) then
     return false
   end
   maneuver.perform(actor, sector, params)
-
   return true
 end
 

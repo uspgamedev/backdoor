@@ -427,36 +427,6 @@ local function _interact(self)
   return action, params
 end
 
-function Actor:getAction(slot)
-  local kind, index = DEFS.ACTION.unpack(slot)
-  if self.actions[kind] then
-    if kind == 'PRIMARY' then
-      return self.actions[kind]
-    elseif kind == 'INTERACT' then
-      return _interact(self)
-    else
-      return kind
-    end
-  elseif self.widgets[index] then
-    return self.widgets[index]:getWidgetAbility()
-  elseif self:isCard(kind) then
-    local card = self.hand[kind]
-    local card_type
-    if card then
-      if card:isArt() then
-        return true
-      elseif card:isUpgrade() then
-        card_type = "UPGRADE"
-      elseif card:isWidget() then
-        card_type = "WIDGET"
-      end
-      return 'PLAY_'..card_type..'_CARD', {
-        card_index = slot
-      }
-    end
-  end
-end
-
 function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
@@ -469,29 +439,8 @@ function Actor:makeAction(sector)
   local success = false
   repeat
     local action_slot, params = self:behavior(sector)
-    local check, extra = self:getAction(action_slot)
-    params = params or {}
-    if extra then
-      -- merge extra onto params
-      for k,v in pairs(extra) do
-        params[k] = v
-      end
-    end
-    if check then
-      local kind, index = DEFS.ACTION.unpack(action_slot)
-      local card = self:getCard(index)
-      local widget = self:getWidget(index)
-      if card and card:isArt() then
-        success = ACTION.castArt(index, actor, sector, params)
-      elseif widget then
-        success = ACTION.activateWidget(index, actor, sector, params)
-      elseif kind == 'PRIMARY' then
-        success = ACTION.useSignature(actor, sector, params)
-      elseif DEFS.BASIC_ABILITIES[action_slot] then
-        success = ACTION.useBasicAblity(action_slot, actor, sector, params)
-      else
-        success = ACTION.makeManeuver(kind, actor, sector, params)
-      end
+    if ACTION.exists(action_slot) then
+      success = ACTION.execute(action_slot, self, sector, params)
     end
   until success
   return true

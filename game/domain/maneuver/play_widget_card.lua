@@ -1,10 +1,14 @@
 
 local maneuver = {}
 
-maneuver.schema = {
-  { id = 'widget_slot', type = 'widget_slot' },
-  { id = 'card_index', type = 'card_index' }
+maneuver.param_specs = {
+  { output = 'card_index', typename = 'card_index' },
+  { output = 'widget_slot', typename = 'choose_widget_slot' },
 }
+
+function maneuver.activatedAbility(actor, sector, params)
+  return nil
+end
 
 function maneuver.validate(actor, sector, params)
   return actor:getHandCard(params.card_index) and params.widget_slot
