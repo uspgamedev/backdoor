@@ -421,18 +421,6 @@ function Actor:ready()
   return self:getBody():isAlive() and self.cooldown <= 0
 end
 
-local function _interact(self)
-  local action, params
-  local sector = self:getBody():getSector()
-  local i, j = self:getPos()
-  local id, exit = sector:findExit(i, j, true)
-  if id then
-    action = 'CHANGE_SECTOR'
-    params = { sector = exit.id, pos = exit.target_pos }
-  end
-  return action, params
-end
-
 function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
