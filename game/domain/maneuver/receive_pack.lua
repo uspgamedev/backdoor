@@ -1,16 +1,20 @@
 
-local maneuver = {}
+local RECEIVEPACK = {}
 
-maneuver.schema = {
-  { id = 'consumed', type = 'consume_list' },
-  { id = 'pack', type = 'pack_list'}
+RECEIVEPACK.param_specs = {
+  { output = 'consumed', typename = 'consume_list' },
+  { output = 'pack', typename = 'pack_list'}
 }
 
-function maneuver.validate(actor, sector, params)
+function RECEIVEPACK.activatedAbility(actor, sector, params)
+  return nil
+end
+
+function RECEIVEPACK.validate(actor, sector, params)
   return params.consumed and params.pack
 end
 
-function maneuver.perform(actor, sector, params)
+function RECEIVEPACK.perform(actor, sector, params)
   for _,card in ipairs(params.consumed) do
     actor:consumeCard(card)
   end
@@ -19,5 +23,5 @@ function maneuver.perform(actor, sector, params)
   end
 end
 
-return maneuver
+return RECEIVEPACK
 

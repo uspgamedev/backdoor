@@ -314,9 +314,8 @@ function state:resume(from, args)
     end
 
   elseif from == GS.OPEN_PACK then
-    _next_action = {
-      'RECEIVE_PACK', { consumed = args.consumed, pack = args.pack }
-    }
+    _useAction(DEFS.ACTION.RECEIVE_PACK,
+               { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
   elseif from == GS.MANAGE_BUFFER then

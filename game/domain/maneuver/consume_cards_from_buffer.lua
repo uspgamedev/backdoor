@@ -1,6 +1,5 @@
 
-local ACTIONDEFS  = require 'domain.definitions.action'
-local CONSUME     = {}
+local CONSUME = {}
 
 CONSUME.param_specs = {
   { output = 'consumed', typename = 'consume_list' },
