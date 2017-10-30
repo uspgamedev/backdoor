@@ -24,12 +24,6 @@ function Actor:init(spec_name)
   self.body_id = nil
   self.cooldown = DEFS.TIME_UNIT
 
-  self.equipped = {}
-  for placement in ipairs(PLACEMENTS) do
-    self.equipped[placement] = false
-  end
-
-  self.widgets = {}
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
@@ -54,26 +48,19 @@ function Actor:loadState(state)
   self.playpoints = state.playpoints
   self.upgrades = state.upgrades
   self.hand_limit = state.hand_limit
-  self.equipped = state.equipped
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
     card:loadState(card_state)
+    card:setOwner(self)
     table.insert(self.hand, card)
-  end
-  self.widgets = {}
-  for index, card_state in pairs(state.widgets) do
-    if card_state then
-      local card = Card(card_state.specname)
-      card:loadState(card_state)
-      self.widgets[index] = card
-    end
   end
   self.buffer = {}
   for i,card_state in ipairs(state.buffer) do
     local card = DEFS.DONE
     if card_state ~= card then
       card = Card(state.buffer.specname)
+      card:setOwner(self)
       card:loadState(card_state)
     end
     self.buffer[i] = card
@@ -89,19 +76,11 @@ function Actor:saveState()
   state.exp = self.exp
   state.playpoints = self.playpoints
   state.upgrades = self.upgrades
-  state.equipped = self.equipped
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
     local card_state = card:saveState()
     table.insert(state.hand, card_state)
-  end
-  state.widgets = {}
-  for index, card in pairs(self.widgets) do
-    if card then
-      local card_state = card:saveState()
-      state.widgets[index] = card_state
-    end
   end
   state.buffer = {}
   for i,card in ipairs(self.buffer) do
@@ -162,79 +141,6 @@ end
 
 function Actor:getSPD()
   return self:getSpec('spd') + self.upgrades.SPD
-end
-
---[[ Widget methods ]]--
-
-function Actor:isEquipped(place)
-  return place and self.equipped[place]
-end
-
-function Actor:equip(place, card)
-  if not place then return end
-  -- check if placement is being used
-  -- if it is, then remove card from that slot
-  if self:isEquipped(place) then
-    local index
-    for i,widget in ipairs(self.widgets) do
-      if widget == self.equipped[place] then
-        index = i
-        break
-      end
-    end
-    local card = self:removeWidget(index)
-    if not card:isOneTimeOnly() then
-      self:addCardToBackbuffer(card)
-    end
-  end
-  -- equip new thing on index
-  self.equipped[place] = card
-end
-
-function Actor:unequip(place)
-  if not place then return end
-  self.equipped[place] = false
-end
-
-function Actor:hasWidgetAt(index)
-  return not not self.widgets[index]
-end
-
-function Actor:removeWidget(index)
-  local card = self.widgets[index]
-  local placement = card:getWidgetPlacement()
-  self:unequip(placement)
-  table.remove(self.widgets, index)
-  return card
-end
-
-function Actor:placeWidget(card)
-  local placement = card:getWidgetPlacement()
-  table.insert(self.widgets, card)
-  self:equip(placement, card)
-end
-
-function Actor:getWidget(index)
-  return index and self.widgets[index]
-end
-
-function Actor:getWidgetNameAt(index)
-  local card = self.widgets[index]
-  if card then return card:getName() end
-end
-
-function Actor:spendWidget(index)
-  local card = self.widgets[index]
-  if card then
-    card:addUsages()
-    if card:isSpent() then
-      return self:removeWidget(index)
-    end
-  end
-end
-
-function Actor:eachWidget()
-  return ipairs(self.widgets)
 end
 
 --[[ Body methods ]]--

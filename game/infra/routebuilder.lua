@@ -41,19 +41,6 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     cooldown = 10,
     exp = 0,
     playpoints = 10,
-    equipped = {
-      weapon = false,
-      offhand = false,
-      suit = false,
-      tool = false,
-      accessory = false,
-    },
-    widgets = {
-      WIDGET_A = false,
-      WIDGET_B = false,
-      WIDGET_C = false,
-      WIDGET_D = false,
-    },
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffer = _simpleBuffer(),
     hand_limit = 5,
@@ -69,6 +56,14 @@ local function _generatePlayerBodyData(idgenerator, species)
     upgrades = {DEF=0,HP=0},
     i = 3,
     j = 5,
+    equipped = {
+      weapon = false,
+      offhand = false,
+      suit = false,
+      tool = false,
+      accessory = false,
+    },
+    widgets = {},
   }
 end
 

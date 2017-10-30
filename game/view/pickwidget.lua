@@ -49,7 +49,7 @@ function PickWidgetView:draw()
 
   g.translate(_width/8, _height/2-2*(_BLOCK_HEIGHT+_MARGIN))
   -- draw stuff
-  for index, widget in self.target:eachWidget() do
+  for index, widget in self.target:getBody():eachWidget() do
     local name, pd
     name = widget:getName()
     local selected = self.selection == index

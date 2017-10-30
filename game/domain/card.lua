@@ -10,18 +10,21 @@ function Card:init(specname)
 
   GameElement.init(self, 'card', specname)
   self.usages = 0
+  self.owner_id = nil
 
 end
 
 function Card:loadState(state)
   self.specname = state.specname
   self.usages = state.usages
+  self.owner_id = state.owner_id
 end
 
 function Card:saveState()
   local state = {}
   state.specname = self.specname
   state.usages = self.usages
+  state.owner_id = self.owner_id
   return state
 end
 
@@ -39,6 +42,14 @@ end
 
 function Card:getRelatedAttr()
   return self:getSpec('attr')
+end
+
+function Card:getOwner()
+  return Util.find(self:getSpec('owner_id'))
+end
+
+function Card:setOwner(owner)
+  self.owner_id = owner.id
 end
 
 function Card:isOneTimeOnly()

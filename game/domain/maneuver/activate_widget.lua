@@ -8,21 +8,22 @@ ACTIVATE.param_specs = {
 }
 
 function ACTIVATE.activatedAbility(actor, sector, params)
-  return actor:getWidget(params.widget_slot):getWidgetAbility()
+  return actor:getBody():getWidget(params.widget_slot):getWidgetAbility()
 end
 
 function ACTIVATE.validate(actor, sector, params)
   if not params.widget_slot then return false end
-  local widget = actor:getWidget(params.widget_slot)
+  local widget = actor:getBody():getWidget(params.widget_slot)
   if not widget then return false end
   local ability = widget:getWidgetAbility()
   return ability and ABILITY.checkParams(ability, actor, sector, params)
 end
 
 function ACTIVATE.perform(actor, sector, params)
-  local widget = actor:getWidget(params.widget_slot)
+  local body = actor:getBody()
+  local widget = body:getWidget(params.widget_slot)
   local ability = widget:getWidgetAbility()
-  actor:spendWidget(params.widget_slot)
+  body:spendWidget(params.widget_slot)
   actor:spendTime(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, sector, params)

@@ -19,6 +19,7 @@ function RECEIVEPACK.perform(actor, sector, params)
     actor:consumeCard(card)
   end
   for _,card in ipairs(params.pack) do
+    card:setOwner(actor)
     actor:addCardToBackbuffer(card)
   end
 end
