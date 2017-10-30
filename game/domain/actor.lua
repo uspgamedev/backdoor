@@ -13,17 +13,6 @@ local Actor = Class{
   __includes = { GameElement }
 }
 
-local BASE_ACTIONS = {
-  IDLE = true,
-  MOVE = true,
-  INTERACT = true,
-  DRAW_NEW_HAND = true,
-  STASH_CARD = true,
-  CONSUME_CARD = true,
-  RECEIVE_PACK = true,
-  CONSUME_CARDS_FROM_BUFFER = true,
-}
-
 --[[ Setup methods ]]--
 
 function Actor:init(spec_name)
@@ -34,8 +23,7 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = DEFS.TIME_UNIT
-  self.actions = setmetatable({ PRIMARY = self:getSpec('primary') },
-                              { __index = BASE_ACTIONS })
+  self.actions = { PRIMARY = self:getSpec('primary') }
 
 
   self.equipped = {}
@@ -44,9 +32,6 @@ function Actor:init(spec_name)
   end
 
   self.widgets = {}
-  for _,slot in pairs(DEFS.WIDGETS) do
-    self.widgets[slot] = false
-  end
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
@@ -79,13 +64,11 @@ function Actor:loadState(state)
     table.insert(self.hand, card)
   end
   self.widgets = {}
-  for slot, card_state in pairs(state.widgets) do
+  for index, card_state in pairs(state.widgets) do
     if card_state then
       local card = Card(card_state.specname)
       card:loadState(card_state)
-      self.widgets[slot] = card
-    else
-      self.widgets[slot] = false
+      self.widgets[index] = card
     end
   end
   self.buffer = {}
@@ -116,12 +99,10 @@ function Actor:saveState()
     table.insert(state.hand, card_state)
   end
   state.widgets = {}
-  for slot, card in pairs(self.widgets) do
+  for index, card in pairs(self.widgets) do
     if card then
       local card_state = card:saveState()
-      state.widgets[slot] = card_state
-    else
-      state.widgets[slot] = false
+      state.widgets[index] = card_state
     end
   end
   state.buffer = {}
@@ -181,19 +162,31 @@ function Actor:getSPD()
   return self:getSpec('spd') + self.upgrades.SPD
 end
 
+--[[ Widget methods ]]--
+
 function Actor:isEquipped(place)
-  if not place then return end
-  return self.equipped[place]
+  return place and self.equipped[place]
 end
 
-function Actor:equip(place, slot)
+function Actor:equip(place, card)
   if not place then return end
   -- check if placement is being used
   -- if it is, then remove card from that slot
-  local equipped_slot = self:isEquipped(place)
-  if equipped_slot then self:clearSlot(equipped_slot) end
-  -- equip new thing on slot
-  self.equipped[place] = slot
+  if self:isEquipped(place) then
+    local index
+    for i,widget in ipairs(self.widgets) do
+      if widget == self.equipped[place] then
+        index = i
+        break
+      end
+    end
+    local card = self:removeWidget(index)
+    if not card:isOneTimeOnly() then
+      self:addCardToBackbuffer(card)
+    end
+  end
+  -- equip new thing on index
+  self.equipped[place] = card
 end
 
 function Actor:unequip(place)
@@ -201,47 +194,45 @@ function Actor:unequip(place)
   self.equipped[place] = false
 end
 
-function Actor:isSlotOccupied(slot)
-  return not not self.widgets[slot]
+function Actor:hasWidgetAt(index)
+  return not not self.widgets[index]
 end
 
-function Actor:clearSlot(slot)
-  local card = self.widgets[slot]
+function Actor:removeWidget(index)
+  local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   self:unequip(placement)
-  self.widgets[slot] = false
+  table.remove(self.widgets, index)
   return card
 end
 
-function Actor:setSlot(slot, card)
-  if self:isSlotOccupied(slot) then
-    local card = self:clearSlot(slot)
-    if not card:isOneTimeOnly() then
-      self:addCardToBackbuffer(card)
-    end
-  end
+function Actor:placeWidget(card)
   local placement = card:getWidgetPlacement()
-  self:equip(placement, slot)
-  self.widgets[slot] = card
+  table.insert(self.widgets, card)
+  self:equip(placement, card)
 end
 
-function Actor:getWidget(slot)
-  return self.widgets[slot]
+function Actor:getWidget(index)
+  return index and self.widgets[index]
 end
 
-function Actor:getWidgetNameAt(slot)
-  local card = self.widgets[slot]
+function Actor:getWidgetNameAt(index)
+  local card = self.widgets[index]
   if card then return card:getName() end
 end
 
-function Actor:spendWidget(slot)
-  local card = self.widgets[slot]
+function Actor:spendWidget(index)
+  local card = self.widgets[index]
   if card then
     card:addUsages()
     if card:isSpent() then
-      return self:clearSlot(slot)
+      return self:removeWidget(index)
     end
   end
+end
+
+function Actor:eachWidget()
+  return ipairs(self.widgets)
 end
 
 --[[ Body methods ]]--
@@ -262,15 +253,16 @@ end
 
 function Actor:isWidget(slot)
   return type(slot) == 'string'
-         and slot:match("^WIDGET_")
+         and slot:match("^WIDGET/%d+$")
 end
 
 function Actor:isCard(slot)
-  return type(slot) == 'number'
+  return type(slot) == 'string'
+         and slot:match("^CARD/%d+$")
 end
 
 function Actor:getSignature()
-  return self.actions.PRIMARY
+  return DB.loadSpec("action", self.actions.PRIMARY)
 end
 
 function Actor:setAction(name, id)
@@ -360,12 +352,12 @@ function Actor:drawCard()
 end
 
 function Actor:getCard(index)
-  return self.hand[index]
+  return index and self.hand[index]
 end
 
 function Actor:getHandCard(index)
   assert(index >= 1 and index <= #self.hand)
-  return self.hand[index]
+  return index and self.hand[index]
 end
 
 function Actor:removeHandCard(index)
@@ -421,47 +413,6 @@ function Actor:ready()
   return self:getBody():isAlive() and self.cooldown <= 0
 end
 
-local function _interact(self)
-  local action, params
-  local sector = self:getBody():getSector()
-  local i, j = self:getPos()
-  local id, exit = sector:findExit(i, j, true)
-  if id then
-    action = 'CHANGE_SECTOR'
-    params = { sector = exit.id, pos = exit.target_pos }
-  end
-  return action, params
-end
-
-function Actor:getAction(slot)
-  if self.actions[slot] then
-    if slot == 'PRIMARY' then
-      return self.actions[slot]
-    elseif slot == 'INTERACT' then
-      return _interact(self)
-    else
-      return slot
-    end
-  elseif self.widgets[slot] then
-    return self.widgets[slot]:getWidgetAbility()
-  elseif self:isCard(slot) then
-    local card = self.hand[slot]
-    local card_type
-    if card then
-      if card:isArt() then
-        return true
-      elseif card:isUpgrade() then
-        card_type = "UPGRADE"
-      elseif card:isWidget() then
-        card_type = "WIDGET"
-      end
-      return 'PLAY_'..card_type..'_CARD', {
-        card_index = slot
-      }
-    end
-  end
-end
-
 function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
@@ -474,28 +425,8 @@ function Actor:makeAction(sector)
   local success = false
   repeat
     local action_slot, params = self:behavior(sector)
-    local check, extra = self:getAction(action_slot)
-    params = params or {}
-    if extra then
-      -- merge extra onto params
-      for k,v in pairs(extra) do
-        params[k] = v
-      end
-    end
-    if check then
-      local card = self:getCard(action_slot)
-      local widget = self:getWidget(action_slot)
-      if card and card:isArt() then
-        success = ACTION.castArt(action_slot, actor, sector, params)
-      elseif widget then
-        success = ACTION.activateWidget(action_slot, actor, sector, params)
-      elseif action_slot == 'PRIMARY' then
-        success = ACTION.useSignature(actor, sector, params)
-      elseif DEFS.BASIC_ABILITIES[action_slot] then
-        success = ACTION.useBasicAblity(action_slot, actor, sector, params)
-      else
-        success = ACTION.makeManeuver(action_slot, actor, sector, params)
-      end
+    if ACTION.exists(action_slot) then
+      success = ACTION.execute(action_slot, self, sector, params)
     end
   until success
   return true

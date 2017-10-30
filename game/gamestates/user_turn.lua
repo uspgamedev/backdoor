@@ -79,44 +79,14 @@ local function _changeToCardSelectScreen()
 
 end
 
-local function _move(dir)
+local function _useAction(action_slot, params)
+  if not ACTION.exists(action_slot) then return false end
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
-  local i, j = controlled_actor:getPos()
-
-  dir = DIR[dir]
-  i, j = i+dir[1], j+dir[2]
-  if current_sector:isValid(i,j) then
-    _next_action = {'MOVE', { pos = {i,j} }}
-  end
-end
-
-local function _useAction(action_slot)
-  local current_sector = _route.getCurrentSector()
-  local controlled_actor = _route.getControlledActor()
-  local params = {}
-  local ability
-  if controlled_actor:isCard(action_slot) then
-    local card = controlled_actor:getCard(action_slot)
-    local card_type
-    if card:isArt() then
-      ability = card:getArtAbility()
-    elseif card:isWidget() then
-      card_type = "WIDGET"
-    elseif card:isUpgrade() then
-      card_type = "UPGRADE"
-    end
-    params.card_index = action_slot
-    ability = ability or ACTION.ability("PLAY_"..card_type.."_CARD")
-  elseif controlled_actor:isWidget(action_slot) then
-    ability = actor:getWidget(action_slot):getWidgetAbility()
-  end
-  if not ability then
-    local action_name = controlled_actor:getAction(action_slot)
-    ability = ACTION.ability(action_name)
-  end
-  if not ability then return false end
-  for _,param in ABILITY.paramsOf(ability) do
+  params = params or {}
+  local param = ACTION.pendingParam(action_slot, controlled_actor,
+                                    current_sector, params)
+  while param do
     if param.typename == 'choose_target' then
       _lockState()
       SWITCHER.push(
@@ -156,20 +126,34 @@ local function _useAction(action_slot)
         return false
       end
     end
+    param = ACTION.pendingParam(action_slot, controlled_actor,
+                                current_sector, params)
   end
   _next_action = {action_slot, params}
   return true
 end
 
+local function _move(dir)
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
+
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if current_sector:isValid(i,j) then
+    _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
+  end
+end
+
 local function _usePrimaryAction()
-  return _useAction('PRIMARY')
+  return _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
 --- Receive a card index from player hands (between 1 and max-hand-size)
 local function _useCardByIndex(index)
   local player = _route.getControlledActor()
 
-  if _useAction(index) then
+  if _useAction(DEFS.ACTION.PLAY_CARD, { card_index = index }) then
     Signal.emit("actor_used_card", player, index)
   end
 end
@@ -189,35 +173,26 @@ local function _manageBuffer()
 end
 
 local function _useWidget()
-  local controlled_actor = _route.getControlledActor()
-  _lockState()
-  SWITCHER.push(
-    GS.PICK_WIDGET_SLOT, controlled_actor,
-    function (which_slot)
-      return not not controlled_actor:getAction(DEFS.WIDGETS[which_slot])
-    end
-  )
-  local args = coroutine.yield(_task)
-  if args.picked_slot then
-    _useAction(args.picked_slot)
+  if not _next_action then
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
   end
 end
 
 local function _interact()
   if not _next_action then
-    _next_action = { 'INTERACT' }
+    _useAction(DEFS.ACTION.INTERACT)
   end
 end
 
 local function _wait()
   if not _next_action then
-    _next_action = { 'IDLE' }
+    _useAction(DEFS.ACTION.IDLE)
   end
 end
 
 local function _newHand()
   if _route.getControlledActor():isHandEmpty() then
-    _useAction('DRAW_NEW_HAND')
+    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
   end
 end
 
@@ -334,22 +309,17 @@ function state:resume(from, args)
       if args.action_type == 'use' then
         _startTask(_useCardByIndex, args.card_index)
       elseif args.action_type == 'stash' then
-        _next_action = {
-          "STASH_CARD", { card_index = args.card_index }
-        }
+        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
       end
     end
 
   elseif from == GS.OPEN_PACK then
-    _next_action = {
-      'RECEIVE_PACK', { consumed = args.consumed, pack = args.pack }
-    }
+    _useAction(DEFS.ACTION.RECEIVE_PACK,
+               { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
     Signal.emit(args.action)
   elseif from == GS.MANAGE_BUFFER then
-    _next_action = {
-      'CONSUME_CARDS_FROM_BUFFER', { consumed = args.consumed }
-    }
+    _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end
 end
 

@@ -1,15 +1,19 @@
 
-local maneuver = {}
+local CONSUME = {}
 
-maneuver.schema = {
-  { id = 'consumed', type = 'consume_list' },
+CONSUME.param_specs = {
+  { output = 'consumed', typename = 'consume_list' },
 }
 
-function maneuver.validate(actor, sector, params)
+function CONSUME.activatedAbility(actor, sector, params)
+  return nil
+end
+
+function CONSUME.validate(actor, sector, params)
   return params.consumed
 end
 
-function maneuver.perform(actor, sector, params)
+function CONSUME.perform(actor, sector, params)
   for _,idx in ipairs(params.consumed) do
     local index = idx + actor:getBufferSize()+1
     local card = actor:getBackBufferCard(index)
@@ -18,5 +22,5 @@ function maneuver.perform(actor, sector, params)
   end
 end
 
-return maneuver
+return CONSUME
 

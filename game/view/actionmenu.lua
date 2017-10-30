@@ -16,7 +16,7 @@ local _ACTIONS = {
   widget = "Use Widget",
   playcard = "Play Card",
   managebuffer = "Manage Back Buffer",
-  drawhand = "Draw New Hand\n(-"..DEFS.NEW_HAND_COST.." PP)",
+  drawhand = "Draw New Hand\n(-"..DEFS.ACTION.NEW_HAND_COST.." PP)",
   openpack = "Open Card Pack",
   wait = "Wait"
 }

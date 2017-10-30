@@ -8,6 +8,9 @@ PARAM.schema = {
 PARAM.type = 'widget_slot'
 
 function PARAM.isValid(sector, actor, parameter, value)
+  if not actor:hasWidgetAt(value) then
+    return false
+  end
   return true
 end
 
