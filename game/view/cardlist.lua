@@ -62,7 +62,7 @@ function View:init(hold_action)
   self.card_list = _EMPTY
   self.consumed = {}
   self.consume_log = false
-  self.holdbar = HoldBar.new(hold_action)
+  self.holdbar = HoldBar(hold_action)
 
   _initGraphicValues()
 end
@@ -113,10 +113,12 @@ end
 
 function View:selectPrev()
   self.selection = _prev_circular(self.selection, #self.card_list, 1)
+  self.holdbar:reset()
 end
 
 function View:selectNext()
   self.selection = _next_circular(self.selection, #self.card_list, 1)
+  self.holdbar:reset()
 end
 
 function View:setSelection(n)
@@ -284,9 +286,10 @@ function View:drawConsumed(g, enter)
 end
 
 function View:drawHoldBar(g)
-  if self.holdbar:holdAndDraw(0, 0) then
+  if self.holdbar:update() then
     self:consumeCard()
   end
+  self.holdbar:draw(0, 0)
 end
 
 
