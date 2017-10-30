@@ -7,7 +7,6 @@ local state = {}
 
 local _view
 local _mapping
-local _consumed
 local _leave
 
 function state:init()
@@ -18,32 +17,18 @@ function state:init()
     PRESS_RIGHT = function()
       _view:selectNext()
     end,
-    PRESS_UP = function()
-      local idx, card = _view:popSelectedCard()
-      CONTROLS.setMap()
-      table.insert(_consumed, idx)
-      _view:updateSelection()
-      if _view:isCardListEmpty() then
-        _leave = true
-      else
-        _view:addTimer("consuming_lock", MAIN_TIMER, "after", .2,
-                       function() CONTROLS.setMap(_mapping) end)
-      end
-    end,
     PRESS_CONFIRM = function()
-      _leave = true
+      if not _view:isLocked() then _leave = true end
     end,
     PRESS_CANCEL = function()
-      _leave = true
+      if not _view:isLocked() then _leave = true end
     end,
   }
-  _view = ManageBufferView()
+  _view = ManageBufferView("UP")
   _view:addElement("HUD")
 end
 
 function state:enter(from, actor)
-  _consumed = {}
-
   if actor:getBackBufferSize() > 0 then
     _leave = false
     _view:open(actor:copyBackBuffer())
@@ -59,7 +44,9 @@ end
 
 function state:update(dt)
   if not DEBUG then
-    if _leave then SWITCHER.pop({consumed = _consumed}) end
+    if _leave or _view:isCardListEmpty() then
+      SWITCHER.pop({consumed = _view:getConsumeLog()})
+    end
     MAIN_TIMER:update(dt)
   end
 end
