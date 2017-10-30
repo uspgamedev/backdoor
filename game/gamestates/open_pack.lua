@@ -20,8 +20,10 @@ function state:init()
       _view:selectNext()
     end,
     PRESS_CONFIRM = function()
-      CONTROLS.setMap()
-      _view:collectCards(function() _leave = true end)
+      if not _view:isLocked() then
+        CONTROLS.setMap()
+        _view:collectCards(function() _leave = true end)
+      end
     end,
   }
   _view = PackView("UP")

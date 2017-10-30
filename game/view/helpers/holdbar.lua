@@ -3,7 +3,7 @@ local INPUT = require 'infra.input'
 local COLORS = require 'domain.definitions.colors'
 
 local _TOTAL = 1
-local _SPEED = 1/16
+local _SPEED = 1/8
 local _ENTER_SPEED = 1/10
 local _EPSILON = 0.01
 local _WIDTH = 64
@@ -52,6 +52,10 @@ end
 function HoldBar:unlock()
   self.locked = false
   self.progress = 0
+end
+
+function HoldBar:isLocked()
+  return self.locked
 end
 
 function HoldBar:holdAndDraw(x, y)

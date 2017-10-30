@@ -67,10 +67,15 @@ function View:init(hold_action)
   _initGraphicValues()
 end
 
+function View:isLocked()
+  return self.holdbar:isLocked()
+end
+
 function View:open(card_list)
   self.invisible = false
   self.card_list = card_list
   self.consume_log = {}
+  self.holdbar:unlock()
   self.selection = math.ceil(#card_list/2)
   for i=1,#card_list do self.y_offset[i] = 0 end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
@@ -79,6 +84,8 @@ function View:open(card_list)
 end
 
 function View:close()
+  self.holdbar:lock()
+  self.consume_log = _EMPTY
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
@@ -89,6 +96,7 @@ function View:close()
 end
 
 function View:collectCards(finish)
+  self.holdbar:lock()
   self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
                 self, {text=0}, "in-quad")
   for i = 1, #self.card_list do
@@ -131,11 +139,12 @@ function View:popSelectedCard()
     consumation = 0,
   })
   local index = #self.consumed
-  self.holdbar:lock()
+  local holdbar = self.holdbar
+  holdbar:lock()
   self:addTimer(_CONSUMED_TIMER..index, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self.consumed[index], {consumation=1},
                 "out-quad", function()
-                              self.holdbar:unlock()
+                              holdbar:unlock()
                               table.remove(self.consumed, index)
                             end)
 
@@ -153,7 +162,7 @@ function View:consumeCard()
 end
 
 function View:getConsumeLog()
-  return self.consume_log
+  return self.consume_log or _EMPTY
 end
 
 function View:draw()

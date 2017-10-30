@@ -7,7 +7,6 @@ local state = {}
 
 local _view
 local _mapping
-local _consumed
 local _leave
 
 function state:init()
@@ -19,10 +18,10 @@ function state:init()
       _view:selectNext()
     end,
     PRESS_CONFIRM = function()
-      _leave = true
+      if not _view:isLocked() then _leave = true end
     end,
     PRESS_CANCEL = function()
-      _leave = true
+      if not _view:isLocked() then _leave = true end
     end,
   }
   _view = ManageBufferView("UP")
@@ -30,8 +29,6 @@ function state:init()
 end
 
 function state:enter(from, actor)
-  _consumed = {}
-
   if actor:getBackBufferSize() > 0 then
     _leave = false
     _view:open(actor:copyBackBuffer())
