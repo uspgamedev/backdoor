@@ -10,7 +10,7 @@ local DEFS = {}
 
 -- + [x] Write action names down as definitions
 -- + [x] Adapt widget selector view to new reality
--- + [ ] Remove Actor.actions since it only needs Action.signature now
+-- + [x] Remove Actor.actions since it only needs Action.signature now
 -- + [ ] Join Actor:getCard() and Actor:getHandCard()
 
 DEFS.DONE = "__DONE_VALUE__"

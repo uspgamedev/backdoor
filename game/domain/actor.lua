@@ -23,8 +23,6 @@ function Actor:init(spec_name)
 
   self.body_id = nil
   self.cooldown = DEFS.TIME_UNIT
-  self.actions = { PRIMARY = self:getSpec('primary') }
-
 
   self.equipped = {}
   for placement in ipairs(PLACEMENTS) do
@@ -124,6 +122,10 @@ end
 
 function Actor:getBasicCollection()
   return self:getSpec('collection')
+end
+
+function Actor:getSignatureAbilityName()
+  return self:getSpec('signature')
 end
 
 function Actor:getExp()
@@ -262,7 +264,7 @@ function Actor:isCard(slot)
 end
 
 function Actor:getSignature()
-  return DB.loadSpec("action", self.actions.PRIMARY)
+  return DB.loadSpec("action", self:getSignatureAbilityName())
 end
 
 function Actor:setAction(name, id)

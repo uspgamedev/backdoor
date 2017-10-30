@@ -12,7 +12,7 @@ return {
   { id = 'name', name = "Full Name", type = 'string' },
   { id = 'behavior', name = "Behavior", type = 'enum',
     options = behaviors },
-  { id = 'primary', name = "Primary", type = 'enum',
+  { id = 'signature', name = "Signature Ability", type = 'enum',
     options = 'domains.action' },
   { id = 'ath', name = "ATH", type = 'integer', range = {0} },
   { id = 'arc', name = "ARC", type = 'integer', range = {0} },

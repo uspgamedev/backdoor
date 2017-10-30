@@ -5,7 +5,7 @@
   "arc":2,
   "collection":"adventurer",
   "description":"Oh honey...",
-  "primary":"MELEE",
+  "signature":"MELEE",
   "name":"Dumb",
   "spd":1
 }
