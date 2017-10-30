@@ -4,13 +4,14 @@ local DEFS = {}
 -- + [x] Xform BACKBUFFER CONSUMPTION into MANEUVER
 -- + [x] Xform all basic actions into MANEUVERS
 -- + [x] Smarter slots + endless widgets
--- + [ ] Move widgets to body
+-- + [x] Move widgets to body
 -- + [ ] Widget buffs
 -- + [ ] Stashed widgets
 
 -- + [x] Write action names down as definitions
 -- + [x] Adapt widget selector view to new reality
 -- + [x] Remove Actor.actions since it only needs Action.signature now
+-- + [ ] Add placement spec to bodies
 -- + [ ] Join Actor:getCard() and Actor:getHandCard()
 
 DEFS.DONE = "__DONE_VALUE__"
