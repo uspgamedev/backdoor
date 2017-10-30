@@ -10,7 +10,9 @@ function DRAWHAND.activatedAbility(actor, sector, params)
 end
 
 function DRAWHAND.validate(actor, sector, params)
-  return actor:isHandEmpty() and actor:getPP() >= DEFS.ACTION.NEW_HAND_COST
+  return not actor:isBufferEmpty()
+         and actor:isHandEmpty()
+         and actor:getPP() >= DEFS.ACTION.NEW_HAND_COST
 end
 
 function DRAWHAND.perform(actor, sector, params)
