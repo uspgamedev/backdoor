@@ -1,5 +1,6 @@
 
 local math = require 'common.math'
+local HOLDBAR = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
 
@@ -48,7 +49,7 @@ local function _prev_circular(i, len, n)
 end
 
 -- PUBLIC METHODS ---------------------------
-function View:init()
+function View:init(hold_action)
   ELEMENT.init(self)
 
   self.enter = 0
@@ -60,6 +61,8 @@ function View:init()
   self.offsets = {}
   self.card_list = _EMPTY
   self.consumed = {}
+  self.consume_log = false
+  self.holdbar = HOLDBAR.new(hold_action)
 
   _initGraphicValues()
 end
@@ -67,6 +70,7 @@ end
 function View:open(card_list)
   self.invisible = false
   self.card_list = card_list
+  self.consume_log = {}
   self.selection = math.ceil(#card_list/2)
   for i=1,#card_list do self.y_offset[i] = 0 end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
@@ -127,15 +131,29 @@ function View:popSelectedCard()
     consumation = 0,
   })
   local index = #self.consumed
+  self.holdbar:lock()
   self:addTimer(_CONSUMED_TIMER..index, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self.consumed[index], {consumation=1},
-                "out-quad", function() table.remove(self.consumed, index) end)
+                "out-quad", function()
+                              self.holdbar:unlock()
+                              table.remove(self.consumed, index)
+                            end)
 
   return self.selection, card
 end
 
 function View:isCardListEmpty()
   return #self.card_list == 0
+end
+
+function View:consumeCard()
+  local idx, card = self:popSelectedCard()
+  self:updateSelection()
+  table.insert(self.consume_log, idx)
+end
+
+function View:getConsumeLog()
+  return self.consume_log
 end
 
 function View:draw()
@@ -158,7 +176,6 @@ function View:drawBG(g, enter)
 end
 
 function View:drawCards(g, enter)
-  local _PD = 40
   local selection = self.selection
   local card_list = self.card_list
   local card_list_size = #card_list
@@ -213,7 +230,6 @@ function View:drawArrow(g, enter)
   local senoid
 
   g.push()
-  g.setColor(0xFF, 0xFF, 0xFF, enter*0xFF)
 
   -- move arrow in senoid
   self.cursor = self.cursor + _SIN_INTERVAL
@@ -224,7 +240,11 @@ function View:drawArrow(g, enter)
   _font.set()
   text_height = _font:getHeight()*lh
 
-  g.translate(0, -_PD - text_height)
+  g.translate(0, -_PD - text_height*1.5)
+  self:drawHoldBar(g)
+
+  g.translate(0, text_height*.5)
+  g.setColor(0xFF, 0xFF, 0xFF, enter*0xFF)
   g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
 
   g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)
@@ -244,8 +264,6 @@ function View:drawConsumed(g, enter)
   local consumed = self.consumed
 
   g.push()
-
-  -- smooth enter!
   g.translate(math.round(_WIDTH/2-_CW/2), math.round(3*_HEIGHT/7-_CH/2))
 
   for i, info in ipairs(consumed) do
@@ -254,6 +272,12 @@ function View:drawConsumed(g, enter)
   end
 
   g.pop()
+end
+
+function View:drawHoldBar(g)
+  if self.holdbar:holdAndDraw(0, 0) then
+    self:consumeCard()
+  end
 end
 
 
