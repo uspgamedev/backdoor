@@ -1,6 +1,6 @@
 
 local math = require 'common.math'
-local HOLDBAR = require 'view.helpers.holdbar'
+local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
 
@@ -62,7 +62,7 @@ function View:init(hold_action)
   self.card_list = _EMPTY
   self.consumed = {}
   self.consume_log = false
-  self.holdbar = HOLDBAR.new(hold_action)
+  self.holdbar = HoldBar.new(hold_action)
 
   _initGraphicValues()
 end

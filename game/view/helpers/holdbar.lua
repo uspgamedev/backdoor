@@ -9,7 +9,7 @@ local _EPSILON = 0.01
 local _WIDTH = 64
 local _HEIGHT = 16
 
-local HOLDBAR = {}
+local HoldBar = {}
 
 local function _new(hold_action)
   return setmetatable({
@@ -17,7 +17,7 @@ local function _new(hold_action)
                         progress = 0,
                         hold_action = hold_action
                       },
-                      { __index = HOLDBAR })
+                      { __index = HoldBar })
 end
 
 local function _advance(progress)
@@ -45,16 +45,16 @@ local function _render(enter, progress, x, y)
   g.pop()
 end
 
-function HOLDBAR:lock()
+function HoldBar:lock()
   self.locked = true
 end
 
-function HOLDBAR:unlock()
+function HoldBar:unlock()
   self.locked = false
   self.progress = 0
 end
 
-function HOLDBAR:holdAndDraw(x, y)
+function HoldBar:holdAndDraw(x, y)
   local is_down = INPUT.isDown(self.hold_action)
 
   -- enter fade in
