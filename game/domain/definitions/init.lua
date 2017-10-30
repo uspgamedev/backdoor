@@ -12,7 +12,7 @@ local DEFS = {}
 -- + [x] Adapt widget selector view to new reality
 -- + [x] Remove Actor.actions since it only needs Action.signature now
 -- + [ ] Add placement spec to bodies
--- + [ ] Join Actor:getCard() and Actor:getHandCard()
+-- + [x] Join Actor:getCard() and Actor:getHandCard()
 
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
