@@ -6,7 +6,6 @@ local ACTION      = require 'domain.action'
 local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
-local PLACEMENTS  = require 'domain.definitions.placements'
 local PACK        = require 'domain.pack'
 
 local Actor = Class{
@@ -52,7 +51,9 @@ function Actor:loadState(state)
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
     card:loadState(card_state)
-    card:setOwner(self)
+    if not card.owner_id then
+      card:setOwner(self)
+    end
     table.insert(self.hand, card)
   end
   self.buffer = {}
@@ -61,7 +62,9 @@ function Actor:loadState(state)
     if card_state ~= card then
       card = Card(state.buffer.specname)
       card:loadState(card_state)
-      card:setOwner(self)
+      if not card.owner_id then
+        card:setOwner(self)
+      end
     end
     self.buffer[i] = card
   end
