@@ -8,12 +8,6 @@ local DEFS = {}
 -- + [ ] Widget buffs
 -- + [ ] Stashed widgets
 
--- + [x] Write action names down as definitions
--- + [x] Adapt widget selector view to new reality
--- + [x] Remove Actor.actions since it only needs Action.signature now
--- + [ ] Add placement spec to bodies
--- + [x] Join Actor:getCard() and Actor:getHandCard()
-
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
 DEFS.CONSUME_EXP = 1
