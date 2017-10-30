@@ -45,7 +45,7 @@ function Card:getRelatedAttr()
 end
 
 function Card:getOwner()
-  return Util.find(self:getSpec('owner_id'))
+  return Util.findId(self.owner_id)
 end
 
 function Card:setOwner(owner)

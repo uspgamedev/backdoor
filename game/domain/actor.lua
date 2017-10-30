@@ -60,8 +60,8 @@ function Actor:loadState(state)
     local card = DEFS.DONE
     if card_state ~= card then
       card = Card(state.buffer.specname)
-      card:setOwner(self)
       card:loadState(card_state)
+      card:setOwner(self)
     end
     self.buffer[i] = card
   end
