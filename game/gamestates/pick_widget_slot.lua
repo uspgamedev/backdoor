@@ -1,6 +1,5 @@
 
 local DB = require 'database'
-local DEFS = require 'domain.definitions'
 local PickWidgetView = require 'view.pickwidget'
 local CONTROLS = require 'infra.control'
 
@@ -15,10 +14,10 @@ local _mapping
 function state:init()
   _mapping = {
     PRESS_UP = function()
-      _selection = (_selection - 2) % #DEFS.WIDGETS + 1
+      _selection = (_selection - 2) % _target:getBody():getWidgetCount() + 1
     end,
     PRESS_DOWN = function()
-      _selection = _selection % #DEFS.WIDGETS + 1
+      _selection = _selection % _target:getBody():getWidgetCount() + 1
     end,
     PRESS_CONFIRM = function()
       if _validate(_selection) then
