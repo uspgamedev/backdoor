@@ -1,14 +1,14 @@
 {
-  "attr":"ARC",
-  "one_time":true,
+  "attr":"MEC",
   "widget":{
     "operators":[{
-        "attr":"ARC",
+        "attr":"MEC",
         "op":"+",
         "val":1
       }],
     "trigger":"on_turn",
     "charges":5
   },
-  "name":"Arcana Stash Bonus"
+  "one_time":true,
+  "name":"Mechanics Stash Bonus"
 }

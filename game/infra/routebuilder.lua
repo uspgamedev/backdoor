@@ -18,6 +18,8 @@ local function _simpleBuffer()
   local buffer = {}
   for i=1,4 do
     table.insert(buffer, _card('arc+'))
+    table.insert(buffer, _card('mec+'))
+    table.insert(buffer, _card('ath+'))
     --table.insert(buffer, _card('bolt'))
     --table.insert(buffer, _card('draw'))
     --table.insert(buffer, _card('cure'))

@@ -1,14 +1,14 @@
 {
-  "attr":"ARC",
+  "attr":"ATH",
   "one_time":true,
   "widget":{
     "operators":[{
-        "attr":"ARC",
+        "attr":"ATH",
         "op":"+",
         "val":1
       }],
     "trigger":"on_turn",
     "charges":5
   },
-  "name":"Arcana Stash Bonus"
+  "name":"Athletics Stash Bonus"
 }
