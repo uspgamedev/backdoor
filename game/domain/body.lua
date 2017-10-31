@@ -217,6 +217,14 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
+function Body:triggerWidgets(kind)
+  for index,widget in ipairs(self.widgets) do
+    if widget:getWidgetTrigger() == kind then
+      self:spendWidget(index)
+    end
+  end
+end
+
 --[[ Combat methods ]]--
 
 function Body:takeDamage(amount)

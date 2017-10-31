@@ -8,6 +8,6 @@
         "val":1
       }],
     "trigger":"on_turn",
-    "charges":2
+    "charges":5
   }
 }
