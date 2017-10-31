@@ -75,6 +75,14 @@ function Body:getPos()
   return self:getSector():getBodyPos(self)
 end
 
+--[[ Attribute getter ]]--
+
+function Body:getAttribute(which)
+  return self:applyStaticOperators(which,
+                                   self:getSpec(which:lower()) +
+                                   self.upgrades[which])
+end
+
 --[[ Appearance methods ]]--
 
 function Body:getAppearance()
@@ -88,7 +96,7 @@ function Body:getHP()
 end
 
 function Body:getMaxHP()
-  return self:getSpec('hp') + self.upgrades.HP
+  return self:getAttribute('HP')
 end
 
 function Body:upgradeHP(val)
@@ -110,7 +118,7 @@ end
 --[[ DEF methods ]]--
 
 function Body:getDEF()
-  return self:getSpec('def') + self.upgrades.DEF
+  return self:getAttribute('DEF')
 end
 
 function Body:getBaseDEF()
