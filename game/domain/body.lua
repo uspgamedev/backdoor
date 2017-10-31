@@ -75,6 +75,14 @@ function Body:getPos()
   return self:getSector():getBodyPos(self)
 end
 
+--[[ Attribute getter ]]--
+
+function Body:getAttribute(which)
+  return self:applyStaticOperators(which,
+                                   self:getSpec(which:lower()) +
+                                   self.upgrades[which])
+end
+
 --[[ Appearance methods ]]--
 
 function Body:getAppearance()
@@ -88,7 +96,7 @@ function Body:getHP()
 end
 
 function Body:getMaxHP()
-  return self:getSpec('hp') + self.upgrades.HP
+  return self:getAttribute('HP')
 end
 
 function Body:upgradeHP(val)
@@ -110,7 +118,7 @@ end
 --[[ DEF methods ]]--
 
 function Body:getDEF()
-  return self:getSpec('def') + self.upgrades.DEF
+  return self:getAttribute('DEF')
 end
 
 function Body:getBaseDEF()
@@ -197,6 +205,32 @@ end
 
 function Body:getWidgetCount()
   return #self.widgets
+end
+
+local _OPS = {
+  ['+'] = function (a,b) return a+b end,
+  ['-'] = function (a,b) return a-b end,
+  ['*'] = function (a,b) return a*b end,
+  ['/'] = function (a,b) return a/b end,
+}
+
+function Body:applyStaticOperators(attr, value)
+  for _,widget in ipairs(self.widgets) do
+    for _,operator in widget:getStaticOperators() do
+      if operator.attr == attr then
+        value = _OPS[operator.op](value, operator.val)
+      end
+    end
+  end
+  return value
+end
+
+function Body:triggerWidgets(kind)
+  for index,widget in ipairs(self.widgets) do
+    if widget:getWidgetTrigger() == kind then
+      self:spendWidget(index)
+    end
+  end
 end
 
 --[[ Combat methods ]]--

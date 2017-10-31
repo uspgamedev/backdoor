@@ -1,32 +1,34 @@
 {
   "attr":"ATH",
   "widget":{
-    "activated_ability":{
-      "params":[{
-          "typename":"choose_target",
-          "max-range":1,
-          "body-only":true,
-          "output":"target"
-        }],
-      "operators":[{
-          "typename":"get_attribute",
-          "output":"ath",
-          "which":"ATH"
-        },{
-          "typename":"get_body_at",
-          "pos":"par:target",
-          "output":"target_body"
-        }],
-      "effects":[{
-          "typename":"dmg_formula",
-          "target":"val:target_body",
-          "attr":"val:ath",
-          "base":4
-        }]
+    "activation":{
+      "cost":10,
+      "ability":{
+        "params":[{
+            "typename":"choose_target",
+            "max-range":1,
+            "body-only":true,
+            "output":"target"
+          }],
+        "operators":[{
+            "typename":"get_attribute",
+            "output":"ath",
+            "which":"ATH"
+          },{
+            "typename":"get_body_at",
+            "pos":"par:target",
+            "output":"target_body"
+          }],
+        "effects":[{
+            "typename":"dmg_formula",
+            "target":"val:target_body",
+            "attr":"val:ath",
+            "base":4
+          }]
+      }
     },
     "charges":12,
     "widget_action":"MELEE",
-    "activation_cost":10,
     "placement":"weapon"
   },
   "desc":"Equip as a Widget. An ugly blunt sord.\nNo, not \"sword\". It says \"sord\" right there,\ninscribed on the hilt.",

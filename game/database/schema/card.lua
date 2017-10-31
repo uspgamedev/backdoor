@@ -45,12 +45,29 @@ return {
     type = 'section',
     schema = {
       { id = 'charges', name = "Charges", type = 'integer', range = {1} },
+      { id = 'trigger', name = "Trigger", type = 'enum',
+        options = DEFS.TRIGGERS },
       { id = 'placement', name = "Placement", type = 'enum',
-        options = DEFS_PACK.placements },
-      { id = 'activation_cost', name = "Activation Cost", type = 'integer',
-        range = {0} },
-      { id = 'activated_ability', name = "Activated Ability", type = 'ability',
-        optional = true }
+        options = DEFS_PACK.placements, optional = true },
+      {
+        id = 'operators', name = "Static Attribute Operator",
+        type = 'array', schema = {
+          { id = 'attr', name = "Attribute", type = 'enum',
+            options = DEFS.ALL_ATTRIBUTES },
+          { id = 'op', name = "Operator", type = 'enum',
+            options = { '+', '-', '*', '/' } },
+          { id = 'val', name = "Value", type = 'integer' },
+        }
+      },
+      {
+        id = 'activation', name = "Activated Ability", type = 'section',
+        schema = {
+          { id = 'cost', name = "Time Cost", type = 'integer',
+            range = {0} },
+          { id = 'ability', name = "Ability", type = 'ability',
+            optional = true }
+        }
+      },
     },
   }
 }

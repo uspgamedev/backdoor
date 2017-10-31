@@ -118,8 +118,15 @@ function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end
 
+function Actor:getAttribute(which)
+  return self:getBody()
+             :applyStaticOperators(which,
+                                   self:getSpec(which:lower()) +
+                                   self.upgrades[which])
+end
+
 function Actor:getATH()
-  return self:getSpec('ath') + self.upgrades.ATH
+  return self:getAttribute('ATH')
 end
 
 function Actor:upgradeATH(n)
@@ -127,7 +134,7 @@ function Actor:upgradeATH(n)
 end
 
 function Actor:getARC()
-  return self:getSpec('arc') + self.upgrades.ARC
+  return self:getAttribute('ARC')
 end
 
 function Actor:upgradeARC(n)
@@ -135,7 +142,7 @@ function Actor:upgradeARC(n)
 end
 
 function Actor:getMEC()
-  return self:getSpec('mec') + self.upgrades.MEC
+  return self:getAttribute('MEC')
 end
 
 function Actor:upgradeMEC(n)
@@ -143,7 +150,7 @@ function Actor:upgradeMEC(n)
 end
 
 function Actor:getSPD()
-  return self:getSpec('spd') + self.upgrades.SPD
+  return self:getAttribute('SPD')
 end
 
 --[[ Body methods ]]--
@@ -329,6 +336,7 @@ end
 
 function Actor:makeAction(sector)
   local success = false
+  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN)
   repeat
     local action_slot, params = self:behavior(sector)
     if ACTION.exists(action_slot) then

@@ -87,12 +87,26 @@ function Card:getUpgradeCost()
   return self:getSpec('upgrade').cost
 end
 
+function Card:getWidgetTrigger()
+  return self:getSpec('widget')['trigger']
+end
+
+function Card:getStaticOperators()
+  return ipairs(self:getSpec('widget')['operators'] or {})
+end
+
+function Card:getWidgetActivation()
+  return self:getSpec('widget')['activation']
+end
+
 function Card:getWidgetAbility()
-  return self:getSpec('widget').activated_ability
+  local activation = self:getWidgetActivation()
+  return activation and activation.ability
 end
 
 function Card:getWidgetActivationCost()
-  return self:getSpec('widget').activation_cost
+  local activation = self:getWidgetActivation()
+  return activation and activation.cost
 end
 
 function Card:getWidgetPlacement()

@@ -1,0 +1,14 @@
+{
+  "attr":"MEC",
+  "widget":{
+    "operators":[{
+        "attr":"MEC",
+        "op":"+",
+        "val":1
+      }],
+    "trigger":"on_turn",
+    "charges":5
+  },
+  "one_time":true,
+  "name":"Mechanics Stash Bonus"
+}

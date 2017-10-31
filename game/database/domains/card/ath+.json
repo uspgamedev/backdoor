@@ -1,0 +1,14 @@
+{
+  "attr":"ATH",
+  "one_time":true,
+  "widget":{
+    "operators":[{
+        "attr":"ATH",
+        "op":"+",
+        "val":1
+      }],
+    "trigger":"on_turn",
+    "charges":5
+  },
+  "name":"Athletics Stash Bonus"
+}
