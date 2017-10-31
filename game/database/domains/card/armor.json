@@ -1,0 +1,15 @@
+{
+  "attr":"ATH",
+  "widget":{
+    "operators":[{
+        "attr":"DEF",
+        "op":"+",
+        "val":2
+      }],
+    "trigger":"on_use",
+    "charges":12,
+    "placement":"suit"
+  },
+  "desc":"Equip as widget. A heavy plate armor.",
+  "name":"Armor"
+}

@@ -55,7 +55,6 @@ function PickWidgetView:draw()
   local strs = {}
   local width = 0
   for index, widget in self.target:getBody():eachWidget() do
-    print(widget:getWidgetTrigger())
     strs[index] = _FMT:format(widget:getName(),
                               widget:getWidgetCharges() - widget:getUsages(),
                               widget:getWidgetCharges(),

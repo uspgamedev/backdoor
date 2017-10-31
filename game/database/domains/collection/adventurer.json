@@ -1,5 +1,4 @@
 {
-  "name":"Adventurer's Cunning",
   "cards":[{
       "card":"bolt"
     },{
@@ -10,6 +9,9 @@
       "card":"sord"
     },{
       "card":"gun"
+    },{
+      "card":"armor"
     }],
+  "name":"Adventurer's Cunning",
   "description":"The basic needs of your typical adventurer."
 }
