@@ -1,0 +1,13 @@
+{
+  "attr":"ARC",
+  "name":"Arcana Stash Bonus",
+  "widget":{
+    "operators":[{
+        "attr":"ARC",
+        "op":"+",
+        "val":1
+      }],
+    "trigger":"on_turn",
+    "charges":2
+  }
+}

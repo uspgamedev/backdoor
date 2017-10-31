@@ -50,18 +50,13 @@ return {
       { id = 'placement', name = "Placement", type = 'enum',
         options = DEFS_PACK.placements, optional = true },
       {
-        id = 'static-effect', name = "Static Effect", type = 'section',
-        schema = {
-          {
-            id = 'actor-operators', name = "Actor Attribute Operators",
-            type = 'array', schema = {
-              { id = 'attr', name = "Attribute", type = 'enum',
-                options = DEFS.ATTRIBUTES },
-              { id = 'op', name = "Operator", type = 'enum',
-                options = { '+', '-', '*', '/' } },
-              { id = 'val', name = "Value", type = 'integer' },
-            }
-          }
+        id = 'operators', name = "Static Attribute Operator",
+        type = 'array', schema = {
+          { id = 'attr', name = "Attribute", type = 'enum',
+            options = DEFS.ALL_ATTRIBUTES },
+          { id = 'op', name = "Operator", type = 'enum',
+            options = { '+', '-', '*', '/' } },
+          { id = 'val', name = "Value", type = 'integer' },
         }
       },
       {

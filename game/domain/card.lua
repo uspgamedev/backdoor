@@ -87,6 +87,10 @@ function Card:getUpgradeCost()
   return self:getSpec('upgrade').cost
 end
 
+function Card:getStaticOperators()
+  return ipairs(self:getSpec('widget')['operators'] or {})
+end
+
 function Card:getWidgetActivation()
   return self:getSpec('widget')['activation']
 end
