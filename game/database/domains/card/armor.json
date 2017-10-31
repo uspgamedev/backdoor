@@ -6,8 +6,7 @@
         "op":"+",
         "val":2
       }],
-    "trigger":"on_use",
-    "charges":12,
+    "charges":24,
     "placement":"suit"
   },
   "desc":"Equip as widget. A heavy plate armor.",
