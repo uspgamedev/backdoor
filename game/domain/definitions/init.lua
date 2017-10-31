@@ -5,7 +5,7 @@ local DEFS = {}
 -- + [x] Xform all basic actions into MANEUVERS
 -- + [x] Smarter slots + endless widgets
 -- + [x] Move widgets to body
--- + [ ] Widget buffs
+-- + [x] Widget buffs
 -- + [ ] Stashed widgets
 
 DEFS.DONE = "__DONE_VALUE__"
