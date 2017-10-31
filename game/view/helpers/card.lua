@@ -65,7 +65,7 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.translate(0, _title_font:getHeight())
 
   _text_font.set()
-  g.printf(card:getDescription(), 0, 0, width)
+  g.printf(card:getDescription() or "[No description]", 0, 0, width)
 
   g.pop()
 end

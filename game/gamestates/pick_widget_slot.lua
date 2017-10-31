@@ -1,5 +1,5 @@
 
-local DB = require 'database'
+local DEFS = require 'domain.definitions'
 local PickWidgetView = require 'view.pickwidget'
 local CONTROLS = require 'infra.control'
 
@@ -10,6 +10,7 @@ local _selection
 local _validate
 local _target
 local _mapping
+local _leave
 
 function state:init()
   _mapping = {
@@ -36,19 +37,27 @@ function state:enter(from, actor, validator)
   _target = actor
   _validate = validator
   _selection = 1
+  _leave = actor:getBody():getWidgetCount() <= 0
 
-  CONTROLS.setMap(_mapping)
+  if not _leave then
+    CONTROLS.setMap(_mapping)
 
-  _view = PickWidgetView(actor)
-  _view:addElement("HUD")
-  _view:fadeIn()
+    _view = PickWidgetView(actor)
+    _view:addElement("HUD")
+    _view:fadeIn()
+  end
 end
 
 function state:update(dt)
   if not DEBUG then
     MAIN_TIMER:update(dt)
+    if _leave then
+      (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
+      SWITCHER.pop({})
+    else
+      _view:setSelection(_selection)
+    end
   end
-  _view:setSelection(_selection)
 end
 
 function state:draw()

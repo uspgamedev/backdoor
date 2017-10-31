@@ -8,6 +8,7 @@ local DEFS = {}
 -- + [x] Widget buffs
 -- + [ ] Stashed widgets
 
+DEFS.NULL_METHOD = function() end
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
 DEFS.CONSUME_EXP = 1
