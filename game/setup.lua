@@ -46,7 +46,6 @@ function setup.config()
     }
 
 
-    love.keyboard.setKeyRepeat(true)
     --SHADERS--
         --
 

@@ -11,7 +11,7 @@ function PARAM.isValid(sector, actor, parameter, value)
   if not actor:getBody():hasWidgetAt(value) then
     return false
   end
-  return true
+  return not not actor:getBody():getWidget(value):getWidgetActivation()
 end
 
 return PARAM
