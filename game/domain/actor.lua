@@ -262,12 +262,7 @@ function Actor:drawCard()
   Signal.emit("actor_draw", self, card)
 end
 
-function Actor:getCard(index)
-  return index and self.hand[index]
-end
-
 function Actor:getHandCard(index)
-  assert(index >= 1 and index <= #self.hand)
   return index and self.hand[index]
 end
 

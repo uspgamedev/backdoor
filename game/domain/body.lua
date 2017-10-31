@@ -195,6 +195,10 @@ function Body:eachWidget()
   return ipairs(self.widgets)
 end
 
+function Body:getWidgetCount()
+  return #self.widgets
+end
+
 --[[ Combat methods ]]--
 
 function Body:takeDamage(amount)

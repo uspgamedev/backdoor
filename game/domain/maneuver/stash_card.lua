@@ -7,7 +7,7 @@ STASH.param_specs = {
 }
 
 local function _card(actor, params)
-  return actor:getCard(params.card_index)
+  return actor:getHandCard(params.card_index)
 end
 
 function STASH.activatedAbility(actor, sector, params)
