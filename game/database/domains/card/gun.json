@@ -1,32 +1,34 @@
 {
   "attr":"MEC",
   "widget":{
-    "activated_ability":{
-      "params":[{
-          "typename":"choose_target",
-          "output":"target",
-          "body-only":true,
-          "max-range":5
-        }],
-      "operators":[{
-          "typename":"get_attribute",
-          "output":"mec",
-          "which":"MEC"
-        },{
-          "typename":"get_body_at",
-          "pos":"par:target",
-          "output":"body"
-        }],
-      "effects":[{
-          "typename":"dmg_formula",
-          "target":"val:body",
-          "base":8,
-          "attr":"val:mec"
-        }]
+    "activation":{
+      "cost":30,
+      "ability":{
+        "params":[{
+            "typename":"choose_target",
+            "output":"target",
+            "body-only":true,
+            "max-range":5
+          }],
+        "operators":[{
+            "typename":"get_attribute",
+            "output":"mec",
+            "which":"MEC"
+          },{
+            "typename":"get_body_at",
+            "pos":"par:target",
+            "output":"body"
+          }],
+        "effects":[{
+            "typename":"dmg_formula",
+            "target":"val:body",
+            "base":8,
+            "attr":"val:mec"
+          }]
+      }
     },
     "charges":12,
     "widget_action":"SHOOT",
-    "activation_cost":30,
     "placement":"weapon"
   },
   "desc":"Equip as a Widget. One shot is hella strong.\nThe push back, however, is quite strong,\nand it may take you some time to act again\nafter shooting.",
