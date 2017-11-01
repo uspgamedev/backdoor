@@ -127,6 +127,10 @@ local function _useAction(action_slot, params)
   return true
 end
 
+_ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
+  return _useAction(DEFS.ACTION.USE_SIGNATURE)
+end
+
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   if _route.getControlledActor():isHandEmpty() then
     _useAction(DEFS.ACTION.DRAW_NEW_HAND)
@@ -165,10 +169,6 @@ local function _move(dir)
   if current_sector:isValid(i,j) then
     _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
   end
-end
-
-local function _usePrimaryAction()
-  return _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
 local function _manageBuffer()
