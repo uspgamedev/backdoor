@@ -166,10 +166,20 @@ end
 
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   _lockState()
-
   SWITCHER.push(GS.MANAGE_BUFFER, _route.getControlledActor())
   local args = coroutine.yield(_task)
   _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
+end
+
+_ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
+  local controlled_actor = _route.getControlledActor()
+  if not controlled_actor:hasOpenPack() then
+    _lockState()
+    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
+    local args = coroutine.yield(_task)
+    _useAction(DEFS.ACTION.RECEIVE_PACK,
+               { consumed = args.consumed, pack = args.pack })
+  end
 end
 
 local function _move(dir)
@@ -187,14 +197,6 @@ end
 local function _wait()
   if not _next_action then
     _useAction(DEFS.ACTION.IDLE)
-  end
-end
-
-local function _openPack()
-  local controlled_actor = _route.getControlledActor()
-  if not controlled_actor:hasOpenPack() then
-    _unregisterSignals()
-    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
   end
 end
 
@@ -226,14 +228,8 @@ end
 
 function _registerSignals()
   Signal.register("interact", _makeSignalHandler(_interact))
-  Signal.register("drawhand", _makeSignalHandler(_newHand))
   Signal.register("open_action_menu", _openActionMenu)
-  Signal.register("playcard",
-                  _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
-  Signal.register("widget", _makeSignalHandler(_useWidget))
-  Signal.register("managebuffer", _makeSignalHandler(_manageBuffer))
-  Signal.register("openpack", _openPack)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   Signal.register("wait", _wait)
   CONTROL.setMap(_mapped_signals)
@@ -286,20 +282,7 @@ end
 function state:resume(from, args)
   _unlockState()
   _resumeTask(args)
-  if from == GS.CARD_SELECT then
-
-    if args.chose_a_card then
-      if args.action_type == 'use' then
-        _startTask(_useCardByIndex, args.card_index)
-      elseif args.action_type == 'stash' then
-        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
-      end
-    end
-
-  elseif from == GS.OPEN_PACK then
-    _useAction(DEFS.ACTION.RECEIVE_PACK,
-               { consumed = args.consumed, pack = args.pack })
-  elseif from == GS.ACTION_MENU and args.action then
+  if from == GS.ACTION_MENU and args.action then
     _startTask(args.action)
   end
 end
