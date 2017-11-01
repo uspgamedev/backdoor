@@ -1,5 +1,7 @@
 
 local ACTIONDEFS  = require 'domain.definitions.action'
+local STASH_CARDS = require 'domain.definitions.stash_cards'
+local Card        = require 'domain.card'
 local STASH       = {}
 
 STASH.param_specs = {
@@ -19,8 +21,10 @@ function STASH.validate(actor, sector, params)
 end
 
 function STASH.perform(actor, sector, params)
-  actor:addCardToBackbuffer(actor:removeHandCard(params.card_index))
-  --FIXME: BUFF ACTOR!
+  local card = actor:removeHandCard(params.card_index)
+  actor:addCardToBackbuffer(card)
+  local stash_bonus = Card(STASH_CARDS[card:getRelatedAttr()])
+  actor:getBody():placeWidget(stash_bonus)
 end
 
 return STASH
