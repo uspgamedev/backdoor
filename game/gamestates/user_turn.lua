@@ -29,8 +29,6 @@ local _save_and_quit
 local _exit_sector
 local _lock
 
-local PARAMETER_STATES
-
 local SIGNALS = {
   PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
@@ -257,11 +255,6 @@ function state:init()
     end
   end
 
-  PARAMETER_STATES = {
-    [GS.PICK_TARGET] = true,
-    [GS.PICK_WIDGET_SLOT] = true,
-  }
-
   _action_queue = Queue(32)
 
 end
@@ -292,11 +285,8 @@ end
 
 function state:resume(from, args)
   _unlockState()
-  if PARAMETER_STATES[from] then
-
-    _resumeTask(args)
-
-  elseif from == GS.CARD_SELECT then
+  _resumeTask(args)
+  if from == GS.CARD_SELECT then
 
     if args.chose_a_card then
       if args.action_type == 'use' then
