@@ -127,8 +127,12 @@ local function _useAction(action_slot, params)
   return true
 end
 
+_ACTION[DEFS.ACTION.INTERACT] = function()
+  _useAction(DEFS.ACTION.INTERACT)
+end
+
 _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
-  return _useAction(DEFS.ACTION.USE_SIGNATURE)
+  _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
@@ -180,12 +184,6 @@ end
 local function _useWidget()
   if not _next_action then
     _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
-  end
-end
-
-local function _interact()
-  if not _next_action then
-    _useAction(DEFS.ACTION.INTERACT)
   end
 end
 
