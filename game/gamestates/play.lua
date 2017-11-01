@@ -109,6 +109,7 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    MAIN_TIMER:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end

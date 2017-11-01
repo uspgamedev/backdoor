@@ -26,8 +26,6 @@ function state:init()
       end
     end,
   }
-  _view = PackView("UP")
-  _view:addElement("HUD")
 end
 
 function state:enter(from, actor)
@@ -41,12 +39,15 @@ function state:enter(from, actor)
   while actor:hasOpenPack() do actor:removePackCard(1) end
 
   CONTROLS.setMap(_mapping)
+  _view = PackView("UP")
+  _view:addElement("HUD")
   _view:open(_pack)
 end
 
 function state:leave()
   _leave = false
   _view:close()
+  _view = nil
 end
 
 function state:update(dt)
