@@ -135,6 +135,10 @@ _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
   _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
+_ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
+  _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
+end
+
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   if _route.getControlledActor():isHandEmpty() then
     _useAction(DEFS.ACTION.DRAW_NEW_HAND)
@@ -163,6 +167,14 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function()
 
 end
 
+_ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
+  _lockState()
+
+  SWITCHER.push(GS.MANAGE_BUFFER, _route.getControlledActor())
+  local args = coroutine.yield(_task)
+  _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
+end
+
 local function _move(dir)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
@@ -172,18 +184,6 @@ local function _move(dir)
   i, j = i+dir[1], j+dir[2]
   if current_sector:isValid(i,j) then
     _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
-  end
-end
-
-local function _manageBuffer()
-  local controlled_actor = _route.getControlledActor()
-  _lockState()
-  SWITCHER.push(GS.MANAGE_BUFFER, controlled_actor)
-end
-
-local function _useWidget()
-  if not _next_action then
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
   end
 end
 
@@ -306,17 +306,6 @@ function state:resume(from, args)
                { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
     _startTask(args.action)
-    --if args.action == 'play_card' then
-    --  _startTask(_changeToCardSelectScreen)
-    --elseif args.action == 'consume_cards_from_buffer' then
-    --  _startTask(_manageBuffer)
-    --elseif args.action == 'receive_pack' then
-    --  _openPack()
-    --else
-    --  _startTask(_useAction, args.action)
-    --end
-  elseif from == GS.MANAGE_BUFFER then
-    _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end
 end
 
