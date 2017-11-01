@@ -10,8 +10,6 @@ local ABILITY       = require 'domain.ability'
 local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
-local Queue         = require 'lux.common.Queue'
-
 local state = {}
 
 --LOCAL VARIABLES--
@@ -20,7 +18,6 @@ local _task
 local _mapped_signals
 local _route
 local _next_action
-local _action_queue
 local _view
 
 local _status_hud
@@ -260,8 +257,6 @@ function state:init()
     end
   end
 
-  _action_queue = Queue(32)
-
 end
 
 function state:enter(_, route, view)
@@ -331,10 +326,6 @@ function state:update(dt)
       if INPUT.actionPressed(dir:upper()) then
         _move(dir)
       end
-    end
-
-    if not _next_action and not _action_queue.isEmpty() then
-      _next_action = _action_queue.pop()
     end
 
     if _next_action then
