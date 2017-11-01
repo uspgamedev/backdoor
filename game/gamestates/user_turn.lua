@@ -29,6 +29,8 @@ local _save_and_quit
 local _exit_sector
 local _lock
 
+local _ACTION = {}
+
 local SIGNALS = {
   PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
@@ -55,19 +57,18 @@ local function _unlockState()
   _registerSignals()
 end
 
-local function _openActionMenu()
-
-  _unregisterSignals()
-  SWITCHER.push(GS.ACTION_MENU, _route)
-
+local function _showHUD()
+  _view.actor:show()
 end
 
-local function _changeToCardSelectScreen()
+local function _hideHUD()
+  _view.actor:hide()
+end
 
-  if #_view.hand.hand > 0 then
-    _unregisterSignals()
-    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
-  end
+local function _openActionMenu()
+
+  _lockState()
+  SWITCHER.push(GS.ACTION_MENU, _route)
 
 end
 
@@ -79,6 +80,7 @@ local function _useAction(action_slot, params)
   local param = ACTION.pendingParam(action_slot, controlled_actor,
                                     current_sector, params)
   while param do
+    print("pending param", param.output, param.typename)
     if param.typename == 'choose_target' then
       _lockState()
       SWITCHER.push(
@@ -125,6 +127,34 @@ local function _useAction(action_slot, params)
   return true
 end
 
+_ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
+  if _route.getControlledActor():isHandEmpty() then
+    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+  end
+end
+
+_ACTION[DEFS.ACTION.PLAY_CARD] = function()
+
+  if #_view.hand.hand > 0 then
+    _lockState()
+
+    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
+    local args = coroutine.yield(_task)
+
+    if args.chose_a_card then
+      if args.action_type == 'use' then
+        if _useAction(DEFS.ACTION.PLAY_CARD,
+                      { card_index = args.card_index }) then
+          Signal.emit("actor_used_card", _route.getControlledActor(), index)
+        end
+      elseif args.action_type == 'stash' then
+        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
+      end
+    end
+  end
+
+end
+
 local function _move(dir)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
@@ -139,23 +169,6 @@ end
 
 local function _usePrimaryAction()
   return _useAction(DEFS.ACTION.USE_SIGNATURE)
-end
-
---- Receive a card index from player hands (between 1 and max-hand-size)
-local function _useCardByIndex(index)
-  local player = _route.getControlledActor()
-
-  if _useAction(DEFS.ACTION.PLAY_CARD, { card_index = index }) then
-    Signal.emit("actor_used_card", player, index)
-  end
-end
-
-local function _showHUD()
-  _view.actor:show()
-end
-
-local function _hideHUD()
-  _view.actor:hide()
 end
 
 local function _manageBuffer()
@@ -182,12 +195,6 @@ local function _wait()
   end
 end
 
-local function _newHand()
-  if _route.getControlledActor():isHandEmpty() then
-    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  end
-end
-
 local function _openPack()
   local controlled_actor = _route.getControlledActor()
   if not controlled_actor:hasOpenPack() then
@@ -207,9 +214,10 @@ local function _resumeTask(...)
   end
 end
 
-local function _startTask(callback, ...)
+local function _startTask(action, ...)
   local controlled_actor = _route.getControlledActor()
-  if controlled_actor then
+  local callback = _ACTION[action]
+  if controlled_actor and not _next_action then
     _task = coroutine.create(callback)
     return _resumeTask(...)
   end
@@ -224,8 +232,7 @@ end
 function _registerSignals()
   Signal.register("interact", _makeSignalHandler(_interact))
   Signal.register("drawhand", _makeSignalHandler(_newHand))
-  Signal.register("open_action_menu",
-                  _makeSignalHandler(_openActionMenu))
+  Signal.register("open_action_menu", _openActionMenu)
   Signal.register("playcard",
                   _makeSignalHandler(_changeToCardSelectScreen))
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
@@ -300,15 +307,16 @@ function state:resume(from, args)
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
-    if args.action == 'play_card' then
-      _startTask(_changeToCardSelectScreen)
-    elseif args.action == 'consume_cards_from_buffer' then
-      _startTask(_manageBuffer)
-    elseif args.action == 'receive_pack' then
-      _openPack()
-    else
-      _startTask(_useAction, args.action)
-    end
+    _startTask(args.action)
+    --if args.action == 'play_card' then
+    --  _startTask(_changeToCardSelectScreen)
+    --elseif args.action == 'consume_cards_from_buffer' then
+    --  _startTask(_manageBuffer)
+    --elseif args.action == 'receive_pack' then
+    --  _openPack()
+    --else
+    --  _startTask(_useAction, args.action)
+    --end
   elseif from == GS.MANAGE_BUFFER then
     _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end
