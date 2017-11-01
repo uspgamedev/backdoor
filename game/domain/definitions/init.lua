@@ -22,8 +22,9 @@ DEFS.HAND_LIMIT = 5
 DEFS.TIME_UNIT = 20
 DEFS.TIME_UNITS_PER_CHARGE = 1 * DEFS.TIME_UNIT
 
-DEFS.ACTION   = require 'domain.definitions.action'
-DEFS.TRIGGERS = require 'domain.definitions.triggers'
+DEFS.ACTION       = require 'domain.definitions.action'
+DEFS.TRIGGERS     = require 'domain.definitions.triggers'
+DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
 
 return DEFS
 
