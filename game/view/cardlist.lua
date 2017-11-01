@@ -72,7 +72,6 @@ function View:isLocked()
 end
 
 function View:open(card_list)
-  self.invisible = false
   self.card_list = card_list
   self.consume_log = {}
   self.holdbar:unlock()
@@ -90,8 +89,8 @@ function View:close()
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
                 function ()
-                  self.invisible = true
                   self.card_list = _EMPTY
+                  self:destroy()
                 end)
 end
 

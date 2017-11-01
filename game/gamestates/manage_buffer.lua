@@ -24,13 +24,13 @@ function state:init()
       if not _view:isLocked() then _leave = true end
     end,
   }
-  _view = ManageBufferView("UP")
-  _view:addElement("HUD")
 end
 
 function state:enter(from, actor)
   if actor:getBackBufferSize() > 0 then
     _leave = false
+    _view = ManageBufferView("UP")
+    _view:addElement("HUD")
     _view:open(actor:copyBackBuffer())
     CONTROLS.setMap(_mapping)
   else
@@ -40,6 +40,7 @@ end
 
 function state:leave()
   _view:close()
+  _view = nil
 end
 
 function state:update(dt)

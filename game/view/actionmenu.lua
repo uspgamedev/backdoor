@@ -97,7 +97,6 @@ function ActionMenu:getSelected()
 end
 
 function ActionMenu:open(last_focus)
-  self.invisible = false
   self.current = last_focus or self.current
   self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
