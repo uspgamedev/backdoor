@@ -74,11 +74,22 @@ function StartMenuView:init()
   self.title = "backdoor"
   self.selection = 1
   self.scrolltop = 1
+  self.enter = 0
 
   _initFontValues()
 
 end
 
+
+function StartMenuView:open()
+  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", 1,
+                self, { enter = 1 }, "in-out-quad"
+  )
+end
+
+function StartMenuView:close()
+  self.enter = 0
+end
 
 function StartMenuView:setItem(item_text)
   self.queue.push(item_text)
@@ -109,6 +120,12 @@ function StartMenuView:draw()
   _renderOptions(q, self.selection, self.scrolltop)
 
   g.pop()
+
+  if self.enter < 1 then
+    g.setColor(0, 0, 0, 0xff*(1-self.enter))
+    g.rectangle("fill", 0, 0, g.getDimensions())
+  end
+
 end
 
 

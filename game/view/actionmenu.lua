@@ -68,7 +68,8 @@ end
 function ActionMenu:hideLabel()
   self:removeTimer(_TWEEN.TEXT, MAIN_TIMER)
   self:addTimer(_TWEEN.TEXT, MAIN_TIMER, "tween",
-    0.01 * self.text, self, { text = 0 }, 'linear')
+    0.05 * self.text, self, { text = 0 }, 'linear',
+    function () self:destroy() end)
 end
 
 function ActionMenu:moveFocus(dir)
@@ -100,15 +101,15 @@ function ActionMenu:open(last_focus)
   self.current = last_focus or self.current
   self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
-                0.2, self, { enter = 1 }, 'out-circ')
+                0.3, self, { enter = 1 }, 'out-circ')
   self:showLabel()
 end
 
 function ActionMenu:close()
   self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
-                0.2, self, { enter = 0 }, 'out-circ',
-                function() self.invisible = true end)
+                0.3, self, { enter = 0 }, 'out-circ',
+                function()  end)
   self:hideLabel()
 end
 

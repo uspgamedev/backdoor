@@ -69,8 +69,6 @@ function state:init()
       Signal.emit(unpack(signal_pack))
     end
   end
-  _menu_view = ActionMenuView()
-  _menu_view:addElement('HUD')
 end
 
 function state:enter(_, route)
@@ -78,6 +76,8 @@ function state:enter(_, route)
   local player = route.getControlledActor()
   local action = 'drawhand'
   if player:getHandSize() > 0 then action = 'playcard' end
+  _menu_view = ActionMenuView()
+  _menu_view:addElement('HUD')
   _menu_view:setCardAction(action)
   _menu_view:open(_last_focus)
   _registerSignals()
@@ -87,7 +87,6 @@ end
 function state:leave()
 
   _unregisterSignals()
-  Util.destroyAll()
 
 end
 
@@ -96,8 +95,6 @@ function state:update(dt)
   if not DEBUG then
     MAIN_TIMER:update(dt)
   end
-
-  Util.destroyAll()
 
 end
 

@@ -21,7 +21,6 @@ end
 --STATE FUNCTIONS--
 
 function state:init()
-  _menu_view = StartMenuView()
   _mapping = {
     PRESS_CONFIRM  = MENU.confirm,
     PRESS_SPECIAL  = MENU.cancel,
@@ -33,13 +32,16 @@ function state:init()
 end
 
 function state:enter()
-  _menu_view:addElement("HUD", nil, "menu_view")
+  _menu_view = StartMenuView()
+  _menu_view:addElement("GUI", nil, "menu_view")
+  _menu_view:open()
   _menu_context = "START_MENU"
   CONTROLS.setMap(_mapping)
 end
 
 function state:leave()
   _menu_view:destroy()
+  _menu_view = nil
 end
 
 function state:resume(from, player_info)
@@ -59,6 +61,7 @@ function state:resume(from, player_info)
 end
 
 function state:update(dt)
+  MAIN_TIMER:update(dt)
   _menu_view.invisible = false
   if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
