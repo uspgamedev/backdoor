@@ -114,6 +114,11 @@ function state:update(dt)
       _playTurns(unpack(_next_action))
     end
     _view.sector:lookAt(_route.getControlledActor() or _player)
+
+    --FIXME:this doesn't need to happen every update (I think)
+    if _route.getControlledActor() or _player then
+      _view.sector:updateFov(_route.getControlledActor() or _player)
+    end
   end
 
   Util.destroyAll()
@@ -182,4 +187,3 @@ end
 
 --Return state functions
 return state
-

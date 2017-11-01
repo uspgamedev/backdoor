@@ -62,6 +62,8 @@ function SectorView:init(route)
     offset = {}
   }
 
+  self.fov = nil --Fov to apply on the sector
+
   self.route = route
   self.body_sprites = {}
   self.sector = false
@@ -106,6 +108,10 @@ function SectorView:addVFX(extra)
   end
 end
 
+function SectorView:updateFov(actor)
+  self.fov = actor.fov
+end
+
 function SectorView:draw()
   local g = love.graphics
   local sector = self.route.getCurrentSector()
@@ -133,6 +139,7 @@ function SectorView:draw()
   g.draw(_flat_batch, 0, 0)
 
   -- draw tall things
+  g.push()
   for i = 0, sector.h-1 do
     local draw_bodies = {}
     local highlights = {}
@@ -204,7 +211,8 @@ function SectorView:draw()
     for _, bodyinfo in ipairs(draw_bodies) do
       local body, x, y = unpack(bodyinfo)
       local id = body:getId()
-      local draw_sprite = self.body_sprites[id] if not draw_sprite then
+      local draw_sprite = self.body_sprites[id]
+      if not draw_sprite then
         local idle = DB.loadSpec('appearance', body:getAppearance()).idle
         draw_sprite = RES.loadSprite(idle)
         self.body_sprites[id] = draw_sprite
@@ -228,8 +236,11 @@ function SectorView:draw()
                   hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
       g.pop()
     end
+
     g.translate(0, _TILE_H)
   end
+  g.pop()
+
   g.pop()
 end
 
