@@ -241,6 +241,19 @@ function SectorView:draw()
   end
   g.pop()
 
+  if self.fov then
+    for i = 1, sector.h do
+      for j = 1, sector.w do
+        if self.fov[i][j] < 1 then
+          local alpha = 256 --(1-self.fov[i][j])*256
+          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+          g.setColor(0,0,0,alpha)
+          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
+        end
+      end
+    end
+  end
+
   g.pop()
 end
 
