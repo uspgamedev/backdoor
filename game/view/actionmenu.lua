@@ -107,8 +107,7 @@ end
 function ActionMenu:close()
   self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween",
-                0.3, self, { enter = 0 }, 'out-circ',
-                function()  end)
+                0.3, self, { enter = 0 }, 'out-circ')
   self:hideLabel()
 end
 
