@@ -99,7 +99,6 @@ end
 function ActionMenu:open(last_focus)
   if _enter_tween.tween or _enter_tween.currentview then
     MAIN_TIMER:cancel(_enter_tween.tween)
-    _enter_tween.enter = 0
     _enter_tween.currentview.invisible = true
   end
   _enter_tween.currentview = self
