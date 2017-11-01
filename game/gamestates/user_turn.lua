@@ -310,7 +310,15 @@ function state:resume(from, args)
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
-    _startTask(_useAction, args.action)
+    if args.action == 'play_card' then
+      _startTask(_changeToCardSelectScreen)
+    elseif args.action == 'consume_cards_from_buffer' then
+      _startTask(_manageBuffer)
+    elseif args.action == 'receive_pack' then
+      _openPack()
+    else
+      _startTask(_useAction, args.action)
+    end
   elseif from == GS.MANAGE_BUFFER then
     _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end

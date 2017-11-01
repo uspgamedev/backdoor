@@ -74,8 +74,8 @@ end
 function state:enter(_, route)
 
   local player = route.getControlledActor()
-  local action = 'drawhand'
-  if player:getHandSize() > 0 then action = 'playcard' end
+  local action = 'draw_new_hand'
+  if player:getHandSize() > 0 then action = 'play_card' end
   _menu_view = ActionMenuView()
   _menu_view:addElement('HUD')
   _menu_view:setCardAction(action)
