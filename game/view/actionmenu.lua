@@ -10,9 +10,10 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'primary', 'widget', 'drawhand', 'managebuffer', 'openpack', 'wait',
+  'interact', 'use_signature', 'widget', 'drawhand', 'managebuffer', 'openpack',
+  'wait',
   interact = "Interact",
-  primary = "Primary Arte",
+  use_signature = "Signature Ability",
   widget = "Use Widget",
   playcard = "Play Card",
   managebuffer = "Manage Back Buffer",

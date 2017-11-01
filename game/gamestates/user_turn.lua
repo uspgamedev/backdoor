@@ -32,14 +32,6 @@ local _lock
 local PARAMETER_STATES
 
 local SIGNALS = {
-  PRESS_UP = {"move", "up"},
-  PRESS_UPLEFT = {"move", "upleft"},
-  PRESS_UPRIGHT = {"move", "upright"},
-  PRESS_DOWN = {"move", "down"},
-  PRESS_DOWNLEFT = {"move", "downleft"},
-  PRESS_DOWNRIGHT = {"move", "downright"},
-  PRESS_RIGHT = {"move", "right"},
-  PRESS_LEFT = {"move", "left"},
   PRESS_CONFIRM = {"interact"},
   PRESS_CANCEL = {"wait"},
   PRESS_SPECIAL = {"primary"},
@@ -232,7 +224,6 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  --Signal.register("move", _move)
   Signal.register("interact", _makeSignalHandler(_interact))
   Signal.register("drawhand", _makeSignalHandler(_newHand))
   Signal.register("open_action_menu",
@@ -319,7 +310,7 @@ function state:resume(from, args)
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
   elseif from == GS.ACTION_MENU and args.action then
-    Signal.emit(args.action)
+    _startTask(_useAction, args.action)
   elseif from == GS.MANAGE_BUFFER then
     _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   end
