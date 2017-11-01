@@ -1,4 +1,7 @@
---MODULE FOR THE GAMESTATE: PLAYER TURN--
+
+--- MODULE FOR THE GAMESTATE: PLAYER TURN
+--  This gamestate rolls out when the player's turn arrives. It pops the action
+--  the player chose to do.
 
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
@@ -8,7 +11,6 @@ local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
 local Queue         = require 'lux.common.Queue'
-local HandView      = require 'view.hand'
 
 local state = {}
 
@@ -230,7 +232,7 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("move", _move)
+  --Signal.register("move", _move)
   Signal.register("interact", _makeSignalHandler(_interact))
   Signal.register("drawhand", _makeSignalHandler(_newHand))
   Signal.register("open_action_menu",
@@ -341,6 +343,12 @@ function state:update(dt)
       _showHUD()
     end
 
+    for _,dir in ipairs(DIR) do
+      if INPUT.actionPressed(dir:upper()) then
+        _move(dir)
+      end
+    end
+
     if not _next_action and not _action_queue.isEmpty() then
       _next_action = _action_queue.pop()
     end
@@ -404,3 +412,4 @@ end
 
 --Return state functions
 return state
+
