@@ -2,6 +2,8 @@
 local IMGUI = require 'imgui'
 local DB = require 'database'
 
+local _NONE = "<none>"
+
 local inputs = {}
 
 function inputs.enum(spec, key)
@@ -11,11 +13,16 @@ function inputs.enum(spec, key)
   if type(_options) == 'string' then
     local group_name = _options
     local category, group = group_name:match("(.-)[%./](.+)")
-    _options = {}
+    _options = { _NONE }
     for k,v in DB.listItemsIn(category, group) do
       table.insert(_options, k)
     end
     table.sort(_options)
+  else
+    _options = { _NONE }
+    for k,v in pairs(key.options) do
+      table.insert(_options, k)
+    end
   end
 
   -- Find the index of the currently assigned option
