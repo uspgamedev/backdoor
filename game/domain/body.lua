@@ -244,7 +244,7 @@ function Body:takeDamageFrom(source, amount)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
-  self.killer = source
+  self.killer = source:getId()
 end
 
 function Body:heal(amount)
