@@ -1,7 +1,7 @@
 
 local DB = require 'database'
 local RANDOM = require 'common.random'
-local Card = require 'Card'
+local Card = require 'domain.card'
 
 local CARDSET = {}
 
@@ -19,8 +19,8 @@ end
 local function _getCardsFrom(setname)
   local cardlist = {}
   local n = 0
-  for cardname, cardspec in DB.listDomainItems("card") do
-    if _belongs(cardspec.set, setname) then
+  for cardname in DB.listDomainItems("card") do
+    if _belongs(DB.loadSpec('card', cardname).set, setname) then
       n = n + 1
       cardlist[n] = cardname
     end

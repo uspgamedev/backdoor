@@ -21,7 +21,7 @@ function inputs.enum(spec, key)
   else
     _options = { _NONE }
     for k,v in pairs(key.options) do
-      table.insert(_options, k)
+      table.insert(_options, v)
     end
   end
 

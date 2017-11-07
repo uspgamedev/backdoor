@@ -1,7 +1,7 @@
 
 local CONTROLS = require 'infra.control'
 local DEFS = require 'domain.definitions'
-local Card = require 'domain.card'
+local COLLECTION = require 'domain.collection'
 local PackView = require 'view.cardlist'
 
 local state = {}
@@ -29,18 +29,16 @@ function state:init()
 end
 
 function state:enter(from, actor)
-  _pack = {}
+  _pack = COLLECTION.generatePackFrom(actor:getSpec('collection'))
 
-  actor:openPack()
-  for i,card_specname in actor:iteratePack() do
-    local card = Card(card_specname)
-    table.insert(_pack, card)
-  end
-  while actor:hasOpenPack() do actor:removePackCard(1) end
 
-  CONTROLS.setMap(_mapping)
   _view = PackView("UP")
-  _view:addElement("HUD")
+  if #_pack > 0 then
+    CONTROLS.setMap(_mapping)
+    _view:addElement("HUD")
+  else
+    _leave = true
+  end
   _view:open(_pack)
 end
 
