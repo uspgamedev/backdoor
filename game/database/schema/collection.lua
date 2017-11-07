@@ -5,7 +5,10 @@ return {
   {
     id = 'cards', name = "Cards", type = 'array',
     schema = {
-      { id = 'card', name = "Card", type = 'enum', options = 'domains.card' }
+      { id = 'set', name = "Card Set", type = 'enum',
+        options = 'domains.cardset' },
+      { id = 'drop', name = "Drop Rate", type = 'integer',
+        range = {1, 100} },
     }
   }
 }

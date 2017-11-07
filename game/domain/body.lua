@@ -13,6 +13,7 @@ function Body:init(specname)
 
   GameElement.init(self, 'body', specname)
 
+  self.killer = false
   self.damage = 0
   self.widgets = {}
   self.equipped = {}
@@ -29,6 +30,7 @@ end
 
 function Body:loadState(state)
   self.damage = state.damage
+  self.killer = state.killer
   self.upgrades = state.upgrades
   self.sector_id = state.sector_id
   self:setId(state.id)
@@ -47,6 +49,7 @@ function Body:saveState()
   local state = {}
   state.specname = self.specname
   state.damage = self.damage
+  state.killer = self.killer
   state.upgrades = self.upgrades
   state.sector_id = self.sector_id
   state.id = self.id
@@ -235,12 +238,13 @@ end
 
 --[[ Combat methods ]]--
 
-function Body:takeDamage(amount)
+function Body:takeDamageFrom(source, amount)
   local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
+  self.killer = source:getId()
 end
 
 function Body:heal(amount)

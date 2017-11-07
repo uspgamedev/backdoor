@@ -11,15 +11,18 @@ local GUI = Class {
 }
 
 local DOMAINS = {
-  'body', 'actor', 'appearance', 'sector', 'card', 'collection', 'action',
+  'body', 'actor', 'appearance', 'sector',
+  'card', 'cardset', 'collection', 'action',
   body = "Body Type",
   actor = "Actor Type",
   appearance = "Appearance",
   sector = "Sector Type",
   card = "Card",
+  cardset = "Card Set",
   collection = "Collection",
   action = "Action",
 }
+
 local RESOURCES = {
   'font', 'texture', 'sprite', 'tileset',
   font = "Font",

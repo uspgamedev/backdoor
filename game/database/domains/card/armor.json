@@ -9,6 +9,7 @@
     "charges":24,
     "placement":"suit"
   },
+  "set":"suits",
   "desc":"Equip as widget. A heavy plate armor.",
   "name":"Armor"
 }
