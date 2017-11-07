@@ -1,16 +1,19 @@
 {
   "cards":[{
-      "card":"bolt"
+      "set":"spells",
+      "drop":30
     },{
-      "card":"cure"
+      "set":"spells",
+      "drop":30
     },{
-      "card":"draw"
+      "set":"blades",
+      "drop":30
     },{
-      "card":"sord"
+      "set":"guns",
+      "drop":30
     },{
-      "card":"gun"
-    },{
-      "card":"armor"
+      "set":"suits",
+      "drop":20
     }],
   "name":"Adventurer's Cunning",
   "description":"The basic needs of your typical adventurer."

@@ -1,18 +1,16 @@
 {
   "attr":"ARC",
+  "set":"conjuring_spells",
   "art_action":"SHOOT",
-  "desc":"An arcane arte that shoots a lightning bolt\nright in a target's face! It's strong, but\nthe casting time is bit slow.",
-  "type":"ART",
-  "pp":3,
-  "name":"Bolt",
   "art":{
     "art_action":"BOLT",
+    "cost":20,
     "art_ability":{
       "params":[{
           "typename":"choose_target",
-          "max-range":5,
+          "output":"target",
           "body-only":true,
-          "output":"target"
+          "max-range":5
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -26,10 +24,13 @@
       "effects":[{
           "typename":"dmg_formula",
           "target":"val:target_body",
-          "attr":"val:arcana",
-          "base":6
+          "base":6,
+          "attr":"val:arcana"
         }]
-    },
-    "cost":20
-  }
+    }
+  },
+  "desc":"An arcane arte that shoots a lightning bolt\nright in a target's face! It's strong, but\nthe casting time is bit slow.",
+  "type":"ART",
+  "pp":3,
+  "name":"Bolt"
 }

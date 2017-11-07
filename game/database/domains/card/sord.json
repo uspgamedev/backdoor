@@ -1,14 +1,15 @@
 {
   "attr":"ATH",
+  "set":"blades",
   "widget":{
+    "operators":[],
     "activation":{
-      "cost":10,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":1,
+            "output":"target",
             "body-only":true,
-            "output":"target"
+            "max-range":1
           }],
         "operators":[{
             "typename":"get_attribute",
@@ -22,10 +23,11 @@
         "effects":[{
             "typename":"dmg_formula",
             "target":"val:target_body",
-            "attr":"val:ath",
-            "base":4
+            "base":4,
+            "attr":"val:ath"
           }]
-      }
+      },
+      "cost":10
     },
     "charges":12,
     "widget_action":"MELEE",
