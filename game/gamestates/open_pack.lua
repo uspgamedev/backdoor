@@ -1,7 +1,7 @@
 
 local CONTROLS = require 'infra.control'
 local DEFS = require 'domain.definitions'
-local COLLECTION = require 'domain.collection'
+local PACK = require 'domain.pack'
 local PackView = require 'view.cardlist'
 
 local state = {}
@@ -29,9 +29,7 @@ function state:init()
 end
 
 function state:enter(from, actor)
-  _pack = COLLECTION.generatePackFrom(actor:getSpec('collection'))
-
-
+  _pack = PACK.generatePackFrom(actor:getSpec('collection'))
   _view = PackView("UP")
   if #_pack > 0 then
     CONTROLS.setMap(_mapping)

@@ -1,16 +1,20 @@
 
-local RNG   = require 'common.random'
-local DB    = require 'database'
-local DEFS  = require 'domain.definitions'
+local DB = require 'database'
+local RANDOM = require 'common.random'
+local CARDSET = require 'domain.cardset'
 
 local PACK = {}
 
-function PACK.open(collection_name)
-  local cards = DB.loadSpec('collection', collection_name).cards
+function PACK.generatePackFrom(collection_name)
+  local collection = DB.loadSpec('collection', collection_name)
   local pack = {}
-  local total = #cards
-  for i=1,DEFS.PACK_SIZE do
-    table.insert(pack, cards[RNG.generate(total)].card)
+  local n = 0
+  for _,card_drop in pairs(collection.cards) do
+    local p = RANDOM.generate(1, 100)
+    if p <= card_drop.drop then
+      n = n + 1
+      pack[n] = CARDSET.getRandomCardFrom(card_drop.set)
+    end
   end
   return pack
 end
