@@ -27,9 +27,9 @@ function state:init()
 end
 
 function state:enter(from, actor)
+  _view = ManageBufferView("UP")
   if actor:getBackBufferSize() > 0 then
     _leave = false
-    _view = ManageBufferView("UP")
     _view:addElement("HUD")
     _view:open(actor:copyBackBuffer())
     CONTROLS.setMap(_mapping)
