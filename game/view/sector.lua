@@ -147,7 +147,7 @@ function SectorView:draw()
           g.setColor(0,0,0,alpha)
           g.rectangle("fill", x, y, _TILE_W, _TILE_H)
         elseif self.fov[i][j] == 0 then --Seen once but invisible now
-          local alpha = 180
+          local alpha = 140
           local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
           g.setColor(0,0,0,alpha)
           g.rectangle("fill", x, y, _TILE_W, _TILE_H)
