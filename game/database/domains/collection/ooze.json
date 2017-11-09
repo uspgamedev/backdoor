@@ -1,0 +1,14 @@
+{
+  "name":"Ooze's Pieces",
+  "cards":[{
+      "drop":80,
+      "set":"slime_loot"
+    },{
+      "drop":50,
+      "set":"loot"
+    },{
+      "drop":20,
+      "set":"healing_spells"
+    }],
+  "description":"The remains of a dead ooze."
+}
