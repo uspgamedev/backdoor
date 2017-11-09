@@ -21,19 +21,10 @@ local _view
 local _status_hud
 local _save_and_quit
 local _exit_sector
-local _lock
 
 local _ACTION = {}
 
 --LOCAL FUNCTIONS--
-
-local function _lockState()
-  _lock = true
-end
-
-local function _unlockState()
-  _lock = false
-end
 
 local function _showHUD()
   _view.actor:show()
@@ -44,10 +35,7 @@ local function _hideHUD()
 end
 
 local function _openActionMenu()
-
-  _lockState()
   SWITCHER.push(GS.ACTION_MENU, _route)
-
 end
 
 local function _useAction(action_slot, params)
@@ -60,7 +48,6 @@ local function _useAction(action_slot, params)
   while param do
     print("pending param", param.output, param.typename)
     if param.typename == 'choose_target' then
-      _lockState()
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
@@ -83,7 +70,6 @@ local function _useAction(action_slot, params)
         return false
       end
     elseif param.typename == "choose_widget_slot" then
-      _lockState()
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
@@ -103,68 +89,6 @@ local function _useAction(action_slot, params)
   end
   _next_action = {action_slot, params}
   return true
-end
-
-_ACTION[DEFS.ACTION.INTERACT] = function()
-  _useAction(DEFS.ACTION.INTERACT)
-end
-
-_ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
-  _useAction(DEFS.ACTION.USE_SIGNATURE)
-end
-
-_ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
-end
-
-_ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
-  if _route.getControlledActor():isHandEmpty() then
-    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  end
-end
-
-_ACTION[DEFS.ACTION.PLAY_CARD] = function()
-
-  if #_view.hand.hand > 0 then
-    _lockState()
-
-    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
-    local args = coroutine.yield(_task)
-
-    if args.chose_a_card then
-      if args.action_type == 'use' then
-        if _useAction(DEFS.ACTION.PLAY_CARD,
-                      { card_index = args.card_index }) then
-          Signal.emit("actor_used_card", _route.getControlledActor(), index)
-        end
-      elseif args.action_type == 'stash' then
-        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
-      end
-    end
-  end
-
-end
-
-_ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
-  _lockState()
-  SWITCHER.push(GS.MANAGE_BUFFER, _route.getControlledActor())
-  local args = coroutine.yield(_task)
-  _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
-end
-
-_ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
-  local controlled_actor = _route.getControlledActor()
-  if not controlled_actor:hasOpenPack() then
-    _lockState()
-    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
-    local args = coroutine.yield(_task)
-    _useAction(DEFS.ACTION.RECEIVE_PACK,
-               { consumed = args.consumed, pack = args.pack })
-  end
-end
-
-_ACTION[DEFS.ACTION.IDLE] = function()
-  _useAction(DEFS.ACTION.IDLE)
 end
 
 local function _move(dir)
@@ -201,9 +125,6 @@ end
 
 --STATE FUNCTIONS--
 
-function state:init()
-end
-
 function state:enter(_, route, view)
 
   _route = route
@@ -213,18 +134,9 @@ function state:enter(_, route, view)
   _view = view
   _view.hand:reset()
 
-  _unlockState()
-
-end
-
-function state:leave()
-
-  _lockState()
-
 end
 
 function state:resume(from, args)
-  _unlockState()
   _resumeTask(args)
   if from == GS.ACTION_MENU and args.action then
     _startTask(args.action)
@@ -233,7 +145,7 @@ end
 
 function state:update(dt)
 
-  if not DEBUG and not _lock then
+  if not DEBUG then
     if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
     if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
 
@@ -324,6 +236,62 @@ function state:wheelmoved(x, y)
   imgui.WheelMoved(y)
 end
 
---Return state functions
+--[[ Action functions ]]--
+
+_ACTION[DEFS.ACTION.INTERACT] = function()
+  _useAction(DEFS.ACTION.INTERACT)
+end
+
+_ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
+  _useAction(DEFS.ACTION.USE_SIGNATURE)
+end
+
+_ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
+  _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
+end
+
+_ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
+  if _route.getControlledActor():isHandEmpty() then
+    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+  end
+end
+
+_ACTION[DEFS.ACTION.PLAY_CARD] = function()
+  if #_view.hand.hand > 0 then
+    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
+    local args = coroutine.yield(_task)
+    if args.chose_a_card then
+      if args.action_type == 'use' then
+        if _useAction(DEFS.ACTION.PLAY_CARD,
+                      { card_index = args.card_index }) then
+          Signal.emit("actor_used_card", _route.getControlledActor(), index)
+        end
+      elseif args.action_type == 'stash' then
+        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
+      end
+    end
+  end
+end
+
+_ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
+  SWITCHER.push(GS.MANAGE_BUFFER, _route.getControlledActor())
+  local args = coroutine.yield(_task)
+  _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
+end
+
+_ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
+  local controlled_actor = _route.getControlledActor()
+  if not controlled_actor:hasOpenPack() then
+    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
+    local args = coroutine.yield(_task)
+    _useAction(DEFS.ACTION.RECEIVE_PACK,
+               { consumed = args.consumed, pack = args.pack })
+  end
+end
+
+_ACTION[DEFS.ACTION.IDLE] = function()
+  _useAction(DEFS.ACTION.IDLE)
+end
+
 return state
 
