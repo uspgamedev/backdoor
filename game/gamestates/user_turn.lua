@@ -7,7 +7,6 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
-local CONTROL       = require 'infra.control'
 local INPUT         = require 'infra.input'
 
 local state = {}
@@ -15,43 +14,25 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _task
-local _mapped_signals
 local _route
 local _next_action
 local _view
 
 local _status_hud
-local _previous_control_map
 local _save_and_quit
 local _exit_sector
 local _lock
 
 local _ACTION = {}
 
-local SIGNALS = {
-  PRESS_CONFIRM = {"interact"},
-  PRESS_CANCEL = {"wait"},
-  PRESS_SPECIAL = {"primary"},
-  PRESS_EXTRA = {"open_action_menu"},
-  PRESS_PAUSE = {"pause"},
-  PRESS_QUIT = {"quit"}
-}
-
---LOCAL FUNCTIONS DECLARATIONS--
-
-local _unregisterSignals
-local _registerSignals
-
 --LOCAL FUNCTIONS--
 
 local function _lockState()
   _lock = true
-  _unregisterSignals()
 end
 
 local function _unlockState()
   _lock = false
-  _registerSignals()
 end
 
 local function _showHUD()
@@ -218,34 +199,9 @@ local function _startTask(action, ...)
   end
 end
 
-local function _makeSignalHandler(callback)
-  return function (...)
-    return _startTask(callback, ...)
-  end
-end
-
-function _registerSignals()
-  CONTROL.setMap(_mapped_signals)
-end
-
-function _unregisterSignals()
-  for _,signal_pack in pairs(SIGNALS) do
-    Signal.clear(signal_pack[1])
-  end
-  CONTROL.setMap(_previous_control_map)
-end
-
-
 --STATE FUNCTIONS--
 
 function state:init()
-  _mapped_signals = {}
-  for input_name, signal_pack in pairs(SIGNALS) do
-    _mapped_signals[input_name] = function ()
-      Signal.emit(unpack(signal_pack))
-    end
-  end
-
 end
 
 function state:enter(_, route, view)
@@ -256,11 +212,6 @@ function state:enter(_, route, view)
 
   _view = view
   _view.hand:reset()
-
-  _registerSignals()
-
-  _previous_control_map = CONTROL.getMap()
-  CONTROL.setMap(_mapped_signals)
 
   _unlockState()
 
