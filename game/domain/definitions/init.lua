@@ -26,5 +26,9 @@ DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
 DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
 
+function DEFS.REQUIRED_ATTR_UPGRADE(apt, lv)
+  return math.ceil(1 * (15 - 1.5*apt) ^ (1 + lv/10))
+end
+
 return DEFS
 
