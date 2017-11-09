@@ -14,6 +14,10 @@ return function (actor)
     if changed then
       actor:getBody():setHP(newhp)
     end
+    IMGUI.Text(("ATH: %d"):format(actor:getATH()))
+    IMGUI.Text(("ARC: %d"):format(actor:getARC()))
+    IMGUI.Text(("MEC: %d"):format(actor:getMEC()))
+    IMGUI.Text(("SPD: %d"):format(actor:getSPD()))
   end
 
 end

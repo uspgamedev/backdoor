@@ -29,10 +29,10 @@ function Actor:init(spec_name)
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
-    ATH = 0,
-    ARC = 0,
-    MEC = 0,
-    SPD = 0,
+    ATH = 100,
+    ARC = 100,
+    MEC = 100,
+    SPD = 100,
   }
   self.attr_lv = {
     ATH = 0,
@@ -49,6 +49,10 @@ function Actor:init(spec_name)
   self.buffer = {}
   self.prizes = {}
 
+  self:updateAttr('ATH')
+  self:updateAttr('ARC')
+  self:updateAttr('MEC')
+  self:updateAttr('SPD')
 end
 
 function Actor:loadState(state)
@@ -153,7 +157,6 @@ function Actor:updateAttr(which)
     required = required +
                DEFS.REQUIRED_ATTR_UPGRADE(self:getSpec(which:lower()), lv)
     lv = lv + 1
-    print(lv, required)
   until self.upgrades[which] < required
   self.attr_lv[which] = lv-1
 end

@@ -4,7 +4,7 @@
     "cost":2,
     "actor_list":[{
         "attr":"MEC",
-        "val":1
+        "val":10
       }],
     "body_list":[]
   },

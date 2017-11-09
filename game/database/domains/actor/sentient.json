@@ -1,10 +1,10 @@
 {
-  "spd":0,
-  "arc":0,
   "signature":"DOUBLESHOOT",
   "collection":"adventurer",
-  "ath":0,
   "behavior":"player",
   "name":"Sentient",
+  "spd":0,
+  "arc":0,
+  "ath":0,
   "mec":0
 }

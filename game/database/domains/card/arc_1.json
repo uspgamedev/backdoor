@@ -6,7 +6,7 @@
     "cost":2,
     "actor_list":[{
         "attr":"ARC",
-        "val":1
+        "val":10
       }],
     "body_list":[]
   }
