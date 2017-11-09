@@ -3,10 +3,11 @@ local DB = require 'database'
 local RANDOM = require 'common.random'
 local Card = require 'domain.card'
 
+local _EMPTY = {}
 local CARDSET = {}
 
 local function _getParent(setname)
-  return DB.loadSpec('cardset', setname).parent
+  return (DB.loadSpec('cardset', setname) or _EMPTY).parent
 end
 
 local function _belongs(setname, from)

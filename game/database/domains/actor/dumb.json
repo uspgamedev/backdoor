@@ -3,9 +3,9 @@
   "behavior":"aggro",
   "mec":2,
   "arc":2,
-  "collection":"adventurer",
-  "description":"Oh honey...",
+  "collection":"ooze",
+  "spd":1,
   "signature":"MELEE",
   "name":"Dumb",
-  "spd":1
+  "description":"Oh honey..."
 }
