@@ -11,7 +11,7 @@ local INPUT         = require 'infra.input'
 
 local state = {}
 
---LOCAL VARIABLES--
+--[[ Local Variables ]]--
 
 local _task
 local _route
@@ -22,59 +22,7 @@ local _save_and_quit
 
 local _ACTION = {}
 
---LOCAL FUNCTIONS--
-
-local function _useAction(action_slot, params)
-  if not ACTION.exists(action_slot) then return false end
-  local current_sector = _route.getCurrentSector()
-  local controlled_actor = _route.getControlledActor()
-  params = params or {}
-  local param = ACTION.pendingParam(action_slot, controlled_actor,
-                                    current_sector, params)
-  while param do
-    if param.typename == 'choose_target' then
-      SWITCHER.push(
-        GS.PICK_TARGET, _view.sector,
-        {
-          pos = { controlled_actor:getPos() },
-          range_checker = function(i, j)
-            return ABILITY.param('choose_target')
-                          .isWithinRange(current_sector, controlled_actor,
-                                        param, {i,j})
-          end,
-          validator = function(i, j)
-            return ABILITY.validate('choose_target', current_sector,
-                                    controlled_actor, param, {i,j})
-          end
-        }
-      )
-      local args = coroutine.yield(_task)
-      if args.target_is_valid then
-        params[param.output] = args.pos
-      else
-        return false
-      end
-    elseif param.typename == "choose_widget_slot" then
-      SWITCHER.push(
-        GS.PICK_WIDGET_SLOT, controlled_actor,
-        function (which_slot)
-          return ABILITY.validate('choose_widget_slot', current_sector,
-                                  controlled_actor, param, which_slot)
-        end
-      )
-      local args = coroutine.yield(_task)
-      if args.picked_slot then
-        params[param.output] = args.picked_slot
-      else
-        return false
-      end
-    end
-    param = ACTION.pendingParam(action_slot, controlled_actor,
-                                current_sector, params)
-  end
-  _next_action = {action_slot, params}
-  return true
-end
+--[[ Task Functions ]]--
 
 local function _resumeTask(...)
   if _task then
@@ -92,6 +40,8 @@ local function _startTask(action, ...)
   end
 end
 
+--[[ HUD Functions ]]--
+
 local function _showHUD()
   _view.actor:show()
 end
@@ -100,7 +50,7 @@ local function _hideHUD()
   _view.actor:hide()
 end
 
---STATE FUNCTIONS--
+--[[ State Methods ]]--
 
 function state:enter(_, route, view)
 
@@ -176,6 +126,58 @@ function state:keypressed(key)
 end
 
 --[[ Action functions ]]--
+
+local function _useAction(action_slot, params)
+  if not ACTION.exists(action_slot) then return false end
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  params = params or {}
+  local param = ACTION.pendingParam(action_slot, controlled_actor,
+                                    current_sector, params)
+  while param do
+    if param.typename == 'choose_target' then
+      SWITCHER.push(
+        GS.PICK_TARGET, _view.sector,
+        {
+          pos = { controlled_actor:getPos() },
+          range_checker = function(i, j)
+            return ABILITY.param('choose_target')
+                          .isWithinRange(current_sector, controlled_actor,
+                                        param, {i,j})
+          end,
+          validator = function(i, j)
+            return ABILITY.validate('choose_target', current_sector,
+                                    controlled_actor, param, {i,j})
+          end
+        }
+      )
+      local args = coroutine.yield(_task)
+      if args.target_is_valid then
+        params[param.output] = args.pos
+      else
+        return false
+      end
+    elseif param.typename == "choose_widget_slot" then
+      SWITCHER.push(
+        GS.PICK_WIDGET_SLOT, controlled_actor,
+        function (which_slot)
+          return ABILITY.validate('choose_widget_slot', current_sector,
+                                  controlled_actor, param, which_slot)
+        end
+      )
+      local args = coroutine.yield(_task)
+      if args.picked_slot then
+        params[param.output] = args.picked_slot
+      else
+        return false
+      end
+    end
+    param = ACTION.pendingParam(action_slot, controlled_actor,
+                                current_sector, params)
+  end
+  _next_action = {action_slot, params}
+  return true
+end
 
 _ACTION[DEFS.ACTION.MOVE] = function (dir)
   local current_sector = _route.getCurrentSector()
