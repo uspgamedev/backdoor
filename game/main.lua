@@ -32,6 +32,8 @@ GS = {
   -- MENU GAMESTATES
   START_MENU = require "gamestates.start_menu",   --The game main menu
   CHARACTER_BUILD = require 'gamestates.character_build',
+  -- DEV GAMESTATES
+  DEVMODE = require 'gamestates.devmode',         -- Development mode
   -- PLAYING GAMESTATES
   PLAY = require "gamestates.play",               -- Game Gamestate
   USER_TURN = require "gamestates.user_turn",     -- User's turn

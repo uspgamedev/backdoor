@@ -145,45 +145,46 @@ end
 
 function state:update(dt)
 
-  if not DEBUG then
-    if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
-    if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
+  if DEBUG then
+    return SWITCHER.push(GS.DEVMODE)
+  end
 
-    _view.sector:lookAt(_route.getControlledActor())
+  if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
+  if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
 
-    MAIN_TIMER:update(dt)
+  _view.sector:lookAt(_route.getControlledActor())
 
-    if _status_hud and not INPUT.isDown("ACTION_4") then
-      _status_hud = false
-      _hideHUD()
-    elseif not _statusHUD and INPUT.isDown("ACTION_4") then
-      _status_hud = true
-      _showHUD()
+  MAIN_TIMER:update(dt)
+
+  if _status_hud and not INPUT.isDown("ACTION_4") then
+    _status_hud = false
+    _hideHUD()
+  elseif not _statusHUD and INPUT.isDown("ACTION_4") then
+    _status_hud = true
+    _showHUD()
+  end
+
+  for _,dir in ipairs(DIR) do
+    if INPUT.actionPressed(dir:upper()) then
+      return _move(dir)
     end
+  end
 
-    for _,dir in ipairs(DIR) do
-      if INPUT.actionPressed(dir:upper()) then
-        return _move(dir)
-      end
-    end
+  if INPUT.actionPressed('CONFIRM') then
+    _startTask(DEFS.ACTION.INTERACT)
+  elseif INPUT.actionPressed('CANCEL') then
+    _startTask(DEFS.ACTION.IDLE)
+  elseif INPUT.actionPressed('SPECIAL') then
+    _startTask(DEFS.ACTION.USE_SIGNATURE)
+  elseif INPUT.actionPressed('EXTRA') then
+    return _openActionMenu()
+  elseif INPUT.actionPressed('PAUSE') then
+    return _saveAndQuit()
+  end
 
-    if INPUT.actionPressed('CONFIRM') then
-      _startTask(DEFS.ACTION.INTERACT)
-    elseif INPUT.actionPressed('CANCEL') then
-      _startTask(DEFS.ACTION.IDLE)
-    elseif INPUT.actionPressed('SPECIAL') then
-      _startTask(DEFS.ACTION.USE_SIGNATURE)
-    elseif INPUT.actionPressed('EXTRA') then
-      return _openActionMenu()
-    elseif INPUT.actionPressed('PAUSE') then
-      return _saveAndQuit()
-    end
-
-    if _next_action then
-      SWITCHER.pop({next_action = _next_action})
-      _next_action = nil
-    end
-
+  if _next_action then
+    SWITCHER.pop({next_action = _next_action})
+    _next_action = nil
   end
 
   Util.destroyAll()
@@ -195,45 +196,9 @@ function state:draw()
 end
 
 function state:keypressed(key)
-
-  imgui.KeyPressed(key)
-  if imgui.GetWantCaptureKeyboard() then
-     return
-  end
-
   if key ~= "escape" then
       Util.defaultKeyPressed(key)
   end
-
-end
-
-function state:textinput(t)
-  imgui.TextInput(t)
-end
-
-function state:keyreleased(key)
-
-  imgui.KeyReleased(key)
-  if imgui.GetWantCaptureKeyboard() then
-     return
-  end
-
-end
-
-function state:mousemoved(x, y)
-  imgui.MouseMoved(x, y)
-end
-
-function state:mousepressed(x, y, button)
-  imgui.MousePressed(button)
-end
-
-function state:mousereleased(x, y, button)
-  imgui.MouseReleased(button)
-end
-
-function state:wheelmoved(x, y)
-  imgui.WheelMoved(y)
 end
 
 --[[ Action functions ]]--
