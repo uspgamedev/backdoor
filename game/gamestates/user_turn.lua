@@ -225,7 +225,6 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -313,6 +312,8 @@ function state:update(dt)
       _startTask(DEFS.ACTION.USE_SIGNATURE)
     elseif INPUT.actionPressed('EXTRA') then
       return _openActionMenu()
+    elseif INPUT.actionPressed('PAUSE') then
+      return _saveAndQuit()
     end
 
     if _next_action then
