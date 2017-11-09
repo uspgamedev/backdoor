@@ -2,8 +2,9 @@
   "extends":"strong",
   "arc":7,
   "signature":"BOLT",
-  "description":"Spellcaster monster, evil by nature.",
+  "collection":"demon",
+  "spd":1,
   "behavior":"aggro",
   "name":"Grinning",
-  "spd":1
+  "description":"Spellcaster monster, evil by nature."
 }
