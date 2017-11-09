@@ -5,7 +5,8 @@
       "amount":2,
       "card":"draw"
     },{
-      "card":"armor"
+      "card":"armor",
+      "amount": 1
     },{
       "amount":2,
       "card":"sord"

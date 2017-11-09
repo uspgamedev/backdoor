@@ -1,4 +1,5 @@
 
+local DB          = require 'database'
 local DEFS        = require 'domain.definitions'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
@@ -14,20 +15,13 @@ local function _card(specname)
   }
 end
 
-local function _simpleBuffer()
+local function _simpleBuffer(background)
   local buffer = {}
-  for i=1,2 do
-    table.insert(buffer, _card('bolt'))
-    table.insert(buffer, _card('draw'))
-    table.insert(buffer, _card('cure'))
-    table.insert(buffer, _card('sord'))
-    table.insert(buffer, _card('armor'))
-    table.insert(buffer, _card('gun'))
-    table.insert(buffer, _card('ath_1'))
-    table.insert(buffer, _card('arc_1'))
-    table.insert(buffer, _card('mec_1'))
-    table.insert(buffer, _card('def_1'))
-    table.insert(buffer, _card('hp_5'))
+  for _,cardinfo in ipairs(DB.loadSpec('actor', background).initial_buffer) do
+    print(cardinfo, cardinfo.amount, cardinfo.card)
+    for i=1, cardinfo.amount do
+      table.insert(buffer, _card(cardinfo.card))
+    end
   end
   RANDOM.shuffle(buffer)
   table.insert(buffer, DEFS.DONE)
@@ -43,7 +37,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     exp = 0,
     playpoints = 10,
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
-    buffer = _simpleBuffer(),
+    buffer = _simpleBuffer(background),
     hand_limit = 5,
     hand = {},
     prizes = {},
