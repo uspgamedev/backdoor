@@ -226,7 +226,6 @@ end
 
 function _registerSignals()
   Signal.register("open_action_menu", _openActionMenu)
-  Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -308,9 +307,11 @@ function state:update(dt)
     end
 
     if INPUT.actionPressed('CONFIRM') then
-      return _startTask(DEFS.ACTION.INTERACT)
+      _startTask(DEFS.ACTION.INTERACT)
     elseif INPUT.actionPressed('CANCEL') then
-      return _startTask(DEFS.ACTION.IDLE)
+      _startTask(DEFS.ACTION.IDLE)
+    elseif INPUT.actionPressed('SPECIAL') then
+      _startTask(DEFS.ACTION.USE_SIGNATURE)
     end
 
     if _next_action then
