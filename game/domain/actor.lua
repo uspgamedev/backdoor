@@ -38,7 +38,7 @@ function Actor:init(spec_name)
   self.playpoints = 10
 
   self.fov = {}
-  self.fov_range = 4
+  self.fov_range = 6
 
   self.buffer = {}
   self.prizes = {}

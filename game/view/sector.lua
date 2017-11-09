@@ -138,6 +138,19 @@ function SectorView:draw()
   end
   g.draw(_flat_batch, 0, 0)
 
+  if self.fov then
+    for i = 1, sector.h do
+      for j = 1, sector.w do
+        if not self.fov[i][j] then
+          local alpha = 255 --(1-self.fov[i][j])*255
+          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+          g.setColor(0,0,0,alpha)
+          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
+        end
+      end
+    end
+  end
+
   -- draw tall things
   g.push()
   for i = 0, sector.h-1 do
@@ -151,6 +164,11 @@ function SectorView:draw()
         local body = sector.bodies[i+1][j+1]
         local x = j*_TILE_W
         if tile.type == SCHEMATICS.WALL then
+          if self.fov and not self.fov[i+1][j+1] then
+            _tall_batch:setColor(0, 0, 0, 255)
+          else
+            _tall_batch:setColor(255, 255, 255, 255)
+          end
           _tall_batch:add(_tile_quads[tile.type], x, 0,
                           0, 1, 1, unpack(_tile_offset[tile.type]))
         elseif self.cursor then
@@ -240,19 +258,6 @@ function SectorView:draw()
     g.translate(0, _TILE_H)
   end
   g.pop()
-
-  if self.fov then
-    for i = 1, sector.h do
-      for j = 1, sector.w do
-        if self.fov[i][j] < 1 then
-          local alpha = 256 --(1-self.fov[i][j])*256
-          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
-          g.setColor(0,0,0,alpha)
-          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
-        end
-      end
-    end
-  end
 
   g.pop()
 end

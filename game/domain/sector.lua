@@ -410,8 +410,8 @@ function _turnLoop(self, ...)
       actor = table.remove(actors_queue)
 
       actor:tick()
+      actor:updateFov(self)
       while actor:ready() do
-        actor:updateFov(self)
         actor:makeAction(self)
         manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
       end

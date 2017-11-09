@@ -19,11 +19,11 @@ local funcs = {}
 function funcs.resetActorFov(actor, sector)
 
   local w, h = sector:getDimensions()
-  actor.fov = {}
+  actor.fov = actor.fov or {}
   for i = 1, h do
-    actor.fov[i] = {}
+    actor.fov[i] = actor.fov[i] or {}
     for j = 1, w do
-      actor.fov[i][j] = 0 --Not visible
+      actor.fov[i][j] = false --Invisible
     end
   end
 
@@ -31,6 +31,7 @@ end
 
 --Update actors field of view based on his position in a given sector
 function funcs.updateFov(actor, sector)
+  funcs.resetActorFov(actor, sector)
   for octant = 1, 8 do
     updateOctant(actor, sector, octant)
   end
@@ -47,14 +48,17 @@ function updateOctant(actor, sector, octant)
   --Actor current position
   local actor_i, actor_j = actor:getPos()
 
-
-  for row = 1, actor.fov_range do
+  local row = 0
+  while true do
 
     local d_i, d_j = transformOctant(row, 0, octant)
     local pos = {actor_i + d_i, actor_j + d_j}
 
     --Check if tile is inside sector
     if not sector:isInside(pos[1],pos[2]) then break end
+    if row > actor.fov_range then
+      full_shadow = true
+    end
 
     for col = 0, row do
       local d_i, d_j = transformOctant(row, col, octant)
@@ -64,24 +68,23 @@ function updateOctant(actor, sector, octant)
       if not sector:isInside(pos[1],pos[2]) then break end
 
       if full_shadow then
-        actor.fov[pos[1]][pos[2]] = 0 --Tile is not visible at all
+        actor.fov[pos[1]][pos[2]] = false --Tile is not visible at all
       else
         --Set visibility of tile
         local projection = projectTile(row, col)
-        local visible = visibilityOfShadow(line, projection)
+        local visible = not visibilityOfShadow(line, projection)
         actor.fov[pos[1]][pos[2]] = visible
 
         --Add any wall tiles to the shadow line
-        if visible > 0 and
+        if visible and
            sector.tiles[pos[1]][pos[2]] and
            sector.tiles[pos[1]][pos[2]].type == SCHEMATICS.WALL then
               addProjection(line, projection)
-              fullShadow = isShadowLineFull(line)
+              fullShadow = fullShadow or isShadowLineFull(line)
         end
-
       end
-
     end
+    row = row + 1
   end
 end
 
@@ -96,6 +99,24 @@ function isShadowLineFull(shadow_line)
     return (#list == 1 and list[1].start == 0 and list[1].finish == 1)
 end
 
+local MAX = 80
+
+function printShadowLine(shadow_line)
+  local string = {}
+  for i=1,MAX do
+    string[i] = '.'
+  end
+  for _,shadow in ipairs(shadow_line.shadow_list) do
+    local a,b = shadow.start*MAX,shadow.finish*MAX
+    a = math.floor(a + 0.5)
+    b = math.floor(b + 0.5)
+    for i=a,b do
+      string[i] = 'X'
+    end
+  end
+  print(table.concat(string))
+end
+
 --Create a shadow table
 function newShadow(_start, _finish)
   assert(_start, "start argument not valid for new shadow")
@@ -106,37 +127,28 @@ function newShadow(_start, _finish)
          }
 end
 
---Checks if a shadow completly contains another and returns the ratio
+--Checks if a shadow completly contains another and
+-- returns the ratio other shadow is covered
 function shadowContainsAnother(shadow, other_shadow)
 
-    --Case where other shadow is completly outside shadow
-    if other_shadow.finish <= shadow.start or
-       other_shadow.start >= shadow.finish then
-         return 0
-    end
-
-    --Case where has some intersection
-    local size = other_shadow.finish - other_shadow.start
-    local outside_size = 0
-    if other_shadow.start < shadow.start then
-      outside_size = outside_size + (shadow.start-other_shadow.start)
-    end
-    if other_shadow.finish > shadow.finish then
-      outside_size = outside_size + (other_shadow.finish-shadow.finish)
-    end
-
-    return outside_size/size
+  if other_shadow.finish <= shadow.finish and
+     other_shadow.start >= shadow.start then
+       return true
+  else
+    return false
+  end
 end
 
 --Returns how visible is a projection given a line of shadows
---From 0 (not visible) to 1 (totally visible)
+--From 0 (visible) to 1 (not visible)
 function visibilityOfShadow(shadow_line, projection)
-    local ratio = 0
     for _,shadow in ipairs(shadow_line.shadow_list) do
-      ratio = ratio + shadowContainsAnother(shadow, projection)
+      if shadowContainsAnother(shadow, projection) then
+        return true
+      end
     end
 
-    return 1 - ratio
+    return false
 end
 
 function addProjection(line, projection)
@@ -144,9 +156,10 @@ function addProjection(line, projection)
   local index = 1;
 
   --Figure out where to slot the new shadow in the list
-  for index = 1, #list do
+  while index <= #list do
      --Stop when we hit the insertion point.
      if list[index].start >= projection.start then break end
+     index = index + 1
   end
 
   --Check if projection overlaps the previous or next shadow
@@ -156,7 +169,7 @@ function addProjection(line, projection)
   end
 
   local overlappingNext
-  if index < #list and list[index].start < projection.finish then
+  if index <= #list and list[index].start < projection.finish then
     overlappingNext = list[index]
   end
 
@@ -179,6 +192,7 @@ function addProjection(line, projection)
       table.insert(list, index, projection)
     end
   end
+
 end
 
 --Transforms row and column values to correspondent octant
