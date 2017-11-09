@@ -33,8 +33,11 @@ function PARAM.isValid(sector, actor, parameter, value)
   if not PARAM.isWithinRange(sector, actor, parameter, value) then
     return false
   end
+  local i, j = unpack(value)
+  if not actor.fov[i][j] or actor.fov[i][j] == 0 then
+    return false
+  end
   return true
 end
 
 return PARAM
-
