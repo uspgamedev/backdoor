@@ -234,7 +234,7 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
 end
 
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function(from_actor)
-  SWITCHER.push(GS.OPEN_PACK, from_actor:getSpec('collection'))
+  SWITCHER.push(GS.OPEN_PACK, from_actor:getNextPrizePack())
   local args = coroutine.yield(_task)
   _useAction(DEFS.ACTION.RECEIVE_PACK,
              { consumed = args.consumed, pack = args.pack })
