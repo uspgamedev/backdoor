@@ -6,7 +6,6 @@ local ACTION      = require 'domain.action'
 local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
-local PACK        = require 'domain.pack'
 
 local Actor = Class{
   __includes = { GameElement }
@@ -33,7 +32,6 @@ function Actor:init(spec_name)
   }
   self.exp = 0
   self.playpoints = 10
-  self.pack = nil
 
   self.buffer = {}
 
@@ -285,35 +283,6 @@ end
 function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
   self.exp = self.exp + DEFS.CONSUME_EXP
-end
-
-function Actor:hasOpenPack()
-  return not not self.pack
-end
-
-function Actor:openPack()
-  assert(not self.pack)
-  self.pack = PACK.open(self:getBasicCollection())
-end
-
-function Actor:iteratePack()
-  assert(self.pack)
-  return ipairs(self.pack)
-end
-
-function Actor:getPackCard(idx)
-  assert(self.pack)
-  assert(idx >= 1 and idx <= #self.pack)
-  return Card(self.pack[idx])
-end
-
-function Actor:removePackCard(idx)
-  assert(self.pack)
-  assert(idx >= 1 and idx <= #self.pack)
-  table.remove(self.pack, idx)
-  if #self.pack == 0 then
-    self.pack = nil
-  end
 end
 
 --[[ Turn methods ]]--

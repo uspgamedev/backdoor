@@ -65,7 +65,7 @@ end
 function state:resume(from, args)
   _resumeTask(args)
   if from == GS.ACTION_MENU and args.action then
-    _startTask(args.action)
+    _startTask(args.action, _route.getControlledActor())
   end
 end
 
@@ -233,14 +233,11 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
 end
 
-_ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
-  local controlled_actor = _route.getControlledActor()
-  if not controlled_actor:hasOpenPack() then
-    SWITCHER.push(GS.OPEN_PACK, controlled_actor)
-    local args = coroutine.yield(_task)
-    _useAction(DEFS.ACTION.RECEIVE_PACK,
-               { consumed = args.consumed, pack = args.pack })
-  end
+_ACTION[DEFS.ACTION.RECEIVE_PACK] = function(from_actor)
+  SWITCHER.push(GS.OPEN_PACK, from_actor:getSpec('collection'))
+  local args = coroutine.yield(_task)
+  _useAction(DEFS.ACTION.RECEIVE_PACK,
+             { consumed = args.consumed, pack = args.pack })
 end
 
 _ACTION[DEFS.ACTION.IDLE] = function()

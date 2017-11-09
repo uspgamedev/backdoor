@@ -28,8 +28,8 @@ function state:init()
   }
 end
 
-function state:enter(from, actor)
-  _pack = PACK.generatePackFrom(actor:getSpec('collection'))
+function state:enter(from, collection)
+  _pack = PACK.generatePackFrom(collection)
   _view = PackView("UP")
   if #_pack > 0 then
     CONTROLS.setMap(_mapping)
