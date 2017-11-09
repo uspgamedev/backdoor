@@ -225,7 +225,6 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("open_action_menu", _openActionMenu)
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
   CONTROL.setMap(_mapped_signals)
 end
@@ -312,6 +311,8 @@ function state:update(dt)
       _startTask(DEFS.ACTION.IDLE)
     elseif INPUT.actionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
+    elseif INPUT.actionPressed('EXTRA') then
+      return _openActionMenu()
     end
 
     if _next_action then
