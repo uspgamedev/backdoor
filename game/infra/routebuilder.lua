@@ -45,7 +45,8 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
     buffer = _simpleBuffer(),
     hand_limit = 5,
-    hand = {}
+    hand = {},
+    prizes = {},
   }
 end
 

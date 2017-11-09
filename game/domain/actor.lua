@@ -34,6 +34,7 @@ function Actor:init(spec_name)
   self.playpoints = 10
 
   self.buffer = {}
+  self.prizes = {}
 
 end
 
@@ -44,6 +45,7 @@ function Actor:loadState(state)
   self.exp = state.exp
   self.playpoints = state.playpoints
   self.upgrades = state.upgrades
+  self.prizes = state.prizes
   self.hand_limit = state.hand_limit
   self.hand = {}
   for _,card_state in ipairs(state.hand) do
@@ -77,6 +79,7 @@ function Actor:saveState()
   state.exp = self.exp
   state.playpoints = self.playpoints
   state.upgrades = self.upgrades
+  state.prizes = self.prizes
   state.hand_limit = self.hand_limit
   state.hand = {}
   for _,card in ipairs(self.hand) do
@@ -283,6 +286,14 @@ end
 function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
   self.exp = self.exp + DEFS.CONSUME_EXP
+end
+
+function Actor:addPrizePack(collection)
+  table.insert(self.prizes, collection)
+end
+
+function Actor:getNextPrizePack()
+  return #self.prizes > 0 and table.remove(self.prizes, 1)
 end
 
 --[[ Turn methods ]]--

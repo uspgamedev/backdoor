@@ -251,5 +251,9 @@ function Body:heal(amount)
   self.damage = math.max(0, self.damage - amount)
 end
 
+function Body:getKiller()
+  return self.killer
+end
+
 return Body
 
