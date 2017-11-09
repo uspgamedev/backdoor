@@ -1,15 +1,15 @@
 {
   "desc":"A piece of disgusting gooey stuff.",
+  "set":"slime_loot",
   "attr":"ARC",
-  "set":"loot",
   "pp":2,
   "name":"Goo",
   "art":{
-    "cost":3,
     "art_ability":{
       "params":[],
       "operators":[],
       "effects":[]
-    }
+    },
+    "cost":3
   }
 }
