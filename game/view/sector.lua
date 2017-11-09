@@ -141,8 +141,13 @@ function SectorView:draw()
   if self.fov then
     for i = 1, sector.h do
       for j = 1, sector.w do
-        if not self.fov[i][j] then
-          local alpha = 255 --(1-self.fov[i][j])*255
+        if not self.fov[i][j] then --Never seen
+          local alpha = 255
+          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+          g.setColor(0,0,0,alpha)
+          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
+        elseif self.fov[i][j] == 0 then --Seen once but invisible now
+          local alpha = 180
           local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
           g.setColor(0,0,0,alpha)
           g.rectangle("fill", x, y, _TILE_W, _TILE_H)
@@ -166,6 +171,8 @@ function SectorView:draw()
         if tile.type == SCHEMATICS.WALL then
           if self.fov and not self.fov[i+1][j+1] then
             _tall_batch:setColor(0, 0, 0, 255)
+          elseif self.fov and self.fov[i+1][j+1] == 0 then
+            _tall_batch:setColor(0, 0, 0, 180)
           else
             _tall_batch:setColor(255, 255, 255, 255)
           end
@@ -228,31 +235,37 @@ function SectorView:draw()
     -- Draw dem bodies
     for _, bodyinfo in ipairs(draw_bodies) do
       local body, x, y = unpack(bodyinfo)
-      local id = body:getId()
-      local draw_sprite = self.body_sprites[id]
-      if not draw_sprite then
-        local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-        draw_sprite = RES.loadSprite(idle)
-        self.body_sprites[id] = draw_sprite
-      end
-      local di, dj = unpack(self.vfx.offset[body] or {0,0})
-      local dx, dy = dj*_TILE_W, di*_TILE_H
-      x, y = x+dx, y+dy
-      g.push()
-      g.setColor(COLORS.NEUTRAL)
-      draw_sprite(x, dy)
+      local i,j = body:getPos()
 
-      -- HP
-      g.translate(x, dy)
-      local hp_percent = body:getHP()/body:getMaxHP()
-      g.setColor(0, 20, 0)
-      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48, _HEALTHBAR_WIDTH,
-                  _HEALTHBAR_HEIGHT)
-      local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
-      g.setColor(HSV(unpack(hsvcol)))
-      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
-                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-      g.pop()
+      --Draw only bodies if player is seeing them
+      if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+
+        local id = body:getId()
+        local draw_sprite = self.body_sprites[id]
+        if not draw_sprite then
+          local idle = DB.loadSpec('appearance', body:getAppearance()).idle
+          draw_sprite = RES.loadSprite(idle)
+          self.body_sprites[id] = draw_sprite
+        end
+        local di, dj = unpack(self.vfx.offset[body] or {0,0})
+        local dx, dy = dj*_TILE_W, di*_TILE_H
+        x, y = x+dx, y+dy
+        g.push()
+        g.setColor(COLORS.NEUTRAL)
+        draw_sprite(x, dy)
+
+        -- HP
+        g.translate(x, dy)
+        local hp_percent = body:getHP()/body:getMaxHP()
+        g.setColor(0, 20, 0)
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48, _HEALTHBAR_WIDTH,
+                    _HEALTHBAR_HEIGHT)
+        local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
+        g.setColor(HSV(unpack(hsvcol)))
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+                    hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+        g.pop()
+      end
     end
 
     g.translate(0, _TILE_H)

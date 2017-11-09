@@ -15,6 +15,18 @@ local projectTile
 
 local funcs = {}
 
+
+function funcs.purgeActorFov(actor, sector)
+  local w, h = sector:getDimensions()
+  actor.fov = actor.fov or {}
+  for i = 1, h do
+    actor.fov[i] = actor.fov[i] or {}
+    for j = 1, w do
+        actor.fov[i][j] = false --Invisible and not seen
+    end
+  end
+end
+
 --Reset actor field of view based on a given sector
 function funcs.resetActorFov(actor, sector)
 
@@ -23,7 +35,9 @@ function funcs.resetActorFov(actor, sector)
   for i = 1, h do
     actor.fov[i] = actor.fov[i] or {}
     for j = 1, w do
-      actor.fov[i][j] = false --Invisible
+      if actor.fov[i][j] then
+        actor.fov[i][j] = 0 --Invisible but seen
+      end
     end
   end
 
@@ -68,15 +82,19 @@ function updateOctant(actor, sector, octant)
       if not sector:isInside(pos[1],pos[2]) then break end
 
       if full_shadow then
-        actor.fov[pos[1]][pos[2]] = false --Tile is not visible at all
+        if actor.fov[pos[1]][pos[2]] then --Was seen once
+          actor.fov[pos[1]][pos[2]] = 0 --Make it invisible
+        end
       else
         --Set visibility of tile
         local projection = projectTile(row, col)
-        local visible = not visibilityOfShadow(line, projection)
-        actor.fov[pos[1]][pos[2]] = visible
+        local visible = 1 - visibilityOfShadow(line, projection)
+        if actor.fov[pos[1]][pos[2]] or visible == 1  then
+          actor.fov[pos[1]][pos[2]] = visible
+        end
 
         --Add any wall tiles to the shadow line
-        if visible and
+        if visible == 1 and
            sector.tiles[pos[1]][pos[2]] and
            sector.tiles[pos[1]][pos[2]].type == SCHEMATICS.WALL then
               addProjection(line, projection)
@@ -131,24 +149,26 @@ end
 -- returns the ratio other shadow is covered
 function shadowContainsAnother(shadow, other_shadow)
 
+  --Is completly contained
   if other_shadow.finish <= shadow.finish and
      other_shadow.start >= shadow.start then
-       return true
+       return 1
   else
-    return false
+       return 0
   end
+
 end
 
 --Returns how visible is a projection given a line of shadows
 --From 0 (visible) to 1 (not visible)
 function visibilityOfShadow(shadow_line, projection)
     for _,shadow in ipairs(shadow_line.shadow_list) do
-      if shadowContainsAnother(shadow, projection) then
-        return true
+      if shadowContainsAnother(shadow, projection) == 1 then
+        return 1
       end
     end
 
-    return false
+    return 0
 end
 
 function addProjection(line, projection)

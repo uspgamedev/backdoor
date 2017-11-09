@@ -304,7 +304,7 @@ function Sector:putActor(actor, i, j)
     oldsector:removeActor(actor)
   end
   self:putBody(body, i, j)
-  actor:resetFov(self) --Update sector fov map to current sector dimensions
+  actor:purgeFov(self) --Update sector fov map to current sector dimensions
   return table.insert(self.actors, actor)
 end
 

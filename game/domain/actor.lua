@@ -38,7 +38,7 @@ function Actor:init(spec_name)
   self.playpoints = 10
 
   self.fov = {}
-  self.fov_range = 6
+  self.fov_range = 8
 
   self.buffer = {}
   self.prizes = {}
@@ -301,6 +301,10 @@ end
 
 function Actor:getNextPrizePack()
   return #self.prizes > 0 and table.remove(self.prizes, 1)
+end
+
+function Actor:purgeFov(sector)
+  Visibility.purgeActorFov(self,sector)
 end
 
 function Actor:resetFov(sector)
