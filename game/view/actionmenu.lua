@@ -30,7 +30,6 @@ local _DRAWHAND = 4
 
 -- LOCAL VARIABLES -------------------------------------------------------------
 
-local _enter_tween = { enter = 0, tween = false, currentview = false }
 local _font
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
@@ -48,6 +47,7 @@ function ActionMenu:init()
   ELEMENT.init(self)
   self.current = 1
   self.switch = 0
+  self.enter = 0
   self.text = 0
   _W, _H = love.graphics.getDimensions()
   _font = _font or FONT.get("Text", 32)
@@ -69,8 +69,7 @@ end
 function ActionMenu:hideLabel()
   self:removeTimer(_TWEEN.TEXT, MAIN_TIMER)
   self:addTimer(_TWEEN.TEXT, MAIN_TIMER, "tween",
-                0.05 * self.text, self, { text = 0 }, 'linear',
-                function () self:destroy() end)
+                0.05 * self.text, self, { text = 0 }, 'linear')
 end
 
 function ActionMenu:moveFocus(dir)
@@ -98,35 +97,28 @@ function ActionMenu:getSelected()
 end
 
 function ActionMenu:open(last_focus)
-  if _enter_tween.tween or _enter_tween.currentview then
-    MAIN_TIMER:cancel(_enter_tween.tween)
-    _enter_tween.currentview.invisible = true
-  end
-  _enter_tween.currentview = self
-  _enter_tween.tween = MAIN_TIMER:tween(0.3, _enter_tween, { enter = 1 },
-                                        'out-circ', function()
-                                          _enter_tween.tween = false
-                                        end
+  self.invisible = false
+  self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
+  self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween", 0.3,
+                self, { enter = 1 }, 'out-circ'
   )
   self.current = last_focus or self.current
   self:showLabel()
 end
 
 function ActionMenu:close()
-  if _enter_tween.tween then MAIN_TIMER:cancel(_enter_tween.tween) end
-  _enter_tween.tween = MAIN_TIMER:tween(0.3, _enter_tween, { enter = 0 },
-                                        'out-circ', function()
-                                          _enter_tween.tween = false
-                                          _enter_tween.currentview = false
-                                          self.invisible = true
-                                        end
+  self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
+  self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween", 0.3,
+                self, { enter = 0 }, 'out-circ', function()
+                  self.invisible = true
+                end
   )
   self:hideLabel()
 end
 
 function ActionMenu:draw()
   local g = love.graphics
-  local enter = _enter_tween.enter
+  local enter = self.enter
   local switch = self.switch
   local cos, sin, pi = math.cos, math.sin, math.pi
   local min, max, abs = math.min, math.max, math.abs
