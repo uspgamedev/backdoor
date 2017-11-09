@@ -172,7 +172,7 @@ function SectorView:draw()
           if self.fov and not self.fov[i+1][j+1] then
             _tall_batch:setColor(0, 0, 0, 255)
           elseif self.fov and self.fov[i+1][j+1] == 0 then
-            _tall_batch:setColor(0, 0, 0, 180)
+            _tall_batch:setColor(100, 100, 100, 255)
           else
             _tall_batch:setColor(255, 255, 255, 255)
           end
