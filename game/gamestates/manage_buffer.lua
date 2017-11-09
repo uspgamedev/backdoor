@@ -39,6 +39,7 @@ function state:enter(from, actor)
 end
 
 function state:leave()
+  CONTROLS.setMap()
   _view:close()
   _view = nil
 end

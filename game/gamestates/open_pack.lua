@@ -41,6 +41,7 @@ function state:enter(from, collection)
 end
 
 function state:leave()
+  CONTROLS.setMap()
   _leave = false
   _view:close()
   _view = nil
