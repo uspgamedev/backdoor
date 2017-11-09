@@ -1,14 +1,14 @@
 {
-  "name":"Demon's Agony",
   "cards":[{
-      "drop":80,
-      "set":"demon_loot"
+      "set":"demon_loot",
+      "drop":80
     },{
-      "drop":50,
-      "set":"conjuring_spells"
+      "set":"conjuring_spells",
+      "drop":50
     },{
-      "drop":50,
-      "set":"conjuring_spells"
+      "set":"conjuring_spells",
+      "drop":50
     }],
+  "name":"Demon's Agony",
   "description":"A demon's remains."
 }

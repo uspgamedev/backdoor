@@ -1,15 +1,15 @@
 {
   "desc":"A broken piece of demon horn.\nNo use whatsoever.",
+  "set":"demon_loot",
   "attr":"ARC",
-  "set":"loot",
   "pp":1,
   "name":"Broken Horn",
   "art":{
-    "cost":3,
     "art_ability":{
       "params":[],
       "operators":[],
       "effects":[]
-    }
+    },
+    "cost":3
   }
 }
