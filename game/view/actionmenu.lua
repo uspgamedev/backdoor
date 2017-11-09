@@ -10,15 +10,16 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'primary', 'widget', 'drawhand', 'managebuffer', 'openpack', 'wait',
+  'interact', 'use_signature', 'activate_widget', 'draw_new_hand',
+  'consume_cards_from_buffer', 'receive_pack', 'idle',
   interact = "Interact",
-  primary = "Primary Arte",
-  widget = "Use Widget",
-  playcard = "Play Card",
-  managebuffer = "Manage Back Buffer",
-  drawhand = "Draw New Hand\n(-"..DEFS.ACTION.NEW_HAND_COST.." PP)",
-  openpack = "Open Card Pack",
-  wait = "Wait"
+  use_signature = "Signature Ability",
+  activate_widget = "Use Widget",
+  play_card = "Play Card",
+  consume_cards_from_buffer = "Manage Back Buffer",
+  draw_new_hand = "Draw New Hand\n(-"..DEFS.ACTION.NEW_HAND_COST.." PP)",
+  receive_pack = "Open Card Pack",
+  idle = "Wait"
 }
 local _TWEEN = {
   OPEN_CLOSE = "__OPEN_CLOSE__",
