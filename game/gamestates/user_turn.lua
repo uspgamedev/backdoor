@@ -182,6 +182,10 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   end
 end
 
+_ACTION[DEFS.ACTION.IDLE] = function()
+  _useAction(DEFS.ACTION.IDLE)
+end
+
 local function _move(dir)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
@@ -191,12 +195,6 @@ local function _move(dir)
   i, j = i+dir[1], j+dir[2]
   if current_sector:isValid(i,j) then
     _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
-  end
-end
-
-local function _wait()
-  if not _next_action then
-    _useAction(DEFS.ACTION.IDLE)
   end
 end
 
@@ -230,7 +228,6 @@ function _registerSignals()
   Signal.register("open_action_menu", _openActionMenu)
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
-  Signal.register("wait", _wait)
   CONTROL.setMap(_mapped_signals)
 end
 
@@ -312,6 +309,8 @@ function state:update(dt)
 
     if INPUT.actionPressed('CONFIRM') then
       return _startTask(DEFS.ACTION.INTERACT)
+    elseif INPUT.actionPressed('CANCEL') then
+      return _startTask(DEFS.ACTION.IDLE)
     end
 
     if _next_action then
