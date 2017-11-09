@@ -304,6 +304,7 @@ function Sector:putActor(actor, i, j)
     oldsector:removeActor(actor)
   end
   self:putBody(body, i, j)
+  actor:purgeFov(self) --Update sector fov map to current sector dimensions
   return table.insert(self.actors, actor)
 end
 
@@ -409,6 +410,7 @@ function _turnLoop(self, ...)
       actor = table.remove(actors_queue)
 
       actor:tick()
+      actor:updateFov(self)
       while actor:ready() do
         actor:makeAction(self)
         manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)

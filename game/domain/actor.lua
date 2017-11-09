@@ -7,6 +7,10 @@ local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
+local PLACEMENTS  = require 'domain.definitions.placements'
+local PACK        = require 'domain.pack'
+local Visibility  = require 'common.visibility'
+
 local Actor = Class{
   __includes = { GameElement }
 }
@@ -32,6 +36,9 @@ function Actor:init(spec_name)
   }
   self.exp = 0
   self.playpoints = 10
+
+  self.fov = {}
+  self.fov_range = 8
 
   self.buffer = {}
   self.prizes = {}
@@ -296,6 +303,18 @@ function Actor:getNextPrizePack()
   return #self.prizes > 0 and table.remove(self.prizes, 1)
 end
 
+function Actor:purgeFov(sector)
+  Visibility.purgeActorFov(self,sector)
+end
+
+function Actor:resetFov(sector)
+  Visibility.resetActorFov(self,sector)
+end
+
+function Actor:updateFov(sector)
+  Visibility.updateFov(self,sector)
+end
+
 --[[ Turn methods ]]--
 
 function Actor:tick()
@@ -343,4 +362,3 @@ function Actor:getPP()
 end
 
 return Actor
-
