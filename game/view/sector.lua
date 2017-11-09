@@ -180,10 +180,14 @@ function SectorView:draw()
                           0, 1, 1, unpack(_tile_offset[tile.type]))
         elseif self.cursor then
           if self.cursor.range_checker(i+1, j+1) then
-            table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {100, 200, 200, 100}})
+            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
+              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {100, 200, 200, 100}})
+            end
           end
           if self.cursor.validator(i+1, j+1) then
-            table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {200, 200, 100, 100}})
+            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
+              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {200, 200, 100, 100}})
+            end
           end
         end
         if body then
