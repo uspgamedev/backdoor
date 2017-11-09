@@ -227,7 +227,6 @@ local function _makeSignalHandler(callback)
 end
 
 function _registerSignals()
-  Signal.register("interact", _makeSignalHandler(_interact))
   Signal.register("open_action_menu", _openActionMenu)
   Signal.register("primary", _makeSignalHandler(_usePrimaryAction))
   Signal.register("pause", _makeSignalHandler(_saveAndQuit))
@@ -307,8 +306,12 @@ function state:update(dt)
 
     for _,dir in ipairs(DIR) do
       if INPUT.actionPressed(dir:upper()) then
-        _move(dir)
+        return _move(dir)
       end
+    end
+
+    if INPUT.actionPressed('CONFIRM') then
+      return _startTask(DEFS.ACTION.INTERACT)
     end
 
     if _next_action then
