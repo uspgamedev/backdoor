@@ -3,10 +3,10 @@
   "ath":8,
   "initial_buffer":[{
       "amount":2,
-      "card":"draw"
+      "card":"meditate"
     },{
-      "card":"armor",
-      "amount": 1
+      "amount":1,
+      "card":"armor"
     },{
       "amount":2,
       "card":"sord"
