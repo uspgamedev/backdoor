@@ -19,7 +19,6 @@ local _next_action
 local _view
 
 local _save_and_quit
-local _exit_sector
 
 local _ACTION = {}
 
@@ -33,7 +32,6 @@ local function _useAction(action_slot, params)
   local param = ACTION.pendingParam(action_slot, controlled_actor,
                                     current_sector, params)
   while param do
-    print("pending param", param.output, param.typename)
     if param.typename == 'choose_target' then
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
@@ -78,18 +76,6 @@ local function _useAction(action_slot, params)
   return true
 end
 
-local function _move(dir)
-  local current_sector = _route.getCurrentSector()
-  local controlled_actor = _route.getControlledActor()
-  local i, j = controlled_actor:getPos()
-
-  dir = DIR[dir]
-  i, j = i+dir[1], j+dir[2]
-  if current_sector:isValid(i,j) then
-    _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
-  end
-end
-
 local function _resumeTask(...)
   if _task then
     local _
@@ -120,7 +106,6 @@ function state:enter(_, route, view)
 
   _route = route
   _save_and_quit = false
-  _exit_sector = false
 
   _view = view
   _view.hand:reset()
@@ -141,7 +126,6 @@ function state:update(dt)
   end
 
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
-  if _exit_sector then return SWITCHER.pop("EXIT_SECTOR") end
 
   _view.sector:lookAt(_route.getControlledActor())
 
@@ -155,7 +139,7 @@ function state:update(dt)
 
   for _,dir in ipairs(DIR) do
     if INPUT.actionPressed(dir:upper()) then
-      return _move(dir)
+      return _startTask(DEFS.ACTION.MOVE, dir)
     end
   end
 
@@ -192,6 +176,19 @@ function state:keypressed(key)
 end
 
 --[[ Action functions ]]--
+
+_ACTION[DEFS.ACTION.MOVE] = function (dir)
+  local current_sector = _route.getCurrentSector()
+  local controlled_actor = _route.getControlledActor()
+  local i, j = controlled_actor:getPos()
+
+  dir = DIR[dir]
+  i, j = i+dir[1], j+dir[2]
+  if current_sector:isValid(i,j) then
+    _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
+  end
+end
+
 
 _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
