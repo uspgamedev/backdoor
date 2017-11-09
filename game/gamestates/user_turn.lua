@@ -18,25 +18,12 @@ local _route
 local _next_action
 local _view
 
-local _status_hud
 local _save_and_quit
 local _exit_sector
 
 local _ACTION = {}
 
 --LOCAL FUNCTIONS--
-
-local function _showHUD()
-  _view.actor:show()
-end
-
-local function _hideHUD()
-  _view.actor:hide()
-end
-
-local function _openActionMenu()
-  SWITCHER.push(GS.ACTION_MENU, _route)
-end
 
 local function _useAction(action_slot, params)
   if not ACTION.exists(action_slot) then return false end
@@ -103,10 +90,6 @@ local function _move(dir)
   end
 end
 
-local function _saveAndQuit()
-  _save_and_quit = true
-end
-
 local function _resumeTask(...)
   if _task then
     local _
@@ -121,6 +104,14 @@ local function _startTask(action, ...)
     _task = coroutine.create(callback)
     return _resumeTask(...)
   end
+end
+
+local function _showHUD()
+  _view.actor:show()
+end
+
+local function _hideHUD()
+  _view.actor:hide()
 end
 
 --STATE FUNCTIONS--
@@ -156,12 +147,10 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if _status_hud and not INPUT.isDown("ACTION_4") then
-    _status_hud = false
-    _hideHUD()
-  elseif not _statusHUD and INPUT.isDown("ACTION_4") then
-    _status_hud = true
+  if INPUT.isDown("ACTION_4") then
     _showHUD()
+  else
+    _hideHUD()
   end
 
   for _,dir in ipairs(DIR) do
@@ -177,9 +166,10 @@ function state:update(dt)
   elseif INPUT.actionPressed('SPECIAL') then
     _startTask(DEFS.ACTION.USE_SIGNATURE)
   elseif INPUT.actionPressed('EXTRA') then
-    return _openActionMenu()
+    return SWITCHER.push(GS.ACTION_MENU, _route)
   elseif INPUT.actionPressed('PAUSE') then
-    return _saveAndQuit()
+    _save_and_quit = true
+    return
   end
 
   if _next_action then
