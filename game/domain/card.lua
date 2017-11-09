@@ -117,6 +117,10 @@ function Card:getWidgetCharges()
   return self:getSpec('widget').charges
 end
 
+function Card:resetUsages()
+  self.usages = 0
+end
+
 function Card:addUsages(n)
   self.usages = self.usages + (n or 1)
 end

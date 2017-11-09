@@ -1,0 +1,41 @@
+{
+  "attr":"ATH",
+  "widget":{
+    "operators":[],
+    "trigger":"on_turn",
+    "activation":{
+      "ability":{
+        "params":[],
+        "operators":[{
+            "typename":"self",
+            "output":"self"
+          },{
+            "typename":"get_attribute",
+            "output":"ath",
+            "which":"ATH"
+          },{
+            "typename":"dice_throw",
+            "rolls":"val:ath",
+            "output":"heal_amount",
+            "sides":4
+          },{
+            "typename":"get_actor_body",
+            "output":"target",
+            "actor":"val:self"
+          }],
+        "effects":[{
+            "typename":"heal",
+            "target":"val:target",
+            "amount":"val:heal_amount"
+          }]
+      }
+    },
+    "charges":12
+  },
+  "desc":"You soothe your muscles to regenerate HP over time.",
+  "upgrade":false,
+  "set":"ath",
+  "pp":3,
+  "name":"Meditate",
+  "one_time":false
+}

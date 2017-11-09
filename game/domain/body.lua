@@ -152,7 +152,7 @@ function Body:equip(place, card)
     end
     local card = self:removeWidget(index)
     local owner = card:getOwner()
-    if owner and not card:isOneTimeOnly() then
+    if owner then
       owner:addCardToBackbuffer(card)
     end
   end
@@ -172,8 +172,12 @@ end
 function Body:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
+  local owner = card:getOwner()
   self:unequip(placement)
   table.remove(self.widgets, index)
+  if owner and not card:isOneTimeOnly() then
+    owner:addCardToBackbuffer(card)
+  end
   return card
 end
 
@@ -197,6 +201,7 @@ function Body:spendWidget(index)
   if card then
     card:addUsages()
     if card:isSpent() then
+      card:resetUsages()
       return self:removeWidget(index)
     end
   end
