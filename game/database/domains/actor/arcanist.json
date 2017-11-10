@@ -1,6 +1,5 @@
 {
   "extends":"sentient",
-  "arc":8,
   "initial_buffer":[{
       "amount":2,
       "card":"draw"
@@ -14,6 +13,9 @@
       "amount":4,
       "card":"arc_1"
     }],
+  "arc":4,
+  "ath":-4,
+  "mec":-4,
   "name":"Arcanist",
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
 }

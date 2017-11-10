@@ -1,10 +1,10 @@
 {
-  "ath":4,
+  "ath":-4,
   "behavior":"aggro",
-  "mec":2,
-  "arc":2,
+  "mec":-4,
+  "arc":-4,
   "collection":"ooze",
-  "spd":1,
+  "spd":-2,
   "signature":"MELEE",
   "name":"Dumb",
   "description":"Oh honey..."

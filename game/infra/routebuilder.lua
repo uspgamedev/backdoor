@@ -35,7 +35,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     cooldown = 10,
     exp = 0,
     playpoints = 10,
-    upgrades = {ATH=0,ARC=0,MEC=0,SPD=0},
+    upgrades = {ATH=100,ARC=100,MEC=100,SPD=100},
     buffer = _simpleBuffer(background),
     hand_limit = 5,
     hand = {},
@@ -48,7 +48,7 @@ local function _generatePlayerBodyData(idgenerator, species)
     id = idgenerator.newID(),
     specname = species,
     damage = 0,
-    upgrades = {DEF=0,HP=0},
+    upgrades = {DEF=100,VIT=100},
     i = 3,
     j = 5,
     equipped = {

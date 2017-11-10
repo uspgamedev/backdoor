@@ -29,6 +29,12 @@ function Actor:init(spec_name)
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
+    ATH = 100,
+    ARC = 100,
+    MEC = 100,
+    SPD = 100,
+  }
+  self.attr_lv = {
     ATH = 0,
     ARC = 0,
     MEC = 0,
@@ -43,6 +49,10 @@ function Actor:init(spec_name)
   self.buffer = {}
   self.prizes = {}
 
+  self:updateAttr('ATH')
+  self:updateAttr('ARC')
+  self:updateAttr('MEC')
+  self:updateAttr('SPD')
 end
 
 function Actor:loadState(state)
@@ -52,6 +62,7 @@ function Actor:loadState(state)
   self.exp = state.exp
   self.playpoints = state.playpoints
   self.upgrades = state.upgrades
+  self.attr_lv = {}
   self.prizes = state.prizes
   self.hand_limit = state.hand_limit
   self.hand = {}
@@ -75,6 +86,10 @@ function Actor:loadState(state)
     end
     self.buffer[i] = card
   end
+  self:updateAttr('ATH')
+  self:updateAttr('ARC')
+  self:updateAttr('MEC')
+  self:updateAttr('SPD')
 end
 
 function Actor:saveState()
@@ -126,11 +141,22 @@ function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end
 
+function Actor:getAttrLevel(which)
+  return self.attr_lv[which]
+end
+
 function Actor:getAttribute(which)
   return self:getBody()
-             :applyStaticOperators(which,
-                                   self:getSpec(which:lower()) +
-                                   self.upgrades[which])
+             :applyStaticOperators(which, self:getAttrLevel(which))
+end
+
+function Actor:updateAttr(which)
+  self.attr_lv[which] = DEFS.APT.ATTR_LEVEL(self, which)
+end
+
+function Actor:upgradeAttr(which, amount)
+  self.upgrades[which] = self.upgrades[which] + amount
+  self:updateAttr(which)
 end
 
 function Actor:getATH()
@@ -138,7 +164,7 @@ function Actor:getATH()
 end
 
 function Actor:upgradeATH(n)
-  self.upgrades.ATH = self.upgrades.ATH + n
+  self:upgradeAttr('ATH', n)
 end
 
 function Actor:getARC()
@@ -146,7 +172,7 @@ function Actor:getARC()
 end
 
 function Actor:upgradeARC(n)
-  self.upgrades.ARC = self.upgrades.ARC + n
+  self:upgradeAttr('ARC', n)
 end
 
 function Actor:getMEC()
@@ -154,11 +180,15 @@ function Actor:getMEC()
 end
 
 function Actor:upgradeMEC(n)
-  self.upgrades.MEC = self.upgrades.MEC + n
+  self:upgradeAttr('MEC', n)
 end
 
 function Actor:getSPD()
   return self:getAttribute('SPD')
+end
+
+function Actor:upgradeSPD(n)
+  self:upgradeAttr('SPD', n)
 end
 
 --[[ Body methods ]]--

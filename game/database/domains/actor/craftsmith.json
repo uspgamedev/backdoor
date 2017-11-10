@@ -1,6 +1,5 @@
 {
   "extends":"sentient",
-  "mec":8,
   "initial_buffer":[{
       "amount":4,
       "card":"mec_1"
@@ -12,8 +11,11 @@
       "card":"meditate"
     },{
       "amount":4,
-      "card":"hp_5"
+      "card":"vit_1"
     }],
   "name":"Craftsmith",
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+  "ath":-4,
+  "arc":-4,
+  "mec":4
 }

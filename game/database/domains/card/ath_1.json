@@ -1,15 +1,14 @@
 {
   "attr":"ATH",
-  "desc":"Upgrades your Athletics attribute by 1.",
+  "desc":"Upgrades your Athletics attribute by 10.",
   "upgrade":{
     "cost":2,
     "actor_list":[{
         "attr":"ATH",
-        "val":1
+        "val":10
       }],
     "body_list":[]
   },
   "type":"UPGRADE",
-  "art_action":"ATH +1",
-  "name":"ATH +1"
+  "name":"ATH +10"
 }
