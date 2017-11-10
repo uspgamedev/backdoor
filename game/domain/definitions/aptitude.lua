@@ -16,5 +16,9 @@ function APT.ATTR_LEVEL(owner, which)
   return lv-1
 end
 
+function APT.VIT2HP(vit)
+  return 20 + vit * vit - vit
+end
+
 return APT
 

@@ -14,10 +14,15 @@ return function (actor)
     if changed then
       actor:getBody():setHP(newhp)
     end
+    IMGUI.Separator()
     IMGUI.Text(("ATH: %d"):format(actor:getATH()))
     IMGUI.Text(("ARC: %d"):format(actor:getARC()))
     IMGUI.Text(("MEC: %d"):format(actor:getMEC()))
     IMGUI.Text(("SPD: %d"):format(actor:getSPD()))
+    IMGUI.Separator()
+    IMGUI.Text(("VIT: %d"):format(actor:getBody():getVIT()))
+    IMGUI.Text(("DEF: %d"):format(actor:getBody():getDEF()))
+    IMGUI.Text(("DEFDIE: d%d"):format(actor:getBody():getBaseDEF()))
   end
 
 end

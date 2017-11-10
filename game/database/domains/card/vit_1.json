@@ -2,12 +2,12 @@
   "attr":"ATH",
   "upgrade":{
     "body_list":[{
-        "attr":"HP",
-        "val":5
+        "attr":"VIT",
+        "val":10
       }],
     "actor_list":[],
     "cost":2
   },
-  "desc":"Upgrades your Max HP by 5.",
-  "name":"HP +5"
+  "desc":"Upgrades your Vitality by 10.",
+  "name":"VIT +10"
 }

@@ -2,6 +2,7 @@
 local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
 local PLACEMENTS  = require 'domain.definitions.placements'
+local APT         = require 'domain.definitions.aptitude'
 local GameElement = require 'domain.gameelement'
 
 local Body = Class{
@@ -22,17 +23,24 @@ function Body:init(specname)
     self.equipped[placement] = false
   end
   self.upgrades = {
+    DEF = 100,
+    VIT = 100,
+  }
+  self.attr_lv = {
     DEF = 0,
-    HP = 0,
+    VIT = 0,
   }
   self.sector_id = nil
 
+  self:updateAttr('DEF')
+  self:updateAttr('VIT')
 end
 
 function Body:loadState(state)
   self.damage = state.damage
   self.killer = state.killer
   self.upgrades = state.upgrades
+  self.attr_lv = {}
   self.sector_id = state.sector_id
   self:setId(state.id)
   self.equipped = state.equipped
@@ -44,6 +52,8 @@ function Body:loadState(state)
       self.widgets[index] = card
     end
   end
+  self:updateAttr('DEF')
+  self:updateAttr('VIT')
 end
 
 function Body:saveState()
@@ -81,10 +91,21 @@ end
 
 --[[ Attribute getter ]]--
 
+function Body:getAttrLevel(which)
+  return self.attr_lv[which]
+end
+
 function Body:getAttribute(which)
-  return self:applyStaticOperators(which,
-                                   self:getSpec(which:lower()) +
-                                   self.upgrades[which])
+  return self:applyStaticOperators(which, self:getAttrLevel(which))
+end
+
+function Body:updateAttr(which)
+  self.attr_lv[which] = APT.ATTR_LEVEL(self, which)
+end
+
+function Body:upgradeAttr(which, amount)
+  self.upgrades[which] = self.upgrades[which] + amount
+  self:updateAttr(which)
 end
 
 --[[ Appearance methods ]]--
@@ -95,16 +116,20 @@ end
 
 --[[ HP methods ]]--
 
+function Body:getVIT()
+  return self:getAttribute('VIT')
+end
+
 function Body:getHP()
   return self:getMaxHP() - self.damage
 end
 
 function Body:getMaxHP()
-  return self:getAttribute('HP')
+  return APT.VIT2HP(self:getAttribute('VIT'))
 end
 
-function Body:upgradeHP(val)
-  self.upgrades.HP = self.upgrades.HP + val
+function Body:upgradeVIT(val)
+  self:upgradeAttr('VIT', val)
 end
 
 function Body:isDead()
@@ -130,7 +155,7 @@ function Body:getBaseDEF()
 end
 
 function Body:upgradeDEF(val)
-  self.upgrades.DEF = self.upgrades.DEF + val
+  self:upgradeAttr('DEF', val)
 end
 
 --[[ Widget methods ]]--
