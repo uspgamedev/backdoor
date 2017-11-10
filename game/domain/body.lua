@@ -6,6 +6,8 @@ local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
 local GameElement = require 'domain.gameelement'
 
+local _EMPTY = {}
+
 local Body = Class{
   __includes = { GameElement }
 }
@@ -271,11 +273,15 @@ function Body:triggerOneWidget(index, trigger, sector)
   local widget = self:getWidget(index)
   if widget:getWidgetTrigger() == trigger then
     self:spendWidget(index)
-    local ability = widget:getWidgetAutoActivationAbility()
+  end
+  local triggered_ability = widget:getWidgetTriggeredAbility() or _EMPTY
+  if triggered_ability.trigger == trigger then
+    local ability = triggered_ability.ability
     if ability then
       local owner = widget:getOwner()
-      if ABILITY.checkParams(ability, owner, sector, {}) then
-        ABILITY.execute(ability, owner, sector, {})
+      local params = {}
+      if ABILITY.checkParams(ability, owner, sector, params) then
+        ABILITY.execute(ability, owner, sector, params)
       end
     end
   end

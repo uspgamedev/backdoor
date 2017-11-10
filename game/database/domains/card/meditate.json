@@ -1,11 +1,18 @@
 {
   "attr":"ATH",
+  "one_time":false,
+  "desc":"You soothe your muscles to regenerate HP over time.",
+  "upgrade":false,
+  "set":"ath",
+  "pp":3,
+  "name":"Meditate",
   "widget":{
     "operators":[],
     "trigger":"on_turn",
     "activation":false,
     "charges":12,
     "auto_activation":{
+      "trigger":"on_turn",
       "ability":{
         "params":[],
         "operators":[{
@@ -32,11 +39,5 @@
           }]
       }
     }
-  },
-  "desc":"You soothe your muscles to regenerate HP over time.",
-  "upgrade":false,
-  "set":"ath",
-  "pp":3,
-  "name":"Meditate",
-  "one_time":false
+  }
 }
