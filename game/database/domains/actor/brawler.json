@@ -2,7 +2,7 @@
   "extends":"sentient",
   "ath":8,
   "initial_buffer":[{
-      "amount":2,
+      "amount":3,
       "card":"meditate"
     },{
       "amount":1,
@@ -17,7 +17,7 @@
       "amount":2,
       "card":"def_1"
     },{
-      "amount":2,
+      "amount":4,
       "card":"ath_1"
     }],
   "name":"Brawler",
