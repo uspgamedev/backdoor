@@ -1,16 +1,16 @@
 {
   "attr":"MEC",
-  "desc":"Equip as a Widget. One shot is hella strong.\nThe push back, however, is quite strong,\nand it may take you some time to act again\nafter shooting.",
-  "set":"guns",
   "widget":{
     "operators":[],
+    "trigger":"on_use",
     "activation":{
+      "cost":30,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":5,
+            "output":"target",
             "body-only":true,
-            "output":"target"
+            "max-range":5
           }],
         "operators":[{
             "typename":"get_attribute",
@@ -24,17 +24,18 @@
         "effects":[{
             "typename":"dmg_formula",
             "target":"val:body",
-            "attr":"val:mec",
-            "base":8
+            "base":8,
+            "attr":"val:mec"
           }]
-      },
-      "cost":30
+      }
     },
     "charges":12,
     "widget_action":"SHOOT",
     "placement":"weapon"
   },
+  "one_time":true,
+  "set":"guns",
   "pp":4,
   "name":"Gun",
-  "one_time":true
+  "desc":"Equip as a Widget. One shot is hella strong.\nThe push back, however, is quite strong,\nand it may take you some time to act again\nafter shooting."
 }
