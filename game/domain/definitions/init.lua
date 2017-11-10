@@ -1,13 +1,6 @@
 
 local DEFS = {}
 
--- + [x] Xform BACKBUFFER CONSUMPTION into MANEUVER
--- + [x] Xform all basic actions into MANEUVERS
--- + [x] Smarter slots + endless widgets
--- + [x] Move widgets to body
--- + [x] Widget buffs
--- + [ ] Stashed widgets
-
 DEFS.NULL_METHOD = function() end
 DEFS.DONE = "__DONE_VALUE__"
 DEFS.DELETE = "__DELETE_VALUE__"
