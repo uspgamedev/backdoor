@@ -69,6 +69,12 @@ return {
             optional = true }
         }
       },
+      {
+        id = 'auto_activation', name = "Self-Activated Ability", type = 'section',
+        schema = {
+          { id = 'ability', name = "Ability", type = 'ability' }
+        }
+      },
     },
   }
 }

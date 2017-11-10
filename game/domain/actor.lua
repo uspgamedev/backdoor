@@ -335,7 +335,7 @@ end
 
 function Actor:makeAction(sector)
   local success = false
-  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN)
+  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN, sector)
   repeat
     local action_slot, params = self:behavior(sector)
     if ACTION.exists(action_slot) then

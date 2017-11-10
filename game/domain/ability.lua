@@ -33,6 +33,7 @@ function ABILITY.validate(param_name, sector, actor, param, value)
 end
 
 function ABILITY.checkParams(ability, actor, sector, params)
+  for k,v in pairs(ability) do print(k,v) end
   for i,parameter in ipairs(ability.params) do
     local paramspec = PAR[parameter.typename]
     if not paramspec.isValid(sector, actor, parameter,
