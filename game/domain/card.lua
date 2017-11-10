@@ -2,6 +2,8 @@
 local ABILITY     = require 'domain.ability'
 local GameElement = require 'domain.gameelement'
 
+local _EMPTY = {}
+
 local Card = Class{
   __includes = { GameElement }
 }
@@ -99,6 +101,10 @@ function Card:getWidgetActivation()
   return self:getSpec('widget')['activation']
 end
 
+function Card:getWidgetAutoActivationAbility()
+  return (self:getSpec('widget')['auto_activation'] or _EMPTY)['ability']
+end
+
 function Card:getWidgetAbility()
   local activation = self:getWidgetActivation()
   return activation and activation.ability
@@ -115,6 +121,10 @@ end
 
 function Card:getWidgetCharges()
   return self:getSpec('widget').charges
+end
+
+function Card:resetUsages()
+  self.usages = 0
 end
 
 function Card:addUsages(n)

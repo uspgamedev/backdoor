@@ -1,5 +1,6 @@
 {
   "attr":"ATH",
+  "desc":"Equip as a Widget. An ugly blunt sord.\nNo, not \"sword\". It says \"sord\" right there,\ninscribed on the hilt.",
   "set":"blades",
   "widget":{
     "operators":[],
@@ -7,8 +8,8 @@
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "output":"target",
             "body-only":true,
+            "output":"target",
             "max-range":1
           }],
         "operators":[{
@@ -33,7 +34,7 @@
     "widget_action":"MELEE",
     "placement":"weapon"
   },
-  "desc":"Equip as a Widget. An ugly blunt sord.\nNo, not \"sword\". It says \"sord\" right there,\ninscribed on the hilt.",
   "pp":4,
-  "name":"Sord"
+  "name":"Sord",
+  "one_time":true
 }
