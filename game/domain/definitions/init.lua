@@ -25,10 +25,7 @@ DEFS.TIME_UNITS_PER_CHARGE = 1 * DEFS.TIME_UNIT
 DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
 DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
-
-function DEFS.REQUIRED_ATTR_UPGRADE(apt, lv)
-  return math.ceil((15 - 1.5*apt) ^ (1 + lv/10))
-end
+DEFS.APT          = require 'domain.definitions.aptitude'
 
 return DEFS
 

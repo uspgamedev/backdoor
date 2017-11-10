@@ -151,14 +151,7 @@ function Actor:getAttribute(which)
 end
 
 function Actor:updateAttr(which)
-  local lv = 0
-  local required = 0
-  repeat
-    required = required +
-               DEFS.REQUIRED_ATTR_UPGRADE(self:getSpec(which:lower()), lv)
-    lv = lv + 1
-  until self.upgrades[which] < required
-  self.attr_lv[which] = lv-1
+  self.attr_lv[which] = DEFS.APT.ATTR_LEVEL(self, which)
 end
 
 function Actor:upgradeAttr(which, amount)
