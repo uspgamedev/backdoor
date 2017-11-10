@@ -70,8 +70,10 @@ return {
         }
       },
       {
-        id = 'auto_activation', name = "Self-Activated Ability", type = 'section',
+        id = 'auto_activation', name = "Triggered Ability", type = 'section',
         schema = {
+          { id = 'trigger', name = "Trigger", type = 'enum',
+            options = DEFS.TRIGGERS },
           { id = 'ability', name = "Ability", type = 'ability' }
         }
       },
