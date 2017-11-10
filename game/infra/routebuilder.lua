@@ -18,7 +18,6 @@ end
 local function _simpleBuffer(background)
   local buffer = {}
   for _,cardinfo in ipairs(DB.loadSpec('actor', background).initial_buffer) do
-    print(cardinfo, cardinfo.amount, cardinfo.card)
     for i=1, cardinfo.amount do
       table.insert(buffer, _card(cardinfo.card))
     end

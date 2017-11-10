@@ -20,7 +20,7 @@ function inputs.enum(spec, key)
     table.sort(_options)
   else
     _options = { _NONE }
-    for k,v in pairs(key.options) do
+    for k,v in ipairs(key.options) do
       table.insert(_options, v)
     end
   end
