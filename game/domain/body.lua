@@ -268,6 +268,15 @@ function Body:takeDamageFrom(amount, source, sector)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT, sector)
+  -- print damage formula info (uncomment for debugging)
+  --[[
+  local str = "%s is being attacked with %d damage!\n"
+              .. "> %s rolls %dd%d for %d defense points!\n"
+              .. "> %s takes %d in damage!\n"
+  local name = self:getSpec('name')
+  print(str:format(name, amount, name, self:getDEF(), self:getBaseDEF(),
+                   defroll, name, dmg))
+  --]]--
 end
 
 function Body:heal(amount)
