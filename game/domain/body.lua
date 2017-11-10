@@ -1,6 +1,7 @@
 
 local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
+local TRIGGERS    = require 'domain.definitions.triggers'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
 local GameElement = require 'domain.gameelement'
@@ -179,6 +180,7 @@ function Body:equip(place, card)
     local card = self:removeWidget(index)
     local owner = card:getOwner()
     if owner then
+      if not card:isOneTimeOnly() then card:resetUsages() end
       owner:addCardToBackbuffer(card)
     end
   end
@@ -202,6 +204,7 @@ function Body:removeWidget(index)
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
+    card:resetUsages()
     owner:addCardToBackbuffer(card)
   end
   return card
@@ -227,7 +230,6 @@ function Body:spendWidget(index)
   if card then
     card:addUsages()
     if card:isSpent() then
-      card:resetUsages()
       return self:removeWidget(index)
     end
   end
@@ -259,37 +261,45 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
-function Body:triggerWidgets(kind, sector)
-  local auto_activations = {}
-  for index,widget in ipairs(self.widgets) do
-    if widget:getWidgetTrigger() == kind then
-      local ability = widget:getWidgetAutoActivationAbility()
-      table.insert(auto_activations, ability and {
-                     ability = ability,
-                     owner = widget:getOwner()
-                   } or nil)
-      self:spendWidget(index)
+function Body:triggerWidgets(trigger, sector)
+  for index in self:eachWidget() do
+    self:triggerOneWidget(index, trigger, sector)
+  end
+end
+
+function Body:triggerOneWidget(index, trigger, sector)
+  local widget = self:getWidget(index)
+  if widget:getWidgetTrigger() == trigger then
+    self:spendWidget(index)
+    local ability = widget:getWidgetAutoActivationAbility()
+    if ability then
+      local owner = widget:getOwner()
+      if ABILITY.checkParams(ability, owner, sector, {}) then
+        ABILITY.execute(ability, owner, sector, {})
+      end
     end
   end
-  for _,activation in ipairs(auto_activations) do
-    local ability = activation.ability
-    local owner = activation.owner
-    if ABILITY.checkParams(ability, owner, sector, {}) then
-      ABILITY.execute(ability, owner, sector, {})
-    end
-  end
-  return auto_activations
 end
 
 --[[ Combat methods ]]--
 
-function Body:takeDamageFrom(source, amount)
+function Body:takeDamageFrom(amount, source, sector)
   local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
+  self:triggerWidgets(TRIGGERS.ON_HIT, sector)
+  -- print damage formula info (uncomment for debugging)
+  --[[
+  local str = "%s is being attacked with %d damage!\n"
+              .. "> %s rolls %dd%d for %d defense points!\n"
+              .. "> %s takes %d in damage!\n"
+  local name = self:getSpec('name')
+  print(str:format(name, amount, name, self:getDEF(), self:getBaseDEF(),
+                   defroll, name, dmg))
+  --]]--
 end
 
 function Body:heal(amount)

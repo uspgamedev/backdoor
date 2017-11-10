@@ -1,6 +1,7 @@
 
 local ACTIONDEFS  = require 'domain.definitions.action'
 local ABILITY     = require 'domain.ability'
+local DEFS        = require 'domain.definitions'
 local ACTIVATE   = {}
 
 ACTIVATE.param_specs = {
@@ -23,7 +24,7 @@ function ACTIVATE.perform(actor, sector, params)
   local body = actor:getBody()
   local widget = body:getWidget(params.widget_slot)
   local ability = widget:getWidgetAbility()
-  body:spendWidget(params.widget_slot)
+  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE, sector)
   actor:spendTime(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, sector, params)

@@ -8,7 +8,7 @@ FX.schema = {
 }
 
 function FX.process (actor, sector, params)
-  params.target:takeDamageFrom(actor, params.amount or 2)
+  params.target:takeDamageFrom(params.amount or 2, actor, sector)
 end
 
 return FX

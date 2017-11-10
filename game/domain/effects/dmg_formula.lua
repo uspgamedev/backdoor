@@ -14,7 +14,7 @@ FX.schema = {
 
 function FX.process (actor, sector, params)
   local amount = RANDOM.rollDice(params.base, params.attr)
-  params.target:takeDamageFrom(actor, amount)
+  params.target:takeDamageFrom(amount, actor, sector)
 end
 
 return FX

@@ -1,6 +1,5 @@
 {
   "attr":"ATH",
-  "set":"suits",
   "one_time":true,
   "widget":{
     "operators":[{
@@ -8,9 +7,11 @@
         "op":"+",
         "val":2
       }],
+    "trigger":"on_hit",
     "charges":24,
     "placement":"suit"
   },
-  "name":"Armor",
-  "desc":"Equip as widget. A heavy plate armor."
+  "desc":"Equip as widget. A heavy plate armor.",
+  "set":"suits",
+  "name":"Armor"
 }
