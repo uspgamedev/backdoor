@@ -17,6 +17,7 @@ local _task
 local _route
 local _next_action
 local _view
+local _extended_hud
 
 local _save_and_quit
 
@@ -44,6 +45,7 @@ end
 
 local function _showHUD()
   _view.actor:show()
+  
 end
 
 local function _hideHUD()
@@ -81,29 +83,39 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if INPUT.isDown("ACTION_4") then
+  if INPUT.isDown("ACTION_4") and not _extended_hud then
+    _extended_hud = true
     _showHUD()
-  else
+  elseif _extended_hud and not INPUT.isDown("ACTION_4") then
+    _extended_hud = false
     _hideHUD()
   end
 
-  for _,dir in ipairs(DIR) do
-    if INPUT.actionPressed(dir:upper()) then
-      return _startTask(DEFS.ACTION.MOVE, dir)
+  if _extended_hud then
+    if INPUT.actionPressed('UP') then
+      _view.widget:scrollUp()
+    elseif INPUT.actionPressed('DOWN') then
+      _view.widget:scrollDown()
     end
-  end
+  else
+    for _,dir in ipairs(DIR) do
+      if INPUT.actionPressed(dir:upper()) then
+        return _startTask(DEFS.ACTION.MOVE, dir)
+      end
+    end
 
-  if INPUT.actionPressed('CONFIRM') then
-    _startTask(DEFS.ACTION.INTERACT)
-  elseif INPUT.actionPressed('CANCEL') then
-    _startTask(DEFS.ACTION.IDLE)
-  elseif INPUT.actionPressed('SPECIAL') then
-    _startTask(DEFS.ACTION.USE_SIGNATURE)
-  elseif INPUT.actionPressed('EXTRA') then
-    return SWITCHER.push(GS.ACTION_MENU, _route)
-  elseif INPUT.actionPressed('PAUSE') then
-    _save_and_quit = true
-    return
+    if INPUT.actionPressed('CONFIRM') then
+      _startTask(DEFS.ACTION.INTERACT)
+    elseif INPUT.actionPressed('CANCEL') then
+      _startTask(DEFS.ACTION.IDLE)
+    elseif INPUT.actionPressed('SPECIAL') then
+      _startTask(DEFS.ACTION.USE_SIGNATURE)
+    elseif INPUT.actionPressed('EXTRA') then
+      return SWITCHER.push(GS.ACTION_MENU, _route)
+    elseif INPUT.actionPressed('PAUSE') then
+      _save_and_quit = true
+      return
+    end
   end
 
   if _next_action then
