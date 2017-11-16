@@ -6,7 +6,9 @@ local inputs = {}
 local function _makeCommon(default, call)
   return function(spec, key)
     return function(self)
-      IMGUI.Text(key.name)
+      if key.name then
+        IMGUI.Text(key.name)
+      end
       local value = spec[key.id] or default
       IMGUI.PushID(key.id)
       local changed, newvalue = call(value, key)
@@ -53,6 +55,14 @@ inputs.text = _makeCommon(
     local changed, newvalue = IMGUI.InputTextMultiline("", value, 256)
     IMGUI.PopItemWidth()
     return changed, newvalue
+  end
+)
+
+inputs.description = _makeCommon(
+  "",
+  function(value, key)
+    IMGUI.Text(key.info)
+    return false
   end
 )
 
