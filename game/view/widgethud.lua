@@ -4,6 +4,7 @@ local WIDGETVIEW = require 'view.helpers.widget'
 
 local _SCROLL_LIMIT = 5
 local _FADE = "_IN_OUT_FADE_"
+local _MOVE = "_MOVE_SCROLL_"
 local _PRIORITIES = {
   [PLACEMENTS.weapon] = 1,
   [PLACEMENTS.offhand] = 2,
@@ -13,7 +14,7 @@ local _PRIORITIES = {
   none = 6
 }
 
-local _MG = 20
+local _MG = 10
 local _WIDTH, _HEIGHT
 
 local function _initGraphicValues()
@@ -30,7 +31,8 @@ function view:init(route)
 
   self.route = route
   self.enter = 1
-  self.top = 1
+  self.focus = 0
+  self.top = 0
   self.widget_list = {}
 
   _initGraphicValues()
@@ -51,11 +53,25 @@ function view:fadeOut()
 end
 
 function view:scrollDown()
-  self.top = math.min(self.top + 1, #self.widget_list - _SCROLL_LIMIT)
+  if #self.widget_list < _SCROLL_LIMIT then return end
+  local max_top = #self.widget_list - _SCROLL_LIMIT + 1
+  self.focus = math.min(self.focus+1, max_top)
+  print("DOWN", self.focus)
+  self:removeTimer(_MOVE, MAIN_TIMER)
+  self:addTimer(_MOVE, MAIN_TIMER, "tween", .25,
+                self, { top = self.focus },
+                "out-back"
+  )
 end
 
 function view:scrollUp()
-  self.top = math.max(self.top - 1, 1)
+  self.focus = math.max(self.focus-1, 0)
+  print("UP", self.focus)
+  self:removeTimer(_MOVE, MAIN_TIMER)
+  self:addTimer(_MOVE, MAIN_TIMER, "tween", .25,
+                self, { top = self.focus },
+                "out-back"
+  )
 end
 
 function view:isValidActor()
@@ -89,12 +105,10 @@ function view:draw()
 
   if enter > 0 then
     local w = WIDGETVIEW.getWidth()
+    local h = WIDGETVIEW.getHeight() + _MG
     g.push()
-    g.translate(_WIDTH - w - 40, 120)
-    for i = self.top, math.min(_SCROLL_LIMIT, #widget_list) do
-      if not widget_list[i] then break end
-      local widget = widget_list[i]
-      local h = WIDGETVIEW.getHeight(widget)
+    g.translate(_WIDTH - w - 40, 120 - h * self.top)
+    for i, widget in ipairs(widget_list) do
       WIDGETVIEW.draw(widget, 0, 0, enter)
       g.translate(0, _MG + h)
     end

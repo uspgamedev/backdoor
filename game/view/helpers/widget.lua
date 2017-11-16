@@ -28,7 +28,7 @@ function WIDGET.draw(widget, x, y, alpha)
   _font:setLineHeight(_LH)
   _font.set()
   g.setColor(0xff, 0xff, 0xff, alpha*0xff)
-  g.printf(_fmt("%s\n%s\n%02d/%02d", widget:getName():sub(1,16),
+  g.printf(_fmt("%s\n[%s]\n%02d/%02d", widget:getName():sub(1,16),
                 widget:getWidgetTrigger():gsub("_", " "),
                 widget:getWidgetCharges() - widget:getUsages(),
                 widget:getWidgetCharges()
