@@ -10,12 +10,15 @@ return {
   { id = 'pp', name = "PlayPoint Reward", type = 'integer' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.PRIMARY_ATTRIBUTES },
+  { id = 'type-description', type = 'description',
+    info = "Cards can be either Arts, Upgrades, or Widgets" },
   {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
       { id = 'cost', name = "Cost", type = 'integer', range = {0} },
-      { id = 'art_ability', name = "Art Ability", type = 'ability' },
+      { id = 'art_ability', name = "Art Ability", type = 'ability',
+        hint = "Happens when card is played from hand" },
     }
   },
   {
@@ -67,7 +70,8 @@ return {
         schema = {
           { id = 'cost', name = "Time Cost", type = 'integer',
             range = {0} },
-          { id = 'ability', name = "Ability", type = 'ability' }
+          { id = 'ability', name = "Ability", type = 'ability',
+            hint = "Happens when widget is activated" }
         }
       },
       {
@@ -75,7 +79,8 @@ return {
         schema = {
           { id = 'trigger', name = "Trigger", type = 'enum',
             options = DEFS.TRIGGERS },
-          { id = 'ability', name = "Ability", type = 'ability' }
+          { id = 'ability', name = "Ability", type = 'ability',
+            hint = "Happens when trigger is detected" }
         }
       },
     },

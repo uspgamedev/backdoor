@@ -92,6 +92,9 @@ function inputs.ability(spec, key)
     IMGUI.Text(("%s"):format(key.name))
     if _active then
       IMGUI.Indent(20)
+      if key.hint then
+        IMGUI.Text(key.hint)
+      end
       for _,cmdtype in ipairs(_CMDTYPES) do
         selected = _commandList(self, ability, cmdtype, selected, delete)
       end
