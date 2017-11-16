@@ -1,8 +1,8 @@
 
-local PLACEMENTS = require 'domain.definitions'
+local PLACEMENTS = require 'domain.definitions.placements'
 local WIDGETVIEW = require 'view.helpers.widget'
 
-local _SCROLL_LIMIT = 8
+local _SCROLL_LIMIT = 5
 local _FADE = "_IN_OUT_FADE_"
 local _PRIORITIES = {
   [PLACEMENTS.weapon] = 1,
@@ -13,7 +13,7 @@ local _PRIORITIES = {
   none = 6
 }
 
-local _MG = 24
+local _MG = 20
 local _WIDTH, _HEIGHT
 
 local function _initGraphicValues()
@@ -22,14 +22,18 @@ local function _initGraphicValues()
 end
 
 local view = Class({
-  __include = { ELEMENT }
+  __includes = { ELEMENT }
 })
 
 function view:init(route)
+  ELEMENT.init(self)
+
   self.route = route
-  self.enter = 0
+  self.enter = 1
   self.top = 1
-  self.widget_list
+  self.widget_list = {}
+
+  _initGraphicValues()
 end
 
 function view:fadeIn()
@@ -55,7 +59,7 @@ function view:scrollUp()
 end
 
 function view:isValidActor()
-  self.actor = route.getControlledActor() or self.actor
+  self.actor = self.route.getControlledActor() or self.actor
   return self.actor
 end
 
@@ -66,8 +70,11 @@ function view:getWidgetList(actor)
     widget_list[index] = widget
   end
   table.sort(widget_list, function(a, b)
-    return _PRIORITIES[a:getWidgetPlacement() or "none"]
-           < _PRIORITIES[b:getWidgetPlacement() or "none"]
+    local placement_a = PLACEMENTS[a:getWidgetPlacement()] or "none"
+    local placement_b = PLACEMENTS[b:getWidgetPlacement()] or "none"
+    local ap = _PRIORITIES[placement_a]
+    local bp = _PRIORITIES[placement_b]
+    return ap < bp
   end)
   self.widget_list = widget_list
   return widget_list
@@ -77,18 +84,23 @@ function view:draw()
   local g = love.graphics
   local actor = self:isValidActor()
   local widget_list = self:getWidgetList(actor)
+  local enter = self.enter
   if not actor or not widget_list then return end
 
-  if self.enter > 1 then
-    local w, h = WIDGETVIEW.getDimensions()
+  if enter > 0 then
+    local w = WIDGETVIEW.getWidth()
     g.push()
-    g.translate(_WIDTH - w - 2*_MG, 160)
-    for i = self.top, _SCROLL_LIMIT do
-      if not widget_list[self.top] then break end
-      local widget = widget_list[self.top]
-      WIDGETVIEW.draw(widget, 0, (i-self.top)*h, enter)
+    g.translate(_WIDTH - w - 40, 120)
+    for i = self.top, math.min(_SCROLL_LIMIT, #widget_list) do
+      if not widget_list[i] then break end
+      local widget = widget_list[i]
+      local h = WIDGETVIEW.getHeight(widget)
+      WIDGETVIEW.draw(widget, 0, 0, enter)
+      g.translate(0, _MG + h)
     end
     g.pop()
   end
 end
+
+return view
 
