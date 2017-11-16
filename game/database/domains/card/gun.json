@@ -3,6 +3,22 @@
   "widget":{
     "operators":[],
     "trigger":"on_use",
+    "trigger-condition":{
+      "params":[{
+          "typename":"card",
+          "output":"widget_self"
+        },{
+          "typename":"card",
+          "output":"activated_widget"
+        },{
+          "typename":"same_card",
+          "rhs":"par:activated_widget",
+          "output":"label#1003",
+          "lhs":"par:widget_self"
+        }],
+      "operators":[],
+      "effects":[]
+    },
     "activation":{
       "cost":30,
       "ability":{
