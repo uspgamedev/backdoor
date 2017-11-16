@@ -56,17 +56,15 @@ function view:scrollDown()
   if #self.widget_list < _SCROLL_LIMIT then return end
   local max_top = #self.widget_list - _SCROLL_LIMIT + 1
   self.focus = math.min(self.focus+1, max_top)
-  print("DOWN", self.focus)
-  self:removeTimer(_MOVE, MAIN_TIMER)
-  self:addTimer(_MOVE, MAIN_TIMER, "tween", .25,
-                self, { top = self.focus },
-                "out-back"
-  )
+  self:updateScroll()
 end
 
 function view:scrollUp()
   self.focus = math.max(self.focus-1, 0)
-  print("UP", self.focus)
+  self:updateScroll()
+end
+
+function view:updateScroll()
   self:removeTimer(_MOVE, MAIN_TIMER)
   self:addTimer(_MOVE, MAIN_TIMER, "tween", .25,
                 self, { top = self.focus },
@@ -93,6 +91,10 @@ function view:getWidgetList(actor)
     return ap < bp
   end)
   self.widget_list = widget_list
+  if #self.widget_list < _SCROLL_LIMIT then
+    self.focus = 0
+    self:updateScroll()
+  end
   return widget_list
 end
 
