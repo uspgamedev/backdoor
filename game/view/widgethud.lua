@@ -90,11 +90,12 @@ function view:getWidgetList(actor)
     local bp = _PRIORITIES[placement_b]
     return ap < bp
   end)
-  self.widget_list = widget_list
-  if #self.widget_list < _SCROLL_LIMIT then
+  if #self.widget_list ~= #widget_list
+     and #widget_list < _SCROLL_LIMIT then
     self.focus = 0
     self:updateScroll()
   end
+  self.widget_list = widget_list
   return widget_list
 end
 
