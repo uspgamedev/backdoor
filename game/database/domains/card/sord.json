@@ -2,15 +2,15 @@
   "attr":"ATH",
   "widget":{
     "operators":[],
-    "trigger":"on_use",
+    "trigger":"on_any_use",
     "activation":{
       "cost":10,
       "ability":{
         "params":[{
             "typename":"choose_target",
             "max-range":1,
-            "body-only":true,
-            "output":"target"
+            "output":"target",
+            "body-only":true
           }],
         "operators":[{
             "typename":"get_attribute",

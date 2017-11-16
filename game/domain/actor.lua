@@ -363,9 +363,12 @@ function Actor:playCard(card_index)
   return card
 end
 
+function Actor:turn()
+  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN, sector)
+end
+
 function Actor:makeAction(sector)
   local success = false
-  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN, sector)
   repeat
     local action_slot, params = self:behavior(sector)
     if ACTION.exists(action_slot) then
