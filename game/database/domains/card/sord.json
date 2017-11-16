@@ -1,16 +1,17 @@
 {
   "attr":"ATH",
+  "set":"blades",
+  "one_time":true,
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":10,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":1,
+            "output":"target",
             "body-only":true,
-            "output":"target"
+            "max-range":1
           }],
         "operators":[{
             "typename":"get_attribute",
@@ -24,17 +25,32 @@
         "effects":[{
             "typename":"dmg_formula",
             "target":"val:target_body",
-            "attr":"val:ath",
-            "base":4
+            "base":4,
+            "attr":"val:ath"
           }]
-      }
+      },
+      "cost":10
+    },
+    "trigger-condition":{
+      "params":[{
+          "typename":"card",
+          "output":"widget_self"
+        },{
+          "typename":"card",
+          "output":"activated_widget"
+        },{
+          "typename":"same_card",
+          "rhs":"par:activated_widget",
+          "output":"label#1003",
+          "lhs":"par:widget_self"
+        }],
+      "operators":[],
+      "effects":[]
     },
     "charges":12,
     "widget_action":"MELEE",
     "placement":"weapon"
   },
-  "one_time":true,
-  "set":"blades",
   "pp":4,
   "name":"Sord",
   "desc":"Equip as a Widget. An ugly blunt sord.\nNo, not \"sword\". It says \"sord\" right there,\ninscribed on the hilt."

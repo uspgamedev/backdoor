@@ -46,8 +46,10 @@ return {
     type = 'section',
     schema = {
       { id = 'charges', name = "Charges", type = 'integer', range = {1} },
-      { id = 'trigger', name = "Trigger", type = 'enum',
+      { id = 'trigger', name = "Spend Trigger", type = 'enum',
         options = DEFS.TRIGGERS },
+      { id = 'trigger-condition', name = "Spend Trigger Condition",
+        type = 'ability', optional = true },
       { id = 'placement', name = "Placement", type = 'enum',
         options = DEFS_PACK.placements, optional = true },
       {
@@ -65,8 +67,7 @@ return {
         schema = {
           { id = 'cost', name = "Time Cost", type = 'integer',
             range = {0} },
-          { id = 'ability', name = "Ability", type = 'ability',
-            optional = true }
+          { id = 'ability', name = "Ability", type = 'ability' }
         }
       },
       {

@@ -263,23 +263,28 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
-function Body:triggerWidgets(trigger, sector)
+function Body:triggerWidgets(trigger, sector, params)
   for index in self:eachWidget() do
-    self:triggerOneWidget(index, trigger, sector)
+    self:triggerOneWidget(index, trigger, sector, params)
   end
 end
 
-function Body:triggerOneWidget(index, trigger, sector)
+function Body:triggerOneWidget(index, trigger, sector, params)
   local widget = self:getWidget(index)
+  local owner = widget:getOwner()
+  params = params or {}
+  params.widget_self = widget 
   if widget:getWidgetTrigger() == trigger then
-    self:spendWidget(index)
+    local condition = widget:getWidgetTriggerCondition()
+    if not condition
+        or ABILITY.checkParams(condition, owner, sector, params) then
+      self:spendWidget(index)
+    end
   end
   local triggered_ability = widget:getWidgetTriggeredAbility() or _EMPTY
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      local owner = widget:getOwner()
-      local params = {}
       if ABILITY.checkParams(ability, owner, sector, params) then
         ABILITY.execute(ability, owner, sector, params)
       end

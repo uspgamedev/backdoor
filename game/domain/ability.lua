@@ -34,8 +34,13 @@ end
 
 function ABILITY.checkParams(ability, actor, sector, params)
   for i,parameter in ipairs(ability.params) do
+    local argvalues = {}
+    local parname, valname = parameter.typename, parameter.output
+    for _,arg in DB.schemaFor('params/'..parname) do
+      argvalues[arg.id] = unref(params, {}, parameter[arg.id])
+    end
     local paramspec = PAR[parameter.typename]
-    if not paramspec.isValid(sector, actor, parameter,
+    if not paramspec.isValid(sector, actor, argvalues,
                              params[parameter.output]) then
       return false
     end

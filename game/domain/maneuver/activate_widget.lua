@@ -24,7 +24,10 @@ function ACTIVATE.perform(actor, sector, params)
   local body = actor:getBody()
   local widget = body:getWidget(params.widget_slot)
   local ability = widget:getWidgetAbility()
-  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE, sector)
+  body:triggerOneWidget(
+    params.widget_slot, DEFS.TRIGGERS.ON_USE, sector,
+    { activated_widget = widget }
+  )
   actor:spendTime(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, sector, params)
