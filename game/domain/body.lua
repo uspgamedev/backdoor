@@ -231,9 +231,6 @@ function Body:spendWidget(index)
   local card = self.widgets[index]
   if card then
     card:addUsages()
-    if card:isSpent() then
-      return self:removeWidget(index)
-    end
   end
 end
 
@@ -261,6 +258,18 @@ function Body:applyStaticOperators(attr, value)
     end
   end
   return value
+end
+
+function Body:tick()
+  local spent = {}
+  for i,widget in ipairs(self.widgets) do
+    if widget:isSpent() then
+      table.insert(spent, i)
+    end
+  end
+  for n,i in ipairs(spent) do
+    self:removeWidget(i - n + 1)
+  end
 end
 
 function Body:triggerWidgets(trigger, sector, params)

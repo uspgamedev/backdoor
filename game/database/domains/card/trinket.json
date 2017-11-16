@@ -1,15 +1,15 @@
 {
   "desc":"Slightly protects you, but degrades whenever a\nwidget is used",
+  "set":"mec",
+  "attr":"MEC",
   "widget":{
     "operators":[{
         "attr":"DEF",
         "op":"+",
         "val":1
       }],
-    "trigger":"on_use",
+    "trigger":"on_any_use",
     "charges":3
   },
-  "attr":"MEC",
-  "set":"mec",
   "name":"Trinket"
 }

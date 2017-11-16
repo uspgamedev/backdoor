@@ -401,19 +401,28 @@ function _turnLoop(self, ...)
   local actors_queue = self.actors_queue
   while true do
 
+    for body in pairs(self.bodies) do
+      if type(body) == 'table' then
+        body:tick()
+      end
+    end
+
     --Initialize actor queue
     for _,actor in ipairs(self.actors) do
+      actor:tick()
+      actor:updateFov(self)
       table.insert(actors_queue,actor)
     end
 
     while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)
 
-      actor:tick()
-      actor:updateFov(self)
-      while actor:ready() do
-        actor:makeAction(self)
-        manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+      if actor:ready() then
+        while actor:ready() do
+          actor:makeAction(self)
+          manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+        end
+        actor:turn()
       end
 
       if actor:isPlayer() and actor:getBody():getSector() ~= self then
