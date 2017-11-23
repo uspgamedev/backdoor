@@ -3,7 +3,7 @@
     "operators":[{
         "typename":"get_attribute",
         "output":"attr",
-        "which":"MEC"
+        "which":"ANI"
       },{
         "typename":"get_body_at",
         "pos":"par:target",

@@ -10,7 +10,7 @@
     },{
       "typename":"get_attribute",
       "output":"athletics",
-      "which":"ATH"
+      "which":"COR"
     }],
   "playpoints":3,
   "params":[{

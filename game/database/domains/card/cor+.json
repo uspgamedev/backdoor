@@ -1,9 +1,9 @@
 {
-  "attr":"ATH",
+  "attr":"COR",
   "one_time":true,
   "widget":{
     "operators":[{
-        "attr":"ATH",
+        "attr":"COR",
         "op":"+",
         "val":1
       }],

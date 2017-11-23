@@ -5,7 +5,7 @@ local OP = {}
 
 OP.schema = {
   { id = 'which', name = "Attribute", type = 'enum',
-    options = {'ATH', 'ARC', 'MEC' } },
+    options = {'COR', 'ARC', 'ANI' } },
   { id = 'output', name = "Label", type = 'output' }
 }
 

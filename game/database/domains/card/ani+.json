@@ -1,8 +1,8 @@
 {
-  "attr":"MEC",
+  "attr":"ANI",
   "widget":{
     "operators":[{
-        "attr":"MEC",
+        "attr":"ANI",
         "op":"+",
         "val":1
       }],

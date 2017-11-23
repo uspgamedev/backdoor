@@ -1,8 +1,8 @@
 
 return {
-  'ath+', 'arc+', 'mec+',
-  ATH = 'ath+',
+  'cor+', 'arc+', 'ani+',
+  COR = 'cor+',
   ARC = 'arc+',
-  MEC = 'mec+'
+  ANI = 'ani+'
 }
 

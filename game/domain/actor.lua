@@ -29,15 +29,15 @@ function Actor:init(spec_name)
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
-    ATH = 100,
+    COR = 100,
     ARC = 100,
-    MEC = 100,
+    ANI = 100,
     SPD = 100,
   }
   self.attr_lv = {
-    ATH = 0,
+    COR = 0,
     ARC = 0,
-    MEC = 0,
+    ANI = 0,
     SPD = 0,
   }
   self.exp = 0
@@ -49,9 +49,9 @@ function Actor:init(spec_name)
   self.buffer = {}
   self.prizes = {}
 
-  self:updateAttr('ATH')
+  self:updateAttr('COR')
   self:updateAttr('ARC')
-  self:updateAttr('MEC')
+  self:updateAttr('ANI')
   self:updateAttr('SPD')
 end
 
@@ -86,9 +86,9 @@ function Actor:loadState(state)
     end
     self.buffer[i] = card
   end
-  self:updateAttr('ATH')
+  self:updateAttr('COR')
   self:updateAttr('ARC')
-  self:updateAttr('MEC')
+  self:updateAttr('ANI')
   self:updateAttr('SPD')
 end
 
@@ -159,12 +159,12 @@ function Actor:upgradeAttr(which, amount)
   self:updateAttr(which)
 end
 
-function Actor:getATH()
-  return self:getAttribute('ATH')
+function Actor:getCOR()
+  return self:getAttribute('COR')
 end
 
-function Actor:upgradeATH(n)
-  self:upgradeAttr('ATH', n)
+function Actor:upgradeCOR(n)
+  self:upgradeAttr('COR', n)
 end
 
 function Actor:getARC()
@@ -175,12 +175,12 @@ function Actor:upgradeARC(n)
   self:upgradeAttr('ARC', n)
 end
 
-function Actor:getMEC()
-  return self:getAttribute('MEC')
+function Actor:getANI()
+  return self:getAttribute('ANI')
 end
 
-function Actor:upgradeMEC(n)
-  self:upgradeAttr('MEC', n)
+function Actor:upgradeANI(n)
+  self:upgradeAttr('ANI', n)
 end
 
 function Actor:getSPD()

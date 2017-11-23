@@ -1,13 +1,13 @@
 {
-  "attr":"MEC",
+  "attr":"ANI",
   "upgrade":{
     "cost":2,
     "actor_list":[{
-        "attr":"MEC",
+        "attr":"ANI",
         "val":10
       }],
     "body_list":[]
   },
   "desc":"Upgrades your Mechanics attribute by 10.",
-  "name":"MEC +10"
+  "name":"ANI +10"
 }
