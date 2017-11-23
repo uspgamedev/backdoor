@@ -216,7 +216,8 @@ function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
   self:equip(placement, card)
   table.insert(self.widgets, card)
-  return #self.widgets
+  return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE,
+                               self:getSector())
 end
 
 function Body:getWidget(index)

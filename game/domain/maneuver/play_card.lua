@@ -42,8 +42,7 @@ function PLAYCARD.perform(actor, sector, params)
     actor:rewardPP(card:getPPReward())
     ABILITY.execute(card:getArtAbility(), actor, sector, params)
   elseif card:isWidget() then
-    local index = body:placeWidget(card)
-    body:triggerOneWidget(index, TRIGGERS.ON_PLACE, sector, params)
+    body:placeWidget(card)
   elseif card:isUpgrade() then
     actor:modifyExpBy(-card:getUpgradeCost())
     local upgrades = card:getUpgradesList()
