@@ -1,7 +1,9 @@
 
 local ACTIONDEFS  = require 'domain.definitions.action'
+local TRIGGERS    = require 'domain.definitions.triggers'
 local ABILITY     = require 'domain.ability'
-local PLAYCARD   = {}
+
+local PLAYCARD = {}
 
 PLAYCARD.param_specs = {
   { output = 'card_index', typename = 'card_index' }
@@ -31,13 +33,17 @@ end
 
 function PLAYCARD.perform(actor, sector, params)
   local card = _card(actor, params)
+  local body = actor:getBody()
   actor:playCard(params.card_index)
+  body:triggerWidgets(TRIGGERS.ON_PLAY, sector, params)
+
   if card:isArt() then
     actor:spendTime(card:getArtCost())
     actor:rewardPP(card:getPPReward())
     ABILITY.execute(card:getArtAbility(), actor, sector, params)
   elseif card:isWidget() then
-    actor:getBody():placeWidget(card)
+    local index = body:placeWidget(card)
+    body:triggerOneWidget(index, TRIGGERS.ON_PLACE, sector, params)
   elseif card:isUpgrade() then
     actor:modifyExpBy(-card:getUpgradeCost())
     local upgrades = card:getUpgradesList()

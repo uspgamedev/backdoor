@@ -214,8 +214,9 @@ end
 
 function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
-  table.insert(self.widgets, card)
   self:equip(placement, card)
+  table.insert(self.widgets, card)
+  return #self.widgets
 end
 
 function Body:getWidget(index)
@@ -260,7 +261,7 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
-function Body:tick()
+function Body:tick(sector)
   local spent = {}
   for i,widget in ipairs(self.widgets) do
     if widget:isSpent() then
@@ -268,7 +269,9 @@ function Body:tick()
     end
   end
   for n,i in ipairs(spent) do
-    self:removeWidget(i - n + 1)
+    local index = i - n + 1
+    self:triggerOneWidget(index, DEFS.ON_DONE, sector)
+    self:removeWidget(index)
   end
 end
 
