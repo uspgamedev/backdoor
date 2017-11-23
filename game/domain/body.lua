@@ -203,7 +203,7 @@ function Body:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   local owner = card:getOwner()
-  self:triggerOneWidget(index, DEFS.ON_LEAVE, self:getSector())
+  self:triggerOneWidget(index, TRIGGERS.ON_LEAVE, self:getSector())
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
@@ -264,6 +264,7 @@ function Body:applyStaticOperators(attr, value)
 end
 
 function Body:tick()
+  self:triggerWidgets(TRIGGERS.ON_TICK, self:getSector())
   local spent = {}
   for i,widget in ipairs(self.widgets) do
     if widget:isSpent() then
@@ -272,7 +273,7 @@ function Body:tick()
   end
   for n,i in ipairs(spent) do
     local index = i - n + 1
-    self:triggerOneWidget(index, DEFS.ON_DONE, self:getSector())
+    self:triggerOneWidget(index, TRIGGERS.ON_DONE, self:getSector())
     self:removeWidget(index)
   end
 end
