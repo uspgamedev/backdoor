@@ -214,8 +214,10 @@ end
 
 function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
-  table.insert(self.widgets, card)
   self:equip(placement, card)
+  table.insert(self.widgets, card)
+  return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE,
+                               self:getSector())
 end
 
 function Body:getWidget(index)
@@ -268,7 +270,9 @@ function Body:tick()
     end
   end
   for n,i in ipairs(spent) do
-    self:removeWidget(i - n + 1)
+    local index = i - n + 1
+    self:triggerOneWidget(index, DEFS.ON_DONE, self:getSector())
+    self:removeWidget(index)
   end
 end
 
