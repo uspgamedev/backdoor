@@ -203,6 +203,7 @@ function Body:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   local owner = card:getOwner()
+  self:triggerOneWidget(index, DEFS.ON_LEAVE, self:getSector())
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
