@@ -3,7 +3,6 @@
   "behavior":"aggro",
   "mec":-4,
   "arc":-4,
-  "collection":"ooze",
   "spd":-2,
   "signature":"MELEE",
   "name":"Dumb",

@@ -2,7 +2,6 @@
   "extends":"strong",
   "arc":2,
   "signature":"BOLT",
-  "collection":"demon",
   "spd":1,
   "behavior":"aggro",
   "name":"Grinning",

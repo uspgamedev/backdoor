@@ -1,15 +1,6 @@
 {
   "extends":"sentient",
   "initial_buffer":[{
-      "amount":2,
-      "card":"draw"
-    },{
-      "amount":4,
-      "card":"cure"
-    },{
-      "amount":4,
-      "card":"bolt"
-    },{
       "amount":4,
       "card":"arc_1"
     }],

@@ -1,15 +1,6 @@
 {
   "extends":"sentient",
   "initial_buffer":[{
-      "amount":3,
-      "card":"meditate"
-    },{
-      "amount":1,
-      "card":"armor"
-    },{
-      "amount":2,
-      "card":"sord"
-    },{
       "amount":2,
       "card":"vit_1"
     },{
