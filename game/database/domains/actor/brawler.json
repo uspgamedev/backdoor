@@ -8,11 +8,11 @@
       "card":"def_1"
     },{
       "amount":4,
-      "card":"ath_1"
+      "card":"cor_1"
     }],
-  "ath":4,
+  "cor":4,
   "arc":-4,
-  "mec":-4,
+  "ani":-4,
   "name":"Brawler",
   "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
 }

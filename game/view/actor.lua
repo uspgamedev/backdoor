@@ -27,7 +27,7 @@ local function _initGraphicValues()
   _width, _height = g.getDimensions()
   _font = FONT.get(_FONT_NAME, _FONT_SIZE)
   _exptext = "EXP: %d"
-  _statstext = "STATS\nATH: %d\nARC: %d\nMEC: %d\nSPD: %d\nDEF: %dd%d"
+  _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
   _actor_text = "HP: %d/%d"
   _depthtext = "DEPTH: %d"
   _buffertext = "%d cards in buffer\n%d in discard pile\n%d in hand\n%d in total"
@@ -114,14 +114,14 @@ end
 
 function ActorView:drawAttributes(g, actor)
   g.push()
-  local ath = actor:getATH()
+  local cor = actor:getCOR()
   local arc = actor:getARC()
-  local mec = actor:getMEC()
+  local ani = actor:getANI()
   local spd = actor:getSPD()
   local def = actor:getBody():getDEF()
   local base_def = actor:getBody():getBaseDEF()
   g.translate(40, 40)
-  g.print(_statstext:format(ath, arc, mec, spd, def, base_def))
+  g.print(_statstext:format(cor, arc, ani, spd, def, base_def))
   g.translate(0, 7*_font:getHeight())
   g.print(_exptext:format(actor:getExp()), 0, 0)
   g.pop()

@@ -35,7 +35,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     cooldown = 10,
     exp = 0,
     playpoints = 10,
-    upgrades = {ATH=100,ARC=100,MEC=100,SPD=100},
+    upgrades = {COR=100,ARC=100,ANI=100,SPD=100},
     buffer = _simpleBuffer(background),
     hand_limit = 5,
     hand = {},

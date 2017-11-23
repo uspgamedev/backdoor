@@ -1,14 +1,14 @@
 {
-  "attr":"ATH",
+  "attr":"COR",
   "desc":"Upgrades your Athletics attribute by 10.",
   "upgrade":{
     "cost":2,
     "actor_list":[{
-        "attr":"ATH",
+        "attr":"COR",
         "val":10
       }],
     "body_list":[]
   },
   "type":"UPGRADE",
-  "name":"ATH +10"
+  "name":"COR +10"
 }

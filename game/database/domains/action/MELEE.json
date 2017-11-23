@@ -2,8 +2,8 @@
   "ability":{
     "operators":[{
         "typename":"get_attribute",
-        "output":"ath",
-        "which":"ATH"
+        "output":"cor",
+        "which":"COR"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
@@ -18,7 +18,7 @@
     "effects":[{
         "typename":"dmg_formula",
         "target":"val:target_body",
-        "attr":"val:ath",
+        "attr":"val:cor",
         "base":4
       }]
   },
