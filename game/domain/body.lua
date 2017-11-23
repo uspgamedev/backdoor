@@ -262,7 +262,7 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
-function Body:tick(sector)
+function Body:tick()
   local spent = {}
   for i,widget in ipairs(self.widgets) do
     if widget:isSpent() then
@@ -271,7 +271,7 @@ function Body:tick(sector)
   end
   for n,i in ipairs(spent) do
     local index = i - n + 1
-    self:triggerOneWidget(index, DEFS.ON_DONE, sector)
+    self:triggerOneWidget(index, DEFS.ON_DONE, self:getSector())
     self:removeWidget(index)
   end
 end

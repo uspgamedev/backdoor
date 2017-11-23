@@ -403,7 +403,7 @@ function _turnLoop(self, ...)
 
     for body in pairs(self.bodies) do
       if type(body) == 'table' then
-        body:tick(self)
+        body:tick()
       end
     end
 
