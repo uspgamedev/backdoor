@@ -19,7 +19,7 @@ FX.schema = {
 function FX.process (actor, sector, params)
   local bodyspec = params['bodyspec']
   local i,j = unpack(params['pos'])
-  local body = sector:getRoute():makeBody(bodyspec, i, j)
+  local body = sector:getRoute().makeBody(bodyspec, i, j)
   local state_data = params['state']
   local state = {}
   state.upgrades = {

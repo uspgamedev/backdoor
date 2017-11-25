@@ -1,4 +1,7 @@
 {
   "name":"Machine",
+  "vit":-1,
+  "def":-1,
+  "def_die":2,
   "appearance":"demobody"
 }
