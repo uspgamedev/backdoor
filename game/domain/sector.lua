@@ -418,6 +418,8 @@ function _turnLoop(self, ...)
       table.insert(actors_queue,actor)
     end
 
+    manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+
     while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)
 
