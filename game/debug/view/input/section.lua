@@ -5,7 +5,7 @@ local DB    = require 'database'
 
 local _inputs = {}
 
-function _inputs.section(spec, key)
+function _inputs.section(spec, key, parent)
 
   local schema = key.schema
   local backup = {}
@@ -20,7 +20,8 @@ function _inputs.section(spec, key)
     inside_schema[i] = {
       id = ("%s:%s"):format(key.id, subkey.id),
       input = function(section_spec)
-        input_lambda = input_lambda or INPUT(subkey.type, section_spec, subkey)
+        input_lambda = input_lambda or INPUT(subkey.type, section_spec, subkey,
+                                             parent)
         return input_lambda
       end
     }

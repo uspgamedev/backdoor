@@ -111,6 +111,10 @@ function Sector:saveState()
   return state
 end
 
+function Sector:getRoute()
+  return self.route
+end
+
 function Sector:getDimensions()
   return self.w, self.h
 end

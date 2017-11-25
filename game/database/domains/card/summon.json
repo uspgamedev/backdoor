@@ -1,0 +1,29 @@
+{
+  "attr":"ARC",
+  "name":"Sample Bot",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "output":"pos",
+          "max-range":1
+        }],
+      "operators":[{
+          "lhs":1,
+          "typename":"integer_binop",
+          "op":"*",
+          "rhs":1,
+          "output":"one"
+        }],
+      "effects":[{
+          "typename":"make_body",
+          "pos":"par:pos",
+          "state":{
+            "vit":"val:one",
+            "def":"val:one"
+          }
+        }]
+    }
+  }
+}
