@@ -110,6 +110,12 @@ function Route:instance(obj)
     end
   end
 
+  function obj.makeBody(bodyspec, i, j)
+    local bid, body = _register(Body(bodyspec))
+    _current_sector:putBody(body, i, j)
+    return body
+  end
+
   function obj.makeActor(bodyspec, actorspec, i, j)
     local bid, body = _register(Body(bodyspec))
     local aid, actor = _register(Actor(actorspec))

@@ -1,15 +1,21 @@
 {
   "extends":"sentient",
   "arc":-4,
-  "cor":-4,
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
-  "name":"Craftsmith",
+  "ani":4,
   "initial_buffer":[{
       "amount":4,
-      "card":"ani_1"
+      "card":"arc_1"
     },{
       "amount":4,
       "card":"vit_1"
+    },{
+      "amount":4,
+      "card":"cor_1"
+    },{
+      "amount":4,
+      "card":"summon"
     }],
-  "ani":4
+  "cor":-4,
+  "name":"Craftsmith",
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

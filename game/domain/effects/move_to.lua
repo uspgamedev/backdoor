@@ -2,6 +2,7 @@
 local FX = {}
 
 FX.schema = {
+  { id = 'body', name = "Body", type = 'value', match = 'body' },
   { id = 'pos', name = "Position", type = 'value', match = 'pos' }
 }
 

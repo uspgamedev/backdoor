@@ -111,6 +111,10 @@ function Sector:saveState()
   return state
 end
 
+function Sector:getRoute()
+  return self.route
+end
+
 function Sector:getDimensions()
   return self.w, self.h
 end
@@ -413,6 +417,8 @@ function _turnLoop(self, ...)
       actor:updateFov(self)
       table.insert(actors_queue,actor)
     end
+
+    manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
 
     while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)

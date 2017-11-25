@@ -6,6 +6,8 @@ local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
 local GameElement = require 'domain.gameelement'
 
+local Card        = require 'domain.card'
+
 local _EMPTY = {}
 
 local Body = Class{
@@ -289,6 +291,7 @@ function Body:triggerOneWidget(index, trigger, sector, params)
   local owner = widget:getOwner()
   params = params or {}
   params.widget_self = widget 
+  params.body_self = self
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition

@@ -128,6 +128,9 @@ function GUI:draw()
       if IMGUI.MenuItem("Actors") then
         self:push('actors_menu')
       end
+      if IMGUI.MenuItem("Bodies") then
+        self:push('bodies_menu')
+      end
       IMGUI.EndMenu()
     end
     if IMGUI.BeginMenu("Domains") then

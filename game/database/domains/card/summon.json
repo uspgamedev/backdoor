@@ -1,0 +1,23 @@
+{
+  "attr":"ARC",
+  "name":"Sample Bot",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "output":"pos",
+          "max-range":1
+        }],
+      "operators":[],
+      "effects":[{
+          "pos":"par:pos",
+          "bodyspec":"machine",
+          "typename":"make_body",
+          "widgetspec":"poison",
+          "vit":0,
+          "def":0
+        }]
+    }
+  }
+}
