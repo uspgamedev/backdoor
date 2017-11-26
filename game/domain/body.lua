@@ -205,7 +205,7 @@ function Body:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   local owner = card:getOwner()
-  self:triggerOneWidget(index, TRIGGERS.ON_LEAVE, self:getSector())
+  self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
@@ -219,8 +219,7 @@ function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
   self:equip(placement, card)
   table.insert(self.widgets, card)
-  return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE,
-                               self:getSector())
+  return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE)
 end
 
 function Body:getWidget(index)
@@ -266,7 +265,7 @@ function Body:applyStaticOperators(attr, value)
 end
 
 function Body:tick()
-  self:triggerWidgets(TRIGGERS.ON_TICK, self:getSector())
+  self:triggerWidgets(TRIGGERS.ON_TICK)
   local spent = {}
   for i,widget in ipairs(self.widgets) do
     if widget:isSpent() then
@@ -275,18 +274,18 @@ function Body:tick()
   end
   for n,i in ipairs(spent) do
     local index = i - n + 1
-    self:triggerOneWidget(index, TRIGGERS.ON_DONE, self:getSector())
+    self:triggerOneWidget(index, TRIGGERS.ON_DONE)
     self:removeWidget(index)
   end
 end
 
-function Body:triggerWidgets(trigger, sector, params)
+function Body:triggerWidgets(trigger, params)
   for index in self:eachWidget() do
-    self:triggerOneWidget(index, trigger, sector, params)
+    self:triggerOneWidget(index, trigger, params)
   end
 end
 
-function Body:triggerOneWidget(index, trigger, sector, params)
+function Body:triggerOneWidget(index, trigger, params)
   local widget = self:getWidget(index)
   local owner = widget:getOwner()
   params = params or {}
@@ -295,7 +294,7 @@ function Body:triggerOneWidget(index, trigger, sector, params)
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition
-        or ABILITY.checkParams(condition, owner, sector, params) then
+        or ABILITY.checkParams(condition, owner, self.getSector(), params) then
       self:spendWidget(index)
     end
   end
@@ -303,8 +302,8 @@ function Body:triggerOneWidget(index, trigger, sector, params)
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      if ABILITY.checkParams(ability, owner, sector, params) then
-        ABILITY.execute(ability, owner, sector, params)
+      if ABILITY.checkParams(ability, owner, self:getSector(), params) then
+        ABILITY.execute(ability, owner, self:getSector(), params)
       end
     end
   end
@@ -312,14 +311,14 @@ end
 
 --[[ Combat methods ]]--
 
-function Body:takeDamageFrom(amount, source, sector)
+function Body:takeDamageFrom(amount, source)
   local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
-  self:triggerWidgets(TRIGGERS.ON_HIT, sector)
+  self:triggerWidgets(TRIGGERS.ON_HIT)
   -- print damage formula info (uncomment for debugging)
   --[[
   local str = "%s is being attacked with %d damage!\n"

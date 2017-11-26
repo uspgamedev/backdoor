@@ -27,9 +27,8 @@ function ACTIVATE.perform(actor, sector, params)
   actor:spendTime(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, sector, params)
-  body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, sector,
-                      { activated_widget = widget })
-  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE, sector)
+  body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, { activated_widget = widget })
+  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE)
 end
 
 return ACTIVATE

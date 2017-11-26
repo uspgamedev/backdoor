@@ -35,7 +35,7 @@ function PLAYCARD.perform(actor, sector, params)
   local card = _card(actor, params)
   local body = actor:getBody()
   actor:playCard(params.card_index)
-  body:triggerWidgets(TRIGGERS.ON_PLAY, sector, params)
+  body:triggerWidgets(TRIGGERS.ON_PLAY, params)
 
   if card:isArt() then
     actor:spendTime(card:getArtCost())
