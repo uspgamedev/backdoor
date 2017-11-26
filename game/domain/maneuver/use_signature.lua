@@ -5,20 +5,19 @@ local SIGNATURE   = {}
 
 SIGNATURE.param_specs = {}
 
-function SIGNATURE.activatedAbility(actor, sector, params)
+function SIGNATURE.activatedAbility(actor, params)
   return actor:getSignature().ability
 end
 
-function SIGNATURE.validate(actor, sector, params)
-  return ABILITY.checkParams(actor:getSignature().ability, actor, sector,
-                             params)
+function SIGNATURE.validate(actor, params)
+  return ABILITY.checkParams(actor:getSignature().ability, actor, params)
 end
 
-function SIGNATURE.perform(actor, sector, params)
+function SIGNATURE.perform(actor, params)
   local signature = actor:getSignature()
   actor:spendTime(signature.cost)
   actor:rewardPP(signature.playpoints or 0)
-  ABILITY.execute(signature.ability, actor, sector, params)
+  ABILITY.execute(signature.ability, actor, params)
 end
 
 return SIGNATURE

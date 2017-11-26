@@ -5,7 +5,7 @@ FX.schema = {
   { id = 'upgrade_list', name = "Upgrades", type = 'value', match = "upgrade-list" },
 }
 
-function FX.process(actor, sector, params)
+function FX.process(actor, params)
   for _,upgrade in ipairs(params.upgrade_list.actor) do
     local attr = upgrade.attr
     local val = upgrade.val

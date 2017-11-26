@@ -9,7 +9,7 @@ OP.schema = {
 
 OP.type = 'actor'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   return actor
 end
 

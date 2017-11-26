@@ -6,7 +6,7 @@ FX.schema = {
     range = {0} }
 }
 
-function FX.process (actor, sector,params)
+function FX.process (actor,params)
   print(params.text)
 end
 

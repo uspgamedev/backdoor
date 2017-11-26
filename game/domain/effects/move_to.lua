@@ -6,8 +6,9 @@ FX.schema = {
   { id = 'pos', name = "Position", type = 'value', match = 'pos' }
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
   local pos = {actor:getPos()}
+  local sector = actor:getBody():getSector()
   sector:putBody(actor:getBody(), unpack(params.pos))
   coroutine.yield('report', {
     type = 'body_moved',

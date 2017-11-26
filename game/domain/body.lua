@@ -294,7 +294,7 @@ function Body:triggerOneWidget(index, trigger, params)
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition
-        or ABILITY.checkParams(condition, owner, self.getSector(), params) then
+        or ABILITY.checkParams(condition, owner, params) then
       self:spendWidget(index)
     end
   end
@@ -302,8 +302,8 @@ function Body:triggerOneWidget(index, trigger, params)
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      if ABILITY.checkParams(ability, owner, self:getSector(), params) then
-        ABILITY.execute(ability, owner, self:getSector(), params)
+      if ABILITY.checkParams(ability, owner, params) then
+        ABILITY.execute(ability, owner, params)
       end
     end
   end

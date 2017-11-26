@@ -8,7 +8,7 @@ PARAM.schema = {
 
 PARAM.type = 'none'
 
-function PARAM.isValid(sector, actor, parameter, value)
+function PARAM.isValid(actor, parameter, value)
   return actor:getPP() >= DEFS.NEW_HAND_COST
 end
 

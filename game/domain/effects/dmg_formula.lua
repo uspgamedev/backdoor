@@ -12,9 +12,9 @@ FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
   local amount = RANDOM.rollDice(params.base, params.attr)
-  params.target:takeDamageFrom(amount, actor, sector)
+  params.target:takeDamageFrom(amount, actor)
 end
 
 return FX

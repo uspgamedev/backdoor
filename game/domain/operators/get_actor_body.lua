@@ -10,7 +10,7 @@ OP.schema = {
 
 OP.type = 'body'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   return actor:getBody()
 end
 

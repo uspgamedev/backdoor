@@ -83,8 +83,9 @@ local function _findPath(start, goal, sector)
   return false
 end
 
-return function (actor, sector)
+return function (actor)
   local target, dist
+  local sector = actor:getBody():getSector()
   local i, j = actor:getPos()
 
   -- create list of opponents

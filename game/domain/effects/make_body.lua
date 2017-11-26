@@ -14,7 +14,8 @@ FX.schema = {
     options = 'domains.card' },
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
+  local sector = actor:getBody():getSector()
   local bodyspec = params['bodyspec']
   local i,j = unpack(params['pos'])
   local body = sector:getRoute().makeBody(bodyspec, i, j)

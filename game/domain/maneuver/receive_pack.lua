@@ -6,15 +6,15 @@ RECEIVEPACK.param_specs = {
   { output = 'pack', typename = 'pack_list'}
 }
 
-function RECEIVEPACK.activatedAbility(actor, sector, params)
+function RECEIVEPACK.activatedAbility(actor, params)
   return nil
 end
 
-function RECEIVEPACK.validate(actor, sector, params)
+function RECEIVEPACK.validate(actor, params)
   return params.consumed and params.pack
 end
 
-function RECEIVEPACK.perform(actor, sector, params)
+function RECEIVEPACK.perform(actor, params)
   for _,card in ipairs(params.consumed) do
     actor:consumeCard(card)
   end

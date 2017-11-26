@@ -5,14 +5,15 @@ local INTERACT = {}
 INTERACT.param_specs = {
 }
 
-function INTERACT.activatedAbility(actor, sector, params)
+function INTERACT.activatedAbility(actor, params)
   return nil
 end
 
 -- FIXME: CHANGE_SECTOR should be an activated ability of interaction with
 --        stairs, portals, etc.
 
-local function _seek(actor, sector, params)
+local function _seek(actor, params)
+  local sector = actor:getBody():getSector()
   if not params.interaction then
     -- Try to go through exit
     local i, j = actor:getPos()
@@ -26,12 +27,12 @@ local function _seek(actor, sector, params)
   return params.interaction
 end
 
-function INTERACT.validate(actor, sector, params)
-  return not not _seek(actor, sector, params)
+function INTERACT.validate(actor, params)
+  return not not _seek(actor, params)
 end
 
-function INTERACT.perform(actor, sector, params)
-  _seek(actor, sector, params)
+function INTERACT.perform(actor, params)
+  _seek(actor, params)
   if params.interaction == 'CHANGE_SECTOR' then
     actor:spendTime(ACTIONDEFS.MOVE_TIME)
     local target_sector = Util.findId(params.sector)

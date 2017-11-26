@@ -369,11 +369,10 @@ end
 
 function Actor:makeAction()
   local success = false
-  local sector = self:getBody():getSector()
   repeat
-    local action_slot, params = self:behavior(sector)
+    local action_slot, params = self:behavior()
     if ACTION.exists(action_slot) then
-      success = ACTION.execute(action_slot, self, sector, params)
+      success = ACTION.execute(action_slot, self, params)
     end
   until success
   return true
