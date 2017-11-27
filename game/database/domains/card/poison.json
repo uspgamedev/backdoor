@@ -13,7 +13,7 @@
           }],
         "operators":[],
         "effects":[{
-            "typename":"damage_to_target",
+            "typename":"damage_on_target",
             "target":"par:body_self",
             "base":1,
             "attr":1
