@@ -3,10 +3,11 @@
   "attr":"ARC",
   "name":"Fireball",
   "art":{
-    "cost":40,
     "art_ability":{
       "params":[{
+          "aoe-hint":3,
           "typename":"choose_target",
+          "empty-tile":true,
           "output":"target",
           "max-range":6
         }],
@@ -22,6 +23,7 @@
           "typename":"damage_on_area",
           "base":8
         }]
-    }
+    },
+    "cost":40
   }
 }

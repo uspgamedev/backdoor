@@ -7,6 +7,9 @@ PARAM.schema = {
   { id = 'max-range', name = "Maximum range", type = 'value', match = 'integer',
     range = {1} },
   { id = 'body-only', name = "Only position with body", type = 'boolean' },
+  { id = 'empty-tile', name = "Only empty position", type = 'boolean' },
+  { id = 'aoe-hint', name = "Size of previewed AoE", type = 'integer',
+    range = {1} },
   { id = 'output', name = "Label", type = 'output' }
 }
 
@@ -29,6 +32,9 @@ function PARAM.isValid(actor, parameter, value)
     return false
   end
   if parameter['body-only'] and not sector:getBodyAt(unpack(value)) then
+    return false
+  end
+  if parameter['empty-tile'] and sector:getBodyAt(unpack(value)) then
     return false
   end
   if not PARAM.isWithinRange(actor, parameter, value) then
