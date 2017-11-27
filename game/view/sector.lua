@@ -179,14 +179,25 @@ function SectorView:draw()
           _tall_batch:add(_tile_quads[tile.type], x, 0,
                           0, 1, 1, unpack(_tile_offset[tile.type]))
         elseif self.cursor then
-          if self.cursor.range_checker(i+1, j+1) then
-            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
-              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {100, 200, 200, 100}})
+          local current_body = self.route.getControlledActor():getBody()
+          if not self.fov or (self.fov[i+1][j+1] and
+                              self.fov[i+1][j+1] > 0)
+                          or body == current_body then
+            if self.cursor.range_checker(i+1, j+1) then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {100, 200, 200, 100} })
             end
-          end
-          if self.cursor.validator(i+1, j+1) then
-            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
-              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {200, 200, 100, 100}})
+            if self.cursor.validator(i+1, j+1) then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {100, 200, 100, 100} })
+            end
+            local ci, cj = self.cursor:getPos()
+            local size   = self.cursor.aoe_hint or 1
+            local abs    = math.abs
+            if size and tile.type == SCHEMATICS.FLOOR
+                    and abs(i+1 - ci) < size and abs(j+1 - cj) < size then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {200, 100, 100, 100} })
             end
           end
         end
@@ -221,7 +232,9 @@ function SectorView:draw()
           if body then
             local name = body:getSpec('name')
             local actor = sector:getActorFromBody(body)
-            if actor then name = ("%s %s"):format(actor:getSpec('name'), name) end
+            if actor then
+              name = ("%s %s"):format(actor:getSpec('name'), name)
+            end
             _font.set()
             _font:setLineHeight(.8)
             g.setColor(COLORS.NEUTRAL)
@@ -262,8 +275,8 @@ function SectorView:draw()
         g.translate(x, dy)
         local hp_percent = body:getHP()/body:getMaxHP()
         g.setColor(0, 20, 0)
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48, _HEALTHBAR_WIDTH,
-                    _HEALTHBAR_HEIGHT)
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+                    _HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
         local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
         g.setColor(HSV(unpack(hsvcol)))
         g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
@@ -281,9 +294,9 @@ end
 
 --CURSOR FUNCTIONS
 
-function SectorView:newCursor(i,j,validator,range_checker)
+function SectorView:newCursor(i, j, aoe_hint, validator, range_checker)
   i, j = i or 1, j or 1
-  self.cursor = Cursor(i,j,validator,range_checker)
+  self.cursor = Cursor(i, j, aoe_hint, validator, range_checker)
 end
 
 function SectorView:removeCursor()
@@ -414,9 +427,10 @@ Cursor = Class{
   __includes = { ELEMENT }
 }
 
-function Cursor:init(i, j, validator, range_checker)
+function Cursor:init(i, j, aoe_hint, validator, range_checker)
   self.i = i
   self.j = j
+  self.aoe_hint = aoe_hint
 
   self.validator = validator
   self.range_checker = range_checker
@@ -427,3 +441,4 @@ function Cursor:getPos()
 end
 
 return SectorView
+

@@ -6,8 +6,9 @@
     "art_ability":{
       "params":[{
           "aoe-hint":3,
+          "non-wall":true,
           "typename":"choose_target",
-          "empty-tile":true,
+          "empty-tile":false,
           "output":"target",
           "max-range":6
         }],

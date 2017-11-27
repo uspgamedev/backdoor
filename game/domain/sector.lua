@@ -141,6 +141,10 @@ function Sector:generate(register)
   self:makeEncounters(base.encounters, register)
 end
 
+function Sector:getTile(i, j)
+  return self.tiles[i][j]
+end
+
 function Sector:makeTiles(grid)
   self.w, self.h = grid.getDim()
   for i = 1, self.h do
