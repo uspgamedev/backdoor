@@ -40,7 +40,8 @@ function PARAM.isValid(actor, parameter, value)
   if parameter['empty-tile'] and sector:getBodyAt(i, j) then
     return false
   end
-  if parameter['non-wall'] and sector:getTile(i, j).type == SCHEMATICS.WALL then
+  local tile = sector:getTile(i, j)
+  if parameter['non-wall'] and tile and tile.type == SCHEMATICS.WALL then
     return false
   end
   if not PARAM.isWithinRange(actor, parameter, value) then
