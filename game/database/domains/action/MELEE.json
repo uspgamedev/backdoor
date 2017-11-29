@@ -16,7 +16,7 @@
         "body-only":true
       }],
     "effects":[{
-        "typename":"dmg_formula",
+        "typename":"damage_on_target",
         "target":"val:target_body",
         "attr":"val:cor",
         "base":4

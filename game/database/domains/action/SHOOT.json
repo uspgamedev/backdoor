@@ -17,7 +17,7 @@
         "output":"target"
       }],
     "effects":[{
-        "typename":"dmg_formula",
+        "typename":"damage_on_target",
         "target":"val:body",
         "attr":"val:attr",
         "base":8

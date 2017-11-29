@@ -151,6 +151,7 @@ local function _useAction(action_slot, params)
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
+          aoe_hint = param['aoe-hint'],
           range_checker = function(i, j)
             return ABILITY.param('choose_target')
                           .isWithinRange(controlled_actor, param, {i,j})
