@@ -1,0 +1,26 @@
+{
+  "attr":"ARC",
+  "pp":10,
+  "name":"Timed Combustion Drone",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "aoe-hint":3,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"pos",
+          "max-range":1
+        }],
+      "operators":[],
+      "effects":[{
+          "pos":"par:pos",
+          "vit":0,
+          "typename":"make_body",
+          "widgetspec":"self-destruct",
+          "def":0,
+          "bodyspec":"machine"
+        }]
+    }
+  }
+}

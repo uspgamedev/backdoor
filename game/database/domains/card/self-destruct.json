@@ -1,0 +1,38 @@
+{
+  "attr":"ARC",
+  "widget":{
+    "operators":[],
+    "trigger":"on_tick",
+    "charges":40,
+    "auto_activation":{
+      "trigger":"on_done",
+      "ability":{
+        "params":[{
+            "typename":"body",
+            "output":"body_self"
+          }],
+        "operators":[{
+            "typename":"self",
+            "output":"actor"
+          },{
+            "typename":"get_attribute",
+            "output":"arc",
+            "which":"ARC"
+          },{
+            "typename":"get_body_pos",
+            "body":"par:body_self",
+            "output":"pos"
+          }],
+        "effects":[{
+            "attr":"val:arc",
+            "center":"val:pos",
+            "size":3,
+            "typename":"damage_on_area",
+            "base":10
+          }]
+      }
+    }
+  },
+  "one_time":true,
+  "name":"Self Destruction"
+}
