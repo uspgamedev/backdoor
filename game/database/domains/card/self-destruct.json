@@ -1,11 +1,11 @@
 {
   "attr":"ARC",
+  "one_time":true,
   "widget":{
     "operators":[],
     "trigger":"on_tick",
     "charges":40,
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
         "params":[{
             "typename":"body",
@@ -29,10 +29,13 @@
             "size":3,
             "typename":"damage_on_area",
             "base":10
+          },{
+            "typename":"destroy_body",
+            "target":"par:body_self"
           }]
-      }
+      },
+      "trigger":"on_done"
     }
   },
-  "one_time":true,
   "name":"Self Destruction"
 }
