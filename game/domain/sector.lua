@@ -425,7 +425,7 @@ function _turnLoop(self, ...)
 
       if actor:ready() then
         while actor:ready() do
-          actor:makeAction(self)
+          actor:makeAction()
           manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
         end
         actor:turn()

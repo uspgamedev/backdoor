@@ -11,7 +11,7 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   return actor["get"..params.which](actor)
 end
 

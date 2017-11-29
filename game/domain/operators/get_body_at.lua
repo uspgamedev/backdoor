@@ -10,8 +10,8 @@ OP.schema = {
 
 OP.type = 'body'
 
-function OP.process(actor, sector, params)
-  return sector:getBodyAt(unpack(params.pos))
+function OP.process(actor, params)
+  return actor:getBody():getSector():getBodyAt(unpack(params.pos))
 end
 
 return OP

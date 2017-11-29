@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'upgrade-list'
 
-function PARAM.isValid(sector, actor, parameter, value)
+function PARAM.isValid(actor, parameter, value)
   return true
 end
 

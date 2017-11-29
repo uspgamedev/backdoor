@@ -12,7 +12,7 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   return RANDOM.rollDice(params.rolls, params.sides)
 end
 

@@ -4,15 +4,15 @@ local IDLE = {}
 
 IDLE.param_specs = {}
 
-function IDLE.activatedAbility(actor, sector, params)
+function IDLE.activatedAbility(actor, params)
   return nil
 end
 
-function IDLE.validate(actor, sector, params)
+function IDLE.validate(actor, params)
   return true
 end
 
-function IDLE.perform(actor, sector, params)
+function IDLE.perform(actor, params)
   actor:spendTime(ACTIONDEFS.IDLE_TIME)
 end
 

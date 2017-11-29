@@ -9,7 +9,7 @@ FX.schema = {
     match = 'integer', range = {1} }, 
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
   local self = params['actor']
   local source = params['source']
   if source == 'HAND' then

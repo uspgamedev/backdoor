@@ -14,7 +14,7 @@ OP.schema = {
 
 OP.type = 'card'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   local self = params['actor']
   local index = params['card-index']
   local source = params['source']

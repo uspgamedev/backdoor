@@ -12,7 +12,7 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   if params.op == "+" then
     return params.lhs + params.rhs
   elseif params.op == "-" then

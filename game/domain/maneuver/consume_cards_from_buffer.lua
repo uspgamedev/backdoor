@@ -5,15 +5,15 @@ CONSUME.param_specs = {
   { output = 'consumed', typename = 'consume_list' },
 }
 
-function CONSUME.activatedAbility(actor, sector, params)
+function CONSUME.activatedAbility(actor, params)
   return nil
 end
 
-function CONSUME.validate(actor, sector, params)
+function CONSUME.validate(actor, params)
   return params.consumed
 end
 
-function CONSUME.perform(actor, sector, params)
+function CONSUME.perform(actor, params)
   for _,idx in ipairs(params.consumed) do
     local index = idx + actor:getBufferSize()+1
     local card = actor:getBackBufferCard(index)

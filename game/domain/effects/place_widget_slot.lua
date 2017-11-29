@@ -8,7 +8,7 @@ FX.schema = {
     match = "widget_slot" },
 }
 
-function FX.process(actor, sector, params)
+function FX.process(actor, params)
   actor:placeWidget(params.widget_slot, params.card)
 end
 

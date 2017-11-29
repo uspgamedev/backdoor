@@ -13,16 +13,16 @@ local function _card(actor, params)
   return actor:getHandCard(params.card_index)
 end
 
-function PLAYCARD.activatedAbility(actor, sector, params)
+function PLAYCARD.activatedAbility(actor, params)
   local card = _card(actor, params)
   return card:isArt() and card:getArtAbility()
 end
 
-function PLAYCARD.validate(actor, sector, params)
+function PLAYCARD.validate(actor, params)
   local card = _card(actor, params)
   local valid = false
   if card:isArt() then
-    valid = ABILITY.checkParams(card:getArtAbility(), actor, sector, params)
+    valid = ABILITY.checkParams(card:getArtAbility(), actor, params)
   elseif card:isWidget() then
     valid = true
   elseif card:isUpgrade() then
@@ -31,16 +31,16 @@ function PLAYCARD.validate(actor, sector, params)
   return valid
 end
 
-function PLAYCARD.perform(actor, sector, params)
+function PLAYCARD.perform(actor, params)
   local card = _card(actor, params)
   local body = actor:getBody()
   actor:playCard(params.card_index)
-  body:triggerWidgets(TRIGGERS.ON_PLAY, sector, params)
+  body:triggerWidgets(TRIGGERS.ON_PLAY, params)
 
   if card:isArt() then
     actor:spendTime(card:getArtCost())
     actor:rewardPP(card:getPPReward())
-    ABILITY.execute(card:getArtAbility(), actor, sector, params)
+    ABILITY.execute(card:getArtAbility(), actor, params)
   elseif card:isWidget() then
     body:placeWidget(card)
   elseif card:isUpgrade() then

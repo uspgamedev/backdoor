@@ -9,7 +9,7 @@ PARAM.schema = {
 
 PARAM.type = 'boolean'
 
-function PARAM.isValid(sector, actor, parameter, value)
+function PARAM.isValid(actor, parameter, value)
   local lhs, rhs = parameter['lhs'], parameter['rhs']
   local op = parameter['op']
   return lhs == rhs
