@@ -11,9 +11,9 @@ local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 
 local _TILE_W = 80
-local _TILE_H = 80
+local _TILE_H = 60
 local _HALF_W = 10
-local _HALF_H = 6
+local _HALF_H = 10
 
 local _HEALTHBAR_WIDTH = 64
 local _HEALTHBAR_HEIGHT = 8
@@ -129,9 +129,11 @@ function SectorView:draw()
   for i = 0, sector.h-1 do
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
-      if _isInFrame(i, j) and tile and tile.type ~= SCHEMATICS.WALL then
+      if _isInFrame(i, j) and tile then
+        local tile_type = (tile.type == SCHEMATICS.WALL)
+                          and SCHEMATICS.FLOOR or tile.type
         local x, y = j*_TILE_W, i*_TILE_H
-        _flat_batch:add(_tile_quads[tile.type], x, y,
+        _flat_batch:add(_tile_quads[tile_type], x, y,
                         0, 1, 1, unpack(_tile_offset[tile.type]))
       end
     end
@@ -275,11 +277,11 @@ function SectorView:draw()
         g.translate(x, dy)
         local hp_percent = body:getHP()/body:getMaxHP()
         g.setColor(0, 20, 0)
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
                     _HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
         local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
         g.setColor(HSV(unpack(hsvcol)))
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
                     hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
         g.pop()
       end

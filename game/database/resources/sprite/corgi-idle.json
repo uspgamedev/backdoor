@@ -1,29 +1,29 @@
 {
   "animation":[{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[0,0,80,120]
     },{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[80,0,80,120]
     },{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[160,0,80,120]
     },{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[240,0,80,120]
     },{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[160,0,80,120]
     },{
+      "offset":[0,70],
       "time":100,
-      "offset":[0,60],
       "quad":[80,0,80,120]
     }],
-  "texture":"corgi",
-  "loop":true
+  "loop":true,
+  "texture":"corgi"
 }

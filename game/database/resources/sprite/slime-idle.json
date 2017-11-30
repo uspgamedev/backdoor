@@ -1,33 +1,33 @@
 {
   "animation":[{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[0,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[80,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[160,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[240,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[320,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[240,0,80,120]
     },{
-      "offset":[0,50],
       "time":100,
+      "offset":[0,56],
       "quad":[160,0,80,120]
     }],
-  "loop":true,
-  "texture":"slime"
+  "texture":"slime",
+  "loop":true
 }
