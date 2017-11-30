@@ -44,7 +44,7 @@ function Actor:init(spec_name)
   self.playpoints = 10
 
   self.fov = {}
-  self.fov_range = 8
+  self.fov_range = 4
 
   self.buffer = {}
   self.prizes = {}
@@ -345,6 +345,11 @@ function Actor:updateFov(sector)
   Visibility.updateFov(self,sector)
 end
 
+function Actor:getFov()
+  return self:getBody()
+             :applyStaticOperators("FOV", self.fov_range)
+end
+
 --[[ Turn methods ]]--
 
 function Actor:tick()
@@ -375,6 +380,7 @@ function Actor:makeAction()
       success = ACTION.execute(action_slot, self, params)
     end
   until success
+  self:updateFov(self:getBody():getSector())
   return true
 end
 
