@@ -361,10 +361,13 @@ function Sector:isInside(i, j)
          (j >= 1 and j <= self.w)
 end
 
-function Sector:isValid(i, j)
+function Sector:isWalkable(i, j)
   return self:isInside(i,j) and
          (self.tiles[i][j] and self.tiles[i][j].type ~= SCHEMATICS.WALL)
-         and not self.bodies[i][j]
+end
+
+function Sector:isValid(i, j)
+  return self:isWalkable(i, j) and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()

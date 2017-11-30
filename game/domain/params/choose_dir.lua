@@ -4,6 +4,7 @@ local DIR = require 'domain.definitions.dir'
 local PARAM = {}
 
 PARAM.schema = {
+  { id = 'body-block', name = "Stop on bodies", type = 'boolean' },
   { id = 'output', name = "Label", type = 'output' }
 }
 

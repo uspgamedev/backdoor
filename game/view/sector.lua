@@ -59,6 +59,7 @@ function SectorView:init(route)
   self.target = nil
   self.cursor = nil
   self.ray_dir = nil
+  self.ray_body_block = false
   self.vfx = {
     offset = {}
   }
@@ -113,8 +114,9 @@ function SectorView:updateFov(actor)
   self.fov = actor.fov
 end
 
-function SectorView:setRayDir(dir)
+function SectorView:setRayDir(dir, body_block)
   self.ray_dir = dir
+  self.ray_body_block = body_block
 end
 
 function SectorView:draw()
@@ -174,11 +176,17 @@ function SectorView:draw()
   if self.ray_dir and self.target then
     local dir = self.ray_dir
     local i, j = self.target:getPos()
-    while sector:isInside(i, j) do
+    local check
+    if self.ray_body_block then
+      check = sector.isValid
+    else
+      check = sector.isWalkable
+    end
+    repeat
       rays[i][j] = true
       i = i + dir[1]
       j = j + dir[2]
-    end
+    until not check(sector, i, j) or not self.fov[i][j]
   end
 
   -- draw tall things
