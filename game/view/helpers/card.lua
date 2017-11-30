@@ -16,10 +16,7 @@ local CARD = {}
 
 local _is_init = false
 local function _init()
-  _neutral_icon = TEXTURE.get('icon-none')
   _card_base = TEXTURE.get("card-base")
-
-  _neutral_icon:setFilter('linear', 'linear')
   _card_base:setFilter("linear", "linear", 1)
 
   _is_init = true
@@ -63,9 +60,13 @@ function CARD.draw(card, x, y, focused, alpha)
   _card_base:draw(x, y)
 
   --card icon
-  _neutral_icon:draw(x+w/2, y+h/2, 0, 1, 1,
-                     _neutral_icon:getWidth()/2,
-                     _neutral_icon:getHeight()/2
+  local br, bg, bb = unpack(COLORS.DARK)
+  local icon_texture = TEXTURE.get(card:getIconTexture() or 'icon-none')
+  g.setColor(br, bg, bb, alpha*255)
+  icon_texture:setFilter('linear', 'linear')
+  icon_texture:draw(x+w/2, y+h/2, 0, 1, 1,
+                    icon_texture:getWidth()/2,
+                    icon_texture:getHeight()/2
   )
 
   g.translate(x, y)
