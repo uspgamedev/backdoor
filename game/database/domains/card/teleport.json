@@ -1,0 +1,30 @@
+{
+  "desc":"Transport all molecules in your body to another position",
+  "attr":"ARC",
+  "pp":4,
+  "name":"Teleport",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "empty-tile":true,
+          "output":"target_pos",
+          "max-range":7
+        }],
+      "operators":[{
+          "typename":"self",
+          "output":"Actor"
+        },{
+          "typename":"get_actor_body",
+          "output":"Body",
+          "actor":"val:Actor"
+        }],
+      "effects":[{
+          "typename":"move_to",
+          "pos":"par:target_pos",
+          "body":"val:Body"
+        }]
+    }
+  }
+}
