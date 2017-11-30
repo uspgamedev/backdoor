@@ -2,7 +2,7 @@
   "extends":"sentient",
   "arc":-4,
   "ani":4,
-  "name":"Craftsmith",
+  "name":"Gadgeteer",
   "cor":-4,
   "initial_buffer":[{
       "amount":2,
