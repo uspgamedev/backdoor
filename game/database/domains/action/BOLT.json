@@ -1,4 +1,5 @@
 {
+  "cost":20,
   "ability":{
     "operators":[{
         "typename":"get_body_at",
@@ -11,17 +12,16 @@
       }],
     "params":[{
         "max-range":5,
-        "typename":"choose_target",
+        "output":"target",
         "body-only":true,
-        "output":"target"
+        "typename":"choose_target"
       }],
     "effects":[{
         "typename":"damage_on_target",
         "target":"val:target_body",
-        "attr":"val:arcana",
-        "base":6
+        "base":4,
+        "attr":"val:arcana"
       }]
   },
-  "playpoints":3,
-  "cost":10
+  "playpoints":5
 }
