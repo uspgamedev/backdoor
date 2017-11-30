@@ -38,6 +38,7 @@ GS = {
   PLAY = require "gamestates.play",               -- Game Gamestate
   USER_TURN = require "gamestates.user_turn",     -- User's turn
   PICK_TARGET = require "gamestates.pick_target", -- Player is choosing targets
+  PICK_DIR = require "gamestates.pick_dir",       -- Player is choosing dir
   PICK_WIDGET_SLOT = require "gamestates.pick_widget_slot",
                                                   -- Player is choosing widget
                                                   -- slot to equip widget

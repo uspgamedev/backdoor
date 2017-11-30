@@ -146,7 +146,15 @@ local function _useAction(action_slot, params)
   params = params or {}
   local param = ACTION.pendingParam(action_slot, controlled_actor, params)
   while param do
-    if param.typename == 'choose_target' then
+    if param.typename == 'choose_dir' then
+      SWITCHER.push(GS.PICK_DIR, _view.sector)
+      local dir = coroutine.yield(_task)
+      if dir then
+        params[param.output] = dir
+      else
+        return false
+      end
+    elseif param.typename == 'choose_target' then
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
