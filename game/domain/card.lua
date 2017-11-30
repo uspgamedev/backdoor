@@ -36,6 +36,10 @@ function Card:getDescription()
   return self:getSpec('desc')
 end
 
+function Card:getIconTexture()
+  return self:getSpec('icon')
+end
+
 function Card:getPPReward()
   return self:getSpec('pp') or 0
 end
