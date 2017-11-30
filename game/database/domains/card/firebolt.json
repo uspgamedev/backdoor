@@ -1,0 +1,46 @@
+{
+  "desc":"Shoot a piercing bolt at the face of your enemies.",
+  "one_time":false,
+  "attr":"ARC",
+  "pp":4,
+  "name":"Firebolt",
+  "art":{
+    "cost":1,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "max-range":7,
+          "empty-tile":false,
+          "body-only":true,
+          "output":"tgt"
+        }],
+      "operators":[{
+          "typename":"get_body_at",
+          "pos":"par:tgt",
+          "output":"body"
+        },{
+          "typename":"get_attribute",
+          "output":"arc",
+          "which":"ARC"
+        },{
+          "op":"*",
+          "typename":"integer_binop",
+          "rhs":2,
+          "output":"arc*2",
+          "lhs":"val:arc"
+        },{
+          "op":"-",
+          "typename":"integer_binop",
+          "rhs":2,
+          "output":"(arc*2)-2",
+          "lhs":"val:arc*2"
+        }],
+      "effects":[{
+          "typename":"damage_on_target",
+          "target":"val:body",
+          "base":"val:(arc*2)-2",
+          "attr":4
+        }]
+    }
+  }
+}
