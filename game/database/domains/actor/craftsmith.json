@@ -2,20 +2,20 @@
   "extends":"sentient",
   "arc":-4,
   "ani":4,
+  "name":"Craftsmith",
+  "cor":-4,
   "initial_buffer":[{
-      "amount":4,
+      "amount":2,
       "card":"arc_1"
     },{
-      "amount":4,
-      "card":"vit_1"
-    },{
-      "amount":4,
+      "amount":2,
       "card":"cor_1"
     },{
       "amount":4,
       "card":"summon"
+    },{
+      "amount":4,
+      "card":"timebomb-drone"
     }],
-  "cor":-4,
-  "name":"Craftsmith",
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

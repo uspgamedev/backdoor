@@ -330,6 +330,10 @@ function Body:takeDamageFrom(amount, source)
   --]]--
 end
 
+function Body:exterminate()
+  self.damage = self:getMaxHP()
+end
+
 function Body:heal(amount)
   self.damage = math.max(0, self.damage - amount)
 end
