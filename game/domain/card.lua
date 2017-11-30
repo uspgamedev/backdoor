@@ -68,6 +68,13 @@ function Card:isWidget()
   return not not self:getSpec('widget')
 end
 
+function Card:getType()
+  if self:isArt() then return 'art'
+  elseif self:isUpgrade() then return 'upgrade'
+  elseif self:isWidget() then return 'widget'
+  end
+end
+
 function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
