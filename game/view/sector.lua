@@ -277,11 +277,11 @@ function SectorView:draw()
         g.translate(x, dy)
         local hp_percent = body:getHP()/body:getMaxHP()
         g.setColor(0, 20, 0)
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
                     _HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
         local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
         g.setColor(HSV(unpack(hsvcol)))
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
+        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
                     hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
         g.pop()
       end
