@@ -1,0 +1,56 @@
+{
+  "desc":"Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children",
+  "widget":{
+    "operators":[],
+    "trigger":"on_use",
+    "activation":{
+      "cost":20,
+      "ability":{
+        "params":[{
+            "typename":"choose_target",
+            "body-only":true,
+            "output":"first_target",
+            "max-range":1
+          }],
+        "operators":[{
+            "typename":"get_body_at",
+            "pos":"par:first_target",
+            "output":"target_body"
+          },{
+            "typename":"get_attribute",
+            "output":"cor",
+            "which":"COR"
+          },{
+            "op":"*",
+            "typename":"integer_binop",
+            "rhs":2,
+            "output":"cor*2",
+            "lhs":"val:cor"
+          }],
+        "effects":[{
+            "typename":"damage_on_target",
+            "target":"val:target_body",
+            "attr":3,
+            "base":"val:cor*2"
+          },{
+            "attr":4,
+            "center":"par:first_target",
+            "size":3,
+            "typename":"damage_on_area",
+            "ignore_owner":true,
+            "base":"val:cor"
+          }]
+      }
+    },
+    "charges":20,
+    "trigger-condition":{
+      "params":[],
+      "operators":[],
+      "effects":[]
+    },
+    "placement":"weapon"
+  },
+  "attr":"COR",
+  "pp":4,
+  "name":"Spark Rod 2000"
+}
