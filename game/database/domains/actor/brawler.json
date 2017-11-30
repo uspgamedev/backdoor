@@ -1,18 +1,18 @@
 {
   "extends":"sentient",
+  "arc":-4,
+  "cor":4,
+  "name":"Brawler",
+  "ani":-4,
   "initial_buffer":[{
       "amount":2,
       "card":"vit_1"
     },{
       "amount":2,
-      "card":"def_1"
+      "card":"cor_1"
     },{
       "amount":4,
-      "card":"cor_1"
+      "card":"charge"
     }],
-  "cor":4,
-  "arc":-4,
-  "ani":-4,
-  "name":"Brawler",
   "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
 }

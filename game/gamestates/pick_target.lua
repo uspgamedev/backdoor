@@ -103,7 +103,7 @@ end
 
 function state:draw()
 
-    Draw.allTables()
+  Draw.allTables()
 
 end
 

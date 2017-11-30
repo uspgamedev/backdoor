@@ -58,6 +58,7 @@ function SectorView:init(route)
 
   self.target = nil
   self.cursor = nil
+  self.ray_dir = nil
   self.vfx = {
     offset = {}
   }
@@ -112,6 +113,10 @@ function SectorView:updateFov(actor)
   self.fov = actor.fov
 end
 
+function SectorView:setRayDir(dir)
+  self.ray_dir = dir
+end
+
 function SectorView:draw()
   local g = love.graphics
   local sector = self.route.getCurrentSector()
@@ -153,6 +158,24 @@ function SectorView:draw()
           g.rectangle("fill", x, y, _TILE_W, _TILE_H)
         end
       end
+    end
+  end
+
+  local rays = {}
+  for i=1,sector.h do
+    rays[i] = {}
+    for j=1,sector.w do
+      rays[i][j] = false
+    end
+  end
+
+  if self.ray_dir and self.target then
+    local dir = self.ray_dir
+    local i, j = self.target:getPos()
+    while sector:isInside(i, j) do
+      rays[i][j] = true
+      i = i + dir[1]
+      j = j + dir[2]
     end
   end
 
@@ -200,6 +223,9 @@ function SectorView:draw()
                                          {200, 100, 100, 100} })
             end
           end
+        elseif self.ray_dir and rays[i+1][j+1] then
+          table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                     {200, 100, 100, 100} })
         end
         if body then
           table.insert(draw_bodies, {body, x, 0})
