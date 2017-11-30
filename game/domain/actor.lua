@@ -333,6 +333,10 @@ function Actor:getNextPrizePack()
   return #self.prizes > 0 and table.remove(self.prizes, 1)
 end
 
+function Actor:getPrizePackCount()
+  return #self.prizes
+end
+
 function Actor:purgeFov(sector)
   Visibility.purgeActorFov(self,sector)
 end
