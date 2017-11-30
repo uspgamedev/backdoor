@@ -1,10 +1,12 @@
 {
-  "cor":-4,
-  "behavior":"aggro",
   "ani":-4,
-  "arc":-4,
-  "spd":-2,
   "signature":"MELEE",
+  "behavior":"aggro",
+  "cor":-4,
+  "arc":-4,
+  "collection":"anything",
+  "initial_buffer":[],
+  "spd":-2,
   "name":"Dumb",
   "description":"Oh honey..."
 }

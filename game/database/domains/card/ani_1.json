@@ -8,6 +8,7 @@
       }],
     "body_list":[]
   },
+  "set":"upgrades_ani",
   "desc":"Upgrades your Mechanics attribute by 10.",
   "name":"ANI +10"
 }

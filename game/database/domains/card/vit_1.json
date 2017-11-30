@@ -8,6 +8,7 @@
     "actor_list":[],
     "cost":2
   },
+  "set":"upgrades_vit",
   "desc":"Upgrades your Vitality by 10.",
   "name":"VIT +10"
 }

@@ -1,6 +1,5 @@
 {
   "attr":"COR",
-  "desc":"Upgrades your Athletics attribute by 10.",
   "upgrade":{
     "cost":2,
     "actor_list":[{
@@ -9,6 +8,8 @@
       }],
     "body_list":[]
   },
+  "set":"upgrades_cor",
   "type":"UPGRADE",
+  "desc":"Upgrades your Athletics attribute by 10.",
   "name":"COR +10"
 }

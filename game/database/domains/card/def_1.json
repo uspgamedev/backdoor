@@ -8,6 +8,7 @@
     "actor_list":[],
     "cost":2
   },
+  "set":"upgrades_def",
   "desc":"Upgrades your Defense by 10.",
   "name":"DEF +10"
 }
