@@ -35,11 +35,21 @@ function CARD.draw(card, x, y, focused, alpha)
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[card:getRelatedAttr()])
   local w, h = _card_base:getDimensions()
+  local typewidth = _info_font:getWidth(card:getType())
+  local pd = 12
   g.push()
 
+  _info_font.set()
 
   if focused then
     -- shine!
+    local shine = 50
+    g.translate(0, -10)
+    cr = cr + shine
+    cg = cg + shine
+    cb = cb + shine
+    g.setColor(COLORS.NEUTRAL)
+    g.printf(card:getName(), x+pd, y-pd-_info_font:getHeight(), w-pd*2, "center")
   end
 
   --shadow
@@ -58,15 +68,11 @@ function CARD.draw(card, x, y, focused, alpha)
 
   g.translate(x, y)
   --Draw card info
-  local pd = 12
-  local typewidth = _info_font:getWidth(card:getType())
   g.setColor(0x20, 0x20, 0x20, alpha*255)
-  _info_font.set()
   g.printf(card:getType(), w-pd-typewidth, 0, typewidth, "right")
-  g.printf(card:getName(), pd, 3*h/5+pd+10, w-pd*2, "center")
 
   if card:isWidget() then
-    g.printf(("[%d/%d]"):format(card:getUsages(), card:getWidgetCharges()),
+    g.printf(("[%d]"):format(card:getWidgetCharges()-card:getUsages()),
              pd, h-pd-_info_font:getHeight(), w-pd*2, "left"
     )
   end
