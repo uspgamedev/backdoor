@@ -110,6 +110,8 @@ function state:update(dt)
       _startTask(DEFS.ACTION.IDLE)
     elseif INPUT.actionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
+    elseif INPUT.actionPressed('ACTION_1') then
+      _startTask(DEFS.ACTION.PLAY_CARD)
     elseif INPUT.actionPressed('EXTRA') then
       return SWITCHER.push(GS.ACTION_MENU, _route)
     elseif INPUT.actionPressed('PAUSE') then
