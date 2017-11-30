@@ -1,10 +1,12 @@
 {
   "extends":"sentient",
-  "behavior":"aggro",
   "signature":"MELEE",
-  "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers.",
-  "spd":0,
-  "arc":0,
+  "behavior":"aggro",
   "cor":0,
-  "ani":0
+  "arc":0,
+  "collection":"anything",
+  "ani":0,
+  "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers.",
+  "initial_buffer":[],
+  "spd":0
 }

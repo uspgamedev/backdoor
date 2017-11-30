@@ -1,7 +1,5 @@
 {
   "attr":"ARC",
-  "name":"ARC +10",
-  "desc":"Upgrades your Arcana attribute by 10.",
   "upgrade":{
     "cost":2,
     "actor_list":[{
@@ -9,5 +7,8 @@
         "val":10
       }],
     "body_list":[]
-  }
+  },
+  "set":"upgrades_arc",
+  "desc":"Upgrades your Arcana attribute by 10.",
+  "name":"ARC +10"
 }

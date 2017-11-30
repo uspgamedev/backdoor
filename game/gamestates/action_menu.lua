@@ -79,7 +79,7 @@ function state:enter(_, route)
   local action = 'draw_new_hand'
   if player:getHandSize() > 0 then action = 'play_card' end
   _menu_view:setCardAction(action)
-  _menu_view:open(_last_focus)
+  _menu_view:open(_last_focus, player)
   _registerSignals()
 
 end

@@ -1,6 +1,8 @@
 {
   "extends":"grinful",
   "arc":3,
+  "collection":"anything",
+  "initial_buffer":[],
   "name":"Fiendish",
   "description":"Stronger spellcaster monster, evil by nature."
 }

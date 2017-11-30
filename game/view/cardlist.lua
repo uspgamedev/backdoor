@@ -250,7 +250,7 @@ function View:drawArrow(g, enter)
   _font.set()
   text_height = _font:getHeight()*lh
 
-  g.translate(0, -_PD - text_height*1.5)
+  g.translate(0, -_PD - text_height*2.5)
   self:drawHoldBar(g)
 
   g.translate(0, text_height*.5)
