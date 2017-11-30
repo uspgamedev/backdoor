@@ -1,8 +1,10 @@
 {
   "extends":"sentient",
   "arc":-4,
-  "ani":4,
+  "signature":"SHOOT",
   "cor":-4,
+  "name":"Gagdeteer",
+  "ani":4,
   "initial_buffer":[{
       "amount":2,
       "card":"goggles"
@@ -16,6 +18,5 @@
       "amount":4,
       "card":"goggles"
     }],
-  "name":"Gagdeteer",
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }
