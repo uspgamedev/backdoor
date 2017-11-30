@@ -147,7 +147,7 @@ local function _useAction(action_slot, params)
   local param = ACTION.pendingParam(action_slot, controlled_actor, params)
   while param do
     if param.typename == 'choose_dir' then
-      SWITCHER.push(GS.PICK_DIR, _view.sector)
+      SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'])
       local dir = coroutine.yield(_task)
       if dir then
         params[param.output] = dir
