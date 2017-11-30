@@ -39,7 +39,6 @@ function CARD.draw(card, x, y, focused, alpha)
   local pd = 12
   g.push()
 
-  _info_font.set()
 
   if focused then
     -- shine!
@@ -48,9 +47,12 @@ function CARD.draw(card, x, y, focused, alpha)
     cr = cr + shine
     cg = cg + shine
     cb = cb + shine
+    _title_font:set()
     g.setColor(COLORS.NEUTRAL)
-    g.printf(card:getName(), x+pd, y-pd-_info_font:getHeight(), w-pd*2, "center")
+    g.printf(card:getName(), x+pd, y-pd-_title_font:getHeight(), w-pd*2, "center")
   end
+
+  _info_font.set()
 
   --shadow
   g.setColor(0, 0, 0, alpha*255)

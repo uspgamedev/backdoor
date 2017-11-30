@@ -9,8 +9,9 @@ local COLORS = require 'domain.definitions.colors'
 local _drawCard
 
 --CONSTS--
-local _F_NAME = "Text" --Font name
-local _F_SIZE = 21 --Font size
+local _WIDTH, _HEIGHT
+local _F_NAME = "Title" --Font name
+local _F_SIZE = 24 --Font size
 local _ACTION_TYPES = {
   'use', 'stash',
 }
@@ -37,6 +38,7 @@ function HandView:init(route)
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
+  _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
 end
 
@@ -95,15 +97,39 @@ end
 function HandView:draw()
   local x, y = self.x, self.y
   local gap = CARD.getWidth() + 20
+  local boxwidth = 128
   local g = love.graphics
-  _font.set()
+
+  -- draw action type
+  if not not self:getActionType() then
+    _font.set()
+    local colorname = self:getActionType():upper()
+    local poly = {
+      0, _HEIGHT/2,
+      self.x + boxwidth, _HEIGHT/2,
+      self.x + boxwidth, _HEIGHT/2 + 40,
+      self.x + boxwidth - 20, _HEIGHT/2 + 60,
+      0, _HEIGHT/2 + 60,
+    }
+    g.push()
+    g.translate(2,2)
+    g.setColor(COLORS.DARK)
+    g.polygon("fill", poly)
+    g.pop()
+    g.setColor(COLORS[colorname])
+    g.polygon("fill", poly)
+    g.setColor(COLORS.NEUTRAL)
+    g.printf(self:getActionType(), self.x, _HEIGHT/2+10, boxwidth, "left")
+  end
+
+  -- draw each card
   for i, card in ipairs(self.hand) do
     CARD.draw(card, x, y, i == self.focus_index)
-    if i == self.focus_index then
-      g.setColor(COLORS.NEUTRAL)
-      g.print(self:getActionType(), x + 2, y - 1.5*_font:getHeight())
-    end
     x = x + gap
+    if self.focus_index == i then
+      local infox = self.x + 5*gap + 20
+      CARD.drawInfo(card, infox, self.y, _WIDTH - infox - 40, 1)
+    end
   end
 end
 
