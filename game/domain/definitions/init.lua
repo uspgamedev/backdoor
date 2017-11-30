@@ -9,7 +9,7 @@ DEFS.MAX_PP = 100
 DEFS.PRIMARY_ATTRIBUTES = {"COR", "ARC", "ANI"}
 DEFS.ATTRIBUTES = {"COR", "ARC", "ANI", "SPD"}
 DEFS.BODY_ATTRIBUTES = {"VIT", "DEF"}
-DEFS.ALL_ATTRIBUTES = {"COR", "ARC", "ANI", "SPD", "VIT", "DEF"}
+DEFS.ALL_ATTRIBUTES = {"COR", "ARC", "ANI", "SPD", "VIT", "DEF", "FOV"}
 DEFS.PACK_SIZE = 5
 DEFS.HAND_LIMIT = 5
 DEFS.TIME_UNIT = 20
@@ -21,4 +21,3 @@ DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
 DEFS.APT          = require 'domain.definitions.aptitude'
 
 return DEFS
-

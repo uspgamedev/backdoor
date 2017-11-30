@@ -70,7 +70,7 @@ function updateOctant(actor, sector, octant)
 
     --Check if tile is inside sector
     if not sector:isInside(pos[1],pos[2]) then break end
-    if row > actor.fov_range then
+    if row > actor:getFov() then
       full_shadow = true
     end
 
