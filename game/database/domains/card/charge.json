@@ -1,0 +1,16 @@
+{
+  "attr":"COR",
+  "pp":5,
+  "name":"Charge",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_dir",
+          "output":"dir"
+        }],
+      "operators":[],
+      "effects":[]
+    }
+  }
+}
