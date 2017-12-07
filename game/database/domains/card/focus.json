@@ -1,0 +1,33 @@
+{
+  "desc":"ARC +2\nSpends whenever an arcana art is played.",
+  "widget":{
+    "operators":[{
+        "attr":"ARC",
+        "op":"+",
+        "val":2
+      }],
+    "trigger":"on_play",
+    "charges":2,
+    "trigger-condition":{
+      "params":[{
+          "typename":"card",
+          "output":"card"
+        },{
+          "typename":"card_has_attribute",
+          "attribute":"ARC",
+          "output":"ok1",
+          "card":"par:card"
+        },{
+          "typename":"card_is_type",
+          "type":"ART",
+          "output":"ok2",
+          "card":"par:card"
+        }],
+      "operators":[],
+      "effects":[]
+    }
+  },
+  "attr":"ARC",
+  "name":"Focus Prop",
+  "art":false
+}
