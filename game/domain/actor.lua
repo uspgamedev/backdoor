@@ -350,8 +350,8 @@ function Actor:updateFov(sector)
 end
 
 function Actor:getFov()
-  return self:getBody()
-             :applyStaticOperators("FOV", self.fov_range)
+  return math.max(0,self:getBody()
+             :applyStaticOperators("FOV", self.fov_range))
 end
 
 --[[ Turn methods ]]--
