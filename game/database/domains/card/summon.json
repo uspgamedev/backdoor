@@ -12,11 +12,11 @@
       "operators":[],
       "effects":[{
           "pos":"par:pos",
-          "bodyspec":"machine",
-          "typename":"make_body",
-          "widgetspec":"poison",
           "vit":0,
-          "def":0
+          "typename":"make_body",
+          "widgetspec":"<none>",
+          "def":50,
+          "bodyspec":"machine"
         }]
     }
   }

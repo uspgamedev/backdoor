@@ -20,7 +20,8 @@ function FX.process (actor, params)
   local i,j = unpack(params['pos'])
   local body = sector:getRoute().makeBody(bodyspec, i, j)
   local state = {}
-  if type(params['widgetspec']) == 'string' then
+  local widgetspec = params['widgetspec']
+  if type(widgetspec) == 'string' and widgetspec ~= '<none>' then
     local widget = Card(params['widgetspec'])
     assert(widget:isWidget())
     widget:setOwner(actor)

@@ -1,0 +1,15 @@
+{
+  "desc":"DEF +2 for the next ten hits.",
+  "widget":{
+    "operators":[{
+        "attr":"DEF",
+        "op":"+",
+        "val":2
+      }],
+    "trigger":"on_hit",
+    "charges":10
+  },
+  "one_time":true,
+  "attr":"ARC",
+  "name":"Reinforced Surface"
+}

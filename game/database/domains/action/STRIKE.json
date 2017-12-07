@@ -8,7 +8,7 @@
     "params":[{
         "typename":"choose_target",
         "output":"pos",
-        "body-only":true,
+        "body-only":{},
         "max-range":1
       }],
     "operators":[{
