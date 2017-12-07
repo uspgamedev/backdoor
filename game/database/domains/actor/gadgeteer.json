@@ -1,22 +1,22 @@
 {
   "extends":"sentient",
-  "arc":-4,
+  "arc":2,
   "signature":"SHOOT",
-  "cor":-4,
+  "cor":2,
   "name":"Gagdeteer",
-  "ani":4,
+  "ani":-4,
   "initial_buffer":[{
-      "amount":2,
-      "card":"goggles"
+      "amount":1,
+      "card":"cor_1"
     },{
-      "amount":2,
+      "amount":1,
+      "card":"arc_1"
+    },{
+      "amount":1,
       "card":"goggles"
     },{
       "amount":4,
-      "card":"goggles"
-    },{
-      "amount":4,
-      "card":"goggles"
+      "card":"rusty-blaster"
     }],
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

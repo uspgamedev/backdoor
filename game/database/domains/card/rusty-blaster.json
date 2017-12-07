@@ -1,0 +1,47 @@
+{
+  "desc":"Shoots three times, dealing 4dARC damage to \narget each time.\n\nAn old but reliable arcane blaster.",
+  "widget":{
+    "operators":[],
+    "trigger":"on_use",
+    "activation":{
+      "ability":{
+        "params":[{
+            "typename":"choose_target",
+            "body-only":true,
+            "output":"target",
+            "max-range":5
+          }],
+        "operators":[{
+            "typename":"get_body_at",
+            "pos":"par:target",
+            "output":"body"
+          },{
+            "typename":"get_attribute",
+            "output":"arc",
+            "which":"ARC"
+          }],
+        "effects":[{
+            "typename":"damage_on_target",
+            "target":"val:body",
+            "attr":"val:arc",
+            "base":4
+          },{
+            "typename":"damage_on_target",
+            "target":"val:body",
+            "base":4,
+            "attr":"val:arc"
+          },{
+            "typename":"damage_on_target",
+            "target":"val:body",
+            "base":4,
+            "attr":"val:arc"
+          }]
+      },
+      "cost":20
+    },
+    "charges":20,
+    "placement":"weapon"
+  },
+  "attr":"ARC",
+  "name":"Rusty Blaster"
+}
