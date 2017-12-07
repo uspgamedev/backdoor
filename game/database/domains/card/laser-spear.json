@@ -1,0 +1,37 @@
+{
+  "desc":"Deals 10dCOR damage to target.\n\nA mass-produced weapon.",
+  "widget":{
+    "operators":[],
+    "trigger":"on_use",
+    "activation":{
+      "cost":20,
+      "ability":{
+        "params":[{
+            "typename":"choose_target",
+            "max-range":1,
+            "body-only":[],
+            "output":"target"
+          }],
+        "operators":[{
+            "typename":"get_body_at",
+            "pos":"par:target",
+            "output":"body"
+          },{
+            "typename":"get_attribute",
+            "output":"cor",
+            "which":"COR"
+          }],
+        "effects":[{
+            "typename":"damage_on_target",
+            "target":"val:body",
+            "base":10,
+            "attr":"val:cor"
+          }]
+      }
+    },
+    "charges":5,
+    "placement":"weapon"
+  },
+  "attr":"COR",
+  "name":"Laser Spear"
+}

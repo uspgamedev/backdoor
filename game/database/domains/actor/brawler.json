@@ -6,14 +6,32 @@
   "name":"Brawler",
   "ani":-4,
   "initial_buffer":[{
-      "amount":2,
+      "amount":1,
       "card":"vit_1"
     },{
-      "amount":4,
+      "amount":1,
       "card":"spark_rod"
     },{
-      "amount":4,
+      "amount":1,
       "card":"rush"
+    },{
+      "amount":1,
+      "card":"laser-spear"
+    },{
+      "amount":1,
+      "card":"rage"
+    },{
+      "amount":1,
+      "card":"power-suit"
+    },{
+      "amount":1,
+      "card":"jump"
+    },{
+      "amount":1,
+      "card":"dropkick"
+    },{
+      "amount":8,
+      "card":"seedling-sap"
     }],
   "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
 }

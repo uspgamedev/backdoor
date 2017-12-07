@@ -1,0 +1,19 @@
+{
+  "desc":"DEF +5, SPD -4",
+  "widget":{
+    "operators":[{
+        "attr":"DEF",
+        "op":"+",
+        "val":5
+      },{
+        "attr":"SPD",
+        "op":"-",
+        "val":4
+      }],
+    "trigger":"on_hit",
+    "charges":8,
+    "placement":"suit"
+  },
+  "attr":"COR",
+  "name":"Power Suit"
+}

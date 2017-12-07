@@ -1,0 +1,14 @@
+{
+  "desc":"SPD -4 for 3 turns",
+  "widget":{
+    "operators":[{
+        "attr":"SPD",
+        "op":"-",
+        "val":4
+      }],
+    "trigger":"on_turn",
+    "charges":3
+  },
+  "attr":"ANI",
+  "name":"Tipsy"
+}
