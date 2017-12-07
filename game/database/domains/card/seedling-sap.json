@@ -1,0 +1,32 @@
+{
+  "desc":"Drink: draw two cards and get the \"Tipsy\"\nwidget.\n\nTipsy: SPD -2 for a while.",
+  "widget":{
+    "operators":[],
+    "trigger":"on_use",
+    "activation":{
+      "cost":10,
+      "ability":{
+        "params":[],
+        "operators":[{
+            "typename":"self",
+            "output":"self"
+          },{
+            "typename":"get_actor_body",
+            "output":"body_self",
+            "actor":"val:self"
+          }],
+        "effects":[{
+            "typename":"draw_card",
+            "amount":2
+          },{
+            "typename":"place_widget",
+            "body":"val:body_self",
+            "card":"tipsy"
+          }]
+      }
+    },
+    "charges":3
+  },
+  "attr":"ANI",
+  "name":"Seedling Sap"
+}
