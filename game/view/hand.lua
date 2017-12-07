@@ -128,7 +128,7 @@ function HandView:draw()
     x = x + gap
     if self.focus_index == i then
       local infox = self.x + 5*gap + 20
-      CARD.drawInfo(card, infox, self.y, _WIDTH - infox - 40, 1)
+      CARD.drawInfo(card, infox, self.y - 40, _WIDTH - infox - 40, 1)
     end
   end
 end
