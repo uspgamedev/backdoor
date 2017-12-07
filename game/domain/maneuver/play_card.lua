@@ -59,6 +59,7 @@ function PLAYCARD.perform(actor, params)
     end
   end
 
+  body:triggerWidgets(TRIGGERS.ON_ACT)
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 

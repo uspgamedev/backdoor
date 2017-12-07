@@ -9,6 +9,7 @@ return {
   "on_place",
   "on_play",
   "on_leave",
+  "on_act",
   ON_TICK = 'on_tick',
   ON_TURN = 'on_turn',
   ON_USE = 'on_use',
@@ -18,6 +19,7 @@ return {
   ON_PLACE = 'on_place',
   ON_PLAY = 'on_play',
   ON_LEAVE = 'on_leave',
+  ON_ACT = 'on_act'
 }
 
 

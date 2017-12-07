@@ -1,4 +1,5 @@
 
+local DEFS        = require 'domain.definitions'
 local ACTIONDEFS  = require 'domain.definitions.action'
 local ABILITY     = require 'domain.ability'
 local SIGNATURE   = {}
@@ -17,6 +18,7 @@ function SIGNATURE.perform(actor, params)
   local signature = actor:getSignature()
   actor:spendTime(signature.cost)
   actor:rewardPP(signature.playpoints or 0)
+  actor:getBody():triggerWidgets(DEFS.TRIGGERS.ON_ACT)
   ABILITY.execute(signature.ability, actor, params)
 end
 
