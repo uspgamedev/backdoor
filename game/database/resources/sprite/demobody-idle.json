@@ -1,29 +1,25 @@
 {
   "animation":[{
-      "offset":[0,64],
       "time":100,
-      "quad":[0,0,80,120]
+      "quad_idx":1
     },{
-      "offset":[0,64],
       "time":100,
-      "quad":[80,0,80,120]
+      "quad_idx":2
     },{
-      "offset":[0,64],
       "time":100,
-      "quad":[160,0,80,120]
+      "quad_idx":3
     },{
-      "offset":[0,64],
       "time":100,
-      "quad":[240,0,80,120]
+      "quad_idx":4
     },{
-      "offset":[0,64],
       "time":100,
-      "quad":[160,0,80,120]
+      "quad_idx":3
     },{
-      "offset":[0,64],
       "time":100,
-      "quad":[80,0,80,120]
+      "quad_idx":2
     }],
+  "loop":true,
   "texture":"demobody",
-  "loop":true
+  "offset":[0,64],
+  "quad_division":[4,1]
 }
