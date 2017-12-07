@@ -146,8 +146,8 @@ function Actor:getAttrLevel(which)
 end
 
 function Actor:getAttribute(which)
-  return self:getBody()
-             :applyStaticOperators(which, self:getAttrLevel(which))
+  return math.max(1,self:getBody()
+                        :applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
 function Actor:updateAttr(which)

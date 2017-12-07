@@ -101,7 +101,7 @@ function Body:getAttrLevel(which)
 end
 
 function Body:getAttribute(which)
-  return self:applyStaticOperators(which, self:getAttrLevel(which))
+  return math.max(1,self:applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
 function Body:updateAttr(which)
