@@ -13,17 +13,8 @@
       "amount":1,
       "card":"fireball"
     },{
-      "amount":1,
-      "card":"firebolt"
-    },{
-      "amount":6,
-      "card":"focus"
-    },{
-      "amount":4,
-      "card":"divination"
-    },{
-      "amount":4,
-      "card":"haste"
+      "amount":7,
+      "card":"heal"
     }],
   "ani":-4,
   "name":"Arcanist",
