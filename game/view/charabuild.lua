@@ -18,6 +18,7 @@ local _HEIGHT
 --LOCALS--
 local _font
 local _smol_font
+local _species
 
 
 --MODULE--
@@ -32,6 +33,7 @@ local function _initGraphicValues()
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("Text", _FONT_SIZE)
   _smol_font = FONT.get("Text", _FONT_SIZE*0.75)
+  _species = RES.loadSprite('hearthborn-idle')
 end
 
 local function _renderSaved(g, saved)
@@ -84,12 +86,8 @@ end
 local function _renderPreview(g)
   g.push()
   g.translate(0, _TILE_H)
-  g.scale(_TILE_W, _TILE_H)
-  g.setColor(200, 100, 100)
-  g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
-  g.setColor(90, 140, 140)
-  g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
   g.setColor(COLORS.NEUTRAL)
+  _species(-40, 0)
   g.pop()
 end
 
