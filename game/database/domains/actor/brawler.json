@@ -3,6 +3,8 @@
   "arc":-4,
   "signature":"STRIKE",
   "cor":4,
+  "name":"Brawler",
+  "ani":-4,
   "initial_buffer":[{
       "amount":1,
       "card":"vit_1"
@@ -19,10 +21,11 @@
       "amount":1,
       "card":"rage"
     },{
-      "amount":4,
+      "amount":1,
       "card":"power-suit"
+    },{
+      "amount":6,
+      "card":"jump"
     }],
-  "ani":-4,
-  "name":"Brawler",
   "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
 }
