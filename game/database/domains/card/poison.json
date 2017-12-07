@@ -1,11 +1,11 @@
 {
   "attr":"COR",
-  "one_time":true,
   "widget":{
     "operators":[],
     "trigger":"on_tick",
     "charges":30,
     "auto_activation":{
+      "trigger":"on_tick",
       "ability":{
         "params":[{
             "typename":"body",
@@ -15,12 +15,12 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"par:body_self",
-            "base":1,
-            "attr":1
+            "attr":1,
+            "base":1
           }]
-      },
-      "trigger":"on_tick"
+      }
     }
   },
+  "one_time":true,
   "name":"Poison"
 }

@@ -1,16 +1,15 @@
 {
-  "desc":"Deals 10dCOR damage to target.\n\nA mass-produced weapon.",
+  "desc":"Deals 10dCOR damage to target.\n\n\"A mass-produced weapon.\"",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":20,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":1,
+            "output":"target",
             "body-only":[],
-            "output":"target"
+            "max-range":1
           }],
         "operators":[{
             "typename":"get_body_at",
@@ -24,10 +23,11 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:body",
-            "base":10,
-            "attr":"val:cor"
+            "attr":"val:cor",
+            "base":10
           }]
-      }
+      },
+      "cost":20
     },
     "charges":5,
     "placement":"weapon"
