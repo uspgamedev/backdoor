@@ -1,5 +1,5 @@
 {
-  "desc":"Increase you\n\"This over the top technological spectacles combine infra-red rays, image intensifier and obfuscation protection to improve the wearer's Field of View!\n\nSee more than ever with the Throttle Goggles, the latest visual wonder from Tark Tech!\"",
+  "desc":"Increase your FoV by 6 for 25 turns.\n\n\"This over the top technological spectacles combine infra-red rays, image intensifier and obfuscation protection to improve the wearer's Field of View!\n\nSee more than ever with the Throttle Goggles, the latest visual wonder from Tark Tech!\"",
   "widget":{
     "operators":[{
         "attr":"FOV",
