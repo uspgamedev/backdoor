@@ -3,8 +3,6 @@
   "arc":4,
   "signature":"BOLT",
   "cor":-4,
-  "name":"Arcanist",
-  "ani":-4,
   "initial_buffer":[{
       "amount":1,
       "card":"arc_1"
@@ -18,8 +16,8 @@
       "amount":1,
       "card":"firebolt"
     },{
-      "amount":6,
-      "card":"focus"
+      "amount":8,
+      "card":"soul_robe"
     },{
       "amount":4,
       "card":"divination"
@@ -27,5 +25,7 @@
       "amount":4,
       "card":"haste"
     }],
+  "ani":-4,
+  "name":"Arcanist",
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
 }
