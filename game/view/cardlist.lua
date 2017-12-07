@@ -20,7 +20,7 @@ local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
-local _MAX_Y_OFFSET = 500
+local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _CONSUME_TEXT = "consume"
 local _WIDTH, _HEIGHT
