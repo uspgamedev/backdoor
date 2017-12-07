@@ -1,0 +1,42 @@
+{
+  "desc":"Deal 14dCOR damage to melee target and\n6dCOR damage to yourself.",
+  "attr":"COR",
+  "name":"Dropkick",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "output":"pos",
+          "body-only":[]
+        }],
+      "operators":[{
+          "typename":"get_attribute",
+          "output":"cor",
+          "which":"COR"
+        },{
+          "typename":"get_body_at",
+          "pos":"par:pos",
+          "output":"target"
+        },{
+          "typename":"self",
+          "output":"self"
+        },{
+          "typename":"get_actor_body",
+          "output":"body_self",
+          "actor":"val:self"
+        }],
+      "effects":[{
+          "typename":"damage_on_target",
+          "target":"val:target",
+          "base":14,
+          "attr":"val:cor"
+        },{
+          "typename":"damage_on_target",
+          "target":"val:body_self",
+          "base":6,
+          "attr":"val:cor"
+        }]
+    }
+  }
+}
