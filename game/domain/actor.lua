@@ -239,6 +239,10 @@ function Actor:isHandEmpty()
   return #self.hand == 0
 end
 
+function Actor:isHandFull()
+  return #self.hand >= self.hand_limit
+end
+
 function Actor:getBufferSize()
   for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then

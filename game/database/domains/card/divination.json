@@ -1,0 +1,17 @@
+{
+  "desc":"Draws two cards, a bit slow.",
+  "attr":"ARC",
+  "pp":2,
+  "name":"Divination",
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "params":[],
+      "operators":[],
+      "effects":[{
+          "typename":"draw_card",
+          "amount":2
+        }]
+    }
+  }
+}

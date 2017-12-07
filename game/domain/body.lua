@@ -246,6 +246,7 @@ function Body:getWidgetCount()
   return #self.widgets
 end
 
+local floor = math.floor
 local _OPS = {
   ['+'] = function (a,b) return a+b end,
   ['-'] = function (a,b) return a-b end,
@@ -257,7 +258,7 @@ function Body:applyStaticOperators(attr, value)
   for _,widget in ipairs(self.widgets) do
     for _,operator in widget:getStaticOperators() do
       if operator.attr == attr then
-        value = _OPS[operator.op](value, operator.val)
+        value = floor(_OPS[operator.op](value, operator.val))
       end
     end
   end

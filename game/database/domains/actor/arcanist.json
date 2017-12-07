@@ -18,6 +18,12 @@
     },{
       "amount":6,
       "card":"focus"
+    },{
+      "amount":4,
+      "card":"divination"
+    },{
+      "amount":4,
+      "card":"haste"
     }],
   "ani":-4,
   "name":"Arcanist",

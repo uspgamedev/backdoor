@@ -1,0 +1,20 @@
+{
+  "desc":"Makes you fast.\n\n\"Gotta go fast!\"",
+  "widget":{
+    "operators":[{
+        "attr":"SPD",
+        "op":"*",
+        "val":2
+      }],
+    "trigger":"on_turn",
+    "charges":6,
+    "trigger-condition":{
+      "params":[],
+      "operators":[],
+      "effects":[]
+    }
+  },
+  "attr":"ANI",
+  "pp":4,
+  "name":"Haste"
+}
