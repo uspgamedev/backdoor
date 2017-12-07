@@ -4,7 +4,7 @@
     "operators":[{
         "attr":"SPD",
         "op":"*",
-        "val":1
+        "val":2
       }],
     "trigger":"on_turn",
     "charges":6,
