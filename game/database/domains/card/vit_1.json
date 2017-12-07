@@ -1,12 +1,12 @@
 {
   "attr":"COR",
   "upgrade":{
+    "cost":2,
+    "actor_list":[],
     "body_list":[{
         "attr":"VIT",
         "val":10
-      }],
-    "actor_list":[],
-    "cost":2
+      }]
   },
   "set":"upgrades_vit",
   "desc":"Upgrades your Vitality by 10.",
