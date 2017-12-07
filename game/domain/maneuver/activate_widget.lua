@@ -28,6 +28,7 @@ function ACTIVATE.perform(actor, params)
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, params)
   body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, { activated_widget = widget })
+  body:triggerWidgets(DEFS.TRIGGERS.ON_ACT)
   body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE)
 end
 
