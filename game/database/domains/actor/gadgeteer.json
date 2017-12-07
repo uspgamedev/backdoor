@@ -3,8 +3,6 @@
   "arc":2,
   "signature":"SHOOT",
   "cor":2,
-  "name":"Gagdeteer",
-  "ani":-4,
   "initial_buffer":[{
       "amount":1,
       "card":"cor_1"
@@ -15,8 +13,16 @@
       "amount":1,
       "card":"goggles"
     },{
-      "amount":4,
+      "amount":1,
       "card":"rusty-blaster"
+    },{
+      "amount":4,
+      "card":"summon"
+    },{
+      "amount":4,
+      "card":"reinforce"
     }],
+  "ani":-4,
+  "name":"Gagdeteer",
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

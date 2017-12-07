@@ -7,7 +7,7 @@
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "body-only":true,
+            "body-only":{},
             "output":"target",
             "max-range":5
           }],

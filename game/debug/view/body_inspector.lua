@@ -18,6 +18,16 @@ return function (body)
     IMGUI.Text(("VIT: %d"):format(body:getVIT()))
     IMGUI.Text(("DEF: %d"):format(body:getDEF()))
     IMGUI.Text(("DEFDIE: d%d"):format(body:getBaseDEF()))
+    IMGUI.Separator()
+    IMGUI.Text("Widgets:")
+    IMGUI.Indent(20)
+    for _,widget in body:eachWidget() do
+      local txt = ("%s [%d]"):format(
+        widget:getName(), widget:getWidgetCharges() - widget:getUsages()
+      )
+      IMGUI.Text(txt)
+    end
+    IMGUI.Unindent(20)
   end
 
 end

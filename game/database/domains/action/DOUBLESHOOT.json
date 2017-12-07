@@ -30,12 +30,12 @@
     "params":[{
         "typename":"choose_target",
         "output":"target",
-        "body-only":true,
+        "body-only":{},
         "max-range":6
       },{
         "typename":"choose_target",
         "output":"target2",
-        "body-only":true,
+        "body-only":{},
         "max-range":6
       }],
     "operators":[{

@@ -13,7 +13,7 @@
     "params":[{
         "max-range":5,
         "output":"target",
-        "body-only":true,
+        "body-only":{},
         "typename":"choose_target"
       }],
     "effects":[{

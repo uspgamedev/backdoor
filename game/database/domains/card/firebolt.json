@@ -11,7 +11,7 @@
           "typename":"choose_target",
           "max-range":7,
           "empty-tile":false,
-          "body-only":true,
+          "body-only":{},
           "output":"tgt"
         }],
       "operators":[{
