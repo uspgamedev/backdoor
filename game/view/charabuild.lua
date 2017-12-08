@@ -88,8 +88,8 @@ end
 
 function View:close(after)
   self:removeTimer('charabuild_fade', MAIN_TIMER)
-  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", _FADE_TIME,
-                self, { enter = 0 }, "linear", after
+  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", 1.5*_FADE_TIME,
+                self, { enter = 0 }, "in-quad", after
   )
 end
 
@@ -171,8 +171,12 @@ function View:drawSelection(g, context, selection)
   g.translate(_WIDTH/2, _HEIGHT/2 + _header_font:getHeight())
 
   local text = _menu_values[context][selection]
+  local spec
   if type(text):match('boolean') then text = text and "Yes" or "No"
-  else text = _getSpec(context, text)['name'] end
+  else
+    spec = _getSpec(context, text)
+    text = spec['name']
+  end
   g.printf(text, -256, 0, 512, "center")
 
   local w = _header_font:getWidth(text) / 2 + _PD * 2
@@ -188,9 +192,24 @@ function View:drawSelection(g, context, selection)
   g.polygon("fill",  w, 0,  w-_PD,  _PD/2,  w-_PD, -_PD/2)
   g.pop()
 
-  g.translate(0, _PD*1.8)
-
   g.pop()
+
+  if spec then
+    g.push()
+    g.translate(2*_WIDTH/3-40,
+                _HEIGHT/2 + 40)
+    local specname = _menu_values[context][selection]
+    local name = _getSpec(context, specname)['name']
+    local desc = _getSpec(context, specname)['description']
+    _header_font:set()
+    _header_font:setLineHeight(1)
+    g.printf(name, 0, -_header_font:getHeight(), 400, "left")
+    _content_font:set()
+    _content_font:setLineHeight(1)
+    g.printf(desc:gsub("(%w)\n(%w)", "%1 %2"), 0, 0, 400, "left")
+    g.pop()
+  end
+
 end
 
 function View:drawContext(g)
@@ -204,17 +223,20 @@ end
 
 function View:drawSaved(g, player_info)
   -- draw current state
+  _header_font:setLineHeight(1)
   _header_font:set()
   g.push()
-  g.translate(2*_WIDTH/3-40, _HEIGHT/2 - 2*_header_font:getHeight() + 40)
+  g.translate(_WIDTH/3-80, _HEIGHT/2 - 2*_header_font:getHeight() + 40)
+  g.setColor(0x38, 0xe4, 0xff, 255*self.enter)
   for i = 1, self.context - 1 do
     local field = _PLAYER_FIELDS[i]
     local specname = player_info[field]
     if specname == true or specname == false then break end
 
     g.print(_getSpec(field, specname)['name'], 0, 0)
-    g.translate(0, _header_font:getHeight())
+    g.translate(0, _header_font:getHeight() - 16)
   end
+  g.setColor(255, 255, 255, 255*self.enter)
   g.pop()
 end
 
