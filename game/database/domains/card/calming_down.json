@@ -1,0 +1,30 @@
+{
+  "attr":"ANI",
+  "widget":{
+    "operators":[],
+    "trigger":"on_act",
+    "charges":2,
+    "auto_activation":{
+      "trigger":"on_tick",
+      "ability":{
+        "params":[],
+        "operators":[{
+            "typename":"self",
+            "output":"self_actor"
+          },{
+            "typename":"get_actor_body",
+            "output":"actor_body",
+            "actor":"val:self_actor"
+          }],
+        "effects":[{
+            "typename":"heal",
+            "target":"val:actor_body",
+            "amount":1
+          }]
+      }
+    }
+  },
+  "desc":"This user is regenerating 2 health each tick. However, doing anything besides moving or waiting will remove this status.",
+  "pp":4,
+  "name":"Calming Down"
+}

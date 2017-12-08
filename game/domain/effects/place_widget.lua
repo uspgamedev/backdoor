@@ -10,7 +10,9 @@ FX.schema = {
 }
 
 function FX.process(actor, params)
-  params['body']:placeWidget(Card(params['card']))
+  local card = Card(params['card'])
+  card:setOwner(actor)
+  params['body']:placeWidget(card)
 end
 
 return FX

@@ -1,0 +1,21 @@
+{
+  "attr":"ANI",
+  "widget":{
+    "operators":[{
+        "attr":"ANI",
+        "op":"+",
+        "val":3
+      }],
+    "trigger":"on_act",
+    "charges":5,
+    "trigger-condition":{
+      "params":[],
+      "operators":[],
+      "effects":[]
+    },
+    "placement":"suit"
+  },
+  "desc":"Buffs your ANI by 4. Has 5 charges, spends one everytime you act.",
+  "pp":3,
+  "name":"Soul Robe"
+}
