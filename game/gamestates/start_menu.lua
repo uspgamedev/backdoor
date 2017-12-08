@@ -55,6 +55,7 @@ function state:resume(from, player_info)
 
     SWITCHER.switch(GS.PLAY, route_data)
   else
+    _menu_view:open()
     _menu_context = "START_MENU"
     CONTROLS.setMap(_mapping)
   end
@@ -63,33 +64,46 @@ end
 function state:update(dt)
   MAIN_TIMER:update(dt)
   _menu_view.invisible = false
+  if _menu_context == "START_MENU" then
+    _menu_view:setItem("New route")
+    _menu_view:setItem("Load route")
+    _menu_view:setItem("Quit")
+  elseif _menu_context == "LOAD_LIST" then
+    local savelist = PROFILE.getSaveList()
+    if next(savelist) then
+      for route_id, route_header in pairs(savelist) do
+        local savename = ("%s %s"):format(route_id, route_header.player_name)
+        _menu_view:setItem(savename)
+      end
+    else
+      _menu_view:setItem("[ NO DATA ]")
+    end
+  end
   if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
-        _menu_view.invisible = true
-        SWITCHER.push(GS.CHARACTER_BUILD)
+        CONTROLS.setMap()
+        _menu_view:close(function()
+          SWITCHER.push(GS.CHARACTER_BUILD)
+        end)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Quit") then
-        love.event.quit()
+        CONTROLS.setMap()
+        _menu_view:close(love.event.quit)
       end
-      _menu_view:setItem("New route")
-      _menu_view:setItem("Load route")
-      _menu_view:setItem("Quit")
     elseif _menu_context == "LOAD_LIST" then
       local savelist = PROFILE.getSaveList()
       if next(savelist) then
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
-          _menu_view:setItem(savename)
           if MENU.item(savename) then
             SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
           end
         end
       else
-        _menu_view:setItem("[ NO DATA ]")
         if MENU.item("[ NO DATA ]") then
           print("Cannot load no data.")
         end
@@ -97,7 +111,8 @@ function state:update(dt)
     end
   else
     if _menu_context == "START_MENU" then
-      love.event.quit()
+      CONTROLS.setMap()
+      _menu_view:close(love.event.quit)
     elseif _menu_context == "LOAD_LIST" then
       _menu_context = "START_MENU"
     end

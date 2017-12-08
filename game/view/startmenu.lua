@@ -17,6 +17,7 @@ local _TILE_W, _TILE_H = 80, 80
 local _SCROLL_THRESHOLD = 4
 local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
+local _FADE_TIME = .5
 
 
 local _menu_font, _title_font
@@ -30,20 +31,18 @@ local function _initFontValues()
 end
 
 
-local function _renderTitle()
-  local g = love.graphics
+local function _renderTitle(g, enter)
   g.push()
   g.translate(0, _height/4)
   _title_font:set()
   _title_font:setLineHeight(_LH)
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(255, 255, 255, 255*enter)
   g.print(_TITLE_TEXT, 0, 0)
   g.pop()
 end
 
 
-local function _renderOptions(q, selection, scrolltop)
-  local g = love.graphics
+local function _renderOptions(g, q, enter, selection, scrolltop)
   g.push()
   g.translate(0, _height/2)
   _menu_font:set()
@@ -51,13 +50,13 @@ local function _renderOptions(q, selection, scrolltop)
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
-    local color = COLORS.BACKGROUND
+    local cr, cg, cb = unpack(COLORS.BACKGROUND)
     count = count + 1
     if count >= scrolltop and count < scrolltop + _SCROLL_THRESHOLD then
       if selection == count then
-        color = COLORS.NEUTRAL
+        cr, cg, cb = unpack(COLORS.NEUTRAL)
       end
-      g.setColor(color)
+      g.setColor(cr, cg, cb, enter*255)
       g.print(item_text, 0, 0)
       g.translate(0, _menu_font:getHeight())
     end
@@ -82,13 +81,17 @@ end
 
 
 function StartMenuView:open()
-  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", 1,
-                self, { enter = 1 }, "in-out-quad"
+  self:removeTimer("startmenu_enter", MAIN_TIMER)
+  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", _FADE_TIME,
+                self, { enter = 1 }, "linear"
   )
 end
 
-function StartMenuView:close()
-  self.enter = 0
+function StartMenuView:close(after)
+  self:removeTimer("startmenu_enter", MAIN_TIMER)
+  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", _FADE_TIME,
+                self, { enter = 0 }, "linear", after
+  )
 end
 
 function StartMenuView:setItem(item_text)
@@ -116,15 +119,10 @@ function StartMenuView:draw()
   g.setBackgroundColor(0, 0, 0)
   g.translate(4*_TILE_W, 0)
 
-  _renderTitle()
-  _renderOptions(q, self.selection, self.scrolltop)
+  _renderTitle(g, self.enter)
+  _renderOptions(g, q, self.enter, self.selection, self.scrolltop)
 
   g.pop()
-
-  if self.enter < 1 then
-    g.setColor(0, 0, 0, 0xff*(1-self.enter))
-    g.rectangle("fill", 0, 0, g.getDimensions())
-  end
 
 end
 
