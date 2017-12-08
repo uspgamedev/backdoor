@@ -4,32 +4,35 @@
   "signature":"STRIKE",
   "cor":4,
   "initial_buffer":[{
-      "amount":1,
+      "amount":3,
       "card":"vit_1"
     },{
-      "amount":1,
+      "amount":2,
       "card":"spark_rod"
     },{
-      "amount":1,
+      "amount":3,
       "card":"rush"
     },{
-      "amount":1,
+      "amount":2,
       "card":"laser-spear"
     },{
-      "amount":1,
+      "amount":3,
       "card":"rage"
     },{
-      "amount":1,
+      "amount":2,
       "card":"power-suit"
     },{
-      "amount":1,
+      "amount":3,
       "card":"jump"
     },{
-      "amount":1,
+      "amount":3,
       "card":"dropkick"
     },{
       "amount":8,
       "card":"calming_down"
+    },{
+      "amount":3,
+      "card":"seedling-sap"
     }],
   "ani":-4,
   "name":"Brawler",
