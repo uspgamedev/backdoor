@@ -206,7 +206,7 @@ function View:drawSelection(g, context, selection)
     g.printf(name, 0, -_header_font:getHeight(), 400, "left")
     _content_font:set()
     _content_font:setLineHeight(1)
-    g.printf(desc:gsub("(%w)\n(%w)", "%1 %2"), 0, 0, 400, "left")
+    g.printf(desc:gsub("([^\n])\n([^\n])", "%1 %2"), 0, 0, 400, "left")
     g.pop()
   end
 
