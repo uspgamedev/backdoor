@@ -4,7 +4,10 @@
   "signature":"BOLT",
   "cor":-4,
   "initial_buffer":[{
-      "amount":1,
+      "amount":3,
+      "card":"arc_1"
+    },{
+      "amount":3,
       "card":"teleport"
     },{
       "amount":2,
@@ -12,6 +15,18 @@
     },{
       "amount":8,
       "card":"stick_flame"
+    },{
+      "amount":4,
+      "card":"firebolt"
+    },{
+      "amount":3,
+      "card":"focus"
+    },{
+      "amount":3,
+      "card":"divination"
+    },{
+      "amount":2,
+      "card":"haste"
     }],
   "ani":-4,
   "name":"Arcanist",

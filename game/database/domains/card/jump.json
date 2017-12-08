@@ -1,12 +1,13 @@
 {
   "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
   "attr":"COR",
+  "pp":3,
   "name":"Jump",
   "art":{
-    "cost":40,
     "art_ability":{
       "params":[{
           "aoe-hint":2,
+          "non-wall":true,
           "typename":"choose_target",
           "empty-tile":true,
           "output":"pos",
@@ -36,6 +37,7 @@
           "body":"val:body",
           "pos":"par:pos"
         }]
-    }
+    },
+    "cost":40
   }
 }
