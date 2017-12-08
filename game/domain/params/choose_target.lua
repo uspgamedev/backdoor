@@ -47,18 +47,8 @@ function PARAM.isValid(actor, parameter, value)
       return false
     end
     local typename = parameter['body-only']['body-type']
-    if typename then
-      local actual_typename = body:getSpecName()
-      local ok = false
-      repeat
-        local parent = DB.loadSpec('body', actual_typename)['extends']
-        if actual_typename == typename then
-          ok = true
-          break
-        end
-        actual_typename = parent
-      until not parent
-      if not ok then return false end
+    if typename and typename ~= '<none>' and not body:isSpec(typename) then
+      return false
     end
   end
   if parameter['empty-tile'] and sector:getBodyAt(i, j) then

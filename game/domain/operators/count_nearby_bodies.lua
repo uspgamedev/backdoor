@@ -5,30 +5,30 @@ OP.schema = {
   { id = 'pos', name = "Position", type = 'value', match = 'pos' },
   { id = 'range', name = "Range", type = 'value', match = 'integer',
     range = {0} },
+  { id = 'body-type', name = "Body Type", type = 'enum',
+    options = 'domains.body' },
   { id = 'output', name = "Label", type = 'output' }
 }
 
-OP.type = 'body'
+OP.type = 'integer'
 
 function OP.process(actor, params)
   local sector = actor:getBody():getSector()
   local i, j = unpack(params['pos'])
   local range = params['range']
-  local nearest
-  local mindist = range+1
+  local specname = params['body-type']
+  local count = 0
   for di=i-range,i+range do
     for dj=j-range,j+range do
       if di ~= i or dj ~= j then
         local body = sector:getBodyAt(di, dj)
-        local dist = math.max(math.abs(di-i), math.abs(dj-j))
-        if body and dist < mindist then
-          nearest = body
-          mindist = dist
+        if body and body:isSpec(specname) then
+          count = count + 1
         end
       end
     end
   end
-  return nearest
+  return count
 end
 
 return OP

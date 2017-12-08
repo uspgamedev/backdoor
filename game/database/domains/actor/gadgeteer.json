@@ -23,6 +23,9 @@
     },{
       "amount":3,
       "card":"reinforce"
+    },{
+      "amount":5,
+      "card":"wrench"
     }],
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }
