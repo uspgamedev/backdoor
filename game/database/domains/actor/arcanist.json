@@ -5,25 +5,13 @@
   "cor":-4,
   "initial_buffer":[{
       "amount":1,
-      "card":"arc_1"
-    },{
-      "amount":1,
       "card":"teleport"
     },{
-      "amount":1,
+      "amount":2,
       "card":"fireball"
     },{
-      "amount":1,
-      "card":"firebolt"
-    },{
       "amount":8,
-      "card":"soul_robe"
-    },{
-      "amount":4,
-      "card":"divination"
-    },{
-      "amount":4,
-      "card":"haste"
+      "card":"stick_flame"
     }],
   "ani":-4,
   "name":"Arcanist",

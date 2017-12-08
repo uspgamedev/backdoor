@@ -15,4 +15,3 @@ function OP.process(actor, params)
 end
 
 return OP
-

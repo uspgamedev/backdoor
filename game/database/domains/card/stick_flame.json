@@ -1,0 +1,28 @@
+{
+  "desc":"Place a Sticky Flame on target body. After a few ticks, the Sticky Flame will explode, dealing 2d(4*ARC) damage to the body holding it.\n\n\"'Hey Danny, hold this for me, will ya?'. - Robert was surprised Danny didn't sent him an invite for his birthday the week after.\"",
+  "attr":"ARC",
+  "pp":4,
+  "name":"Stick Flame",
+  "art":{
+    "art_ability":{
+      "params":[{
+          "aoe-hint":1,
+          "max-range":4,
+          "typename":"choose_target",
+          "output":"target_pos",
+          "body-only":[]
+        }],
+      "operators":[{
+          "typename":"get_body_at",
+          "pos":"par:target_pos",
+          "output":"target_body"
+        }],
+      "effects":[{
+          "typename":"place_widget",
+          "body":"val:target_body",
+          "card":"sticky_flame"
+        }]
+    },
+    "cost":40
+  }
+}
