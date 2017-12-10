@@ -1,0 +1,27 @@
+{
+  "desc":"Kaboom",
+  "attr":"COR",
+  "name":"Sensor Bomb",
+  "art":{
+    "art_ability":{
+      "params":[{
+          "aoe-hint":4,
+          "max-range":1,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"pos",
+          "empty-tile":true
+        }],
+      "operators":[],
+      "effects":[{
+          "pos":"par:pos",
+          "vit":50,
+          "typename":"make_body",
+          "widgetspec":"proximity-detector",
+          "def":50,
+          "bodyspec":"machine"
+        }]
+    },
+    "cost":60
+  }
+}

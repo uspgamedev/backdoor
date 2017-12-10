@@ -84,6 +84,9 @@ end
 --[[ Spec-related methods ]]--
 
 function Body:isSpec(specname)
+  if not specname or specname == '<none>' then
+    return true
+  end
   local actual_specname = self:getSpecName()
   local ok = false
   repeat
