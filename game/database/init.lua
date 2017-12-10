@@ -119,14 +119,12 @@ local function _refresh(cache, basepath)
       _refresh(subcache, newbasepath)
     end
   end
-  --[[--
   -- HARD REFRESH --
   local group
   repeat
     group = next(cache)
-    cache[group] = nil
+    if group then cache[group] = nil end
   until next(cache) == nil
-  --]]--
 end
 
 function _listItemsIn(category, group_name)
