@@ -4,13 +4,12 @@
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":20,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":1,
+            "output":"pos",
             "body-only":[],
-            "output":"pos"
+            "max-range":1
           }],
         "operators":[{
             "typename":"get_attribute",
@@ -28,17 +27,18 @@
             "body":"val:body",
             "output":"center"
           },{
+            "ignore-owner":true,
             "pos":"val:center",
             "typename":"count_nearby_bodies",
-            "body-type":"machine",
+            "range":5,
             "output":"count",
-            "range":5
+            "body-type":"machine"
           },{
             "op":"+",
             "typename":"integer_binop",
-            "rhs":5,
+            "lhs":"val:count",
             "output":"base",
-            "lhs":"val:count"
+            "rhs":5
           },{
             "typename":"get_body_at",
             "pos":"par:pos",
@@ -47,10 +47,11 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:target",
-            "base":"val:base",
-            "attr":"val:cor"
+            "attr":"val:cor",
+            "base":"val:base"
           }]
-      }
+      },
+      "cost":20
     },
     "charges":10,
     "placement":"weapon"
