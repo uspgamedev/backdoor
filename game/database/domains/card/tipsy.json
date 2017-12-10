@@ -9,6 +9,7 @@
     "trigger":"on_turn",
     "charges":3
   },
+  "one_time":true,
   "attr":"ANI",
   "name":"Tipsy"
 }

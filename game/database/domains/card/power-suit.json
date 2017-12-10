@@ -14,6 +14,7 @@
     "charges":8,
     "placement":"suit"
   },
+  "one_time":true,
   "attr":"COR",
   "name":"Power Suit"
 }

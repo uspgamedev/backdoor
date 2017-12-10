@@ -9,6 +9,7 @@
     "trigger":"on_tick",
     "charges":40
   },
+  "one_time":true,
   "attr":"ANI",
   "name":"Blind"
 }

@@ -6,6 +6,7 @@
     "activation":false,
     "charges":40,
     "auto_activation":{
+      "trigger":"on_done",
       "ability":{
         "params":[{
             "typename":"body",
@@ -18,20 +19,20 @@
           },{
             "op":"*",
             "typename":"integer_binop",
-            "lhs":"val:ARC",
+            "rhs":4,
             "output":"ARC*4",
-            "rhs":4
+            "lhs":"val:ARC"
           }],
         "effects":[{
             "typename":"damage_on_target",
             "target":"par:body_self",
-            "base":"val:ARC*4",
-            "attr":2
+            "attr":2,
+            "base":"val:ARC*4"
           }]
-      },
-      "trigger":"on_done"
+      }
     }
   },
+  "one_time":true,
   "attr":"ARC",
   "name":"Sticky Flame"
 }
