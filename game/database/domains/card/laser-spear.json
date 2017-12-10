@@ -4,12 +4,13 @@
     "operators":[],
     "trigger":"on_use",
     "activation":{
+      "cost":20,
       "ability":{
         "params":[{
             "typename":"choose_target",
+            "max-range":1,
             "output":"target",
-            "body-only":[],
-            "max-range":1
+            "body-only":[]
           }],
         "operators":[{
             "typename":"get_body_at",
@@ -23,15 +24,15 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:body",
-            "attr":"val:cor",
-            "base":10
+            "base":10,
+            "attr":"val:cor"
           }]
-      },
-      "cost":20
+      }
     },
     "charges":5,
     "placement":"weapon"
   },
+  "one_time":true,
   "attr":"COR",
   "name":"Laser Spear"
 }
