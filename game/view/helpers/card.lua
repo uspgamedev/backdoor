@@ -101,7 +101,7 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.translate(0, _title_font:getHeight())
 
   _text_font.set()
-  local desc = card:getDescription():gsub("[^\n][\n][^\n]", " ")
+  local desc = card:getDescription():gsub("([^\n])[\n]([^\n])", "%1 %2")
   g.printf(desc:gsub("\n\n", "\n") or "[No description]", 0, 0, width)
 
   g.pop()
