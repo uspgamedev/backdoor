@@ -84,8 +84,8 @@ function DIRECTIONALS.wasDirectionTriggered(direction)
   if not hat then _last_hat = false end
   if not axis then _last_axis = false end
 
-  if hat == _last_hat then hat = false end
-  if axis == _last_axis then axis = false end
+  if _last_hat then hat = false end
+  if _last_axis then axis = false end
 
   if hat == dir then _last_hat = hat end
   if axis == dir then _last_axis = axis end
