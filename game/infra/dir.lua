@@ -2,7 +2,7 @@
 local INPUT = require 'input'
 local DIR = require 'domain.definitions.dir'
 
-local DIRECTIONAL = {}
+local DIRECTIONALS = {}
 
 local _DEADZONE = .4
 local _DEADZONE_SQR = _DEADZONE * _DEADZONE
@@ -20,17 +20,20 @@ local _POSITIONS = {
   ru = 'upright',
 }
 
-local acos = math.acos
-local sqrt = math.sqrt
 local abs = math.abs
-local used
-function DIRECTIONAL.getFromAxes()
+
+local _used
+local _last_hat
+
+DIRECTIONALS.DEADZONE = _DEADZONE
+
+function DIRECTIONALS.getFromAxes()
   local x, y = INPUT.getAxis('AXIS_X'), INPUT.getAxis('AXIS_Y')
   if x*x+y*y < _DEADZONE_SQR then
-    used = false
+    _used = false
     return false
-  elseif not used then
-    used = true
+  elseif not _used then
+    _used = true
     if     x >  _DEADZONE and abs(y) < _DEADZONE then
       return 'right'
     elseif x < -_DEADZONE and abs(y) < _DEADZONE then
@@ -51,13 +54,12 @@ function DIRECTIONAL.getFromAxes()
   end
 end
 
-local last_hat
-function DIRECTIONAL.getFromHat()
+function DIRECTIONALS.getFromHat()
   local dir = INPUT.getHat('HAT_DIRECTIONALS')
-  if dir == last_hat then return false end
-  last_hat = dir
+  if dir == _last_hat then return false end
+  _last_hat = dir
   return _POSITIONS[dir]
 end
 
-return DIRECTIONAL
+return DIRECTIONALS
 

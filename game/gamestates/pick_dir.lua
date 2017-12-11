@@ -1,6 +1,7 @@
 
-local DIR   = require 'domain.definitions.dir'
-local INPUT = require 'input'
+local INPUT        = require 'input'
+local DIRECTIONALS = require 'infra.dir'
+local DIR          = require 'domain.definitions.dir'
 local state = {}
 
 local _sector_view
@@ -21,8 +22,11 @@ end
 function state:update(dt)
   MAIN_TIMER:update(dt)
 
+  local axis = DIRECTIONALS.getFromAxes()
+  local hat = DIRECTIONALS.getFromHat()
+  local input_dir = axis or hat
   for _,dir in ipairs(DIR) do
-    if INPUT.wasActionPressed(dir:upper()) then
+    if INPUT.wasActionPressed(dir:upper()) or input_dir == dir then
       _updateDir(dir)
     end
   end

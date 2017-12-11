@@ -1,5 +1,6 @@
 --MODULE FOR THE GAMESTATE: SELECTING A CARD IN HAND--
 local INPUT = require 'input'
+local DIRECTIONALS = require 'infra.dir'
 
 
 local state = {}
@@ -62,13 +63,16 @@ function state:update(dt)
   if DEBUG then return end
   MAIN_TIMER:update(dt)
 
-  if INPUT.wasActionPressed('RIGHT') then
+  local axis = DIRECTIONALS.getFromAxes()
+  local hat = DIRECTIONALS.getFromHat()
+  local input_dir = axis or hat
+  if INPUT.wasActionPressed('RIGHT') or input_dir == 'right' then
     _moveFocus("right")
-  elseif INPUT.wasActionPressed('LEFT') then
+  elseif INPUT.wasActionPressed('LEFT') or input_dir == 'left' then
     _moveFocus("left")
-  elseif INPUT.wasActionPressed('UP') then
+  elseif INPUT.wasActionPressed('UP') or input_dir == 'up' then
     _changeActionType("up")
-  elseif INPUT.wasActionPressed('DOWN') then
+  elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
     _changeActionType("down")
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()

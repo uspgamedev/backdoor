@@ -1,5 +1,6 @@
 
 local INPUT = require 'input'
+local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
 local PackView = require 'view.cardlist'
@@ -56,9 +57,12 @@ function state:update(dt)
     })
   else
 
-    if INPUT.wasActionPressed('LEFT') then
+    local axis = DIRECTIONALS.getFromAxes()
+    local hat = DIRECTIONALS.getFromHat()
+    local input_dir = axis or hat
+    if INPUT.wasActionPressed('LEFT') or input_dir == 'left' then
       _prev()
-    elseif INPUT.wasActionPressed('RIGHT') then
+    elseif INPUT.wasActionPressed('RIGHT') or input_dir == 'right' then
       _next()
     elseif INPUT.wasActionPressed('CONFIRM') then
       _confirm()

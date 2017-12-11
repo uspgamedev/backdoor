@@ -1,5 +1,6 @@
 
 local INPUT = require 'input'
+local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PickWidgetView = require 'view.pickwidget'
 
@@ -52,9 +53,12 @@ function state:update(dt)
       (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
       SWITCHER.pop({})
     else
-      if INPUT.wasActionPressed('UP') then
+      local axis = DIRECTIONALS.getFromAxes()
+      local hat = DIRECTIONALS.getFromHat()
+      local input_dir = axis or hat
+      if INPUT.wasActionPressed('UP') or input_dir == 'up' then
         _prev()
-      elseif INPUT.wasActionPressed('DOWN') then
+      elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
         _next()
       elseif INPUT.wasActionPressed('CONFIRM') then
         _confirm()

@@ -2,6 +2,7 @@
 --- GAMESTATE: Choosing an action
 
 local INPUT          = require 'input'
+local DIRECTIONALS   = require 'infra.dir'
 local ActionMenuView = require 'view.actionmenu'
 
 local state = {}
@@ -54,9 +55,12 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if INPUT.wasActionPressed('UP') then
+  local axis = DIRECTIONALS.getFromAxes()
+  local hat = DIRECTIONALS.getFromHat()
+  local input_dir = axis or hat
+  if INPUT.wasActionPressed('UP') or input_dir == 'up' then
     _moveFocus('up')
-  elseif INPUT.wasActionPressed('DOWN') then
+  elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
     _moveFocus('down')
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirm()

@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB = require 'database'
 local MENU = require 'infra.menu'
-local DIRECTIONAL = require 'infra.dir'
+local DIRECTIONALS = require 'infra.dir'
 local INPUT = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE = require 'infra.profile'
@@ -62,16 +62,13 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
     end
 
-    local axis = DIRECTIONAL.getFromAxes()
-    local hat = DIRECTIONAL.getFromHat()
-    if not axis and not hat then
-      if INPUT.wasActionPressed('UP') then MENU.prev()
-      elseif INPUT.wasActionPressed('DOWN') then MENU.next()
-      end
-    else
-      if axis == 'up' or hat == 'up' then MENU.prev()
-      elseif axis == 'down' or hat == 'down' then MENU.next()
-      end
+    local axis = DIRECTIONALS.getFromAxes()
+    local hat = DIRECTIONALS.getFromHat()
+    local input_dir = axis or hat
+    if INPUT.wasActionPressed('UP') or input_dir == 'up' then
+      MENU.prev()
+    elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
+      MENU.next()
     end
   end
 

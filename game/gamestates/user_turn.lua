@@ -7,6 +7,7 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
+local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 
 local state = {}
@@ -91,15 +92,18 @@ function state:update(dt)
     _hideHUD()
   end
 
+  local axis = DIRECTIONALS.getFromAxes()
+  local hat = DIRECTIONALS.getFromHat()
+  local input_dir = axis or hat
   if _extended_hud then
-    if INPUT.wasActionPressed('UP') then
+    if INPUT.wasActionPressed('UP') or input_dir == 'up' then
       _view.widget:scrollUp()
-    elseif INPUT.wasActionPressed('DOWN') then
+    elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
       _view.widget:scrollDown()
     end
   else
     for _,dir in ipairs(DIR) do
-      if INPUT.wasActionPressed(dir:upper()) then
+      if INPUT.wasActionPressed(dir:upper()) or dir == input_dir then
         return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
