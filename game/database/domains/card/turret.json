@@ -1,29 +1,31 @@
 {
-  "desc":"Kaboom",
+  "desc":"Kachink",
   "attr":"COR",
-  "name":"Sensor Bomb",
+  "name":"Turret",
   "art":{
-    "cost":60,
     "art_ability":{
       "params":[{
           "aoe-hint":4,
-          "empty-tile":true,
+          "max-range":1,
           "typename":"choose_target",
           "non-wall":true,
           "output":"pos",
-          "max-range":1
+          "empty-tile":true
         }],
       "operators":[],
       "effects":[{
           "widgets":[{
-              "spec":"proximity-detector"
+              "spec":"auto-fire"
+            },{
+              "spec":"battery"
             }],
           "pos":"par:pos",
           "typename":"make_body",
+          "def":50,
           "bodyspec":"machine",
-          "vit":50,
-          "def":50
+          "vit":50
         }]
-    }
+    },
+    "cost":60
   }
 }
