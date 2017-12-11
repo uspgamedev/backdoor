@@ -56,8 +56,10 @@ SWITCHER = require 'infra.switcher'
 
 local PROFILE = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
-local INPUT = require 'infra.input'
+local INPUT = require 'input'
 local DB = require 'database'
+
+local JSON = require 'dkjson'
 
 ------------------
 --LÖVE FUNCTIONS--
@@ -81,10 +83,24 @@ function love.load(arg)
 
   require 'tests'
 
+  -- init DB
   DB.init()
-  INPUT.init()
-  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
+  -- setup input
+  local loaded_input = INPUT.load(JSON.decode)
+  if not loaded_input then
+    local inputmap = DB.loadSetting('controls')
+    INPUT.setup(inputmap)
+  end
+
+  -- setup input flush
+  local update = love.update
+  love.update = function(dt)
+    update(dt)
+    INPUT.flush() -- must be called afterwards
+  end
+
+  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 end
 
 function love.quit()
