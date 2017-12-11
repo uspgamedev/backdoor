@@ -55,17 +55,14 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  local input_dir = axis or hat
-  if INPUT.wasActionPressed('UP') or input_dir == 'up' then
-    _moveFocus('up')
-  elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
-    _moveFocus('down')
+  if DIRECTIONALS.wasDirectionTriggered('UP') then
+    _moveFocus('UP')
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+    _moveFocus('DOWN')
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirm()
   elseif INPUT.wasActionPressed('CANCEL') or
-    INPUT.wasActionPressed('EXTRA') then
+         INPUT.wasActionPressed('EXTRA') then
     _cancel()
   end
 

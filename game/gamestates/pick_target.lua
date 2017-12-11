@@ -64,19 +64,16 @@ function state:update(dt)
   MAIN_TIMER:update(dt)
   _sector_view:lookAtCursor()
 
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  local input_dir = axis or hat
-  for _,dir in ipairs(DIR) do
-    if INPUT.wasActionPressed(dir:upper()) or input_dir == dir then
-      return _moveCursor(dir)
-    end
-  end
-
   if INPUT.wasActionPressed('CONFIRM') then
     _confirm()
   elseif INPUT.wasActionPressed('CANCEL') then
     _cancel()
+  else
+    for _,dir in ipairs(DIR) do
+      if DIRECTIONALS.wasDirectionTriggered(dir) then
+        return _moveCursor(dir)
+      end
+    end
   end
 
 end

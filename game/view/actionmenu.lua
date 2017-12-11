@@ -78,9 +78,9 @@ end
 
 function ActionMenu:moveFocus(dir)
   local last = self.current
-  if dir == 'up' or dir == 'right' then
+  if dir == 'UP' or dir == 'RIGHT' then
     self.current = math.max(1, self.current - 1)
-  elseif dir == 'down' or dir == 'left' then
+  elseif dir == 'DOWN' or dir == 'LEFT' then
     self.current = math.min(#_ACTIONS, self.current + 1)
   end
   if last ~= self.current then

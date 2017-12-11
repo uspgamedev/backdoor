@@ -56,18 +56,15 @@ function state:update(dt)
   MAIN_TIMER:update(dt)
 
   if not _locked then
-    if INPUT.wasActionPressed('CONFIRM') then MENU.confirm()
-    elseif INPUT.wasActionPressed('SPECIAL') then MENU.cancel()
-    elseif INPUT.wasActionPressed('CANCEL') then MENU.cancel()
-    elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
-    end
-
-    local axis = DIRECTIONALS.getFromAxes()
-    local hat = DIRECTIONALS.getFromHat()
-    local input_dir = axis or hat
-    if INPUT.wasActionPressed('UP') or input_dir == 'up' then
+    if INPUT.wasActionPressed('CONFIRM') then
+      MENU.confirm()
+    elseif INPUT.wasActionPressed('SPECIAL') or
+           INPUT.wasActionPressed('CANCEL') or
+           INPUT.wasActionPressed('QUIT') then
+      MENU.cancel()
+    elseif DIRECTIONALS.wasDirectionTriggered('UP') then
       MENU.prev()
-    elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
       MENU.next()
     end
   end

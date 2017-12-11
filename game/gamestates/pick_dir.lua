@@ -22,21 +22,18 @@ end
 function state:update(dt)
   MAIN_TIMER:update(dt)
 
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  local input_dir = axis or hat
-  for _,dir in ipairs(DIR) do
-    if INPUT.wasActionPressed(dir:upper()) or input_dir == dir then
-      _updateDir(dir)
-    end
-  end
-
   if INPUT.wasActionPressed('CONFIRM') then
     _sector_view:setRayDir()
     SWITCHER.pop(_current_dir)
   elseif INPUT.wasActionPressed('CANCEL') then
     _sector_view:setRayDir()
     SWITCHER.pop()
+  else
+    for _,dir in ipairs(DIR) do
+      if DIRECTIONALS.wasActionPressed(dir) then
+        _updateDir(dir)
+      end
+    end
   end
 end
 

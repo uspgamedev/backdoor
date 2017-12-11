@@ -57,12 +57,9 @@ function state:update(dt)
     })
   else
 
-    local axis = DIRECTIONALS.getFromAxes()
-    local hat = DIRECTIONALS.getFromHat()
-    local input_dir = axis or hat
-    if INPUT.wasActionPressed('LEFT') or input_dir == 'left' then
+    if DIRECTIONALS.wasDirectionTriggered('LEFT') then
       _prev()
-    elseif INPUT.wasActionPressed('RIGHT') or input_dir == 'right' then
+    elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
     elseif INPUT.wasActionPressed('CONFIRM') then
       _confirm()

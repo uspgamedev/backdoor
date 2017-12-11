@@ -59,22 +59,10 @@ function state:update(dt)
     _view:confirm()
   elseif INPUT.wasActionPressed(_CANCEL) then
     _view:cancel()
-  end
-
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  if not axis and not hat then
-    if INPUT.wasActionPressed(_NEXT) then
-      _view:selectPrev()
-    elseif INPUT.wasActionPressed(_PREV) then
-      _view:selectNext()
-    end
-  else
-    if axis == 'left' or hat == 'left' then
-      _view:selectPrev()
-    elseif axis == 'right' or hat == 'right' then
-      _view:selectNext()
-    end
+  elseif DIRECTIONALS.wasDirectionTriggered(_NEXT) then
+    _view:selectPrev()
+  elseif DIRECTIONALS.wasDirectionTriggered(_PREV) then
+    _view:selectNext()
   end
 
   -- exit gamestate if either everything or nothing is done

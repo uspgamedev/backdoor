@@ -63,17 +63,14 @@ function state:update(dt)
   if DEBUG then return end
   MAIN_TIMER:update(dt)
 
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  local input_dir = axis or hat
-  if INPUT.wasActionPressed('RIGHT') or input_dir == 'right' then
-    _moveFocus("right")
-  elseif INPUT.wasActionPressed('LEFT') or input_dir == 'left' then
-    _moveFocus("left")
-  elseif INPUT.wasActionPressed('UP') or input_dir == 'up' then
-    _changeActionType("up")
-  elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
-    _changeActionType("down")
+  if DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+    _moveFocus("RIGHT")
+  elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
+    _moveFocus("LEFT")
+  elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+    _changeActionType("UP")
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+    _changeActionType("DOWN")
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()
   elseif INPUT.wasActionPressed('CANCEL') or

@@ -357,21 +357,21 @@ function _isInCone(origin_i, origin_j, target_i, target_j, dir)
   local i = target_i - origin_i
   local j = target_j - origin_j
 
-  if     dir == "up" then   --UP
+  if     dir == "UP" then   --UP
     return j >= i and j <= -i
-  elseif dir == "right" then   --RIGHT
+  elseif dir == "RIGHT" then   --RIGHT
     return i >= -j and i <= j
-  elseif dir == "down" then   --DOWN
+  elseif dir == "DOWN" then   --DOWN
     return j <= i and j >= -i
-  elseif dir == "left" then     --LEFT
+  elseif dir == "LEFT" then     --LEFT
     return i <= -j and i >= j
-  elseif dir == "upright" then   --UPRIGHT
+  elseif dir == "UPRIGHT" then   --UPRIGHT
     return i <= 0 and j >= 0
-  elseif dir == "downright" then   --DOWNRIGHT
+  elseif dir == "DOWNRIGHT" then   --DOWNRIGHT
     return i >= 0 and j >= 0
-  elseif dir == "downleft" then   --DOWNLEFT
+  elseif dir == "DOWNLEFT" then   --DOWNLEFT
     return i >= 0 and j <= 0
-  elseif dir == "upleft" then   --UPLEFT
+  elseif dir == "UPLEFT" then   --UPLEFT
     return i <= 0 and j <= 0
   else
     return error(("Not valid direction for cone function: %s"):format(dir))

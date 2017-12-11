@@ -2,63 +2,95 @@
 local INPUT = require 'input'
 local DIR = require 'domain.definitions.dir'
 
+local pi    = math.pi
+local abs   = math.abs
+local atan2 = math.atan2
+
 local DIRECTIONALS = {}
 
-local _DEADZONE = .4
+local _DEADZONE = .5
 local _DEADZONE_SQR = _DEADZONE * _DEADZONE
 local _SIXTEENTH = math.pi / 8
 
-local _POSITIONS = {
+local _DIR_ENUM = {
   c  = false,
-  u  = 'up',
-  d  = 'down',
-  l  = 'left',
-  r  = 'right',
-  ld = 'downleft',
-  lu = 'upleft',
-  rd = 'downright',
-  ru = 'upright',
+  u  = 1,
+  r  = 2,
+  d  = 3,
+  l  = 4,
+  lu = 5,
+  ru = 6,
+  rd = 7,
+  ld = 8,
 }
 
-local abs = math.abs
+local _DIR_TRANSLATE = {
+  UP        = 'u',
+  RIGHT     = 'r',
+  DOWN      = 'd',
+  LEFT      = 'l',
+  UPLEFT    = 'lu',
+  UPRIGHT   = 'ru',
+  DOWNRIGHT = 'rd',
+  DOWNLEFT  = 'ld',
+}
 
-local _used
-local _last_hat
+local _ANGLES = {}
+for i = 0, 7 do
+  _ANGLES[i*2+1] = i*pi/8
+  _ANGLES[i*2+2] = -i*pi/8
+end
 
 DIRECTIONALS.DEADZONE = _DEADZONE
 
 function DIRECTIONALS.getFromAxes()
   local x, y = INPUT.getAxis('AXIS_X'), INPUT.getAxis('AXIS_Y')
   if x*x+y*y < _DEADZONE_SQR then
-    _used = false
-    return false
-  elseif not _used then
-    _used = true
+    return 'c'
+  else
     if     x >  _DEADZONE and abs(y) < _DEADZONE then
-      return 'right'
+      return 'r'
     elseif x < -_DEADZONE and abs(y) < _DEADZONE then
-      return 'left'
+      return 'l'
     elseif y >  _DEADZONE and abs(x) < _DEADZONE then
-      return 'down'
+      return 'd'
     elseif y < -_DEADZONE and abs(x) < _DEADZONE then
-      return 'up'
+      return 'u'
     elseif y < 0 and x < 0 then
-      return 'upleft'
+      return 'lu'
     elseif y < 0 and x > 0 then
-      return 'upright'
+      return 'ru'
     elseif y > 0 and x < 0 then
-      return 'downleft'
+      return 'ld'
     elseif y > 0 and x > 0 then
-      return 'downright'
+      return 'rd'
     end
   end
+  return false
 end
 
 function DIRECTIONALS.getFromHat()
-  local dir = INPUT.getHat('HAT_DIRECTIONALS')
-  if dir == _last_hat then return false end
-  _last_hat = dir
-  return _POSITIONS[dir]
+  return INPUT.getHat('HAT_DIRECTIONALS')
+end
+
+local _last_axis
+local _last_hat
+
+function DIRECTIONALS.wasDirectionTriggered(direction)
+  local dir = _DIR_ENUM[_DIR_TRANSLATE[direction]]
+  local hat = _DIR_ENUM[DIRECTIONALS.getFromHat()]
+  local axis = _DIR_ENUM[DIRECTIONALS.getFromAxes()]
+
+  if not hat then _last_hat = false end
+  if not axis then _last_axis = false end
+
+  if hat == _last_hat then hat = false end
+  if axis == _last_axis then axis = false end
+
+  if hat == dir then _last_hat = hat end
+  if axis == dir then _last_axis = axis end
+
+  return hat == dir or axis == dir or INPUT.wasActionPressed(direction)
 end
 
 return DIRECTIONALS

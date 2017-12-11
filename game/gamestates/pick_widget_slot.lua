@@ -53,12 +53,9 @@ function state:update(dt)
       (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
       SWITCHER.pop({})
     else
-      local axis = DIRECTIONALS.getFromAxes()
-      local hat = DIRECTIONALS.getFromHat()
-      local input_dir = axis or hat
-      if INPUT.wasActionPressed('UP') or input_dir == 'up' then
+      if DIRECTIONALS.wasDirectionTriggered('UP') then
         _prev()
-      elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
+      elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
         _next()
       elseif INPUT.wasActionPressed('CONFIRM') then
         _confirm()

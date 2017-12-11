@@ -92,18 +92,15 @@ function state:update(dt)
     _hideHUD()
   end
 
-  local axis = DIRECTIONALS.getFromAxes()
-  local hat = DIRECTIONALS.getFromHat()
-  local input_dir = axis or hat
   if _extended_hud then
-    if INPUT.wasActionPressed('UP') or input_dir == 'up' then
+    if DIRECTIONALS.wasDirectionTriggered('UP') then
       _view.widget:scrollUp()
-    elseif INPUT.wasActionPressed('DOWN') or input_dir == 'down' then
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
       _view.widget:scrollDown()
     end
   else
     for _,dir in ipairs(DIR) do
-      if INPUT.wasActionPressed(dir:upper()) or dir == input_dir then
+      if DIRECTIONALS.wasDirectionTriggered(dir) then
         return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
