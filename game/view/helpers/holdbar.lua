@@ -1,5 +1,5 @@
 
-local INPUT = require 'infra.input'
+local INPUT = require 'input'
 local COLORS = require 'domain.definitions.colors'
 
 local _TOTAL = 1
@@ -83,7 +83,7 @@ function HoldBar:rewind()
 end
 
 function HoldBar:update()
-  local is_down = INPUT.isDown(self.hold_action)
+  local is_down = INPUT.isActionDown(self.hold_action)
 
   -- enter fade in
   if self.locked or not is_down then

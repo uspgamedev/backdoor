@@ -11,7 +11,7 @@ local state = {}
 
 local _menu_view
 local _menu_context
-local _mapping
+local _locked
 
 --LOCAL FUNCTIONS--
 
@@ -20,22 +20,12 @@ end
 
 --STATE FUNCTIONS--
 
-function state:init()
-  _mapping = {
-    PRESS_CONFIRM  = MENU.confirm,
-    PRESS_SPECIAL  = MENU.cancel,
-    PRESS_CANCEL   = MENU.cancel,
-    PRESS_QUIT     = MENU.cancel,
-    PRESS_UP       = MENU.prev,
-    PRESS_DOWN     = MENU.next,
-  }
-end
-
 function state:enter()
   _menu_view = StartMenuView()
   _menu_view:addElement("GUI", nil, "menu_view")
   _menu_view:open()
   _menu_context = "START_MENU"
+  _locked = false
 end
 
 function state:leave()
@@ -56,18 +46,21 @@ function state:resume(from, player_info)
   else
     _menu_view:open()
     _menu_context = "START_MENU"
+    _locked = false
   end
 end
 
 function state:update(dt)
   MAIN_TIMER:update(dt)
 
-  if INPUT.wasActionPressed('CONFIRM') then MENU.confirm()
-  elseif INPUT.wasActionPressed('SPECIAL') then MENU.cancel()
-  elseif INPUT.wasActionPressed('CANCEL') then MENU.cancel()
-  elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
-  elseif INPUT.wasActionPressed('UP') then MENU.prev()
-  elseif INPUT.wasActionPressed('DOWN') then MENU.next()
+  if not _locked then
+    if INPUT.wasActionPressed('CONFIRM') then MENU.confirm()
+    elseif INPUT.wasActionPressed('SPECIAL') then MENU.cancel()
+    elseif INPUT.wasActionPressed('CANCEL') then MENU.cancel()
+    elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
+    elseif INPUT.wasActionPressed('UP') then MENU.prev()
+    elseif INPUT.wasActionPressed('DOWN') then MENU.next()
+    end
   end
 
   _menu_view.invisible = false
@@ -89,6 +82,7 @@ function state:update(dt)
   if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
+        _locked = true
         _menu_view:close(function()
           SWITCHER.push(GS.CHARACTER_BUILD)
         end)
@@ -97,6 +91,7 @@ function state:update(dt)
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Quit") then
+        _locked = true
         _menu_view:close(love.event.quit)
       end
     elseif _menu_context == "LOAD_LIST" then
@@ -105,7 +100,10 @@ function state:update(dt)
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
           if MENU.item(savename) then
-            SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+            _locked = true
+            _menu_view:close(function()
+              SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+            end)
           end
         end
       else
@@ -116,6 +114,7 @@ function state:update(dt)
     end
   else
     if _menu_context == "START_MENU" then
+      _locked = true
       _menu_view:close(love.event.quit)
     elseif _menu_context == "LOAD_LIST" then
       _menu_context = "START_MENU"

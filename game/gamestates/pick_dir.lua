@@ -1,6 +1,6 @@
 
 local DIR   = require 'domain.definitions.dir'
-local INPUT = require 'infra.input'
+local INPUT = require 'input'
 local state = {}
 
 local _sector_view
@@ -22,15 +22,15 @@ function state:update(dt)
   MAIN_TIMER:update(dt)
 
   for _,dir in ipairs(DIR) do
-    if INPUT.actionPressed(dir:upper()) then
+    if INPUT.wasActionPressed(dir:upper()) then
       _updateDir(dir)
     end
   end
 
-  if INPUT.actionPressed('CONFIRM') then
+  if INPUT.wasActionPressed('CONFIRM') then
     _sector_view:setRayDir()
     SWITCHER.pop(_current_dir)
-  elseif INPUT.actionPressed('CANCEL') then
+  elseif INPUT.wasActionPressed('CANCEL') then
     _sector_view:setRayDir()
     SWITCHER.pop()
   end

@@ -59,9 +59,8 @@ end
 
 function state:update(dt)
 
-  if not DEBUG then
-    MAIN_TIMER:update(dt)
-  end
+  if DEBUG then return end
+  MAIN_TIMER:update(dt)
 
   if INPUT.wasActionPressed('RIGHT') then
     _moveFocus("right")
@@ -74,11 +73,9 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()
   elseif INPUT.wasActionPressed('CANCEL') or
-         INPUT.wasActionPressed('SPECIAL') then
+    INPUT.wasActionPressed('SPECIAL') then
     _cancel()
   end
-
-  Util.destroyAll()
 
 end
 

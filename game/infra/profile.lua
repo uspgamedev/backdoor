@@ -3,7 +3,6 @@ local json = require 'dkjson'
 local IDGenerator = require 'common.idgenerator'
 local RUNFLAGS = require 'infra.runflags'
 local ROUTEBUILDER = require 'infra.routebuilder'
-local INPUT = require 'infra.input'
 local ZIP = love.math
 
 -- CONSTANTS --
@@ -50,7 +49,6 @@ end
 local function _saveProfile(base)
   local profile_data = base or _metadata
   local file = assert(filesystem.newFile(PROFILE_PATH, "w"))
-  profile_data.key_mapping = INPUT.getMapping()
   file:write(_encode(profile_data))
   return file:close()
 end
@@ -64,7 +62,6 @@ local function _loadProfile()
   local filedata = assert(filesystem.newFileData(PROFILE_PATH))
   _metadata = _decode(filedata:getString())
   _id_generator = IDGenerator(_metadata.next_id)
-  INPUT.loadMapping(_metadata.key_mapping)
 end
 
 -- METHODS --

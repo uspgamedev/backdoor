@@ -11,14 +11,6 @@ local state = {}
 local _menu_view
 local _last_focus
 
-local SIGNALS = {
-  PRESS_UP = {"move_focus", "up"},
-  PRESS_DOWN = {"move_focus", "down"},
-  PRESS_CONFIRM = {"confirm"},
-  PRESS_CANCEL = {"cancel"},
-  PRESS_EXTRA = {"cancel"},
-}
-
 --[[ LOCAL FUNCTIONS ]]--
 
 local function _moveFocus(dir)
@@ -58,10 +50,9 @@ function state:leave()
 end
 
 function state:update(dt)
+  if DEBUG then return end
 
-  if not DEBUG then
-    MAIN_TIMER:update(dt)
-  end
+  MAIN_TIMER:update(dt)
 
   if INPUT.wasActionPressed('UP') then
     _moveFocus('up')
@@ -70,7 +61,7 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirm()
   elseif INPUT.wasActionPressed('CANCEL') or
-         INPUT.wasActionPressed('EXTRA') then
+    INPUT.wasActionPressed('EXTRA') then
     _cancel()
   end
 
