@@ -37,12 +37,14 @@ function PLAYCARD.perform(actor, params)
   actor:playCard(params.card_index)
 
   if card:isArt() then
-    actor:spendTime(card:getArtCost())
+    actor:exhaust(card:getArtCost())
     actor:rewardPP(card:getPPReward())
     ABILITY.execute(card:getArtAbility(), actor, params)
   elseif card:isWidget() then
+    actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)
     body:placeWidget(card)
   elseif card:isUpgrade() then
+    actor:exhaust(ACTIONDEFS.PLAY_UPGRADE_COST)
     actor:modifyExpBy(-card:getUpgradeCost())
     local upgrades = card:getUpgradesList()
     for _,upgrade in ipairs(upgrades.actor) do

@@ -24,7 +24,7 @@ function Actor:init(spec_name)
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
   self.body_id = nil
-  self.cooldown = DEFS.TIME_UNIT
+  self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
   self.hand_limit = 5
@@ -392,7 +392,7 @@ function Actor:makeAction()
   return true
 end
 
-function Actor:spendTime(n)
+function Actor:exhaust(n)
   self.cooldown = self.cooldown + n
 end
 

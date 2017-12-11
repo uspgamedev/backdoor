@@ -17,7 +17,7 @@ end
 
 function MOVE.perform(actor, params)
   local sector = actor:getBody():getSector()
-  actor:spendTime(ACTIONDEFS.MOVE_TIME)
+  actor:exhaust(ACTIONDEFS.MOVE_COST)
   local pos = {actor:getPos()}
   sector:putBody(actor:getBody(), unpack(params.pos))
   coroutine.yield('report', {

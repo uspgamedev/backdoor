@@ -13,7 +13,7 @@ function IDLE.validate(actor, params)
 end
 
 function IDLE.perform(actor, params)
-  actor:spendTime(ACTIONDEFS.IDLE_TIME)
+  actor:exhaust(ACTIONDEFS.IDLE_COST)
 end
 
 return IDLE

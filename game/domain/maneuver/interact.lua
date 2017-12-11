@@ -34,7 +34,7 @@ end
 function INTERACT.perform(actor, params)
   _seek(actor, params)
   if params.interaction == 'CHANGE_SECTOR' then
-    actor:spendTime(ACTIONDEFS.MOVE_TIME)
+    actor:exhaust(ACTIONDEFS.MOVE_COST)
     local target_sector = Util.findId(params.sector)
     target_sector:putActor(actor, unpack(params.pos))
   end
