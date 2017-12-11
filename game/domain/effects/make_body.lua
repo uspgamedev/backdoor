@@ -10,8 +10,13 @@ FX.schema = {
     range = {0} },
   { id = 'def', name = "DEF upgrades", type = 'value', match = 'integer',
     range = {0} },
-  { id = 'widgetspec', name = "Starting Widget", type = 'enum',
-    options = 'domains.card' },
+  {
+    id = 'widgets', name = "Starting Widget", type = 'array',
+    schema = {
+      { id = 'spec', name = "Which", type = 'enum',
+        options = 'domains.card' },
+    }
+  }
 }
 
 function FX.process (actor, params)
@@ -20,12 +25,15 @@ function FX.process (actor, params)
   local i,j = unpack(params['pos'])
   local body = sector:getRoute().makeBody(bodyspec, i, j)
   local state = {}
-  local widgetspec = params['widgetspec']
-  if type(widgetspec) == 'string' and widgetspec ~= '<none>' then
-    local widget = Card(params['widgetspec'])
-    assert(widget:isWidget())
-    widget:setOwner(actor)
-    state.widgets = { widget }
+  state.widgets = {}
+  for _,widget_params in ipairs(params['widgets']) do
+    local widgetspec = widget_params['spec']
+    if type(widgetspec) == 'string' and widgetspec ~= '<none>' then
+      local widget = Card(widgetspec)
+      assert(widget:isWidget())
+      widget:setOwner(actor)
+      table.insert(state.widgets, widget)
+    end
   end
   state.upgrades = {
     VIT = params['vit'],
