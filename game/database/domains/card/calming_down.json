@@ -3,7 +3,7 @@
   "widget":{
     "operators":[],
     "trigger":"on_act",
-    "charges":2,
+    "charges":1,
     "auto_activation":{
       "trigger":"on_tick",
       "ability":{

@@ -40,6 +40,7 @@ function PLAYCARD.perform(actor, params)
     actor:spendTime(card:getArtCost())
     actor:rewardPP(card:getPPReward())
     ABILITY.execute(card:getArtAbility(), actor, params)
+    body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
     body:placeWidget(card)
   elseif card:isUpgrade() then
@@ -59,7 +60,6 @@ function PLAYCARD.perform(actor, params)
     end
   end
 
-  body:triggerWidgets(TRIGGERS.ON_ACT)
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
