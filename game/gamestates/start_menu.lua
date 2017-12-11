@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB = require 'database'
 local MENU = require 'infra.menu'
-local CONTROLS = require 'infra.control'
+local INPUT = require 'input'
 local PROFILE = require 'infra.profile'
 local StartMenuView = require 'view.startmenu'
 
@@ -36,7 +36,6 @@ function state:enter()
   _menu_view:addElement("GUI", nil, "menu_view")
   _menu_view:open()
   _menu_context = "START_MENU"
-  CONTROLS.setMap(_mapping)
 end
 
 function state:leave()
@@ -57,12 +56,20 @@ function state:resume(from, player_info)
   else
     _menu_view:open()
     _menu_context = "START_MENU"
-    CONTROLS.setMap(_mapping)
   end
 end
 
 function state:update(dt)
   MAIN_TIMER:update(dt)
+
+  if INPUT.wasActionPressed('CONFIRM') then MENU.confirm()
+  elseif INPUT.wasActionPressed('SPECIAL') then MENU.cancel()
+  elseif INPUT.wasActionPressed('CANCEL') then MENU.cancel()
+  elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
+  elseif INPUT.wasActionPressed('UP') then MENU.prev()
+  elseif INPUT.wasActionPressed('DOWN') then MENU.next()
+  end
+
   _menu_view.invisible = false
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
@@ -82,7 +89,6 @@ function state:update(dt)
   if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
-        CONTROLS.setMap()
         _menu_view:close(function()
           SWITCHER.push(GS.CHARACTER_BUILD)
         end)
@@ -91,7 +97,6 @@ function state:update(dt)
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Quit") then
-        CONTROLS.setMap()
         _menu_view:close(love.event.quit)
       end
     elseif _menu_context == "LOAD_LIST" then
@@ -111,7 +116,6 @@ function state:update(dt)
     end
   else
     if _menu_context == "START_MENU" then
-      CONTROLS.setMap()
       _menu_view:close(love.event.quit)
     elseif _menu_context == "LOAD_LIST" then
       _menu_context = "START_MENU"

@@ -70,8 +70,8 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirm()
   elseif INPUT.wasActionPressed('CANCEL') or
-    _cancel()
          INPUT.wasActionPressed('EXTRA') then
+    _cancel()
   end
 
 end
