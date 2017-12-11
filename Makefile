@@ -13,6 +13,9 @@ STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
 								 $(STEAMING_REPO)/clean_template/classes \
 								 $(STEAMING_REPO)/clean_template/extra_libs
 
+INPUT_LIB=$(LIBS_DIR)/input
+INPUT_REPO=externals/input
+
 IMGUI_LIB=imgui.so
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
@@ -22,7 +25,7 @@ CPML_REPO=externals/cpml
 
 DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB)
+DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
 
 ## MAIN TARGETS
 
@@ -49,6 +52,14 @@ $(STEAMING_LIB): $(STEAMING_REPO)
 
 $(STEAMING_REPO):
 	git clone https://github.com/uspgamedev/STEAMING.git $(STEAMING_REPO)
+
+## INPUT
+
+$(INPUT_LIB): $(INPUT_REPO)
+	cp -r $(INPUT_REPO) $(INPUT_LIB)
+
+$(INPUT_REPO):
+	git clone https://github.com/orenjiakira/input.git $(INPUT_REPO)
 
 ## IMGUI
 
