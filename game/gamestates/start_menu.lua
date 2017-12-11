@@ -1,7 +1,9 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB = require 'database'
 local MENU = require 'infra.menu'
+local DIRECTIONAL = require 'infra.dir'
 local INPUT = require 'input'
+local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE = require 'infra.profile'
 local StartMenuView = require 'view.startmenu'
 
@@ -58,15 +60,25 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('SPECIAL') then MENU.cancel()
     elseif INPUT.wasActionPressed('CANCEL') then MENU.cancel()
     elseif INPUT.wasActionPressed('QUIT') then MENU.cancel()
-    elseif INPUT.wasActionPressed('UP') then MENU.prev()
-    elseif INPUT.wasActionPressed('DOWN') then MENU.next()
+    end
+
+    local axis = DIRECTIONAL.getFromAxes()
+    local hat = DIRECTIONAL.getFromHat()
+    if not axis and not hat then
+      if INPUT.wasActionPressed('UP') then MENU.prev()
+      elseif INPUT.wasActionPressed('DOWN') then MENU.next()
+      end
+    else
+      if axis == 'up' or hat == 'up' then MENU.prev()
+      elseif axis == 'down' or hat == 'down' then MENU.next()
+      end
     end
   end
 
-  _menu_view.invisible = false
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
     _menu_view:setItem("Load route")
+    _menu_view:setItem("Controls")
     _menu_view:setItem("Quit")
   elseif _menu_context == "LOAD_LIST" then
     local savelist = PROFILE.getSaveList()
@@ -89,6 +101,9 @@ function state:update(dt)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
+      end
+      if MENU.item("Controls") then
+        CONFIGURE_INPUT(INPUT, INPUT.getMap())
       end
       if MENU.item("Quit") then
         _locked = true
