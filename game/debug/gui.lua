@@ -141,6 +141,9 @@ function GUI:draw()
         end
       end
       IMGUI.Separator()
+      if IMGUI.MenuItem("Refresh") then
+        DB.refresh(DB.loadCategory('domains'))
+      end
       if IMGUI.MenuItem("Save") then
         DB.save(DB.loadCategory('domains'))
       end
@@ -154,6 +157,9 @@ function GUI:draw()
         end
       end
       IMGUI.Separator()
+      if IMGUI.MenuItem("Refresh") then
+        DB.refresh(DB.loadCategory('resources'))
+      end
       if IMGUI.MenuItem("Save") then
         DB.save(DB.loadCategory('resources'))
       end

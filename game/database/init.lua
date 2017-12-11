@@ -95,18 +95,36 @@ local function _save(cache, basepath)
       local meta = getmetatable(subcache) or {}
       local item = meta.group or group
       local newbasepath = basepath.."/"..item
-      if subcache == DEFS.DELETE then
-        cache[group] = nil
-        _deleteFile(newbasepath..".json")
-      else
-        _save(subcache, newbasepath)
-      end
+      _save(subcache, newbasepath)
     end
   else
     -- save file
     local filepath = basepath..".json"
     return assert(_writeFile(filepath, cache))
   end
+end
+
+local function _refresh(cache, basepath)
+  -- check whether we are saving a group of files or a file
+  if getmetatable(cache).is_leaf then return end
+  -- save group
+  for group, subcache in pairs(cache) do
+    local meta = getmetatable(subcache) or {}
+    local item = meta.group or group
+    local newbasepath = basepath.."/"..item
+    if subcache == DEFS.DELETE then
+      cache[group] = nil
+      _deleteFile(newbasepath..".json")
+    else
+      _refresh(subcache, newbasepath)
+    end
+  end
+  -- HARD REFRESH --
+  local group
+  repeat
+    group = next(cache)
+    if group then cache[group] = nil end
+  until next(cache) == nil
 end
 
 function _listItemsIn(category, group_name)
@@ -227,9 +245,16 @@ function DB.listItemsIn(category, group)
   return _listItemsIn(category, group)
 end
 
+function DB.refresh(container)
+  container = container or _dbcache
+  local basepath = getmetatable(container).relpath
+  _refresh(container, basepath)
+end
+
 function DB.save(container)
   container = container or _dbcache
   local basepath = getmetatable(container).relpath
+  _refresh(container, basepath)
   _save(container, basepath)
 end
 
