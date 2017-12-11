@@ -35,10 +35,38 @@ local _DIR_TRANSLATE = {
   DOWNLEFT  = 'ld',
 }
 
-local _ANGLES = {}
-for i = 0, 7 do
-  _ANGLES[i*2+1] = i*pi/8
-  _ANGLES[i*2+2] = -i*pi/8
+local _OCTANTS = {}
+
+function _OCTANTS.UP(x, y)
+  return y/3 < x and x < -y/3
+end
+
+function _OCTANTS.RIGHT(x, y)
+  return -x/3 < y and y < x/3
+end
+
+function _OCTANTS.DOWN(x, y)
+  return -y/3 < x and x < y/3
+end
+
+function _OCTANTS.LEFT(x, y)
+  return x/3 < y and y < -x/3
+end
+
+function _OCTANTS.UPLEFT(x, y)
+  return 3*x <= y and y <= x/3
+end
+
+function _OCTANTS.UPRIGHT(x, y)
+  return -3*x <= y and y <= -x/3
+end
+
+function _OCTANTS.DOWNRIGHT(x, y)
+  return x/3 <= y and y <= 3*x
+end
+
+function _OCTANTS.DOWNLEFT(x, y)
+  return -x/3 <= y and y <= -3*x
 end
 
 DIRECTIONALS.DEADZONE = _DEADZONE
@@ -48,22 +76,11 @@ function DIRECTIONALS.getFromAxes()
   if x*x+y*y < _DEADZONE_SQR then
     return 'c'
   else
-    if     x >  _DEADZONE and abs(y) < _DEADZONE then
-      return 'r'
-    elseif x < -_DEADZONE and abs(y) < _DEADZONE then
-      return 'l'
-    elseif y >  _DEADZONE and abs(x) < _DEADZONE then
-      return 'd'
-    elseif y < -_DEADZONE and abs(x) < _DEADZONE then
-      return 'u'
-    elseif y < 0 and x < 0 then
-      return 'lu'
-    elseif y < 0 and x > 0 then
-      return 'ru'
-    elseif y > 0 and x < 0 then
-      return 'ld'
-    elseif y > 0 and x > 0 then
-      return 'rd'
+    for dir, enum in pairs(_DIR_TRANSLATE) do
+      if _OCTANTS[dir](x, y) then
+        print(enum)
+        return enum
+      end
     end
   end
   return false
@@ -87,10 +104,13 @@ function DIRECTIONALS.wasDirectionTriggered(direction)
   if _last_hat then hat = false end
   if _last_axis then axis = false end
 
-  if hat == dir then _last_hat = hat end
-  if axis == dir then _last_axis = axis end
+  local is_hat = hat == dir
+  local is_axis = axis == dir
 
-  return hat == dir or axis == dir or INPUT.wasActionPressed(direction)
+  if is_hat then _last_hat = hat end
+  if is_axis then _last_axis = axis end
+
+  return is_hat or is_axis or INPUT.wasActionPressed(direction)
 end
 
 return DIRECTIONALS

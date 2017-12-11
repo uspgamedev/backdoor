@@ -26,7 +26,7 @@ local function _cancel()
 end
 
 function state:enter(from, actor)
-  _view = ManageBufferView("SPECIAL")
+  _view = ManageBufferView("UP")
   if actor:getBackBufferSize() > 0 then
     _leave = false
     _view:addElement("HUD")

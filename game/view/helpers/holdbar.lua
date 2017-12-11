@@ -85,6 +85,9 @@ end
 
 function HoldBar:update()
   local is_down = INPUT.isActionDown(self.hold_action)
+  if self.hold_action == 'UP' then
+    is_down = is_down or INPUT.getAxis('AXIS_Y') < -DIRECTIONALS.DEADZONE
+  end
 
   -- enter fade in
   if self.locked or not is_down then

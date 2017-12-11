@@ -30,7 +30,7 @@ function state:update(dt)
     SWITCHER.pop()
   else
     for _,dir in ipairs(DIR) do
-      if DIRECTIONALS.wasActionPressed(dir) then
+      if DIRECTIONALS.wasDirectionTriggered(dir) then
         _updateDir(dir)
       end
     end

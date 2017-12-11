@@ -30,7 +30,7 @@ end
 
 function state:enter(from, collection)
   _pack = PACK.generatePackFrom(collection)
-  _view = PackView("SPECIAL")
+  _view = PackView("UP")
   if #_pack > 0 then
     _view:addElement("HUD")
   else
