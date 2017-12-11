@@ -78,7 +78,6 @@ function DIRECTIONALS.getFromAxes()
   else
     for dir, enum in pairs(_DIR_TRANSLATE) do
       if _OCTANTS[dir](x, y) then
-        print(enum)
         return enum
       end
     end
@@ -111,6 +110,13 @@ function DIRECTIONALS.wasDirectionTriggered(direction)
   if is_axis then _last_axis = axis end
 
   return is_hat or is_axis or INPUT.wasActionPressed(direction)
+end
+
+function DIRECTIONALS.isDirectionDown(direction)
+  local dir = _DIR_ENUM[_DIR_TRANSLATE[direction]]
+  local hat = _DIR_ENUM[DIRECTIONALS.getFromHat()]
+  local axis = _DIR_ENUM[DIRECTIONALS.getFromAxes()]
+  return dir == hat or dir == axis or INPUT.isActionDown(direction)
 end
 
 return DIRECTIONALS
