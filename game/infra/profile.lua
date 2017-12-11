@@ -1,9 +1,12 @@
 
-local json = require 'dkjson'
-local IDGenerator = require 'common.idgenerator'
-local RUNFLAGS = require 'infra.runflags'
+local JSON         = require 'dkjson'
+local INPUT        = require 'input'
+
+local IDGenerator  = require 'common.idgenerator'
+local RUNFLAGS     = require 'infra.runflags'
 local ROUTEBUILDER = require 'infra.routebuilder'
-local ZIP = love.math
+local DB           = require 'database'
+local ZIP          = love.math
 
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
@@ -31,15 +34,41 @@ local function _decompress(str) --> str
 end
 
 local function _encode(t) --> str
-  return _compress(json.encode(t, {indent = true}))
+  return _compress(JSON.encode(t, {indent = true}))
 end
 
 local function _decode(str) --> table
-  return json.decode(_decompress(str))
+  return JSON.decode(_decompress(str))
+end
+
+local function _deleteInput()
+  INPUT.delete()
+end
+
+local function _loadInput()
+  -- setup input
+  local loaded_input = INPUT.load(_decode)
+  if not loaded_input then
+    local inputmap = DB.loadSetting('controls')
+    INPUT.setup(inputmap)
+  end
+  -- setup input flush
+  local update = love.update
+  love.update = function(dt)
+    update(dt)
+    if INPUT.wasActionReleased('QUIT') then love.event.quit() end
+    INPUT.flush() -- must be called afterwards
+  end
+end
+
+local function _saveInput()
+  return INPUT.save(_encode)
 end
 
 local function _cleanSlate ()
   print("CLEAR FLAG SET. DELETING ALL SAVE DATA.")
+  print("Removing custom controls")
+  _deleteInput()
   for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
     print(("Removing: %s"):format(filename))
     filesystem.remove(SAVEDIR..filename)
@@ -75,6 +104,7 @@ function PROFILE.init()
   if not filesystem.exists(PROFILE_PATH) then _newProfile() end
   -- load profile from disk
   _loadProfile()
+  _loadInput()
 end
 
 function PROFILE.loadRoute(route_id)
@@ -116,6 +146,7 @@ end
 -- permadeath. Also if you quit without saving, you lose your savefle.
 -- BUT! If the game crashes, you keep your last save.
 function PROFILE.quit()
+  _saveInput()
   _saveProfile()
   local save_list = _metadata.save_list
   for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do

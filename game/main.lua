@@ -73,8 +73,6 @@ function love.load(arg)
 
   SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
 
-  PROFILE.init() -- initializes save & load system
-
   -- Setup support for multiple resolutions. Res.init() Must be called after
   -- Gamestate.registerEvents() so it will properly call the draw function
   -- applying translations.
@@ -86,20 +84,8 @@ function love.load(arg)
   -- init DB
   DB.init()
 
-  -- setup input
-  local loaded_input = INPUT.load(JSON.decode)
-  if not loaded_input then
-    local inputmap = DB.loadSetting('controls')
-    INPUT.setup(inputmap)
-  end
-
-  -- setup input flush
-  local update = love.update
-  love.update = function(dt)
-    update(dt)
-    if INPUT.wasActionReleased('QUIT') then love.event.quit() end
-    INPUT.flush() -- must be called afterwards
-  end
+  -- initializes save & load system
+  PROFILE.init()
 
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 end
