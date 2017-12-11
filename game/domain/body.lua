@@ -4,6 +4,7 @@ local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
+local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
 
 local Card        = require 'domain.card'
@@ -78,6 +79,25 @@ function Body:saveState()
     end
   end
   return state
+end
+
+--[[ Spec-related methods ]]--
+
+function Body:isSpec(specname)
+  if not specname or specname == '<none>' then
+    return true
+  end
+  local actual_specname = self:getSpecName()
+  local ok = false
+  repeat
+    local parent = DB.loadSpec('body', actual_specname)['extends']
+    if actual_specname == specname then
+      ok = true
+      break
+    end
+    actual_specname = parent
+  until not parent or parent == '<none>'
+  return ok
 end
 
 --[[ Sector-related methods ]]--
