@@ -35,6 +35,7 @@ all: $(DEPENDENCIES)
 update:
 	cd $(LUX_REPO); git pull
 	cd $(STEAMING_REPO); git pull
+	cd $(INPUT_REPO); git pull
 
 ## LUX
 
