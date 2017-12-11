@@ -13,8 +13,6 @@ DEFS.BODY_ATTRIBUTES = {"VIT", "DEF"}
 DEFS.ALL_ATTRIBUTES = {"COR", "ARC", "ANI", "SPD", "VIT", "DEF", "FOV"}
 DEFS.PACK_SIZE = 5
 DEFS.HAND_LIMIT = 5
-DEFS.TIME_UNIT = 20
-DEFS.TIME_UNITS_PER_CHARGE = 1 * DEFS.TIME_UNIT
 
 DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
