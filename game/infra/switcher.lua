@@ -1,7 +1,7 @@
 
 local Gamestate = require "steaming.extra_libs.hump.gamestate"
 local Queue = require 'lux.common.Queue'
-local Controls = require 'infra.control'
+local INPUT = require 'input'
 
 local SWITCHER = {}
 
@@ -22,19 +22,19 @@ function SWITCHER.start(to, ...)
 end
 
 function SWITCHER.switch(to, ...)
-  Controls.flush()
+  INPUT.flush()
   _switched = { to, ... }
 end
 
 function SWITCHER.push(to, ...)
   _stack_size = _stack_size + 1
-  Controls.flush()
+  INPUT.flush()
   _pushed = { to, ... }
 end
 
 function SWITCHER.pop(...)
   _stack_size = _stack_size - 1
-  Controls.flush()
+  INPUT.flush()
   _popped = { ... }
 end
 

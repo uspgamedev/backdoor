@@ -1,5 +1,7 @@
 
-local INPUT = require 'infra.input'
+local INPUT = require 'input'
+local DIRECTIONALS = require 'infra.dir'
+local DIR = require 'domain.definitions.dir'
 local COLORS = require 'domain.definitions.colors'
 
 local _TOTAL = 1
@@ -83,7 +85,13 @@ function HoldBar:rewind()
 end
 
 function HoldBar:update()
-  local is_down = INPUT.isDown(self.hold_action)
+  local is_down
+  local action = self.hold_action
+  if DIR[action] then
+    is_down = DIRECTIONALS.isDirectionDown(action)
+  else
+    is_down = INPUT.isActionDown(action)
+  end
 
   -- enter fade in
   if self.locked or not is_down then

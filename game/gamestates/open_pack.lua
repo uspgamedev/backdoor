@@ -1,5 +1,6 @@
 
-local CONTROLS = require 'infra.control'
+local INPUT = require 'input'
+local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
 local PackView = require 'view.cardlist'
@@ -7,32 +8,30 @@ local PackView = require 'view.cardlist'
 local state = {}
 
 local _view
-local _mapping
 local _pack
 local _leave
 
 function state:init()
-  _mapping = {
-    PRESS_LEFT = function()
-      _view:selectPrev()
-    end,
-    PRESS_RIGHT = function()
-      _view:selectNext()
-    end,
-    PRESS_CONFIRM = function()
-      if not _view:isLocked() then
-        CONTROLS.setMap()
-        _view:collectCards(function() _leave = true end)
-      end
-    end,
-  }
+end
+
+local function _prev()
+  _view:selectPrev()
+end
+
+local function _next()
+  _view:selectNext()
+end
+
+local function _confirm()
+  if not _view:isLocked() then
+    _view:collectCards(function() _leave = true end)
+  end
 end
 
 function state:enter(from, collection)
   _pack = PACK.generatePackFrom(collection)
   _view = PackView("UP")
   if #_pack > 0 then
-    CONTROLS.setMap(_mapping)
     _view:addElement("HUD")
   else
     _leave = true
@@ -41,21 +40,31 @@ function state:enter(from, collection)
 end
 
 function state:leave()
-  CONTROLS.setMap()
   _leave = false
   _view:close()
   _view = nil
 end
 
 function state:update(dt)
-  if not DEBUG then
-    if _leave or _view:isCardListEmpty() then
-      SWITCHER.pop({
-        consumed = _view:getConsumeLog(),
-        pack = _pack
-      })
+  if DEBUG then return end
+
+  MAIN_TIMER:update(dt)
+
+  if _leave or _view:isCardListEmpty() then
+    SWITCHER.pop({
+      consumed = _view:getConsumeLog(),
+      pack = _pack
+    })
+  else
+
+    if DIRECTIONALS.wasDirectionTriggered('LEFT') then
+      _prev()
+    elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+      _next()
+    elseif INPUT.wasActionPressed('CONFIRM') then
+      _confirm()
     end
-    MAIN_TIMER:update(dt)
+
   end
 end
 

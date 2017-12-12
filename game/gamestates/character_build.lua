@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: CHARACTER BUILDER--
 local DB             = require 'database'
-local INPUT          = require 'infra.input'
-local CONTROLS       = require 'infra.control'
+local INPUT          = require 'input'
+local DIRECTIONALS   = require 'infra.dir'
 local CharaBuildView = require 'view.charabuild'
 
 
@@ -39,7 +39,6 @@ function state:init()
 end
 
 function state:enter()
-  CONTROLS.setMap()
   _resetState()
   _view = CharaBuildView()
   _view:addElement("GUI", nil, "character_builder_view")
@@ -56,14 +55,14 @@ function state:update(dt)
   if _leave then return end
 
   -- if you confirm or cancel, all it does is change the current menu context
-  if INPUT.actionPressed(_CONFIRM) then
+  if INPUT.wasActionPressed(_CONFIRM) then
     _view:confirm()
-  elseif INPUT.actionPressed(_CANCEL) then
+  elseif INPUT.wasActionPressed(_CANCEL) then
     _view:cancel()
-  elseif INPUT.actionPressed(_NEXT) then
-    _view:selectNext()
-  elseif INPUT.actionPressed(_PREV) then
+  elseif DIRECTIONALS.wasDirectionTriggered(_NEXT) then
     _view:selectPrev()
+  elseif DIRECTIONALS.wasDirectionTriggered(_PREV) then
+    _view:selectNext()
   end
 
   -- exit gamestate if either everything or nothing is done

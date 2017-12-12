@@ -1,7 +1,5 @@
 
 
-local CONTROL   = require 'infra.control'
-
 local state = {}
 
 --[[ LOCAL VARIABLES ]]--

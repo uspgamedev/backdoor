@@ -47,10 +47,10 @@ function HandView:getFocus()
 end
 
 function HandView:moveFocus(dir)
-  if dir == "left" then
-    self.focus_index = math.max(1, self.focus_index - 1)
-  elseif dir == "right" then
-    self.focus_index = math.min(#self.hand, self.focus_index + 1)
+  if dir == "LEFT" then
+    self.focus_index = (self.focus_index + #self.hand - 2) % #self.hand + 1
+  elseif dir == "RIGHT" then
+    self.focus_index = self.focus_index % #self.hand + 1
   end
 end
 
@@ -59,9 +59,9 @@ function HandView:getActionType()
 end
 
 function HandView:changeActionType(dir)
-  if dir == 'up' then
+  if dir == 'UP' then
     self.action_type = (self.action_type - 2) % #_ACTION_TYPES + 1
-  elseif dir == 'down' then
+  elseif dir == 'DOWN' then
     self.action_type = self.action_type % #_ACTION_TYPES + 1
   else
     error(("Unknown dir %s"):format(dir))

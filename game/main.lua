@@ -56,8 +56,10 @@ SWITCHER = require 'infra.switcher'
 
 local PROFILE = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
-local INPUT = require 'infra.input'
+local INPUT = require 'input'
 local DB = require 'database'
+
+local JSON = require 'dkjson'
 
 ------------------
 --LÖVE FUNCTIONS--
@@ -71,8 +73,6 @@ function love.load(arg)
 
   SWITCHER.init() --Overwrites love callbacks to call Gamestate as well
 
-  PROFILE.init() -- initializes save & load system
-
   -- Setup support for multiple resolutions. Res.init() Must be called after
   -- Gamestate.registerEvents() so it will properly call the draw function
   -- applying translations.
@@ -81,10 +81,13 @@ function love.load(arg)
 
   require 'tests'
 
+  -- init DB
   DB.init()
-  INPUT.init()
-  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
+  -- initializes save & load system
+  PROFILE.init()
+
+  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 end
 
 function love.quit()

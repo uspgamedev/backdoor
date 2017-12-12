@@ -7,7 +7,8 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
-local INPUT         = require 'infra.input'
+local DIRECTIONALS  = require 'infra.dir'
+local INPUT         = require 'input'
 
 local state = {}
 
@@ -83,38 +84,38 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if INPUT.isDown("ACTION_4") and not _extended_hud then
+  if INPUT.isActionDown("ACTION_4") and not _extended_hud then
     _extended_hud = true
     _showHUD()
-  elseif _extended_hud and not INPUT.isDown("ACTION_4") then
+  elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
     _extended_hud = false
     _hideHUD()
   end
 
   if _extended_hud then
-    if INPUT.actionPressed('UP') then
+    if DIRECTIONALS.wasDirectionTriggered('UP') then
       _view.widget:scrollUp()
-    elseif INPUT.actionPressed('DOWN') then
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
       _view.widget:scrollDown()
     end
   else
     for _,dir in ipairs(DIR) do
-      if INPUT.actionPressed(dir:upper()) then
+      if DIRECTIONALS.wasDirectionTriggered(dir) then
         return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
 
-    if INPUT.actionPressed('CONFIRM') then
+    if INPUT.wasActionPressed('CONFIRM') then
       _startTask(DEFS.ACTION.INTERACT)
-    elseif INPUT.actionPressed('CANCEL') then
+    elseif INPUT.wasActionPressed('CANCEL') then
       _startTask(DEFS.ACTION.IDLE)
-    elseif INPUT.actionPressed('SPECIAL') then
+    elseif INPUT.wasActionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
-    elseif INPUT.actionPressed('ACTION_1') then
+    elseif INPUT.wasActionPressed('ACTION_1') then
       _startTask(DEFS.ACTION.PLAY_CARD)
-    elseif INPUT.actionPressed('EXTRA') then
+    elseif INPUT.wasActionPressed('EXTRA') then
       return SWITCHER.push(GS.ACTION_MENU, _route)
-    elseif INPUT.actionPressed('PAUSE') then
+    elseif INPUT.wasActionPressed('PAUSE') then
       _save_and_quit = true
       return
     end
