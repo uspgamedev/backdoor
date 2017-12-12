@@ -1,0 +1,14 @@
+{
+  "attr":"ARC",
+  "upgrade":{
+    "cost":3,
+    "actor_list":[{
+        "attr":"SPD",
+        "val":10
+      }],
+    "body_list":[]
+  },
+  "one_time":false,
+  "set":"upgrades_spd",
+  "name":"SPD +10"
+}
