@@ -381,13 +381,15 @@ function Actor:turn()
 end
 
 function Actor:makeAction()
-  local success = false
-  repeat
-    local action_slot, params = self:behavior()
-    if ACTION.exists(action_slot) then
-      success = ACTION.execute(action_slot, self, params)
-    end
-  until success
+  if not self:getBody():hasStatusTag(DEFS.STATUS_TAGS.STUN) then
+    local success = false
+    repeat
+      local action_slot, params = self:behavior()
+      if ACTION.exists(action_slot) then
+        success = ACTION.execute(action_slot, self, params)
+      end
+    until success
+  end
   self:updateFov(self:getBody():getSector())
   return true
 end
