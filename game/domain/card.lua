@@ -110,6 +110,16 @@ function Card:getStaticOperators()
   return ipairs(self:getSpec('widget')['operators'] or {})
 end
 
+function Card:hasStatusTag(tag)
+  local status_list = self:getSpec('widget')['status-tags'] or {}
+  for _,status in ipairs(status_list) do
+    if status['tag'] == tag then
+      return true
+    end
+  end
+  return false
+end
+
 function Card:getWidgetActivation()
   return self:getSpec('widget')['activation']
 end
