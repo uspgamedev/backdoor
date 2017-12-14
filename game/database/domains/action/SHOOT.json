@@ -1,4 +1,5 @@
 {
+  "playpoints":3,
   "cost":20,
   "ability":{
     "operators":[{
@@ -13,10 +14,11 @@
         "body":"val:body_self",
         "output":"origin"
       },{
-        "typename":"hitscan",
         "pos":"val:origin",
+        "dir":"par:dir",
+        "typename":"hitscan",
         "output":"hit_pos",
-        "dir":"par:dir"
+        "maxrange":5
       },{
         "typename":"translated",
         "pos":"val:hit_pos",
@@ -39,6 +41,5 @@
         "typename":"damage_on_area",
         "base":8
       }]
-  },
-  "playpoints":3
+  }
 }
