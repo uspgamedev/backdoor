@@ -1,4 +1,5 @@
 
+local RANDOM = require 'common.random'
 local math = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
@@ -94,20 +95,21 @@ function View:close()
                 end)
 end
 
-function View:collectCards(finish)
+function View:collectCards()
   self.holdbar:lock()
   self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
                 self, {text=0}, "in-quad")
   for i = 1, #self.card_list do
-    self:addTimer("collect_card_"..i, MAIN_TIMER, "after", (i-1)*.06,
+    self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
+                  RANDOM.safeGenerate()*0.1 + .05,
                   function()
                     self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                  "tween", .3, self.y_offset,
-                                  {[i] = _MAX_Y_OFFSET}, "in-quad")
+                                  "tween", .4, self.y_offset,
+                                  {[i] = _MAX_Y_OFFSET}, "in-back")
                   end)
   end
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                #self.card_list*.06+.3, finish)
+                0.55, function() self.card_list = _EMPTY end)
 end
 
 function View:selectPrev()
