@@ -47,7 +47,7 @@ function PARAM.isValid(actor, parameter, value)
       return false
     end
     local typename = parameter['body-only']['body-type']
-    if typename and typename ~= '<none>' and not body:isSpec(typename) then
+    if typename and not body:isSpec(typename) then
       return false
     end
   end
