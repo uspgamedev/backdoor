@@ -15,8 +15,8 @@ local _TILE_H = 60
 local _HALF_W = 10
 local _HALF_H = 10
 
-local _HEALTHBAR_WIDTH = 64
-local _HEALTHBAR_HEIGHT = 8
+local _HEALTHBAR_WIDTH = 56
+local _HEALTHBAR_HEIGHT = 4
 
 local _texture
 local _tile_offset
@@ -191,6 +191,8 @@ function SectorView:draw()
 
   -- draw tall things
   g.push()
+  local all_bodies = {}
+  local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
     local highlights = {}
@@ -239,6 +241,7 @@ function SectorView:draw()
         end
         if body then
           table.insert(draw_bodies, {body, x, 0})
+          table.insert(all_bodies, body)
         end
       end
     end
@@ -266,15 +269,7 @@ function SectorView:draw()
           -- NAME
           local body = sector:getBodyAt(c_i, c_j)
           if body then
-            local name = body:getSpec('name')
-            local actor = sector:getActorFromBody(body)
-            if actor then
-              name = ("%s %s"):format(actor:getSpec('name'), name)
-            end
-            _font.set()
-            _font:setLineHeight(.8)
-            g.setColor(COLORS.NEUTRAL)
-            g.printf(name, -0.5*_TILE_W, -_TILE_H, 2*_TILE_W, "center")
+            named = body
           end
           g.setColor(COLORS.NEUTRAL)
         else
@@ -303,27 +298,49 @@ function SectorView:draw()
         local di, dj = unpack(self.vfx.offset[body] or {0,0})
         local dx, dy = dj*_TILE_W, di*_TILE_H
         x, y = x+dx, y+dy
-        g.push()
         g.setColor(COLORS.NEUTRAL)
         draw_sprite(x, dy)
 
-        -- HP
-        g.translate(x, dy)
-        local hp_percent = body:getHP()/body:getMaxHP()
-        g.setColor(0, 20, 0)
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
-                    _HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-        local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
-        g.setColor(HSV(unpack(hsvcol)))
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -64,
-                    hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-        g.pop()
       end
     end
+
 
     g.translate(0, _TILE_H)
   end
   g.pop()
+
+  -- HP, above everything
+  for _,body in ipairs(all_bodies) do
+    local i, j = body:getPos()
+    if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+      local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+      local hp_percent = body:getHP()/body:getMaxHP()
+      local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
+      local cr, cg, cb = HSV(unpack(hsvcol))
+      g.push()
+      g.translate(x, y)
+      g.setColor(0, 20, 0, 200)
+      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+      g.setColor(cr, cg, cb, 200)
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+
+      -- NAME
+      if named == body then
+        local name = body:getSpec('name')
+        local actor = sector:getActorFromBody(body)
+        if actor then
+          name = ("%s %s"):format(actor:getSpec('name'), name)
+        end
+        _font.set()
+        _font:setLineHeight(.8)
+        g.setColor(COLORS.NEUTRAL)
+        g.printf(name, -0.5*_TILE_W, _TILE_H-5, 2*_TILE_W, "center")
+      end
+      g.pop()
+    end
+  end
 
   g.pop()
 end
