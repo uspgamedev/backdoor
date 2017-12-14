@@ -12,7 +12,7 @@ OP.schema = {
 OP.type = 'body'
 
 local function _checkOwner(actor, body, ignore)
-  return not ignore or actor:getBody(body) ~= body
+  return not ignore or actor:getBody() ~= body
 end
 
 function OP.process(actor, params)
