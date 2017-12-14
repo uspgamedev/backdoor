@@ -1,9 +1,9 @@
 {
   "attr":"COR",
-  "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
-  "pp":10,
-  "name":"Rush",
+  "icon":false,
+  "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
       "params":[{
           "typename":"choose_dir",
@@ -22,10 +22,11 @@
           "body":"val:body_self",
           "output":"origin"
         },{
-          "typename":"hitscan",
           "pos":"val:origin",
+          "dir":"par:dir",
+          "typename":"hitscan",
           "output":"target_pos",
-          "dir":"par:dir"
+          "maxrange":6
         },{
           "typename":"translated",
           "pos":"val:target_pos",
@@ -47,7 +48,11 @@
           "typename":"damage_on_area",
           "base":10
         }]
-    },
-    "cost":20
-  }
+    }
+  },
+  "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
+  "type-description":"",
+  "pp":10,
+  "name":"Rush",
+  "set":false
 }
