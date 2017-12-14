@@ -28,7 +28,7 @@ function FX.process (actor, params)
   state.widgets = {}
   for _,widget_params in ipairs(params['widgets']) do
     local widgetspec = widget_params['spec']
-    if type(widgetspec) == 'string' and widgetspec ~= '<none>' then
+    if widgetspec then
       local widget = Card(widgetspec)
       assert(widget:isWidget())
       widget:setOwner(actor)

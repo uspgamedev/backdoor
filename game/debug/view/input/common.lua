@@ -10,6 +10,7 @@ local function _makeCommon(default, call)
         IMGUI.Text(key.name)
       end
       local value = spec[key.id] or default
+      spec[key.id] = value
       IMGUI.PushID(key.id)
       local changed, newvalue = call(value, key)
       IMGUI.PopID()
@@ -28,7 +29,7 @@ inputs.boolean = _makeCommon(
 )
 
 inputs.integer = _makeCommon(
-  nil,
+  0,
   function(value, key)
     value = value or (key.range or {0})[1]
     local range = key.range

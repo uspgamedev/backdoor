@@ -17,12 +17,13 @@ function inputs.vector(spec, key)
   local selected = nil
   local size = key.size
   local range = key.range
+  local default = key.default or 0
   local signature = setmetatable(key.signature or
                                  {'x','y','z','w'},
                                  signature_mt)
   local subschemas = {}
   for i=1, size do
-    vector[i] = vector[i] or 0
+    vector[i] = vector[i] or default
     local subkey = {
       id = i,
       name = signature[i],

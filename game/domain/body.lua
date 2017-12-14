@@ -84,7 +84,7 @@ end
 --[[ Spec-related methods ]]--
 
 function Body:isSpec(specname)
-  if not specname or specname == '<none>' then
+  if not specname then
     return true
   end
   local actual_specname = self:getSpecName()
@@ -96,7 +96,7 @@ function Body:isSpec(specname)
       break
     end
     actual_specname = parent
-  until not parent or parent == '<none>'
+  until not parent
   return ok
 end
 
