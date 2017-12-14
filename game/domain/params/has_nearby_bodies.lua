@@ -3,6 +3,7 @@ local DEFS = require 'domain.definitions'
 local PARAM = {}
 
 PARAM.schema = {
+  { id = 'pos', name = "Position", type = 'value', match = 'pos' },
   { id = 'count', name = "At least", type = 'value', match = 'integer',
     range = {1} },
   { id = 'range', name = "Range", type = 'value', match = 'integer',
@@ -21,7 +22,7 @@ end
 
 function PARAM.isValid(actor, params, value)
   local sector = actor:getBody():getSector()
-  local i, j = actor:getBody():getPos()
+  local i, j = unpack(params['pos'])
   local range = params['range']
   local specname = params['body-type']
   local notowner = params['ignore-owner']

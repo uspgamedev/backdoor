@@ -1,5 +1,6 @@
 {
-  "desc":"Adubiraba",
+  "attr":"COR",
+  "icon":false,
   "widget":{
     "operators":[],
     "trigger":"on_done",
@@ -7,22 +8,20 @@
     "auto_activation":{
       "ability":{
         "params":[{
-            "ignore-owner":true,
-            "typename":"has_nearby_bodies",
-            "count":2,
-            "output":"check",
-            "range":3
+            "typename":"pos",
+            "output":"pos_self"
           },{
-            "typename":"body",
-            "output":"body_self"
+            "ignore-owner":true,
+            "body-type":false,
+            "pos":"par:pos_self",
+            "typename":"has_nearby_bodies",
+            "count":1,
+            "range":3,
+            "output":"count"
           }],
         "operators":[{
-            "typename":"get_body_pos",
-            "body":"par:body_self",
-            "output":"pos"
-          },{
             "ignore-owner":true,
-            "pos":"val:pos",
+            "pos":"par:pos_self",
             "typename":"find_nearest_body",
             "output":"target",
             "range":3
@@ -39,9 +38,13 @@
           }]
       },
       "trigger":"on_tick"
-    }
+    },
+    "placement":false
   },
-  "attr":"COR",
+  "desc":"Adubiraba",
+  "type-description":"",
   "one_time":true,
-  "name":"Auto-Fire"
+  "pp":0,
+  "name":"Auto-Fire",
+  "set":false
 }

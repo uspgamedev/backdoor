@@ -312,6 +312,7 @@ function Body:triggerOneWidget(index, trigger, params)
   params = params or {}
   params.widget_self = widget 
   params.body_self = self
+  params.pos_self = {self:getPos()}
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition

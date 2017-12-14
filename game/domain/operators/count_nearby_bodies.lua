@@ -14,7 +14,7 @@ OP.schema = {
 OP.type = 'integer'
 
 local function _checkOwner(actor, body, ignore)
-  return not ignore or actor:getBody(body) ~= body
+  return not ignore or actor:getBody() ~= body
 end
 
 function OP.process(actor, params)
