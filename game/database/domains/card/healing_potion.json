@@ -1,19 +1,20 @@
 {
   "attr":"COR",
-  "icon":false,
+  "icon":"card-potion",
   "one_time":true,
   "art":{
+    "cost":20,
     "art_ability":{
       "params":[{
           "aoe-hint":0,
-          "max-range":0,
+          "empty-tile":false,
+          "output":"self",
+          "typename":"choose_target",
+          "non-wall":false,
           "body-only":{
             "body-type":false
           },
-          "typename":"choose_target",
-          "non-wall":false,
-          "output":"self",
-          "empty-tile":false
+          "max-range":0
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -25,8 +26,7 @@
           "target":"val:body",
           "amount":20
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"A small healing potion.\n\n\"Gulp. Down the hatch, foxy.\"",
   "type-description":"",

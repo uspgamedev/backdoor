@@ -1,15 +1,23 @@
 {
+  "attr":"COR",
+  "icon":"card-wrench",
+  "set":false,
   "desc":"Deal XdCOR damage where X=5+nearby machines",
+  "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Wrench",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
+      "cost":20,
       "ability":{
         "params":[{
             "typename":"choose_target",
+            "max-range":1,
             "output":"pos",
-            "body-only":[],
-            "max-range":1
+            "body-only":[]
           }],
         "operators":[{
             "typename":"get_attribute",
@@ -30,15 +38,15 @@
             "ignore-owner":true,
             "pos":"val:center",
             "typename":"count_nearby_bodies",
+            "body-type":"machine",
             "range":5,
-            "output":"count",
-            "body-type":"machine"
+            "output":"count"
           },{
             "op":"+",
             "typename":"integer_binop",
-            "lhs":"val:count",
+            "rhs":5,
             "output":"base",
-            "rhs":5
+            "lhs":"val:count"
           },{
             "typename":"get_body_at",
             "pos":"par:pos",
@@ -47,15 +55,13 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:target",
-            "attr":"val:cor",
-            "base":"val:base"
+            "base":"val:base",
+            "attr":"val:cor"
           }]
-      },
-      "cost":20
+      }
     },
     "charges":10,
+    "status-tags":[],
     "placement":"weapon"
-  },
-  "attr":"COR",
-  "name":"Wrench"
+  }
 }
