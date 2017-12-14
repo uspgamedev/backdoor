@@ -1,0 +1,30 @@
+{
+  "desc":"Stuns in a 5-tile radius area.\n\n\"Aaaaaaahhh... Savior of the Universe!\"",
+  "attr":"ARC",
+  "name":"Flash",
+  "art":{
+    "cost":40,
+    "art_ability":{
+      "params":[],
+      "operators":[{
+          "typename":"self",
+          "output":"self"
+        },{
+          "typename":"get_actor_body",
+          "output":"body",
+          "actor":"val:self"
+        },{
+          "typename":"get_body_pos",
+          "body":"val:body",
+          "output":"pos"
+        }],
+      "effects":[{
+          "center":"val:pos",
+          "size":5,
+          "card":"stunned",
+          "typename":"place_widget_on_area",
+          "ignore_owner":true
+        }]
+    }
+  }
+}

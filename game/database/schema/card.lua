@@ -69,6 +69,13 @@ return {
         }
       },
       {
+        id = 'status-tags', name = "Status Tag", type = 'array',
+        schema = {
+          { id = 'tag', name = "Tag", type = 'enum',
+            options = DEFS.STATUS_TAGS }
+        }
+      },
+      {
         id = 'activation', name = "Activated Ability", type = 'section',
         schema = {
           { id = 'cost', name = "Time Cost", type = 'integer',

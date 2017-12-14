@@ -383,7 +383,12 @@ end
 function Actor:makeAction()
   local success = false
   repeat
-    local action_slot, params = self:behavior()
+    local action_slot, params
+    if self:getBody():hasStatusTag(DEFS.STATUS_TAGS.STUN) then
+      action_slot, params = DEFS.ACTION.IDLE, {}
+    else
+      action_slot, params = self:behavior()
+    end
     if ACTION.exists(action_slot) then
       success = ACTION.execute(action_slot, self, params)
     end

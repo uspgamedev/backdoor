@@ -285,6 +285,14 @@ function Body:applyStaticOperators(attr, value)
   return value
 end
 
+function Body:hasStatusTag(tag)
+  for _,widget in ipairs(self.widgets) do
+    if widget:hasStatusTag(tag) then
+      return true
+    end
+  end
+end
+
 function Body:tick()
   self:triggerWidgets(TRIGGERS.ON_TICK)
   local spent = {}
