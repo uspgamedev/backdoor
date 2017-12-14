@@ -19,21 +19,23 @@
   },
   "rooms":{
     "tries":256,
-    "maxh":9,
+    "count":32,
     "minw":3,
     "minh":3,
-    "count":32,
+    "maxh":9,
     "rmar":1,
     "maxw":9
   },
-  "maze":[],
+  "maze":{
+    "double":false
+  },
   "deadends":{
     "amount":24
   },
   "bootstrap":{
     "w":30,
     "mh":2,
-    "tileset":"demo",
+    "tileset":"otherdemo",
     "h":30,
     "mw":2
   },

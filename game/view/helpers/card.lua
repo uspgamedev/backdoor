@@ -40,13 +40,16 @@ function CARD.draw(card, x, y, focused, alpha)
   if focused then
     -- shine!
     local shine = 50
+    local cardname = card:getName()
+    local namewidth = _title_font:getWidth(cardname)
     g.translate(0, -10)
     cr = cr + shine
     cg = cg + shine
     cb = cb + shine
     _title_font:set()
     g.setColor(COLORS.NEUTRAL)
-    g.printf(card:getName(), x+pd, y-pd-_title_font:getHeight(), w-pd*2, "center")
+    g.printf(cardname, x + (w - namewidth)/2, y-pd-_title_font:getHeight(),
+             namewidth, "center")
   end
 
   _info_font.set()

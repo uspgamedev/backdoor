@@ -15,34 +15,36 @@
     "min":4
   },
   "rooms":{
+    "minh":3,
+    "rmar":1,
+    "minw":3,
     "tries":256,
     "maxh":9,
-    "minw":3,
-    "minh":3,
     "count":24,
-    "rmar":1,
     "maxw":9
   },
-  "maze":[],
+  "deadends":{
+    "amount":48
+  },
   "exits":{
     "distance":5,
+    "threshold":2,
     "exits":[{
         "target_specname":"sector02"
       },{
         "target_specname":"sector03"
       },{
         "target_specname":"sector_final"
-      }],
-    "threshold":2
+      }]
   },
   "bootstrap":{
     "w":24,
     "mh":2,
     "h":40,
-    "tileset":"demo",
+    "tileset":"otherdemo",
     "mw":2
   },
-  "deadends":{
-    "amount":48
+  "maze":{
+    "double":false
   }
 }

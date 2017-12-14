@@ -1,9 +1,12 @@
 {
   "extends":"sentient",
-  "arc":4,
   "signature":"BOLT",
-  "cor":-4,
+  "behavior":"player",
   "name":"Arcanist",
+  "cor":-4,
+  "arc":4,
+  "collection":false,
+  "spd":0,
   "ani":-4,
   "initial_buffer":[{
       "amount":3,
