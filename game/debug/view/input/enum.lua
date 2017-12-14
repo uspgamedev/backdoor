@@ -36,6 +36,12 @@ function inputs.enum(spec, key)
 
   local _active = not (not spec[key.id] and key.optional)
 
+  if _active and _options[_current] ~= _NONE then
+    spec[key.id] = spec[key.id] or _options[_current]
+  else
+    spec[key.id] = false
+  end
+
   return function(self)
     if key.optional then
       IMGUI.PushID(key.id .. ".check")
@@ -50,7 +56,11 @@ function inputs.enum(spec, key)
       IMGUI.PopID()
       if changed then
         _current = value
-        spec[key.id] = _options[value]
+        if _options[value] == _NONE then
+          spec[key.id] = false
+        else
+          spec[key.id] = _options[value]
+        end
       end
     end
   end
