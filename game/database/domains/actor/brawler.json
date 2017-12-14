@@ -1,9 +1,12 @@
 {
   "extends":"sentient",
-  "arc":-4,
   "signature":"STRIKE",
+  "behavior":"player",
   "cor":4,
   "name":"Brawler",
+  "arc":-4,
+  "collection":false,
+  "spd":0,
   "ani":-4,
   "initial_buffer":[{
       "amount":3,
@@ -12,7 +15,7 @@
       "amount":1,
       "card":"spark_rod"
     },{
-      "amount":3,
+      "amount":10,
       "card":"rush"
     },{
       "amount":1,
@@ -32,6 +35,9 @@
     },{
       "amount":8,
       "card":"stomp"
+    },{
+      "amount":2,
+      "card":"calming_down"
     },{
       "amount":3,
       "card":"seedling-sap"
