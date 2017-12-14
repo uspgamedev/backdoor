@@ -1,9 +1,12 @@
 {
   "extends":"sentient",
-  "arc":2,
   "signature":"SHOOT",
+  "behavior":"player",
   "cor":2,
   "name":"Gagdeteer",
+  "arc":2,
+  "collection":false,
+  "spd":0,
   "ani":-4,
   "initial_buffer":[{
       "amount":3,
@@ -33,8 +36,11 @@
       "amount":2,
       "card":"reassemble"
     },{
-      "amount":8,
+      "amount":2,
       "card":"flash"
+    },{
+      "amount":2,
+      "card":"jetboots"
     }],
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }
