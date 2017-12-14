@@ -7,7 +7,7 @@ local PARAM = {}
 
 PARAM.schema = {
   { id = 'max-range', name = "Maximum range", type = 'value', match = 'integer',
-    range = {1} },
+    range = {0} },
   {
     id = 'body-only', name = "Only position with body", type = 'section',
     schema = {
