@@ -101,24 +101,28 @@ function View:collectCards()
                 self, {text=0}, "in-quad")
   for i = 1, #self.card_list do
     self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  RANDOM.safeGenerate()*0.1 + .05,
+                  RANDOM.safeGenerate(1, 18)/60 + .05,
                   function()
                     self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                  "tween", .4, self.y_offset,
+                                  "tween", .3, self.y_offset,
                                   {[i] = _MAX_Y_OFFSET}, "in-back")
                   end)
   end
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                0.55, function() self.card_list = _EMPTY end)
+                0.65, function() self.card_list = _EMPTY end)
 end
 
-function View:selectPrev()
-  self.selection = _prev_circular(self.selection, #self.card_list, 1)
+function View:selectPrev(n)
+  if self:isLocked() then return end
+  n = n or 1
+  self.selection = _prev_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
 end
 
 function View:selectNext()
-  self.selection = _next_circular(self.selection, #self.card_list, 1)
+  if self:isLocked() then return end
+  n = n or 1
+  self.selection = _next_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
 end
 
