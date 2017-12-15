@@ -1,18 +1,17 @@
 {
-  "desc":"Deal 4d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
-  "one_time":false,
   "attr":"ARC",
-  "pp":4,
-  "name":"Firebolt",
+  "icon":"card-firebolt",
+  "set":false,
   "art":{
+    "cost":1,
     "art_ability":{
       "params":[{
-          "output":"tgt",
+          "max-range":7,
           "typename":"choose_target",
           "empty-tile":false,
+          "output":"tgt",
           "body-only":{
-          },
-          "max-range":7
+          }
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -25,23 +24,27 @@
         },{
           "op":"*",
           "typename":"integer_binop",
-          "lhs":"val:arc",
+          "rhs":2,
           "output":"arc*2",
-          "rhs":2
+          "lhs":"val:arc"
         },{
           "op":"-",
           "typename":"integer_binop",
-          "lhs":"val:arc*2",
+          "rhs":2,
           "output":"(arc*2)-2",
-          "rhs":2
+          "lhs":"val:arc*2"
         }],
       "effects":[{
           "typename":"damage_on_target",
           "target":"val:body",
-          "attr":4,
-          "base":"val:(arc*2)-2"
+          "base":"val:(arc*2)-2",
+          "attr":4
         }]
-    },
-    "cost":1
-  }
+    }
+  },
+  "desc":"Deal 4d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
+  "type-description":"",
+  "pp":4,
+  "name":"Firebolt",
+  "one_time":false
 }

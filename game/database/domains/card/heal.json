@@ -1,10 +1,8 @@
 {
-  "desc":"Heal self for 3d(2*ANI)",
   "attr":"ANI",
-  "pp":3,
-  "name":"Heal",
+  "icon":"card-heal",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
       "params":[],
       "operators":[{
@@ -21,9 +19,9 @@
         },{
           "op":"*",
           "typename":"integer_binop",
-          "rhs":2,
+          "lhs":"val:ANI",
           "output":"2*ANI",
-          "lhs":"val:ANI"
+          "rhs":2
         },{
           "typename":"dice_throw",
           "rolls":3,
@@ -35,6 +33,12 @@
           "target":"val:self-body",
           "amount":"val:amount"
         }]
-    }
-  }
+    },
+    "cost":20
+  },
+  "desc":"Heal self for 3d(2*ANI)",
+  "type-description":"",
+  "pp":3,
+  "name":"Heal",
+  "set":false
 }

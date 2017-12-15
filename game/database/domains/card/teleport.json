@@ -1,9 +1,9 @@
 {
-  "desc":"Teleport self to target position.\n\n\"Transporting all the molecules in your body has never been so easy! But I wonder if your original self dies everytime you do that... well who cares.\"",
   "attr":"ARC",
-  "pp":4,
-  "name":"Teleport",
+  "icon":"card-teleport",
+  "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
       "params":[{
           "typename":"choose_target",
@@ -24,7 +24,11 @@
           "pos":"par:target_pos",
           "body":"val:Body"
         }]
-    },
-    "cost":20
-  }
+    }
+  },
+  "desc":"Teleport self to target position.\n\n\"Transporting all the molecules in your body has never been so easy! But I wonder if your original self dies everytime you do that... well who cares.\"",
+  "type-description":"",
+  "pp":4,
+  "name":"Teleport",
+  "set":false
 }

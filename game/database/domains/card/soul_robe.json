@@ -1,5 +1,12 @@
 {
   "attr":"ANI",
+  "icon":"card-soul-robe",
+  "one_time":false,
+  "desc":"Buffs your ANI by 4. Has 5 charges, spends one everytime you act.",
+  "type-description":"",
+  "set":false,
+  "pp":3,
+  "name":"Soul Robe",
   "widget":{
     "operators":[{
         "attr":"ANI",
@@ -8,14 +15,12 @@
       }],
     "trigger":"on_act",
     "charges":5,
+    "status-tags":[],
     "trigger-condition":{
       "params":[],
       "operators":[],
       "effects":[]
     },
     "placement":"suit"
-  },
-  "desc":"Buffs your ANI by 4. Has 5 charges, spends one everytime you act.",
-  "pp":3,
-  "name":"Soul Robe"
+  }
 }
