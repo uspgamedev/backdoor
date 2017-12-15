@@ -3,6 +3,7 @@ local FONT = require 'view.helpers.font'
 local TEXTURE = require 'view.helpers.texture'
 local RES = require 'resources'
 local COLORS = require 'domain.definitions.colors'
+local round = require 'common.math' .round
 
 --CARDVIEW PROPERTIES--
 
@@ -13,6 +14,7 @@ local _card_base
 local _neutral_icon
 
 local CARD = {}
+
 
 local _is_init = false
 local function _init()
@@ -48,7 +50,8 @@ function CARD.draw(card, x, y, focused, alpha)
     cb = cb + shine
     _title_font:set()
     g.setColor(COLORS.NEUTRAL)
-    g.printf(cardname, x + (w - namewidth)/2, y-pd-_title_font:getHeight(),
+    g.printf(cardname, x + round((w - namewidth)/2),
+             round(y-pd-_title_font:getHeight()),
              namewidth, "center")
   end
 
