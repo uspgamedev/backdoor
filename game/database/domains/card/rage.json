@@ -1,5 +1,12 @@
 {
+  "attr":"ANI",
+  "icon":"card-rage",
+  "set":false,
   "desc":"For 10 turns, increase COR and SPD but reduce DEF.",
+  "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Rage",
   "widget":{
     "operators":[{
         "attr":"COR",
@@ -15,8 +22,8 @@
         "val":3
       }],
     "trigger":"on_turn",
-    "charges":10
-  },
-  "attr":"ANI",
-  "name":"Rage"
+    "charges":10,
+    "status-tags":[],
+    "placement":false
+  }
 }

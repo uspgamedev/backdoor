@@ -1,10 +1,16 @@
 {
+  "attr":"ANI",
+  "icon":"card-seedling-sap",
+  "set":false,
   "desc":"Drink: draw two cards and get the \"Tipsy\"\nwidget.\n\nTipsy: SPD -2 for a while.",
+  "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Seedling Sap",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":10,
       "ability":{
         "params":[],
         "operators":[{
@@ -23,10 +29,11 @@
             "body":"val:body_self",
             "card":"tipsy"
           }]
-      }
+      },
+      "cost":10
     },
-    "charges":3
-  },
-  "attr":"ANI",
-  "name":"Seedling Sap"
+    "charges":3,
+    "status-tags":[],
+    "placement":false
+  }
 }

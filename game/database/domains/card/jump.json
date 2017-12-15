@@ -1,17 +1,17 @@
 {
-  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
   "attr":"COR",
-  "pp":3,
-  "name":"Jump",
+  "icon":"card-jump",
+  "one_time":false,
   "art":{
+    "cost":40,
     "art_ability":{
       "params":[{
           "aoe-hint":2,
-          "non-wall":true,
+          "max-range":4,
           "typename":"choose_target",
-          "empty-tile":true,
+          "non-wall":true,
           "output":"pos",
-          "max-range":4
+          "empty-tile":true
         }],
       "operators":[{
           "typename":"get_attribute",
@@ -37,7 +37,11 @@
           "body":"val:body",
           "pos":"par:pos"
         }]
-    },
-    "cost":40
-  }
+    }
+  },
+  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
+  "type-description":"",
+  "pp":3,
+  "name":"Jump",
+  "set":false
 }

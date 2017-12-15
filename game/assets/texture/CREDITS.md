@@ -4,12 +4,18 @@ Creative Commons BY 3.0 license, with credits to Lorc, Delapouite and
 other contributors (as per game-icons.net/about.html#authors):
 
 + auto-repair.png
++ boot-stomp.png
 + boots.png
++ brandy-bottle.png
 + burning-dot.png
 + burning-meteor.png
 + card-goggles.png
 + card-turret.png
++ chest-armor.png
 + emerald.png
++ fire-dash.png
++ fire-punch.png
++ fire-silhouette.png
 + fission.png
 + fluffly-flame.png
 + hospital-cross.png
@@ -22,6 +28,9 @@ other contributors (as per game-icons.net/about.html#authors):
 + icon-receive_pack.png
 + icon-use_signature.png
 + land-mine.png
++ lunar-wand.png
++ magic-trident.png
++ meditation.png
 + metal-scales.png
 + monkey-wrench.png
 + orb-direction.png
@@ -33,4 +42,5 @@ other contributors (as per game-icons.net/about.html#authors):
 + triorb.png
 + upgrade.png
 + warlock-eye.png
++ wide-arrow-dunk.png
 

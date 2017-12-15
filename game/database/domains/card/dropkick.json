@@ -1,9 +1,8 @@
 {
-  "desc":"Deal 14dCOR damage to melee target and\n6dCOR damage to yourself.",
   "attr":"COR",
-  "name":"Dropkick",
+  "icon":"card-dropkick",
+  "set":false,
   "art":{
-    "cost":20,
     "art_ability":{
       "params":[{
           "typename":"choose_target",
@@ -29,14 +28,20 @@
       "effects":[{
           "typename":"damage_on_target",
           "target":"val:target",
-          "base":14,
-          "attr":"val:cor"
+          "attr":"val:cor",
+          "base":14
         },{
           "typename":"damage_on_target",
           "target":"val:body_self",
-          "base":6,
-          "attr":"val:cor"
+          "attr":"val:cor",
+          "base":6
         }]
-    }
-  }
+    },
+    "cost":20
+  },
+  "desc":"Deal 14dCOR damage to melee target and\n6dCOR damage to yourself.",
+  "type-description":"",
+  "pp":0,
+  "name":"Unreserved Punch",
+  "one_time":false
 }
