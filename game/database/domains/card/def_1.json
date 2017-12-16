@@ -1,14 +1,18 @@
 {
   "attr":"COR",
+  "icon":"card-upgrade",
+  "set":"upgrades_def",
+  "desc":"Upgrades your Defense by 10.",
   "upgrade":{
+    "cost":2,
+    "actor_list":[],
     "body_list":[{
         "attr":"DEF",
         "val":10
-      }],
-    "actor_list":[],
-    "cost":2
+      }]
   },
-  "set":"upgrades_def",
-  "desc":"Upgrades your Defense by 10.",
-  "name":"DEF +10"
+  "type-description":"",
+  "pp":0,
+  "name":"DEF +10",
+  "one_time":true
 }

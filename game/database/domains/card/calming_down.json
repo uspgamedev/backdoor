@@ -1,11 +1,18 @@
 {
   "attr":"ANI",
+  "icon":"card-meditation",
+  "one_time":false,
+  "desc":"This user regenerates 2 hit points per tick. However, doing anything besides moving or waiting will remove this status.",
+  "type-description":"",
+  "set":false,
+  "pp":4,
+  "name":"Meditation",
   "widget":{
     "operators":[],
     "trigger":"on_act",
     "charges":1,
+    "status-tags":[],
     "auto_activation":{
-      "trigger":"on_tick",
       "ability":{
         "params":[],
         "operators":[{
@@ -21,10 +28,9 @@
             "target":"val:actor_body",
             "amount":1
           }]
-      }
-    }
-  },
-  "desc":"This user is regenerating 2 health each tick. However, doing anything besides moving or waiting will remove this status.",
-  "pp":4,
-  "name":"Calming Down"
+      },
+      "trigger":"on_tick"
+    },
+    "placement":false
+  }
 }

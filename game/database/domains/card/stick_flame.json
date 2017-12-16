@@ -1,16 +1,16 @@
 {
-  "desc":"Place a Sticky Flame on target body. After a few ticks, the Sticky Flame will explode, dealing 2d(4*ARC) damage to the body holding it.\n\n\"'Hey Danny, hold this for me, will ya?'. - Robert was surprised Danny didn't sent him an invite for his birthday the week after.\"",
   "attr":"ARC",
-  "pp":4,
-  "name":"Stick Flame",
+  "icon":"card-sticky-flame",
+  "one_time":false,
   "art":{
+    "cost":40,
     "art_ability":{
       "params":[{
           "aoe-hint":1,
-          "max-range":4,
           "typename":"choose_target",
+          "body-only":[],
           "output":"target_pos",
-          "body-only":[]
+          "max-range":4
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -22,7 +22,11 @@
           "body":"val:target_body",
           "card":"sticky_flame"
         }]
-    },
-    "cost":40
-  }
+    }
+  },
+  "desc":"Place a Sticky Flame on target body. After a few ticks, the Sticky Flame will explode, dealing 2d(4*ARC) damage to the body holding it.\n\n\"'Hey Danny, hold this for me, will ya?'. - Robert was surprised Danny didn't sent him an invite for his birthday the week after.\"",
+  "type-description":"",
+  "pp":4,
+  "name":"Stick Flame",
+  "set":false
 }

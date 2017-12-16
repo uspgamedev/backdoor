@@ -1,14 +1,18 @@
 {
   "attr":"ANI",
+  "icon":"card-upgrade",
+  "set":"upgrades_ani",
+  "desc":"Upgrades your Mechanics attribute by 10.",
   "upgrade":{
-    "cost":2,
+    "body_list":[],
     "actor_list":[{
         "attr":"ANI",
         "val":10
       }],
-    "body_list":[]
+    "cost":2
   },
-  "set":"upgrades_ani",
-  "desc":"Upgrades your Mechanics attribute by 10.",
-  "name":"ANI +10"
+  "type-description":"",
+  "pp":0,
+  "name":"ANI +10",
+  "one_time":true
 }

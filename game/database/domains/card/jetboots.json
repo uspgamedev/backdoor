@@ -1,13 +1,17 @@
 {
   "attr":"COR",
-  "icon":false,
+  "icon":"card-jetboots",
   "one_time":false,
   "desc":"Allows you to dash in straight lines.",
   "type-description":"",
+  "set":false,
+  "pp":0,
+  "name":"Jetboots",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
+      "cost":10,
       "ability":{
         "params":[{
             "typename":"choose_dir",
@@ -37,13 +41,10 @@
             "body":"val:body",
             "pos":"val:target-pos"
           }]
-      },
-      "cost":10
+      }
     },
     "charges":8,
+    "status-tags":[],
     "placement":false
-  },
-  "pp":0,
-  "name":"Jetboots",
-  "set":false
+  }
 }

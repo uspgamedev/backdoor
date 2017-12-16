@@ -1,7 +1,7 @@
 {
   "attr":"ARC",
-  "pp":10,
-  "name":"Timed Combustion Drone",
+  "icon":"card-timer-bomb",
+  "set":false,
   "art":{
     "cost":20,
     "art_ability":{
@@ -14,13 +14,21 @@
         }],
       "operators":[],
       "effects":[{
+          "widgets":[{
+              "spec":"self-destruct"
+            }],
           "pos":"par:pos",
-          "vit":0,
+          "def":0,
           "typename":"make_body",
           "widgetspec":"self-destruct",
-          "def":0,
-          "bodyspec":"machine"
+          "bodyspec":"machine",
+          "vit":0
         }]
     }
-  }
+  },
+  "desc":"",
+  "type-description":"",
+  "pp":10,
+  "name":"Timed Combustion Drone",
+  "one_time":false
 }

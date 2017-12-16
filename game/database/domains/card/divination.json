@@ -1,10 +1,8 @@
 {
-  "desc":"Draws two cards, a bit slow.",
   "attr":"ARC",
-  "pp":2,
-  "name":"Divination",
+  "icon":"card-divination",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
       "params":[],
       "operators":[],
@@ -12,6 +10,12 @@
           "typename":"draw_card",
           "amount":2
         }]
-    }
-  }
+    },
+    "cost":20
+  },
+  "desc":"Draws two cards, a bit slow.",
+  "type-description":"",
+  "pp":2,
+  "name":"Divination",
+  "set":false
 }

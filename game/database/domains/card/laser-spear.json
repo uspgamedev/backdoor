@@ -1,16 +1,16 @@
 {
-  "desc":"Deals 10dCOR damage to target.\n\n\"A mass-produced weapon.\"",
+  "attr":"COR",
+  "icon":"card-laser-spear",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":20,
       "ability":{
         "params":[{
             "typename":"choose_target",
-            "max-range":1,
+            "body-only":[],
             "output":"target",
-            "body-only":[]
+            "max-range":1
           }],
         "operators":[{
             "typename":"get_body_at",
@@ -24,15 +24,20 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:body",
-            "base":10,
-            "attr":"val:cor"
+            "attr":"val:cor",
+            "base":10
           }]
-      }
+      },
+      "cost":20
     },
     "charges":5,
+    "status-tags":[],
     "placement":"weapon"
   },
-  "one_time":true,
-  "attr":"COR",
-  "name":"Laser Spear"
+  "desc":"Deals 10dCOR damage to target.\n\n\"A mass-produced weapon.\"",
+  "type-description":"",
+  "set":false,
+  "pp":0,
+  "name":"Laser Spear",
+  "one_time":true
 }

@@ -1,6 +1,6 @@
 {
   "attr":"COR",
-  "icon":false,
+  "icon":"card-spark-rod",
   "set":false,
   "desc":"Deals 3d(2*COR) damage to target enemy, and afterwards creates a shocking wave that deals 4dCOR area damage. \n\n\"Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children\"",
   "type-description":"",
