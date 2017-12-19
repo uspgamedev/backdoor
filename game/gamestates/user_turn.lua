@@ -112,7 +112,11 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
     elseif INPUT.wasActionPressed('ACTION_1') then
-      _startTask(DEFS.ACTION.PLAY_CARD)
+      if _route.getControlledActor():isHandEmpty() then
+        _startTask(DEFS.ACTION.DRAW_NEW_HAND)
+      else
+        _startTask(DEFS.ACTION.PLAY_CARD)
+      end
     elseif INPUT.wasActionPressed('EXTRA') then
       return SWITCHER.push(GS.ACTION_MENU, _route)
     elseif INPUT.wasActionPressed('PAUSE') then
