@@ -116,6 +116,7 @@ function ActionMenu:close()
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween", 0.3,
                 self, { enter = 0 }, 'out-circ', function()
                   self.invisible = true
+                  CAM:zoomTo(1)
                 end
   )
   self:hideLabel()

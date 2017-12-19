@@ -74,6 +74,7 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()
   elseif INPUT.wasActionPressed('CANCEL') or
+    INPUT.wasActionPressed('ACTION_1') or
     INPUT.wasActionPressed('SPECIAL') then
     _cancel()
   end

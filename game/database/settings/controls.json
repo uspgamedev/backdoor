@@ -4,7 +4,7 @@
     "ACTION_2":["e"],
     "ACTION_3":["w"],
     "ACTION_4":["q"],
-    "CONFIRM":["f"],
+    "CONFIRM":["f", true, "return"],
     "CANCEL":["d"],
     "SPECIAL":["s"],
     "EXTRA":["a"],
