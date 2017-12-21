@@ -1,11 +1,12 @@
 {
+  "cost":20,
   "ability":{
     "params":[{
         "typename":"choose_target",
+        "max-range":1,
         "output":"pos",
         "body-only":{
-        },
-        "max-range":1
+        }
       }],
     "operators":[{
         "typename":"get_attribute",
@@ -17,12 +18,12 @@
         "output":"target"
       }],
     "effects":[{
-        "typename":"damage_on_target",
+        "attr":"val:cor",
         "target":"val:target",
+        "typename":"damage_on_target",
         "base":5,
-        "attr":"val:cor"
+        "sfx":"example"
       }]
   },
-  "playpoints":0,
-  "cost":20
+  "playpoints":0
 }

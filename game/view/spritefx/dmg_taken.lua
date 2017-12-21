@@ -8,6 +8,9 @@ local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 
 function SPRITEFX.apply(sectorview, args)
+  --Play sfx if any
+  if args.sfx then args.sfx:stop(); args.sfx:play(); end
+
   local body, amount = args.body, args.amount
   local i, j = body:getPos()
   local body_sprite = sectorview:getBodySprite(body)
@@ -43,4 +46,3 @@ function SPRITEFX.apply(sectorview, args)
 end
 
 return SPRITEFX
-
