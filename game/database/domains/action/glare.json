@@ -1,15 +1,11 @@
 {
-  "operators":[],
-  "params":[],
-  "cost":0,
-  "effects":[],
   "ability":{
     "params":[{
         "aoe-hint":0,
-        "non-wall":false,
+        "empty-tile":false,
         "output":"pos",
         "typename":"choose_target",
-        "empty-tile":false,
+        "non-wall":false,
         "body-only":{
           "body-type":false
         },
@@ -28,7 +24,9 @@
         "typename":"damage_on_target",
         "target":"val:target",
         "attr":"val:arc",
-        "base":6
+        "base":5
       }]
-  }
+  },
+  "playpoints":0,
+  "cost":20
 }

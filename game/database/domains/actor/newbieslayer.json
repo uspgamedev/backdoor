@@ -3,11 +3,11 @@
   "signature":"punch",
   "behavior":"aggro",
   "cor":4,
-  "arc":0,
+  "arc":2,
   "collection":"anything",
-  "spd":0,
-  "ani":0,
-  "initial_buffer":[],
+  "description":"The newbie's nightmares...",
   "name":"Newbie Killer",
-  "description":"The newbie's nightmares..."
+  "ani":2,
+  "initial_buffer":[],
+  "spd":0
 }

@@ -2,12 +2,12 @@
   "extends":"strong",
   "signature":"glare",
   "behavior":"aggro",
-  "cor":0,
-  "arc":2,
+  "cor":-2,
+  "arc":3,
   "collection":"anything",
-  "ani":0,
-  "description":"Spellcaster monster, evil by nature.",
-  "name":"Grinning",
+  "spd":1,
   "initial_buffer":[],
-  "spd":1
+  "ani":-2,
+  "name":"Grinning",
+  "description":"Spellcaster monster, evil by nature."
 }

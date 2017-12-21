@@ -1,6 +1,6 @@
 {
-  "operators":[],
-  "params":[],
+  "cost":20,
+  "playpoints":0,
   "ability":{
     "operators":[{
         "typename":"get_attribute",
@@ -13,10 +13,10 @@
       }],
     "params":[{
         "aoe-hint":0,
-        "empty-tile":false,
+        "non-wall":false,
         "output":"pos",
         "typename":"choose_target",
-        "non-wall":false,
+        "empty-tile":false,
         "body-only":{
           "body-type":false
         },
@@ -26,9 +26,7 @@
         "typename":"damage_on_target",
         "target":"val:target",
         "attr":"val:cor",
-        "base":6
+        "base":4
       }]
-  },
-  "cost":6,
-  "effects":[]
+  }
 }
