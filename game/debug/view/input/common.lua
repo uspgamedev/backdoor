@@ -29,7 +29,7 @@ inputs.boolean = _makeCommon(
 )
 
 inputs.float = _makeCommon(
-  0,
+  nil,
   function(value, key)
     value = value or key.default or (key.range or {0})[1]
     local range = key.range
