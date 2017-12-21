@@ -50,7 +50,7 @@ end
 
 
 --SPRITE MODULE--
-local Sprite = CLASS({
+local Sprite = Class({
   __includes = ELEMENT
 })
 
@@ -67,9 +67,13 @@ function Sprite:getCurrentQuad()
   local animation = self.animation
   local dt = floor(delta()*1000)
   self.timecount = self.timecount + dt
-  while self.timecount >= animation.frames[self.frame].time do
-    self.timecount = self.timecount - dt
-    self.frame = self.frame % animation.framecount + 1
+  if self.timecount >= animation.frames[self.frame].time then
+    self.timecount = 0
+    if animation.loop then
+      self.frame = self.frame % animation.framecount + 1
+    else
+      self.frame = min(self.frame + 1, animation.framecount)
+    end
   end
   return animation.frames[self.frame].quad
 end
@@ -84,7 +88,7 @@ end
 
 function Sprite:draw(...)
   if self.decor then
-    self:decor(self.render, ...)
+    self:decor(...)
   else
     self:render(...)
   end
