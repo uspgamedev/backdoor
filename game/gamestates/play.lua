@@ -35,7 +35,7 @@ local function _playTurns(...)
   elseif request == "changeSector" then
     return _playTurns()
   elseif request == "report" then
-    _view.sector:addVFX(extra)
+    _view.sector:startVFX(extra)
     SWITCHER.push(GS.ANIMATION, _view.sector)
   end
   _next_action = nil

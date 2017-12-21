@@ -3,6 +3,7 @@
   "icon":"card-rush",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
       "params":[{
           "typename":"choose_dir",
@@ -37,9 +38,11 @@
           "which":"COR"
         }],
       "effects":[{
+          "pos":"val:target_pos",
+          "vfx":"SLIDE",
           "typename":"move_to",
           "body":"val:body_self",
-          "pos":"val:target_pos"
+          "vfx-spd":1
         },{
           "attr":"val:cor",
           "center":"val:damage_pos",
@@ -47,8 +50,7 @@
           "typename":"damage_on_area",
           "base":10
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
   "type-description":"",

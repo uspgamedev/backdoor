@@ -28,6 +28,20 @@ inputs.boolean = _makeCommon(
   end
 )
 
+inputs.float = _makeCommon(
+  nil,
+  function(value, key)
+    value = value or key.default or (key.range or {0})[1]
+    local range = key.range
+    local changed, newvalue = IMGUI.InputFloat("", value, 0.1, 0.5)
+    if range then
+      newvalue = math.max(range[1],
+                          range[2] and math.min(range[2], newvalue) or newvalue)
+    end
+    return changed, newvalue
+  end
+)
+
 inputs.integer = _makeCommon(
   0,
   function(value, key)
