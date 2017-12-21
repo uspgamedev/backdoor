@@ -7,7 +7,7 @@ FX.schema = {
   { id = 'vfx', name = "Visual Effect", type = 'enum',
     options = { 'SLIDE', 'JUMP' } },
   { id = 'vfx-spd', name ="Animation Speed", type = 'float',
-    range = {0.1, 10.0} }
+    range = {0.1, 10.0}, default = 1.0 }
 }
 
 function FX.process (actor, params)
@@ -22,6 +22,13 @@ function FX.process (actor, params)
   if params['vfx'] == 'SLIDE' then
     coroutine.yield('report', {
       type = 'body_moved',
+      body = body,
+      origin = pos,
+      speed_factor = params['vfx-spd']
+    })
+  elseif params['vfx'] == 'JUMP' then
+    coroutine.yield('report', {
+      type = 'body_jumped',
       body = body,
       origin = pos,
       speed_factor = params['vfx-spd']

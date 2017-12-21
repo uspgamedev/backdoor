@@ -31,7 +31,7 @@ inputs.boolean = _makeCommon(
 inputs.float = _makeCommon(
   0,
   function(value, key)
-    value = value or (key.range or {0})[1]
+    value = value or key.default or (key.range or {0})[1]
     local range = key.range
     local changed, newvalue = IMGUI.InputFloat("", value, 0.1, 0.5)
     if range then
