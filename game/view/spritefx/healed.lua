@@ -20,11 +20,11 @@ function SPRITEFX.apply(sectorview, args)
       draw_sprite(x,y,r,sx,sy)
       font:set()
       g.setColor(COLORS.DARK)
-      g.printf(("-%d"):format(amount), x + 2,
+      g.printf(("+%d"):format(amount), x + 2,
                            y - _TILE_H/2 - dmg_offset[1] + 2,
                            _TILE_W, 'center')
-      g.setColor(COLORS.NOTIFICATION)
-      g.printf(("-%d"):format(amount), x,
+      g.setColor(COLORS.VALID)
+      g.printf(("+%d"):format(amount), x,
                            y - _TILE_H/2 - dmg_offset[1],
                            _TILE_W, 'center')
     end
