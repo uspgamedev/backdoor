@@ -1,6 +1,6 @@
 {
   "extends":"sentient",
-  "signature":"BOLT",
+  "signature":"bolting",
   "behavior":"player",
   "cor":-4,
   "arc":4,

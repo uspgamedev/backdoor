@@ -1,32 +1,32 @@
 {
-  "playpoints":3,
-  "cost":6,
   "ability":{
     "operators":[{
-        "typename":"get_attribute",
-        "output":"cor",
-        "which":"COR"
-      },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"target_body"
+      },{
+        "typename":"get_attribute",
+        "output":"arcana",
+        "which":"ARC"
       }],
     "params":[{
         "aoe-hint":0,
-        "non-wall":false,
-        "output":"target",
         "typename":"choose_target",
-        "empty-tile":false,
         "body-only":{
           "body-type":false
         },
-        "max-range":1
+        "max-range":5,
+        "non-wall":false,
+        "output":"target",
+        "empty-tile":false
       }],
     "effects":[{
         "typename":"damage_on_target",
         "target":"val:target_body",
-        "attr":"val:cor",
-        "base":4
+        "base":4,
+        "attr":"val:arcana"
       }]
-  }
+  },
+  "cost":20,
+  "playpoints":0
 }

@@ -102,7 +102,7 @@ return function (actor)
 
   if dist == 1 then
     -- attack if close!
-    return ACTIONDEFS.USE_SIGNATURE, { target = {target:getPos()} }
+    return ACTIONDEFS.USE_SIGNATURE, { pos = {target:getPos()} }
   elseif dist <= VISION then
     -- chase if far away!
     local pos = _findPath({i,j}, {target:getPos()}, sector)

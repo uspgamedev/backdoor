@@ -1,12 +1,13 @@
 {
   "ani":-4,
-  "signature":"MELEE",
+  "signature":"tackle",
   "behavior":"aggro",
   "cor":-4,
   "arc":-4,
   "collection":"anything",
-  "initial_buffer":[],
-  "spd":-2,
+  "extends":false,
+  "description":"Oh honey...",
   "name":"Dumb",
-  "description":"Oh honey..."
+  "initial_buffer":[],
+  "spd":-2
 }

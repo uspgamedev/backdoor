@@ -13,6 +13,26 @@ return function(spec, group_name, title, delete, rename, parent)
   end
 
   return title .. " Editor", 2, function(self)
+
+    -- meta actions
+    local spec_meta = getmetatable(spec)
+    if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save") then
+      DB.save(spec)
+    end
+    IMGUI.SameLine()
+    if rename and IMGUI.Button("Rename") then
+      self:push('name_input', title, rename)
+    end
+    IMGUI.SameLine()
+    if IMGUI.Button("Delete") then
+      delete()
+      return true
+    end
+    IMGUI.Spacing()
+    IMGUI.Separator()
+    IMGUI.Spacing()
+
+    -- editor inputs
     for i,input in ipairs(inputs) do
       local pop = 0
       local keyid = keys[i].id
@@ -33,20 +53,20 @@ return function(spec, group_name, title, delete, rename, parent)
       end
     end
     IMGUI.Spacing()
-    IMGUI.Indent(360)
-    local spec_meta = getmetatable(spec)
+    IMGUI.Separator()
+    IMGUI.Spacing()
     if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save") then
       DB.save(spec)
     end
+    IMGUI.SameLine()
     if rename and IMGUI.Button("Rename") then
       self:push('name_input', title, rename)
-      IMGUI.SameLine()
     end
+    IMGUI.SameLine()
     if IMGUI.Button("Delete") then
       delete()
       return true
     end
-    IMGUI.Unindent(360)
   end
 
 end

@@ -1,13 +1,11 @@
 {
   "extends":"sentient",
-  "signature":"STRIKE",
+  "signature":"punch",
   "behavior":"player",
   "cor":4,
-  "name":"Brawler",
   "arc":-4,
   "collection":false,
-  "spd":0,
-  "ani":-4,
+  "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience.",
   "initial_buffer":[{
       "amount":3,
       "card":"vit_1"
@@ -42,5 +40,7 @@
       "amount":3,
       "card":"seedling-sap"
     }],
-  "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
+  "ani":-4,
+  "name":"Brawler",
+  "spd":0
 }
