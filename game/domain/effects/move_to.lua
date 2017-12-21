@@ -3,7 +3,11 @@ local FX = {}
 
 FX.schema = {
   { id = 'body', name = "Body", type = 'value', match = 'body' },
-  { id = 'pos', name = "Position", type = 'value', match = 'pos' }
+  { id = 'pos', name = "Position", type = 'value', match = 'pos' },
+  { id = 'vfx', name = "Visual Effect", type = 'enum',
+    options = { 'SLIDE', 'JUMP' } },
+  { id = 'vfx-spd', name ="Animation Speed", type = 'float',
+    range = {0.1, 10.0} }
 }
 
 function FX.process (actor, params)
@@ -15,11 +19,14 @@ function FX.process (actor, params)
   end
   local sector = body:getSector()
   sector:putBody(body, unpack(target_pos))
-  coroutine.yield('report', {
-    type = 'body_moved',
-    body = body,
-    origin = pos
-  })
+  if params['vfx'] == 'SLIDE' then
+    coroutine.yield('report', {
+      type = 'body_moved',
+      body = body,
+      origin = pos,
+      speed_factor = params['vfx-spd']
+    })
+  end
 end
 
 return FX

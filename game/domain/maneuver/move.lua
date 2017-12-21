@@ -23,7 +23,8 @@ function MOVE.perform(actor, params)
   coroutine.yield('report', {
     type = 'body_moved',
     body = actor:getBody(),
-    origin = pos
+    origin = pos,
+    speed_factor = 1.0
   })
 end
 

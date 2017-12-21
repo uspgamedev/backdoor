@@ -20,9 +20,11 @@
           "actor":"val:Actor"
         }],
       "effects":[{
-          "typename":"move_to",
           "pos":"par:target_pos",
-          "body":"val:Body"
+          "vfx":"SLIDE",
+          "typename":"move_to",
+          "body":"val:Body",
+          "vfx-spd":0.10000000149012
         }]
     }
   },

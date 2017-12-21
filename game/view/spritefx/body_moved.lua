@@ -9,6 +9,8 @@ function SPRITEFX.apply(sectorview, args)
   local body, i, j = args.body, unpack(args.origin)
   local i0, j0 = body:getPos()
   local offset = {i - i0, j - j0}
+  local di, dj = unpack(offset)
+  local dist   = (di*di + dj*dj)^0.5
   local draw_sprite = sectorview:getBodySprite(body)
   sectorview:setBodySprite(
     body,
@@ -20,7 +22,8 @@ function SPRITEFX.apply(sectorview, args)
     end
   )
   sectorview:addTimer(
-    nil, MAIN_TIMER, "tween", 0.05, offset, {0, 0}, "in-out-quad",
+    nil, MAIN_TIMER, "tween", dist/20/args.speed_factor, offset, {0, 0},
+    "in-out-quad",
     function()
       sectorview:setBodySprite(body, draw_sprite)
       sectorview:finishVFX()
