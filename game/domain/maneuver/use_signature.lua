@@ -17,7 +17,6 @@ end
 function SIGNATURE.perform(actor, params)
   local signature = actor:getSignature()
   actor:exhaust(signature.cost)
-  --actor:rewardPP(signature.playpoints or 0)
   actor:getBody():triggerWidgets(DEFS.TRIGGERS.ON_ACT)
   ABILITY.execute(signature.ability, actor, params)
 end
