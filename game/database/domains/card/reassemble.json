@@ -3,22 +3,21 @@
   "icon":"card-reassemble",
   "set":false,
   "art":{
-    "cost":60,
     "art_ability":{
       "params":[{
           "typename":"choose_target",
-          "max-range":1,
+          "output":"from",
           "body-only":{
             "body-type":"machine"
           },
-          "output":"from"
+          "max-range":1
         },{
           "aoe-hint":1,
-          "empty-tile":true,
+          "max-range":1,
           "typename":"choose_target",
-          "non-wall":true,
+          "empty-tile":true,
           "output":"to",
-          "max-range":1
+          "non-wall":true
         }],
       "operators":[{
           "typename":"get_body_at",
@@ -26,11 +25,14 @@
           "output":"body"
         }],
       "effects":[{
+          "pos":"par:to",
+          "vfx":"SLIDE",
           "typename":"move_to",
           "body":"val:body",
-          "pos":"par:to"
+          "vfx-spd":0.5
         }]
-    }
+    },
+    "cost":60
   },
   "desc":"Move target machine",
   "type-description":"",
