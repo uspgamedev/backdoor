@@ -318,6 +318,39 @@ function SectorView:draw()
   end
   g.pop()
 
+  -- HP, above everything
+  for _,body in ipairs(all_bodies) do
+    local i, j = body:getPos()
+    if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+      local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+      local hp_percent = body:getHP()/body:getMaxHP()
+      local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
+      local cr, cg, cb = HSV(unpack(hsvcol))
+      g.push()
+      g.translate(x, y)
+      g.setColor(0, 20, 0, 200)
+      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+      g.setColor(cr, cg, cb, 200)
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+
+      -- NAME
+      if named == body then
+        local name = body:getSpec('name')
+        local actor = sector:getActorFromBody(body)
+        if actor then
+          name = ("%s %s"):format(actor:getSpec('name'), name)
+        end
+        _font.set()
+        _font:setLineHeight(.8)
+        g.setColor(COLORS.NEUTRAL)
+        g.printf(name, -0.5*_TILE_W, _TILE_H-5, 2*_TILE_W, "center")
+      end
+      g.pop()
+    end
+  end
+
   g.pop()
 end
 
