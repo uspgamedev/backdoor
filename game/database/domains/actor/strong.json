@@ -1,12 +1,13 @@
 {
   "extends":"sentient",
-  "signature":"MELEE",
+  "signature":"tackle",
   "behavior":"aggro",
   "cor":0,
   "arc":0,
   "collection":"anything",
+  "name":"Sentient",
+  "spd":0,
   "ani":0,
-  "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers.",
   "initial_buffer":[],
-  "spd":0
+  "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers."
 }

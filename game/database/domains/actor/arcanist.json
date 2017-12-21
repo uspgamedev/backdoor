@@ -1,11 +1,13 @@
 {
   "extends":"sentient",
-  "signature":"BOLT",
+  "signature":"bolt",
   "behavior":"player",
   "cor":-4,
   "arc":4,
   "collection":false,
-  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
+  "spd":0,
+  "name":"Arcanist",
+  "ani":-4,
   "initial_buffer":[{
       "amount":3,
       "card":"arc_1"
@@ -40,7 +42,5 @@
       "amount":4,
       "card":"soul_robe"
     }],
-  "ani":-4,
-  "name":"Arcanist",
-  "spd":0
+  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
 }

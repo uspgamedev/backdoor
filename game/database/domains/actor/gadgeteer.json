@@ -1,11 +1,13 @@
 {
   "extends":"sentient",
-  "signature":"SHOOT",
+  "signature":"bullet",
   "behavior":"player",
   "cor":2,
   "arc":2,
   "collection":false,
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+  "spd":0,
+  "name":"Gagdeteer",
+  "ani":-4,
   "initial_buffer":[{
       "amount":3,
       "card":"cor_1"
@@ -43,7 +45,5 @@
       "amount":4,
       "card":"timebomb-drone"
     }],
-  "ani":-4,
-  "name":"Gagdeteer",
-  "spd":0
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

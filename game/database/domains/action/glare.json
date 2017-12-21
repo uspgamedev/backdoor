@@ -1,0 +1,34 @@
+{
+  "operators":[],
+  "params":[],
+  "cost":0,
+  "effects":[],
+  "ability":{
+    "params":[{
+        "aoe-hint":0,
+        "non-wall":false,
+        "output":"pos",
+        "typename":"choose_target",
+        "empty-tile":false,
+        "body-only":{
+          "body-type":false
+        },
+        "max-range":2
+      }],
+    "operators":[{
+        "typename":"get_body_at",
+        "pos":"par:pos",
+        "output":"target"
+      },{
+        "typename":"get_attribute",
+        "output":"arc",
+        "which":"ARC"
+      }],
+    "effects":[{
+        "typename":"damage_on_target",
+        "target":"val:target",
+        "attr":"val:arc",
+        "base":6
+      }]
+  }
+}

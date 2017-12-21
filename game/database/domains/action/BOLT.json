@@ -1,5 +1,7 @@
 {
-  "cost":20,
+  "operators":[],
+  "params":[],
+  "effects":[],
   "ability":{
     "operators":[{
         "typename":"get_body_at",
@@ -11,17 +13,22 @@
         "which":"ARC"
       }],
     "params":[{
-        "max-range":5,
+        "aoe-hint":0,
         "output":"target",
-        "body-only":{},
+        "empty-tile":false,
+        "max-range":5,
+        "non-wall":false,
+        "body-only":{
+          "body-type":false
+        },
         "typename":"choose_target"
       }],
     "effects":[{
         "typename":"damage_on_target",
         "target":"val:target_body",
-        "base":4,
-        "attr":"val:arcana"
+        "attr":"val:arcana",
+        "base":5
       }]
   },
-  "playpoints":5
+  "cost":20
 }

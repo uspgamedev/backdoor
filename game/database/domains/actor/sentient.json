@@ -1,9 +1,13 @@
 {
-  "signature":"DOUBLESHOOT",
+  "extends":false,
+  "signature":"tackle",
   "behavior":"player",
-  "name":"Sentient",
-  "spd":0,
-  "arc":0,
   "cor":0,
-  "ani":0
+  "arc":0,
+  "collection":false,
+  "description":"",
+  "initial_buffer":[],
+  "ani":0,
+  "name":"Sentient",
+  "spd":0
 }
