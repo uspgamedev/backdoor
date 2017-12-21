@@ -413,4 +413,12 @@ function Actor:getPP()
   return self.playpoints
 end
 
+function Actor:getStrength()
+  local str = 0
+  for attr,value in pairs(self.upgrades) do
+    str = value + str
+  end
+  return str
+end
+
 return Actor

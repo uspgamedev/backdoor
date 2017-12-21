@@ -38,7 +38,7 @@ function PLAYCARD.perform(actor, params)
 
   if card:isArt() then
     actor:exhaust(card:getArtCost())
-    actor:rewardPP(card:getPPReward())
+    --actor:rewardPP(card:getPPReward())
     ABILITY.execute(card:getArtAbility(), actor, params)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
