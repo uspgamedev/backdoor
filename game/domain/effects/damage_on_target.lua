@@ -14,7 +14,12 @@ FX.schema = {
 
 function FX.process (actor, params)
   local amount = RANDOM.rollDice(params.base, params.attr)
-  params.target:takeDamageFrom(amount, actor)
+  local dmg = params.target:takeDamageFrom(amount, actor)
+  coroutine.yield('report', {
+    type = 'dmg_taken',
+    body = params['target'],
+    amount = dmg,
+  })
 end
 
 return FX

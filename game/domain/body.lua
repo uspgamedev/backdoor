@@ -349,6 +349,7 @@ function Body:takeDamageFrom(amount, source)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
+  return dmg
   -- print damage formula info (uncomment for debugging)
   --[[
   local str = "%s is being attacked with %d damage!\n"
