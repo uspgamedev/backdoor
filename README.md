@@ -25,6 +25,7 @@ Works only in Unix systems (Linux and MacOS) for now. Dependencies:
 + Make
 + löve
 + wget
++ luajit (dev package)
 
 If all the above are properly installed, the command
 
