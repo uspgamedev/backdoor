@@ -11,14 +11,13 @@ function SPRITEFX.apply(sectorview, args)
   local offset = {i - i0, j - j0}
   local jump_offset = {0}
   local di, dj = unpack(offset)
-  local draw_sprite = sectorview:getBodySprite(body)
-  sectorview:setBodySprite(
-    body,
-    function (x,y,r,sx,sy)
+  local body_sprite = sectorview:getBodySprite(body)
+  body_sprite:setDecorator(
+    function (self, x, y, ...)
      local di, dj = unpack(offset)
      local dx, dy = dj*_TILE_W, di*_TILE_H
      x, y = x+dx, y+dy
-     draw_sprite(x,y - jump_offset[1],r,sx,sy)
+     self:render(x, y - jump_offset[1], ...)
     end
   )
   sectorview:addTimer(
@@ -30,7 +29,7 @@ function SPRITEFX.apply(sectorview, args)
         nil, MAIN_TIMER, "tween", 0.2/args.speed_factor, jump_offset, {0},
         "in-quad",
         function()
-          sectorview:setBodySprite(body, draw_sprite)
+          body_sprite:clearDecorator()
           sectorview:finishVFX()
         end
       )

@@ -10,14 +10,13 @@ local _TILE_H = VIEWDEFS.TILE_H
 function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local i, j = body:getPos()
-  local draw_sprite = sectorview:getBodySprite(body)
+  local body_sprite = sectorview:getBodySprite(body)
   local font = FONT.get('Text', 24)
   local dmg_offset = {0}
-  sectorview:setBodySprite(
-    body,
-    function (x,y,r,sx,sy)
+  body_sprite:setDecorator(
+    function (self, x, y, ...)
       local g = love.graphics
-      draw_sprite(x,y,r,sx,sy)
+      body_sprite:render(x, y, ...)
       font:set()
       g.setColor(COLORS.DARK)
       g.printf(("-%d"):format(amount), x + 2,
@@ -35,7 +34,7 @@ function SPRITEFX.apply(sectorview, args)
     function()
       sectorview:addTimer(
         nil, MAIN_TIMER, "after", 0.5, function ()
-          sectorview:setBodySprite(body, draw_sprite)
+          body_sprite:clearDecorator()
           sectorview:finishVFX()
         end
       )

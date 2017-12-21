@@ -162,7 +162,7 @@ function View:drawSpecies(g, player_info)
     local appearance = DB.loadSpec('appearance', appearance_specname)
     self.sprite = RES.loadSprite(appearance.idle)
   end
-  if self.sprite then self.sprite(-40, 0) end
+  if self.sprite then self.sprite:draw(-40, 0) end
   g.pop()
 end
 
