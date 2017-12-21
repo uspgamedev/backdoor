@@ -293,7 +293,7 @@ function SectorView:draw()
         else
           g.setColor(255, 50, 50)
         end
-        _cursor_sprite(0, 0)
+        _cursor_sprite:draw(0, 0)
         g.pop()
       end
     end
@@ -308,7 +308,7 @@ function SectorView:draw()
 
         local draw_sprite = self:getBodySprite(body)
         g.setColor(COLORS.NEUTRAL)
-        draw_sprite(x, y)
+        draw_sprite:draw(x, y)
 
       end
     end
