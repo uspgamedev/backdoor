@@ -32,6 +32,8 @@ function state:update(dt)
 
   if not _sector_view:hasPendingVFX() then
     SWITCHER.pop()
+  else
+    _sector_view:updateVFX(dt)
   end
 
   Util.destroyAll()

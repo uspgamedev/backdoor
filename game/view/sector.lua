@@ -9,11 +9,13 @@ local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
+local VIEWDEFS    = require 'view.definitions'
+local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 
-local _TILE_W = 80
-local _TILE_H = 60
-local _HALF_W = 10
-local _HALF_H = 10
+local _TILE_W = VIEWDEFS.TILE_W
+local _TILE_H = VIEWDEFS.TILE_H
+local _HALF_W = VIEWDEFS.HALF_W
+local _HALF_H = VIEWDEFS.HALF_H
 
 local _HEALTHBAR_WIDTH = 56
 local _HEALTHBAR_HEIGHT = 4
@@ -60,9 +62,7 @@ function SectorView:init(route)
   self.cursor = nil
   self.ray_dir = nil
   self.ray_body_block = false
-  self.vfx = {
-    offset = {}
-  }
+  self.vfx = nil
 
   self.fov = nil --Fov to apply on the sector
 
@@ -92,22 +92,25 @@ function SectorView:initSector(sector)
 end
 
 function SectorView:hasPendingVFX()
-  return not Util.tableEmpty(self.vfx.offset)
+  return not not self.vfx
 end
 
 function SectorView:lookAt(target)
   self.target = target
 end
 
-function SectorView:addVFX(extra)
-  if extra.type == 'body_moved' then
-    local body, i, j = extra.body, unpack(extra.origin)
-    local i0, j0 = body:getPos()
-    local offset = {i - i0, j - j0}
-    self.vfx.offset[body] = offset
-    self:addTimer(nil, MAIN_TIMER, "tween", 0.05, offset, {0, 0}, "in-out-quad",
-                  function() self.vfx.offset[body] = nil end)
-  end
+function SectorView:updateVFX(dt)
+
+end
+
+function SectorView:startVFX(extra)
+  local spritefx = SPRITEFX[extra.type]
+  spritefx.apply(self, extra)
+  self.vfx = spritefx
+end
+
+function SectorView:finishVFX()
+  self.vfx = nil
 end
 
 function SectorView:updateFov(actor)
@@ -117,6 +120,21 @@ end
 function SectorView:setRayDir(dir, body_block)
   self.ray_dir = dir
   self.ray_body_block = body_block
+end
+
+function SectorView:getBodySprite(body)
+  local id = body:getId()
+  local draw_sprite = self.body_sprites[id]
+  if not draw_sprite then
+    local idle = DB.loadSpec('appearance', body:getAppearance()).idle
+    draw_sprite = RES.loadSprite(idle)
+    self.body_sprites[id] = draw_sprite
+  end
+  return draw_sprite
+end
+
+function SectorView:setBodySprite(body, draw)
+  self.body_sprites[body:getId()] = draw
 end
 
 function SectorView:draw()
@@ -288,18 +306,9 @@ function SectorView:draw()
       --Draw only bodies if player is seeing them
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
 
-        local id = body:getId()
-        local draw_sprite = self.body_sprites[id]
-        if not draw_sprite then
-          local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-          draw_sprite = RES.loadSprite(idle)
-          self.body_sprites[id] = draw_sprite
-        end
-        local di, dj = unpack(self.vfx.offset[body] or {0,0})
-        local dx, dy = dj*_TILE_W, di*_TILE_H
-        x, y = x+dx, y+dy
+        local draw_sprite = self:getBodySprite(body)
         g.setColor(COLORS.NEUTRAL)
-        draw_sprite(x, dy)
+        draw_sprite(x, y)
 
       end
     end
