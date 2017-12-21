@@ -1,0 +1,40 @@
+{
+  "attr":"ARC",
+  "icon":"card-focus-gem",
+  "one_time":false,
+  "art":false,
+  "desc":"ARC +2\nSpends whenever an arcana art is played.",
+  "type-description":"",
+  "set":false,
+  "pp":0,
+  "name":"Focus Gem",
+  "widget":{
+    "operators":[{
+        "attr":"ARC",
+        "op":"+",
+        "val":2
+      }],
+    "trigger":"on_play",
+    "charges":2,
+    "status-tags":[],
+    "trigger-condition":{
+      "params":[{
+          "typename":"card",
+          "output":"card"
+        },{
+          "typename":"card_has_attribute",
+          "attribute":"ARC",
+          "output":"ok1",
+          "card":"par:card"
+        },{
+          "typename":"card_is_type",
+          "type":"ART",
+          "output":"ok2",
+          "card":"par:card"
+        }],
+      "operators":[],
+      "effects":[]
+    },
+    "placement":false
+  }
+}

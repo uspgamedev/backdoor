@@ -5,7 +5,7 @@ FX.schema = {
   { id = 'value', name = "Modify Exp By", type = 'value', match = 'integer' },
 }
 
-function FX.process(actor, sector, params)
+function FX.process(actor, params)
   actor:modifyExpBy(params.value)
 end
 

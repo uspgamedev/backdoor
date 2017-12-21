@@ -4,7 +4,10 @@ local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
+local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
+
+local Card        = require 'domain.card'
 
 local _EMPTY = {}
 
@@ -78,6 +81,25 @@ function Body:saveState()
   return state
 end
 
+--[[ Spec-related methods ]]--
+
+function Body:isSpec(specname)
+  if not specname then
+    return true
+  end
+  local actual_specname = self:getSpecName()
+  local ok = false
+  repeat
+    local parent = DB.loadSpec('body', actual_specname)['extends']
+    if actual_specname == specname then
+      ok = true
+      break
+    end
+    actual_specname = parent
+  until not parent
+  return ok
+end
+
 --[[ Sector-related methods ]]--
 
 function Body:setSector(sector_id)
@@ -99,7 +121,7 @@ function Body:getAttrLevel(which)
 end
 
 function Body:getAttribute(which)
-  return self:applyStaticOperators(which, self:getAttrLevel(which))
+  return math.max(1,self:applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
 function Body:updateAttr(which)
@@ -203,6 +225,7 @@ function Body:removeWidget(index)
   local card = self.widgets[index]
   local placement = card:getWidgetPlacement()
   local owner = card:getOwner()
+  self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
@@ -214,8 +237,9 @@ end
 
 function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
-  table.insert(self.widgets, card)
   self:equip(placement, card)
+  table.insert(self.widgets, card)
+  return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE)
 end
 
 function Body:getWidget(index)
@@ -242,6 +266,7 @@ function Body:getWidgetCount()
   return #self.widgets
 end
 
+local floor = math.floor
 local _OPS = {
   ['+'] = function (a,b) return a+b end,
   ['-'] = function (a,b) return a-b end,
@@ -253,14 +278,23 @@ function Body:applyStaticOperators(attr, value)
   for _,widget in ipairs(self.widgets) do
     for _,operator in widget:getStaticOperators() do
       if operator.attr == attr then
-        value = _OPS[operator.op](value, operator.val)
+        value = floor(_OPS[operator.op](value, operator.val))
       end
     end
   end
   return value
 end
 
+function Body:hasStatusTag(tag)
+  for _,widget in ipairs(self.widgets) do
+    if widget:hasStatusTag(tag) then
+      return true
+    end
+  end
+end
+
 function Body:tick()
+  self:triggerWidgets(TRIGGERS.ON_TICK)
   local spent = {}
   for i,widget in ipairs(self.widgets) do
     if widget:isSpent() then
@@ -268,25 +302,29 @@ function Body:tick()
     end
   end
   for n,i in ipairs(spent) do
-    self:removeWidget(i - n + 1)
+    local index = i - n + 1
+    self:triggerOneWidget(index, TRIGGERS.ON_DONE)
+    self:removeWidget(index)
   end
 end
 
-function Body:triggerWidgets(trigger, sector, params)
+function Body:triggerWidgets(trigger, params)
   for index in self:eachWidget() do
-    self:triggerOneWidget(index, trigger, sector, params)
+    self:triggerOneWidget(index, trigger, params)
   end
 end
 
-function Body:triggerOneWidget(index, trigger, sector, params)
+function Body:triggerOneWidget(index, trigger, params)
   local widget = self:getWidget(index)
   local owner = widget:getOwner()
   params = params or {}
   params.widget_self = widget 
+  params.body_self = self
+  params.pos_self = {self:getPos()}
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition
-        or ABILITY.checkParams(condition, owner, sector, params) then
+        or ABILITY.checkParams(condition, owner, params) then
       self:spendWidget(index)
     end
   end
@@ -294,8 +332,8 @@ function Body:triggerOneWidget(index, trigger, sector, params)
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      if ABILITY.checkParams(ability, owner, sector, params) then
-        ABILITY.execute(ability, owner, sector, params)
+      if ABILITY.checkParams(ability, owner, params) then
+        ABILITY.execute(ability, owner, params)
       end
     end
   end
@@ -303,14 +341,14 @@ end
 
 --[[ Combat methods ]]--
 
-function Body:takeDamageFrom(amount, source, sector)
+function Body:takeDamageFrom(amount, source)
   local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
-  self:triggerWidgets(TRIGGERS.ON_HIT, sector)
+  self:triggerWidgets(TRIGGERS.ON_HIT)
   -- print damage formula info (uncomment for debugging)
   --[[
   local str = "%s is being attacked with %d damage!\n"
@@ -320,6 +358,10 @@ function Body:takeDamageFrom(amount, source, sector)
   print(str:format(name, amount, name, self:getDEF(), self:getBaseDEF(),
                    defroll, name, dmg))
   --]]--
+end
+
+function Body:exterminate()
+  self.damage = self:getMaxHP()
 end
 
 function Body:heal(amount)

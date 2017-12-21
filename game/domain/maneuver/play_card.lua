@@ -1,7 +1,9 @@
 
 local ACTIONDEFS  = require 'domain.definitions.action'
+local TRIGGERS    = require 'domain.definitions.triggers'
 local ABILITY     = require 'domain.ability'
-local PLAYCARD   = {}
+
+local PLAYCARD = {}
 
 PLAYCARD.param_specs = {
   { output = 'card_index', typename = 'card_index' }
@@ -11,16 +13,16 @@ local function _card(actor, params)
   return actor:getHandCard(params.card_index)
 end
 
-function PLAYCARD.activatedAbility(actor, sector, params)
+function PLAYCARD.activatedAbility(actor, params)
   local card = _card(actor, params)
   return card:isArt() and card:getArtAbility()
 end
 
-function PLAYCARD.validate(actor, sector, params)
+function PLAYCARD.validate(actor, params)
   local card = _card(actor, params)
   local valid = false
   if card:isArt() then
-    valid = ABILITY.checkParams(card:getArtAbility(), actor, sector, params)
+    valid = ABILITY.checkParams(card:getArtAbility(), actor, params)
   elseif card:isWidget() then
     valid = true
   elseif card:isUpgrade() then
@@ -29,16 +31,21 @@ function PLAYCARD.validate(actor, sector, params)
   return valid
 end
 
-function PLAYCARD.perform(actor, sector, params)
+function PLAYCARD.perform(actor, params)
   local card = _card(actor, params)
+  local body = actor:getBody()
   actor:playCard(params.card_index)
+
   if card:isArt() then
-    actor:spendTime(card:getArtCost())
+    actor:exhaust(card:getArtCost())
     actor:rewardPP(card:getPPReward())
-    ABILITY.execute(card:getArtAbility(), actor, sector, params)
+    ABILITY.execute(card:getArtAbility(), actor, params)
+    body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
-    actor:getBody():placeWidget(card)
+    actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)
+    body:placeWidget(card)
   elseif card:isUpgrade() then
+    actor:exhaust(ACTIONDEFS.PLAY_UPGRADE_COST)
     actor:modifyExpBy(-card:getUpgradeCost())
     local upgrades = card:getUpgradesList()
     for _,upgrade in ipairs(upgrades.actor) do
@@ -54,6 +61,8 @@ function PLAYCARD.perform(actor, sector, params)
       end
     end
   end
+
+  body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
 return PLAYCARD

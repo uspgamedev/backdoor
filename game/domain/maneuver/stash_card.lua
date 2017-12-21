@@ -12,15 +12,15 @@ local function _card(actor, params)
   return actor:getHandCard(params.card_index)
 end
 
-function STASH.activatedAbility(actor, sector, params)
+function STASH.activatedAbility(actor, params)
   return nil
 end
 
-function STASH.validate(actor, sector, params)
+function STASH.validate(actor, params)
   return not not _card(actor, params)
 end
 
-function STASH.perform(actor, sector, params)
+function STASH.perform(actor, params)
   local card = actor:removeHandCard(params.card_index)
   actor:addCardToBackbuffer(card)
   local stash_bonus = Card(STASH_CARDS[card:getRelatedAttr()])

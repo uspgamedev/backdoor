@@ -28,11 +28,11 @@ function ABILITY.param(param_name)
   return PAR[param_name]
 end
 
-function ABILITY.validate(param_name, sector, actor, param, value)
-  return PAR[param_name].isValid(sector, actor, param, value)
+function ABILITY.validate(param_name, actor, param, value)
+  return PAR[param_name].isValid(actor, param, value)
 end
 
-function ABILITY.checkParams(ability, actor, sector, params)
+function ABILITY.checkParams(ability, actor, params)
   for i,parameter in ipairs(ability.params) do
     local argvalues = {}
     local parname, valname = parameter.typename, parameter.output
@@ -40,7 +40,7 @@ function ABILITY.checkParams(ability, actor, sector, params)
       argvalues[arg.id] = unref(params, {}, parameter[arg.id])
     end
     local paramspec = PAR[parameter.typename]
-    if not paramspec.isValid(sector, actor, argvalues,
+    if not paramspec.isValid(actor, argvalues,
                              params[parameter.output]) then
       return false
     end
@@ -48,7 +48,7 @@ function ABILITY.checkParams(ability, actor, sector, params)
   return true
 end
 
-function ABILITY.execute(ability, actor, sector, params)
+function ABILITY.execute(ability, actor, params)
   local values = {}
   for i,operation in ipairs(ability.operators) do
     local argvalues = {}
@@ -56,7 +56,7 @@ function ABILITY.execute(ability, actor, sector, params)
     for _,arg in DB.schemaFor('operators/'..opname) do
       argvalues[arg.id] = unref(params, values, operation[arg.id])
     end
-    values[valname] = OP[opname].process(actor, sector, argvalues)
+    values[valname] = OP[opname].process(actor, argvalues)
   end
   for i,effect_spec in ipairs(ability.effects) do
     local argvalues = {}
@@ -64,7 +64,7 @@ function ABILITY.execute(ability, actor, sector, params)
     for _,arg in DB.schemaFor('effects/'..fx_name) do
       argvalues[arg.id] = unref(params, values, effect_spec[arg.id])
     end
-    FX[fx_name].process(actor, sector, argvalues)
+    FX[fx_name].process(actor, argvalues)
   end
 end
 

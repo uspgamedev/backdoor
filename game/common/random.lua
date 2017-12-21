@@ -7,6 +7,10 @@ local RANDOM = {}
 local _rng = love.math.newRandomGenerator()
 
 --METHODS--
+function RANDOM.safeGenerate(e, d)
+  return love.math.random(e, d)
+end
+
 function RANDOM.generate(e, d)
   return _rng:random(e, d)
 end

@@ -1,0 +1,15 @@
+{
+  "desc":"This actor has its FoV greatly reduced for a while.",
+  "widget":{
+    "operators":[{
+        "attr":"FOV",
+        "op":"-",
+        "val":3
+      }],
+    "trigger":"on_tick",
+    "charges":40
+  },
+  "one_time":true,
+  "attr":"ANI",
+  "name":"Blind"
+}

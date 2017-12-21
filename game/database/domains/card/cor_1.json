@@ -1,0 +1,19 @@
+{
+  "attr":"COR",
+  "icon":"card-upgrade",
+  "one_time":true,
+  "desc":"Upgrades your Athletics attribute by 10.",
+  "upgrade":{
+    "body_list":[],
+    "actor_list":[{
+        "attr":"COR",
+        "val":10
+      }],
+    "cost":2
+  },
+  "type-description":"",
+  "type":"UPGRADE",
+  "pp":0,
+  "name":"COR +10",
+  "set":"upgrades_cor"
+}

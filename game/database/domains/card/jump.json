@@ -1,0 +1,47 @@
+{
+  "attr":"COR",
+  "icon":"card-jump",
+  "one_time":false,
+  "art":{
+    "cost":40,
+    "art_ability":{
+      "params":[{
+          "aoe-hint":2,
+          "max-range":4,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"pos",
+          "empty-tile":true
+        }],
+      "operators":[{
+          "typename":"get_attribute",
+          "output":"cor",
+          "which":"COR"
+        },{
+          "typename":"self",
+          "output":"self"
+        },{
+          "typename":"get_actor_body",
+          "output":"body",
+          "actor":"val:self"
+        }],
+      "effects":[{
+          "attr":"val:cor",
+          "center":"par:pos",
+          "size":2,
+          "typename":"damage_on_area",
+          "ignore_owner":true,
+          "base":12
+        },{
+          "typename":"move_to",
+          "body":"val:body",
+          "pos":"par:pos"
+        }]
+    }
+  },
+  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
+  "type-description":"",
+  "pp":3,
+  "name":"Jump",
+  "set":false
+}

@@ -5,6 +5,9 @@ local DEFS = require 'domain.definitions'
 return {
   { id = 'one_time', name = "Is One Time Usage", type = 'boolean' },
   { id = 'name', name = "Name", type = 'string' },
+  { id = 'icon', name = "Icon", type = 'enum',
+    options = 'resources.texture',
+    optional = true },
   { id = 'set', name = "Card Set", type = 'enum', options = 'domains.cardset' },
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'pp', name = "PlayPoint Reward", type = 'integer' },
@@ -63,6 +66,13 @@ return {
           { id = 'op', name = "Operator", type = 'enum',
             options = { '+', '-', '*', '/' } },
           { id = 'val', name = "Value", type = 'integer' },
+        }
+      },
+      {
+        id = 'status-tags', name = "Status Tag", type = 'array',
+        schema = {
+          { id = 'tag', name = "Tag", type = 'enum',
+            options = DEFS.STATUS_TAGS }
         }
       },
       {

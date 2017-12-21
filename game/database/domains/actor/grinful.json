@@ -1,10 +1,11 @@
 {
   "extends":"strong",
-  "arc":2,
   "signature":"BOLT",
-  "collection":"demon",
-  "spd":1,
   "behavior":"aggro",
+  "arc":2,
+  "collection":"anything",
+  "spd":1,
   "name":"Grinning",
+  "initial_buffer":[],
   "description":"Spellcaster monster, evil by nature."
 }

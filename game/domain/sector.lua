@@ -111,6 +111,10 @@ function Sector:saveState()
   return state
 end
 
+function Sector:getRoute()
+  return self.route
+end
+
 function Sector:getDimensions()
   return self.w, self.h
 end
@@ -135,6 +139,10 @@ function Sector:generate(register)
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
+end
+
+function Sector:getTile(i, j)
+  return self.tiles[i][j]
 end
 
 function Sector:makeTiles(grid)
@@ -353,10 +361,13 @@ function Sector:isInside(i, j)
          (j >= 1 and j <= self.w)
 end
 
-function Sector:isValid(i, j)
+function Sector:isWalkable(i, j)
   return self:isInside(i,j) and
          (self.tiles[i][j] and self.tiles[i][j].type ~= SCHEMATICS.WALL)
-         and not self.bodies[i][j]
+end
+
+function Sector:isValid(i, j)
+  return self:isWalkable(i, j) and not self.bodies[i][j]
 end
 
 function Sector:randomValidTile()
@@ -414,12 +425,14 @@ function _turnLoop(self, ...)
       table.insert(actors_queue,actor)
     end
 
+    manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+
     while not Util.tableEmpty(actors_queue) do
       actor = table.remove(actors_queue)
 
       if actor:ready() then
         while actor:ready() do
-          actor:makeAction(self)
+          actor:makeAction()
           manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
         end
         actor:turn()

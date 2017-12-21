@@ -1,0 +1,30 @@
+{
+  "operators":[],
+  "playpoints":2,
+  "params":[],
+  "cost":20,
+  "effects":[],
+  "ability":{
+    "params":[{
+        "typename":"choose_target",
+        "output":"pos",
+        "body-only":{},
+        "max-range":1
+      }],
+    "operators":[{
+        "typename":"get_attribute",
+        "output":"cor",
+        "which":"COR"
+      },{
+        "typename":"get_body_at",
+        "pos":"par:pos",
+        "output":"target"
+      }],
+    "effects":[{
+        "typename":"damage_on_target",
+        "target":"val:target",
+        "base":6,
+        "attr":"val:cor"
+      }]
+  }
+}

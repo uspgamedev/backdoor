@@ -1,21 +1,46 @@
 {
   "extends":"sentient",
-  "initial_buffer":[{
-      "amount":2,
-      "card":"draw"
-    },{
-      "amount":4,
-      "card":"cure"
-    },{
-      "amount":4,
-      "card":"bolt"
-    },{
-      "amount":4,
-      "card":"arc_1"
-    }],
+  "signature":"BOLT",
+  "behavior":"player",
+  "cor":-4,
   "arc":4,
-  "ath":-4,
-  "mec":-4,
+  "collection":false,
+  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
+  "initial_buffer":[{
+      "amount":3,
+      "card":"arc_1"
+    },{
+      "amount":3,
+      "card":"teleport"
+    },{
+      "amount":2,
+      "card":"fireball"
+    },{
+      "amount":2,
+      "card":"stick_flame"
+    },{
+      "amount":4,
+      "card":"firebolt"
+    },{
+      "amount":3,
+      "card":"focus"
+    },{
+      "amount":3,
+      "card":"divination"
+    },{
+      "amount":2,
+      "card":"haste"
+    },{
+      "amount":4,
+      "card":"heal"
+    },{
+      "amount":3,
+      "card":"illusion_of_darkness"
+    },{
+      "amount":4,
+      "card":"soul_robe"
+    }],
+  "ani":-4,
   "name":"Arcanist",
-  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
+  "spd":0
 }

@@ -6,16 +6,18 @@ MOVE.param_specs = {
   { output = 'pos', typename = 'direction' },
 }
 
-function MOVE.activatedAbility(actor, sector, params)
+function MOVE.activatedAbility(actor, params)
   return nil
 end
 
-function MOVE.validate(actor, sector, params)
+function MOVE.validate(actor, params)
+  local sector = actor:getBody():getSector()
   return sector:isValid(unpack(params.pos))
 end
 
-function MOVE.perform(actor, sector, params)
-  actor:spendTime(ACTIONDEFS.MOVE_TIME)
+function MOVE.perform(actor, params)
+  local sector = actor:getBody():getSector()
+  actor:exhaust(ACTIONDEFS.MOVE_COST)
   local pos = {actor:getPos()}
   sector:putBody(actor:getBody(), unpack(params.pos))
   coroutine.yield('report', {

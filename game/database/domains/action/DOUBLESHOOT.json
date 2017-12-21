@@ -10,7 +10,7 @@
     },{
       "typename":"get_attribute",
       "output":"athletics",
-      "which":"ATH"
+      "which":"COR"
     }],
   "playpoints":3,
   "params":[{
@@ -30,12 +30,12 @@
     "params":[{
         "typename":"choose_target",
         "output":"target",
-        "body-only":true,
+        "body-only":{},
         "max-range":6
       },{
         "typename":"choose_target",
         "output":"target2",
-        "body-only":true,
+        "body-only":{},
         "max-range":6
       }],
     "operators":[{
@@ -52,12 +52,12 @@
         "which":"ARC"
       }],
     "effects":[{
-        "typename":"dmg_formula",
+        "typename":"damage_on_target",
         "target":"val:body1",
         "base":3,
         "attr":"val:arcana"
       },{
-        "typename":"dmg_formula",
+        "typename":"damage_on_target",
         "target":"val:body2",
         "base":3,
         "attr":"val:arcana"
@@ -65,12 +65,12 @@
   },
   "cost":12,
   "effects":[{
-      "typename":"dmg_formula",
+      "typename":"damage_on_target",
       "target":"val:body1",
       "base":3,
       "attr":"val:athletics"
     },{
-      "typename":"dmg_formula",
+      "typename":"damage_on_target",
       "target":"val:body2",
       "attr":"val:athletics",
       "base":3

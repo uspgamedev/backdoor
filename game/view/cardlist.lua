@@ -1,4 +1,5 @@
 
+local RANDOM = require 'common.random'
 local math = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
@@ -20,7 +21,7 @@ local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
-local _MAX_Y_OFFSET = 500
+local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _CONSUME_TEXT = "consume"
 local _WIDTH, _HEIGHT
@@ -94,29 +95,34 @@ function View:close()
                 end)
 end
 
-function View:collectCards(finish)
+function View:collectCards()
   self.holdbar:lock()
   self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
                 self, {text=0}, "in-quad")
   for i = 1, #self.card_list do
-    self:addTimer("collect_card_"..i, MAIN_TIMER, "after", (i-1)*.06,
+    self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
+                  RANDOM.safeGenerate(1, 18)/60 + .05,
                   function()
                     self:addTimer("getting_card_"..i, MAIN_TIMER,
                                   "tween", .3, self.y_offset,
-                                  {[i] = _MAX_Y_OFFSET}, "in-quad")
+                                  {[i] = _MAX_Y_OFFSET}, "in-back")
                   end)
   end
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                #self.card_list*.06+.3, finish)
+                0.65, function() self.card_list = _EMPTY end)
 end
 
-function View:selectPrev()
-  self.selection = _prev_circular(self.selection, #self.card_list, 1)
+function View:selectPrev(n)
+  if self:isLocked() then return end
+  n = n or 1
+  self.selection = _prev_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
 end
 
 function View:selectNext()
-  self.selection = _next_circular(self.selection, #self.card_list, 1)
+  if self:isLocked() then return end
+  n = n or 1
+  self.selection = _next_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
 end
 
@@ -250,7 +256,7 @@ function View:drawArrow(g, enter)
   _font.set()
   text_height = _font:getHeight()*lh
 
-  g.translate(0, -_PD - text_height*1.5)
+  g.translate(0, -_PD - text_height*2.5)
   self:drawHoldBar(g)
 
   g.translate(0, text_height*.5)

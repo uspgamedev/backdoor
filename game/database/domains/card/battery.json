@@ -1,0 +1,22 @@
+{
+  "name":"Battery",
+  "widget":{
+    "operators":[],
+    "trigger":"on_tick",
+    "charges":100,
+    "auto_activation":{
+      "ability":{
+        "params":[{
+            "typename":"body",
+            "output":"body_self"
+          }],
+        "operators":[],
+        "effects":[{
+            "typename":"destroy_body",
+            "target":"par:body_self"
+          }]
+      },
+      "trigger":"on_done"
+    }
+  }
+}

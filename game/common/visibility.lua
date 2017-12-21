@@ -22,7 +22,7 @@ function funcs.purgeActorFov(actor, sector)
   for i = 1, h do
     actor.fov[i] = actor.fov[i] or {}
     for j = 1, w do
-        actor.fov[i][j] = false --Invisible and not seen
+      actor.fov[i][j] = false -- Invisible and not seen
     end
   end
 end
@@ -36,7 +36,7 @@ function funcs.resetActorFov(actor, sector)
     actor.fov[i] = actor.fov[i] or {}
     for j = 1, w do
       if actor.fov[i][j] then
-        actor.fov[i][j] = 0 --Invisible but seen
+        actor.fov[i][j] = 0 -- Invisible but seen
       end
     end
   end
@@ -70,7 +70,7 @@ function updateOctant(actor, sector, octant)
 
     --Check if tile is inside sector
     if not sector:isInside(pos[1],pos[2]) then break end
-    if row > actor.fov_range then
+    if row > actor:getFov() then
       full_shadow = true
     end
 

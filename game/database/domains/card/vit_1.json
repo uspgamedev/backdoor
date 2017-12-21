@@ -1,13 +1,18 @@
 {
-  "attr":"ATH",
+  "attr":"ANI",
+  "icon":"card-upgrade",
+  "set":"upgrades_vit",
+  "desc":"Upgrades your Vitality by 10.",
   "upgrade":{
+    "cost":2,
+    "actor_list":[],
     "body_list":[{
         "attr":"VIT",
         "val":10
-      }],
-    "actor_list":[],
-    "cost":2
+      }]
   },
-  "desc":"Upgrades your Vitality by 10.",
-  "name":"VIT +10"
+  "type-description":"",
+  "pp":0,
+  "name":"VIT +10",
+  "one_time":true
 }

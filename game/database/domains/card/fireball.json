@@ -1,0 +1,35 @@
+{
+  "attr":"ARC",
+  "icon":"card-fireball",
+  "set":false,
+  "art":{
+    "cost":40,
+    "art_ability":{
+      "params":[{
+          "aoe-hint":3,
+          "max-range":6,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"target",
+          "empty-tile":false
+        }],
+      "operators":[{
+          "typename":"get_attribute",
+          "output":"arc",
+          "which":"ARC"
+        }],
+      "effects":[{
+          "attr":"val:arc",
+          "center":"par:target",
+          "size":3,
+          "typename":"damage_on_area",
+          "base":8
+        }]
+    }
+  },
+  "desc":"Deal 8dARC damage in a 3-tile radius area\nsurrounding target position.\n\n\"Ages does by, and the fireball spell remains the\nbread and butter of arcane artists.\"",
+  "type-description":"",
+  "pp":0,
+  "name":"Fireball",
+  "one_time":false
+}

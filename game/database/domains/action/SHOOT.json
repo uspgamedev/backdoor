@@ -1,28 +1,45 @@
 {
+  "playpoints":3,
+  "cost":20,
   "ability":{
     "operators":[{
-        "typename":"get_attribute",
-        "output":"attr",
-        "which":"MEC"
+        "typename":"self",
+        "output":"self"
       },{
-        "typename":"get_body_at",
-        "pos":"par:target",
-        "output":"body"
+        "typename":"get_actor_body",
+        "output":"body_self",
+        "actor":"val:self"
+      },{
+        "typename":"get_body_pos",
+        "body":"val:body_self",
+        "output":"origin"
+      },{
+        "pos":"val:origin",
+        "dir":"par:dir",
+        "typename":"hitscan",
+        "output":"hit_pos",
+        "maxrange":5
+      },{
+        "typename":"translated",
+        "pos":"val:hit_pos",
+        "output":"target_pos",
+        "dir":"par:dir"
+      },{
+        "typename":"get_attribute",
+        "output":"cor",
+        "which":"COR"
       }],
     "params":[{
-        "filter":"BODY",
-        "max-range":5,
-        "typename":"choose_target",
-        "body-only":true,
-        "output":"target"
+        "typename":"choose_dir",
+        "output":"dir",
+        "body-block":true
       }],
     "effects":[{
-        "typename":"dmg_formula",
-        "target":"val:body",
-        "attr":"val:attr",
+        "attr":"val:cor",
+        "center":"val:target_pos",
+        "size":1,
+        "typename":"damage_on_area",
         "base":8
       }]
-  },
-  "playpoints":3,
-  "cost":10
+  }
 }

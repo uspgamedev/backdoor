@@ -5,13 +5,13 @@ local OP = {}
 
 OP.schema = {
   { id = 'which', name = "Attribute", type = 'enum',
-    options = {'ATH', 'ARC', 'MEC' } },
+    options = {'COR', 'ARC', 'ANI' } },
   { id = 'output', name = "Label", type = 'output' }
 }
 
 OP.type = 'integer'
 
-function OP.process(actor, sector, params)
+function OP.process(actor, params)
   return actor["get"..params.which](actor)
 end
 

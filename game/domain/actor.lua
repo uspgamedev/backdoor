@@ -24,34 +24,34 @@ function Actor:init(spec_name)
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
   self.body_id = nil
-  self.cooldown = DEFS.TIME_UNIT
+  self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
   self.hand_limit = 5
   self.upgrades = {
-    ATH = 100,
+    COR = 100,
     ARC = 100,
-    MEC = 100,
+    ANI = 100,
     SPD = 100,
   }
   self.attr_lv = {
-    ATH = 0,
+    COR = 0,
     ARC = 0,
-    MEC = 0,
+    ANI = 0,
     SPD = 0,
   }
   self.exp = 0
   self.playpoints = 10
 
   self.fov = {}
-  self.fov_range = 8
+  self.fov_range = 4
 
   self.buffer = {}
   self.prizes = {}
 
-  self:updateAttr('ATH')
+  self:updateAttr('COR')
   self:updateAttr('ARC')
-  self:updateAttr('MEC')
+  self:updateAttr('ANI')
   self:updateAttr('SPD')
 end
 
@@ -86,9 +86,9 @@ function Actor:loadState(state)
     end
     self.buffer[i] = card
   end
-  self:updateAttr('ATH')
+  self:updateAttr('COR')
   self:updateAttr('ARC')
-  self:updateAttr('MEC')
+  self:updateAttr('ANI')
   self:updateAttr('SPD')
 end
 
@@ -146,8 +146,8 @@ function Actor:getAttrLevel(which)
 end
 
 function Actor:getAttribute(which)
-  return self:getBody()
-             :applyStaticOperators(which, self:getAttrLevel(which))
+  return math.max(1,self:getBody()
+                        :applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
 function Actor:updateAttr(which)
@@ -159,12 +159,12 @@ function Actor:upgradeAttr(which, amount)
   self:updateAttr(which)
 end
 
-function Actor:getATH()
-  return self:getAttribute('ATH')
+function Actor:getCOR()
+  return self:getAttribute('COR')
 end
 
-function Actor:upgradeATH(n)
-  self:upgradeAttr('ATH', n)
+function Actor:upgradeCOR(n)
+  self:upgradeAttr('COR', n)
 end
 
 function Actor:getARC()
@@ -175,12 +175,12 @@ function Actor:upgradeARC(n)
   self:upgradeAttr('ARC', n)
 end
 
-function Actor:getMEC()
-  return self:getAttribute('MEC')
+function Actor:getANI()
+  return self:getAttribute('ANI')
 end
 
-function Actor:upgradeMEC(n)
-  self:upgradeAttr('MEC', n)
+function Actor:upgradeANI(n)
+  self:upgradeAttr('ANI', n)
 end
 
 function Actor:getSPD()
@@ -237,6 +237,10 @@ end
 
 function Actor:isHandEmpty()
   return #self.hand == 0
+end
+
+function Actor:isHandFull()
+  return #self.hand >= self.hand_limit
 end
 
 function Actor:getBufferSize()
@@ -333,6 +337,10 @@ function Actor:getNextPrizePack()
   return #self.prizes > 0 and table.remove(self.prizes, 1)
 end
 
+function Actor:getPrizePackCount()
+  return #self.prizes
+end
+
 function Actor:purgeFov(sector)
   Visibility.purgeActorFov(self,sector)
 end
@@ -343,6 +351,11 @@ end
 
 function Actor:updateFov(sector)
   Visibility.updateFov(self,sector)
+end
+
+function Actor:getFov()
+  return math.max(0,self:getBody()
+             :applyStaticOperators("FOV", self.fov_range))
 end
 
 --[[ Turn methods ]]--
@@ -364,21 +377,27 @@ function Actor:playCard(card_index)
 end
 
 function Actor:turn()
-  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN, sector)
+  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN)
 end
 
-function Actor:makeAction(sector)
+function Actor:makeAction()
   local success = false
   repeat
-    local action_slot, params = self:behavior(sector)
+    local action_slot, params
+    if self:getBody():hasStatusTag(DEFS.STATUS_TAGS.STUN) then
+      action_slot, params = DEFS.ACTION.IDLE, {}
+    else
+      action_slot, params = self:behavior()
+    end
     if ACTION.exists(action_slot) then
-      success = ACTION.execute(action_slot, self, sector, params)
+      success = ACTION.execute(action_slot, self, params)
     end
   until success
+  self:updateFov(self:getBody():getSector())
   return true
 end
 
-function Actor:spendTime(n)
+function Actor:exhaust(n)
   self.cooldown = self.cooldown + n
 end
 

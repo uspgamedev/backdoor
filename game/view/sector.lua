@@ -11,12 +11,12 @@ local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 
 local _TILE_W = 80
-local _TILE_H = 80
+local _TILE_H = 60
 local _HALF_W = 10
-local _HALF_H = 6
+local _HALF_H = 10
 
-local _HEALTHBAR_WIDTH = 64
-local _HEALTHBAR_HEIGHT = 8
+local _HEALTHBAR_WIDTH = 56
+local _HEALTHBAR_HEIGHT = 4
 
 local _texture
 local _tile_offset
@@ -58,6 +58,8 @@ function SectorView:init(route)
 
   self.target = nil
   self.cursor = nil
+  self.ray_dir = nil
+  self.ray_body_block = false
   self.vfx = {
     offset = {}
   }
@@ -112,6 +114,11 @@ function SectorView:updateFov(actor)
   self.fov = actor.fov
 end
 
+function SectorView:setRayDir(dir, body_block)
+  self.ray_dir = dir
+  self.ray_body_block = body_block
+end
+
 function SectorView:draw()
   local g = love.graphics
   local sector = self.route.getCurrentSector()
@@ -129,9 +136,11 @@ function SectorView:draw()
   for i = 0, sector.h-1 do
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
-      if _isInFrame(i, j) and tile and tile.type ~= SCHEMATICS.WALL then
+      if _isInFrame(i, j) and tile then
+        local tile_type = (tile.type == SCHEMATICS.WALL)
+                          and SCHEMATICS.FLOOR or tile.type
         local x, y = j*_TILE_W, i*_TILE_H
-        _flat_batch:add(_tile_quads[tile.type], x, y,
+        _flat_batch:add(_tile_quads[tile_type], x, y,
                         0, 1, 1, unpack(_tile_offset[tile.type]))
       end
     end
@@ -156,8 +165,34 @@ function SectorView:draw()
     end
   end
 
+  local rays = {}
+  for i=1,sector.h do
+    rays[i] = {}
+    for j=1,sector.w do
+      rays[i][j] = false
+    end
+  end
+
+  if self.ray_dir and self.target then
+    local dir = self.ray_dir
+    local i, j = self.target:getPos()
+    local check
+    if self.ray_body_block then
+      check = sector.isValid
+    else
+      check = sector.isWalkable
+    end
+    repeat
+      rays[i][j] = true
+      i = i + dir[1]
+      j = j + dir[2]
+    until not check(sector, i, j) or not self.fov[i][j]
+  end
+
   -- draw tall things
   g.push()
+  local all_bodies = {}
+  local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
     local highlights = {}
@@ -179,19 +214,34 @@ function SectorView:draw()
           _tall_batch:add(_tile_quads[tile.type], x, 0,
                           0, 1, 1, unpack(_tile_offset[tile.type]))
         elseif self.cursor then
-          if self.cursor.range_checker(i+1, j+1) then
-            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
-              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {100, 200, 200, 100}})
+          local current_body = self.route.getControlledActor():getBody()
+          if not self.fov or (self.fov[i+1][j+1] and
+                              self.fov[i+1][j+1] > 0)
+                          or body == current_body then
+            if self.cursor.range_checker(i+1, j+1) then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {100, 200, 200, 100} })
+            end
+            if self.cursor.validator(i+1, j+1) then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {100, 200, 100, 100} })
+            end
+            local ci, cj = self.cursor:getPos()
+            local size   = self.cursor.aoe_hint or 1
+            local abs    = math.abs
+            if size and tile.type == SCHEMATICS.FLOOR
+                    and abs(i+1 - ci) < size and abs(j+1 - cj) < size then
+              table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                         {200, 100, 100, 100} })
             end
           end
-          if self.cursor.validator(i+1, j+1) then
-            if not self.fov or (self.fov[i+1][j+1] and self.fov[i+1][j+1] > 0) then
-              table.insert(highlights, {x, 0, _TILE_W, _TILE_H, {200, 200, 100, 100}})
-            end
-          end
+        elseif self.ray_dir and rays[i+1][j+1] then
+          table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
+                                     {200, 100, 100, 100} })
         end
         if body then
           table.insert(draw_bodies, {body, x, 0})
+          table.insert(all_bodies, body)
         end
       end
     end
@@ -219,13 +269,7 @@ function SectorView:draw()
           -- NAME
           local body = sector:getBodyAt(c_i, c_j)
           if body then
-            local name = body:getSpec('name')
-            local actor = sector:getActorFromBody(body)
-            if actor then name = ("%s %s"):format(actor:getSpec('name'), name) end
-            _font.set()
-            _font:setLineHeight(.8)
-            g.setColor(COLORS.NEUTRAL)
-            g.printf(name, -0.5*_TILE_W, -_TILE_H, 2*_TILE_W, "center")
+            named = body
           end
           g.setColor(COLORS.NEUTRAL)
         else
@@ -254,36 +298,58 @@ function SectorView:draw()
         local di, dj = unpack(self.vfx.offset[body] or {0,0})
         local dx, dy = dj*_TILE_W, di*_TILE_H
         x, y = x+dx, y+dy
-        g.push()
         g.setColor(COLORS.NEUTRAL)
         draw_sprite(x, dy)
 
-        -- HP
-        g.translate(x, dy)
-        local hp_percent = body:getHP()/body:getMaxHP()
-        g.setColor(0, 20, 0)
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48, _HEALTHBAR_WIDTH,
-                    _HEALTHBAR_HEIGHT)
-        local hsvcol = { 0 + 100*hp_percent, 240, 150 - 50*hp_percent }
-        g.setColor(HSV(unpack(hsvcol)))
-        g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, -48,
-                    hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-        g.pop()
       end
     end
+
 
     g.translate(0, _TILE_H)
   end
   g.pop()
+
+  -- HP, above everything
+  for _,body in ipairs(all_bodies) do
+    local i, j = body:getPos()
+    if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+      local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
+      local hp_percent = body:getHP()/body:getMaxHP()
+      local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
+      local cr, cg, cb = HSV(unpack(hsvcol))
+      g.push()
+      g.translate(x, y)
+      g.setColor(0, 20, 0, 200)
+      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+      g.setColor(cr, cg, cb, 200)
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
+
+      -- NAME
+      if named == body then
+        local name = body:getSpec('name')
+        local actor = sector:getActorFromBody(body)
+        if actor then
+          name = ("%s %s"):format(actor:getSpec('name'), name)
+        end
+        _font.set()
+        _font:setLineHeight(.8)
+        g.setColor(COLORS.NEUTRAL)
+        g.printf(name, -0.5*_TILE_W, _TILE_H-5, 2*_TILE_W, "center")
+      end
+      g.pop()
+    end
+  end
 
   g.pop()
 end
 
 --CURSOR FUNCTIONS
 
-function SectorView:newCursor(i,j,validator,range_checker)
+function SectorView:newCursor(i, j, aoe_hint, validator, range_checker)
   i, j = i or 1, j or 1
-  self.cursor = Cursor(i,j,validator,range_checker)
+  self.cursor = Cursor(i, j, aoe_hint, validator, range_checker)
 end
 
 function SectorView:removeCursor()
@@ -308,21 +374,21 @@ function _isInCone(origin_i, origin_j, target_i, target_j, dir)
   local i = target_i - origin_i
   local j = target_j - origin_j
 
-  if     dir == "up" then   --UP
+  if     dir == "UP" then   --UP
     return j >= i and j <= -i
-  elseif dir == "right" then   --RIGHT
+  elseif dir == "RIGHT" then   --RIGHT
     return i >= -j and i <= j
-  elseif dir == "down" then   --DOWN
+  elseif dir == "DOWN" then   --DOWN
     return j <= i and j >= -i
-  elseif dir == "left" then     --LEFT
+  elseif dir == "LEFT" then     --LEFT
     return i <= -j and i >= j
-  elseif dir == "upright" then   --UPRIGHT
+  elseif dir == "UPRIGHT" then   --UPRIGHT
     return i <= 0 and j >= 0
-  elseif dir == "downright" then   --DOWNRIGHT
+  elseif dir == "DOWNRIGHT" then   --DOWNRIGHT
     return i >= 0 and j >= 0
-  elseif dir == "downleft" then   --DOWNLEFT
+  elseif dir == "DOWNLEFT" then   --DOWNLEFT
     return i >= 0 and j <= 0
-  elseif dir == "upleft" then   --UPLEFT
+  elseif dir == "UPLEFT" then   --UPLEFT
     return i <= 0 and j <= 0
   else
     return error(("Not valid direction for cone function: %s"):format(dir))
@@ -414,9 +480,10 @@ Cursor = Class{
   __includes = { ELEMENT }
 }
 
-function Cursor:init(i, j, validator, range_checker)
+function Cursor:init(i, j, aoe_hint, validator, range_checker)
   self.i = i
   self.j = j
+  self.aoe_hint = aoe_hint
 
   self.validator = validator
   self.range_checker = range_checker
@@ -427,3 +494,4 @@ function Cursor:getPos()
 end
 
 return SectorView
+

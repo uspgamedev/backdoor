@@ -1,27 +1,46 @@
 {
   "extends":"sentient",
+  "signature":"STRIKE",
+  "behavior":"player",
+  "cor":4,
+  "name":"Brawler",
+  "arc":-4,
+  "collection":false,
+  "spd":0,
+  "ani":-4,
   "initial_buffer":[{
       "amount":3,
-      "card":"meditate"
-    },{
-      "amount":1,
-      "card":"armor"
-    },{
-      "amount":2,
-      "card":"sord"
-    },{
-      "amount":2,
       "card":"vit_1"
     },{
-      "amount":2,
-      "card":"def_1"
+      "amount":1,
+      "card":"spark_rod"
     },{
-      "amount":4,
-      "card":"ath_1"
+      "amount":10,
+      "card":"rush"
+    },{
+      "amount":1,
+      "card":"laser-spear"
+    },{
+      "amount":3,
+      "card":"rage"
+    },{
+      "amount":2,
+      "card":"power-suit"
+    },{
+      "amount":3,
+      "card":"jump"
+    },{
+      "amount":3,
+      "card":"dropkick"
+    },{
+      "amount":8,
+      "card":"stomp"
+    },{
+      "amount":2,
+      "card":"calming_down"
+    },{
+      "amount":3,
+      "card":"seedling-sap"
     }],
-  "ath":4,
-  "arc":-4,
-  "mec":-4,
-  "name":"Brawler",
   "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
 }

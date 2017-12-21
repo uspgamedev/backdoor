@@ -1,0 +1,38 @@
+{
+  "attr":"ARC",
+  "icon":"card-flash",
+  "set":false,
+  "art":{
+    "art_ability":{
+      "params":[{
+          "aoe-hint":5,
+          "max-range":0,
+          "body-only":{
+            "body-type":false
+          },
+          "typename":"choose_target",
+          "empty-tile":false,
+          "output":"self_pos",
+          "non-wall":false
+        }],
+      "operators":[{
+          "typename":"get_body_at",
+          "pos":"par:self_pos",
+          "output":"self"
+        }],
+      "effects":[{
+          "center":"par:self_pos",
+          "size":5,
+          "card":"stunned",
+          "typename":"place_widget_on_area",
+          "ignore_owner":true
+        }]
+    },
+    "cost":40
+  },
+  "desc":"Stuns in a 5-tile radius area.\n\n\"Aaaaaaahhh... Savior of the Universe!\"",
+  "type-description":"",
+  "pp":0,
+  "name":"Flash",
+  "one_time":false
+}

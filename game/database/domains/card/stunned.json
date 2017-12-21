@@ -1,0 +1,14 @@
+{
+  "desc":"Can't take actions.",
+  "widget":{
+    "operators":[],
+    "trigger":"on_tick",
+    "status-tags":[{
+        "tag":"stun"
+      }],
+    "charges":40
+  },
+  "attr":"COR",
+  "one_time":true,
+  "name":"Stunned"
+}

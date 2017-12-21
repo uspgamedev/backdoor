@@ -1,27 +1,32 @@
 {
+  "playpoints":3,
+  "cost":6,
   "ability":{
     "operators":[{
         "typename":"get_attribute",
-        "output":"ath",
-        "which":"ATH"
+        "output":"cor",
+        "which":"COR"
       },{
         "typename":"get_body_at",
         "pos":"par:target",
         "output":"target_body"
       }],
     "params":[{
-        "typename":"choose_target",
-        "max-range":1,
+        "aoe-hint":0,
+        "non-wall":false,
         "output":"target",
-        "body-only":true
+        "typename":"choose_target",
+        "empty-tile":false,
+        "body-only":{
+          "body-type":false
+        },
+        "max-range":1
       }],
     "effects":[{
-        "typename":"dmg_formula",
+        "typename":"damage_on_target",
         "target":"val:target_body",
-        "attr":"val:ath",
+        "attr":"val:cor",
         "base":4
       }]
-  },
-  "playpoints":3,
-  "cost":6
+  }
 }

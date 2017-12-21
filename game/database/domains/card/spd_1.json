@@ -1,0 +1,18 @@
+{
+  "attr":"ARC",
+  "icon":"card-upgrade",
+  "set":"upgrades_spd",
+  "desc":"",
+  "upgrade":{
+    "cost":2,
+    "actor_list":[{
+        "attr":"SPD",
+        "val":10
+      }],
+    "body_list":[]
+  },
+  "type-description":"",
+  "pp":0,
+  "name":"SPD +10",
+  "one_time":false
+}

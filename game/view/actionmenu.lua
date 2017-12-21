@@ -3,6 +3,7 @@ local RES = require 'resources'
 local CAM = require 'common.camera'
 local FONT = require 'view.helpers.font'
 local DEFS = require 'domain.definitions'
+local COLORS = require 'domain.definitions.colors'
 
 -- CONSTANTS -------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ local _DRAWHAND = 4
 -- LOCAL VARIABLES -------------------------------------------------------------
 
 local _font
+local _tiny_font
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
 
@@ -49,8 +51,10 @@ function ActionMenu:init()
   self.switch = 0
   self.enter = 0
   self.text = 0
+  self.actor = false
   _W, _H = love.graphics.getDimensions()
   _font = _font or FONT.get("Text", 32)
+  _tiny_font = _tiny_font or FONT.get("TextBold", 20)
 
 end
 
@@ -74,9 +78,9 @@ end
 
 function ActionMenu:moveFocus(dir)
   local last = self.current
-  if dir == 'up' or dir == 'right' then
+  if dir == 'UP' or dir == 'RIGHT' then
     self.current = math.max(1, self.current - 1)
-  elseif dir == 'down' or dir == 'left' then
+  elseif dir == 'DOWN' or dir == 'LEFT' then
     self.current = math.min(#_ACTIONS, self.current + 1)
   end
   if last ~= self.current then
@@ -96,7 +100,8 @@ function ActionMenu:getSelected()
   return _ACTIONS[self.current]
 end
 
-function ActionMenu:open(last_focus)
+function ActionMenu:open(last_focus, actor)
+  self.actor = actor
   self.invisible = false
   self:removeTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER)
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween", 0.3,
@@ -111,6 +116,7 @@ function ActionMenu:close()
   self:addTimer(_TWEEN.OPEN_CLOSE, MAIN_TIMER, "tween", 0.3,
                 self, { enter = 0 }, 'out-circ', function()
                   self.invisible = true
+                  CAM:zoomTo(1)
                 end
   )
   self:hideLabel()
@@ -141,6 +147,26 @@ function ActionMenu:draw()
     g.setColor(255, 255, 255, enter*fade*255)
     g.draw(RES.loadTexture('icon-' .. action_name), 0, 0, 0, 1/4*size, 1/4*size,
            256, 256)
+    if action_name == 'receive_pack' and self.actor then
+      local pack_count = self.actor:getPrizePackCount()
+      if pack_count > 0 then
+        local count_str = tostring(pack_count)
+        local w = _tiny_font:getWidth(count_str)
+        local h = _tiny_font:getHeight()
+        local cr, cg, cb = unpack(COLORS.NOTIFICATION)
+        g.push()
+        g.translate(64*size*cos(pi/4), 64*size*sin(pi/4))
+        g.scale(size)
+        g.setColor(cr, cg, cb, enter*fade*255)
+        g.circle("fill", 0, 0, 20, 20)
+        cr, cg, cb = unpack(COLORS.NEUTRAL)
+        g.setColor(cr, cg, cb, enter*fade*255)
+        _tiny_font:setLineHeight(1)
+        _tiny_font.set()
+        g.printf(count_str, -w/2, -1.1*h/2, w, "center")
+        g.pop()
+      end
+    end
     g.pop()
   end
   g.push()

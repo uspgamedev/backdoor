@@ -4,7 +4,7 @@
     "loops":24
   },
   "encounters":{
-    "max":9,
+    "max":14,
     "recipes":[{
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat"
@@ -15,33 +15,35 @@
         "actorspec":"grinful",
         "bodyspec":"imp"
       }],
-    "min":3
+    "min":6
   },
   "rooms":{
-    "tries":256,
-    "maxh":9,
-    "minw":3,
     "minh":3,
-    "count":32,
     "rmar":1,
+    "minw":3,
+    "tries":256,
+    "count":32,
+    "maxh":9,
     "maxw":9
   },
-  "maze":[],
+  "exits":{
+    "distance":5,
+    "exits":[{
+        "target_specname":"sector03"
+      }],
+    "threshold":2
+  },
   "deadends":{
     "amount":24
   },
   "bootstrap":{
     "w":30,
     "mh":2,
-    "tileset":"demo",
+    "tileset":"otherdemo",
     "h":30,
     "mw":2
   },
-  "exits":{
-    "distance":5,
-    "threshold":2,
-    "exits":[{
-        "target_specname":"sector03"
-      }]
+  "maze":{
+    "double":false
   }
 }

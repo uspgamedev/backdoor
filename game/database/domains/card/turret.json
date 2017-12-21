@@ -1,0 +1,36 @@
+{
+  "attr":"COR",
+  "icon":"card-turret",
+  "set":false,
+  "art":{
+    "cost":60,
+    "art_ability":{
+      "params":[{
+          "aoe-hint":4,
+          "empty-tile":true,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"pos",
+          "max-range":1
+        }],
+      "operators":[],
+      "effects":[{
+          "widgets":[{
+              "spec":"auto-fire"
+            },{
+              "spec":"battery"
+            }],
+          "pos":"par:pos",
+          "typename":"make_body",
+          "vit":50,
+          "def":50,
+          "bodyspec":"machine"
+        }]
+    }
+  },
+  "desc":"Kachink",
+  "type-description":"",
+  "pp":0,
+  "name":"Turret",
+  "one_time":false
+}

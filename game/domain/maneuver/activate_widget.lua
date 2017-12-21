@@ -8,28 +8,28 @@ ACTIVATE.param_specs = {
   { output = 'widget_slot', typename = 'choose_widget_slot' }
 }
 
-function ACTIVATE.activatedAbility(actor, sector, params)
+function ACTIVATE.activatedAbility(actor, params)
   return actor:getBody():getWidget(params.widget_slot):getWidgetAbility()
 end
 
-function ACTIVATE.validate(actor, sector, params)
+function ACTIVATE.validate(actor, params)
   if not params.widget_slot then return false end
   local widget = actor:getBody():getWidget(params.widget_slot)
   if not widget then return false end
   local ability = widget:getWidgetAbility()
-  return ability and ABILITY.checkParams(ability, actor, sector, params)
+  return ability and ABILITY.checkParams(ability, actor, params)
 end
 
-function ACTIVATE.perform(actor, sector, params)
+function ACTIVATE.perform(actor, params)
   local body = actor:getBody()
   local widget = body:getWidget(params.widget_slot)
   local ability = widget:getWidgetAbility()
-  actor:spendTime(widget:getWidgetActivationCost())
+  actor:exhaust(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
-  ABILITY.execute(ability, actor, sector, params)
-  body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, sector,
-                      { activated_widget = widget })
-  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE, sector)
+  ABILITY.execute(ability, actor, params)
+  body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, { activated_widget = widget })
+  body:triggerWidgets(DEFS.TRIGGERS.ON_ACT)
+  body:triggerOneWidget(params.widget_slot, DEFS.TRIGGERS.ON_USE)
 end
 
 return ACTIVATE

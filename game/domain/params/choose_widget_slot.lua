@@ -7,7 +7,7 @@ PARAM.schema = {
 
 PARAM.type = 'widget_slot'
 
-function PARAM.isValid(sector, actor, parameter, value)
+function PARAM.isValid(actor, parameter, value)
   if not actor:getBody():hasWidgetAt(value) then
     return false
   end

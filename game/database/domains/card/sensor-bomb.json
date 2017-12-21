@@ -1,0 +1,34 @@
+{
+  "attr":"COR",
+  "icon":"card-sensor-bomb",
+  "set":false,
+  "art":{
+    "art_ability":{
+      "params":[{
+          "aoe-hint":4,
+          "max-range":1,
+          "typename":"choose_target",
+          "empty-tile":true,
+          "output":"pos",
+          "non-wall":true
+        }],
+      "operators":[],
+      "effects":[{
+          "widgets":[{
+              "spec":"proximity-detector"
+            }],
+          "pos":"par:pos",
+          "typename":"make_body",
+          "def":50,
+          "bodyspec":"machine",
+          "vit":50
+        }]
+    },
+    "cost":60
+  },
+  "desc":"Kaboom",
+  "type-description":"",
+  "pp":0,
+  "name":"Sensor Bomb",
+  "one_time":false
+}

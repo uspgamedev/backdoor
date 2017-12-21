@@ -6,7 +6,7 @@ FX.schema = {
     range = {1} }, 
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
   for i = 1, params.amount do
     actor:drawCard()
   end 

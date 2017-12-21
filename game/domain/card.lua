@@ -36,6 +36,10 @@ function Card:getDescription()
   return self:getSpec('desc')
 end
 
+function Card:getIconTexture()
+  return self:getSpec('icon')
+end
+
 function Card:getPPReward()
   return self:getSpec('pp') or 0
 end
@@ -68,6 +72,13 @@ function Card:isWidget()
   return not not self:getSpec('widget')
 end
 
+function Card:getType()
+  if self:isArt() then return 'art'
+  elseif self:isUpgrade() then return 'upgrade'
+  elseif self:isWidget() then return 'widget'
+  end
+end
+
 function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
@@ -97,6 +108,16 @@ end
 
 function Card:getStaticOperators()
   return ipairs(self:getSpec('widget')['operators'] or {})
+end
+
+function Card:hasStatusTag(tag)
+  local status_list = self:getSpec('widget')['status-tags'] or {}
+  for _,status in ipairs(status_list) do
+    if status['tag'] == tag then
+      return true
+    end
+  end
+  return false
 end
 
 function Card:getWidgetActivation()

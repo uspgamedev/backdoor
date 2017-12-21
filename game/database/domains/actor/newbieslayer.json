@@ -1,6 +1,8 @@
 {
   "extends":"strong",
+  "collection":"anything",
+  "initial_buffer":[],
+  "cor":4,
   "name":"Newbie Killer",
-  "ath":4,
   "description":"The newbie's nightmares..."
 }

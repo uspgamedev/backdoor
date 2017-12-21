@@ -4,7 +4,7 @@
     "loops":12
   },
   "encounters":{
-    "max":10,
+    "max":12,
     "recipes":[{
         "actorspec":"fiendish",
         "bodyspec":"eye"
@@ -12,18 +12,20 @@
         "actorspec":"grinful",
         "bodyspec":"imp"
       }],
-    "min":4
+    "min":6
   },
   "rooms":{
     "tries":256,
-    "maxh":9,
+    "count":24,
     "minw":3,
     "minh":3,
-    "count":24,
+    "maxh":9,
     "rmar":1,
     "maxw":9
   },
-  "maze":[],
+  "maze":{
+    "double":false
+  },
   "exits":{
     "distance":5,
     "exits":[{
@@ -39,7 +41,7 @@
     "w":24,
     "mh":2,
     "h":40,
-    "tileset":"demo",
+    "tileset":"otherdemo",
     "mw":2
   },
   "deadends":{

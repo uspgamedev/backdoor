@@ -1,165 +1,243 @@
 --CHARACTER BUILDER VIEW--
+local DB = require 'database'
 local RES = require 'resources'
 local FONT = require 'view.helpers.font'
-local Queue = require 'lux.common.Queue'
 local COLORS = require 'domain.definitions.colors'
 
 
 --CONSTANTS--
-local _TILE_W = 80
-local _TILE_H = 80
+local _CONTEXTS = {
+  "Species",
+  "Background",
+  "Are you sure?",
+}
+
+local _PLAYER_FIELDS = {
+  'species',
+  'background',
+  'confirm',
+}
+
+local _SPECS = {
+  species = 'body',
+  background = 'actor',
+}
+
+local _FADE_TIME = .4
 local _PD = 16
 local _LH = 1.5
-local _FONT_SIZE = 32
 local _WIDTH
 local _HEIGHT
 
 
 --LOCALS--
-local _font
-local _smol_font
+local _header_font
+local _content_font
+local _menu_values
 
+
+local sin = math.sin
+local pi  = math.pi
+local delta = love.timer.getDelta
 
 --MODULE--
-local CharaBuildView = Class{
+local View = Class{
   __includes = { ELEMENT }
 }
 
 
 --LOCAL FUNCTIONS--
-local function _initGraphicValues()
+
+local function _initValues()
+  local playables = DB.loadSetting("playable")
   local g = love.graphics
+  _menu_values = {
+    species     = playables.species,
+    background  = playables.background,
+    confirm     = {true, false},
+  }
   _WIDTH, _HEIGHT = g.getDimensions()
-  _font = FONT.get("Text", _FONT_SIZE)
-  _smol_font = FONT.get("Text", _FONT_SIZE*0.75)
+  _header_font  = FONT.get("Text", 32)
+  _content_font = FONT.get("Text", 24)
 end
 
-local function _renderSaved(g, saved)
-  g.push()
-  g.translate(2*_TILE_W, _TILE_H/2)
-  for _,data in ipairs(saved) do
-    local context, name = unpack(data)
-    g.push()
-    g.printf(("%s: %s"):format(context, name), 0, 0, _WIDTH/4, "left")
-    g.pop()
-    g.translate(0, _FONT_SIZE*_LH)
-  end
-  g.pop()
+local function _getSpec(field, specname)
+  return DB.loadSpec(_SPECS[field], specname)
 end
 
-local function _renderContext(g, context_name)
-  local w = _font:getWidth(context_name)
-  g.translate(0, 160)
-  g.printf(context_name, -w/2, 0, w, "center")
-  g.translate(0, _FONT_SIZE*2)
-end
-
-local function _renderOptions(g, sel, width, render_queue)
-  local w = width + 2*_PD
-  local h = _font:getHeight()*3/5
-  local count = 0
-  while not render_queue.isEmpty() do
-    local name, data = unpack(render_queue.pop())
-    count = count + 1
-    if count == sel then
-      g.push()
-      g.translate(-w/2, 0)
-      g.polygon("fill", {0, h-_PD/2, 0-_PD/2, h, 0, h+_PD/2})
-      g.polygon("fill", {w, h-_PD/2, w+_PD/2, h, w, h+_PD/2})
-      g.printf(name, 0, 0, w, "center")
-      g.pop()
-      if data then
-        g.push()
-        g.translate(2*_TILE_W, -_FONT_SIZE*2)
-        _smol_font:set()
-        _smol_font:setLineHeight(3*_LH/5)
-        g.printf(data.desc, 0, 0, 5*_TILE_W, "left")
-        _font:set()
-        g.pop()
-      end
-    end
-  end
-end
-
-local function _renderPreview(g)
-  g.push()
-  g.translate(0, _TILE_H)
-  g.scale(_TILE_W, _TILE_H)
-  g.setColor(200, 100, 100)
-  g.polygon('fill', 0.0, -0.75, -0.25, 0.0, 0.0, 0.25)
-  g.setColor(90, 140, 140)
-  g.polygon('fill', 0.0, -0.75, 0.25, 0.0, 0.0, 0.25)
-  g.setColor(COLORS.NEUTRAL)
-  g.pop()
-end
-
-
---VIEW METHODS--
-function CharaBuildView:init()
-
+function View:init()
   ELEMENT.init(self)
 
+  self.enter = 0
+  self.context = 1
   self.selection = 1
-  self.context = false
-  self.render_queue = Queue(256)
-  self.saved = {}
-  self.width = 0
+  self.arrow = 0
+  self.leave = false
+  self.sprite = false
 
-  _initGraphicValues()
-
+  _initValues()
 end
 
-function CharaBuildView:save(context_name, name)
-  table.insert(self.saved, {context_name, name})
+function View:open(player_info)
+  self.player_info = player_info
+  self:removeTimer('charabuild_fade', MAIN_TIMER)
+  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", _FADE_TIME,
+                self, { enter = 1 }, "linear"
+  )
 end
 
-function CharaBuildView:flush()
-  for k,v in ipairs(self.saved) do self.saved[k] = nil end
+function View:close(after)
+  self:removeTimer('charabuild_fade', MAIN_TIMER)
+  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", 1.5*_FADE_TIME,
+                self, { enter = 0 }, "in-quad", after
+  )
 end
 
-function CharaBuildView:setContext(context_name)
-  self.context = context_name
+function View:reset()
+  self.context = 1
+  self.selection = 1
+  self.sprite = false
 end
 
-function CharaBuildView:setItem(name, data)
-  self.render_queue.push {name, data}
-  self.width = math.max(self.width, _font:getWidth(name))
+function View:selectPrev()
+  local context = _PLAYER_FIELDS[self.context]
+  local menu_size = #_menu_values[context]
+  self.selection = (self.selection + menu_size - 2) % menu_size + 1
+  if self.context == 1 then self.sprite = false end
 end
 
-function CharaBuildView:select(n)
-  self.selection = n
+function View:selectNext()
+  local context = _PLAYER_FIELDS[self.context]
+  local menu_size = #_menu_values[context]
+  self.selection = self.selection % menu_size + 1
+  if self.context == 1 then self.sprite = false end
 end
 
-function CharaBuildView:draw()
-  if not self.context then return end
+function View:confirm()
+  local context = _PLAYER_FIELDS[self.context]
+  self.player_info[context] = _menu_values[context][self.selection]
+  self.context = self.context + 1
+  self.selection = 1
+end
+
+function View:cancel()
+  local context = _PLAYER_FIELDS[self.context]
+  self.player_info[context] = false
+  self.context = self.context - 1
+  if self.context < 1 then
+    self.leave = true
+    self.context = 1
+  end
+  self.selection = 1
+end
+
+function View:getContext()
+  return self.context
+end
+
+function View:draw()
   local g = love.graphics
-  local render_queue = self.render_queue
+  local enter = self.enter
+  local player_info = self.player_info
+  local context = _PLAYER_FIELDS[self.context]
+  local selection = self.selection
 
-  -- reset rendering modifiers
-  _font:set()
-  _font:setLineHeight(_LH)
+  g.setBackgroundColor(0, 0, 0)
+  g.setColor(0xff, 0xff, 0xff, 0xff*enter)
 
-  g.setColor(COLORS.NEUTRAL)
+  self:drawSaved(g, player_info)
+  self:drawContext(g)
+  self:drawSpecies(g, player_info)
+  if self.context > #_CONTEXTS then return end
+  self:drawSelection(g, context, selection)
+
+end
+
+function View:drawSpecies(g, player_info)
+  g.push()
+  g.translate(_WIDTH/2, _HEIGHT/2)
+  local species = player_info.species or _menu_values.species[self.selection]
+  if not self.sprite and species then
+    local appearance_specname = _getSpec('species', species)['appearance']
+    local appearance = DB.loadSpec('appearance', appearance_specname)
+    self.sprite = RES.loadSprite(appearance.idle)
+  end
+  if self.sprite then self.sprite(-40, 0) end
+  g.pop()
+end
+
+function View:drawSelection(g, context, selection)
+  g.push()
+  g.translate(_WIDTH/2, _HEIGHT/2 + _header_font:getHeight())
+
+  local text = _menu_values[context][selection]
+  local spec
+  if type(text):match('boolean') then text = text and "Yes" or "No"
+  else
+    spec = _getSpec(context, text)
+    text = spec['name']
+  end
+  g.printf(text, -256, 0, 512, "center")
+
+  local w = _header_font:getWidth(text) / 2 + _PD * 2
+  self.arrow = (self.arrow + 2 * pi * delta()) % pi
 
   g.push()
-  g.translate(_WIDTH/2, _HEIGHT/2 - _TILE_H)
+  g.translate(-sin(self.arrow)*_PD/2, _PD*1.8)
+  g.polygon("fill", -w, 0, -w+_PD, -_PD/2, -w+_PD,  _PD/2)
+  g.pop()
 
-  -- saved data
-  _renderSaved(g, self.saved)
-
-  -- preview
-  _renderPreview(g)
-
-  -- context name
-  _renderContext(g, self.context)
-
-  -- options
-  _renderOptions(g, self.selection, self.width, render_queue)
+  g.push()
+  g.translate(sin(self.arrow)*_PD/2, _PD*1.8)
+  g.polygon("fill",  w, 0,  w-_PD,  _PD/2,  w-_PD, -_PD/2)
+  g.pop()
 
   g.pop()
 
-  -- reset width
-  self.width = 0
+  if spec then
+    g.push()
+    g.translate(2*_WIDTH/3-40,
+                _HEIGHT/2 + 40)
+    local specname = _menu_values[context][selection]
+    local name = _getSpec(context, specname)['name']
+    local desc = _getSpec(context, specname)['description']
+    _header_font:set()
+    _header_font:setLineHeight(1)
+    g.printf(name, 0, -_header_font:getHeight(), 400, "left")
+    _content_font:set()
+    _content_font:setLineHeight(1)
+    g.printf(desc:gsub("([^\n])\n([^\n])", "%1 %2"), 0, 0, 400, "left")
+    g.pop()
+  end
+
 end
 
-return CharaBuildView
+function View:drawContext(g)
+  -- draw current options in context
+  _header_font:set()
+  g.push()
+  g.translate(_WIDTH/2, _HEIGHT/2 - 160)
+  g.printf(_CONTEXTS[self.context] or "ROUTE START!", -256, 0, 512, "center")
+  g.pop()
+end
+
+function View:drawSaved(g, player_info)
+  -- draw current state
+  _header_font:setLineHeight(1)
+  _header_font:set()
+  g.push()
+  g.translate(_WIDTH/3-80, _HEIGHT/2 - 2*_header_font:getHeight() + 40)
+  g.setColor(0x38, 0xe4, 0xff, 255*self.enter)
+  for i = 1, self.context - 1 do
+    local field = _PLAYER_FIELDS[i]
+    local specname = player_info[field]
+    if specname == true or specname == false then break end
+
+    g.print(_getSpec(field, specname)['name'], 0, 0)
+    g.translate(0, _header_font:getHeight() - 16)
+  end
+  g.setColor(255, 255, 255, 255*self.enter)
+  g.pop()
+end
+
+return View

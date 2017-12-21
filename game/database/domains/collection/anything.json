@@ -1,0 +1,17 @@
+{
+  "name":"Anything",
+  "cards":[{
+      "drop":80,
+      "set":"upgrades"
+    },{
+      "set":"upgrades",
+      "drop":60
+    },{
+      "drop":40,
+      "set":"upgrades"
+    },{
+      "drop":80,
+      "set":"consumables"
+    }],
+  "description":"Drops literally anything."
+}

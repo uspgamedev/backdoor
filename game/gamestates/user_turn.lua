@@ -7,7 +7,8 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
-local INPUT         = require 'infra.input'
+local DIRECTIONALS  = require 'infra.dir'
+local INPUT         = require 'input'
 
 local state = {}
 
@@ -83,36 +84,42 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if INPUT.isDown("ACTION_4") and not _extended_hud then
+  if INPUT.isActionDown("ACTION_4") and not _extended_hud then
     _extended_hud = true
     _showHUD()
-  elseif _extended_hud and not INPUT.isDown("ACTION_4") then
+  elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
     _extended_hud = false
     _hideHUD()
   end
 
   if _extended_hud then
-    if INPUT.actionPressed('UP') then
+    if DIRECTIONALS.wasDirectionTriggered('UP') then
       _view.widget:scrollUp()
-    elseif INPUT.actionPressed('DOWN') then
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
       _view.widget:scrollDown()
     end
   else
     for _,dir in ipairs(DIR) do
-      if INPUT.actionPressed(dir:upper()) then
+      if DIRECTIONALS.wasDirectionTriggered(dir) then
         return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
 
-    if INPUT.actionPressed('CONFIRM') then
+    if INPUT.wasActionPressed('CONFIRM') then
       _startTask(DEFS.ACTION.INTERACT)
-    elseif INPUT.actionPressed('CANCEL') then
+    elseif INPUT.wasActionPressed('CANCEL') then
       _startTask(DEFS.ACTION.IDLE)
-    elseif INPUT.actionPressed('SPECIAL') then
+    elseif INPUT.wasActionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
-    elseif INPUT.actionPressed('EXTRA') then
+    elseif INPUT.wasActionPressed('ACTION_1') then
+      if _route.getControlledActor():isHandEmpty() then
+        _startTask(DEFS.ACTION.DRAW_NEW_HAND)
+      else
+        _startTask(DEFS.ACTION.PLAY_CARD)
+      end
+    elseif INPUT.wasActionPressed('EXTRA') then
       return SWITCHER.push(GS.ACTION_MENU, _route)
-    elseif INPUT.actionPressed('PAUSE') then
+    elseif INPUT.wasActionPressed('PAUSE') then
       _save_and_quit = true
       return
     end
@@ -144,22 +151,29 @@ local function _useAction(action_slot, params)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
   params = params or {}
-  local param = ACTION.pendingParam(action_slot, controlled_actor,
-                                    current_sector, params)
+  local param = ACTION.pendingParam(action_slot, controlled_actor, params)
   while param do
-    if param.typename == 'choose_target' then
+    if param.typename == 'choose_dir' then
+      SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'])
+      local dir = coroutine.yield(_task)
+      if dir then
+        params[param.output] = dir
+      else
+        return false
+      end
+    elseif param.typename == 'choose_target' then
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
+          aoe_hint = param['aoe-hint'],
           range_checker = function(i, j)
             return ABILITY.param('choose_target')
-                          .isWithinRange(current_sector, controlled_actor,
-                                        param, {i,j})
+                          .isWithinRange(controlled_actor, param, {i,j})
           end,
           validator = function(i, j)
-            return ABILITY.validate('choose_target', current_sector,
-                                    controlled_actor, param, {i,j})
+            return ABILITY.validate('choose_target', controlled_actor, param,
+                                    {i,j})
           end
         }
       )
@@ -173,8 +187,8 @@ local function _useAction(action_slot, params)
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
-          return ABILITY.validate('choose_widget_slot', current_sector,
-                                  controlled_actor, param, which_slot)
+          return ABILITY.validate('choose_widget_slot', controlled_actor, param,
+                                  which_slot)
         end
       )
       local args = coroutine.yield(_task)
@@ -184,8 +198,7 @@ local function _useAction(action_slot, params)
         return false
       end
     end
-    param = ACTION.pendingParam(action_slot, controlled_actor,
-                                current_sector, params)
+    param = ACTION.pendingParam(action_slot, controlled_actor, params)
   end
   _next_action = {action_slot, params}
   return true

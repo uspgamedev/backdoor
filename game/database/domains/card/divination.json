@@ -1,0 +1,21 @@
+{
+  "attr":"ARC",
+  "icon":"card-divination",
+  "one_time":false,
+  "art":{
+    "art_ability":{
+      "params":[],
+      "operators":[],
+      "effects":[{
+          "typename":"draw_card",
+          "amount":2
+        }]
+    },
+    "cost":20
+  },
+  "desc":"Draws two cards, a bit slow.",
+  "type-description":"",
+  "pp":2,
+  "name":"Divination",
+  "set":false
+}

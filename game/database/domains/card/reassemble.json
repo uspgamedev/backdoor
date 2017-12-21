@@ -1,0 +1,40 @@
+{
+  "attr":"COR",
+  "icon":"card-reassemble",
+  "set":false,
+  "art":{
+    "cost":60,
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "max-range":1,
+          "body-only":{
+            "body-type":"machine"
+          },
+          "output":"from"
+        },{
+          "aoe-hint":1,
+          "empty-tile":true,
+          "typename":"choose_target",
+          "non-wall":true,
+          "output":"to",
+          "max-range":1
+        }],
+      "operators":[{
+          "typename":"get_body_at",
+          "pos":"par:from",
+          "output":"body"
+        }],
+      "effects":[{
+          "typename":"move_to",
+          "body":"val:body",
+          "pos":"par:to"
+        }]
+    }
+  },
+  "desc":"Move target machine",
+  "type-description":"",
+  "pp":0,
+  "name":"Reassemble",
+  "one_time":false
+}

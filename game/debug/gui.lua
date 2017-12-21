@@ -128,6 +128,9 @@ function GUI:draw()
       if IMGUI.MenuItem("Actors") then
         self:push('actors_menu')
       end
+      if IMGUI.MenuItem("Bodies") then
+        self:push('bodies_menu')
+      end
       IMGUI.EndMenu()
     end
     if IMGUI.BeginMenu("Domains") then
@@ -138,6 +141,9 @@ function GUI:draw()
         end
       end
       IMGUI.Separator()
+      if IMGUI.MenuItem("Refresh") then
+        DB.refresh(DB.loadCategory('domains'))
+      end
       if IMGUI.MenuItem("Save") then
         DB.save(DB.loadCategory('domains'))
       end
@@ -151,6 +157,9 @@ function GUI:draw()
         end
       end
       IMGUI.Separator()
+      if IMGUI.MenuItem("Refresh") then
+        DB.refresh(DB.loadCategory('resources'))
+      end
       if IMGUI.MenuItem("Save") then
         DB.save(DB.loadCategory('resources'))
       end

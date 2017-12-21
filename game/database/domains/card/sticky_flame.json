@@ -1,0 +1,38 @@
+{
+  "desc":"This widget spends charges every tick. When out of charges, it will explode dealing 2d(4*ARC) damage to self, where ARC is the original caster ARC.",
+  "widget":{
+    "operators":[],
+    "trigger":"on_tick",
+    "activation":false,
+    "charges":40,
+    "auto_activation":{
+      "trigger":"on_done",
+      "ability":{
+        "params":[{
+            "typename":"body",
+            "output":"body_self"
+          }],
+        "operators":[{
+            "typename":"get_attribute",
+            "output":"ARC",
+            "which":"ARC"
+          },{
+            "op":"*",
+            "typename":"integer_binop",
+            "rhs":4,
+            "output":"ARC*4",
+            "lhs":"val:ARC"
+          }],
+        "effects":[{
+            "typename":"damage_on_target",
+            "target":"par:body_self",
+            "attr":2,
+            "base":"val:ARC*4"
+          }]
+      }
+    }
+  },
+  "one_time":true,
+  "attr":"ARC",
+  "name":"Sticky Flame"
+}

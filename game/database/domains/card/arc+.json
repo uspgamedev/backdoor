@@ -7,8 +7,8 @@
         "op":"+",
         "val":1
       }],
-    "trigger":"on_turn",
-    "charges":5
+    "trigger":"on_act",
+    "charges":1
   },
-  "name":"Arcana Stash Bonus"
+  "name":"Arcana Up"
 }

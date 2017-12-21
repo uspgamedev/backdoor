@@ -1,0 +1,32 @@
+{
+  "attr":"ARC",
+  "icon":"card-reinforce",
+  "set":false,
+  "art":{
+    "art_ability":{
+      "params":[{
+          "typename":"choose_target",
+          "output":"target",
+          "body-only":{
+            "body-type":"machine"
+          }
+        }],
+      "operators":[{
+          "typename":"get_body_at",
+          "pos":"par:target",
+          "output":"machine"
+        }],
+      "effects":[{
+          "typename":"place_widget",
+          "body":"val:machine",
+          "card":"reinforced-surface"
+        }]
+    },
+    "cost":20
+  },
+  "desc":"Temporarily boost target machine's DEF.",
+  "type-description":"",
+  "pp":0,
+  "name":"Reinforce",
+  "one_time":false
+}

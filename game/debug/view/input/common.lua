@@ -10,6 +10,7 @@ local function _makeCommon(default, call)
         IMGUI.Text(key.name)
       end
       local value = spec[key.id] or default
+      spec[key.id] = value
       IMGUI.PushID(key.id)
       local changed, newvalue = call(value, key)
       IMGUI.PopID()
@@ -28,7 +29,7 @@ inputs.boolean = _makeCommon(
 )
 
 inputs.integer = _makeCommon(
-  nil,
+  0,
   function(value, key)
     value = value or (key.range or {0})[1]
     local range = key.range
@@ -52,7 +53,7 @@ inputs.text = _makeCommon(
   "",
   function(value, key)
     IMGUI.PushItemWidth(360)
-    local changed, newvalue = IMGUI.InputTextMultiline("", value, 256)
+    local changed, newvalue = IMGUI.InputTextMultiline("", value, 1024)
     IMGUI.PopItemWidth()
     return changed, newvalue
   end
@@ -67,4 +68,3 @@ inputs.description = _makeCommon(
 )
 
 return inputs
-

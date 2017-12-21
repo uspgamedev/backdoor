@@ -1,7 +1,9 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB = require 'database'
 local MENU = require 'infra.menu'
-local CONTROLS = require 'infra.control'
+local DIRECTIONALS = require 'infra.dir'
+local INPUT = require 'input'
+local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE = require 'infra.profile'
 local StartMenuView = require 'view.startmenu'
 
@@ -11,7 +13,7 @@ local state = {}
 
 local _menu_view
 local _menu_context
-local _mapping
+local _locked
 
 --LOCAL FUNCTIONS--
 
@@ -20,23 +22,12 @@ end
 
 --STATE FUNCTIONS--
 
-function state:init()
-  _mapping = {
-    PRESS_CONFIRM  = MENU.confirm,
-    PRESS_SPECIAL  = MENU.cancel,
-    PRESS_CANCEL   = MENU.cancel,
-    PRESS_QUIT     = MENU.cancel,
-    PRESS_UP       = MENU.prev,
-    PRESS_DOWN     = MENU.next,
-  }
-end
-
 function state:enter()
   _menu_view = StartMenuView()
   _menu_view:addElement("GUI", nil, "menu_view")
   _menu_view:open()
   _menu_context = "START_MENU"
-  CONTROLS.setMap(_mapping)
+  _locked = false
 end
 
 function state:leave()
@@ -55,41 +46,76 @@ function state:resume(from, player_info)
 
     SWITCHER.switch(GS.PLAY, route_data)
   else
+    _menu_view:open()
     _menu_context = "START_MENU"
-    CONTROLS.setMap(_mapping)
+    _locked = false
   end
 end
 
 function state:update(dt)
   MAIN_TIMER:update(dt)
-  _menu_view.invisible = false
+
+  if not _locked then
+    if INPUT.wasActionPressed('CONFIRM') then
+      MENU.confirm()
+    elseif INPUT.wasActionPressed('SPECIAL') or
+           INPUT.wasActionPressed('CANCEL') or
+           INPUT.wasActionPressed('QUIT') then
+      MENU.cancel()
+    elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+      MENU.prev()
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      MENU.next()
+    end
+  end
+
+  if _menu_context == "START_MENU" then
+    _menu_view:setItem("New route")
+    _menu_view:setItem("Load route")
+    _menu_view:setItem("Controls")
+    _menu_view:setItem("Quit")
+  elseif _menu_context == "LOAD_LIST" then
+    local savelist = PROFILE.getSaveList()
+    if next(savelist) then
+      for route_id, route_header in pairs(savelist) do
+        local savename = ("%s %s"):format(route_id, route_header.player_name)
+        _menu_view:setItem(savename)
+      end
+    else
+      _menu_view:setItem("[ NO DATA ]")
+    end
+  end
   if MENU.begin(_menu_context) then
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
-        _menu_view.invisible = true
-        SWITCHER.push(GS.CHARACTER_BUILD)
+        _locked = true
+        _menu_view:close(function()
+          SWITCHER.push(GS.CHARACTER_BUILD)
+        end)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
       end
-      if MENU.item("Quit") then
-        love.event.quit()
+      if MENU.item("Controls") then
+        CONFIGURE_INPUT(INPUT, INPUT.getMap())
       end
-      _menu_view:setItem("New route")
-      _menu_view:setItem("Load route")
-      _menu_view:setItem("Quit")
+      if MENU.item("Quit") then
+        _locked = true
+        _menu_view:close(love.event.quit)
+      end
     elseif _menu_context == "LOAD_LIST" then
       local savelist = PROFILE.getSaveList()
       if next(savelist) then
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
-          _menu_view:setItem(savename)
           if MENU.item(savename) then
-            SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+            _locked = true
+            _menu_view:close(function()
+              SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+            end)
           end
         end
       else
-        _menu_view:setItem("[ NO DATA ]")
         if MENU.item("[ NO DATA ]") then
           print("Cannot load no data.")
         end
@@ -97,7 +123,8 @@ function state:update(dt)
     end
   else
     if _menu_context == "START_MENU" then
-      love.event.quit()
+      _locked = true
+      _menu_view:close(love.event.quit)
     elseif _menu_context == "LOAD_LIST" then
       _menu_context = "START_MENU"
     end

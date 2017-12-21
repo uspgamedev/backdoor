@@ -7,7 +7,7 @@ FX.schema = {
     range = {0} },
 }
 
-function FX.process (actor, sector, params)
+function FX.process (actor, params)
   params.target:heal(params.amount or 2)
 end
 
