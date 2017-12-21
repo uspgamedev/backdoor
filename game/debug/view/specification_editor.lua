@@ -16,15 +16,15 @@ return function(spec, group_name, title, delete, rename, parent)
 
     -- meta actions
     local spec_meta = getmetatable(spec)
-    if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save") then
+    if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##1") then
       DB.save(spec)
     end
     IMGUI.SameLine()
-    if rename and IMGUI.Button("Rename") then
+    if rename and IMGUI.Button("Rename##1") then
       self:push('name_input', title, rename)
     end
     IMGUI.SameLine()
-    if IMGUI.Button("Delete") then
+    if IMGUI.Button("Delete##1") then
       delete()
       return true
     end
@@ -55,15 +55,15 @@ return function(spec, group_name, title, delete, rename, parent)
     IMGUI.Spacing()
     IMGUI.Separator()
     IMGUI.Spacing()
-    if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save") then
+    if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##2") then
       DB.save(spec)
     end
     IMGUI.SameLine()
-    if rename and IMGUI.Button("Rename") then
+    if rename and IMGUI.Button("Rename##2") then
       self:push('name_input', title, rename)
     end
     IMGUI.SameLine()
-    if IMGUI.Button("Delete") then
+    if IMGUI.Button("Delete##2") then
       delete()
       return true
     end
