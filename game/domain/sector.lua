@@ -395,8 +395,8 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   for _, dead_actor in ipairs(dead_actor_list) do
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
-      local killerStrength = killer_actor:getStrength()
-      local deadStrength = dead_actor:getStrength()
+      local killerStrength = killer_actor:getPowerLevel()
+      local deadStrength = dead_actor:getPowerLevel()
       local reward_pp = math.floor(2*deadStrength/killerStrength)
       killer_actor:addPrizePack(dead_actor:getSpec('collection'))
       killer_actor:rewardPP(reward_pp)
