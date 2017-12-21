@@ -30,7 +30,7 @@ local function _initGraphicValues()
   _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
   _actor_text = "HP: %d/%d"
   _depthtext = "DEPTH: %d"
-  _buffertext = "%d cards in buffer\n%d in discard pile\n%d in hand\n%d in total"
+  _buffertext = "%d cards in buffer\n%d in backbuffer\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
     [SCHEMATICS.WALL] = {200, 128, 50},

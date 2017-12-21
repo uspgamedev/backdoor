@@ -27,7 +27,12 @@ function FX.process (actor, params)
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
         if not ignore_owner or body ~= actor:getBody() then
-          body:takeDamageFrom(amount, actor)
+          local dmg = body:takeDamageFrom(amount, actor)
+          coroutine.yield('report', {
+            type = 'dmg_taken',
+            body = body,
+            amount = dmg,
+          })
         end
       end
     end
