@@ -413,4 +413,12 @@ function Actor:getPP()
   return self.playpoints
 end
 
+function Actor:getPowerLevel()
+  local lvl = 0
+  for attr,value in pairs(self.upgrades) do
+    lvl = value + lvl
+  end
+  return lvl
+end
+
 return Actor

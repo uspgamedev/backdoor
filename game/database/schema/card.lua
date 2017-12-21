@@ -10,7 +10,6 @@ return {
     optional = true },
   { id = 'set', name = "Card Set", type = 'enum', options = 'domains.cardset' },
   { id = 'desc', name = "Description", type = 'text' },
-  { id = 'pp', name = "PlayPoint Reward", type = 'integer' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.PRIMARY_ATTRIBUTES },
   { id = 'type-description', type = 'description',
