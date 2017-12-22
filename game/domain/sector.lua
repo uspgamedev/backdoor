@@ -11,8 +11,6 @@ local Body = require 'domain.body'
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'
 
-local math = require 'common.math'
-
 local Sector = Class {
   __includes = { GameElement }
 }
@@ -425,10 +423,7 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
       -- award PP
-      local killer_powerlvl = killer_actor:getPowerLevel()
-      local dead_powerlvl = dead_actor:getPowerLevel()
-
-      local reward_pp = math.round((dead_powerlvl/killer_powerlvl)^5)
+      local reward_pp = dead_actor:calculatePP(killer_actor)
       killer_actor:rewardPP(reward_pp)
 
       -- award pack
