@@ -1,6 +1,11 @@
 
 local APT = {}
 
+--- Calculate required upgrade points for a certain level given an aptitude.
+--  For the resulting tables run
+--  ```bash
+--  $ make FLAGS=--test=aptitude
+--  ```
 function APT.REQUIRED_ATTR_UPGRADE(apt, lv)
   return math.ceil((15 - 1.5*apt) ^ (1 + lv/10))
 end
