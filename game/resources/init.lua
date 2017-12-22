@@ -62,7 +62,7 @@ end
 function RES.loadSprite(name)
   local info = DB.loadResource('sprite', name)
   local texture = RES.loadTexture(info.texture)
-  return COMPOUND_RES.sprite.new(texture, info)
+  return COMPOUND_RES.sprite.load(name, info, texture)
 end
 
 function RES.loadTileSet(name)

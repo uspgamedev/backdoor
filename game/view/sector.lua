@@ -124,13 +124,13 @@ end
 
 function SectorView:getBodySprite(body)
   local id = body:getId()
-  local draw_sprite = self.body_sprites[id]
-  if not draw_sprite then
+  local body_sprite = self.body_sprites[id]
+  if not body_sprite then
     local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-    draw_sprite = RES.loadSprite(idle)
-    self.body_sprites[id] = draw_sprite
+    body_sprite = RES.loadSprite(idle)
+    self.body_sprites[id] = body_sprite
   end
-  return draw_sprite
+  return body_sprite
 end
 
 function SectorView:setBodySprite(body, draw)
@@ -293,7 +293,7 @@ function SectorView:draw()
         else
           g.setColor(255, 50, 50)
         end
-        _cursor_sprite(0, 0)
+        _cursor_sprite:draw(0, 0)
         g.pop()
       end
     end
@@ -306,9 +306,9 @@ function SectorView:draw()
       --Draw only bodies if player is seeing them
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
 
-        local draw_sprite = self:getBodySprite(body)
+        local body_sprite = self:getBodySprite(body)
         g.setColor(COLORS.NEUTRAL)
-        draw_sprite(x, y)
+        body_sprite:draw(x, y)
 
       end
     end
