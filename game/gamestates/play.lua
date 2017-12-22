@@ -149,45 +149,7 @@ function state:draw()
 end
 
 function state:keypressed(key)
-
-  imgui.KeyPressed(key)
-  if imgui.GetWantCaptureKeyboard() then
-    return
-  end
-
-  if key ~= "escape" then
-    Util.defaultKeyPressed(key)
-  end
-
-end
-
-function state:textinput(t)
-  imgui.TextInput(t)
-end
-
-function state:keyreleased(key)
-
-  imgui.KeyReleased(key)
-  if imgui.GetWantCaptureKeyboard() then
-    return
-  end
-
-end
-
-function state:mousemoved(x, y)
-  imgui.MouseMoved(x, y)
-end
-
-function state:mousepressed(x, y, button)
-  imgui.MousePressed(button)
-end
-
-function state:mousereleased(x, y, button)
-  imgui.MouseReleased(button)
-end
-
-function state:wheelmoved(x, y)
-  imgui.WheelMoved(y)
+  if key == 'f1' then DEBUG = true end
 end
 
 --Return state functions

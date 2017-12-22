@@ -13,8 +13,8 @@ end
 
 function state:keypressed(key)
   imgui.KeyPressed(key)
-  if not imgui.GetWantCaptureKeyboard() then
-     Util.defaultKeyPressed(key)
+  if not imgui.GetWantCaptureKeyboard() and key == 'f1' then
+    DEBUG = false
   end
 end
 

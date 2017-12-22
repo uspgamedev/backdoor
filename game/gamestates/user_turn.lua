@@ -139,9 +139,7 @@ function state:draw()
 end
 
 function state:keypressed(key)
-  if key ~= "escape" then
-      Util.defaultKeyPressed(key)
-  end
+  if key == 'f1' then DEBUG = true end
 end
 
 --[[ Action functions ]]--
