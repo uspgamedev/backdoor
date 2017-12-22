@@ -2,8 +2,8 @@
   "name":"Battery",
   "widget":{
     "operators":[],
-    "trigger":"on_tick",
-    "charges":100,
+    "trigger":"on_cycle",
+    "charges":20,
     "auto_activation":{
       "ability":{
         "params":[{

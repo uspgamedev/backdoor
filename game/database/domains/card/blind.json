@@ -6,8 +6,8 @@
         "op":"-",
         "val":3
       }],
-    "trigger":"on_tick",
-    "charges":40
+    "trigger":"on_cycle",
+    "charges":8
   },
   "one_time":true,
   "attr":"ANI",

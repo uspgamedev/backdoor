@@ -239,6 +239,7 @@ function Body:placeWidget(card)
   local placement = card:getWidgetPlacement()
   self:equip(placement, card)
   table.insert(self.widgets, card)
+  card:resetTicks()
   return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE)
 end
 
@@ -297,6 +298,9 @@ function Body:tick()
   self:triggerWidgets(TRIGGERS.ON_TICK)
   local spent = {}
   for i,widget in ipairs(self.widgets) do
+    if widget:tick() then
+      self:triggerOneWidget(i, TRIGGERS.ON_CYCLE)
+    end
     if widget:isSpent() then
       table.insert(spent, i)
     end

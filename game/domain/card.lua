@@ -1,5 +1,6 @@
 
 local ABILITY     = require 'domain.ability'
+local ACTIONSDEFS = require 'domain.definitions.action'
 local GameElement = require 'domain.gameelement'
 
 local Card = Class{
@@ -11,6 +12,7 @@ function Card:init(specname)
   GameElement.init(self, 'card', specname)
   self.usages = 0
   self.owner_id = nil
+  self.ticks = 0
 
 end
 
@@ -18,6 +20,7 @@ function Card:loadState(state)
   self.specname = state.specname
   self.usages = state.usages
   self.owner_id = state.owner_id
+  self.ticks = state.ticks
 end
 
 function Card:saveState()
@@ -25,6 +28,7 @@ function Card:saveState()
   state.specname = self.specname
   state.usages = self.usages
   state.owner_id = self.owner_id
+  state.ticks = self.ticks
   return state
 end
 
@@ -161,6 +165,19 @@ end
 function Card:isSpent()
   local max = self:getWidgetCharges()
   return max > 0 and self:getUsages() >= max
+end
+
+function Card:resetTicks()
+  self.ticks = 0
+end
+
+function Card:tick()
+  self.ticks = self.ticks + 1
+  if self.ticks >= ACTIONSDEFS.CYLCLE_UNIT then
+    self.ticks = 0
+    return true
+  end
+  return false
 end
 
 return Card

@@ -2,9 +2,9 @@
   "desc":"This widget spends charges every tick. When out of charges, it will explode dealing 2d(4*ARC) damage to self, where ARC is the original caster ARC.",
   "widget":{
     "operators":[],
-    "trigger":"on_tick",
+    "trigger":"on_cycle",
     "activation":false,
-    "charges":40,
+    "charges":8,
     "auto_activation":{
       "trigger":"on_done",
       "ability":{
