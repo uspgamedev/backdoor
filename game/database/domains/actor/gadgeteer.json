@@ -5,17 +5,9 @@
   "cor":2,
   "arc":2,
   "collection":false,
-  "spd":0,
-  "name":"Gagdeteer",
-  "ani":-4,
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
   "initial_buffer":[{
-      "amount":3,
-      "card":"cor_1"
-    },{
-      "amount":3,
-      "card":"arc_1"
-    },{
-      "amount":2,
+      "amount":1,
       "card":"goggles"
     },{
       "amount":1,
@@ -42,8 +34,10 @@
       "amount":2,
       "card":"jetboots"
     },{
-      "amount":4,
+      "amount":2,
       "card":"timebomb-drone"
     }],
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
+  "ani":-4,
+  "name":"Gagdeteer",
+  "spd":0
 }
