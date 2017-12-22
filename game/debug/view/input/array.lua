@@ -22,7 +22,7 @@ function inputs.array(spec, key)
         INPUT(subkey.type, element, subkey)(self)
         IMGUI.PopID()
       end
-      if IMGUI.Button("Delete##"..i) then
+      if IMGUI.Button("Delete##array-button-"..i) then
         removed = i
       end
       IMGUI.Unindent(20)

@@ -7,37 +7,34 @@
   "collection":false,
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
   "initial_buffer":[{
-      "amount":3,
-      "card":"arc_1"
-    },{
-      "amount":3,
+      "amount":1,
       "card":"teleport"
     },{
-      "amount":2,
+      "amount":1,
       "card":"fireball"
     },{
-      "amount":2,
+      "amount":1,
       "card":"stick_flame"
     },{
-      "amount":4,
+      "amount":2,
       "card":"firebolt"
     },{
-      "amount":3,
+      "amount":1,
       "card":"focus"
     },{
-      "amount":3,
+      "amount":2,
       "card":"divination"
     },{
-      "amount":2,
+      "amount":1,
       "card":"haste"
     },{
-      "amount":4,
+      "amount":2,
       "card":"heal"
     },{
-      "amount":3,
+      "amount":1,
       "card":"illusion_of_darkness"
     },{
-      "amount":4,
+      "amount":1,
       "card":"soul_robe"
     }],
   "ani":-4,
