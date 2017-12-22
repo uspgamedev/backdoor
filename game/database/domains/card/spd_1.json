@@ -7,7 +7,7 @@
     "cost":2,
     "actor_list":[{
         "attr":"SPD",
-        "val":10
+        "val":50
       }],
     "body_list":[]
   },
