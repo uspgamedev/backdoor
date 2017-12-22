@@ -415,10 +415,11 @@ end
 
 function Actor:getPowerLevel()
   local lvl = 0
+  local body_powerlvl = self:getBody():getPowerLevel()
   for attr,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
-  return lvl
+  return lvl + body_powerlvl
 end
 
 return Actor

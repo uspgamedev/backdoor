@@ -1,5 +1,6 @@
 
 local DB = require 'database'
+local DEFS = require 'domain.definitions'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 local COLORS = require 'domain.definitions.colors'
@@ -179,8 +180,34 @@ function Sector:makeEncounters(encounters, register)
   for _,encounter in ipairs(encounters) do
     local actor_spec, body_spec = unpack(encounter.monster)
     local i, j = unpack(encounter.pos)
+    local upgradexp = encounter.upgrade_power
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
+
+    -- allocating exp
+    if upgradexp > 0 then
+      local unit, total = 0, 0
+      local aptitudes = {}
+      for _,attr in ipairs(DEFS.ATTRIBUTES) do
+        aptitudes[attr] = actor:getSpec(attr:lower()) + 4 -- min of 0
+        total = total + aptitudes[attr]
+      end
+      for _,attr in ipairs(DEFS.BODY_ATTRIBUTES) do
+        aptitudes[attr] = body:getSpec(attr:lower()) + 4 -- min of 0
+        total = total + aptitudes[attr]
+      end
+      unit = upgradexp / total
+      for attr,priority in pairs(aptitudes) do
+        local award = math.floor(unit * priority)
+        if DEFS.ATTRIBUTES[attr] then
+          actor:upgradeAttr(attr, award)
+        elseif DEFS.BODY_ATTRIBUTES[attr] then
+          body:upgradeAttr(attr, award)
+        end
+      end
+    end
+
+    -- putting actor and body in sector
     actor:setBody(bid)
     self:putActor(actor, i, j)
   end

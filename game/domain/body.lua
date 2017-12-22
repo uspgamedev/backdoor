@@ -377,5 +377,14 @@ function Body:getKiller()
   return self.killer
 end
 
+--POWERLEVEL--
+function Body:getPowerLevel()
+  local lvl = 0
+  for attr,value in pairs(self.upgrades) do
+    lvl = value + lvl
+  end
+  return lvl
+end
+
 return Body
 
