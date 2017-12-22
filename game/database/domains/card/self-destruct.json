@@ -3,8 +3,8 @@
   "one_time":true,
   "widget":{
     "operators":[],
-    "trigger":"on_tick",
-    "charges":40,
+    "trigger":"on_cycle",
+    "charges":8,
     "auto_activation":{
       "ability":{
         "params":[{

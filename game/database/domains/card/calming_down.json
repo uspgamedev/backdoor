@@ -26,10 +26,10 @@
         "effects":[{
             "typename":"heal",
             "target":"val:actor_body",
-            "amount":1
+            "amount":5
           }]
       },
-      "trigger":"on_tick"
+      "trigger":"on_cycle"
     },
     "placement":false
   }

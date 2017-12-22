@@ -2,10 +2,10 @@
   "attr":"COR",
   "widget":{
     "operators":[],
-    "trigger":"on_tick",
-    "charges":30,
+    "trigger":"on_cycle",
+    "charges":6,
     "auto_activation":{
-      "trigger":"on_tick",
+      "trigger":"on_cycle",
       "ability":{
         "params":[{
             "typename":"body",

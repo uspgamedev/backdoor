@@ -5,7 +5,9 @@
     "operators":[],
     "trigger":"on_done",
     "charges":1,
+    "status-tags":[],
     "auto_activation":{
+      "trigger":"on_cycle",
       "ability":{
         "params":[{
             "typename":"pos",
@@ -13,11 +15,11 @@
           },{
             "ignore-owner":true,
             "body-type":false,
-            "pos":"par:pos_self",
+            "output":"count",
             "typename":"has_nearby_bodies",
             "count":1,
             "range":3,
-            "output":"count"
+            "pos":"par:pos_self"
           }],
         "operators":[{
             "ignore-owner":true,
@@ -33,18 +35,17 @@
         "effects":[{
             "typename":"damage_on_target",
             "target":"val:target",
-            "attr":"val:cor",
-            "base":1
+            "base":5,
+            "attr":"val:cor"
           }]
-      },
-      "trigger":"on_tick"
+      }
     },
     "placement":false
   },
   "desc":"Adubiraba",
   "type-description":"",
-  "one_time":true,
+  "set":false,
   "pp":0,
   "name":"Auto-Fire",
-  "set":false
+  "one_time":true
 }
