@@ -2,7 +2,7 @@
   "attr":"ARC",
   "icon":"card-upgrade",
   "set":"upgrades_spd",
-  "desc":"",
+  "desc":"Upgrades your Speed by 10.",
   "upgrade":{
     "cost":2,
     "actor_list":[{
