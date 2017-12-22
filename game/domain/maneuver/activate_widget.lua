@@ -24,6 +24,10 @@ function ACTIVATE.perform(actor, params)
   local body = actor:getBody()
   local widget = body:getWidget(params.widget_slot)
   local ability = widget:getWidgetAbility()
+  coroutine.yield('report', {
+    type = 'body_acted',
+    body = body,
+  })
   actor:exhaust(widget:getWidgetActivationCost())
   actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, params)
