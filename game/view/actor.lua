@@ -12,7 +12,7 @@ local _TILE_W = 8
 local _TILE_H = 8
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
-local _MINIMAP_ALPHA = 0x40
+local _MINIMAP_ALPHA = 180
 
 local _initialized = false
 local _exptext, _statstext, _depthtext, _buffertext
@@ -87,14 +87,33 @@ function ActorView:draw()
 
   _font:set()
   _font:setLineHeight(1)
+
+  -- always visible
+  self:drawImportantHUD(g, actor)
+
+  -- only visible when holding button
   g.setColor(cr, cg, cb, self.alpha*0xff)
   if self.alpha > 0 then
+    self:drawMiniMap(g, actor)
     self:drawHP(g, actor)
     self:drawAttributes(g, actor)
     self:drawBuffers(g, actor)
     self:drawDepth(g)
-    self:drawMiniMap(g, actor)
   end
+end
+
+function ActorView:drawImportantHUD(g, actor)
+  local pptext = ("%d PP"):format(actor:getPP())
+  local xptext = _exptext:format(actor:getExp())
+  g.push()
+  g.setColor(COLORS.DARK)
+  g.print(pptext, 40, _height-80)
+  g.print(xptext, 40, _height-80-_font:getHeight())
+  g.translate(-2, -2)
+  g.setColor(COLORS.NEUTRAL)
+  g.print(pptext, 40, _height-80)
+  g.print(xptext, 40, _height-80-_font:getHeight())
+  g.pop()
 end
 
 function ActorView:drawHP(g, actor)
@@ -104,11 +123,12 @@ function ActorView:drawHP(g, actor)
   local hp, max_hp = body:getHP(), body:getMaxHP()
   local str = _actor_text:format(hp, max_hp)
   local w = _font:getWidth(str) + _font:getHeight()
-  g.translate(_width/2 - w/2, _height/2 + 60)
+  g.translate(_width/2 - w/2, _height/2 + 20)
+  g.setColor(0, 0, 0, self.alpha*0xff)
+  g.printf(str, 0, 0, w, "center")
+  g.translate(-2, -2)
   g.setColor(cr, cg, cb, self.alpha*0xff)
   g.printf(str, 0, 0, w, "center")
-  g.translate(0, _font:getHeight())
-  g.printf(("%d PP"):format(actor:getPP()), 0, 0, w, "center")
   g.pop()
 end
 
@@ -122,8 +142,6 @@ function ActorView:drawAttributes(g, actor)
   local base_def = actor:getBody():getBaseDEF()
   g.translate(40, 40)
   g.print(_statstext:format(cor, arc, ani, spd, def, base_def))
-  g.translate(0, 7*_font:getHeight())
-  g.print(_exptext:format(actor:getExp()), 0, 0)
   g.pop()
 end
 
@@ -158,7 +176,7 @@ function ActorView:drawMiniMap(g, actor)
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   g.push()
   g.setColor(nr, ng, nb, self.alpha*0xff)
-  g.translate(_width/2, _height/4)
+  g.translate(320, 20)
   g.printf(sectorname,
            -_font:getWidth(sectorname)/2, 0,
            _font:getWidth(sectorname), "center")

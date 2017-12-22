@@ -1,5 +1,6 @@
 
 local DB = require 'database'
+local DEFS = require 'domain.definitions'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 local COLORS = require 'domain.definitions.colors'
@@ -9,6 +10,8 @@ local Body = require 'domain.body'
 
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'
+
+local math = require 'common.math'
 
 local Sector = Class {
   __includes = { GameElement }
@@ -177,8 +180,34 @@ function Sector:makeEncounters(encounters, register)
   for _,encounter in ipairs(encounters) do
     local actor_spec, body_spec = unpack(encounter.monster)
     local i, j = unpack(encounter.pos)
+    local upgradexp = encounter.upgrade_power
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
+
+    -- allocating exp
+    if upgradexp > 0 then
+      local unit, total = 0, 0
+      local aptitudes = {}
+      for _,attr in ipairs(DEFS.ATTRIBUTES) do
+        aptitudes[attr] = actor:getSpec(attr:lower()) + 4 -- min of 0
+        total = total + aptitudes[attr]
+      end
+      for _,attr in ipairs(DEFS.BODY_ATTRIBUTES) do
+        aptitudes[attr] = body:getSpec(attr:lower()) + 4 -- min of 0
+        total = total + aptitudes[attr]
+      end
+      unit = upgradexp / total
+      for attr,priority in pairs(aptitudes) do
+        local award = math.floor(unit * priority)
+        if DEFS.ATTRIBUTES[attr] then
+          actor:upgradeAttr(attr, award)
+        elseif DEFS.BODY_ATTRIBUTES[attr] then
+          body:upgradeAttr(attr, award)
+        end
+      end
+    end
+
+    -- putting actor and body in sector
     actor:setBody(bid)
     self:putActor(actor, i, j)
   end
@@ -395,11 +424,15 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   for _, dead_actor in ipairs(dead_actor_list) do
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
-      local killerStrength = killer_actor:getPowerLevel()
-      local deadStrength = dead_actor:getPowerLevel()
-      local reward_pp = math.floor(2*deadStrength/killerStrength)
-      killer_actor:addPrizePack(dead_actor:getSpec('collection'))
+      -- award PP
+      local killer_powerlvl = killer_actor:getPowerLevel()
+      local dead_powerlvl = dead_actor:getPowerLevel()
+
+      local reward_pp = math.round((dead_powerlvl/killer_powerlvl)^5)
       killer_actor:rewardPP(reward_pp)
+
+      -- award pack
+      killer_actor:addPrizePack(dead_actor:getSpec('collection'))
     end
     for i, act in ipairs(actors_queue) do
       if dead_actor == act then

@@ -29,7 +29,6 @@ function ACTIVATE.perform(actor, params)
     body = body,
   })
   actor:exhaust(widget:getWidgetActivationCost())
-  actor:rewardPP(widget:getPPReward())
   ABILITY.execute(ability, actor, params)
   body:triggerWidgets(DEFS.TRIGGERS.ON_ANY_USE, { activated_widget = widget })
   body:triggerWidgets(DEFS.TRIGGERS.ON_ACT)
