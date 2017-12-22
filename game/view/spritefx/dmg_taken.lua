@@ -11,7 +11,7 @@ function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local i, j = body:getPos()
   local body_sprite = sectorview:getBodySprite(body)
-  local font = FONT.get('Text', 24)
+  local font = FONT.get('Text', 32)
   local dmg_offset = {0}
   body_sprite:setDecorator(
     function (self, x, y, ...)
@@ -29,11 +29,11 @@ function SPRITEFX.apply(sectorview, args)
     end
   )
   sectorview:addTimer(
-    nil, MAIN_TIMER, "tween", 0.2, dmg_offset, {100},
+    nil, MAIN_TIMER, "tween", 0.2, dmg_offset, {80},
     "out-back",
     function()
       sectorview:addTimer(
-        nil, MAIN_TIMER, "after", 0.5, function ()
+        nil, MAIN_TIMER, "after", 0.1, function ()
           body_sprite:clearDecorator()
           sectorview:finishVFX()
         end
