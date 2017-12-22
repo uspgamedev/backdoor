@@ -16,6 +16,10 @@ end
 
 function SIGNATURE.perform(actor, params)
   local signature = actor:getSignature()
+  coroutine.yield('report', {
+    type = 'body_acted',
+    body = actor:getBody(),
+  })
   actor:exhaust(signature.cost)
   actor:getBody():triggerWidgets(DEFS.TRIGGERS.ON_ACT)
   ABILITY.execute(signature.ability, actor, params)
