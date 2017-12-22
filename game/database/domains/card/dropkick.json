@@ -3,11 +3,18 @@
   "icon":"card-dropkick",
   "set":false,
   "art":{
+    "cost":20,
     "art_ability":{
       "params":[{
+          "aoe-hint":0,
+          "max-range":1,
+          "non-wall":false,
           "typename":"choose_target",
+          "empty-tile":false,
           "output":"pos",
-          "body-only":[]
+          "body-only":{
+            "body-type":false
+          }
         }],
       "operators":[{
           "typename":"get_attribute",
@@ -28,16 +35,15 @@
       "effects":[{
           "typename":"damage_on_target",
           "target":"val:target",
-          "attr":"val:cor",
-          "base":14
+          "base":14,
+          "attr":"val:cor"
         },{
           "typename":"damage_on_target",
           "target":"val:body_self",
-          "attr":"val:cor",
-          "base":6
+          "base":6,
+          "attr":"val:cor"
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"Deal 14dCOR damage to melee target and\n6dCOR damage to yourself.",
   "type-description":"",
