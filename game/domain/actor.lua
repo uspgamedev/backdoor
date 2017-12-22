@@ -121,6 +121,10 @@ end
 
 --[[ Spec methods ]]--
 
+function Actor:getTitle()
+  return ("%s %s"):format(self:getSpec('name'), self:getBody():getSpec('name'))
+end
+
 function Actor:isPlayer()
   return self:getSpec('behavior') == 'player'
 end

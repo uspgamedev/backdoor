@@ -7,6 +7,8 @@ return function (body)
     local hp = body:getHP()
     self.sector_view:lookAt(body)
     IMGUI.Text(("ID: %s"):format(body:getId()))
+    IMGUI.Text(("Species: %s"):format(body:getSpec('name')))
+    IMGUI.Separator()
     IMGUI.PushItemWidth(100)
     local changed, newhp = IMGUI.SliderInt("Hit Points", hp, 1,
                                            body:getMaxHP())

@@ -7,6 +7,8 @@ return function (actor)
     local hp = actor:getBody():getHP()
     self.sector_view:lookAt(actor)
     IMGUI.Text(("ID: %s"):format(actor:getId()))
+    IMGUI.Text(("Title: %s"):format(actor:getTitle()))
+    IMGUI.Separator()
     IMGUI.PushItemWidth(100)
     local changed, newhp = IMGUI.SliderInt("Hit Points", hp, 1,
                                            actor:getBody():getMaxHP())
@@ -14,6 +16,7 @@ return function (actor)
     if changed then
       actor:getBody():setHP(newhp)
     end
+    IMGUI.Text(("PWRLVL: %d"):format(actor:getPowerLevel()))
     IMGUI.Separator()
     IMGUI.Text(("COR: %d"):format(actor:getCOR()))
     IMGUI.Text(("ARC: %d"):format(actor:getARC()))
