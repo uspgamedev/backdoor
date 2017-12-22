@@ -3,6 +3,7 @@ local IMGUI = require 'imgui'
 
 return function (actor)
 
+  local player = actor:getBody():getSector():getRoute().getControlledActor()
   return "Actor Inspector", 2, function(self)
     local hp = actor:getBody():getHP()
     self.sector_view:lookAt(actor)
@@ -17,6 +18,7 @@ return function (actor)
       actor:getBody():setHP(newhp)
     end
     IMGUI.Text(("PWRLVL: %d"):format(actor:getPowerLevel()))
+    IMGUI.Text(("PP AWARD: %d"):format(actor:calculatePP(player)))
     IMGUI.Separator()
     IMGUI.Text(("COR: %d"):format(actor:getCOR()))
     IMGUI.Text(("ARC: %d"):format(actor:getARC()))
