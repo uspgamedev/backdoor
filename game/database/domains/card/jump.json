@@ -25,18 +25,18 @@
           "actor":"val:self"
         }],
       "effects":[{
+          "pos":"par:pos",
+          "vfx":"JUMP",
+          "typename":"move_to",
+          "body":"val:body",
+          "vfx-spd":1
+        },{
           "attr":"val:cor",
           "center":"par:pos",
           "size":2,
           "typename":"damage_on_area",
           "ignore_owner":true,
           "base":12
-        },{
-          "pos":"par:pos",
-          "vfx":"JUMP",
-          "typename":"move_to",
-          "body":"val:body",
-          "vfx-spd":1
         }]
     },
     "cost":40
