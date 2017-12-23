@@ -124,7 +124,7 @@ function Sector:getTileSet()
   return self:getSpec('bootstrap').tileset
 end
 
-function Sector:generate(register)
+function Sector:generate(register, depth)
 
   -- load sector's specs
   local base = {}
@@ -137,6 +137,7 @@ function Sector:generate(register)
     end
   end
 
+  self:setDepth(depth)
   self:makeTiles(base.grid)
   self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
@@ -178,9 +179,13 @@ function Sector:makeEncounters(encounters, register)
   for _,encounter in ipairs(encounters) do
     local actor_spec, body_spec = unpack(encounter.monster)
     local i, j = unpack(encounter.pos)
-    local upgradexp = encounter.upgrade_power
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
+    local depth_multiplier = 1+ self:getDepth() / 3
+    local upgradexp = encounter.upgrade_power
+
+    print("Depth:", self:getDepth(), depth_multiplier)
+    upgradexp = math.floor(upgradexp * depth_multiplier)
 
     -- allocating exp
     if upgradexp > 0 then

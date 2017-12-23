@@ -89,9 +89,9 @@ function Route:instance(obj)
     return _controlled_actor
   end
 
-  function obj.makeSector(sector_spec)
+  function obj.makeSector(sector_spec, depth)
     local id,sector = _register(Sector(sector_spec, obj))
-    sector:generate(_register)
+    sector:generate(_register, depth)
     table.insert(_sectors, sector)
     return id, sector
   end
@@ -102,10 +102,10 @@ function Route:instance(obj)
   --  @param exit         The exit data
   function obj.linkSectorExit(from_sector, idx, exit)
     if not exit.id then
-      local id, to_sector = obj.makeSector(exit.specname)
+      local depth = from_sector:getDepth() + 1
+      local id, to_sector = obj.makeSector(exit.specname, depth)
       local entry = to_sector:getExit(1)
       to_sector:link(1, from_sector.id, unpack(exit.pos))
-      to_sector:setDepth(from_sector:getDepth() + 1)
       from_sector:link(idx, id, unpack(entry.pos))
     end
   end
