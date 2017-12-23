@@ -337,10 +337,12 @@ function SectorView:draw()
 
       -- NAME
       if named == body then
-        local name = body:getSpec('name')
+        local name
         local actor = sector:getActorFromBody(body)
         if actor then
-          name = ("%s %s"):format(actor:getSpec('name'), name)
+          name = actor:getTitle()
+        else
+          name = body:getSpec('name')
         end
         _font.set()
         _font:setLineHeight(.8)

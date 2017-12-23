@@ -11,6 +11,8 @@ local PLACEMENTS  = require 'domain.definitions.placements'
 local PACK        = require 'domain.pack'
 local Visibility  = require 'common.visibility'
 
+local math = require 'common.math'
+
 local Actor = Class{
   __includes = { GameElement }
 }
@@ -120,6 +122,10 @@ function Actor:saveState()
 end
 
 --[[ Spec methods ]]--
+
+function Actor:getTitle()
+  return ("%s %s"):format(self:getSpec('name'), self:getBody():getSpec('name'))
+end
 
 function Actor:isPlayer()
   return self:getSpec('behavior') == 'player'
@@ -411,6 +417,12 @@ end
 
 function Actor:getPP()
   return self.playpoints
+end
+
+function Actor:calculatePP(killer)
+  local killerpwrlvl = killer:getPowerLevel()
+  local selfpwrlvl = self:getPowerLevel()
+  return math.round((selfpwrlvl / killerpwrlvl) ^ 5)
 end
 
 function Actor:getPowerLevel()

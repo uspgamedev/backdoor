@@ -7,7 +7,8 @@ return function()
 
   return "Current Route", 1, function(self)
     for body in pairs(Util.findSubtype 'body') do
-      if IMGUI.Selectable(body:getId(), body == selected) then
+      local identity = ("%s: %s"):format(body:getId(), body:getSpec('name'))
+      if IMGUI.Selectable(identity, body == selected) then
         selected = body
         self:push("body_inspector", body)
       end
