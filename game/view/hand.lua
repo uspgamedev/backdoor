@@ -3,6 +3,7 @@ local FONT = require 'view.helpers.font'
 local CARD = require 'view.helpers.card'
 local COLORS = require 'domain.definitions.colors'
 
+local math = require 'common.math'
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
@@ -77,7 +78,7 @@ function HandView:activate()
                                            0.2,
                                            self,
                                            { y = self.initial_y - CARD.getHeight() },
-                                           'out-cubic')
+                                           'out-back')
 end
 
 function HandView:deactivate()
@@ -91,44 +92,46 @@ function HandView:deactivate()
                                         0.2,
                                         self,
                                         {y = self.initial_y},
-                                         'out-cubic')
+                                         'out-back')
 end
 
 function HandView:draw()
   local x, y = self.x, self.y
+  local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
   local gap = CARD.getWidth() + 20
   local boxwidth = 128
   local g = love.graphics
 
   -- draw action type
-  if not not self:getActionType() then
-    _font.set()
-    local colorname = self:getActionType():upper()
-    local poly = {
-      0, _HEIGHT/2,
-      self.x + boxwidth, _HEIGHT/2,
-      self.x + boxwidth, _HEIGHT/2 + 40,
-      self.x + boxwidth - 20, _HEIGHT/2 + 60,
-      0, _HEIGHT/2 + 60,
-    }
-    g.push()
-    g.translate(2,2)
-    g.setColor(COLORS.DARK)
-    g.polygon("fill", poly)
-    g.pop()
-    g.setColor(COLORS[colorname])
-    g.polygon("fill", poly)
-    g.setColor(COLORS.NEUTRAL)
-    g.printf(self:getActionType(), self.x, _HEIGHT/2+10, boxwidth, "left")
-  end
+  _font.set()
+  local colorname = (self:getActionType() or "BACKGROUND"):upper()
+  local poly = {
+    -20, _HEIGHT/2,
+    self.x + boxwidth, _HEIGHT/2,
+    self.x + boxwidth, _HEIGHT/2 + 40,
+    self.x + boxwidth - 20, _HEIGHT/2 + 60,
+    -20, _HEIGHT/2 + 60,
+  }
+  local offset = self.x+boxwidth
+  g.push()
+  g.translate(math.round(-offset+offset*enter), 0)
+  g.setColor(COLORS.DARK)
+  g.polygon("fill", poly)
+  g.translate(-2,-2)
+  g.setColor(COLORS[colorname])
+  g.polygon("fill", poly)
+  g.setColor(COLORS.NEUTRAL)
+  g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
+  g.pop()
 
   -- draw each card
+  local infoy = self.initial_y + - CARD.getHeight() - 40
   for i, card in ipairs(self.hand) do
     CARD.draw(card, x, y, i == self.focus_index)
     x = x + gap
     if self.focus_index == i then
       local infox = self.x + 5*gap + 20
-      CARD.drawInfo(card, infox, self.y - 40, _WIDTH - infox - 40, 1)
+      CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
     end
   end
 end

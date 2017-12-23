@@ -9,6 +9,7 @@ local state = {}
 --LOCAL VARIABLES--
 
 local _route
+local _actor_view
 local _hand_view
 
 --LOCAL FUNCTIONS--
@@ -42,11 +43,13 @@ end
 function state:init()
 end
 
-function state:enter(_, route, hand_view)
+function state:enter(_, route, _view)
 
   _route = route
-  _hand_view = hand_view
+  _hand_view = _view.hand
   _hand_view:activate()
+  _actor_view = _view.actor
+  _actor_view.onhandview = true
 
   --Make cool animation for cards showing up
 
@@ -55,6 +58,7 @@ end
 function state:leave()
 
   _hand_view:deactivate()
+  _actor_view.onhandview = false
 
 end
 

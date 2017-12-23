@@ -238,7 +238,7 @@ end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
   if #_view.hand.hand > 0 then
-    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
+    SWITCHER.push(GS.CARD_SELECT, _route, _view)
     local args = coroutine.yield(_task)
     if args.chose_a_card then
       if args.action_type == 'use' then
