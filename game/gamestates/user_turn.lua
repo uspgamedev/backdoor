@@ -46,7 +46,6 @@ end
 
 local function _showHUD()
   _view.actor:show()
-  
 end
 
 local function _hideHUD()
@@ -117,6 +116,10 @@ function state:update(dt)
       else
         _startTask(DEFS.ACTION.PLAY_CARD)
       end
+    elseif INPUT.wasActionPressed('ACTION_2') then
+      _startTask(DEFS.ACTION.ACTIVATE_WIDGET)
+    elseif INPUT.wasActionPressed('ACTION_3') then
+      _startTask(DEFS.ACTION.RECEIVE_PACK)
     elseif INPUT.wasActionPressed('EXTRA') then
       return SWITCHER.push(GS.ACTION_MENU, _route)
     elseif INPUT.wasActionPressed('PAUSE') then
@@ -235,7 +238,7 @@ end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
   if #_view.hand.hand > 0 then
-    SWITCHER.push(GS.CARD_SELECT, _route, _view.hand)
+    SWITCHER.push(GS.CARD_SELECT, _route, _view)
     local args = coroutine.yield(_task)
     if args.chose_a_card then
       if args.action_type == 'use' then

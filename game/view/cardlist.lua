@@ -1,5 +1,4 @@
 
-local RANDOM = require 'common.random'
 local math = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
@@ -101,7 +100,7 @@ function View:collectCards()
                 self, {text=0}, "in-quad")
   for i = 1, #self.card_list do
     self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  RANDOM.safeGenerate(1, 18)/60 + .05,
+                  i*3/60 + .05,
                   function()
                     self:addTimer("getting_card_"..i, MAIN_TIMER,
                                   "tween", .3, self.y_offset,

@@ -43,7 +43,7 @@ function Actor:init(spec_name)
     SPD = 0,
   }
   self.exp = 0
-  self.playpoints = 10
+  self.playpoints = 2*DEFS.ACTION.NEW_HAND_COST
 
   self.fov = {}
   self.fov_range = 4
@@ -422,7 +422,7 @@ end
 function Actor:calculatePP(killer)
   local killerpwrlvl = killer:getPowerLevel()
   local selfpwrlvl = self:getPowerLevel()
-  return math.round((selfpwrlvl / killerpwrlvl) ^ 5)
+  return math.round((selfpwrlvl / killerpwrlvl) ^ 2 * 10)
 end
 
 function Actor:getPowerLevel()

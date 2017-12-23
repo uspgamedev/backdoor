@@ -1,8 +1,11 @@
 
 local RES = require 'resources'
 local FONT = require 'view.helpers.font'
+local ACTIONDEFS = require 'domain.definitions.action'
 local COLORS = require 'domain.definitions.colors'
 local SCHEMATICS = require 'domain.definitions.schematics'
+
+local math = require 'common.math'
 
 local ActorView = Class{
   __includes = { ELEMENT }
@@ -103,16 +106,45 @@ function ActorView:draw()
 end
 
 function ActorView:drawImportantHUD(g, actor)
-  local pptext = ("%d PP"):format(actor:getPP())
+  local pptext = ("%d/%d PP"):format(actor:getPP(), ACTIONDEFS.NEW_HAND_COST)
   local xptext = _exptext:format(actor:getExp())
+  local pcktext = ("%d PACK(S) UNOPENED!"):format(actor:getPrizePackCount())
+  local fh = _font:getHeight()
+  local normal_y = 100
+  local unfocus_y = 440
+  local spd = 15
+  local dt = love.timer.getDelta()
+  local y = self.importanthud_y or normal_y
+
+  if self.onhandview then
+    y = math.round(y + (unfocus_y - y) * spd * dt)
+    if math.abs(unfocus_y-y) < 1 then y = unfocus_y end
+  else
+    y = math.round(y + (normal_y - y) * spd * dt)
+    if math.abs(normal_y-y) < 1 then y = normal_y end
+  end
+  self.importanthud_y = y
+
   g.push()
   g.setColor(COLORS.DARK)
-  g.print(pptext, 40, _height-80)
-  g.print(xptext, 40, _height-80-_font:getHeight())
+  g.print(pptext, 40, _height-y-fh*2)
+  g.print(xptext, 40, _height-y-fh)
+  if actor:getPrizePackCount() > 0 then
+    g.print(pcktext, 40, _height-y)
+  end
   g.translate(-2, -2)
+  if actor:getPP() >= ACTIONDEFS.NEW_HAND_COST then
+    g.setColor(COLORS.SUCCESS)
+  else
+    g.setColor(COLORS.WARNING)
+  end
+  g.print(pptext, 40, _height-y-fh*2)
   g.setColor(COLORS.NEUTRAL)
-  g.print(pptext, 40, _height-80)
-  g.print(xptext, 40, _height-80-_font:getHeight())
+  g.print(xptext, 40, _height-y-fh)
+  if actor:getPrizePackCount() > 0 then
+    g.setColor(COLORS.NOTIFICATION)
+    g.print(pcktext, 40, _height-y)
+  end
   g.pop()
 end
 

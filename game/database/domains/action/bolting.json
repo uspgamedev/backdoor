@@ -1,4 +1,5 @@
 {
+  "playpoints":0,
   "ability":{
     "operators":[{
         "typename":"get_body_at",
@@ -11,22 +12,21 @@
       }],
     "params":[{
         "aoe-hint":0,
-        "typename":"choose_target",
+        "empty-tile":false,
+        "output":"target",
+        "max-range":5,
+        "non-wall":false,
         "body-only":{
           "body-type":false
         },
-        "max-range":5,
-        "non-wall":false,
-        "output":"target",
-        "empty-tile":false
+        "typename":"choose_target"
       }],
     "effects":[{
         "typename":"damage_on_target",
         "target":"val:target_body",
-        "base":4,
-        "attr":"val:arcana"
+        "attr":"val:arcana",
+        "base":6
       }]
   },
-  "cost":20,
-  "playpoints":0
+  "cost":20
 }
