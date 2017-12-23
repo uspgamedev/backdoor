@@ -4,9 +4,6 @@
   "one_time":false,
   "desc":"Makes you fast.\n\n\"Gotta go fast!\"",
   "type-description":"",
-  "set":false,
-  "pp":4,
-  "name":"Haste",
   "widget":{
     "operators":[{
         "attr":"SPD",
@@ -14,13 +11,16 @@
         "val":2
       }],
     "trigger":"on_turn",
-    "charges":6,
     "status-tags":[],
+    "charges":10,
     "trigger-condition":{
       "params":[],
       "operators":[],
       "effects":[]
     },
     "placement":false
-  }
+  },
+  "pp":4,
+  "name":"Haste",
+  "set":false
 }

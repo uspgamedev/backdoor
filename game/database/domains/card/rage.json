@@ -4,9 +4,6 @@
   "set":false,
   "desc":"For 10 turns, increase COR and SPD but reduce DEF.",
   "type-description":"",
-  "one_time":false,
-  "pp":0,
-  "name":"Rage",
   "widget":{
     "operators":[{
         "attr":"COR",
@@ -15,15 +12,18 @@
       },{
         "attr":"SPD",
         "op":"+",
-        "val":2
+        "val":4
       },{
         "attr":"DEF",
         "op":"-",
         "val":3
       }],
     "trigger":"on_turn",
-    "charges":10,
     "status-tags":[],
+    "charges":10,
     "placement":false
-  }
+  },
+  "pp":0,
+  "name":"Rage",
+  "one_time":false
 }

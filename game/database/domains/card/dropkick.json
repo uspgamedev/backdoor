@@ -3,18 +3,17 @@
   "icon":"card-dropkick",
   "set":false,
   "art":{
-    "cost":20,
     "art_ability":{
       "params":[{
           "aoe-hint":0,
-          "max-range":1,
-          "non-wall":false,
-          "typename":"choose_target",
-          "empty-tile":false,
-          "output":"pos",
           "body-only":{
             "body-type":false
-          }
+          },
+          "empty-tile":false,
+          "typename":"choose_target",
+          "non-wall":false,
+          "output":"pos",
+          "max-range":1
         }],
       "operators":[{
           "typename":"get_attribute",
@@ -24,28 +23,21 @@
           "typename":"get_body_at",
           "pos":"par:pos",
           "output":"target"
-        },{
-          "typename":"self",
-          "output":"self"
-        },{
-          "typename":"get_actor_body",
-          "output":"body_self",
-          "actor":"val:self"
         }],
       "effects":[{
           "typename":"damage_on_target",
           "target":"val:target",
-          "base":14,
-          "attr":"val:cor"
+          "attr":"val:cor",
+          "base":14
         },{
-          "typename":"damage_on_target",
-          "target":"val:body_self",
-          "base":6,
-          "attr":"val:cor"
+          "typename":"damage_self",
+          "percentage":10,
+          "stay_alive":false
         }]
-    }
+    },
+    "cost":20
   },
-  "desc":"Deal 14dCOR damage to melee target and\n6dCOR damage to yourself.",
+  "desc":"Deal 14dCOR damage to melee target, but\ndeals 10% of your MaxHP as recoil damage\nto yourself.",
   "type-description":"",
   "pp":0,
   "name":"Unreserved Punch",
