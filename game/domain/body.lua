@@ -365,6 +365,12 @@ function Body:takeDamageFrom(amount, source)
   --]]--
 end
 
+function Body:takePiercedDamageFrom(amount, source)
+  self.damage = math.min(self:getMaxHP(), self.damage + amount)
+  self.killer = source:getId()
+  return amount
+end
+
 function Body:exterminate()
   self.damage = self:getMaxHP()
 end

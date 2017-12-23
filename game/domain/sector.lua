@@ -181,10 +181,9 @@ function Sector:makeEncounters(encounters, register)
     local i, j = unpack(encounter.pos)
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
-    local depth_multiplier = 1+ self:getDepth() / 3
+    local depth_multiplier = 1 + self:getDepth() / 3
     local upgradexp = encounter.upgrade_power
 
-    print("Depth:", self:getDepth(), depth_multiplier)
     upgradexp = math.floor(upgradexp * depth_multiplier)
 
     -- allocating exp
