@@ -61,7 +61,8 @@ function PARAM.isValid(actor, parameter, value)
   if not PARAM.isWithinRange(actor, parameter, value) then
     return false
   end
-  if not actor.fov[i][j] or actor.fov[i][j] == 0 then
+  local fov = actor:getFov(sector)
+  if not fov[i][j] or fov[i][j] == 0 then
     return false
   end
   return true
