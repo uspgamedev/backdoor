@@ -206,6 +206,7 @@ function ActorView:drawMiniMap(g, actor)
   local tiles = sector.tiles
   local sectorname = sector:getSpecName()
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
+  local fov = actor:getFov(sector)
   g.push()
   g.setColor(nr, ng, nb, self.alpha*0xff)
   g.translate(320, 20)
@@ -220,7 +221,7 @@ function ActorView:drawMiniMap(g, actor)
     for j = 0, w-1 do
       local ti, tj = i+1, j+1
       local tile = tiles[ti][tj]
-      if tile then
+      if tile and fov[i+1][j+1] then
         local x, y = j*_TILE_W, i*_TILE_H
         local cr,cg,cb = _tile_colors[tile.type]
         g.setColor(cr, cg, cb)
