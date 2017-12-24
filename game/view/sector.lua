@@ -114,7 +114,8 @@ function SectorView:finishVFX()
 end
 
 function SectorView:updateFov(actor)
-  self.fov = actor.fov
+  local sector = self.route.getCurrentSector()
+  self.fov = actor:getFov(sector)
 end
 
 function SectorView:setRayDir(dir, body_block)
@@ -167,6 +168,9 @@ function SectorView:draw()
 
   if self.fov then
     for i = 1, sector.h do
+      if not self.fov[i] then
+        print(("Failed for sector %s"):format(sector.id))
+      end
       for j = 1, sector.w do
         if not self.fov[i][j] then --Never seen
           local alpha = 255

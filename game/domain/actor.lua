@@ -88,6 +88,7 @@ function Actor:loadState(state)
     end
     self.buffer[i] = card
   end
+  self.fov = state.fov or self.fov
   self:updateAttr('COR')
   self:updateAttr('ARC')
   self:updateAttr('ANI')
@@ -118,6 +119,7 @@ function Actor:saveState()
     end
     state.buffer[i] = card_state
   end
+  state.fov = self.fov
   return state
 end
 
@@ -348,18 +350,26 @@ function Actor:getPrizePackCount()
 end
 
 function Actor:purgeFov(sector)
-  Visibility.purgeActorFov(self,sector)
+  local fov = self:getFov(sector)
+  if not fov then
+    self.fov[sector:getId()] = Visibility.purgeFov(sector)
+  end
 end
 
 function Actor:resetFov(sector)
-  Visibility.resetActorFov(self,sector)
+  Visibility.resetFov(self:getFov(sector), sector)
 end
 
 function Actor:updateFov(sector)
   Visibility.updateFov(self,sector)
 end
 
-function Actor:getFov()
+function Actor:getFov(sector)
+  sector = sector or self:getBody():getSector()
+  return self.fov[sector:getId()]
+end
+
+function Actor:getFovRange()
   return math.max(0,self:getBody()
              :applyStaticOperators("FOV", self.fov_range))
 end

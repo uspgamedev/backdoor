@@ -16,27 +16,27 @@ local projectTile
 local funcs = {}
 
 
-function funcs.purgeActorFov(actor, sector)
+function funcs.purgeFov(sector)
   local w, h = sector:getDimensions()
-  actor.fov = actor.fov or {}
+  local fov = {}
   for i = 1, h do
-    actor.fov[i] = actor.fov[i] or {}
+    fov[i] = fov[i] or {}
     for j = 1, w do
-      actor.fov[i][j] = false -- Invisible and not seen
+      fov[i][j] = false -- Invisible and not seen
     end
   end
+  return fov
 end
 
---Reset actor field of view based on a given sector
-function funcs.resetActorFov(actor, sector)
+--- Reset actor field of view based on a given sector
+function funcs.resetFov(fov, sector)
 
   local w, h = sector:getDimensions()
-  actor.fov = actor.fov or {}
   for i = 1, h do
-    actor.fov[i] = actor.fov[i] or {}
+    fov[i] = fov[i] or {}
     for j = 1, w do
-      if actor.fov[i][j] then
-        actor.fov[i][j] = 0 -- Invisible but seen
+      if fov[i][j] then
+        fov[i][j] = 0 -- Invisible but seen
       end
     end
   end
@@ -45,7 +45,7 @@ end
 
 --Update actors field of view based on his position in a given sector
 function funcs.updateFov(actor, sector)
-  funcs.resetActorFov(actor, sector)
+  funcs.resetFov(actor:getFov(sector), sector)
   for octant = 1, 8 do
     updateOctant(actor, sector, octant)
   end
@@ -61,6 +61,7 @@ function updateOctant(actor, sector, octant)
 
   --Actor current position
   local actor_i, actor_j = actor:getPos()
+  local fov = actor:getFov(sector)
 
   local row = 0
   while true do
@@ -70,7 +71,7 @@ function updateOctant(actor, sector, octant)
 
     --Check if tile is inside sector
     if not sector:isInside(pos[1],pos[2]) then break end
-    if row > actor:getFov() then
+    if row > actor:getFovRange() then
       full_shadow = true
     end
 
@@ -82,15 +83,15 @@ function updateOctant(actor, sector, octant)
       if not sector:isInside(pos[1],pos[2]) then break end
 
       if full_shadow then
-        if actor.fov[pos[1]][pos[2]] then --Was seen once
-          actor.fov[pos[1]][pos[2]] = 0 --Make it invisible
+        if fov[pos[1]][pos[2]] then --Was seen once
+          fov[pos[1]][pos[2]] = 0 --Make it invisible
         end
       else
         --Set visibility of tile
         local projection = projectTile(row, col)
         local visible = 1 - visibilityOfShadow(line, projection)
-        if actor.fov[pos[1]][pos[2]] or visible == 1  then
-          actor.fov[pos[1]][pos[2]] = visible
+        if fov[pos[1]][pos[2]] or visible == 1  then
+          fov[pos[1]][pos[2]] = visible
         end
 
         --Add any wall tiles to the shadow line

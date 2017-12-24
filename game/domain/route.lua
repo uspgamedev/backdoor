@@ -141,7 +141,9 @@ function Route:instance(obj)
   function obj.playTurns(...)
     _checkSector()
     local request, extra = _current_sector:playTurns(...)
-    _controlled_actor = (request == "userTurn") and extra or nil
+    if request == 'userTurn' then
+      _controlled_actor = extra
+    end
     return request, extra
   end
 
