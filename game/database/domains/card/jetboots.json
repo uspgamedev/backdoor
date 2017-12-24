@@ -4,10 +4,14 @@
   "one_time":false,
   "desc":"Allows you to dash in straight lines.",
   "type-description":"",
+  "set":false,
+  "pp":0,
+  "name":"Jetboots",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
+      "cost":10,
       "ability":{
         "params":[{
             "typename":"choose_dir",
@@ -30,7 +34,7 @@
             "dir":"par:dir",
             "typename":"hitscan",
             "output":"target-pos",
-            "maxrange":8
+            "maxrange":5
           }],
         "effects":[{
             "pos":"val:target-pos",
@@ -39,14 +43,10 @@
             "body":"val:body",
             "vfx-spd":1
           }]
-      },
-      "cost":10
+      }
     },
     "charges":8,
     "status-tags":[],
     "placement":false
-  },
-  "pp":0,
-  "name":"Jetboots",
-  "set":false
+  }
 }

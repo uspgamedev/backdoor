@@ -3,13 +3,13 @@
   "icon":"card-turret",
   "set":false,
   "art":{
-    "cost":60,
+    "cost":100,
     "art_ability":{
       "params":[{
           "aoe-hint":4,
-          "empty-tile":true,
-          "typename":"choose_target",
           "non-wall":true,
+          "typename":"choose_target",
+          "empty-tile":true,
           "output":"pos",
           "max-range":1
         }],
@@ -17,14 +17,12 @@
       "effects":[{
           "widgets":[{
               "spec":"auto-fire"
-            },{
-              "spec":"battery"
             }],
           "pos":"par:pos",
           "typename":"make_body",
-          "vit":50,
           "def":50,
-          "bodyspec":"machine"
+          "bodyspec":"machine",
+          "vit":50
         }]
     }
   },

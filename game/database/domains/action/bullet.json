@@ -1,4 +1,5 @@
 {
+  "playpoints":0,
   "ability":{
     "operators":[{
         "typename":"self",
@@ -38,9 +39,8 @@
         "size":1,
         "typename":"damage_on_area",
         "ignore_owner":false,
-        "base":5
+        "base":6
       }]
   },
-  "cost":20,
-  "playpoints":0
+  "cost":20
 }

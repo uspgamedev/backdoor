@@ -5,12 +5,12 @@
   "art":{
     "art_ability":{
       "params":[{
-          "aoe-hint":4,
+          "aoe-hint":2,
           "max-range":1,
           "typename":"choose_target",
-          "empty-tile":true,
+          "non-wall":true,
           "output":"pos",
-          "non-wall":true
+          "empty-tile":true
         }],
       "operators":[],
       "effects":[{
@@ -19,12 +19,12 @@
             }],
           "pos":"par:pos",
           "typename":"make_body",
-          "def":50,
           "bodyspec":"machine",
-          "vit":50
+          "vit":50,
+          "def":50
         }]
     },
-    "cost":60
+    "cost":40
   },
   "desc":"Kaboom",
   "type-description":"",

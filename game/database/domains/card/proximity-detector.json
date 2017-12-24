@@ -4,12 +4,10 @@
   "one_time":true,
   "desc":"Don't stand so close to me!",
   "type-description":"",
-  "set":false,
-  "pp":0,
-  "name":"Proximity Detector",
   "widget":{
     "operators":[],
     "trigger":"on_tick",
+    "status-tags":[],
     "charges":1,
     "trigger-condition":{
       "params":[{
@@ -18,17 +16,16 @@
         },{
           "ignore-owner":true,
           "body-type":false,
-          "range":3,
+          "pos":"par:pos_self",
           "typename":"has_nearby_bodies",
           "count":1,
-          "output":"yup",
-          "pos":"par:pos_self"
+          "range":3,
+          "output":"yup"
         }],
       "operators":[],
       "effects":[]
     },
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
         "params":[{
             "typename":"body",
@@ -49,13 +46,17 @@
           },{
             "attr":"val:cor",
             "center":"val:pos",
-            "size":4,
+            "size":2,
             "typename":"damage_on_area",
-            "ignore_owner":true,
-            "base":10
+            "ignore_owner":false,
+            "base":16
           }]
-      }
+      },
+      "trigger":"on_done"
     },
     "placement":false
-  }
+  },
+  "pp":0,
+  "name":"Proximity Detector",
+  "set":false
 }
