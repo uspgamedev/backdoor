@@ -1,11 +1,13 @@
 {
   "attr":"ARC",
-  "one_time":true,
+  "icon":false,
   "widget":{
     "operators":[],
     "trigger":"on_cycle",
     "charges":8,
+    "status-tags":[],
     "auto_activation":{
+      "trigger":"on_done",
       "ability":{
         "params":[{
             "typename":"body",
@@ -28,14 +30,19 @@
             "center":"val:pos",
             "size":3,
             "typename":"damage_on_area",
-            "base":10
+            "ignore_owner":false,
+            "base":12
           },{
             "typename":"destroy_body",
             "target":"par:body_self"
           }]
-      },
-      "trigger":"on_done"
-    }
+      }
+    },
+    "placement":false
   },
-  "name":"Self Destruction"
+  "desc":"",
+  "type-description":"",
+  "one_time":true,
+  "name":"Self Destruction",
+  "set":false
 }
