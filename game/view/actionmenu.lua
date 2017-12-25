@@ -11,7 +11,7 @@ local _W, _H
 local _ANGLE = math.pi/4
 local _RADIUS = 196
 local _ACTIONS = {
-  'interact', 'use_signature', 'activate_widget', 'draw_new_hand',
+  'interact', 'use_signature', 'activate_widget', 'play_card', 'draw_new_hand',
   'consume_cards_from_buffer', 'receive_pack', 'idle',
   interact = "Interact",
   use_signature = "Signature Ability",
@@ -27,7 +27,6 @@ local _TWEEN = {
   TEXT = "__TEXT__",
   SWITCH = "__SWITCH__",
 }
-local _DRAWHAND = 4
 
 -- LOCAL VARIABLES -------------------------------------------------------------
 
@@ -56,10 +55,6 @@ function ActionMenu:init()
   _font = _font or FONT.get("Text", 32)
   _tiny_font = _tiny_font or FONT.get("TextBold", 20)
 
-end
-
-function ActionMenu:setCardAction(action_name)
-  _ACTIONS[_DRAWHAND] = action_name
 end
 
 function ActionMenu:showLabel()

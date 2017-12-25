@@ -40,9 +40,6 @@ end
 function state:enter(_, route)
 
   local player = route.getControlledActor()
-  local action = 'draw_new_hand'
-  if player:getHandSize() > 0 then action = 'play_card' end
-  _menu_view:setCardAction(action)
   _menu_view:open(_last_focus, player)
 
 end
