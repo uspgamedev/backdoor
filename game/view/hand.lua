@@ -14,7 +14,7 @@ local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _ACTION_TYPES = {
-  'use', 'stash',
+  'play',
 }
 
 local _font
@@ -74,11 +74,8 @@ function HandView:activate()
   self.action_type = 1
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
-  self:addTimer("start", MAIN_TIMER, "tween",
-                                           0.2,
-                                           self,
-                                           { y = self.initial_y - CARD.getHeight() },
-                                           'out-back')
+  self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
+                { y = self.initial_y - CARD.getHeight() }, 'out-back')
 end
 
 function HandView:deactivate()
@@ -88,11 +85,8 @@ function HandView:deactivate()
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
 
-  self:addTimer("end", MAIN_TIMER, "tween",
-                                        0.2,
-                                        self,
-                                        {y = self.initial_y},
-                                         'out-back')
+  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self, {y = self.initial_y},
+                'out-back')
 end
 
 function HandView:draw()
@@ -162,3 +156,4 @@ function HandView:reset()
 end
 
 return HandView
+

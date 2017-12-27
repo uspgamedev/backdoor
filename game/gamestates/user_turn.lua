@@ -111,11 +111,7 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
     elseif INPUT.wasActionPressed('ACTION_1') then
-      if _route.getControlledActor():isHandEmpty() then
-        _startTask(DEFS.ACTION.DRAW_NEW_HAND)
-      else
-        _startTask(DEFS.ACTION.PLAY_CARD)
-      end
+      _startTask(DEFS.ACTION.PLAY_CARD)
     elseif INPUT.wasActionPressed('ACTION_2') then
       _startTask(DEFS.ACTION.ACTIVATE_WIDGET)
     elseif INPUT.wasActionPressed('ACTION_3') then
@@ -231,9 +227,7 @@ _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
 end
 
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
-  if _route.getControlledActor():isHandEmpty() then
-    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  end
+  _useAction(DEFS.ACTION.DRAW_NEW_HAND)
 end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
@@ -241,13 +235,11 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function()
     SWITCHER.push(GS.CARD_SELECT, _route, _view)
     local args = coroutine.yield(_task)
     if args.chose_a_card then
-      if args.action_type == 'use' then
+      if args.action_type == 'play' then
         if _useAction(DEFS.ACTION.PLAY_CARD,
                       { card_index = args.card_index }) then
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
         end
-      elseif args.action_type == 'stash' then
-        _useAction(DEFS.ACTION.STASH_CARD, { card_index = args.card_index })
       end
     end
   end
