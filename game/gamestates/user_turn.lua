@@ -111,11 +111,7 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('SPECIAL') then
       _startTask(DEFS.ACTION.USE_SIGNATURE)
     elseif INPUT.wasActionPressed('ACTION_1') then
-      if _route.getControlledActor():isHandEmpty() then
-        _startTask(DEFS.ACTION.DRAW_NEW_HAND)
-      else
-        _startTask(DEFS.ACTION.PLAY_CARD)
-      end
+      _startTask(DEFS.ACTION.PLAY_CARD)
     elseif INPUT.wasActionPressed('ACTION_2') then
       _startTask(DEFS.ACTION.ACTIVATE_WIDGET)
     elseif INPUT.wasActionPressed('ACTION_3') then
