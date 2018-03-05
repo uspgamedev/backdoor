@@ -72,7 +72,7 @@ $(IMGUI_BUILD_DIR): $(IMGUI_REPO)
 	mkdir $(IMGUI_BUILD_DIR)
 
 $(IMGUI_REPO):
-	git clone -b 0.8 https://github.com/slages/love-imgui.git $(IMGUI_REPO)
+	git clone https://github.com/slages/love-imgui.git $(IMGUI_REPO)
 
 ## CPML
 
