@@ -49,6 +49,9 @@ function GUI:init(sector_view)
   self.active = false
   self.current_level = 1
   self.sector_view = sector_view
+  self.demo_window = false
+
+  IMGUI.StyleColorsDark()
 
 end
 
@@ -165,6 +168,12 @@ function GUI:draw()
       end
       IMGUI.EndMenu()
     end
+    if IMGUI.BeginMenu("IMGUI") then
+      if IMGUI.MenuItem("Demo Window") then
+        self.demo_window = true
+      end
+      IMGUI.EndMenu()
+    end
     IMGUI.EndMainMenuBar()
   end
 
@@ -176,6 +185,10 @@ function GUI:draw()
         break
       end
     end
+  end
+
+  if self.demo_window then
+    self.demo_window = IMGUI.ShowDemoWindow(self.demo_window)
   end
 
   g.setBackgroundColor(50, 80, 80, 255)
