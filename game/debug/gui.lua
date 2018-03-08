@@ -24,9 +24,10 @@ local DOMAINS = {
 }
 
 local RESOURCES = {
-  'font', 'texture', 'sprite', 'tileset',
+  'font', 'texture', 'sfx', 'sprite', 'tileset',
   font = "Font",
   texture = "Texture",
+  sfx = "Sound Effect",
   sprite = "Animated Sprite",
   tileset = "TileSet",
 }

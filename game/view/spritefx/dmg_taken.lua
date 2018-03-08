@@ -2,6 +2,7 @@
 local VIEWDEFS  = require 'view.definitions'
 local FONT      = require 'view.helpers.font'
 local COLORS    = require 'domain.definitions.colors'
+local RES       = require 'resources'
 local SPRITEFX  = {}
 
 local _TILE_W = VIEWDEFS.TILE_W
@@ -43,4 +44,3 @@ function SPRITEFX.apply(sectorview, args)
 end
 
 return SPRITEFX
-

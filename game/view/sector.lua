@@ -105,6 +105,9 @@ end
 
 function SectorView:startVFX(extra)
   local spritefx = SPRITEFX[extra.type]
+  --Play SFX if any
+  local sfx
+  if extra.sfx then sfx = RES.loadSFX(extra.sfx); sfx:setVolume(1); sfx:stop(); sfx:play(); end
   spritefx.apply(self, extra)
   self.vfx = spritefx
 end
@@ -509,4 +512,3 @@ function Cursor:getPos()
 end
 
 return SectorView
-
