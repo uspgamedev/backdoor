@@ -11,7 +11,7 @@ local _TILE_H = VIEWDEFS.TILE_H
 function SPRITEFX.apply(sectorview, args)
   --Play sfx if any
   local sfx
-  if args.sfx then sfx = RES.loadSFX(args.sfx); sfx:play(); end
+  if args.sfx then sfx = RES.loadSFX(args.sfx); sfx:setVolume(1); sfx:stop(); sfx:play(); end
 
   local body, amount = args.body, args.amount
   local i, j = body:getPos()
