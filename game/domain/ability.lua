@@ -32,6 +32,17 @@ function ABILITY.validate(param_name, actor, param, value)
   return PAR[param_name].isValid(actor, param, value)
 end
 
+local _CMDTYPE_PATHS = {
+  ['in'] = 'inputs/',
+  ['op'] = 'operators/',
+  ['fx'] = 'effects/'
+}
+
+local function args(typename)
+  local cmdtype, cmdname = typename:match("(%w+):(%w+)")
+  return DB.schemaFor(_CMDTYPE_PATHS[cmdtype] .. cmdname)
+end
+
 function ABILITY.checkParams(ability, actor, params)
   for i,parameter in ipairs(ability.params) do
     local argvalues = {}
