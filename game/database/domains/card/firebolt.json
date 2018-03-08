@@ -34,10 +34,11 @@
           "rhs":2
         }],
       "effects":[{
-          "typename":"damage_on_target",
+          "attr":4,
           "target":"val:body",
-          "attr":6,
-          "base":"val:(arc*2)-2"
+          "typename":"damage_on_target",
+          "base":"val:(arc*2)-2",
+          "sfx":"example"
         }]
     },
     "cost":1

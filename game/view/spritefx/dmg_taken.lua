@@ -2,6 +2,7 @@
 local VIEWDEFS  = require 'view.definitions'
 local FONT      = require 'view.helpers.font'
 local COLORS    = require 'domain.definitions.colors'
+local RES       = require 'resources'
 local SPRITEFX  = {}
 
 local _TILE_W = VIEWDEFS.TILE_W
@@ -9,7 +10,8 @@ local _TILE_H = VIEWDEFS.TILE_H
 
 function SPRITEFX.apply(sectorview, args)
   --Play sfx if any
-  if args.sfx then args.sfx:stop(); args.sfx:play(); end
+  local sfx
+  if args.sfx then sfx = RES.loadSFX(args.sfx); sfx:play(); end
 
   local body, amount = args.body, args.amount
   local i, j = body:getPos()
