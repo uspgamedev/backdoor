@@ -6,10 +6,10 @@ local _NONE = "<none>"
 
 local inputs = {}
 
-function inputs.enum(spec, key)
+function inputs.enum(spec, field)
 
   -- Build option list from given array or from a database domain
-  local _options = key.options
+  local _options = field.options
   if type(_options) == 'string' then
     local group_name = _options
     local category, group = group_name:match("(.-)[%./](.+)")
@@ -20,7 +20,7 @@ function inputs.enum(spec, key)
     table.sort(_options)
   else
     _options = { _NONE }
-    for k,v in ipairs(key.options) do
+    for k,v in ipairs(field.options) do
       table.insert(_options, v)
     end
   end
@@ -28,38 +28,38 @@ function inputs.enum(spec, key)
   -- Find the index of the currently assigned option
   local _current = 1
   for i,option in ipairs(_options) do
-    if option == spec[key.id] then
+    if option == spec[field.id] then
       _current = i
       break
     end
   end
 
-  local _active = not (not spec[key.id] and key.optional)
+  local _active = not (not spec[field.id] and field.optional)
 
   if _active and _options[_current] ~= _NONE then
-    spec[key.id] = spec[key.id] or _options[_current]
+    spec[field.id] = spec[field.id] or _options[_current]
   else
-    spec[key.id] = false
+    spec[field.id] = false
   end
 
   return function(self)
-    if key.optional then
-      IMGUI.PushID(key.id .. ".check")
+    if field.optional then
+      IMGUI.PushID(field.id .. ".check")
       _active = select(2, IMGUI.Checkbox("", _active))
       IMGUI.PopID()
       IMGUI.SameLine()
     end
-    IMGUI.Text(key.name)
+    IMGUI.Text(field.name)
     if _active then
-      IMGUI.PushID(key.id)
+      IMGUI.PushID(field.id)
       local changed,value = IMGUI.Combo("", _current, _options, #_options, 15)
       IMGUI.PopID()
       if changed then
         _current = value
         if _options[value] == _NONE then
-          spec[key.id] = false
+          spec[field.id] = false
         else
-          spec[key.id] = _options[value]
+          spec[field.id] = _options[value]
         end
       end
     end

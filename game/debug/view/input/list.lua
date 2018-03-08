@@ -7,13 +7,13 @@ local _idgen = IDGenerator()
 
 local inputs = {}
 
-function inputs.list(spec, key)
+function inputs.list(spec, field)
 
-  local list = spec[key.id] or {}
+  local list = spec[field.id] or {}
   local selected = nil
   local typeoptions = {}
 
-  for _,option in DB.subschemaTypes(key.id) do
+  for _,option in DB.subschemaTypes(field.id) do
     table.insert(typeoptions, option)
   end
 
@@ -22,7 +22,7 @@ function inputs.list(spec, key)
   end
 
   return function(self)
-    IMGUI.Text(("%ss:"):format(key.name))
+    IMGUI.Text(("%ss:"):format(field.name))
     IMGUI.Indent(20)
     for i,element in ipairs(list) do
       local view
@@ -34,20 +34,21 @@ function inputs.list(spec, key)
       if IMGUI.Selectable(view, selected == i) then
         selected = i
         self:push('specification_editor', element,
-                  key.id .. '/' .. element.typename, key.name, delete, nil,
+                  field.id .. '/' .. element.typename, field.name, delete, nil,
                   spec)
       end
     end
-    if IMGUI.Button("New " .. key.name) then
+    if IMGUI.Button("New " .. field.name) then
       self:push(
-        'list_picker', key.name, typeoptions,
+        'list_picker', field.name, typeoptions,
         function (value)
           if value then
             local new = { typename = typeoptions[value] }
-            local schema = require('domain.'..key.id..'.'..new.typename).schema
-            for _,subkey in ipairs(schema) do
-              if subkey.type == 'output' then
-                new[subkey.id] = 'label'.._idgen.newID()
+            local schema = 
+              require('domain.'..field.id..'.'..new.typename).schema
+            for _,subfield in ipairs(schema) do
+              if subfield.type == 'output' then
+                new[subfield.id] = 'label'.._idgen.newID()
               end
             end
             table.insert(list, new)

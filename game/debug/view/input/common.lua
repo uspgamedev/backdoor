@@ -4,18 +4,18 @@ local IMGUI = require 'imgui'
 local inputs = {}
 
 local function _makeCommon(default, call)
-  return function(spec, key)
+  return function(spec, field)
     return function(self)
-      if key.name then
-        IMGUI.Text(key.name)
+      if field.name then
+        IMGUI.Text(field.name)
       end
-      local value = spec[key.id] or default
-      spec[key.id] = value
-      IMGUI.PushID(key.id)
-      local changed, newvalue = call(value, key)
+      local value = spec[field.id] or default
+      spec[field.id] = value
+      IMGUI.PushID(field.id)
+      local changed, newvalue = call(value, field)
       IMGUI.PopID()
       if changed then
-        spec[key.id] = newvalue
+        spec[field.id] = newvalue
       end
     end
   end
@@ -23,16 +23,16 @@ end
 
 inputs.boolean = _makeCommon(
   false,
-  function(value, key)
+  function(value, field)
     return IMGUI.Checkbox("", value)
   end
 )
 
 inputs.float = _makeCommon(
   nil,
-  function(value, key)
-    value = value or key.default or (key.range or {0})[1]
-    local range = key.range
+  function(value, field)
+    value = value or field.default or (field.range or {0})[1]
+    local range = field.range
     local changed, newvalue = IMGUI.InputFloat("", value, 0.1, 0.5)
     if range then
       newvalue = math.max(range[1],
@@ -44,9 +44,9 @@ inputs.float = _makeCommon(
 
 inputs.integer = _makeCommon(
   0,
-  function(value, key)
-    value = value or (key.range or {0})[1]
-    local range = key.range
+  function(value, field)
+    value = value or (field.range or {0})[1]
+    local range = field.range
     local changed, newvalue = IMGUI.InputInt("", value, 1, 10)
     if range then
       newvalue = math.max(range[1],
@@ -58,14 +58,14 @@ inputs.integer = _makeCommon(
 
 inputs.string = _makeCommon(
   "",
-  function(value, key)
+  function(value, field)
     return IMGUI.InputText("", value, 64)
   end
 )
 
 inputs.text = _makeCommon(
   "",
-  function(value, key)
+  function(value, field)
     IMGUI.PushItemWidth(360)
     local changed, newvalue = IMGUI.InputTextMultiline("", value, 1024)
     IMGUI.PopItemWidth()
@@ -75,8 +75,8 @@ inputs.text = _makeCommon(
 
 inputs.description = _makeCommon(
   "",
-  function(value, key)
-    IMGUI.Text(key.info)
+  function(value, field)
+    IMGUI.Text(field.info)
     return false
   end
 )
