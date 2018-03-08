@@ -11,7 +11,9 @@ local ZIP          = love.math
 -- CONSTANTS --
 local SAVEDIR = "_savedata/"
 local PROFILE_FILENAME = "profile"
+local CONTROL_FILENAME = "controls"
 local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
+local CONTROL_PATH = SAVEDIR..CONTROL_FILENAME
 local METABASE = { next_id = 1, save_list = {} }
 
 -- HELPERS
@@ -42,12 +44,12 @@ local function _decode(str) --> table
 end
 
 local function _deleteInput()
-  INPUT.delete()
+  INPUT.delete(CONTROL_PATH)
 end
 
 local function _loadInput()
   -- setup input
-  local loaded_input = INPUT.load(_decode)
+  local loaded_input = INPUT.load(CONTROL_PATH, _decode)
   if not loaded_input then
     local inputmap = DB.loadSetting('controls')
     INPUT.setup(inputmap)
@@ -62,7 +64,7 @@ local function _loadInput()
 end
 
 local function _saveInput()
-  return INPUT.save(_encode)
+  return INPUT.save(CONTROL_PATH, _encode)
 end
 
 local function _cleanSlate ()
@@ -150,7 +152,8 @@ function PROFILE.quit()
   _saveProfile()
   local save_list = _metadata.save_list
   for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
-    if filename ~= PROFILE_FILENAME and not save_list[filename] then
+    if filename ~= PROFILE_FILENAME and filename ~= CONTROL_FILENAME
+                                    and not save_list[filename] then
       print(("Removing unsaved file: %s"):format(filename))
       filesystem.remove(SAVEDIR..filename)
     end
