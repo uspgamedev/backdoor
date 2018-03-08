@@ -15,7 +15,7 @@ for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view/input") do
 end
 
 local function _invalid(spec, field)
-  return function (self)
+  return function (gui)
     IMGUI.PushStyleColor("Text", 0.8, 0.6, 0, 1)
     IMGUI.Text(("Unknown field type: %s"):format(field.type))
     IMGUI.PopStyleColor(1)

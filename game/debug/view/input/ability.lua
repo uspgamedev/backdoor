@@ -14,7 +14,7 @@ local _idgen = IDGenerator()
 
 local inputs = {}
 
-local function _commandList(self, ability, cmdtype, selected, delete)
+local function _commandList(gui, ability, cmdtype, selected, delete)
 
   local result
   local typeoptions = {}
@@ -41,14 +41,14 @@ local function _commandList(self, ability, cmdtype, selected, delete)
       selected = selected or {}
       selected.cmdtype = cmdtype
       selected.idx = i
-      self:push('specification_editor', command,
-                cmdtype .. '/' .. command.typename, _CMDTYPES[cmdtype], delete,
-                nil, ability)
+      gui:push('specification_editor', command,
+               cmdtype .. '/' .. command.typename, _CMDTYPES[cmdtype], delete,
+               nil, ability)
     end
     IMGUI.PopID()
   end
   if IMGUI.Button("New " .. _CMDTYPES[cmdtype]) then
-    self:push(
+    gui:push(
       'list_picker', _CMDTYPES[cmdtype], typeoptions,
       function (value)
         if value then
@@ -83,7 +83,7 @@ function inputs.ability(spec, field)
 
   local _active = not (not spec[field.id] and field.optional)
 
-  return function(self)
+  return function(gui)
     if field.optional then
       IMGUI.PushID(field.id .. ".check")
       _active = select(2, IMGUI.Checkbox("", _active))
@@ -97,7 +97,7 @@ function inputs.ability(spec, field)
         IMGUI.Text(field.hint)
       end
       for _,cmdtype in ipairs(_CMDTYPES) do
-        selected = _commandList(self, ability, cmdtype, selected, delete)
+        selected = _commandList(gui, ability, cmdtype, selected, delete)
       end
       spec[field.id] = ability
       IMGUI.Unindent(20)

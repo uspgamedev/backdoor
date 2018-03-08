@@ -27,7 +27,7 @@ function _inputs.section(spec, field, parent)
     }
   end
 
-  return function(self)
+  return function(gui)
     local element = spec[field.id]
     local enabled
     enabled = select(2, IMGUI.Checkbox(field.name, not not element))
@@ -41,7 +41,7 @@ function _inputs.section(spec, field, parent)
       IMGUI.Indent(20)
       for i, subfield in ipairs(schema) do
         IMGUI.PushID(inside_schema[i].id)
-        inside_schema[i].input(element)(self)
+        inside_schema[i].input(element)(gui)
         IMGUI.PopID()
       end
       IMGUI.Unindent(20)

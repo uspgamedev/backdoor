@@ -42,7 +42,7 @@ function inputs.enum(spec, field)
     spec[field.id] = false
   end
 
-  return function(self)
+  return function(gui)
     if field.optional then
       IMGUI.PushID(field.id .. ".check")
       _active = select(2, IMGUI.Checkbox("", _active))

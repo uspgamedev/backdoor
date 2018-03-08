@@ -21,7 +21,7 @@ function inputs.list(spec, field)
     table.remove(list, selected)
   end
 
-  return function(self)
+  return function(gui)
     IMGUI.Text(("%ss:"):format(field.name))
     IMGUI.Indent(20)
     for i,element in ipairs(list) do
@@ -33,13 +33,13 @@ function inputs.list(spec, field)
       end
       if IMGUI.Selectable(view, selected == i) then
         selected = i
-        self:push('specification_editor', element,
-                  field.id .. '/' .. element.typename, field.name, delete, nil,
-                  spec)
+        gui:push('specification_editor', element,
+                 field.id .. '/' .. element.typename, field.name, delete, nil,
+                 spec)
       end
     end
     if IMGUI.Button("New " .. field.name) then
-      self:push(
+      gui:push(
         'list_picker', field.name, typeoptions,
         function (value)
           if value then

@@ -12,14 +12,14 @@ function inputs.array(spec, field)
 
   spec[field.id] = array
 
-  return function(self)
+  return function(gui)
     local removed
     for i,element in ipairs(array) do
       IMGUI.Text(("%s #%d"):format(field.name, i))
       IMGUI.Indent(20)
       for j,subfield in ipairs(field.schema) do
         IMGUI.PushID(i)
-        INPUT(subfield.type, element, subfield)(self)
+        INPUT(subfield.type, element, subfield)(gui)
         IMGUI.PopID()
       end
       if IMGUI.Button("Delete##array-button-"..i) then

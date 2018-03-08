@@ -3,9 +3,9 @@ local IMGUI = require 'imgui'
 
 return function (body)
 
-  return "Body Inspector", 2, function(self)
+  return "Body Inspector", 2, function(gui)
     local hp = body:getHP()
-    self.sector_view:lookAt(body)
+    gui.sector_view:lookAt(body)
     IMGUI.Text(("ID: %s"):format(body:getId()))
     IMGUI.Text(("Species: %s"):format(body:getSpec('name')))
     IMGUI.Separator()

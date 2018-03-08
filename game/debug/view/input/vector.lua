@@ -5,7 +5,7 @@ local DB    = require 'database'
 
 local inputs = {}
 local signature_mt = {
-  __index = function(self, k)
+  __index = function(gui, k)
     return tonumber(k)
   end
 }
@@ -39,7 +39,7 @@ function inputs.vector(spec, field)
     return new
   end
 
-  return function(self)
+  return function(gui)
     IMGUI.Text(("%s"):format(field.name))
     IMGUI.Columns(2, field.id, false)
     for i, subfield in ipairs(subschemas) do

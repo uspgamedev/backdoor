@@ -5,7 +5,7 @@ local inputs = {}
 
 local function _makeCommon(default, call)
   return function(spec, field)
-    return function(self)
+    return function(gui)
       if field.name then
         IMGUI.Text(field.name)
       end

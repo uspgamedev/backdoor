@@ -31,7 +31,7 @@ local function _getRefs(spec, field, parent)
 end
 
 inputs['output'] = function(spec, field, parent)
-  return function(self)
+  return function(gui)
     IMGUI.PushID(field.id)
     IMGUI.Text(field.name)
     local changed, value = IMGUI.InputText("", spec[field.id] or field.id, 64)
@@ -61,7 +61,7 @@ inputs['value'] = function(spec, field, parent)
     use_ref = false
   end
 
-  return function(self)
+  return function(gui)
     IMGUI.PushID(field.id)
     IMGUI.Text(field.name)
     local changed

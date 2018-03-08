@@ -3,7 +3,7 @@ local IMGUI = require 'imgui'
 
 return function(name, list, value)
 
-  return "Choose a " .. name, 1, function(self)
+  return "Choose a " .. name, 1, function(gui)
     IMGUI.Text("Options:")
     IMGUI.PushItemWidth(160)
     local changed, newvalue = IMGUI.ListBox("", value(), list, #list, 15)
