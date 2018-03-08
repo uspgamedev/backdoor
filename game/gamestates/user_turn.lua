@@ -252,7 +252,7 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
 end
 
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
-  SWITCHER.push(GS.OPEN_PACK, _route.getControlledActor():getNextPrizePack())
+  SWITCHER.push(GS.OPEN_PACK, _route.getControlledActor():getPrizePacks())
   local args = coroutine.yield(_task)
   _useAction(DEFS.ACTION.RECEIVE_PACK,
              { consumed = args.consumed, pack = args.pack })
@@ -263,4 +263,3 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 return state
-

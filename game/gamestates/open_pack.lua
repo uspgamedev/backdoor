@@ -3,13 +3,15 @@ local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
-local PackView = require 'view.cardlist'
+local PackView = require 'view.packlist'
+local CardView = require 'view.cardlist'
 
 local state = {}
 
 local _view
 local _pack
 local _leave
+local _status
 
 function state:init()
 end
@@ -23,20 +25,26 @@ local function _next()
 end
 
 local function _confirm()
-  if not _view:isLocked() then
+  if _status == "choosing_pack" then
+    _pack = PACK.generatePackFrom(_view:getChosenPack())
+    _view:close()
+    _status = "choosing_card"
+    _view = CardView("UP")
+    _view:open(_pack)
+  elseif not _view:isLocked() then
     _view:collectCards(function() _leave = true end)
   end
 end
 
-function state:enter(from, collection)
-  _pack = PACK.generatePackFrom(collection)
-  _view = PackView("UP")
-  if #_pack > 0 then
+function state:enter(from, packlist)
+  _pack = nil
+  _status = "choosing_pack"
+  _view = PackView("UP", packlist)
+  if #packlist > 0 then
     _view:addElement("HUD")
   else
     _leave = true
   end
-  _view:open(_pack)
 end
 
 function state:leave()
@@ -50,7 +58,13 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if _leave or _view:isCardListEmpty() then
+  if _status == "choosing_pack" and (_leave or _view:isPackListEmpty()) then
+    print("okay")
+    SWITCHER.pop({
+      consumed = {},
+      pack = nil
+    })
+  elseif _status == "choosing_card" and (_leave or _view:isCardListEmpty()) then
     SWITCHER.pop({
       consumed = _view:getConsumeLog(),
       pack = _pack
@@ -73,6 +87,3 @@ function state:draw()
 end
 
 return state
-
-
-

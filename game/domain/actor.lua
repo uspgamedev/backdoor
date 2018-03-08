@@ -341,6 +341,10 @@ function Actor:addPrizePack(collection)
   table.insert(self.prizes, collection)
 end
 
+function Actor:getPrizePacks()
+  return self.prizes
+end
+
 function Actor:getNextPrizePack()
   return #self.prizes > 0 and table.remove(self.prizes, 1)
 end
