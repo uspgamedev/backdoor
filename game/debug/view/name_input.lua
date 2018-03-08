@@ -5,7 +5,7 @@ return function(title, validator)
 
   local name = ""
 
-  return "Name for " .. title, 1, function(self)
+  return "Name for " .. title, 1, function(gui)
     local changed
     changed, name = IMGUI.InputText("", name, 64)
     if (IMGUI.Button("Confirm") or IMGUI.IsKeyPressed(12))

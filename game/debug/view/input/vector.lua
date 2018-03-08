@@ -5,30 +5,30 @@ local DB    = require 'database'
 
 local inputs = {}
 local signature_mt = {
-  __index = function(self, k)
+  __index = function(gui, k)
     return tonumber(k)
   end
 }
 
-function inputs.vector(spec, key)
+function inputs.vector(spec, field)
 
-  local vector = spec[key.id] or {}
-  spec[key.id] = vector
+  local vector = spec[field.id] or {}
+  spec[field.id] = vector
   local selected = nil
-  local size = key.size
-  local range = key.range
-  local default = key.default or 0
-  local signature = setmetatable(key.signature or
+  local size = field.size
+  local range = field.range
+  local default = field.default or 0
+  local signature = setmetatable(field.signature or
                                  {'x','y','z','w'},
                                  signature_mt)
   local subschemas = {}
   for i=1, size do
     vector[i] = vector[i] or default
-    local subkey = {
+    local subfield = {
       id = i,
       name = signature[i],
     }
-    subschemas[i] = subkey
+    subschemas[i] = subfield
   end
 
   local function check_range(new)
@@ -39,12 +39,12 @@ function inputs.vector(spec, key)
     return new
   end
 
-  return function(self)
-    IMGUI.Text(("%s"):format(key.name))
-    IMGUI.Columns(2, key.id, false)
-    for i, subkey in ipairs(subschemas) do
-      IMGUI.PushID(("%s#%d"):format(key.name, subkey.id))
-      IMGUI.Text(("%s"):format(subkey.name))
+  return function(gui)
+    IMGUI.Text(("%s"):format(field.name))
+    IMGUI.Columns(2, field.id, false)
+    for i, subfield in ipairs(subschemas) do
+      IMGUI.PushID(("%s#%d"):format(field.name, subfield.id))
+      IMGUI.Text(("%s"):format(subfield.name))
       IMGUI.SameLine()
       local changed, new = IMGUI.InputInt("", vector[i])
       IMGUI.PopID()

@@ -56,16 +56,16 @@ return function(category_name, group_name, title)
     end
   end
 
-  return title .. " List", 1, function(self)
+  return title .. " List", 1, function(gui)
     if IMGUI.Button("New "..title) then
-      self:push('name_input', title, newvalue)
+      gui:push('name_input', title, newvalue)
     end
     IMGUI.Text(("All %ss:"):format(title))
     local changed
     changed, selected = IMGUI.ListBox("", selected, list, list.n, 15)
     if changed then
-      self:push('specification_editor', group[list[selected]], group_name,
-                title, delete, rename)
+      gui:push('specification_editor', group[list[selected]], group_name,
+               title, delete, rename)
     end
   end
 

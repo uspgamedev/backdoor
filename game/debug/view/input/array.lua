@@ -5,21 +5,21 @@ local DB    = require 'database'
 
 local inputs = {}
 
-function inputs.array(spec, key)
+function inputs.array(spec, field)
 
-  local array = spec[key.id] or {}
+  local array = spec[field.id] or {}
   local selected = nil
 
-  spec[key.id] = array
+  spec[field.id] = array
 
-  return function(self)
+  return function(gui)
     local removed
     for i,element in ipairs(array) do
-      IMGUI.Text(("%s #%d"):format(key.name, i))
+      IMGUI.Text(("%s #%d"):format(field.name, i))
       IMGUI.Indent(20)
-      for j,subkey in ipairs(key.schema) do
+      for j,subfield in ipairs(field.schema) do
         IMGUI.PushID(i)
-        INPUT(subkey.type, element, subkey)(self)
+        INPUT(subfield.type, element, subfield)(gui)
         IMGUI.PopID()
       end
       if IMGUI.Button("Delete##array-button-"..i) then
@@ -30,7 +30,7 @@ function inputs.array(spec, key)
     if removed then
       table.remove(array,removed)
     end
-    if IMGUI.Button("New " .. key.name) then
+    if IMGUI.Button("New " .. field.name) then
       table.insert(array, {})
     end
   end

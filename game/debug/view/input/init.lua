@@ -14,10 +14,10 @@ for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view/input") do
   end
 end
 
-local function _invalid(spec, key)
-  return function (self)
+local function _invalid(spec, field)
+  return function (gui)
     IMGUI.PushStyleColor("Text", 0.8, 0.6, 0, 1)
-    IMGUI.Text(("Unknown input type: %s"):format(key.type))
+    IMGUI.Text(("Unknown field type: %s"):format(field.type))
     IMGUI.PopStyleColor(1)
   end
 end

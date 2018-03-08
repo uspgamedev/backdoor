@@ -12,7 +12,7 @@ return function(spec, group_name, title, delete, rename, parent)
     table.insert(inputs, INPUT(key.type, spec, key, parent))
   end
 
-  return title .. " Editor", 2, function(self)
+  return title .. " Editor", 2, function(gui)
 
     -- meta actions
     local spec_meta = getmetatable(spec)
@@ -21,7 +21,7 @@ return function(spec, group_name, title, delete, rename, parent)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##1") then
-      self:push('name_input', title, rename)
+      gui:push('name_input', title, rename)
     end
     IMGUI.SameLine()
     if IMGUI.Button("Delete##1") then
@@ -42,7 +42,7 @@ return function(spec, group_name, title, delete, rename, parent)
         pop = 1
       end
       IMGUI.Spacing()
-      input(self)
+      input(gui)
       if pop > 0 then
         IMGUI.PopStyleColor(pop)
       elseif extended and keyid ~= 'extends' then
@@ -60,7 +60,7 @@ return function(spec, group_name, title, delete, rename, parent)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##2") then
-      self:push('name_input', title, rename)
+      gui:push('name_input', title, rename)
     end
     IMGUI.SameLine()
     if IMGUI.Button("Delete##2") then

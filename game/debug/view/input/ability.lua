@@ -14,7 +14,7 @@ local _idgen = IDGenerator()
 
 local inputs = {}
 
-local function _commandList(self, ability, cmdtype, selected, delete)
+local function _commandList(gui, ability, cmdtype, selected, delete)
 
   local result
   local typeoptions = {}
@@ -41,22 +41,22 @@ local function _commandList(self, ability, cmdtype, selected, delete)
       selected = selected or {}
       selected.cmdtype = cmdtype
       selected.idx = i
-      self:push('specification_editor', command,
-                cmdtype .. '/' .. command.typename, _CMDTYPES[cmdtype], delete,
-                nil, ability)
+      gui:push('specification_editor', command,
+               cmdtype .. '/' .. command.typename, _CMDTYPES[cmdtype], delete,
+               nil, ability)
     end
     IMGUI.PopID()
   end
   if IMGUI.Button("New " .. _CMDTYPES[cmdtype]) then
-    self:push(
+    gui:push(
       'list_picker', _CMDTYPES[cmdtype], typeoptions,
       function (value)
         if value then
           local new = { typename = typeoptions[value] }
           local schema = require('domain.'..cmdtype..'.'..new.typename).schema
-          for _,subkey in ipairs(schema) do
-            if subkey.type == 'output' then
-              new[subkey.id] = 'label'.._idgen.newID()
+          for _,subfield in ipairs(schema) do
+            if subfield.type == 'output' then
+              new[subfield.id] = 'label'.._idgen.newID()
             end
           end
           table.insert(list, new)
@@ -71,34 +71,35 @@ local function _commandList(self, ability, cmdtype, selected, delete)
   return selected
 end
 
-function inputs.ability(spec, key)
+function inputs.ability(spec, field)
 
-  local ability = spec[key.id] or { params = {}, operators = {}, effects = {} }
+  local ability = spec[field.id]
+                  or { params = {}, operators = {}, effects = {} }
   local selected = nil
 
   local function delete()
     table.remove(ability[selected.cmdtype], selected.idx)
   end
 
-  local _active = not (not spec[key.id] and key.optional)
+  local _active = not (not spec[field.id] and field.optional)
 
-  return function(self)
-    if key.optional then
-      IMGUI.PushID(key.id .. ".check")
+  return function(gui)
+    if field.optional then
+      IMGUI.PushID(field.id .. ".check")
       _active = select(2, IMGUI.Checkbox("", _active))
       IMGUI.PopID()
       IMGUI.SameLine()
     end
-    IMGUI.Text(("%s"):format(key.name))
+    IMGUI.Text(("%s"):format(field.name))
     if _active then
       IMGUI.Indent(20)
-      if key.hint then
-        IMGUI.Text(key.hint)
+      if field.hint then
+        IMGUI.Text(field.hint)
       end
       for _,cmdtype in ipairs(_CMDTYPES) do
-        selected = _commandList(self, ability, cmdtype, selected, delete)
+        selected = _commandList(gui, ability, cmdtype, selected, delete)
       end
-      spec[key.id] = ability
+      spec[field.id] = ability
       IMGUI.Unindent(20)
     end
   end
