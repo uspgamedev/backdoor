@@ -152,7 +152,8 @@ function PROFILE.quit()
   _saveProfile()
   local save_list = _metadata.save_list
   for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
-    if filename ~= PROFILE_FILENAME and not save_list[filename] then
+    if filename ~= PROFILE_FILENAME and filename ~= CONTROL_FILENAME
+                                    and not save_list[filename] then
       print(("Removing unsaved file: %s"):format(filename))
       filesystem.remove(SAVEDIR..filename)
     end
