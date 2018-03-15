@@ -254,6 +254,7 @@ end
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   SWITCHER.push(GS.OPEN_PACK, _route.getControlledActor():getPrizePacks())
   local args = coroutine.yield(_task)
+  if args.pack == nil then return end
   _useAction(DEFS.ACTION.RECEIVE_PACK,
              { consumed = args.consumed, pack = args.pack })
 end

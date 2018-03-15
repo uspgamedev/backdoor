@@ -36,6 +36,12 @@ local function _confirm()
   end
 end
 
+local function _cancel()
+  if _status == "choosing_pack" then
+    _leave = true
+  end
+end
+
 function state:enter(from, packlist)
   _pack = nil
   _status = "choosing_pack"
@@ -59,7 +65,6 @@ function state:update(dt)
   MAIN_TIMER:update(dt)
 
   if _status == "choosing_pack" and (_leave or _view:isPackListEmpty()) then
-    print("okay")
     SWITCHER.pop({
       consumed = {},
       pack = nil
@@ -70,13 +75,16 @@ function state:update(dt)
       pack = _pack
     })
   else
-
-    if DIRECTIONALS.wasDirectionTriggered('LEFT') then
+    if _status == "choosing_pack" and _view:usedHoldbar() then
+      _confirm()
+    elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
     elseif INPUT.wasActionPressed('CONFIRM') then
       _confirm()
+    elseif INPUT.wasActionPressed('CANCEL') then
+      _cancel()
     end
 
   end

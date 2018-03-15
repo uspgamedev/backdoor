@@ -22,7 +22,7 @@ local _PD = 40
 local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
-local _CONSUME_TEXT = "consume"
+local _HOLDBAR_TEXT = "open pack"
 local _WIDTH, _HEIGHT
 local _CW, _CH
 
@@ -54,13 +54,19 @@ function View:init(hold_action, packlist)
 
   self.enter = 0
   self.text = 0
-  self.selection = 1
+  self.selection = math.ceil(#packlist/2)
   self.cursor = 0
+
   self.y_offset = {}
+  for i=1,#packlist do self.y_offset[i] = 0 end
+
   self.move = self.selection
   self.offsets = {}
   self.pack_list = packlist
+
   self.holdbar = HoldBar(hold_action)
+  self.holdbar:unlock()
+  self.holdbar_activated = false
 
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
@@ -83,7 +89,7 @@ function View:close()
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
                 function ()
-                  self.card_list = _EMPTY
+                  self.pack_list = _EMPTY
                   self:destroy()
                 end)
 end
@@ -91,14 +97,14 @@ end
 function View:selectPrev(n)
   if self:isLocked() then return end
   n = n or 1
-  self.selection = _prev_circular(self.selection, #self.card_list, n)
+  self.selection = _prev_circular(self.selection, #self.pack_list, n)
   self.holdbar:reset()
 end
 
 function View:selectNext()
   if self:isLocked() then return end
   n = n or 1
-  self.selection = _next_circular(self.selection, #self.card_list, n)
+  self.selection = _next_circular(self.selection, #self.pack_list, n)
   self.holdbar:reset()
 end
 
@@ -161,7 +167,7 @@ function View:drawPacks(g, enter)
     else
       g.setColor(0,255,0)
     end
-    g.rectangle("fill", 0, 0, 200, 300)
+    g.rectangle("fill", 0, 0, 100, 200)
     g.pop()
   end
   g.pop()
@@ -181,7 +187,7 @@ function View:drawPacks(g, enter)
 end
 
 function View:drawArrow(g, enter)
-  local text_width = _font:getWidth(_CONSUME_TEXT)
+  local text_width = _font:getWidth(_HOLDBAR_TEXT)
   local lh = 1.25
   local text_height
   local senoid
@@ -202,7 +208,7 @@ function View:drawArrow(g, enter)
 
   g.translate(0, text_height*.5)
   g.setColor(0xFF, 0xFF, 0xFF, enter*0xFF)
-  g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
+  g.printf(_HOLDBAR_TEXT, -text_width/2, 0, text_width, "center")
 
   g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)
   g.polygon("fill", 0, 0, _ARRSIZE/2, -_ARRSIZE, _ARRSIZE, 0)
@@ -217,9 +223,13 @@ function View:drawPackDesc(g, pack, enter)
   g.pop()
 end
 
+function View:usedHoldbar()
+  return self.holdbar_activated
+end
+
 function View:drawHoldBar(g)
   if self.holdbar:update() then
-    self:consumeCard()
+    self.holdbar_activated = true
   end
   self.holdbar:draw(0, 0)
 end
