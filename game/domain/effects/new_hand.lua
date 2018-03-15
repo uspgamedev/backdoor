@@ -5,7 +5,7 @@ FX.schema = {
   {id='nothing', type='none', name = "NO PARAM"}
 }
 
-function FX.process (actor, params)
+function FX.process (actor, fieldvalues)
   if actor:isHandEmpty() then
     for i = 1,actor:getHandLimit() do
       actor:drawCard()

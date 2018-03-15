@@ -11,8 +11,8 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, params)
-  return actor["get"..params.which](actor)
+function OP.process(actor, fieldvalues)
+  return actor["get"..fieldvalues.which](actor)
 end
 
 return OP

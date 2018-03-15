@@ -1,17 +1,17 @@
 
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'source', name = "Card source", type = 'enum',
     options = { 'HAND', 'PACK' } },
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'integer'
+INPUT.type = 'integer'
 
-function PARAM.isValid(actor, parameter, value)
+function INPUT.isValid(actor, fieldvalues, value)
   return true
 end
 
-return PARAM
+return INPUT
 

@@ -5,16 +5,16 @@ local DRAWHAND = {}
 
 DRAWHAND.param_specs = {}
 
-function DRAWHAND.activatedAbility(actor, params)
+function DRAWHAND.activatedAbility(actor, inputvalues)
   return nil
 end
 
-function DRAWHAND.validate(actor, params)
+function DRAWHAND.validate(actor, inputvalues)
   return not actor:isBufferEmpty()
          and actor:getPP() >= DEFS.ACTION.NEW_HAND_COST
 end
 
-function DRAWHAND.perform(actor, params)
+function DRAWHAND.perform(actor, inputvalues)
   actor:spendPP(DEFS.ACTION.NEW_HAND_COST)
   while not actor:isHandEmpty() do
     local card = actor:removeHandCard(1)

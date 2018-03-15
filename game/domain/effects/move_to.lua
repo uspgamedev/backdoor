@@ -10,28 +10,28 @@ FX.schema = {
     range = {0.1, 10.0}, default = 1.0 }
 }
 
-function FX.process (actor, params)
+function FX.process (actor, fieldvalues)
   local pos = {actor:getPos()}
-  local body = params['body']
-  local target_pos = params['pos']
+  local body = fieldvalues['body']
+  local target_pos = fieldvalues['pos']
   if pos[1] == target_pos[1] and pos[2] == target_pos[2] then
     return
   end
   local sector = body:getSector()
   sector:putBody(body, unpack(target_pos))
-  if params['vfx'] == 'SLIDE' then
+  if fieldvalues['vfx'] == 'SLIDE' then
     coroutine.yield('report', {
       type = 'body_moved',
       body = body,
       origin = pos,
-      speed_factor = params['vfx-spd']
+      speed_factor = fieldvalues['vfx-spd']
     })
-  elseif params['vfx'] == 'JUMP' then
+  elseif fieldvalues['vfx'] == 'JUMP' then
     coroutine.yield('report', {
       type = 'body_jumped',
       body = body,
       origin = pos,
-      speed_factor = params['vfx-spd']
+      speed_factor = fieldvalues['vfx-spd']
     })
   end
 end

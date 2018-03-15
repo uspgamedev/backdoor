@@ -12,16 +12,17 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, params)
-  if params.op == "+" then
-    return params.lhs + params.rhs
-  elseif params.op == "-" then
-    return params.lhs - params.rhs
-  elseif params.op == "*" then
-    return params.lhs * params.rhs
-  elseif params.op == "/" then
-    assert(params.rhs ~= 0, "Tried to divide by zero") --Handle division by zero
-    return math.floor(params.lhs / params.rhs)
+function OP.process(actor, fieldvalues)
+  if fieldvalues.op == "+" then
+    return fieldvalues.lhs + fieldvalues.rhs
+  elseif fieldvalues.op == "-" then
+    return fieldvalues.lhs - fieldvalues.rhs
+  elseif fieldvalues.op == "*" then
+    return fieldvalues.lhs * fieldvalues.rhs
+  elseif fieldvalues.op == "/" then
+    --Handle division by zero
+    assert(fieldvalues.rhs ~= 0, "Tried to divide by zero") 
+    return math.floor(fieldvalues.lhs / fieldvalues.rhs)
   end
 
 end

@@ -14,10 +14,10 @@ OP.schema = {
 
 OP.type = 'card'
 
-function OP.process(actor, params)
-  local self = params['actor']
-  local index = params['card-index']
-  local source = params['source']
+function OP.process(actor, fieldvalues)
+  local self = fieldvalues['actor']
+  local index = fieldvalues['card-index']
+  local source = fieldvalues['source']
   if source == 'HAND' then
     return self:getHandCard(index)
   elseif source == 'PACK' then

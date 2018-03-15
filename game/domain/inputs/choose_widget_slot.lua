@@ -1,18 +1,18 @@
 
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'widget_slot'
+INPUT.type = 'widget_slot'
 
-function PARAM.isValid(actor, parameter, value)
+function INPUT.isValid(actor, fieldvalues, value)
   if not actor:getBody():hasWidgetAt(value) then
     return false
   end
   return not not actor:getBody():getWidget(value):getWidgetActivation()
 end
 
-return PARAM
+return INPUT
 

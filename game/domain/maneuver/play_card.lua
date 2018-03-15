@@ -9,20 +9,20 @@ PLAYCARD.param_specs = {
   { output = 'card_index', typename = 'card_index' }
 }
 
-local function _card(actor, params)
-  return actor:getHandCard(params.card_index)
+local function _card(actor, inputvalues)
+  return actor:getHandCard(inputvalues.card_index)
 end
 
-function PLAYCARD.activatedAbility(actor, params)
-  local card = _card(actor, params)
+function PLAYCARD.activatedAbility(actor, inputvalues)
+  local card = _card(actor, inputvalues)
   return card:isArt() and card:getArtAbility()
 end
 
-function PLAYCARD.validate(actor, params)
-  local card = _card(actor, params)
+function PLAYCARD.validate(actor, inputvalues)
+  local card = _card(actor, inputvalues)
   local valid = false
   if card:isArt() then
-    valid = ABILITY.checkParams(card:getArtAbility(), actor, params)
+    valid = ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
   elseif card:isWidget() then
     valid = true
   elseif card:isUpgrade() then
@@ -31,10 +31,10 @@ function PLAYCARD.validate(actor, params)
   return valid
 end
 
-function PLAYCARD.perform(actor, params)
-  local card = _card(actor, params)
+function PLAYCARD.perform(actor, inputvalues)
+  local card = _card(actor, inputvalues)
   local body = actor:getBody()
-  actor:playCard(params.card_index)
+  actor:playCard(inputvalues.card_index)
 
   if card:isArt() then
     coroutine.yield('report', {
@@ -42,7 +42,7 @@ function PLAYCARD.perform(actor, params)
       body = body,
     })
     actor:exhaust(card:getArtCost())
-    ABILITY.execute(card:getArtAbility(), actor, params)
+    ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
     actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)

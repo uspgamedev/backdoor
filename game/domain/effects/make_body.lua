@@ -19,15 +19,15 @@ FX.schema = {
   }
 }
 
-function FX.process (actor, params)
+function FX.process (actor, fieldvalues)
   local sector = actor:getBody():getSector()
-  local bodyspec = params['bodyspec']
-  local i,j = unpack(params['pos'])
+  local bodyspec = fieldvalues['bodyspec']
+  local i,j = unpack(fieldvalues['pos'])
   local body = sector:getRoute().makeBody(bodyspec, i, j)
   local state = {}
   state.widgets = {}
-  for _,widget_params in ipairs(params['widgets']) do
-    local widgetspec = widget_params['spec']
+  for _,widget_fieldvalues in ipairs(fieldvalues['widgets']) do
+    local widgetspec = widget_fieldvalues['spec']
     if widgetspec then
       local widget = Card(widgetspec)
       assert(widget:isWidget())
@@ -36,8 +36,8 @@ function FX.process (actor, params)
     end
   end
   state.upgrades = {
-    VIT = params['vit'],
-    DEF = params['def'],
+    VIT = fieldvalues['vit'],
+    DEF = fieldvalues['def'],
   }
   body:loadState(setmetatable(state, { __index = body:saveState() }))
 end
