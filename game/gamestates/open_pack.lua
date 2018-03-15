@@ -12,6 +12,7 @@ local _view
 local _pack
 local _leave
 local _status
+local _pack_index
 
 function state:init()
 end
@@ -27,10 +28,12 @@ end
 local function _confirm()
   if _status == "choosing_pack" then
     _pack = PACK.generatePackFrom(_view:getChosenPack())
+    _pack_index = _view:getSelection()
     _view:close()
     _status = "choosing_card"
     _view = CardView("UP")
     _view:open(_pack)
+    _view:addElement("HUD")
   elseif not _view:isLocked() then
     _view:collectCards(function() _leave = true end)
   end
@@ -67,12 +70,14 @@ function state:update(dt)
   if _status == "choosing_pack" and (_leave or _view:isPackListEmpty()) then
     SWITCHER.pop({
       consumed = {},
-      pack = nil
+      pack = nil,
+      pack_index = nil,
     })
   elseif _status == "choosing_card" and (_leave or _view:isCardListEmpty()) then
     SWITCHER.pop({
       consumed = _view:getConsumeLog(),
-      pack = _pack
+      pack = _pack,
+      pack_index = _pack_index
     })
   else
     if _status == "choosing_pack" and _view:usedHoldbar() then
@@ -81,7 +86,7 @@ function state:update(dt)
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
-    elseif INPUT.wasActionPressed('CONFIRM') then
+    elseif _status == "choosing_card" and INPUT.wasActionPressed('CONFIRM') then
       _confirm()
     elseif INPUT.wasActionPressed('CANCEL') then
       _cancel()

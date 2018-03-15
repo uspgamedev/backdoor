@@ -112,6 +112,10 @@ function View:setSelection(n)
   self.selection = n
 end
 
+function View:getSelection()
+  return self.selection
+end
+
 function View:isPackListEmpty()
   return #self.pack_list == 0
 end
