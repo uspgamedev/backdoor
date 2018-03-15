@@ -1,7 +1,7 @@
 
 local RECEIVEPACK = {}
 
-RECEIVEPACK.param_specs = {
+RECEIVEPACK.input_specs = {
   { output = 'consumed', typename = 'consume_list' },
   { output = 'pack', typename = 'pack_list'}
 }

@@ -2,7 +2,7 @@
 local ACTIONDEFS = require 'domain.definitions.action'
 local IDLE = {}
 
-IDLE.param_specs = {}
+IDLE.input_specs = {}
 
 function IDLE.activatedAbility(actor, inputvalues)
   return nil

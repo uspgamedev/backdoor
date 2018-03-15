@@ -1,7 +1,7 @@
 
 local FX = require 'lux.pack' 'domain.effects'
 local OP = require 'lux.pack' 'domain.operators'
-local IN = require 'lux.pack' 'domain.params'
+local IN = require 'lux.pack' 'domain.inputs'
 local DB = require 'database'
 
 local _CMDTYPES = {
@@ -12,8 +12,8 @@ local _CMDTYPES = {
 
 local function _unref(ref, values)
   if type(ref) == 'string' then
-    local t,n = ref:match '=(.+)'
-    if t and n then
+    local n = ref:match '=(.+)'
+    if n then
       return values[n]
     end
   end
@@ -37,7 +37,7 @@ end
 local ABILITY = {}
 
 function ABILITY.inputsOf(ability)
-  return ipairs(ability.input_cmds)
+  return ipairs(ability.inputs)
 end
 
 function ABILITY.input(input_name)
@@ -49,7 +49,7 @@ function ABILITY.validate(input_name, actor, input_fields, value)
 end
 
 local function _fields(cmd)
-  return DB.schemaFor(cmd.type .. '/' .. cmd.name)
+  return DB.schemaFor(cmd.type .. 's/' .. cmd.name)
 end
 
 local function _unrefFieldValues(cmd, values)
@@ -62,7 +62,7 @@ end
 
 function ABILITY.checkInputs(ability, actor, inputvalues)
   local values = {}
-  for _,cmd in ipairs(ability.input_cmds) do
+  for _,cmd in ipairs(ability.inputs) do
     if cmd.type == 'input' then
       local unrefd_field_values = _unrefFieldValues(cmd, values)
       local inputspec = IN[cmd.name]
@@ -77,12 +77,12 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
   return true
 end
 
-local _CMDLISTS = { 'input_cmds', 'effect_cmds' }
+local _CMDLISTS = { 'inputs', 'effects' }
 
 function ABILITY.execute(ability, actor, inputvalues)
   local values = {}
   for _,cmdlist in ipairs(_CMDLISTS) do
-    for _,cmd in ipairs(ability.input_cmds) do
+    for _,cmd in ipairs(ability[cmdlist]) do
       local value
       local type, name = cmd.type, cmd.name
       if type == 'input' then
@@ -97,7 +97,9 @@ function ABILITY.execute(ability, actor, inputvalues)
           return error("Invalid command type")
         end
       end
-      values[cmd.output] = value
+      if cmd.output then
+        values[cmd.output] = value
+      end
     end
   end
 end

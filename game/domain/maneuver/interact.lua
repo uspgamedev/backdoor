@@ -2,7 +2,7 @@
 local ACTIONDEFS = require 'domain.definitions.action'
 local INTERACT = {}
 
-INTERACT.param_specs = {
+INTERACT.input_specs = {
 }
 
 function INTERACT.activatedAbility(actor, inputvalues)

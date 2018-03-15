@@ -3,7 +3,7 @@ local DEFS = require 'domain.definitions'
 
 local DRAWHAND = {}
 
-DRAWHAND.param_specs = {}
+DRAWHAND.input_specs = {}
 
 function DRAWHAND.activatedAbility(actor, inputvalues)
   return nil

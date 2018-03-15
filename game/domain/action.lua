@@ -19,7 +19,7 @@ function ACTION.pendingInput(action_name, actor, inputvalues)
   local activated_ability = maneuver.activatedAbility(actor, inputvalues)
   if activated_ability then
     for _,input_spec in ABILITY.inputsOf(activated_ability) do
-      if not inputvalues[input_spec.output] then
+      if input_spec.type == 'input' and not inputvalues[input_spec.output] then
         return input_spec
       end
     end

@@ -6,7 +6,7 @@ return function(name, list, value)
   return "Choose a " .. name, 1, function(gui)
     IMGUI.Text("Options:")
     IMGUI.PushItemWidth(160)
-    local changed, newvalue = IMGUI.ListBox("", value(), list, #list, 15)
+    local newvalue, changed = IMGUI.ListBox("", value(), list, #list, 15)
     local confirmed
     if changed then
       confirmed = value(newvalue)

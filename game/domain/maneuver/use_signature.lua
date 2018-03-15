@@ -4,7 +4,7 @@ local ACTIONDEFS  = require 'domain.definitions.action'
 local ABILITY     = require 'domain.ability'
 local SIGNATURE   = {}
 
-SIGNATURE.param_specs = {}
+SIGNATURE.input_specs = {}
 
 function SIGNATURE.activatedAbility(actor, inputvalues)
   return actor:getSignature().ability

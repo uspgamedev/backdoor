@@ -2,7 +2,7 @@
 local ACTIONDEFS = require 'domain.definitions.action'
 local MOVE = {}
 
-MOVE.param_specs = {
+MOVE.input_specs = {
   { output = 'pos', typename = 'direction' },
 }
 

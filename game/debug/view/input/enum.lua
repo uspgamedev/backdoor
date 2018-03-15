@@ -45,14 +45,14 @@ function inputs.enum(spec, field)
   return function(gui)
     if field.optional then
       IMGUI.PushID(field.id .. ".check")
-      _active = select(2, IMGUI.Checkbox("", _active))
+      _active = IMGUI.Checkbox("", _active)
       IMGUI.PopID()
       IMGUI.SameLine()
     end
     IMGUI.Text(field.name)
     if _active then
       IMGUI.PushID(field.id)
-      local changed,value = IMGUI.Combo("", _current, _options, #_options, 15)
+      local value, changed = IMGUI.Combo("", _current, _options, #_options, 15)
       IMGUI.PopID()
       if changed then
         _current = value

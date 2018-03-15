@@ -1,4 +1,5 @@
 {
+  "cost":20,
   "playpoints":0,
   "ability":{
     "operators":[{
@@ -10,23 +11,46 @@
         "output":"arcana",
         "which":"ARC"
       }],
-    "params":[{
-        "aoe-hint":0,
-        "empty-tile":false,
-        "output":"target",
+    "inputs":[{
+        "aoe-hint":1,
         "max-range":5,
-        "non-wall":false,
         "body-only":{
           "body-type":false
         },
-        "typename":"choose_target"
+        "non-wall":false,
+        "type":"input",
+        "empty-tile":false,
+        "name":"choose_target",
+        "output":"pos"
+      },{
+        "type":"operator",
+        "pos":"=pos",
+        "name":"get_body_at",
+        "output":"target"
+      },{
+        "type":"operator",
+        "which":"ARC",
+        "name":"get_attribute",
+        "output":"arc"
+      }],
+    "params":[{
+        "aoe-hint":0,
+        "typename":"choose_target",
+        "body-only":{
+          "body-type":false
+        },
+        "max-range":5,
+        "empty-tile":false,
+        "output":"target",
+        "non-wall":false
       }],
     "effects":[{
-        "typename":"damage_on_target",
-        "target":"val:target_body",
-        "attr":"val:arcana",
-        "base":6
+        "attr":"=arc",
+        "target":"=target",
+        "type":"effect",
+        "base":6,
+        "name":"damage_on_target",
+        "sfx":false
       }]
-  },
-  "cost":20
+  }
 }

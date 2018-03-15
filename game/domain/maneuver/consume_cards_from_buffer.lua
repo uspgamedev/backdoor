@@ -1,7 +1,7 @@
 
 local CONSUME = {}
 
-CONSUME.param_specs = {
+CONSUME.input_specs = {
   { output = 'consumed', typename = 'consume_list' },
 }
 

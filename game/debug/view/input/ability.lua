@@ -4,25 +4,31 @@ local DB          = require 'database'
 local IDGenerator = require 'common.idgenerator'
 
 local _CMDTYPES = {
-  'params', 'operators', 'effects',
-  params = "Parameter",
-  operators = "Value",
+  'inputs', 'effects',
+  inputs = "Input",
   effects = "Effect"
 }
 
 local _idgen = IDGenerator()
-
 local inputs = {}
 
 local function _commandList(gui, ability, cmdtype, selected, delete)
 
   local result
-  local typeoptions = {}
+  local cmdoptions = {}
+  local cmdtypes = {}
 
   local list = ability[cmdtype] or {}
+  ability[cmdtype] = list
 
   for _,option in DB.subschemaTypes(cmdtype) do
-    table.insert(typeoptions, option)
+    table.insert(cmdoptions, option)
+    table.insert(cmdtypes, cmdtype:sub(1,-2))
+  end
+
+  for _,option in DB.subschemaTypes('operators') do
+    table.insert(cmdoptions, option)
+    table.insert(cmdtypes, 'operator')
   end
 
   IMGUI.Text(("%ss:"):format(_CMDTYPES[cmdtype]))
@@ -30,9 +36,9 @@ local function _commandList(gui, ability, cmdtype, selected, delete)
   for i,command in ipairs(list) do
     local view
     if command.output then
-      view = ("%s -> [%s]"):format(command.typename, command.output)
+      view = ("%s -> [%s]"):format(command.name, command.output)
     else
-      view = ("%2d: %s"):format(i, command.typename)
+      view = ("%2d: %s"):format(i, command.name)
     end
     IMGUI.PushID(("%s/%s:%d"):format(ability, cmdtype, i))
     if IMGUI.Selectable(view,
@@ -42,25 +48,24 @@ local function _commandList(gui, ability, cmdtype, selected, delete)
       selected.cmdtype = cmdtype
       selected.idx = i
       gui:push('specification_editor', command,
-               cmdtype .. '/' .. command.typename, _CMDTYPES[cmdtype], delete,
+               command.type .. 's/' .. command.name, _CMDTYPES[cmdtype], delete,
                nil, ability)
     end
     IMGUI.PopID()
   end
   if IMGUI.Button("New " .. _CMDTYPES[cmdtype]) then
     gui:push(
-      'list_picker', _CMDTYPES[cmdtype], typeoptions,
+      'list_picker', _CMDTYPES[cmdtype], cmdoptions,
       function (value)
         if value then
-          local new = { typename = typeoptions[value] }
-          local schema = require('domain.'..cmdtype..'.'..new.typename).schema
+          local new = { type = cmdtypes[value], name = cmdoptions[value] }
+          local schema = require('domain.'..new.type..'s.'..new.name).schema
           for _,subfield in ipairs(schema) do
             if subfield.type == 'output' then
               new[subfield.id] = 'label'.._idgen.newID()
             end
           end
           table.insert(list, new)
-          ability[cmdtype] = list
           return true
         end
         return 0
@@ -86,7 +91,7 @@ function inputs.ability(spec, field)
   return function(gui)
     if field.optional then
       IMGUI.PushID(field.id .. ".check")
-      _active = select(2, IMGUI.Checkbox("", _active))
+      _active = IMGUI.Checkbox("", _active)
       IMGUI.PopID()
       IMGUI.SameLine()
     end

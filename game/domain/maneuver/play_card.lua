@@ -5,7 +5,7 @@ local ABILITY     = require 'domain.ability'
 
 local PLAYCARD = {}
 
-PLAYCARD.param_specs = {
+PLAYCARD.input_specs = {
   { output = 'card_index', typename = 'card_index' }
 }
 
