@@ -3,6 +3,9 @@ local math = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
+local RES  = require 'resources'
+local DB   = require 'database'
+
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -34,8 +37,8 @@ local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("TextBold", 21)
-  _CW = CARD.getWidth()
-  _CH = CARD.getHeight()
+  _CW = CARD.getWidth() + 20
+  _CH = CARD.getHeight() + 20
 end
 
 local function _next_circular(i, len, n)
@@ -166,12 +169,26 @@ function View:drawPacks(g, enter)
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), 0)
     g.translate(0, self.y_offset[i])
+    packbg = RES.loadTexture("pack")
+
+    local shiny = 1
     if focus then
-      g.setColor(255,0,0)
-    else
-      g.setColor(0,255,0)
+      shiny = 1.5
     end
-    g.rectangle("fill", 0, 0, 100, 200)
+
+    --shadow
+    g.setColor(0, 0, 0, 200)
+    g.draw(packbg, 5, 5)
+
+    --pack
+    g.setColor(85*shiny, 178*shiny, 127*shiny)
+    g.draw(packbg, 0, 0)
+
+    --draw icon
+    local collection = DB.loadSpec("collection", pack_list[selection])
+    local text = RES.loadTexture(collection.image)
+    g.setColor(255,255,255)
+    g.draw(text,-5,25)
     g.pop()
   end
   g.pop()

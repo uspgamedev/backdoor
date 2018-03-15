@@ -1,5 +1,4 @@
 {
-  "name":"Anything",
   "cards":[{
       "drop":80,
       "set":"upgrades"
@@ -13,5 +12,7 @@
       "drop":80,
       "set":"consumables"
     }],
+  "name":"Anything",
+  "image":"card-rage",
   "description":"Drops literally anything."
 }
