@@ -188,7 +188,7 @@ function View:drawPacks(g, enter)
     local collection = DB.loadSpec("collection", pack_list[selection])
     local text = RES.loadTexture(collection.image)
     g.setColor(255,255,255)
-    g.draw(text,-5,25)
+    g.draw(text,-3,45)
     g.pop()
   end
   g.pop()
