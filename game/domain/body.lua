@@ -336,7 +336,7 @@ function Body:triggerOneWidget(index, trigger, inputs)
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      if ABILITY.checkParams(ability, owner, inputs) then
+      if ABILITY.checkInputs(ability, owner, inputs) then
         ABILITY.execute(ability, owner, inputs)
       end
     end
