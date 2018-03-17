@@ -1,3 +1,7 @@
+--------------------------------------------------------------------------------
+-- This is script is used to migrate abilities in the database from 0.1's     --
+-- system to 0.2's system                                                     --
+--------------------------------------------------------------------------------
 
 local json = require 'game.libs.dkjson'
 
