@@ -20,20 +20,6 @@ local function _unref(ref, values)
   return ref
 end
 
-local function unref(params, values, ref)
-  if type(ref) == 'string' then
-    local t,n = ref:match '(%w+):(.+)'
-    if t and n then
-      if t == 'par' then
-        return params[n]
-      elseif t == 'val' then
-        return values[n]
-      end
-    end
-  end
-  return ref
-end
-
 local ABILITY = {}
 
 function ABILITY.inputsOf(ability)

@@ -3,7 +3,7 @@ local ACTIONDEFS = require 'domain.definitions.action'
 local MOVE = {}
 
 MOVE.input_specs = {
-  { output = 'pos', typename = 'direction' },
+  { output = 'pos', name = 'direction' },
 }
 
 function MOVE.activatedAbility(actor, inputvalues)

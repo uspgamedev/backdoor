@@ -65,7 +65,7 @@ end
 local function scanNode(node)
   local changed = false
   for k,v in pairs(node) do
-    if type(k) == 'string' and (k:match 'ability' or
+    if type(k) == 'string' and (k:match '.*ability.*' or
                                 k:match 'trigger%-condition') then
       node[k] = migrateNode(v)
       changed = true

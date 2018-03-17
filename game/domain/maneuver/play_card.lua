@@ -6,7 +6,7 @@ local ABILITY     = require 'domain.ability'
 local PLAYCARD = {}
 
 PLAYCARD.input_specs = {
-  { output = 'card_index', typename = 'card_index' }
+  { output = 'card_index', name = 'card_index' }
 }
 
 local function _card(actor, inputvalues)

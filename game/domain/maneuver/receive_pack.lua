@@ -2,8 +2,8 @@
 local RECEIVEPACK = {}
 
 RECEIVEPACK.input_specs = {
-  { output = 'consumed', typename = 'consume_list' },
-  { output = 'pack', typename = 'pack_list'}
+  { output = 'consumed', name = 'consume_list' },
+  { output = 'pack', name = 'pack_list'}
 }
 
 function RECEIVEPACK.activatedAbility(actor, inputvalues)

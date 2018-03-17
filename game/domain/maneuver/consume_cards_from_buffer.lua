@@ -2,7 +2,7 @@
 local CONSUME = {}
 
 CONSUME.input_specs = {
-  { output = 'consumed', typename = 'consume_list' },
+  { output = 'consumed', name = 'consume_list' },
 }
 
 function CONSUME.activatedAbility(actor, inputvalues)

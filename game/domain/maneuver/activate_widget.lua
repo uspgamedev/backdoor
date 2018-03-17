@@ -5,7 +5,7 @@ local DEFS        = require 'domain.definitions'
 local ACTIVATE   = {}
 
 ACTIVATE.input_specs = {
-  { output = 'widget_slot', typename = 'choose_widget_slot' }
+  { output = 'widget_slot', name = 'choose_widget_slot' }
 }
 
 function ACTIVATE.activatedAbility(actor, inputvalues)
@@ -17,7 +17,7 @@ function ACTIVATE.validate(actor, inputvalues)
   local widget = actor:getBody():getWidget(inputvalues.widget_slot)
   if not widget then return false end
   local ability = widget:getWidgetAbility()
-  return ability and ABILITY.checkParams(ability, actor, inputvalues)
+  return ability and ABILITY.checkInputs(ability, actor, inputvalues)
 end
 
 function ACTIVATE.perform(actor, inputvalues)
