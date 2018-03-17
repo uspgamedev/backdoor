@@ -1,60 +1,66 @@
 {
-  "attr":"ARC",
-  "icon":"card-fireball",
-  "set":false,
+  "pp":0,
+  "desc":"Up you gooooooo",
   "art":{
+    "cost":40,
     "art_ability":{
-      "params":[{
+      "inputs":[{
+          "output":"victim_pos",
+          "type":"input",
+          "empty-tile":false,
+          "non-wall":false,
           "aoe-hint":0,
-          "max-range":3,
           "body-only":{
             "body-type":false
           },
-          "typename":"choose_target",
-          "empty-tile":false,
-          "output":"victim_pos",
-          "non-wall":false
+          "name":"choose_target",
+          "max-range":3
         },{
-          "aoe-hint":0,
-          "max-range":6,
-          "typename":"choose_target",
-          "empty-tile":true,
+          "type":"input",
           "output":"target_pos",
-          "non-wall":false
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:victim_pos",
+          "non-wall":false,
+          "aoe-hint":0,
+          "empty-tile":true,
+          "name":"choose_target",
+          "max-range":6
+        },{
+          "pos":"=victim_pos",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"victim_body"
         },{
-          "typename":"get_attribute",
           "output":"arc",
+          "type":"operator",
+          "name":"get_attribute",
           "which":"ARC"
         },{
-          "lhs":"val:arc",
-          "typename":"integer_binop",
+          "op":"*",
           "rhs":3,
-          "output":"arc*3",
-          "op":"*"
+          "lhs":"=arc",
+          "type":"operator",
+          "name":"integer_binop",
+          "output":"arc*3"
         }],
       "effects":[{
-          "pos":"par:target_pos",
+          "body":"=victim_body",
+          "pos":"=target_pos",
+          "vfx-spd":1.1000000238419,
           "vfx":"JUMP",
-          "typename":"move_to",
-          "body":"val:victim_body",
-          "vfx-spd":1.1000000238419
+          "name":"move_to",
+          "type":"effect"
         },{
-          "typename":"damage_on_target",
-          "target":"val:victim_body",
-          "base":"val:arc*3",
+          "type":"effect",
+          "target":"=victim_body",
+          "name":"damage_on_target",
+          "base":"=arc*3",
           "attr":3
         }]
-    },
-    "cost":40
+    }
   },
-  "desc":"Up you gooooooo",
+  "one_time":false,
+  "icon":"card-fireball",
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Meteor Blast",
-  "one_time":false
+  "attr":"ARC",
+  "name":"Meteor Blast"
 }

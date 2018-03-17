@@ -1,34 +1,35 @@
 {
-  "attr":"ARC",
-  "icon":"card-timer-bomb",
-  "set":false,
+  "pp":10,
+  "desc":"",
   "art":{
     "cost":20,
     "art_ability":{
-      "params":[{
-          "aoe-hint":3,
-          "typename":"choose_target",
+      "inputs":[{
+          "type":"input",
           "non-wall":true,
           "output":"pos",
+          "aoe-hint":3,
+          "name":"choose_target",
           "max-range":1
         }],
-      "operators":[],
       "effects":[{
+          "def":0,
+          "type":"effect",
+          "vit":0,
+          "bodyspec":"machine",
           "widgets":[{
               "spec":"self-destruct"
             }],
-          "pos":"par:pos",
-          "def":0,
-          "typename":"make_body",
-          "widgetspec":"self-destruct",
-          "bodyspec":"machine",
-          "vit":0
+          "pos":"=pos",
+          "name":"make_body",
+          "widgetspec":"self-destruct"
         }]
     }
   },
-  "desc":"",
+  "one_time":false,
+  "icon":"card-timer-bomb",
+  "set":false,
   "type-description":"",
-  "pp":10,
-  "name":"Timed Combustion Drone",
-  "one_time":false
+  "attr":"ARC",
+  "name":"Timed Combustion Drone"
 }

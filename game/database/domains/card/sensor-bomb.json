@@ -1,34 +1,35 @@
 {
-  "attr":"COR",
-  "icon":"card-sensor-bomb",
-  "set":false,
+  "pp":0,
+  "desc":"Kaboom",
   "art":{
+    "cost":40,
     "art_ability":{
-      "params":[{
-          "aoe-hint":2,
-          "max-range":1,
-          "typename":"choose_target",
-          "non-wall":true,
+      "inputs":[{
+          "type":"input",
           "output":"pos",
-          "empty-tile":true
+          "non-wall":true,
+          "aoe-hint":2,
+          "empty-tile":true,
+          "name":"choose_target",
+          "max-range":1
         }],
-      "operators":[],
       "effects":[{
+          "def":50,
+          "type":"effect",
+          "bodyspec":"machine",
           "widgets":[{
               "spec":"proximity-detector"
             }],
-          "pos":"par:pos",
-          "typename":"make_body",
-          "bodyspec":"machine",
-          "vit":50,
-          "def":50
+          "pos":"=pos",
+          "name":"make_body",
+          "vit":50
         }]
-    },
-    "cost":40
+    }
   },
-  "desc":"Kaboom",
+  "one_time":false,
+  "icon":"card-sensor-bomb",
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Sensor Bomb",
-  "one_time":false
+  "attr":"COR",
+  "name":"Sensor Bomb"
 }

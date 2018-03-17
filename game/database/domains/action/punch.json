@@ -1,29 +1,32 @@
 {
+  "playpoints":0,
   "cost":20,
   "ability":{
-    "params":[{
-        "typename":"choose_target",
-        "max-range":1,
-        "output":"pos",
-        "body-only":{
-        }
+    "effects":[{
+        "attr":"=cor",
+        "sfx":"example",
+        "name":"damage_on_target",
+        "base":5,
+        "target":"=target",
+        "type":"effect"
       }],
-    "operators":[{
-        "typename":"get_attribute",
+    "inputs":[{
+        "output":"pos",
+        "type":"input",
+        "name":"choose_target",
+        "body-only":{
+        },
+        "max-range":1
+      },{
         "output":"cor",
+        "name":"get_attribute",
+        "type":"operator",
         "which":"COR"
       },{
-        "typename":"get_body_at",
-        "pos":"par:pos",
-        "output":"target"
-      }],
-    "effects":[{
-        "attr":"val:cor",
-        "target":"val:target",
-        "typename":"damage_on_target",
-        "base":5,
-        "sfx":"example"
+        "output":"target",
+        "name":"get_body_at",
+        "type":"operator",
+        "pos":"=pos"
       }]
-  },
-  "playpoints":0
+  }
 }

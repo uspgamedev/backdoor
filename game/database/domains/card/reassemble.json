@@ -1,42 +1,45 @@
 {
-  "attr":"COR",
-  "icon":"card-reassemble",
-  "set":false,
+  "pp":0,
+  "desc":"Move target machine",
   "art":{
+    "cost":60,
     "art_ability":{
-      "params":[{
-          "typename":"choose_target",
+      "inputs":[{
+          "type":"input",
           "output":"from",
           "body-only":{
             "body-type":"machine"
           },
+          "name":"choose_target",
           "max-range":1
         },{
-          "aoe-hint":1,
-          "max-range":1,
-          "typename":"choose_target",
-          "empty-tile":true,
+          "type":"input",
           "output":"to",
-          "non-wall":true
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:from",
+          "non-wall":true,
+          "aoe-hint":1,
+          "empty-tile":true,
+          "name":"choose_target",
+          "max-range":1
+        },{
+          "pos":"=from",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"body"
         }],
       "effects":[{
-          "pos":"par:to",
+          "body":"=body",
+          "pos":"=to",
+          "vfx-spd":0.5,
           "vfx":"SLIDE",
-          "typename":"move_to",
-          "body":"val:body",
-          "vfx-spd":0.5
+          "name":"move_to",
+          "type":"effect"
         }]
-    },
-    "cost":60
+    }
   },
-  "desc":"Move target machine",
+  "one_time":false,
+  "icon":"card-reassemble",
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Reassemble",
-  "one_time":false
+  "attr":"COR",
+  "name":"Reassemble"
 }

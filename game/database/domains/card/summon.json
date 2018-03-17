@@ -1,32 +1,33 @@
 {
-  "attr":"ARC",
-  "icon":false,
-  "set":false,
+  "pp":0,
+  "desc":"",
   "art":{
     "cost":20,
     "art_ability":{
-      "params":[{
-          "aoe-hint":0,
-          "max-range":1,
-          "typename":"choose_target",
-          "non-wall":false,
+      "inputs":[{
+          "type":"input",
           "output":"pos",
-          "empty-tile":false
+          "non-wall":false,
+          "aoe-hint":0,
+          "empty-tile":false,
+          "name":"choose_target",
+          "max-range":1
         }],
-      "operators":[],
       "effects":[{
-          "widgets":[],
-          "pos":"par:pos",
           "def":50,
-          "typename":"make_body",
+          "type":"effect",
           "bodyspec":"machine",
+          "widgets":[],
+          "pos":"=pos",
+          "name":"make_body",
           "vit":0
         }]
     }
   },
-  "desc":"",
+  "one_time":false,
+  "icon":false,
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Sample Bot",
-  "one_time":false
+  "attr":"ARC",
+  "name":"Sample Bot"
 }

@@ -1,28 +1,27 @@
 {
-  "attr":"COR",
-  "icon":"card-goggles",
-  "one_time":false,
-  "desc":"Increase your FoV by 6 for 25 turns.\n\n\"This over the top technological spectacles combine infra-red rays, image intensifier and obfuscation protection to improve the wearer's Field of View!\n\nSee more than ever with the Throttle Goggles, the latest visual wonder from Tark Tech!\"",
-  "type-description":"",
-  "set":false,
   "pp":4,
-  "name":"Throttle Goggles",
+  "desc":"Increase your FoV by 6 for 25 turns.\n\n\"This over the top technological spectacles combine infra-red rays, image intensifier and obfuscation protection to improve the wearer's Field of View!\n\nSee more than ever with the Throttle Goggles, the latest visual wonder from Tark Tech!\"",
+  "one_time":false,
+  "icon":"card-goggles",
   "widget":{
-    "operators":[{
-        "attr":"FOV",
-        "op":"+",
-        "val":6
-      }],
-    "trigger":"on_turn",
-    "activation":false,
     "status-tags":[],
+    "auto_activation":false,
+    "operators":[{
+        "val":6,
+        "op":"+",
+        "attr":"FOV"
+      }],
+    "placement":"tool",
+    "activation":false,
     "charges":25,
     "trigger-condition":{
-      "params":[],
-      "operators":[],
+      "inputs":[],
       "effects":[]
     },
-    "auto_activation":false,
-    "placement":"tool"
-  }
+    "trigger":"on_turn"
+  },
+  "set":false,
+  "type-description":"",
+  "attr":"COR",
+  "name":"Throttle Goggles"
 }

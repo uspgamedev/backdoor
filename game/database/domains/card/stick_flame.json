@@ -1,32 +1,34 @@
 {
-  "attr":"ARC",
-  "icon":"card-sticky-flame",
-  "one_time":false,
+  "pp":4,
+  "desc":"Place a Sticky Flame on target body. After a few ticks, the Sticky Flame will explode, dealing 2d(4*ARC) damage to the body holding it.\n\n\"'Hey Danny, hold this for me, will ya?'. - Robert was surprised Danny didn't sent him an invite for his birthday the week after.\"",
   "art":{
     "cost":40,
     "art_ability":{
-      "params":[{
-          "aoe-hint":1,
-          "typename":"choose_target",
-          "body-only":[],
+      "inputs":[{
+          "type":"input",
           "output":"target_pos",
+          "aoe-hint":1,
+          "body-only":[],
+          "name":"choose_target",
           "max-range":4
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:target_pos",
+        },{
+          "pos":"=target_pos",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"target_body"
         }],
       "effects":[{
-          "typename":"place_widget",
-          "body":"val:target_body",
+          "type":"effect",
+          "body":"=target_body",
+          "name":"place_widget",
           "card":"sticky_flame"
         }]
     }
   },
-  "desc":"Place a Sticky Flame on target body. After a few ticks, the Sticky Flame will explode, dealing 2d(4*ARC) damage to the body holding it.\n\n\"'Hey Danny, hold this for me, will ya?'. - Robert was surprised Danny didn't sent him an invite for his birthday the week after.\"",
+  "one_time":false,
+  "icon":"card-sticky-flame",
+  "set":false,
   "type-description":"",
-  "pp":4,
-  "name":"Stick Flame",
-  "set":false
+  "attr":"ARC",
+  "name":"Stick Flame"
 }

@@ -1,26 +1,27 @@
 {
-  "attr":"COR",
   "widget":{
     "operators":[],
     "trigger":"on_cycle",
-    "charges":6,
     "auto_activation":{
       "trigger":"on_cycle",
       "ability":{
-        "params":[{
-            "typename":"body",
+        "inputs":[{
+            "type":"input",
+            "name":"body",
             "output":"body_self"
           }],
-        "operators":[],
         "effects":[{
-            "typename":"damage_on_target",
-            "target":"par:body_self",
-            "attr":1,
-            "base":1
+            "target":"=body_self",
+            "name":"damage_on_target",
+            "base":1,
+            "type":"effect",
+            "attr":1
           }]
       }
-    }
+    },
+    "charges":6
   },
+  "name":"Poison",
   "one_time":true,
-  "name":"Poison"
+  "attr":"COR"
 }

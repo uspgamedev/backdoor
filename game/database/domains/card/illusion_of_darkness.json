@@ -1,31 +1,33 @@
 {
-  "attr":"ANI",
-  "icon":"card-illusion-of-darkness",
-  "one_time":false,
+  "pp":3,
+  "desc":"Makes target enemy Blind temporary. Blind enemies have they FoV greatly reduced.",
   "art":{
+    "cost":20,
     "art_ability":{
-      "params":[{
-          "typename":"choose_target",
-          "body-only":[],
+      "inputs":[{
+          "type":"input",
           "output":"target_pos",
+          "body-only":[],
+          "name":"choose_target",
           "max-range":6
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:target_pos",
+        },{
+          "pos":"=target_pos",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"target_body"
         }],
       "effects":[{
-          "typename":"place_widget",
-          "body":"val:target_body",
+          "type":"effect",
+          "body":"=target_body",
+          "name":"place_widget",
           "card":"blind"
         }]
-    },
-    "cost":20
+    }
   },
-  "desc":"Makes target enemy Blind temporary. Blind enemies have they FoV greatly reduced.",
+  "one_time":false,
+  "icon":"card-illusion-of-darkness",
+  "set":false,
   "type-description":"",
-  "pp":3,
-  "name":"Illusion of Darkness",
-  "set":false
+  "attr":"ANI",
+  "name":"Illusion of Darkness"
 }

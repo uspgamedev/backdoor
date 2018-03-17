@@ -1,44 +1,49 @@
 {
-  "attr":"ANI",
-  "icon":"card-heal",
-  "one_time":false,
+  "pp":3,
+  "desc":"Heal self for 5d(2*ANI)",
   "art":{
     "cost":20,
     "art_ability":{
-      "params":[],
-      "operators":[{
-          "typename":"self",
+      "inputs":[{
+          "type":"operator",
+          "name":"self",
           "output":"self"
         },{
-          "typename":"get_actor_body",
-          "output":"self-body",
-          "actor":"val:self"
+          "type":"operator",
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self-body"
         },{
-          "typename":"get_attribute",
           "output":"ANI",
+          "type":"operator",
+          "name":"get_attribute",
           "which":"ANI"
         },{
           "op":"*",
-          "typename":"integer_binop",
           "rhs":2,
-          "output":"2*ANI",
-          "lhs":"val:ANI"
+          "lhs":"=ANI",
+          "type":"operator",
+          "name":"integer_binop",
+          "output":"2*ANI"
         },{
-          "typename":"dice_throw",
+          "type":"operator",
           "rolls":5,
           "output":"amount",
-          "sides":"val:2*ANI"
+          "name":"dice_throw",
+          "sides":"=2*ANI"
         }],
       "effects":[{
-          "typename":"heal",
-          "target":"val:self-body",
-          "amount":"val:amount"
+          "amount":"=amount",
+          "type":"effect",
+          "target":"=self-body",
+          "name":"heal"
         }]
     }
   },
-  "desc":"Heal self for 5d(2*ANI)",
+  "one_time":false,
+  "icon":"card-heal",
+  "set":false,
   "type-description":"",
-  "pp":3,
-  "name":"Heal",
-  "set":false
+  "attr":"ANI",
+  "name":"Heal"
 }

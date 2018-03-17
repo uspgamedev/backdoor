@@ -1,49 +1,53 @@
 {
-  "attr":"ANI",
-  "icon":"card-stomp",
-  "set":false,
+  "pp":0,
+  "desc":"Stuns and damages in a 3-tile radius area",
   "art":{
     "cost":60,
     "art_ability":{
-      "params":[{
+      "inputs":[{
+          "output":"self_pos",
+          "type":"input",
+          "empty-tile":false,
+          "non-wall":false,
           "aoe-hint":3,
-          "max-range":0,
           "body-only":{
             "body-type":false
           },
-          "typename":"choose_target",
-          "empty-tile":false,
-          "output":"self_pos",
-          "non-wall":false
-        }],
-      "operators":[{
-          "typename":"get_attribute",
+          "name":"choose_target",
+          "max-range":0
+        },{
           "output":"ani",
+          "type":"operator",
+          "name":"get_attribute",
           "which":"ANI"
         },{
-          "typename":"get_body_at",
-          "pos":"par:self_pos",
+          "pos":"=self_pos",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"body"
         }],
       "effects":[{
-          "center":"par:self_pos",
+          "type":"effect",
+          "center":"=self_pos",
           "size":3,
-          "card":"stunned",
-          "typename":"place_widget_on_area",
-          "ignore_owner":true
-        },{
-          "attr":"val:ani",
-          "center":"par:self_pos",
-          "size":3,
-          "typename":"damage_on_area",
           "ignore_owner":true,
-          "base":2
+          "name":"place_widget_on_area",
+          "card":"stunned"
+        },{
+          "type":"effect",
+          "size":3,
+          "center":"=self_pos",
+          "base":2,
+          "ignore_owner":true,
+          "attr":"=ani",
+          "name":"damage_on_area"
         }]
     }
   },
-  "desc":"Stuns and damages in a 3-tile radius area",
+  "one_time":false,
+  "icon":"card-stomp",
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Stomp",
-  "one_time":false
+  "attr":"ANI",
+  "name":"Stomp"
 }

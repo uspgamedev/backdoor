@@ -1,62 +1,67 @@
 {
-  "attr":"COR",
-  "icon":false,
-  "one_time":true,
-  "desc":"Don't stand so close to me!",
-  "type-description":"",
-  "set":false,
   "pp":0,
-  "name":"Proximity Detector",
+  "desc":"Don't stand so close to me!",
+  "one_time":true,
+  "icon":false,
   "widget":{
-    "operators":[],
-    "trigger":"on_tick",
     "status-tags":[],
-    "charges":1,
+    "operators":[],
+    "placement":false,
     "auto_activation":{
       "trigger":"on_done",
       "ability":{
-        "params":[{
-            "typename":"body",
+        "inputs":[{
+            "type":"input",
+            "name":"body",
             "output":"body_self"
-          }],
-        "operators":[{
-            "typename":"get_body_pos",
-            "body":"par:body_self",
+          },{
+            "type":"operator",
+            "body":"=body_self",
+            "name":"get_body_pos",
             "output":"pos"
           },{
-            "typename":"get_attribute",
             "output":"cor",
+            "type":"operator",
+            "name":"get_attribute",
             "which":"COR"
           }],
         "effects":[{
-            "typename":"destroy_body",
-            "target":"par:body_self"
+            "type":"effect",
+            "target":"=body_self",
+            "name":"destroy_body"
           },{
-            "attr":"val:cor",
-            "center":"val:pos",
+            "type":"effect",
             "size":2,
-            "typename":"damage_on_area",
+            "center":"=pos",
+            "base":16,
             "ignore_owner":false,
-            "base":16
+            "attr":"=cor",
+            "name":"damage_on_area"
           }]
       }
     },
+    "charges":1,
     "trigger-condition":{
-      "params":[{
-          "typename":"pos",
+      "inputs":[{
+          "type":"input",
+          "name":"pos",
           "output":"pos_self"
         },{
-          "ignore-owner":true,
+          "count":1,
+          "type":"input",
           "body-type":false,
           "output":"yup",
-          "typename":"has_nearby_bodies",
-          "count":1,
+          "pos":"=pos_self",
           "range":1,
-          "pos":"par:pos_self"
+          "name":"has_nearby_bodies",
+          "ignore-owner":true
         }],
-      "operators":[],
       "effects":[]
     },
-    "placement":false
-  }
+    "trigger":"on_tick"
+  },
+  "set":false,
+  "type-description":"",
+  "attr":"COR",
+  "name":"Proximity Detector"
 }

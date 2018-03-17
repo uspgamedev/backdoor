@@ -1,52 +1,57 @@
 {
-  "attr":"COR",
-  "icon":"card-jetboots",
-  "one_time":false,
-  "desc":"Allows you to dash in straight lines.",
-  "type-description":"",
-  "set":false,
   "pp":0,
-  "name":"Jetboots",
+  "desc":"Allows you to dash in straight lines.",
+  "one_time":false,
+  "icon":"card-jetboots",
   "widget":{
+    "status-tags":[],
     "operators":[],
-    "trigger":"on_use",
+    "placement":false,
     "activation":{
       "cost":10,
       "ability":{
-        "params":[{
-            "typename":"choose_dir",
-            "output":"dir",
-            "body-block":true
-          }],
-        "operators":[{
-            "typename":"self",
+        "inputs":[{
+            "body-block":true,
+            "type":"input",
+            "name":"choose_dir",
+            "output":"dir"
+          },{
+            "type":"operator",
+            "name":"self",
             "output":"self"
           },{
-            "typename":"get_actor_body",
-            "output":"body",
-            "actor":"val:self"
+            "actor":"=self",
+            "type":"operator",
+            "name":"get_actor_body",
+            "output":"body"
           },{
-            "typename":"get_body_pos",
-            "body":"val:body",
+            "body":"=body",
+            "type":"operator",
+            "name":"get_body_pos",
             "output":"origin"
           },{
-            "pos":"val:origin",
-            "dir":"par:dir",
-            "typename":"hitscan",
-            "output":"target-pos",
-            "maxrange":5
+            "type":"operator",
+            "maxrange":5,
+            "dir":"=dir",
+            "pos":"=origin",
+            "name":"hitscan",
+            "output":"target-pos"
           }],
         "effects":[{
-            "pos":"val:target-pos",
+            "body":"=body",
+            "pos":"=target-pos",
+            "vfx-spd":1,
             "vfx":"SLIDE",
-            "typename":"move_to",
-            "body":"val:body",
-            "vfx-spd":1
+            "name":"move_to",
+            "type":"effect"
           }]
       }
     },
     "charges":8,
-    "status-tags":[],
-    "placement":false
-  }
+    "trigger":"on_use"
+  },
+  "name":"Jetboots",
+  "type-description":"",
+  "set":false,
+  "attr":"COR"
 }

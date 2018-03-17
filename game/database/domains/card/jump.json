@@ -1,49 +1,54 @@
 {
-  "attr":"COR",
-  "icon":"card-jump",
-  "one_time":false,
+  "pp":3,
+  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
   "art":{
+    "cost":40,
     "art_ability":{
-      "params":[{
+      "inputs":[{
+          "type":"input",
+          "output":"pos",
+          "non-wall":true,
           "aoe-hint":2,
           "empty-tile":true,
-          "typename":"choose_target",
-          "non-wall":true,
-          "output":"pos",
+          "name":"choose_target",
           "max-range":4
-        }],
-      "operators":[{
-          "typename":"get_attribute",
+        },{
           "output":"cor",
+          "type":"operator",
+          "name":"get_attribute",
           "which":"COR"
         },{
-          "typename":"self",
+          "type":"operator",
+          "name":"self",
           "output":"self"
         },{
-          "typename":"get_actor_body",
-          "output":"body",
-          "actor":"val:self"
+          "type":"operator",
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"body"
         }],
       "effects":[{
-          "pos":"par:pos",
+          "body":"=body",
+          "pos":"=pos",
+          "vfx-spd":1,
           "vfx":"JUMP",
-          "typename":"move_to",
-          "body":"val:body",
-          "vfx-spd":1
+          "name":"move_to",
+          "type":"effect"
         },{
-          "attr":"val:cor",
-          "center":"par:pos",
+          "type":"effect",
           "size":2,
-          "typename":"damage_on_area",
+          "center":"=pos",
+          "base":12,
           "ignore_owner":true,
-          "base":12
+          "attr":"=cor",
+          "name":"damage_on_area"
         }]
-    },
-    "cost":40
+    }
   },
-  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
+  "one_time":false,
+  "icon":"card-jump",
+  "set":false,
   "type-description":"",
-  "pp":3,
-  "name":"Jump",
-  "set":false
+  "attr":"COR",
+  "name":"Jump"
 }

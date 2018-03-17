@@ -1,54 +1,59 @@
 {
-  "attr":"ARC",
+  "pp":0,
+  "desc":"Shoots three times, dealing 4dARC damage to \narget each time.\n\nAn old but reliable arcane blaster.",
+  "one_time":true,
   "icon":"card-blaster",
   "widget":{
+    "status-tags":[],
     "operators":[],
-    "trigger":"on_use",
+    "placement":"weapon",
     "activation":{
+      "cost":20,
       "ability":{
-        "params":[{
-            "typename":"choose_target",
-            "output":"target",
+        "inputs":[{
             "body-only":{
             },
+            "type":"input",
+            "output":"target",
+            "name":"choose_target",
             "max-range":5
-          }],
-        "operators":[{
-            "typename":"get_body_at",
-            "pos":"par:target",
+          },{
+            "pos":"=target",
+            "type":"operator",
+            "name":"get_body_at",
             "output":"body"
           },{
-            "typename":"get_attribute",
             "output":"arc",
+            "type":"operator",
+            "name":"get_attribute",
             "which":"ARC"
           }],
         "effects":[{
-            "typename":"damage_on_target",
-            "target":"val:body",
-            "attr":"val:arc",
+            "type":"effect",
+            "target":"=body",
+            "name":"damage_on_target",
+            "attr":"=arc",
             "base":4
           },{
-            "typename":"damage_on_target",
-            "target":"val:body",
+            "type":"effect",
+            "target":"=body",
+            "name":"damage_on_target",
             "base":4,
-            "attr":"val:arc"
+            "attr":"=arc"
           },{
-            "typename":"damage_on_target",
-            "target":"val:body",
+            "type":"effect",
+            "target":"=body",
+            "name":"damage_on_target",
             "base":4,
-            "attr":"val:arc"
+            "attr":"=arc"
           }]
-      },
-      "cost":20
+      }
     },
     "charges":20,
-    "status-tags":[],
-    "placement":"weapon"
+    "trigger":"on_use"
   },
-  "desc":"Shoots three times, dealing 4dARC damage to \narget each time.\n\nAn old but reliable arcane blaster.",
+  "name":"Rusty Blaster",
   "type-description":"",
   "set":false,
-  "pp":0,
-  "name":"Rusty Blaster",
-  "one_time":true
+  "attr":"ARC"
 }

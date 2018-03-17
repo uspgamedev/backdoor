@@ -1,36 +1,38 @@
 {
-  "attr":"ANI",
-  "icon":"card-meditation",
-  "one_time":false,
-  "desc":"This user regenerates 2 hit points per tick. However, doing anything besides moving or waiting will remove this status.",
-  "type-description":"",
-  "set":false,
   "pp":4,
-  "name":"Meditation",
+  "desc":"This user regenerates 2 hit points per tick. However, doing anything besides moving or waiting will remove this status.",
+  "one_time":false,
+  "icon":"card-meditation",
   "widget":{
-    "operators":[],
-    "trigger":"on_act",
-    "charges":1,
     "status-tags":[],
+    "operators":[],
+    "placement":false,
+    "charges":1,
     "auto_activation":{
       "ability":{
-        "params":[],
-        "operators":[{
-            "typename":"self",
+        "inputs":[{
+            "type":"operator",
+            "name":"self",
             "output":"self_actor"
           },{
-            "typename":"get_actor_body",
-            "output":"actor_body",
-            "actor":"val:self_actor"
+            "actor":"=self_actor",
+            "type":"operator",
+            "name":"get_actor_body",
+            "output":"actor_body"
           }],
         "effects":[{
-            "typename":"heal",
-            "target":"val:actor_body",
-            "amount":5
+            "amount":5,
+            "type":"effect",
+            "target":"=actor_body",
+            "name":"heal"
           }]
       },
       "trigger":"on_cycle"
     },
-    "placement":false
-  }
+    "trigger":"on_act"
+  },
+  "name":"Meditation",
+  "type-description":"",
+  "set":false,
+  "attr":"ANI"
 }
