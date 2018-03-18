@@ -1,51 +1,56 @@
 {
-  "attr":"ARC",
-  "icon":"card-firebolt",
-  "set":false,
+  "pp":4,
+  "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
   "art":{
+    "cost":1,
     "art_ability":{
-      "params":[{
+      "inputs":[{
+          "type":"input",
+          "output":"tgt",
           "body-only":{
           },
-          "max-range":7,
           "empty-tile":false,
-          "output":"tgt",
-          "typename":"choose_target"
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:tgt",
+          "name":"choose_target",
+          "max-range":7
+        },{
+          "pos":"=tgt",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"body"
         },{
-          "typename":"get_attribute",
           "output":"arc",
+          "type":"operator",
+          "name":"get_attribute",
           "which":"ARC"
         },{
           "op":"*",
-          "typename":"integer_binop",
-          "lhs":"val:arc",
-          "output":"arc*2",
-          "rhs":2
+          "rhs":2,
+          "lhs":"=arc",
+          "type":"operator",
+          "name":"integer_binop",
+          "output":"arc*2"
         },{
           "op":"-",
-          "typename":"integer_binop",
-          "lhs":"val:arc*2",
-          "output":"(arc*2)-2",
-          "rhs":2
+          "rhs":2,
+          "lhs":"=arc*2",
+          "type":"operator",
+          "name":"integer_binop",
+          "output":"(arc*2)-2"
         }],
       "effects":[{
+          "sfx":"example",
+          "type":"effect",
+          "target":"=body",
+          "base":"=(arc*2)-2",
           "attr":4,
-          "target":"val:body",
-          "typename":"damage_on_target",
-          "base":"val:(arc*2)-2",
-          "sfx":"example"
+          "name":"damage_on_target"
         }]
-    },
-    "cost":1
+    }
   },
-  "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
+  "one_time":false,
+  "icon":"card-firebolt",
+  "set":false,
   "type-description":"",
-  "pp":4,
-  "name":"Firebolt",
-  "one_time":false
+  "attr":"ARC",
+  "name":"Firebolt"
 }

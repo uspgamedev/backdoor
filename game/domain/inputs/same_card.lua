@@ -1,19 +1,19 @@
 
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'lhs', name = "Operand 1", type = 'value', match = 'card' },
   { id = 'rhs', name = "Operand 2", type = 'value', match = 'card' },
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'boolean'
+INPUT.type = 'boolean'
 
-function PARAM.isValid(actor, parameter, value)
-  local lhs, rhs = parameter['lhs'], parameter['rhs']
-  local op = parameter['op']
+function INPUT.isValid(actor, fieldvalues, value)
+  local lhs, rhs = fieldvalues['lhs'], fieldvalues['rhs']
+  local op = fieldvalues['op']
   return lhs == rhs
 end
 
-return PARAM
+return INPUT
 

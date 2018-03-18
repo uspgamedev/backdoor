@@ -11,9 +11,9 @@ OP.schema = {
 
 OP.type = 'pos'
 
-function OP.process(actor, params)
-  local pos = params['pos']
-  local dir = params['dir']
+function OP.process(actor, fieldvalues)
+  local pos = fieldvalues['pos']
+  local dir = fieldvalues['dir']
   return { pos[1]+dir[1], pos[2]+dir[2] }
 end
 

@@ -1,38 +1,40 @@
 {
-  "attr":"ARC",
-  "icon":"card-flash",
-  "set":false,
+  "pp":0,
+  "desc":"Stuns in a 5-tile radius area.\n\n\"Aaaaaaahhh... Savior of the Universe!\"",
   "art":{
+    "cost":40,
     "art_ability":{
-      "params":[{
+      "inputs":[{
+          "output":"self_pos",
+          "type":"input",
+          "empty-tile":false,
+          "non-wall":false,
           "aoe-hint":5,
-          "max-range":0,
           "body-only":{
             "body-type":false
           },
-          "typename":"choose_target",
-          "empty-tile":false,
-          "output":"self_pos",
-          "non-wall":false
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:self_pos",
+          "name":"choose_target",
+          "max-range":0
+        },{
+          "pos":"=self_pos",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"self"
         }],
       "effects":[{
-          "center":"par:self_pos",
+          "type":"effect",
+          "center":"=self_pos",
           "size":5,
-          "card":"stunned",
-          "typename":"place_widget_on_area",
-          "ignore_owner":true
+          "ignore_owner":true,
+          "name":"place_widget_on_area",
+          "card":"stunned"
         }]
-    },
-    "cost":40
+    }
   },
-  "desc":"Stuns in a 5-tile radius area.\n\n\"Aaaaaaahhh... Savior of the Universe!\"",
+  "one_time":false,
+  "icon":"card-flash",
+  "set":false,
   "type-description":"",
-  "pp":0,
-  "name":"Flash",
-  "one_time":false
+  "attr":"ARC",
+  "name":"Flash"
 }

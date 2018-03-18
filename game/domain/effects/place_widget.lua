@@ -9,10 +9,10 @@ FX.schema = {
     options = "domains.card" },
 }
 
-function FX.process(actor, params)
-  local card = Card(params['card'])
+function FX.process(actor, fieldvalues)
+  local card = Card(fieldvalues['card'])
   card:setOwner(actor)
-  params['body']:placeWidget(card)
+  fieldvalues['body']:placeWidget(card)
 end
 
 return FX

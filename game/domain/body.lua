@@ -318,17 +318,17 @@ function Body:triggerWidgets(trigger, params)
   end
 end
 
-function Body:triggerOneWidget(index, trigger, params)
+function Body:triggerOneWidget(index, trigger, inputs)
   local widget = self:getWidget(index)
   local owner = widget:getOwner()
-  params = params or {}
-  params.widget_self = widget 
-  params.body_self = self
-  params.pos_self = {self:getPos()}
+  inputs = inputs or {}
+  inputs.widget_self = widget 
+  inputs.body_self = self
+  inputs.pos_self = {self:getPos()}
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()
     if not condition
-        or ABILITY.checkParams(condition, owner, params) then
+        or ABILITY.checkInputs(condition, owner, inputs) then
       self:spendWidget(index)
     end
   end
@@ -336,8 +336,8 @@ function Body:triggerOneWidget(index, trigger, params)
   if triggered_ability.trigger == trigger then
     local ability = triggered_ability.ability
     if ability then
-      if ABILITY.checkParams(ability, owner, params) then
-        ABILITY.execute(ability, owner, params)
+      if ABILITY.checkInputs(ability, owner, inputs) then
+        ABILITY.execute(ability, owner, inputs)
       end
     end
   end

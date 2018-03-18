@@ -15,15 +15,15 @@ FX.schema = {
     optional = true },
 }
 
-function FX.process (actor, params)
-  local amount = RANDOM.rollDice(params.base, params.attr)
-  local dmg = params.target:takeDamageFrom(amount, actor)
+function FX.process (actor, fieldvalues)
+  local amount = RANDOM.rollDice(fieldvalues.base, fieldvalues.attr)
+  local dmg = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
     type = 'dmg_taken',
-    body = params['target'],
+    body = fieldvalues['target'],
     amount = dmg,
-    sfx = params.sfx,
+    sfx = fieldvalues.sfx,
   })
 end
 

@@ -13,12 +13,12 @@ OP.schema = {
 
 OP.type = 'pos'
 
-function OP.process(actor, params)
+function OP.process(actor, fieldvalues)
   local sector = actor:getBody():getSector()
   local pos = {}
-  local next_pos = { unpack(params['pos']) } -- Clone it!
-  local dir = params['dir']
-  local maxrange = params['maxrange']
+  local next_pos = { unpack(fieldvalues['pos']) } -- Clone it!
+  local dir = fieldvalues['dir']
+  local maxrange = fieldvalues['maxrange']
   local i = 0
   repeat
     pos[1], pos[2] = unpack(next_pos)

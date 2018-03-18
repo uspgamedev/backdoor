@@ -148,9 +148,9 @@ local function _useAction(action_slot, params)
   local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
   params = params or {}
-  local param = ACTION.pendingParam(action_slot, controlled_actor, params)
+  local param = ACTION.pendingInput(action_slot, controlled_actor, params)
   while param do
-    if param.typename == 'choose_dir' then
+    if param.name == 'choose_dir' then
       SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'])
       local dir = coroutine.yield(_task)
       if dir then
@@ -158,14 +158,14 @@ local function _useAction(action_slot, params)
       else
         return false
       end
-    elseif param.typename == 'choose_target' then
+    elseif param.name == 'choose_target' then
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
           pos = { controlled_actor:getPos() },
           aoe_hint = param['aoe-hint'],
           range_checker = function(i, j)
-            return ABILITY.param('choose_target')
+            return ABILITY.input('choose_target')
                           .isWithinRange(controlled_actor, param, {i,j})
           end,
           validator = function(i, j)
@@ -180,7 +180,7 @@ local function _useAction(action_slot, params)
       else
         return false
       end
-    elseif param.typename == "choose_widget_slot" then
+    elseif param.name == "choose_widget_slot" then
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
@@ -195,7 +195,7 @@ local function _useAction(action_slot, params)
         return false
       end
     end
-    param = ACTION.pendingParam(action_slot, controlled_actor, params)
+    param = ACTION.pendingInput(action_slot, controlled_actor, params)
   end
   _next_action = {action_slot, params}
   return true

@@ -15,13 +15,13 @@ FX.schema = {
     range = {1} },
 }
 
-function FX.process (actor, params)
+function FX.process (actor, fieldvalues)
   local sector  = actor:getBody():getSector()
-  local ci, cj  = unpack(params['center'])
-  local size    = params['size']
-  local attr    = params['attr']
-  local base    = params['base']
-  local ignore_owner = params['ignore_owner']
+  local ci, cj  = unpack(fieldvalues['center'])
+  local size    = fieldvalues['size']
+  local attr    = fieldvalues['attr']
+  local base    = fieldvalues['base']
+  local ignore_owner = fieldvalues['ignore_owner']
   local amount = RANDOM.rollDice(base, attr)
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do

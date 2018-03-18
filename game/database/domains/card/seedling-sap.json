@@ -1,39 +1,42 @@
 {
-  "attr":"ANI",
-  "icon":"card-seedling-sap",
-  "set":false,
-  "desc":"Drink: draw two cards and get the \"Tipsy\"\nwidget.\n\nTipsy: SPD -2 for a while.",
-  "type-description":"",
-  "one_time":false,
   "pp":0,
-  "name":"Seedling Sap",
+  "desc":"Drink: draw two cards and get the \"Tipsy\"\nwidget.\n\nTipsy: SPD -2 for a while.",
+  "one_time":false,
+  "icon":"card-seedling-sap",
   "widget":{
+    "status-tags":[],
     "operators":[],
-    "trigger":"on_use",
+    "placement":false,
     "activation":{
+      "cost":10,
       "ability":{
-        "params":[],
-        "operators":[{
-            "typename":"self",
+        "inputs":[{
+            "type":"operator",
+            "name":"self",
             "output":"self"
           },{
-            "typename":"get_actor_body",
-            "output":"body_self",
-            "actor":"val:self"
+            "actor":"=self",
+            "type":"operator",
+            "name":"get_actor_body",
+            "output":"body_self"
           }],
         "effects":[{
-            "typename":"draw_card",
-            "amount":2
+            "amount":2,
+            "type":"effect",
+            "name":"draw_card"
           },{
-            "typename":"place_widget",
-            "body":"val:body_self",
+            "body":"=body_self",
+            "type":"effect",
+            "name":"place_widget",
             "card":"tipsy"
           }]
-      },
-      "cost":10
+      }
     },
     "charges":3,
-    "status-tags":[],
-    "placement":false
-  }
+    "trigger":"on_use"
+  },
+  "name":"Seedling Sap",
+  "type-description":"",
+  "set":false,
+  "attr":"ANI"
 }

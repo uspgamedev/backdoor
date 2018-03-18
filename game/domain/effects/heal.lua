@@ -7,12 +7,12 @@ FX.schema = {
     range = {0} },
 }
 
-function FX.process (actor, params)
-  params.target:heal(params.amount or 2)
+function FX.process (actor, fieldvalues)
+  fieldvalues.target:heal(fieldvalues.amount or 2)
   coroutine.yield('report', {
     type = 'healed',
-    body = params['target'],
-    amount = params['amount'],
+    body = fieldvalues['target'],
+    amount = fieldvalues['amount'],
   })
 end
 

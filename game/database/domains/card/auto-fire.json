@@ -1,51 +1,55 @@
 {
-  "attr":"COR",
+  "pp":0,
+  "desc":"Adubiraba",
+  "one_time":true,
   "icon":false,
   "widget":{
-    "operators":[],
-    "trigger":"on_done",
-    "charges":1,
     "status-tags":[],
+    "operators":[],
+    "placement":false,
+    "charges":1,
     "auto_activation":{
-      "trigger":"on_cycle",
       "ability":{
-        "params":[{
-            "typename":"pos",
+        "inputs":[{
+            "type":"input",
+            "name":"pos",
             "output":"pos_self"
           },{
-            "ignore-owner":true,
-            "body-type":false,
-            "output":"count",
-            "typename":"has_nearby_bodies",
             "count":1,
-            "range":3,
-            "pos":"par:pos_self"
-          }],
-        "operators":[{
+            "type":"input",
+            "body-type":false,
             "ignore-owner":true,
-            "pos":"par:pos_self",
-            "typename":"find_nearest_body",
-            "output":"target",
-            "range":3
+            "pos":"=pos_self",
+            "range":3,
+            "name":"has_nearby_bodies",
+            "output":"count"
           },{
-            "typename":"get_attribute",
-            "output":"cor",
-            "which":"COR"
+            "type":"operator",
+            "range":3,
+            "ignore-owner":true,
+            "pos":"=pos_self",
+            "name":"find_nearest_body",
+            "output":"target"
+          },{
+            "which":"COR",
+            "type":"operator",
+            "name":"get_attribute",
+            "output":"cor"
           }],
         "effects":[{
-            "typename":"damage_on_target",
-            "target":"val:target",
-            "base":5,
-            "attr":"val:cor"
+            "type":"effect",
+            "target":"=target",
+            "name":"damage_on_target",
+            "attr":"=cor",
+            "base":5
           }]
-      }
+      },
+      "trigger":"on_cycle"
     },
-    "placement":false
+    "trigger":"on_done"
   },
-  "desc":"Adubiraba",
+  "name":"Auto-Fire",
   "type-description":"",
   "set":false,
-  "pp":0,
-  "name":"Auto-Fire",
-  "one_time":true
+  "attr":"COR"
 }

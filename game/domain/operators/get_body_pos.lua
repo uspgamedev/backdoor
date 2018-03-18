@@ -10,8 +10,8 @@ OP.schema = {
 
 OP.type = 'pos'
 
-function OP.process(actor, params)
-  return { params['body']:getPos() }
+function OP.process(actor, fieldvalues)
+  return { fieldvalues['body']:getPos() }
 end
 
 return OP

@@ -4,17 +4,17 @@ local ACTIONDEFS  = require 'domain.definitions.action'
 local ABILITY     = require 'domain.ability'
 local SIGNATURE   = {}
 
-SIGNATURE.param_specs = {}
+SIGNATURE.input_specs = {}
 
-function SIGNATURE.activatedAbility(actor, params)
+function SIGNATURE.activatedAbility(actor, inputvalues)
   return actor:getSignature().ability
 end
 
-function SIGNATURE.validate(actor, params)
-  return ABILITY.checkParams(actor:getSignature().ability, actor, params)
+function SIGNATURE.validate(actor, inputvalues)
+  return ABILITY.checkInputs(actor:getSignature().ability, actor, inputvalues)
 end
 
-function SIGNATURE.perform(actor, params)
+function SIGNATURE.perform(actor, inputvalues)
   local signature = actor:getSignature()
   coroutine.yield('report', {
     type = 'body_acted',
@@ -22,7 +22,7 @@ function SIGNATURE.perform(actor, params)
   })
   actor:exhaust(signature.cost)
   actor:getBody():triggerWidgets(DEFS.TRIGGERS.ON_ACT)
-  ABILITY.execute(signature.ability, actor, params)
+  ABILITY.execute(signature.ability, actor, inputvalues)
 end
 
 return SIGNATURE

@@ -2,17 +2,17 @@
 local ACTIONDEFS = require 'domain.definitions.action'
 local IDLE = {}
 
-IDLE.param_specs = {}
+IDLE.input_specs = {}
 
-function IDLE.activatedAbility(actor, params)
+function IDLE.activatedAbility(actor, inputvalues)
   return nil
 end
 
-function IDLE.validate(actor, params)
+function IDLE.validate(actor, inputvalues)
   return true
 end
 
-function IDLE.perform(actor, params)
+function IDLE.perform(actor, inputvalues)
   actor:exhaust(ACTIONDEFS.IDLE_COST)
 end
 

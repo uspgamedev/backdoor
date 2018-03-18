@@ -9,13 +9,13 @@ FX.schema = {
     match = 'integer', range = {1} }, 
 }
 
-function FX.process (actor, params)
-  local self = params['actor']
-  local source = params['source']
+function FX.process (actor, fieldvalues)
+  local self = fieldvalues['actor']
+  local source = fieldvalues['source']
   if source == 'HAND' then
-    self:removeHandCard(params['card-index'])
+    self:removeHandCard(fieldvalues['card-index'])
   elseif source == 'PACK' then
-    self:removePackCard(params['card-index'])
+    self:removePackCard(fieldvalues['card-index'])
   else
     return error("Unknown card source")
   end

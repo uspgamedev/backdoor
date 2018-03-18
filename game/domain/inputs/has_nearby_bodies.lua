@@ -1,8 +1,8 @@
 
 local DEFS = require 'domain.definitions'
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'pos', name = "Position", type = 'value', match = 'pos' },
   { id = 'count', name = "At least", type = 'value', match = 'integer',
     range = {1} },
@@ -14,18 +14,18 @@ PARAM.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'none'
+INPUT.type = 'none'
 
 local function _checkOwner(actor, body, ignore)
   return not ignore or actor:getBody(body) ~= body
 end
 
-function PARAM.isValid(actor, params, value)
+function INPUT.isValid(actor, fieldvalues, value)
   local sector = actor:getBody():getSector()
-  local i, j = unpack(params['pos'])
-  local range = params['range']
-  local specname = params['body-type']
-  local notowner = params['ignore-owner']
+  local i, j = unpack(fieldvalues['pos'])
+  local range = fieldvalues['range']
+  local specname = fieldvalues['body-type']
+  local notowner = fieldvalues['ignore-owner']
   local count = 0
   for di=i-range,i+range do
     for dj=j-range,j+range do
@@ -38,8 +38,8 @@ function PARAM.isValid(actor, params, value)
       end
     end
   end
-  return count >= params['count']
+  return count >= fieldvalues['count']
 end
 
-return PARAM
+return INPUT
 

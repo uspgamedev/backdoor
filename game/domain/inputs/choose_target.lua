@@ -3,9 +3,9 @@ local SCHEMATICS  = require 'domain.definitions.schematics'
 local TILE        = require 'common.tile'
 local DB          = require 'database'
 
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'max-range', name = "Maximum range", type = 'value', match = 'integer',
     range = {0} },
   {
@@ -22,10 +22,10 @@ PARAM.schema = {
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'pos'
+INPUT.type = 'pos'
 
-function PARAM.isWithinRange(actor, parameter, value)
-  local max = parameter['max-range'] if max then
+function INPUT.isWithinRange(actor, fieldvalues, value)
+  local max = fieldvalues['max-range'] if max then
     local i,j = actor:getPos()
     local dist = TILE.dist(i,j,unpack(value))
     if dist > max then
@@ -35,30 +35,30 @@ function PARAM.isWithinRange(actor, parameter, value)
   return true
 end
 
-function PARAM.isValid(actor, parameter, value)
+function INPUT.isValid(actor, fieldvalues, value)
   local sector = actor:getBody():getSector()
   local i, j = unpack(value)
   if not sector:isInside(i, j) then
     return false
   end
-  if parameter['body-only'] then
+  if fieldvalues['body-only'] then
     local body = sector:getBodyAt(i, j)
     if not body then
       return false
     end
-    local typename = parameter['body-only']['body-type']
+    local typename = fieldvalues['body-only']['body-type']
     if typename and not body:isSpec(typename) then
       return false
     end
   end
-  if parameter['empty-tile'] and sector:getBodyAt(i, j) then
+  if fieldvalues['empty-tile'] and sector:getBodyAt(i, j) then
     return false
   end
   local tile = sector:getTile(i, j)
-  if parameter['non-wall'] and tile and tile.type == SCHEMATICS.WALL then
+  if fieldvalues['non-wall'] and tile and tile.type == SCHEMATICS.WALL then
     return false
   end
-  if not PARAM.isWithinRange(actor, parameter, value) then
+  if not INPUT.isWithinRange(actor, fieldvalues, value) then
     return false
   end
   local fov = actor:getFov(sector)
@@ -68,4 +68,5 @@ function PARAM.isValid(actor, parameter, value)
   return true
 end
 
-return PARAM
+return INPUT
+

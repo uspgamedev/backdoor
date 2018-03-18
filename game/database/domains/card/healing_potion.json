@@ -1,36 +1,38 @@
 {
-  "attr":"COR",
-  "icon":"card-potion",
-  "one_time":true,
+  "pp":4,
+  "desc":"A small healing potion.\n\n\"Gulp. Down the hatch, foxy.\"",
   "art":{
     "cost":20,
     "art_ability":{
-      "params":[{
-          "aoe-hint":0,
-          "empty-tile":false,
+      "inputs":[{
           "output":"self",
-          "typename":"choose_target",
+          "type":"input",
+          "empty-tile":false,
           "non-wall":false,
+          "aoe-hint":0,
           "body-only":{
             "body-type":false
           },
+          "name":"choose_target",
           "max-range":0
-        }],
-      "operators":[{
-          "typename":"get_body_at",
-          "pos":"par:self",
+        },{
+          "pos":"=self",
+          "type":"operator",
+          "name":"get_body_at",
           "output":"body"
         }],
       "effects":[{
-          "typename":"heal",
-          "target":"val:body",
-          "amount":20
+          "amount":20,
+          "type":"effect",
+          "target":"=body",
+          "name":"heal"
         }]
     }
   },
-  "desc":"A small healing potion.\n\n\"Gulp. Down the hatch, foxy.\"",
+  "one_time":true,
+  "icon":"card-potion",
+  "set":"consumables_potions",
   "type-description":"",
-  "pp":4,
-  "name":"Healing Potion",
-  "set":"consumables_potions"
+  "attr":"COR",
+  "name":"Healing Potion"
 }

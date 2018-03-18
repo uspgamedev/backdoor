@@ -1,36 +1,39 @@
 {
-  "attr":"ARC",
-  "icon":"card-teleport",
-  "one_time":false,
+  "pp":4,
+  "desc":"Teleport self to target position.\n\n\"Transporting all the molecules in your body has never been so easy! But I wonder if your original self dies everytime you do that... well who cares.\"",
   "art":{
     "cost":20,
     "art_ability":{
-      "params":[{
-          "typename":"choose_target",
-          "empty-tile":true,
+      "inputs":[{
+          "type":"input",
           "output":"target_pos",
+          "empty-tile":true,
+          "name":"choose_target",
           "max-range":7
-        }],
-      "operators":[{
-          "typename":"self",
+        },{
+          "type":"operator",
+          "name":"self",
           "output":"Actor"
         },{
-          "typename":"get_actor_body",
-          "output":"Body",
-          "actor":"val:Actor"
+          "type":"operator",
+          "actor":"=Actor",
+          "name":"get_actor_body",
+          "output":"Body"
         }],
       "effects":[{
-          "pos":"par:target_pos",
+          "body":"=Body",
+          "pos":"=target_pos",
+          "vfx-spd":1,
           "vfx":false,
-          "typename":"move_to",
-          "body":"val:Body",
-          "vfx-spd":1
+          "name":"move_to",
+          "type":"effect"
         }]
     }
   },
-  "desc":"Teleport self to target position.\n\n\"Transporting all the molecules in your body has never been so easy! But I wonder if your original self dies everytime you do that... well who cares.\"",
+  "one_time":false,
+  "icon":"card-teleport",
+  "set":false,
   "type-description":"",
-  "pp":4,
-  "name":"Teleport",
-  "set":false
+  "attr":"ARC",
+  "name":"Teleport"
 }

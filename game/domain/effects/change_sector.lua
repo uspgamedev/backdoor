@@ -7,9 +7,9 @@ FX.schema = {
   { id = 'target_pos', name = "Target Position", type = 'value', match = 'pos' }
 }
 
-function FX.process(actor, params)
-  local target_sector = Util.findId(params.target_sector)
-  target_sector:putActor(actor, unpack(params.target_pos))
+function FX.process(actor, fieldvalues)
+  local target_sector = Util.findId(fieldvalues.target_sector)
+  target_sector:putActor(actor, unpack(fieldvalues.target_pos))
 end
 
 return FX

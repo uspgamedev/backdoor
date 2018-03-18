@@ -30,7 +30,7 @@ function _inputs.section(spec, field, parent)
   return function(gui)
     local element = spec[field.id]
     local enabled
-    enabled = select(2, IMGUI.Checkbox(field.name, not not element))
+    enabled = IMGUI.Checkbox(field.name, not not element)
     if not element and (enabled or field.required) then
       element = backup
     elseif element and not enabled and not field.required then

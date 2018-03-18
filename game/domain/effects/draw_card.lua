@@ -6,8 +6,8 @@ FX.schema = {
     range = {1} }, 
 }
 
-function FX.process (actor, params)
-  for i = 1, params.amount do
+function FX.process (actor, fieldvalues)
+  for i = 1, fieldvalues.amount do
     actor:drawCard()
   end 
 end

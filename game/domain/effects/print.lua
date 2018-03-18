@@ -6,8 +6,8 @@ FX.schema = {
     range = {0} }
 }
 
-function FX.process (actor,params)
-  print(params.text)
+function FX.process (actor,fieldvalues)
+  print(fieldvalues.text)
 end
 
 return FX

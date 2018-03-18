@@ -1,26 +1,25 @@
 {
-  "attr":"ANI",
-  "icon":"card-haste",
-  "one_time":false,
+  "pp":4,
   "desc":"Makes you fast.\n\n\"Gotta go fast!\"",
-  "type-description":"",
+  "one_time":false,
+  "name":"Haste",
   "widget":{
-    "operators":[{
-        "attr":"SPD",
-        "op":"*",
-        "val":2
-      }],
-    "trigger":"on_turn",
     "status-tags":[],
+    "operators":[{
+        "val":2,
+        "op":"*",
+        "attr":"SPD"
+      }],
+    "placement":false,
     "charges":10,
     "trigger-condition":{
-      "params":[],
-      "operators":[],
+      "inputs":[],
       "effects":[]
     },
-    "placement":false
+    "trigger":"on_turn"
   },
-  "pp":4,
-  "name":"Haste",
-  "set":false
+  "set":false,
+  "type-description":"",
+  "icon":"card-haste",
+  "attr":"ANI"
 }

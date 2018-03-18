@@ -1,19 +1,19 @@
 
 local DEFS = require 'domain.definitions'
-local PARAM = {}
+local INPUT = {}
 
-PARAM.schema = {
+INPUT.schema = {
   { id = 'card', name = "Card", type = 'value', match = 'card' },
   { id = 'type', name = "Type", type = 'enum',
     options = DEFS.CARD_TYPES },
   { id = 'output', name = "Label", type = 'output' }
 }
 
-PARAM.type = 'boolean'
+INPUT.type = 'boolean'
 
-function PARAM.isValid(actor, parameter, value)
-  local cardtype  = parameter['type']
-  local card      = parameter['card']
+function INPUT.isValid(actor, fieldvalues, value)
+  local cardtype  = fieldvalues['type']
+  local card      = fieldvalues['card']
   if cardtype == 'ART' then
     return card:isArt()
   elseif cardtype == 'WIDGET' then
@@ -24,5 +24,5 @@ function PARAM.isValid(actor, parameter, value)
   return false
 end
 
-return PARAM
+return INPUT
 

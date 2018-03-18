@@ -17,12 +17,12 @@ local function _checkOwner(actor, body, ignore)
   return not ignore or actor:getBody() ~= body
 end
 
-function OP.process(actor, params)
+function OP.process(actor, fieldvalues)
   local sector = actor:getBody():getSector()
-  local i, j = unpack(params['pos'])
-  local range = params['range']
-  local specname = params['body-type']
-  local notowner = params['ignore-owner']
+  local i, j = unpack(fieldvalues['pos'])
+  local range = fieldvalues['range']
+  local specname = fieldvalues['body-type']
+  local notowner = fieldvalues['ignore-owner']
   local count = 0
   for di=i-range,i+range do
     for dj=j-range,j+range do

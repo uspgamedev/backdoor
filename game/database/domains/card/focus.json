@@ -1,40 +1,41 @@
 {
-  "attr":"ARC",
-  "icon":"card-focus-gem",
-  "one_time":false,
-  "art":false,
-  "desc":"ARC +2\nSpends whenever an arcana art is played.",
-  "type-description":"",
-  "set":false,
   "pp":0,
-  "name":"Focus Gem",
+  "desc":"ARC +2\nSpends whenever an arcana art is played.",
+  "art":false,
+  "one_time":false,
+  "icon":"card-focus-gem",
   "widget":{
-    "operators":[{
-        "attr":"ARC",
-        "op":"+",
-        "val":2
-      }],
-    "trigger":"on_play",
-    "charges":2,
     "status-tags":[],
+    "operators":[{
+        "val":2,
+        "op":"+",
+        "attr":"ARC"
+      }],
+    "placement":false,
+    "charges":2,
     "trigger-condition":{
-      "params":[{
-          "typename":"card",
+      "inputs":[{
+          "type":"input",
+          "name":"card",
           "output":"card"
         },{
-          "typename":"card_has_attribute",
-          "attribute":"ARC",
+          "type":"input",
           "output":"ok1",
-          "card":"par:card"
+          "attribute":"ARC",
+          "name":"card_has_attribute",
+          "card":"=card"
         },{
-          "typename":"card_is_type",
-          "type":"ART",
           "output":"ok2",
-          "card":"par:card"
+          "type":"ART",
+          "name":"card_is_type",
+          "card":"=card"
         }],
-      "operators":[],
       "effects":[]
     },
-    "placement":false
-  }
+    "trigger":"on_play"
+  },
+  "set":false,
+  "type-description":"",
+  "attr":"ARC",
+  "name":"Focus Gem"
 }

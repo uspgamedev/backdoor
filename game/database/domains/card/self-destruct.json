@@ -1,48 +1,53 @@
 {
-  "attr":"ARC",
-  "icon":false,
   "widget":{
-    "operators":[],
-    "trigger":"on_cycle",
-    "charges":8,
     "status-tags":[],
+    "operators":[],
+    "placement":false,
+    "charges":8,
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
-        "params":[{
-            "typename":"body",
+        "inputs":[{
+            "type":"input",
+            "name":"body",
             "output":"body_self"
-          }],
-        "operators":[{
-            "typename":"self",
+          },{
+            "type":"operator",
+            "name":"self",
             "output":"actor"
           },{
-            "typename":"get_attribute",
-            "output":"arc",
-            "which":"ARC"
+            "which":"ARC",
+            "type":"operator",
+            "name":"get_attribute",
+            "output":"arc"
           },{
-            "typename":"get_body_pos",
-            "body":"par:body_self",
+            "type":"operator",
+            "body":"=body_self",
+            "name":"get_body_pos",
             "output":"pos"
           }],
         "effects":[{
-            "attr":"val:arc",
-            "center":"val:pos",
+            "type":"effect",
             "size":3,
-            "typename":"damage_on_area",
+            "center":"=pos",
+            "name":"damage_on_area",
+            "base":12,
             "ignore_owner":false,
-            "base":12
+            "attr":"=arc"
           },{
-            "typename":"destroy_body",
-            "target":"par:body_self"
+            "type":"effect",
+            "target":"=body_self",
+            "name":"destroy_body"
           }]
-      }
+      },
+      "trigger":"on_done"
     },
-    "placement":false
+    "trigger":"on_cycle"
   },
+  "attr":"ARC",
   "desc":"",
-  "type-description":"",
+  "icon":false,
   "one_time":true,
-  "name":"Self Destruction",
-  "set":false
+  "type-description":"",
+  "set":false,
+  "name":"Self Destruction"
 }

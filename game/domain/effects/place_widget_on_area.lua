@@ -12,12 +12,12 @@ FX.schema = {
     options = "domains.card" },
 }
 
-function FX.process (actor, params)
+function FX.process (actor, fieldvalues)
   local sector        = actor:getBody():getSector()
-  local ci, cj        = unpack(params['center'])
-  local size          = params['size']
-  local cardspec      = params['card']
-  local ignore_owner  = params['ignore_owner']
+  local ci, cj        = unpack(fieldvalues['center'])
+  local size          = fieldvalues['size']
+  local cardspec      = fieldvalues['card']
+  local ignore_owner  = fieldvalues['ignore_owner']
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then

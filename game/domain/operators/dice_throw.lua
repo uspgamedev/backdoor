@@ -12,8 +12,8 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, params)
-  return RANDOM.rollDice(params.rolls, params.sides)
+function OP.process(actor, fieldvalues)
+  return RANDOM.rollDice(fieldvalues.rolls, fieldvalues.sides)
 end
 
 return OP

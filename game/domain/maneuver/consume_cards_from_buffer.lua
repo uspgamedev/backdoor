@@ -1,20 +1,20 @@
 
 local CONSUME = {}
 
-CONSUME.param_specs = {
-  { output = 'consumed', typename = 'consume_list' },
+CONSUME.input_specs = {
+  { output = 'consumed', name = 'consume_list' },
 }
 
-function CONSUME.activatedAbility(actor, params)
+function CONSUME.activatedAbility(actor, inputvalues)
   return nil
 end
 
-function CONSUME.validate(actor, params)
-  return params.consumed
+function CONSUME.validate(actor, inputvalues)
+  return inputvalues.consumed
 end
 
-function CONSUME.perform(actor, params)
-  for _,idx in ipairs(params.consumed) do
+function CONSUME.perform(actor, inputvalues)
+  for _,idx in ipairs(inputvalues.consumed) do
     local index = idx + actor:getBufferSize()+1
     local card = actor:getBackBufferCard(index)
     actor:removeBufferCard(index)

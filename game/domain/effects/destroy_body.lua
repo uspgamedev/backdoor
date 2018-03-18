@@ -6,8 +6,8 @@ FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
 }
 
-function FX.process (actor, params)
-  params.target:exterminate()
+function FX.process (actor, fieldvalues)
+  fieldvalues.target:exterminate()
 end
 
 return FX
