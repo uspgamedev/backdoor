@@ -21,6 +21,7 @@ local _view
 local _extended_hud
 
 local _long_walk
+local _alert
 local _save_and_quit
 
 local _ACTION = {}
@@ -43,6 +44,22 @@ local function _startTask(action, ...)
   end
 end
 
+--[[ Long walk functionf ]]--
+
+local function _continueLongWalk()
+  local dir = _long_walk
+  dir = DIR[dir]
+  local i, j = _route.getControlledActor():getPos()
+  i, j = i+dir[1], j+dir[2]
+  if not _route.getCurrentSector():isValid(i,j) then
+    return false
+  end
+  if _alert then
+    return false
+  end
+  return true
+end
+
 --[[ HUD Functions ]]--
 
 local function _showHUD()
@@ -59,10 +76,11 @@ function state:init()
   _long_walk = false
 end
 
-function state:enter(_, route, view)
+function state:enter(_, route, view, alert)
 
   _route = route
   _save_and_quit = false
+  _alert = alert
 
   _view = view
   _view.hand:reset()
@@ -110,11 +128,7 @@ function state:update(dt)
     end
   else
     if _long_walk then
-      local dir = _long_walk
-      dir = DIR[dir]
-      local i, j = _route.getControlledActor():getPos()
-      i, j = i+dir[1], j+dir[2]
-      if _route.getCurrentSector():isValid(i,j) then
+      if _continueLongWalk() then
         return _startTask(DEFS.ACTION.MOVE, _long_walk)
       else
         _long_walk = false
