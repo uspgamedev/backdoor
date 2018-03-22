@@ -36,6 +36,7 @@ function PLAYCARD.perform(actor, inputvalues)
   local body = actor:getBody()
   actor:playCard(inputvalues.card_index)
 
+  body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
   if card:isArt() then
     coroutine.yield('report', {
       type = 'body_acted',
@@ -64,8 +65,6 @@ function PLAYCARD.perform(actor, inputvalues)
       end
     end
   end
-
-  body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
 return PLAYCARD
