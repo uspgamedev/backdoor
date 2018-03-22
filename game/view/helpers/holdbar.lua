@@ -43,11 +43,14 @@ local HoldBar = Class({
   __includes = ELEMENT
 })
 
-function HoldBar:init(hold_action)
+function HoldBar:init(hold_actions)
   ELEMENT.init(self)
+  assert(type(hold_actions) == 'table',
+         "HoldBar object receives a list (table) of possible actions to hold! "
+         .. ("Not a '%s'"):format(type(hold_actions)))
   self.enter = 0
   self.progress = 0
-  self.hold_action = hold_action
+  self.hold_actions = hold_actions
   self.timers = {}
 end
 
@@ -85,12 +88,13 @@ function HoldBar:rewind()
 end
 
 function HoldBar:update()
-  local is_down
-  local action = self.hold_action
-  if DIR[action] then
-    is_down = DIRECTIONALS.isDirectionDown(action)
-  else
-    is_down = INPUT.isActionDown(action)
+  local is_down = false
+  local actions = self.hold_actions
+
+  for _,action in ipairs(actions) do
+    if is_down then break end
+    is_down = (DIR[action] and DIRECTIONALS.isDirectionDown(action))
+              or INPUT.isActionDown(action)
   end
 
   -- enter fade in
