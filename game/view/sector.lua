@@ -37,10 +37,14 @@ local SectorView = Class{
   __includes = { ELEMENT }
 }
 
-local function _moveCamera(target)
+local function _moveCamera(target, force)
   local i, j = target:getPos()
   local tx, ty = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
-  CAM:lockPosition(tx, ty)
+  if force then
+    CAM:lookAt(tx, ty)
+  else
+    CAM:lockPosition(tx, ty)
+  end
 end
 
 
@@ -69,6 +73,7 @@ function SectorView:init(route)
   self.route = route
   self.body_sprites = {}
   self.sector = false
+  self.sector_changed = true
 
   _font = _font or FONT.get("Text", 16)
 
@@ -141,13 +146,18 @@ function SectorView:setBodySprite(body, draw)
   self.body_sprites[body:getId()] = draw
 end
 
+function SectorView:sectorChanged()
+  self.sector_changed = true
+end
+
 function SectorView:draw()
   local g = love.graphics
   local sector = self.route.getCurrentSector()
   self:initSector(sector)
   if not self.sector then return end
   if self.target then
-    _moveCamera(self.target)
+    _moveCamera(self.target, self.sector_changed)
+    self.sector_changed = false
   end
   g.setBackgroundColor(75, 78, 60, 255)
   g.setColor(COLORS.NEUTRAL)

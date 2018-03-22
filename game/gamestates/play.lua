@@ -33,6 +33,7 @@ local function _playTurns(...)
   elseif request == "userTurn" then
     SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
+    _view.sector:sectorChanged()
     return _playTurns()
   elseif request == "report" then
     _view.sector:startVFX(extra)
