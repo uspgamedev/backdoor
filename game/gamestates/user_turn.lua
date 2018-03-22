@@ -20,6 +20,7 @@ local _next_action
 local _view
 local _extended_hud
 
+local _long_walk
 local _save_and_quit
 
 local _ACTION = {}
@@ -53,6 +54,10 @@ local function _hideHUD()
 end
 
 --[[ State Methods ]]--
+
+function state:init()
+  _long_walk = false
+end
 
 function state:enter(_, route, view)
 
@@ -91,6 +96,12 @@ function state:update(dt)
     _hideHUD()
   end
 
+  if _next_action then
+    SWITCHER.pop({next_action = _next_action})
+    _next_action = nil
+    return
+  end
+
   if _extended_hud then
     if DIRECTIONALS.wasDirectionTriggered('UP') then
       _view.widget:scrollUp()
@@ -98,8 +109,22 @@ function state:update(dt)
       _view.widget:scrollDown()
     end
   else
+    if _long_walk then
+      local dir = _long_walk
+      dir = DIR[dir]
+      local i, j = _route.getControlledActor():getPos()
+      i, j = i+dir[1], j+dir[2]
+      if _route.getCurrentSector():isValid(i,j) then
+        return _startTask(DEFS.ACTION.MOVE, _long_walk)
+      else
+        _long_walk = false
+      end
+    end
     for _,dir in ipairs(DIR) do
       if DIRECTIONALS.wasDirectionTriggered(dir) then
+        if INPUT.isActionDown('MODIFIER') then
+          _long_walk = dir
+        end
         return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
@@ -122,11 +147,6 @@ function state:update(dt)
       _save_and_quit = true
       return
     end
-  end
-
-  if _next_action then
-    SWITCHER.pop({next_action = _next_action})
-    _next_action = nil
   end
 
   Util.destroyAll()

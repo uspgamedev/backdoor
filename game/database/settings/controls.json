@@ -17,7 +17,8 @@
     "DOWNRIGHT":["pagedown","n"],
     "DOWNLEFT":["end","b"],
     "QUIT":["f8"],
-    "PAUSE":["escape"]
+    "PAUSE":["escape"],
+    "MODIFIER":["lshift"]
   },
   "analog":{
     "AXIS_X":1,
