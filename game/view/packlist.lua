@@ -52,7 +52,7 @@ local function _prev_circular(i, len, n)
 end
 
 -- PUBLIC METHODS ---------------------------
-function View:init(hold_action, packlist)
+function View:init(hold_actions, packlist)
   ELEMENT.init(self)
 
   self.enter = 0
@@ -67,7 +67,7 @@ function View:init(hold_action, packlist)
   self.offsets = {}
   self.pack_list = packlist
 
-  self.holdbar = HoldBar(hold_action)
+  self.holdbar = HoldBar(hold_actions)
   self.holdbar:unlock()
   self.holdbar_activated = false
 
