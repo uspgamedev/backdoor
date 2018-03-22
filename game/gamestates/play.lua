@@ -38,7 +38,8 @@ local function _playTurns(...)
     return _playTurns()
   elseif request == "report" then
     _view.sector:startVFX(extra)
-    if extra.type == 'dmg_taken' then
+    if extra.type == 'dmg_taken' and
+       extra.body == _route:getControlledActor():getBody() then
       _alert = true
     end
     SWITCHER.push(GS.ANIMATION, _view.sector)
