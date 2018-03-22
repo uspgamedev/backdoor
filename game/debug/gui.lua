@@ -83,7 +83,7 @@ function GUI:push(viewname, ...)
       IMGUI.SetNextWindowPos(x(), 40, "Always")
       IMGUI.SetNextWindowSizeConstraints(width, 80, width, MENU_MAX_HEIGHT)
       IMGUI.PushStyleVar("WindowPadding", 16, 16)
-      local _,open = IMGUI.Begin(title, true,
+      local open = IMGUI.Begin(title, true,
                                  { "NoCollapse", "AlwaysAutoResize",
                                  "AlwaysUseWindowPadding" })
       if open then
