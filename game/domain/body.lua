@@ -139,6 +139,12 @@ function Body:getAppearance()
   return self:getSpec('appearance')
 end
 
+--[[ Faction methods ]]--
+
+function Body:getFaction()
+  return self:getSpec('faction')
+end
+
 --[[ HP methods ]]--
 
 function Body:getVIT()

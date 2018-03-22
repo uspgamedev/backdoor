@@ -1,7 +1,7 @@
 {
   "extends":false,
   "name":"Machine",
-  "faction":"player",
+  "faction":"allied",
   "def_die":2,
   "appearance":"demobody",
   "def":-2,
