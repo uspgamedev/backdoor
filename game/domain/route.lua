@@ -135,11 +135,15 @@ function Route:instance(obj)
     local player_sector = obj.getPlayerActor():getBody():getSector()
     if player_sector ~= _current_sector then
       obj.setCurrentSector(player_sector.id)
+      return true
     end
+    return false
   end
 
   function obj.playTurns(...)
-    _checkSector()
+    if _checkSector() then
+      return "sectorChanged"
+    end
     local request, extra = _current_sector:playTurns(...)
     if request == 'userTurn' then
       _controlled_actor = extra
