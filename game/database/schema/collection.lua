@@ -1,6 +1,7 @@
 
 return {
   { id = 'name', name = "Full Name", type = "string" },
+  { id = 'image', name = "Image", type = 'enum', options = 'resources.texture' },
   { id = 'description', name = "Description", type = 'text' },
   {
     id = 'cards', name = "Cards", type = 'array',
@@ -12,4 +13,3 @@ return {
     }
   }
 }
-

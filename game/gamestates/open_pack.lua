@@ -3,13 +3,16 @@ local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
-local PackView = require 'view.cardlist'
+local PackView = require 'view.packlist'
+local CardView = require 'view.cardlist'
 
 local state = {}
 
 local _view
 local _pack
 local _leave
+local _status
+local _pack_index
 
 function state:init()
 end
@@ -23,20 +26,34 @@ local function _next()
 end
 
 local function _confirm()
-  if not _view:isLocked() then
+  if _status == "choosing_pack" then
+    _pack = PACK.generatePackFrom(_view:getChosenPack())
+    _pack_index = _view:getSelection()
+    _view:close()
+    _status = "choosing_card"
+    _view = CardView("UP")
+    _view:open(_pack)
+    _view:addElement("HUD")
+  elseif not _view:isLocked() then
     _view:collectCards(function() _leave = true end)
   end
 end
 
-function state:enter(from, collection)
-  _pack = PACK.generatePackFrom(collection)
-  _view = PackView("UP")
-  if #_pack > 0 then
+local function _cancel()
+  if _status == "choosing_pack" then
+    _leave = true
+  end
+end
+
+function state:enter(from, packlist)
+  _pack = nil
+  _status = "choosing_pack"
+  _view = PackView("UP", packlist)
+  if #packlist > 0 then
     _view:addElement("HUD")
   else
     _leave = true
   end
-  _view:open(_pack)
 end
 
 function state:leave()
@@ -50,19 +67,29 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if _leave or _view:isCardListEmpty() then
+  if _status == "choosing_pack" and (_leave or _view:isPackListEmpty()) then
+    SWITCHER.pop({
+      consumed = {},
+      pack = nil,
+      pack_index = nil,
+    })
+  elseif _status == "choosing_card" and (_leave or _view:isCardListEmpty()) then
     SWITCHER.pop({
       consumed = _view:getConsumeLog(),
-      pack = _pack
+      pack = _pack,
+      pack_index = _pack_index
     })
   else
-
-    if DIRECTIONALS.wasDirectionTriggered('LEFT') then
+    if _status == "choosing_pack" and _view:usedHoldbar() then
+      _confirm()
+    elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
-    elseif INPUT.wasActionPressed('CONFIRM') then
+    elseif _status == "choosing_card" and INPUT.wasActionPressed('CONFIRM') then
       _confirm()
+    elseif INPUT.wasActionPressed('CANCEL') then
+      _cancel()
     end
 
   end
@@ -73,6 +100,3 @@ function state:draw()
 end
 
 return state
-
-
-
