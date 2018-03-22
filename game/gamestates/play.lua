@@ -22,6 +22,7 @@ local _view
 local _gui
 
 local _switch_to
+local _alert
 
 --LOCAL FUNCTION--
 
@@ -31,12 +32,17 @@ local function _playTurns(...)
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
-    SWITCHER.push(GS.USER_TURN, _route, _view)
+    SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
+    _alert = false
   elseif request == "changeSector" then
     _view.sector:sectorChanged()
     return _playTurns()
   elseif request == "report" then
     _view.sector:startVFX(extra)
+    if extra.type == 'dmg_taken' and
+       extra.body == _route:getControlledActor():getBody() then
+      _alert = true
+    end
     SWITCHER.push(GS.ANIMATION, _view.sector)
   end
   _next_action = nil
@@ -49,6 +55,10 @@ local function _saveAndQuit()
 end
 
 --STATE FUNCTIONS--
+
+function state:init()
+  _alert = false
+end
 
 function state:enter(pre, route_data)
 
