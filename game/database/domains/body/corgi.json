@@ -1,6 +1,10 @@
 {
   "extends":"demihuman",
+  "def_die":5,
+  "def":0,
+  "faction":"agressive",
   "appearance":"corgi",
+  "vit":0,
   "name":"Corgiborn",
-  "description":"Stubby legs, a heart-shaped butt,\na happy goofy face. But don't be fooled!\nNot all of them are friendly..."
+  "description":false
 }

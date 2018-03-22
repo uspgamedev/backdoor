@@ -1,8 +1,10 @@
 {
+  "extends":false,
+  "faction":"allied",
   "def":0,
   "def_die":5,
   "appearance":"hearthborn",
-  "name":"Demihuman",
   "vit":0,
-  "description":"Humanoid people in general."
+  "name":"Demihuman",
+  "description":false
 }
