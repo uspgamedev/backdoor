@@ -49,7 +49,7 @@ local function _prev_circular(i, len, n)
 end
 
 -- PUBLIC METHODS ---------------------------
-function View:init(hold_action)
+function View:init(hold_actions)
   ELEMENT.init(self)
 
   self.enter = 0
@@ -62,7 +62,7 @@ function View:init(hold_action)
   self.card_list = _EMPTY
   self.consumed = {}
   self.consume_log = false
-  self.holdbar = HoldBar(hold_action)
+  self.holdbar = HoldBar(hold_actions)
 
   _initGraphicValues()
 end

@@ -8,8 +8,8 @@ local CardView = require 'view.cardlist'
 
 local state = {}
 
-local _view
-local _pack
+local _card_list_view
+local _pack_list_view
 local _leave
 local _status
 local _pack_index
@@ -18,24 +18,24 @@ function state:init()
 end
 
 local function _prev()
-  _view:selectPrev()
+  _card_list_view:selectPrev()
 end
 
 local function _next()
-  _view:selectNext()
+  _card_list_view:selectNext()
 end
 
 local function _confirm()
   if _status == "choosing_pack" then
-    _pack = PACK.generatePackFrom(_view:getChosenPack())
-    _pack_index = _view:getSelection()
-    _view:close()
     _status = "choosing_card"
-    _view = CardView("UP")
-    _view:open(_pack)
-    _view:addElement("HUD")
-  elseif not _view:isLocked() then
-    _view:collectCards(function() _leave = true end)
+    _pack_list_view = PACK.generatePackFrom(_card_list_view:getChosenPack())
+    _pack_index = _card_list_view:getSelection()
+    _card_list_view:close()
+    _card_list_view = CardView({"UP"})
+    _card_list_view:open(_pack_list_view)
+    _card_list_view:addElement("HUD")
+  elseif not _card_list_view:isLocked() then
+    _card_list_view:collectCards(function() _leave = true end)
   end
 end
 
@@ -46,11 +46,11 @@ local function _cancel()
 end
 
 function state:enter(from, packlist)
-  _pack = nil
   _status = "choosing_pack"
-  _view = PackView("UP", packlist)
+  _pack_list_view = nil
+  _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
-    _view:addElement("HUD")
+    _card_list_view:addElement("HUD")
   else
     _leave = true
   end
@@ -58,8 +58,8 @@ end
 
 function state:leave()
   _leave = false
-  _view:close()
-  _view = nil
+  _card_list_view:close()
+  _card_list_view = nil
 end
 
 function state:update(dt)
@@ -67,20 +67,20 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if _status == "choosing_pack" and (_leave or _view:isPackListEmpty()) then
+  if _status == "choosing_pack" and (_leave or _card_list_view:isPackListEmpty()) then
     SWITCHER.pop({
       consumed = {},
       pack = nil,
       pack_index = nil,
     })
-  elseif _status == "choosing_card" and (_leave or _view:isCardListEmpty()) then
+  elseif _status == "choosing_card" and (_leave or _card_list_view:isCardListEmpty()) then
     SWITCHER.pop({
-      consumed = _view:getConsumeLog(),
-      pack = _pack,
+      consumed = _card_list_view:getConsumeLog(),
+      pack = _pack_list_view,
       pack_index = _pack_index
     })
   else
-    if _status == "choosing_pack" and _view:usedHoldbar() then
+    if _status == "choosing_pack" and _card_list_view:usedHoldbar() then
       _confirm()
     elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
       _prev()
