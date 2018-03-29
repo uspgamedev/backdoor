@@ -7,6 +7,7 @@ FX.schema = {
   { id = 'percentage', name = "HP Percentage", type = 'integer',
     range = {1, 90}
   },
+  { id = 'target', name = "Target", type = 'value', match = 'body' },
   { id = 'stay_alive', name = "Stay Alive?", type = 'boolean' },
 }
 
@@ -20,7 +21,7 @@ function FX.process (actor, fieldvalues)
   if fieldvalues.stay_alive then
     amount = math.min(current_hp - 1, amount)
   end
-  local dmg = body:takePiercedDamageFrom(amount, actor)
+  local dmg = body:loseLifeFrom(amount, actor)
   coroutine.yield('report', {
     type = 'dmg_taken',
     body = body,
