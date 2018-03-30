@@ -9,6 +9,7 @@ local SectorView  = require 'view.sector'
 local HandView    = require 'view.hand'
 local ActorView   = require 'view.actor'
 local WidgetView  = require 'view.widgethud'
+local FadeView    = require 'view.fade'
 
 local state = {}
 
@@ -102,12 +103,18 @@ function state:enter(pre, route_data)
   _view.widget = WidgetView(_route)
   _view.widget:addElement("HUD")
 
-  -- start gamestate
-  _playTurns()
-
   -- GUI
   _gui = GUI(_view.sector)
   _gui:addElement("GUI")
+
+  -- start gamestate
+  _playTurns()
+
+  local fade_view = FadeView(FadeView.STATE_FADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeInAndThen(function()
+    fade_view:destroy()
+  end)
 
 end
 

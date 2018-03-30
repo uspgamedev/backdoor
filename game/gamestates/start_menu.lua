@@ -6,6 +6,7 @@ local INPUT = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE = require 'infra.profile'
 local StartMenuView = require 'view.startmenu'
+local FadeView = require 'view.fade'
 
 local state = {}
 
@@ -44,7 +45,13 @@ function state:resume(from, player_info)
     background = player_info.background
     print(string.format("selected %s %s", species, background))
 
-    SWITCHER.switch(GS.PLAY, route_data)
+    _locked = true
+    local fade_view = FadeView()
+    fade_view:addElement("GUI")
+    fade_view:fadeOutAndThen(function()
+      SWITCHER.switch(GS.PLAY, route_data)
+      fade_view:destroy()
+    end)
   else
     _menu_view:open()
     _menu_context = "START_MENU"
@@ -111,7 +118,12 @@ function state:update(dt)
           if MENU.item(savename) then
             _locked = true
             _menu_view:close(function()
-              SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+              local fade_view = FadeView()
+              fade_view:addElement("GUI")
+              fade_view:fadeOutAndThen(function()
+                SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
+                fade_view:destroy()
+              end)
             end)
           end
         end
