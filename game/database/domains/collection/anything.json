@@ -1,18 +1,18 @@
 {
-  "cards":[{
-      "drop":80,
-      "set":"upgrades"
-    },{
-      "set":"upgrades",
-      "drop":60
-    },{
-      "drop":40,
-      "set":"upgrades"
-    },{
-      "drop":80,
-      "set":"consumables"
-    }],
   "name":"Anything",
   "image":"card-rage",
-  "description":"Drops literally anything."
+  "cards":[{
+      "set":"upgrades_common",
+      "drop":80
+    },{
+      "drop":60,
+      "set":"upgrades_common"
+    },{
+      "set":"upgrades_common",
+      "drop":40
+    },{
+      "set":"consumables",
+      "drop":80
+    }],
+  "description":false
 }
