@@ -1,4 +1,8 @@
 {
   "sprite":"box",
-  "name":"Food"
+  "name":"Food",
+  "ablity":{
+    "inputs":[],
+    "effects":[]
+  }
 }
