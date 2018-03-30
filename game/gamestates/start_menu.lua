@@ -16,11 +16,6 @@ local _menu_view
 local _menu_context
 local _locked
 
---LOCAL FUNCTIONS--
-
-local function _title()
-end
-
 --STATE FUNCTIONS--
 
 function state:enter()
@@ -38,18 +33,12 @@ end
 
 function state:resume(from, player_info)
   if player_info then
-    local route_data = PROFILE.newRoute(player_info)
-
-    local species, background
-    species = player_info.species
-    background = player_info.background
-    print(string.format("selected %s %s", species, background))
-
     _locked = true
+    print(("%s %s"):format(player_info.species, player_info.background))
     local fade_view = FadeView()
     fade_view:addElement("GUI")
     fade_view:fadeOutAndThen(function()
-      SWITCHER.switch(GS.PLAY, route_data)
+      SWITCHER.switch(GS.PLAY, PROFILE.newRoute(player_info))
       fade_view:destroy()
     end)
   else
@@ -143,7 +132,6 @@ function state:update(dt)
   end
   MENU.finish()
   _menu_view:setSelection(MENU.getSelection())
-  _title()
 end
 
 function state:draw()
