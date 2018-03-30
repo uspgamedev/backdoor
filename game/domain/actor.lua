@@ -390,6 +390,24 @@ end
 
 --[[ Turn methods ]]--
 
+local function _grabDrops(actor, tile)
+  local drops = tile.drops
+  local inputvalues = {}
+  local n = #drops
+  local i = 1
+  while i <= n do
+    local dropname = drops[i]
+    local dropspec = DB.loadSpec('drop', dropname)
+    if ABILITY.checkInputs(dropspec.ability, actor, inputvalues) then
+      table.remove(drops, i)
+      n = n-1
+      ABILITY.execute(dropspec.ability, actor, inputvalues)
+    else
+      i = i+1
+    end
+  end
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
   if not self:isHandEmpty() then
@@ -403,6 +421,7 @@ function Actor:tick()
       self:addCardToBackbuffer(card)
     end
   end
+  _grabDrops(self, self:getBody():getSector():getTile(self:getPos()))
 end
 
 function Actor:resetHandCountdown()
