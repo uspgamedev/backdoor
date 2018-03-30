@@ -73,7 +73,7 @@ function SectorView:init(route)
   self.route = route
   self.body_sprites = {}
   self.sector = false
-  self.sector_changed = true
+  self.sector_changed = false
 
   _font = _font or FONT.get("Text", 16)
 
