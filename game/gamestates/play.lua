@@ -61,9 +61,16 @@ local function _playTurns(...)
 end
 
 local function _saveAndQuit()
+  local fade_view = FadeView(FadeView.STATE_UNFADED)
   local route_data = _route.saveState()
   PROFILE.saveRoute(route_data)
-  SWITCHER.switch(GS.START_MENU)
+  fade_view:addElement("GUI")
+  fade_view:fadeOutAndThen(function()
+    SWITCHER.switch(GS.START_MENU)
+    fade_view:fadeInAndThen(function()
+      fade_view:destroy()
+    end)
+  end)
 end
 
 --STATE FUNCTIONS--
