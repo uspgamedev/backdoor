@@ -79,7 +79,7 @@ end
 function inputs.ability(spec, field)
 
   local ability = spec[field.id]
-                  or { params = {}, operators = {}, effects = {} }
+                  or { inputs = {}, effects = {} }
   local selected = nil
 
   local function delete()
