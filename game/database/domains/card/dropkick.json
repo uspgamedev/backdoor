@@ -33,10 +33,15 @@
           "base":14,
           "attr":"=cor"
         },{
+          "type":"operator",
+          "name":"self",
+          "output":"self"
+        },{
           "percentage":10,
           "type":"effect",
-          "name":"damage_self",
-          "stay_alive":false
+          "name":"lose_life",
+          "stay_alive":false,
+          "target":"=self"
         }]
     }
   },
