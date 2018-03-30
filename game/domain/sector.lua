@@ -190,7 +190,7 @@ function Sector:makeEncounters(encounters, register)
     if upgradexp > 0 then
       local unit, total = 0, 0
       local aptitudes = {}
-      for _,attr in ipairs(DEFS.ATTRIBUTES) do
+      for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
         aptitudes[attr] = actor:getSpec(attr:lower()) + 4 -- min of 0
         total = total + aptitudes[attr]
       end
@@ -201,10 +201,10 @@ function Sector:makeEncounters(encounters, register)
       unit = upgradexp / total
       for attr,priority in pairs(aptitudes) do
         local award = math.floor(unit * priority)
-        if DEFS.ATTRIBUTES[attr] then
+        if DEFS.PRIMARY_ATTRIBUTES[attr] then
           actor:upgradeAttr(attr, award)
         elseif DEFS.BODY_ATTRIBUTES[attr] then
-          body:upgradeAttr(attr, award)
+          body:upgradeAttr(attr, math.floor(award / 2))
         end
       end
     end
