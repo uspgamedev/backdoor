@@ -1,5 +1,7 @@
 
-local ACTIONDEFS = require 'domain.definitions.action'
+local ACTIONDEFS  = require 'domain.definitions.action'
+local ABILITY     = require 'domain.ability'
+local DB          = require 'database'
 local MOVE = {}
 
 MOVE.input_specs = {
@@ -26,6 +28,13 @@ function MOVE.perform(actor, inputvalues)
     origin = pos,
     speed_factor = 1.0
   })
+  local tile = sector:getTile(unpack(inputvalues.pos))
+  local drops = tile.drops
+  tile.drops = {}
+  for _,dropname in ipairs(drops) do
+    local dropspec = DB.loadSpec('drop', dropname)
+    ABILITY.execute(dropspec.ability, actor, {})
+  end
 end
 
 return MOVE

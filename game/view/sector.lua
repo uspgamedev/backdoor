@@ -306,9 +306,9 @@ function SectorView:draw()
       local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
 
       g.setColor({0, 0, 0, 100})
-      g.ellipse('fill', x + _TILE_W/2, y - _TILE_H/2, 16, 6, 16)
+      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, x + _TILE_W/2, y - _TILE_H*1.25, 0, 1, 1, 32, 24)
+      g.draw(sprite, x + _TILE_W/2, y - _TILE_H*.25, 0, 1, 1, 32, 24)
     end
 
 

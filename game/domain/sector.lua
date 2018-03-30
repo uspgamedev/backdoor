@@ -430,10 +430,6 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   for _, dead_actor in ipairs(dead_actor_list) do
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
-      -- award PP
-      local reward_pp = dead_actor:calculatePP(killer_actor)
-      killer_actor:rewardPP(reward_pp)
-
       -- award pack
       killer_actor:addPrizePack(dead_actor:getSpec('collection'))
     end
