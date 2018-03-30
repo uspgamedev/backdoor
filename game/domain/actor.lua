@@ -30,6 +30,7 @@ function Actor:init(spec_name)
 
   self.hand = {}
   self.hand_limit = 5
+  self.hand_countdown = 0
   self.upgrades = {
     COR = 100,
     ARC = 100,
@@ -251,6 +252,10 @@ function Actor:isHandFull()
   return #self.hand >= self.hand_limit
 end
 
+function Actor:getHandCountdown()
+  return self.hand_countdown
+end
+
 function Actor:getBufferSize()
   for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
@@ -317,6 +322,7 @@ function Actor:drawCard()
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
+  self:resetHandCountdown()
 end
 
 function Actor:getHandCard(index)
@@ -386,6 +392,21 @@ end
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  if not self:isHandEmpty() then
+    self.hand_countdown = math.max(0, self.hand_countdown - 1)
+  else
+    self.hand_countdown = 0
+  end
+  if self.hand_countdown == 0 then
+    while not self:isHandEmpty() do
+      local card = self:removeHandCard(1)
+      self:addCardToBackbuffer(card)
+    end
+  end
+end
+
+function Actor:resetHandCountdown()
+  self.hand_countdown = DEFS.ACTION.HAND_DURATION
 end
 
 function Actor:ready()
@@ -397,6 +418,7 @@ function Actor:playCard(card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
+  self:resetHandCountdown()
   return card
 end
 

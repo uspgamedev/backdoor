@@ -158,7 +158,7 @@ function Sector:makeTiles(grid)
       local tile_type = grid.get(j, i)
       if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
         tile = { type = tile_type, drops = {} }
-        if tile_type == SCHEMATICS.FLOOR and RANDOM.generate(100) > 98 then
+        if tile_type == SCHEMATICS.FLOOR and RANDOM.generate(100) > 99 then
           table.insert(tile.drops, 'food')
         end
       end
