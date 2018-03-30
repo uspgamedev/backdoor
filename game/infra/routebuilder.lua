@@ -66,17 +66,17 @@ local function _generateSectorsData(idgenerator, player_info)
   -- create first sector
   local sectors = {}
   local n = false
-  local f = {type = SCHEMATICS.FLOOR}
-  local e = {type = SCHEMATICS.EXIT}
+  local f = function() return {type = SCHEMATICS.FLOOR, drops = {}} end
+  local e = function() return {type = SCHEMATICS.EXIT, drops = {}} end
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
       { n, n, n, n, n, n, n, },
       { n, n, n, n, n, n, n, },
-      { n, n, f, f, f, n, n, },
-      { n, n, f, e, f, n, n, },
-      { n, n, f, f, f, n, n, },
+      { n, n, f(), f(), f(), n, n, },
+      { n, n, f(), e(), f(), n, n, },
+      { n, n, f(), f(), f(), n, n, },
       { n, n, n, n, n, n, n, },
       { n, n, n, n, n, n, n, },
     },
