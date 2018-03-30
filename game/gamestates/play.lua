@@ -36,8 +36,19 @@ local function _playTurns(...)
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
-    _view.sector:sectorChanged()
-    return _playTurns()
+    local fade_view = FadeView(FadeView.STATE_UNFADED)
+    fade_view:addElement("GUI")
+    fade_view:fadeOutAndThen(function()
+      local change_sector_ok = _route.checkSector()
+      assert(change_sector_ok, "Sector Change fuck up")
+      _view.sector:sectorChanged()
+      MAIN_TIMER:after(FadeView.FADE_TIME, function()
+        fade_view:fadeInAndThen(function()
+          fade_view:destroy()
+          return _playTurns()
+        end)
+      end)
+    end)
   elseif request == "report" then
     _view.sector:startVFX(extra)
     if extra.type == 'dmg_taken' and
