@@ -30,10 +30,19 @@ function MOVE.perform(actor, inputvalues)
   })
   local tile = sector:getTile(unpack(inputvalues.pos))
   local drops = tile.drops
-  tile.drops = {}
-  for _,dropname in ipairs(drops) do
+  local inputvalues = {}
+  local n = #drops
+  local i = 1
+  while i <= n do
+    local dropname = drops[i]
     local dropspec = DB.loadSpec('drop', dropname)
-    ABILITY.execute(dropspec.ability, actor, {})
+    if ABILITY.checkInputs(dropspec.ability, actor, inputvalues) then
+      table.remove(drops, i)
+      n = n-1
+      ABILITY.execute(dropspec.ability, actor, inputvalues)
+    else
+      i = i+1
+    end
   end
 end
 

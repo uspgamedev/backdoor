@@ -44,7 +44,7 @@ function Actor:init(spec_name)
     SPD = 0,
   }
   self.exp = 0
-  self.playpoints = 2*DEFS.ACTION.NEW_HAND_COST
+  self.playpoints = DEFS.MAX_PP
 
   self.fov = {}
   self.fov_range = 4

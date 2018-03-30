@@ -34,7 +34,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     specname = background,
     cooldown = 10,
     exp = 0,
-    playpoints = 2*DEFS.ACTION.NEW_HAND_COST,
+    playpoints = DEFS.MAX_PP,
     upgrades = {COR=100,ARC=100,ANI=100,SPD=100},
     buffer = _simpleBuffer(background),
     hand_limit = 5,

@@ -2,11 +2,16 @@
   "sprite":"box",
   "name":"Food",
   "ability":{
-    "inputs":[],
     "effects":[{
         "type":"effect",
         "name":"reward_pp",
-        "amount":5
+        "amount":10
+      }],
+    "inputs":[{
+        "type":"input",
+        "amount":100,
+        "name":"has_less_pp",
+        "output":"not_full"
       }]
   }
 }
