@@ -101,10 +101,14 @@ end
 
 function view:draw()
   local g = love.graphics
+
   local actor = self:isValidActor()
+  if not actor then return end
+
   local widget_list = self:getWidgetList(actor)
+  if not widget_list then return end
+
   local enter = self.enter
-  if not actor or not widget_list then return end
 
   if enter > 0 then
     local w = WIDGETVIEW.getWidth()

@@ -9,6 +9,7 @@ local SectorView  = require 'view.sector'
 local HandView    = require 'view.hand'
 local ActorView   = require 'view.actor'
 local WidgetView  = require 'view.widgethud'
+local FadeView    = require 'view.fade'
 
 local state = {}
 
@@ -35,8 +36,19 @@ local function _playTurns(...)
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
-    _view.sector:sectorChanged()
-    return _playTurns()
+    local fade_view = FadeView(FadeView.STATE_UNFADED)
+    fade_view:addElement("GUI")
+    fade_view:fadeOutAndThen(function()
+      local change_sector_ok = _route.checkSector()
+      assert(change_sector_ok, "Sector Change fuck up")
+      _view.sector:sectorChanged()
+      MAIN_TIMER:after(FadeView.FADE_TIME, function()
+        fade_view:fadeInAndThen(function()
+          fade_view:destroy()
+          return _playTurns()
+        end)
+      end)
+    end)
   elseif request == "report" then
     _view.sector:startVFX(extra)
     if extra.type == 'dmg_taken' and
@@ -49,9 +61,16 @@ local function _playTurns(...)
 end
 
 local function _saveAndQuit()
+  local fade_view = FadeView(FadeView.STATE_UNFADED)
   local route_data = _route.saveState()
   PROFILE.saveRoute(route_data)
-  SWITCHER.switch(GS.START_MENU)
+  fade_view:addElement("GUI")
+  fade_view:fadeOutAndThen(function()
+    SWITCHER.switch(GS.START_MENU)
+    fade_view:fadeInAndThen(function()
+      fade_view:destroy()
+    end)
+  end)
 end
 
 --STATE FUNCTIONS--
@@ -102,12 +121,18 @@ function state:enter(pre, route_data)
   _view.widget = WidgetView(_route)
   _view.widget:addElement("HUD")
 
-  -- start gamestate
-  _playTurns()
-
   -- GUI
   _gui = GUI(_view.sector)
   _gui:addElement("GUI")
+
+  -- start gamestate
+  _playTurns()
+
+  local fade_view = FadeView(FadeView.STATE_FADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeInAndThen(function()
+    fade_view:destroy()
+  end)
 
 end
 
