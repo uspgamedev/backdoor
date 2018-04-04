@@ -1,10 +1,16 @@
 
-local Camera = require "steaming.extra_libs.hump.camera"
-local math = require 'common.math'
+local math     = require 'common.math'
+local Camera   = require "steaming.extra_libs.hump.camera"
+local VIEWDEFS = require 'view.definitions'
 
+local _TILE_W = VIEWDEFS.TILE_W
+local _TILE_H = VIEWDEFS.TILE_H
+local _HALF_W = VIEWDEFS.HALF_W
+local _HALF_H = VIEWDEFS.HALF_H
 
-local _width, _height = love.graphics.getDimensions()
-local CAM = Camera(_width/2, _height/2, 1, 0, Camera.smooth.damped(5))
+local CAM = Camera(love.graphics.getWidth() / 2,
+                   love.graphics.getHeight() / 2,
+                   1, 0, Camera.smooth.damped(5))
 
 function CAM:attach(x, y, w, h, noclip)
   local g = love.graphics
@@ -23,6 +29,16 @@ function CAM:attach(x, y, w, h, noclip)
   g.rotate(self.rot)
   g.translate(-math.round(self.x*self.scale)/self.scale,
               -math.round(self.y*self.scale)/self.scale)
+end
+
+function CAM:isTileInFrame(i, j)
+  local cx, cy = CAM:position()
+  cx = cx / _TILE_W
+  cy = cy / _TILE_H
+  return     j >= cx - _HALF_W
+         and j <= cx + _HALF_W
+         and i >= cy - _HALF_H
+         and i <= cy + _HALF_H
 end
 
 return CAM

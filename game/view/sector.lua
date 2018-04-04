@@ -12,6 +12,8 @@ local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 
+local SECTOR_TILEMAP = require 'view.sector.tilemap'
+
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 local _HALF_W = VIEWDEFS.HALF_W
@@ -23,7 +25,6 @@ local _HEALTHBAR_HEIGHT = 4
 local _texture
 local _tile_offset
 local _tile_quads
-local _flat_batch
 local _tall_batch
 local _tileset
 local _cursor_sprite
@@ -90,7 +91,7 @@ function SectorView:initSector(sector)
     _tile_offset = _tileset.offsets
     _tile_quads = _tileset.quads
 
-    _flat_batch = g.newSpriteBatch(_texture, 512, "stream")
+    SECTOR_TILEMAP.init(sector, _tileset)
     _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
@@ -159,46 +160,19 @@ function SectorView:draw()
     _moveCamera(self.target, self.sector_changed)
     self.sector_changed = false
   end
-  g.setBackgroundColor(75, 78, 60, 255)
+
+  -- draw background
+  g.setBackgroundColor(COLORS.BLACK)
+  g.push()
+  g.setColor(COLORS.BACKGROUND)
+  g.rectangle("fill", 0, 0, _TILE_W * sector.w, _TILE_H * sector.h)
   g.setColor(COLORS.NEUTRAL)
+  g.pop()
+
+  -- reset color
   g.push()
 
-  -- draw flat tiles
-  _flat_batch:clear()
-  for i = 0, sector.h-1 do
-    for j = 0, sector.w-1 do
-      local tile = sector.tiles[i+1][j+1]
-      if _isInFrame(i, j) and tile then
-        local tile_type = (tile.type == SCHEMATICS.WALL)
-                          and SCHEMATICS.FLOOR or tile.type
-        local x, y = j*_TILE_W, i*_TILE_H
-        _flat_batch:add(_tile_quads[tile_type], x, y,
-                        0, 1, 1, unpack(_tile_offset[tile.type]))
-      end
-    end
-  end
-  g.draw(_flat_batch, 0, 0)
-
-  if self.fov then
-    for i = 1, sector.h do
-      if not self.fov[i] then
-        print(("Failed for sector %s"):format(sector.id))
-      end
-      for j = 1, sector.w do
-        if not self.fov[i][j] then --Never seen
-          local alpha = 255
-          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
-          g.setColor(0,0,0,alpha)
-          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
-        elseif self.fov[i][j] == 0 then --Seen once but invisible now
-          local alpha = 140
-          local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
-          g.setColor(0,0,0,alpha)
-          g.rectangle("fill", x, y, _TILE_W, _TILE_H)
-        end
-      end
-    end
-  end
+  SECTOR_TILEMAP.drawFloor(g, self.fov)
 
   local rays = {}
   for i=1,sector.h do
@@ -234,7 +208,7 @@ function SectorView:draw()
     _tall_batch:clear()
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
-      if _isInFrame(i, j) and tile then
+      if CAM:isTileInFrame(i, j) and tile then
         -- Add tiles to spritebatch
         local body = sector.bodies[i+1][j+1]
         local x = j*_TILE_W
