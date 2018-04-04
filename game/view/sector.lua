@@ -163,16 +163,14 @@ function SectorView:draw()
 
   -- draw background
   g.setBackgroundColor(COLORS.BLACK)
-  g.push()
-  g.setColor(COLORS.BACKGROUND)
-  g.rectangle("fill", 0, 0, _TILE_W * sector.w, _TILE_H * sector.h)
   g.setColor(COLORS.NEUTRAL)
-  g.pop()
 
   -- reset color
   g.push()
 
-  SECTOR_TILEMAP.drawFloor(g, self.fov)
+  local fov = self.fov
+  SECTOR_TILEMAP.drawAbyss(g, fov)
+  SECTOR_TILEMAP.drawFloor(g, fov)
 
   local rays = {}
   for i=1,sector.h do
