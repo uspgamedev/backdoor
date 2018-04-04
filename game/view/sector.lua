@@ -1,7 +1,7 @@
 
 local DB          = require 'database'
 local RES         = require 'resources'
-local HSV         = require 'common.color'.hsv
+local HSV         = require 'common.color'.fromHSV
 local math        = require 'common.math'
 local CAM         = require 'common.camera'
 local SCHEMATICS  = require 'domain.definitions.schematics'
@@ -172,6 +172,7 @@ function SectorView:draw()
   SECTOR_TILEMAP.drawAbyss(g, fov)
   SECTOR_TILEMAP.drawFloor(g, fov)
 
+  -- setting up rays
   local rays = {}
   for i=1,sector.h do
     rays[i] = {}
@@ -314,7 +315,7 @@ function SectorView:draw()
       local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
       local hp_percent = body:getHP()/body:getMaxHP()
       local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
-      local cr, cg, cb = HSV(unpack(hsvcol))
+      local cr, cg, cb = HSV(unpack(hsvcol)):unpack()
       g.push()
       g.translate(x, y)
       g.setColor(0, 20, 0, 200)
