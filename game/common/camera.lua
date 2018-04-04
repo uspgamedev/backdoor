@@ -41,5 +41,28 @@ function CAM:isTileInFrame(i, j)
          and i <= cy + _HALF_H
 end
 
+function CAM:tilesInRange()
+  local cx, cy = CAM:position() -- start point
+  local rx, ry
+  cx = math.floor(cx / _TILE_W - _HALF_W)
+  cy = math.floor(cy / _TILE_H - _HALF_H)
+  rx = math.ceil(cx + 2 * _HALF_W)
+  ry = math.ceil(cy + 2 * _HALF_H)
+  local init_s = { cy, cx - 1 }
+  return function(s)
+    s[2] = s[2] + 1
+
+    -- advance line
+    if s[2] > rx then
+      s[2] = cx
+      s[1] = s[1] + 1
+      -- check for end of lines
+      if s[1] > ry then return end
+    end
+
+    return s[1], s[2]
+  end, init_s
+end
+
 return CAM
 
