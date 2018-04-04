@@ -32,7 +32,7 @@ function CAM:attach(x, y, w, h, noclip)
 end
 
 function CAM:isTileInFrame(i, j)
-  local cx, cy = CAM:position()
+  local cx, cy = self:position()
   cx = cx / _TILE_W
   cy = cy / _TILE_H
   return     j >= cx - _HALF_W
@@ -42,7 +42,7 @@ function CAM:isTileInFrame(i, j)
 end
 
 function CAM:tilesInRange()
-  local cx, cy = CAM:position() -- start point
+  local cx, cy = self:position() -- start point
   local rx, ry
   cx = math.floor(cx / _TILE_W - _HALF_W)
   cy = math.floor(cy / _TILE_H - _HALF_H)
