@@ -34,7 +34,7 @@ local function _generatePlayerActorData(idgenerator, body_id, background)
     specname = background,
     cooldown = 10,
     exp = 0,
-    playpoints = 2*DEFS.ACTION.NEW_HAND_COST,
+    playpoints = DEFS.MAX_PP,
     upgrades = {COR=100,ARC=100,ANI=100,SPD=100},
     buffer = _simpleBuffer(background),
     hand_limit = 5,
@@ -66,29 +66,29 @@ local function _generateSectorsData(idgenerator, player_info)
   -- create first sector
   local sectors = {}
   local n = false
-  local f = {type = SCHEMATICS.FLOOR}
-  local e = {type = SCHEMATICS.EXIT}
+  local f = function() return {type = SCHEMATICS.FLOOR, drops = {}} end
+  local e = function() return {type = SCHEMATICS.EXIT, drops = {}} end
   local first_sector = {
     specname = 'initial',
     id = idgenerator.newID(),
     tiles = {
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, f, f, f, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, f, e, f, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, f, f, f, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
-      { n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n, f(), f(), f(), n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n, f(), e(), f(), n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n, f(), f(), f(), n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
+      { n, n, n, n, n, n, n, n, n,   n,   n,   n, n, n, n, n, n, n, n, n, n, },
     },
     w = 21,
     h = 17,

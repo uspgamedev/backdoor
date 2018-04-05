@@ -173,7 +173,7 @@ end
 
 function Card:tick()
   self.ticks = self.ticks + 1
-  if self.ticks >= ACTIONSDEFS.CYLCLE_UNIT then
+  if self.ticks >= ACTIONSDEFS.CYCLE_UNIT then
     self.ticks = 0
     return true
   end

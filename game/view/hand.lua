@@ -2,6 +2,7 @@
 local FONT = require 'view.helpers.font'
 local CARD = require 'view.helpers.card'
 local COLORS = require 'domain.definitions.colors'
+local ACTIONDEFS = require 'domain.definitions.action'
 
 local math = require 'common.math'
 
@@ -93,6 +94,7 @@ function HandView:draw()
   local x, y = self.x, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
   local gap = CARD.getWidth() + 20
+  local handwidth = gap*5*2 - 40
   local boxwidth = 128
   local g = love.graphics
 
@@ -117,6 +119,17 @@ function HandView:draw()
   g.setColor(COLORS.NEUTRAL)
   g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
   g.pop()
+
+  -- draw hand countdown
+  local percent = self.route.getControlledActor():getHandCountdown()
+                / ACTIONDEFS.HAND_DURATION,
+  g.push()
+  g.translate(2,2)
+  g.setColor(COLORS.DARK)
+  g.rectangle('fill', x, y - 64, handwidth/2 * percent, 8)
+  g.pop()
+  g.setColor(COLORS.WARNING)
+  g.rectangle('fill', x, y - 64, handwidth/2 * percent, 8)
 
   -- draw each card
   local infoy = self.initial_y + - CARD.getHeight() - 40

@@ -30,6 +30,7 @@ function Actor:init(spec_name)
 
   self.hand = {}
   self.hand_limit = 5
+  self.hand_countdown = 0
   self.upgrades = {
     COR = 100,
     ARC = 100,
@@ -43,7 +44,7 @@ function Actor:init(spec_name)
     SPD = 0,
   }
   self.exp = 0
-  self.playpoints = 2*DEFS.ACTION.NEW_HAND_COST
+  self.playpoints = DEFS.MAX_PP
 
   self.fov = {}
   self.fov_range = 4
@@ -251,6 +252,10 @@ function Actor:isHandFull()
   return #self.hand >= self.hand_limit
 end
 
+function Actor:getHandCountdown()
+  return self.hand_countdown
+end
+
 function Actor:getBufferSize()
   for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
@@ -317,6 +322,7 @@ function Actor:drawCard()
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
+  self:resetHandCountdown()
 end
 
 function Actor:getHandCard(index)
@@ -384,8 +390,42 @@ end
 
 --[[ Turn methods ]]--
 
+local function _grabDrops(actor, tile)
+  local drops = tile.drops
+  local inputvalues = {}
+  local n = #drops
+  local i = 1
+  while i <= n do
+    local dropname = drops[i]
+    local dropspec = DB.loadSpec('drop', dropname)
+    if ABILITY.checkInputs(dropspec.ability, actor, inputvalues) then
+      table.remove(drops, i)
+      n = n-1
+      ABILITY.execute(dropspec.ability, actor, inputvalues)
+    else
+      i = i+1
+    end
+  end
+end
+
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  if not self:isHandEmpty() then
+    self.hand_countdown = math.max(0, self.hand_countdown - 1)
+  else
+    self.hand_countdown = 0
+  end
+  if self.hand_countdown == 0 then
+    while not self:isHandEmpty() do
+      local card = self:removeHandCard(1)
+      self:addCardToBackbuffer(card)
+    end
+  end
+  _grabDrops(self, self:getBody():getSector():getTile(self:getPos()))
+end
+
+function Actor:resetHandCountdown()
+  self.hand_countdown = DEFS.ACTION.HAND_DURATION
 end
 
 function Actor:ready()
@@ -397,6 +437,7 @@ function Actor:playCard(card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
+  self:resetHandCountdown()
   return card
 end
 

@@ -13,6 +13,7 @@ local GUI = Class {
 local DOMAINS = {
   'body', 'actor', 'appearance', 'sector',
   'card', 'cardset', 'collection', 'action',
+  'drop',
   body = "Body Type",
   actor = "Actor Type",
   appearance = "Appearance",
@@ -20,7 +21,8 @@ local DOMAINS = {
   card = "Card",
   cardset = "Card Set",
   collection = "Collection",
-  action = "Action",
+  action = "Signature",
+  drop = "Drop"
 }
 
 local RESOURCES = {

@@ -4,6 +4,7 @@ local DEFS = require 'domain.definitions'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
 local COLORS = require 'domain.definitions.colors'
+local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
 local Body = require 'domain.body'
@@ -156,7 +157,10 @@ function Sector:makeTiles(grid)
       local tile = false
       local tile_type = grid.get(j, i)
       if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
-        tile = { type = tile_type }
+        tile = { type = tile_type, drops = {} }
+        if tile_type == SCHEMATICS.FLOOR and RANDOM.generate(100) > 99 then
+          table.insert(tile.drops, 'food')
+        end
       end
       self.tiles[i][j] = tile
       self.bodies[i][j] = false
@@ -426,10 +430,6 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   for _, dead_actor in ipairs(dead_actor_list) do
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
-      -- award PP
-      local reward_pp = dead_actor:calculatePP(killer_actor)
-      killer_actor:rewardPP(reward_pp)
-
       -- award pack
       killer_actor:addPrizePack(dead_actor:getSpec('collection'))
     end

@@ -193,6 +193,7 @@ function SectorView:draw()
   local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
+    local draw_drops = {}
     local highlights = {}
     _tall_batch:clear()
     for j = 0, sector.w-1 do
@@ -240,6 +241,12 @@ function SectorView:draw()
         if body then
           table.insert(draw_bodies, {body, x, 0})
           table.insert(all_bodies, body)
+        end
+        for k,drop in ipairs(tile.drops) do
+          if not self.fov or (self.fov[i+1][j+1] and
+                              self.fov[i+1][j+1] ~= 0) then
+            table.insert(draw_drops, {drop, x, 0, k})
+          end
         end
       end
     end
@@ -291,6 +298,17 @@ function SectorView:draw()
         body_sprite:draw(x, y)
 
       end
+    end
+
+    -- Draw drops
+    for _,drop in ipairs(draw_drops) do
+      local specname, x, y, i = unpack(drop)
+      local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
+
+      g.setColor({0, 0, 0, 100})
+      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
+      g.setColor(COLORS.NEUTRAL)
+      g.draw(sprite, x + _TILE_W/2, y - _TILE_H*.25, 0, 1, 1, 32, 24)
     end
 
 

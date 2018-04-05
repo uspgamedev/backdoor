@@ -1,5 +1,7 @@
 
-local ACTIONDEFS = require 'domain.definitions.action'
+local ACTIONDEFS  = require 'domain.definitions.action'
+local ABILITY     = require 'domain.ability'
+local DB          = require 'database'
 local MOVE = {}
 
 MOVE.input_specs = {

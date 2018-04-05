@@ -10,7 +10,7 @@ INPUT.schema = {
 INPUT.type = 'none'
 
 function INPUT.isValid(actor, fieldvalues, value)
-  return actor:getPP() >= fieldvalues['amount']
+  return actor:getPP() < fieldvalues['amount']
 end
 
 return INPUT
