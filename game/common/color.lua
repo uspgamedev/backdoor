@@ -81,7 +81,7 @@ function Color.fromInt(r, g, b, a)
   local c = {}
   if type(r) == "table" then
     for i = 1, 4 do
-      c[i] = r[i] / 255
+      c[i] = (r[i] or 1) / 255
     end
     return Color:new(c)
   end
