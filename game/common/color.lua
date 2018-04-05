@@ -1,5 +1,12 @@
 
+local math = require 'common.math'
+
 local Color = require 'lux.prototype' :new { __type = 'color' }
+
+local function _err_type_mismatch(a, b, op)
+  return error(string.format("Invalid operation with color (%s %s %s)",
+                             type(a), op, type(b)))
+end
 
 function Color:__init()
   for i = 1, 4 do
@@ -22,9 +29,31 @@ function Color.__mul(a, b)
     }
   elseif type(a) == 'table' and a.__type == 'color' and type(b) == 'number' then
     return Color:new {a[1] * b, a[2] * b, a[3] * b, a[4] * b}
-  elseif type(b) == 'number' and type(b) == 'table' and b.__type == 'color' then
+  elseif type(a) == 'number' and type(b) == 'table' and b.__type == 'color' then
     return Color:new {b[1] * a, b[2] * a, b[3] * a, b[4] * a}
   end
+  return _err_type_mismatch(a, b, '*')
+end
+
+function Color.__add(a, b)
+  if type(a) == 'table' and type(b) == 'table'
+     and a.__type == 'color' and b.__type == 'color' then
+    return Color:new {
+      math.max(1, a[1] + b[1]),
+      math.max(1, a[2] + b[2]),
+      math.max(1, a[3] + b[3]),
+      math.max(1, a[4] + b[4]),
+    }
+  end
+  return _err_type_mismatch(a, b, '+')
+end
+
+function Color:__tostring()
+  return string.format("Color(%03d, %03d, %03d, %03d)",
+                       math.round(self[1] * 255),
+                       math.round(self[2] * 255),
+                       math.round(self[3] * 255),
+                       math.round(self[4] * 255))
 end
 
 function Color:unpack()
