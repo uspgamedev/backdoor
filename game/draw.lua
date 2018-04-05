@@ -37,7 +37,7 @@ function draw.allTables()
     first_time = true
   end
   local g = love.graphics
-  g.setColor(1, 1, 1, identityp(fade()/255))
+  g.setColor(1, 1, 1, fade()/255)
   g.rectangle('fill', 0, 0, g.getDimensions())
 
   DrawTable(DRAW_TABLE.GUI)
