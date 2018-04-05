@@ -1,7 +1,10 @@
 {
+  "extends":false,
+  "name":"Machine",
+  "faction":"allied",
   "def_die":2,
   "appearance":"demobody",
-  "name":"Machine",
+  "def":-2,
   "vit":-4,
-  "def":-2
+  "description":"Heavy Metal."
 }

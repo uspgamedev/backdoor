@@ -16,6 +16,7 @@ INPUT.schema = {
     }
   },
   { id = 'empty-tile', name = "Only empty position", type = 'boolean' },
+  { id = 'dif-fact', name = "Only different faction", type = 'boolean' },
   { id = 'non-wall', name = "Only without wall", type = 'boolean' },
   { id = 'aoe-hint', name = "Size of previewed AoE", type = 'integer',
     range = {1} },
@@ -52,6 +53,9 @@ function INPUT.isValid(actor, fieldvalues, value)
     end
   end
   if fieldvalues['empty-tile'] and sector:getBodyAt(i, j) then
+    return false
+  end
+  if fieldvalues['dif-fact'] and sector:getBodyAt(i, j):getFaction() == actor:getBody():getFaction() then
     return false
   end
   local tile = sector:getTile(i, j)

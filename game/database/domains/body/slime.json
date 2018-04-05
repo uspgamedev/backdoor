@@ -1,8 +1,10 @@
 {
+  "extends":false,
+  "faction":"agressive",
   "def":0,
   "def_die":4,
   "appearance":"slime",
-  "vit":-1,
   "name":"Slime",
-  "description":""
+  "vit":-1,
+  "description":"Delicious when fried."
 }
