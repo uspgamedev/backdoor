@@ -119,6 +119,7 @@ function GUI:draw()
   local g = love.graphics
 
   IMGUI.NewFrame()
+  IMGUI.PushStyleVar('FramePadding', 8, 4)
 
   if IMGUI.BeginMainMenuBar() then
     if IMGUI.BeginMenu("Game") then
@@ -197,6 +198,7 @@ function GUI:draw()
 
   g.setBackgroundColor(50/255, 80/255, 80/255, 1)
   g.setColor(1, 1, 1)
+  IMGUI.PopStyleVar(1)
   IMGUI.Render()
 end
 
