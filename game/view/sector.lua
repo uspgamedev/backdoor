@@ -49,16 +49,6 @@ local function _moveCamera(target, force)
 end
 
 
-local function _isInFrame(i, j)
-  local cx, cy = CAM:position()
-  cx = cx / _TILE_W
-  cy = cy / _TILE_H
-  return     j >= cx - _HALF_W
-         and j <= cx + _HALF_W
-         and i >= cy - _HALF_H
-         and i <= cy + _HALF_H
-end
-
 function SectorView:init(route)
 
   ELEMENT.init(self)
