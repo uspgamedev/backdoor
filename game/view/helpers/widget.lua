@@ -22,12 +22,12 @@ function WIDGET.draw(widget, x, y, alpha)
   local g = love.graphics
 
   g.push()
-  g.setColor(0x1f, 0x1f, 0x1f, alpha*0xff)
+  g.setColor(0x1f/255, 0x1f/255, 0x1f/255, alpha)
   g.rectangle("fill", x, y, WIDGET.getWidth(), WIDGET.getHeight())
   g.translate(_PD, _PD)
   _font:setLineHeight(_LH)
   _font.set()
-  g.setColor(0xff, 0xff, 0xff, alpha*0xff)
+  g.setColor(1, 1, 1, alpha)
   g.printf(_fmt("%s\n[%s]\n%02d/%02d", widget:getName():sub(1,16),
                 widget:getWidgetTrigger():gsub("_", " "),
                 widget:getWidgetCharges() - widget:getUsages(),

@@ -186,7 +186,7 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0x80)
+  g.setColor(0, 0, 0, enter*0.5)
   g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
 
@@ -259,7 +259,7 @@ function View:drawArrow(g, enter)
   self:drawHoldBar(g)
 
   g.translate(0, text_height*.5)
-  g.setColor(0xFF, 0xFF, 0xFF, enter*0xFF)
+  g.setColor(1, 1, 1, enter)
   g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
 
   g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)

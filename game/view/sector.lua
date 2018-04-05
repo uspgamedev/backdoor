@@ -1,7 +1,7 @@
 
 local DB          = require 'database'
 local RES         = require 'resources'
-local HSV         = require 'common.color'.fromHSV
+local Color       = require 'common.color'
 local math        = require 'common.math'
 local CAM         = require 'common.camera'
 local SCHEMATICS  = require 'domain.definitions.schematics'
@@ -203,11 +203,11 @@ function SectorView:draw()
         local x = j*_TILE_W
         if tile.type == SCHEMATICS.WALL then
           if self.fov and not self.fov[i+1][j+1] then
-            _tall_batch:setColor(0, 0, 0, 255)
+            _tall_batch:setColor(COLORS.BLACK)
           elseif self.fov and self.fov[i+1][j+1] == 0 then
-            _tall_batch:setColor(100, 100, 100, 255)
+            _tall_batch:setColor(COLORS.HALF_VISIBLE)
           else
-            _tall_batch:setColor(255, 255, 255, 255)
+            _tall_batch:setColor(COLORS.NEUTRAL)
           end
           _tall_batch:add(_tile_quads[tile.type], x, 0,
                           0, 1, 1, unpack(_tile_offset[tile.type]))
@@ -218,11 +218,11 @@ function SectorView:draw()
                           or body == current_body then
             if self.cursor.range_checker(i+1, j+1) then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
-                                         {100, 200, 200, 100} })
+                                         Color.fromInt {100, 200, 200, 100} })
             end
             if self.cursor.validator(i+1, j+1) then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
-                                         {100, 200, 100, 100} })
+                                         Color.fromInt {100, 200, 100, 100} })
             end
             local ci, cj = self.cursor:getPos()
             local size   = self.cursor.aoe_hint or 1
@@ -230,12 +230,12 @@ function SectorView:draw()
             if size and tile.type == SCHEMATICS.FLOOR
                     and abs(i+1 - ci) < size and abs(j+1 - cj) < size then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
-                                         {200, 100, 100, 100} })
+                                         Color.fromInt {200, 100, 100, 100} })
             end
           end
         elseif self.ray_dir and rays[i+1][j+1] then
           table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
-                                     {200, 100, 100, 100} })
+                                     Color.fromInt {200, 100, 100, 100} })
         end
         if body then
           table.insert(draw_bodies, {body, x, 0})
@@ -271,7 +271,7 @@ function SectorView:draw()
           end
           g.setColor(COLORS.NEUTRAL)
         else
-          g.setColor(255, 50, 50)
+          g.setColor(1, 50/255, 50/255)
         end
         _cursor_sprite:draw(0, 0)
         g.pop()
@@ -305,13 +305,13 @@ function SectorView:draw()
       local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
       local hp_percent = body:getHP()/body:getMaxHP()
       local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
-      local cr, cg, cb = HSV(unpack(hsvcol)):unpack()
+      local cr, cg, cb = Color.fromHSV(unpack(hsvcol)):unpack()
       g.push()
       g.translate(x, y)
-      g.setColor(0, 20, 0, 200)
+      g.setColor(0, 20/255, 0, 200/255)
       g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
                   (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-      g.setColor(cr, cg, cb, 200)
+      g.setColor(cr, cg, cb, 200/255)
       g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
                   hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
 
