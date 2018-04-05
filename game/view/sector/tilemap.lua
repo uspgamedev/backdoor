@@ -30,19 +30,21 @@ function TileMap.drawAbyss(g, fov)
   _abyss_batch:clear()
   for i, j in CAM:tilesInRange() do
     local ti, tj = i+1, j+1
-    _abyss_batch:setColor(COLORS.BLACK)
-    if fov and fov[ti] then
-      local visibility = fov[ti][tj]
-      if visibility then
-        if visibility == 0 then
-          _abyss_batch:setColor(_SEEN_ABYSS)
-        else
-          _abyss_batch:setColor(COLORS.BACKGROUND)
+    if _sector:isInside(ti, tj) then
+      _abyss_batch:setColor(COLORS.BLACK)
+      if fov and fov[ti] then
+        local visibility = fov[ti][tj]
+        if visibility then
+          if visibility == 0 then
+            _abyss_batch:setColor(_SEEN_ABYSS)
+          else
+            _abyss_batch:setColor(COLORS.BACKGROUND)
+          end
         end
       end
+      local x, y = j*_TILE_W, i*_TILE_H
+      _abyss_batch:add(x, y, 0, _TILE_W, _TILE_H)
     end
-    local x, y = j*_TILE_W, i*_TILE_H
-    _abyss_batch:add(x, y, 0, _TILE_W, _TILE_H)
   end
   g.draw(_abyss_batch, 0, 0)
   g.pop()
