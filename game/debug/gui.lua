@@ -192,8 +192,8 @@ function GUI:draw()
     self.demo_window = IMGUI.ShowDemoWindow(self.demo_window)
   end
 
-  g.setBackgroundColor(50, 80, 80, 255)
-  g.setColor(255, 255, 255)
+  g.setBackgroundColor(50/255, 80/255, 80/255, 1)
+  g.setColor(1, 1, 1)
   IMGUI.Render()
 end
 

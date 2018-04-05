@@ -67,7 +67,7 @@ local function _listFilesIn(relpath)
 end
 
 local function _deleteFile(relpath)
-  if love.filesystem.exists(relpath) then
+  if love.filesystem.getInfo(relpath, 'file') then
     local path = _fullpath(relpath)
     return os.remove(_fullpath(relpath))
   end
@@ -166,7 +166,7 @@ local function _get(self, key)
   local obj = setmetatable({}, meta)
 
   -- if directory
-  if fs.isDirectory(path) then
+  if fs.getInfo(path, 'directory') then
     meta.__index = _get
     self[key] = obj
     return obj
@@ -174,7 +174,7 @@ local function _get(self, key)
 
   -- if json file
   local filepath = path..".json"
-  if fs.exists(filepath) then
+  if fs.getInfo(filepath, 'file') then
     obj = _loadFile(filepath)
     DB.initSpec(obj, self, meta.group)
     self[key] = obj
