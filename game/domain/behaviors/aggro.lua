@@ -10,6 +10,7 @@ return function (actor)
   local sector = actor:getBody():getSector()
   local i, j = actor:getPos()
 
+  -- i can't see anybody!
   if not actor:hasVisibleBodies() then return RandomWalk.execute(actor) end
 
   -- create list of opponents
@@ -26,7 +27,7 @@ return function (actor)
   end
 
   if not target then
-    -- i can't see anybody!
+    -- i can't see anybody of opposing faction!
     return RandomWalk.execute(actor)
   elseif dist == 1 then
     -- attack if close!
