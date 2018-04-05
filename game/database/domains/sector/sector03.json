@@ -18,10 +18,10 @@
   },
   "rooms":{
     "tries":256,
-    "maxh":9,
+    "count":24,
     "minw":3,
     "minh":3,
-    "count":24,
+    "maxh":9,
     "rmar":1,
     "maxw":9
   },
@@ -41,10 +41,10 @@
   },
   "bootstrap":{
     "w":24,
-    "mh":2,
+    "mh":7,
     "h":40,
     "tileset":"otherdemo",
-    "mw":2
+    "mw":9
   },
   "deadends":{
     "amount":48

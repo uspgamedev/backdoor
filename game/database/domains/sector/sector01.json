@@ -18,10 +18,10 @@
   },
   "rooms":{
     "tries":256,
-    "count":24,
+    "maxh":9,
     "rmar":1,
     "minh":3,
-    "maxh":9,
+    "count":24,
     "minw":3,
     "maxw":9
   },
@@ -34,10 +34,10 @@
   },
   "bootstrap":{
     "w":40,
-    "mh":2,
+    "mh":7,
     "tileset":"demo",
     "h":40,
-    "mw":2
+    "mw":9
   },
   "exits":{
     "distance":5,

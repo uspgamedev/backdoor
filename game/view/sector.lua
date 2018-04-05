@@ -152,7 +152,7 @@ function SectorView:draw()
   end
 
   -- draw background
-  g.setBackgroundColor(COLORS.BLACK)
+  g.setBackgroundColor(COLORS.BACKGROUND)
   g.setColor(COLORS.NEUTRAL)
 
   -- reset color
