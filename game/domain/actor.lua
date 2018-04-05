@@ -378,9 +378,7 @@ function Actor:updateSeenBodies()
   local seen = self.seen_bodies
   local sector = self:getBody():getSector()
   local w, h = sector:getDimensions()
-  printf("##Actor: %s:%s", self:getSpecName(), self:getId())
   for body_id in pairs(self.seen_bodies) do
-    printf("  > deleting body: %s", body_id)
     seen[body_id] = nil
   end
   for i = 1, w do
@@ -389,7 +387,6 @@ function Actor:updateSeenBodies()
       local fov = self.fov[sector:getId()]
       local visibility = fov and fov[i] and fov[i][j]
       if body and body ~= self:getBody() and visibility and visibility ~= 0 then
-        printf("  > %s", body:getId())
         seen[body:getId()] = true
       end
     end
