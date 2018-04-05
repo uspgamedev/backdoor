@@ -31,18 +31,18 @@ local function _initFontValues()
 end
 
 
-local function _renderTitle(g, enter)
+local function _renderTitle(g)
   g.push()
   g.translate(0, _height/4)
   _title_font:set()
   _title_font:setLineHeight(_LH)
-  g.setColor(255, 255, 255, 255*enter)
+  g.setColor(COLORS.NEUTRAL)
   g.print(_TITLE_TEXT, 0, 0)
   g.pop()
 end
 
 
-local function _renderOptions(g, q, enter, selection, scrolltop)
+local function _renderOptions(g, q, selection, scrolltop)
   g.push()
   g.translate(0, _height/2)
   _menu_font:set()
@@ -50,13 +50,13 @@ local function _renderOptions(g, q, enter, selection, scrolltop)
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
-    local cr, cg, cb = unpack(COLORS.BACKGROUND)
+    local text_color = COLORS.BACKGROUND
     count = count + 1
     if count >= scrolltop and count < scrolltop + _SCROLL_THRESHOLD then
       if selection == count then
-        cr, cg, cb = unpack(COLORS.NEUTRAL)
+        text_color = COLORS.NEUTRAL
       end
-      g.setColor(cr, cg, cb, enter*255)
+      g.setColor(text_color)
       g.print(item_text, 0, 0)
       g.translate(0, _menu_font:getHeight())
     end
@@ -73,25 +73,9 @@ function StartMenuView:init()
   self.title = "backdoor"
   self.selection = 1
   self.scrolltop = 1
-  self.enter = 0
 
   _initFontValues()
 
-end
-
-
-function StartMenuView:open()
-  self:removeTimer("startmenu_enter", MAIN_TIMER)
-  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", _FADE_TIME,
-                self, { enter = 1 }, "linear"
-  )
-end
-
-function StartMenuView:close(after)
-  self:removeTimer("startmenu_enter", MAIN_TIMER)
-  self:addTimer("startmenu_enter", MAIN_TIMER, "tween", _FADE_TIME,
-                self, { enter = 0 }, "linear", after
-  )
 end
 
 function StartMenuView:setItem(item_text)
@@ -119,8 +103,8 @@ function StartMenuView:draw()
   g.setBackgroundColor(0, 0, 0)
   g.translate(4*_TILE_W, 0)
 
-  _renderTitle(g, self.enter)
-  _renderOptions(g, q, self.enter, self.selection, self.scrolltop)
+  _renderTitle(g)
+  _renderOptions(g, q, self.selection, self.scrolltop)
 
   g.pop()
 
