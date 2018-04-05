@@ -31,7 +31,7 @@ function FadeView:fadeOutAndThen(do_a_thing)
                 self, { alpha = 1 }, "linear",
                 function()
                   self.fading_out = false
-                  do_a_thing()
+                  if do_a_thing then do_a_thing() end
                 end)
 end
 
@@ -43,13 +43,13 @@ function FadeView:fadeInAndThen(do_a_thing)
                 self, { alpha = 0 }, "linear",
                 function()
                   self.fading_in = false
-                  do_a_thing()
+                  if do_a_thing then do_a_thing() end
                 end)
 end
 
 function FadeView:draw()
   local g = love.graphics
-  g.setColor(0, 0, 0, self.alpha * 0xff)
+  g.setColor(0, 0, 0, self.alpha)
   g.rectangle("fill", 0, 0, g.getDimensions())
 end
 

@@ -5,6 +5,11 @@ require 'libs'
 -- LUX portability
 require 'lux.portable'
 
+local common = require 'lux.common'
+
+printf = common.printf
+identityp = common.identityp
+
 -- CPML
 cpml      = require 'cpml'
 

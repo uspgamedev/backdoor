@@ -1,9 +1,10 @@
 
-local RES = require 'resources'
-local FONT = require 'view.helpers.font'
+local RES        = require 'resources'
+local FONT       = require 'view.helpers.font'
 local ACTIONDEFS = require 'domain.definitions.action'
-local COLORS = require 'domain.definitions.colors'
 local SCHEMATICS = require 'domain.definitions.schematics'
+local COLORS     = require 'domain.definitions.colors'
+local Color      = require 'common.color'
 
 local math = require 'common.math'
 
@@ -15,7 +16,7 @@ local _TILE_W = 8
 local _TILE_H = 8
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
-local _MINIMAP_ALPHA = 180
+local _MINIMAP_ALPHA = 180 / 255
 
 local _initialized = false
 local _exptext, _statstext, _depthtext, _buffertext
@@ -36,17 +37,15 @@ local function _initGraphicValues()
   _buffertext = "%d cards in buffer\n%d in backbuffer\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
-    [SCHEMATICS.WALL] = {200, 128, 50},
-    [SCHEMATICS.FLOOR] = {50, 128, 255},
-    [SCHEMATICS.EXIT] = {200, 200, 40},
+    [SCHEMATICS.WALL] = Color.fromInt {200, 128, 50},
+    [SCHEMATICS.FLOOR] = Color.fromInt {50, 128, 255},
+    [SCHEMATICS.EXIT] = Color.fromInt {200, 200, 40},
   }
-  _tile_mesh = g.newMesh(4,
-    --{ {0, 0}, {_TILE_W, 0}, {_TILE_W, _TILE_H}, {0, _TILE_H} },
-    "fan", "dynamic")
-  _tile_mesh:setVertex(1, 0, 0, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 255, 255, 255, _MINIMAP_ALPHA)
+  _tile_mesh = g.newMesh(4, "fan", "dynamic")
+  _tile_mesh:setVertex(1, 0, 0, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
+  _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
   _initialized = true
 end
 
@@ -95,7 +94,7 @@ function ActorView:draw()
   self:drawImportantHUD(g, actor)
 
   -- only visible when holding button
-  g.setColor(cr, cg, cb, self.alpha*0xff)
+  g.setColor(cr, cg, cb, self.alpha)
   if self.alpha > 0 then
     self:drawMiniMap(g, actor)
     self:drawHP(g, actor)
@@ -156,10 +155,10 @@ function ActorView:drawHP(g, actor)
   local str = _actor_text:format(hp, max_hp)
   local w = _font:getWidth(str) + _font:getHeight()
   g.translate(_width/2 - w/2, _height/2 + 20)
-  g.setColor(0, 0, 0, self.alpha*0xff)
+  g.setColor(0, 0, 0, self.alpha)
   g.printf(str, 0, 0, w, "center")
   g.translate(-2, -2)
-  g.setColor(cr, cg, cb, self.alpha*0xff)
+  g.setColor(cr, cg, cb, self.alpha)
   g.printf(str, 0, 0, w, "center")
   g.pop()
 end
@@ -208,14 +207,14 @@ function ActorView:drawMiniMap(g, actor)
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = actor:getFov(sector)
   g.push()
-  g.setColor(nr, ng, nb, self.alpha*0xff)
+  g.setColor(nr, ng, nb, self.alpha)
   g.translate(320, 20)
   g.printf(sectorname,
            -_font:getWidth(sectorname)/2, 0,
            _font:getWidth(sectorname), "center")
   g.translate(- (w/2) * _TILE_W, _font:getHeight())
   for n=1,4 do
-    _tile_mesh:setVertexAttribute(n, 3, 255, 255, 255, _MINIMAP_ALPHA*self.alpha)
+    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, _MINIMAP_ALPHA*self.alpha)
   end
   for i = 0, h-1 do
     for j = 0, w-1 do
@@ -223,11 +222,11 @@ function ActorView:drawMiniMap(g, actor)
       local tile = tiles[ti][tj]
       if tile and fov[i+1][j+1] then
         local x, y = j*_TILE_W, i*_TILE_H
-        local cr,cg,cb = _tile_colors[tile.type]
+        local cr,cg,cb = _tile_colors[tile.type]:unpack()
         g.setColor(cr, cg, cb)
         g.draw(_tile_mesh, x, y)
         if ai == ti and aj == tj then
-          g.setColor(255, 160, 40, self.alpha*0xff)
+          g.setColor(1, 160/255, 40/255, self.alpha)
           g.circle("fill", x+_TILE_W/2, y+_TILE_H/2, _TILE_W/2, _TILE_H/2)
         end
       end

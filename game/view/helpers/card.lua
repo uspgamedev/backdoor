@@ -41,7 +41,7 @@ function CARD.draw(card, x, y, focused, alpha)
 
   if focused then
     -- shine!
-    local shine = 50
+    local shine = 50/255
     local cardname = card:getName()
     local namewidth = _title_font:getWidth(cardname)
     g.translate(0, -10)
@@ -58,17 +58,17 @@ function CARD.draw(card, x, y, focused, alpha)
   _info_font.set()
 
   --shadow
-  g.setColor(0, 0, 0, alpha*255)
+  g.setColor(0, 0, 0, alpha)
   _card_base:draw(x+2, y+2)
 
   --card
-  g.setColor(cr, cg, cb, alpha*255)
+  g.setColor(cr, cg, cb, alpha)
   _card_base:draw(x, y)
 
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(card:getIconTexture() or 'icon-none')
-  g.setColor(br, bg, bb, alpha*255)
+  g.setColor(br, bg, bb, alpha)
   icon_texture:setFilter('linear', 'linear')
   icon_texture:draw(x+w/2, y+h/2, 0, 1, 1,
                     icon_texture:getWidth()/2,
@@ -77,7 +77,7 @@ function CARD.draw(card, x, y, focused, alpha)
 
   g.translate(x, y)
   --Draw card info
-  g.setColor(0x20, 0x20, 0x20, alpha*255)
+  g.setColor(0x20/255, 0x20/255, 0x20/255, alpha)
   g.printf(card:getType(), w-pd-typewidth, 0, typewidth, "right")
 
   if card:isWidget() then
@@ -98,7 +98,7 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.push()
 
   g.translate(x, y)
-  g.setColor(cr, cg, cb, alpha*255)
+  g.setColor(cr, cg, cb, alpha)
 
   _title_font:setLineHeight(1.5)
   _title_font.set()

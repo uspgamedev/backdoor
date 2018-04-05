@@ -103,7 +103,7 @@ function PROFILE.init()
   __COMPRESS__ = __COMPRESS__ or RUNFLAGS.COMPRESS
   if RUNFLAGS.CLEAR then _cleanSlate() end
   -- check if profile exists and generate one if not
-  if not filesystem.exists(PROFILE_PATH) then _newProfile() end
+  if not filesystem.getInfo(PROFILE_PATH, 'file') then _newProfile() end
   -- load profile from disk
   _loadProfile()
   _loadInput()

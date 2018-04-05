@@ -27,7 +27,7 @@ end
 
 local function _render(enter, progress, x, y)
   local g = love.graphics
-  local alpha = enter * 0xFF
+  local alpha = enter
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
   g.push()
   g.translate(x - _WIDTH/2, y)

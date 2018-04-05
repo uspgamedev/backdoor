@@ -88,8 +88,8 @@ end
 
 function View:close(after)
   self:removeTimer('charabuild_fade', MAIN_TIMER)
-  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", 1.5*_FADE_TIME,
-                self, { enter = 0 }, "in-quad", after
+  self:addTimer('charabuild_fade', MAIN_TIMER, "tween", _FADE_TIME,
+                self, { enter = 0 }, "linear", after
   )
 end
 
@@ -143,7 +143,7 @@ function View:draw()
   local selection = self.selection
 
   g.setBackgroundColor(0, 0, 0)
-  g.setColor(0xff, 0xff, 0xff, 0xff*enter)
+  g.setColor(1, 1, 1, enter)
 
   self:drawSaved(g, player_info)
   self:drawContext(g)
@@ -227,7 +227,7 @@ function View:drawSaved(g, player_info)
   _header_font:set()
   g.push()
   g.translate(_WIDTH/3-80, _HEIGHT/2 - 2*_header_font:getHeight() + 40)
-  g.setColor(0x38, 0xe4, 0xff, 255*self.enter)
+  g.setColor(0x38/255, 0xe4/255, 1, self.enter)
   for i = 1, self.context - 1 do
     local field = _PLAYER_FIELDS[i]
     local specname = player_info[field]
@@ -236,7 +236,7 @@ function View:drawSaved(g, player_info)
     g.print(_getSpec(field, specname)['name'], 0, 0)
     g.translate(0, _header_font:getHeight() - 16)
   end
-  g.setColor(255, 255, 255, 255*self.enter)
+  g.setColor(1, 1, 1, self.enter)
   g.pop()
 end
 

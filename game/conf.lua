@@ -2,7 +2,7 @@
 
 function love.conf(t)
     t.identity = "backdoor"             -- The name of the save directory (string)
-    t.version = "0.10.2"                -- The LÖVE version this game was made for (string)
+    t.version = "11.0"                  -- The LÖVE version this game was made for (string)
     t.console = false                   -- Attach a console (boolean, Windows only)
     t.accelerometerjoystick = false     -- Enable the accelerometer on iOS and Android by exposing it as a Joystick (boolean)
     t.externalstorage = false           -- True to save files (and read from the save directory) in external storage on Android (boolean)

@@ -46,7 +46,7 @@ end
 
 function PickWidgetView:draw()
   local g = love.graphics
-  g.setColor(0, 0, 0, self.alpha*0x80)
+  g.setColor(0, 0, 0, self.alpha*0.5)
   g.rectangle("fill", 0, 0, _width, _height)
   g.push()
 
@@ -65,16 +65,16 @@ function PickWidgetView:draw()
   for index, info_str in ipairs(strs) do
     local selected = self.selection == index
     if selected then
-      g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)
+      g.setColor(Color.fromInt(0xff, 0xff, 0xff, self.alpha*0xff))
     else
-      g.setColor(0x16, 0x16, 0x16, self.alpha*0xff)
+      g.setColor(Color.fromInt(0x16, 0x16, 0x16, self.alpha*0xff))
     end
     g.rectangle("fill", 0, 0, width+8*_PADDING, _BLOCK_HEIGHT)
     _font:set()
     if selected then
-      g.setColor(0x00, 0x00, 0x00, self.alpha*0xff)
+      g.setColor(Color.fromInt(0x00, 0x00, 0x00, self.alpha*0xff))
     else
-      g.setColor(0xff, 0xff, 0xff, self.alpha*0xff)
+      g.setColor(Color.fromInt(0xff, 0xff, 0xff, self.alpha*0xff))
     end
     g.printf(info_str, 4*_PADDING, _PADDING, width)
     g.translate(0, _BLOCK_HEIGHT + _MARGIN)

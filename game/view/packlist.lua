@@ -137,7 +137,7 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0x80)
+  g.setColor(0, 0, 0, enter*0.5)
   g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
 
@@ -171,13 +171,13 @@ function View:drawPacks(g, enter)
     g.translate(0, self.y_offset[i])
     packbg = RES.loadTexture("pack")
 
-    local shiny = 1
+    local shiny = 1/255
     if focus then
-      shiny = 1.5
+      shiny = 1.5/255
     end
 
     --shadow
-    g.setColor(0, 0, 0, 200)
+    g.setColor(0, 0, 0, 200/255)
     g.draw(packbg, 5, 5)
 
     --pack
@@ -187,7 +187,7 @@ function View:drawPacks(g, enter)
     --draw icon
     local collection = DB.loadSpec("collection", pack_list[selection])
     local text = RES.loadTexture(collection.image)
-    g.setColor(255,255,255)
+    g.setColor(1, 1, 1)
     g.draw(text,-3,45)
     g.pop()
   end
@@ -228,7 +228,7 @@ function View:drawArrow(g, enter)
   self:drawHoldBar(g)
 
   g.translate(0, text_height*.5)
-  g.setColor(0xFF, 0xFF, 0xFF, enter*0xFF)
+  g.setColor(1, 1, 1, enter)
   g.printf(_HOLDBAR_TEXT, -text_width/2, 0, text_width, "center")
 
   g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)
