@@ -3,13 +3,14 @@ local TILE       = require 'common.tile'
 local Action     = require 'domain.action'
 local ACTIONDEFS = require 'domain.definitions.action'
 local FindPath   = require 'domain.behaviors.helpers.findpath'
+local RandomWalk = require 'domain.behaviors.helpers.random'
 
 return function (actor)
   local target, dist
   local sector = actor:getBody():getSector()
   local i, j = actor:getPos()
 
-  if not actor:hasVisibleBodies() then return ACTIONDEFS.IDLE end
+  if not actor:hasVisibleBodies() then return RandomWalk.execute(actor) end
 
   -- create list of opponents
   for body_id,seen in actor:eachSeenBody() do
@@ -24,9 +25,9 @@ return function (actor)
     end
   end
 
-  if not dist then
-    -- there are not valid targets!
-    return ACTIONDEFS.IDLE, {}
+  if not target then
+    -- i can't see anybody!
+    return RandomWalk.execute(actor)
   elseif dist == 1 then
     -- attack if close!
     return ACTIONDEFS.USE_SIGNATURE, { pos = {target:getPos()} }
@@ -39,6 +40,6 @@ return function (actor)
   end
 
   -- there are valid targets, but i can't reach them
-  return ACTIONDEFS.IDLE, {}
+  return RandomWalk.execute(actor)
 end
 
