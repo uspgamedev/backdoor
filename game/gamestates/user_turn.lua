@@ -7,6 +7,7 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
+local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 
@@ -23,6 +24,7 @@ local _extended_hud
 local _long_walk
 local _alert
 local _save_and_quit
+local _was_on_menu
 
 local _ACTION = {}
 
@@ -85,12 +87,17 @@ function state:enter(_, route, view, alert)
   _view = view
   _view.hand:reset()
 
+  _was_on_menu = false
+
 end
 
 function state:resume(from, args)
   _resumeTask(args)
   if from == GS.ACTION_MENU and args.action then
+    _was_on_menu = true
     _startTask(args.action)
+  else
+    _was_on_menu = false
   end
 end
 
@@ -257,11 +264,19 @@ _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
 end
 
 _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
+  if _route.getControlledActor():getBody():getWidgetCount() > 0 then
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
+  elseif _was_on_menu then
+    SWITCHER.push(GS.ACTION_MENU, _route)
+  end
 end
 
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
-  _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+  if MANEUVERS['draw_new_hand'].validate(_route.getControlledActor(), {}) then
+    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+  elseif _was_on_menu then
+    SWITCHER.push(GS.ACTION_MENU, _route)
+  end
 end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
@@ -276,22 +291,34 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function()
         end
       end
     end
+  elseif _was_on_menu then
+    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
-  SWITCHER.push(GS.MANAGE_BUFFER, _route.getControlledActor())
-  local args = coroutine.yield(_task)
-  _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
+  local actor = _route.getControlledActor()
+  if actor:getBackBufferSize() > 0 then
+    SWITCHER.push(GS.MANAGE_BUFFER, actor)
+    local args = coroutine.yield(_task)
+    _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
+  elseif _was_on_menu then
+    SWITCHER.push(GS.ACTION_MENU, _route)
+  end
 end
 
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
-  SWITCHER.push(GS.OPEN_PACK, _route.getControlledActor():getPrizePacks())
-  local args = coroutine.yield(_task)
-  if args.pack == nil then return end
-  _route.getControlledActor():removePrizePack(args.pack_index)
-  _useAction(DEFS.ACTION.RECEIVE_PACK,
-             { consumed = args.consumed, pack = args.pack })
+  local actor = _route.getControlledActor()
+  if actor:getPrizePackCount() > 0 then
+    SWITCHER.push(GS.OPEN_PACK, actor:getPrizePacks())
+    local args = coroutine.yield(_task)
+    if args.pack == nil then return end
+    _route.getControlledActor():removePrizePack(args.pack_index)
+    _useAction(DEFS.ACTION.RECEIVE_PACK,
+               { consumed = args.consumed, pack = args.pack })
+  elseif _was_on_menu then
+    SWITCHER.push(GS.ACTION_MENU, _route)
+  end
 end
 
 _ACTION[DEFS.ACTION.IDLE] = function()
@@ -299,3 +326,4 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 return state
+

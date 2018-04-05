@@ -1,8 +1,8 @@
 
 local RES = require 'resources'
 local DEFS = require 'domain.definitions'
-local COLORS = require 'domain.definitions.colors'
 local Color = require 'common.color'
+local COLOR = require 'common.color'
 local FONT = require 'view.helpers.font'
 
 local PickWidgetView = Class{
