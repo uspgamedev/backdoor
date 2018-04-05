@@ -46,6 +46,7 @@ function Actor:init(spec_name)
   self.exp = 0
   self.playpoints = DEFS.MAX_PP
 
+  self.seen_bodies = {}
   self.fov = {}
   self.fov_range = 4
 
@@ -363,6 +364,38 @@ function Actor:getPrizePackCount()
   return #self.prizes
 end
 
+-- Visibility Methods --
+
+function Actor:hasVisibleBodies()
+  return not not next(self.seen_bodies)
+end
+
+function Actor:eachSeenBody()
+  return pairs(self.seen_bodies)
+end
+
+function Actor:updateSeenBodies()
+  local seen = self.seen_bodies
+  local sector = self:getBody():getSector()
+  local w, h = sector:getDimensions()
+  printf("##Actor: %s:%s", self:getSpecName(), self:getId())
+  for body_id in pairs(self.seen_bodies) do
+    printf("  > deleting body: %s", body_id)
+    seen[body_id] = nil
+  end
+  for i = 1, w do
+    for j = 1, h do
+      local body = sector:getBodyAt(i, j)
+      local fov = self.fov[sector:getId()]
+      local visibility = fov and fov[i] and fov[i][j]
+      if body and body ~= self:getBody() and visibility and visibility ~= 0 then
+        printf("  > %s", body:getId())
+        seen[body:getId()] = true
+      end
+    end
+  end
+end
+
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then
@@ -376,6 +409,7 @@ end
 
 function Actor:updateFov(sector)
   Visibility.updateFov(self,sector)
+  self:updateSeenBodies()
 end
 
 function Actor:getFov(sector)

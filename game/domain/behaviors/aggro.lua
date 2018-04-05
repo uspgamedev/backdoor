@@ -9,10 +9,14 @@ return function (actor)
   local sector = actor:getBody():getSector()
   local i, j = actor:getPos()
 
+  if not actor:hasVisibleBodies() then return ACTIONDEFS.IDLE end
+
   -- create list of opponents
-  for _,opponent in sector:iterateActors() do
-    if opponent:isPlayer() then
-      local k, l = opponent:getPos()
+  for body_id,seen in actor:eachSeenBody() do
+    local opponent = Util.findId(body_id)
+    print(opponent:getSpecName())
+    if opponent:getFaction() ~= self:getBody():getFaction() then
+      local k, l = identityp(opponent:getPos())
       local d = TILE.dist(i, j, k, l)
       if not target or not dist or d < dist then
         target = opponent
