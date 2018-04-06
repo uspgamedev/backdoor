@@ -70,8 +70,6 @@ function TileMap.drawFloor(g, fov)
         else
           _tile_batch:setColor(COLORS.NEUTRAL)
         end
-      else
-        error(string.format("No FOV in tile [%d, %d]", ti, tj))
       end
       _tile_batch:add(_tile_quads[tile_type], x, y,
                   0, 1, 1, unpack(_tile_offset[tile.type]))
