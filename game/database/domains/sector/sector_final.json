@@ -6,47 +6,47 @@
   "encounters":{
     "max":14,
     "recipes":[{
-        "actorspec":"newbieslayer",
         "bodyspec":"rewasvat",
+        "actorspec":"newbieslayer",
         "upgrade_power":200
       },{
-        "actorspec":"fiendish",
         "bodyspec":"eye",
+        "actorspec":"fiendish",
         "upgrade_power":150
       },{
-        "actorspec":"grinful",
         "bodyspec":"imp",
+        "actorspec":"grinful",
         "upgrade_power":150
       }],
     "min":6
   },
   "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
     "tries":256,
-    "count":32,
     "maxh":9,
+    "minw":3,
+    "minh":3,
+    "count":32,
+    "rmar":1,
     "maxw":9
   },
-  "exits":{
-    "distance":5,
-    "exits":[{
-        "target_specname":"sector03"
-      }],
-    "threshold":2
+  "maze":{
+    "double":false
   },
   "deadends":{
     "amount":24
   },
   "bootstrap":{
-    "w":30,
+    "w":48,
     "mh":7,
     "tileset":"otherdemo",
-    "h":30,
+    "h":48,
     "mw":9
   },
-  "maze":{
-    "double":false
+  "exits":{
+    "distance":5,
+    "threshold":2,
+    "exits":[{
+        "target_specname":"sector03"
+      }]
   }
 }
