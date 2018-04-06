@@ -1,6 +1,7 @@
 
 local TILE       = require 'common.tile'
 local Action     = require 'domain.action'
+local MANEUVERS  = require 'lux.pack' 'domain.maneuver'
 local ACTIONDEFS = require 'domain.definitions.action'
 local FindPath   = require 'domain.behaviors.helpers.findpath'
 local RandomWalk = require 'domain.behaviors.helpers.random'
@@ -26,17 +27,17 @@ return function (actor)
     end
   end
 
-  if not target then
-    -- i can't see anybody of opposing faction!
-    return RandomWalk.execute(actor)
-  elseif dist == 1 then
-    -- attack if close!
-    return ACTIONDEFS.USE_SIGNATURE, { pos = {target:getPos()} }
-  elseif dist <= 8 then
-    -- chase if far away!
-    local pos = FindPath.getNextStep({i,j}, {target:getPos()}, sector)
-    if pos then
-      return ACTIONDEFS.MOVE, { pos = pos }
+  if target then
+    local inputs = { pos = { target:getPos() } }
+    if MANEUVERS[ACTIONDEFS.USE_SIGNATURE].validate(actor, inputs) then
+      -- attack if close!
+      return ACTIONDEFS.USE_SIGNATURE, inputs
+    else
+      -- chase if far away!
+      inputs.pos = FindPath.getNextStep({i, j}, inputs.pos, sector)
+      if inputs.pos and MANEUVERS[ACTIONDEFS.MOVE].validate(actor, inputs) then
+        return ACTIONDEFS.MOVE, inputs
+      end
     end
   end
 
