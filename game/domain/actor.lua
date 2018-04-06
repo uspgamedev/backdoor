@@ -363,6 +363,27 @@ function Actor:getPrizePackCount()
   return #self.prizes
 end
 
+-- Visibility Methods --
+
+function Actor:getVisibleBodies()
+  local seen = {}
+  local sector = self:getBody():getSector()
+  local w, h = sector:getDimensions()
+
+  for i = 1, h do
+    for j = 1, w do
+      local body = sector:getBodyAt(i, j)
+      local fov = self:getFov(sector)
+      local visible = fov and fov[i] and fov[i][j]
+      if body and body ~= self:getBody() and visible and visible ~= 0 then
+        seen[body:getId()] = true
+      end
+    end
+  end
+
+  return seen
+end
+
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then
@@ -375,7 +396,7 @@ function Actor:resetFov(sector)
 end
 
 function Actor:updateFov(sector)
-  Visibility.updateFov(self,sector)
+  Visibility.updateFov(self, sector)
 end
 
 function Actor:getFov(sector)

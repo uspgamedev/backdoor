@@ -93,6 +93,9 @@ end
 
 function SectorView:lookAt(target)
   self.target = target
+  if target and target.fov then
+    self:updateFov(target)
+  end
 end
 
 function SectorView:updateVFX(dt)
