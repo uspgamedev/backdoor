@@ -46,7 +46,6 @@ function Actor:init(spec_name)
   self.exp = 0
   self.playpoints = DEFS.MAX_PP
 
-  self.seen_bodies = {}
   self.fov = {}
   self.fov_range = 4
 
@@ -366,31 +365,23 @@ end
 
 -- Visibility Methods --
 
-function Actor:hasVisibleBodies()
-  return not not next(self.seen_bodies)
-end
-
-function Actor:eachSeenBody()
-  return pairs(self.seen_bodies)
-end
-
-function Actor:updateSeenBodies()
-  local seen = self.seen_bodies
+function Actor:getVisibleBodies()
+  local seen = {}
   local sector = self:getBody():getSector()
   local w, h = sector:getDimensions()
-  for body_id in pairs(self.seen_bodies) do
-    seen[body_id] = nil
-  end
-  for i = 1, w do
-    for j = 1, h do
+
+  for i = 1, h do
+    for j = 1, w do
       local body = sector:getBodyAt(i, j)
-      local fov = self.fov[sector:getId()]
-      local visibility = fov and fov[i] and fov[i][j]
-      if body and body ~= self:getBody() and visibility and visibility ~= 0 then
+      local fov = self:getFov(sector)
+      local visible = fov and fov[i] and fov[i][j]
+      if body and body ~= self:getBody() and visible and visible ~= 0 then
         seen[body:getId()] = true
       end
     end
   end
+
+  return seen
 end
 
 function Actor:purgeFov(sector)
@@ -405,8 +396,7 @@ function Actor:resetFov(sector)
 end
 
 function Actor:updateFov(sector)
-  Visibility.updateFov(self,sector)
-  self:updateSeenBodies()
+  Visibility.updateFov(self, sector)
 end
 
 function Actor:getFov(sector)

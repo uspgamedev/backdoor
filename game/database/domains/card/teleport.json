@@ -1,13 +1,24 @@
 {
-  "pp":4,
-  "desc":"Teleport self to target position.\n\n\"Transporting all the molecules in your body has never been so easy! But I wonder if your original self dies everytime you do that... well who cares.\"",
+  "attr":"ARC",
+  "icon":"card-teleport",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
+      "effects":[{
+          "vfx-spd":1,
+          "vfx":false,
+          "type":"effect",
+          "body":"=Body",
+          "name":"move_to",
+          "pos":"=target_pos"
+        }],
       "inputs":[{
-          "type":"input",
-          "output":"target_pos",
           "empty-tile":true,
+          "output":"target_pos",
+          "aoe-hint":0,
+          "dif-fact":false,
+          "type":"input",
+          "non-wall":true,
           "name":"choose_target",
           "max-range":7
         },{
@@ -16,24 +27,16 @@
           "output":"Actor"
         },{
           "type":"operator",
-          "actor":"=Actor",
+          "output":"Body",
           "name":"get_actor_body",
-          "output":"Body"
-        }],
-      "effects":[{
-          "body":"=Body",
-          "pos":"=target_pos",
-          "vfx-spd":1,
-          "vfx":false,
-          "name":"move_to",
-          "type":"effect"
+          "actor":"=Actor"
         }]
-    }
+    },
+    "cost":20
   },
-  "one_time":false,
-  "icon":"card-teleport",
-  "set":false,
+  "desc":false,
   "type-description":"",
-  "attr":"ARC",
-  "name":"Teleport"
+  "pp":4,
+  "name":"Teleport",
+  "set":false
 }

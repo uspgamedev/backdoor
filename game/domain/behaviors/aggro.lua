@@ -11,12 +11,12 @@ return function (actor)
   local i, j = actor:getPos()
 
   -- i can't see anybody!
-  if not actor:hasVisibleBodies() then return RandomWalk.execute(actor) end
+  local visible_bodies = actor:getVisibleBodies()
 
   -- create list of opponents
-  for body_id,seen in actor:eachSeenBody() do
+  for body_id in pairs(visible_bodies) do
     local opponent = Util.findId(body_id)
-    if opponent:getFaction() ~= actor:getBody():getFaction() then
+    if opponent and opponent:getFaction() ~= actor:getBody():getFaction() then
       local k, l = opponent:getPos()
       local d = TILE.dist(i, j, k, l)
       if not target or not dist or d < dist then
