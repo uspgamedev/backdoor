@@ -10,7 +10,7 @@ return function (body)
     IMGUI.Text(("Species: %s"):format(body:getSpec('name')))
     IMGUI.Separator()
     IMGUI.PushItemWidth(100)
-    local changed, newhp = IMGUI.SliderInt("Hit Points", hp, 1,
+    local newhp, changed = IMGUI.SliderInt("Hit Points", hp, 1,
                                            body:getMaxHP())
     IMGUI.PopItemWidth()
     if changed then
