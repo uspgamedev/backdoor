@@ -370,13 +370,17 @@ function Actor:getVisibleBodies()
   local sector = self:getBody():getSector()
   local w, h = sector:getDimensions()
 
-  for i = 1, h do
-    for j = 1, w do
-      local body = sector:getBodyAt(i, j)
-      local fov = self:getFov(sector)
-      local visible = fov and fov[i] and fov[i][j]
-      if body and body ~= self:getBody() and visible and visible ~= 0 then
-        seen[body:getId()] = true
+  local range = self:getFovRange()
+  local pi, pj = self:getPos()
+  for i = pi-range, pi+range do
+    for j = pj-range, pj+range do
+      if sector:isInside(i, j) then
+        local body = sector:getBodyAt(i, j)
+        local fov = self:getFov(sector)
+        local visible = fov and fov[i] and fov[i][j]
+        if body and body ~= self:getBody() and visible and visible ~= 0 then
+          seen[body:getId()] = true
+        end
       end
     end
   end
