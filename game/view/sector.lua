@@ -70,6 +70,10 @@ function SectorView:init(route)
 
 end
 
+function SectorView:getTarget()
+  return self.target
+end
+
 function SectorView:initSector(sector)
   if sector and sector ~= self.sector then
     local g = love.graphics
@@ -106,9 +110,14 @@ function SectorView:startVFX(extra)
   local spritefx = SPRITEFX[extra.type]
   --Play SFX if any
   local sfx
-  if extra.sfx then sfx = RES.loadSFX(extra.sfx); sfx:setVolume(1); sfx:stop(); sfx:play(); end
-  spritefx.apply(self, extra)
+  if extra.sfx then
+    sfx = RES.loadSFX(extra.sfx)
+    sfx:setVolume(1)
+    sfx:stop()
+    sfx:play()
+  end
   self.vfx = spritefx
+  spritefx.apply(self, extra)
 end
 
 function SectorView:finishVFX()
