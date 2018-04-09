@@ -51,10 +51,8 @@ local function _playTurns(...)
     end)
   elseif request == "report" then
     _view.sector:startVFX(extra)
-    if extra.type == 'dmg_taken' and
-       extra.body == _route:getControlledActor():getBody() then
-      _alert = true
-    end
+    _alert = _alert or (extra.type == 'number_rise')
+                    and (extra.body == _player:getBody())
     SWITCHER.push(GS.ANIMATION, _view.sector)
   end
   _next_action = nil
@@ -84,9 +82,6 @@ function state:enter(pre, route_data)
   -- load route
   _route = Route()
   _route.loadState(route_data)
-
-  -- set player
-  _player = _route.getControlledActor()
 
   -- View table
   _view = {}
@@ -127,6 +122,9 @@ function state:enter(pre, route_data)
 
   -- start gamestate
   _playTurns()
+
+  -- set player
+  _player = _route.getControlledActor()
 
   local fade_view = FadeView(FadeView.STATE_FADED)
   fade_view:addElement("GUI")

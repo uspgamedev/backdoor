@@ -29,7 +29,8 @@ function FX.process (actor, fieldvalues)
         if not ignore_owner or body ~= actor:getBody() then
           local dmg = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
-            type = 'dmg_taken',
+            type = 'number_rise',
+            number_type = 'damage',
             body = body,
             amount = dmg,
           })

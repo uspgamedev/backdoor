@@ -18,7 +18,8 @@ function FX.process (actor, fieldvalues)
   actor:rewardPP(amount)
 
   coroutine.yield('report', {
-    type = 'healed',
+    type = 'number_rise',
+    number_type = 'food',
     body = target or actor:getBody(),
     amount = amount,
   })
