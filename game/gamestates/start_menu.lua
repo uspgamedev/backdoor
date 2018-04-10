@@ -38,6 +38,7 @@ function state:enter()
   _menu_view = StartMenuView()
   _menu_view:addElement("HUD")
 
+  _locked = true
   local _fade_view = FadeView(FadeView.STATE_FADED)
   _fade_view:addElement("GUI")
   _fade_view:fadeInAndThen(function()
@@ -59,6 +60,7 @@ function state:resume(from, player_info)
   else
     _menu_context = "START_MENU"
     _menu_view.invisible = false
+    _locked = true
     local _fade_view = FadeView(FadeView.STATE_FADED)
     _fade_view:addElement("GUI")
     _fade_view:fadeInAndThen(function()
