@@ -468,6 +468,7 @@ function _turnLoop(self, ...)
 
       if actor:ready() then
         while actor:ready() do
+          actor:grabDrops(self:getTile(actor:getPos()))
           actor:makeAction()
           manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
         end
