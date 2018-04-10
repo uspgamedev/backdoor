@@ -159,7 +159,6 @@ function Sector:makeTiles(grid, drops)
       if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
         tile = { type = tile_type, drops = {} }
         for _,drop in ipairs(drops[i][j]) do
-          printf("inserting food in tile: '%s' [%d, %d]", tile_type, i, j)
           table.insert(tile.drops, drop)
         end
       end

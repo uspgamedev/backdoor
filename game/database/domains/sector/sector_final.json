@@ -6,41 +6,40 @@
   "encounters":{
     "max":14,
     "recipes":[{
-        "actorspec":"newbieslayer",
         "bodyspec":"rewasvat",
+        "actorspec":"newbieslayer",
         "upgrade_power":200
       },{
-        "actorspec":"fiendish",
         "bodyspec":"eye",
+        "actorspec":"fiendish",
         "upgrade_power":150
       },{
-        "actorspec":"grinful",
         "bodyspec":"imp",
+        "actorspec":"grinful",
         "upgrade_power":150
       }],
     "min":6
   },
   "drops":{
-    "droprate":2
+    "drops":[{
+        "droptype":"food",
+        "droprate":2
+      }]
   },
   "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
     "tries":256,
-    "maxh":9,
     "count":32,
+    "minw":3,
+    "minh":3,
+    "maxh":9,
+    "rmar":1,
     "maxw":9
-  },
-  "exits":{
-    "distance":5,
-    "exits":[{
-        "target_specname":"sector03"
-      }],
-    "threshold":2
   },
   "deadends":{
     "amount":24
+  },
+  "maze":{
+    "double":false
   },
   "bootstrap":{
     "w":48,
@@ -49,7 +48,11 @@
     "h":48,
     "mw":9
   },
-  "maze":{
-    "double":false
+  "exits":{
+    "distance":5,
+    "threshold":2,
+    "exits":[{
+        "target_specname":"sector03"
+      }]
   }
 }
