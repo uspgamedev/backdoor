@@ -8,8 +8,8 @@ local _FOOD = 'food'
 local transformer = {}
 
 transformer.schema = {
-  { id = 'droprate', name = "Food Drop Rate",
-    type = 'integer', range = {0, _RATE_MAX} },
+  { id = 'droprate', name = "Food Drop Rate", type = 'integer',
+    range = {0, _RATE_MAX} },
 }
 
 function transformer.process(sectorinfo, params)
@@ -17,10 +17,11 @@ function transformer.process(sectorinfo, params)
   local droprate = params.droprate
 
   local drops = {}
-  for i, j, tile in grid.iterate() do
+  for j, i, tile in grid.iterate() do
     drops[i] = drops[i] or {}
     drops[i][j] = {}
     if tile == SCHEMATICS.FLOOR and RANDOM.generate(_RATE_MAX) <= droprate then
+      printf("tile chosen: [%d, %d] '%s'", i, j, tile)
       table.insert(drops[i][j], _FOOD)
     end
   end
