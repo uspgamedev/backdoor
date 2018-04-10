@@ -35,6 +35,11 @@ local _tiny_font
 
 -- LOCAL FUNCTION DECLARATIONS -------------------------------------------------
 
+local function _getDisplacedIndex(current, offset, max)
+  return (current + max*offset - 1 + offset) % max + 1
+end
+
+
 -- ActionMenu Class ----------------------------------------------------------
 
 local ActionMenu = Class {
@@ -73,13 +78,22 @@ end
 
 function ActionMenu:moveFocus(dir)
   local last = self.current
-  if dir == 'UP' or dir == 'RIGHT' then
-    self.current = math.max(1, self.current - 1)
-  elseif dir == 'DOWN' or dir == 'LEFT' then
-    self.current = math.min(#_ACTIONS, self.current + 1)
+  local item_count = #_ACTIONS
+  local offset = 0
+  if dir == 'UP' or dir == 'RIGHT' or dir == 'UPRIGHT' then
+    offset = -1
+  elseif dir == 'DOWN' or dir == 'LEFT' or dir == 'DOWNLEFT' then
+    offset = 1
   end
+  self.current = _getDisplacedIndex(self.current, offset, item_count)
   if last ~= self.current then
-    self.switch = last - self.current
+    local k = last - self.current
+    if k > item_count / 2 then
+      k = k - item_count
+    elseif k < -item_count / 2 then
+      k = k + item_count
+    end
+    self.switch = k
     self:removeTimer(_TWEEN.SWITCH, MAIN_TIMER)
     self:addTimer(_TWEEN.SWITCH, MAIN_TIMER, "tween",
                   0.3, self, { switch = 0 }, 'out-back')
@@ -127,8 +141,18 @@ function ActionMenu:draw()
   g.push()
   g.translate(_W/2, _H/2 - 40)
   local rot = (enter - 1) * pi + switch * _ANGLE
-  for i,action_name in ipairs(_ACTIONS) do
+  local item_count = #_ACTIONS
+  local start = _getDisplacedIndex(self.current, -3, item_count)
+  local finish = _getDisplacedIndex(self.current, 3, item_count)
+  local i = start
+  while i ~= finish do
+    local action_name = _ACTIONS[i]
     local k = i - self.current
+    if k > item_count / 2 then
+      k = k - item_count
+    elseif k < -item_count / 2 then
+      k = k + item_count
+    end
     local angle = rot - _ANGLE*k
     local x,y = cos(angle), -sin(angle)
     local size = (i == self.current) and (1 - abs(switch)/2) or 0.5
@@ -163,6 +187,8 @@ function ActionMenu:draw()
       end
     end
     g.pop()
+
+    i = _getDisplacedIndex(i, 1, item_count)
   end
   g.push()
   _font:setLineHeight(1)
