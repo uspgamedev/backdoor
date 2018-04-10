@@ -54,8 +54,16 @@ function state:update(dt)
 
   if DIRECTIONALS.wasDirectionTriggered('UP') then
     _moveFocus('UP')
+  elseif DIRECTIONALS.wasDirectionTriggered('UPLEFT') then
+    _moveFocus('UPLEFT')
+  elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
+    _moveFocus('LEFT')
   elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
     _moveFocus('DOWN')
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWNRIGHT') then
+    _moveFocus('DOWNRIGHT')
+  elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+    _moveFocus('RIGHT')
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirm()
   elseif INPUT.wasActionPressed('CANCEL') or
