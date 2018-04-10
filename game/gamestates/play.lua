@@ -128,8 +128,10 @@ function state:enter(pre, route_data)
 
   local fade_view = FadeView(FadeView.STATE_FADED)
   fade_view:addElement("GUI")
-  fade_view:fadeInAndThen(function()
-    fade_view:destroy()
+  MAIN_TIMER:after(FadeView.FADE_TIME, function()
+    fade_view:fadeInAndThen(function()
+      fade_view:destroy()
+    end)
   end)
 
 end
