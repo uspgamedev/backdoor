@@ -415,7 +415,7 @@ end
 
 --[[ Turn methods ]]--
 
-local function _grabDrops(actor, tile)
+function Actor:grabDrops(tile)
   local drops = tile.drops
   local inputvalues = {}
   local n = #drops
@@ -423,10 +423,10 @@ local function _grabDrops(actor, tile)
   while i <= n do
     local dropname = drops[i]
     local dropspec = DB.loadSpec('drop', dropname)
-    if ABILITY.checkInputs(dropspec.ability, actor, inputvalues) then
+    if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1
-      ABILITY.execute(dropspec.ability, actor, inputvalues)
+      ABILITY.execute(dropspec.ability, self, inputvalues)
     else
       i = i+1
     end
@@ -446,7 +446,6 @@ function Actor:tick()
       self:addCardToBackbuffer(card)
     end
   end
-  _grabDrops(self, self:getBody():getSector():getTile(self:getPos()))
 end
 
 function Actor:resetHandCountdown()
