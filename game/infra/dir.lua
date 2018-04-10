@@ -116,6 +116,10 @@ function DIRECTIONALS.isDirectionDown(direction)
   local dir = _DIR_ENUM[_DIR_TRANSLATE[direction]]
   local hat = _DIR_ENUM[DIRECTIONALS.getFromHat()]
   local axis = _DIR_ENUM[DIRECTIONALS.getFromAxes()]
+
+  _last_hat = hat
+  _last_axis = axis
+
   return dir == hat or dir == axis or INPUT.isActionDown(direction)
 end
 
