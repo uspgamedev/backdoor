@@ -139,7 +139,7 @@ function Sector:generate(register, depth)
   end
 
   self:setDepth(depth)
-  self:makeTiles(base.grid)
+  self:makeTiles(base.grid, base.drops)
   self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
 end
@@ -148,7 +148,7 @@ function Sector:getTile(i, j)
   return self.tiles[i][j]
 end
 
-function Sector:makeTiles(grid)
+function Sector:makeTiles(grid, drops)
   self.w, self.h = grid.getDim()
   for i = 1, self.h do
     self.tiles[i] = {}
@@ -158,8 +158,8 @@ function Sector:makeTiles(grid)
       local tile_type = grid.get(j, i)
       if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
         tile = { type = tile_type, drops = {} }
-        if tile_type == SCHEMATICS.FLOOR and RANDOM.generate(100) > 99 then
-          table.insert(tile.drops, 'food')
+        for _,drop in ipairs(drops[i][j]) do
+          table.insert(tile.drops, drop)
         end
       end
       self.tiles[i][j] = tile

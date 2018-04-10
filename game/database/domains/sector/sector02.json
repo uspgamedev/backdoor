@@ -20,12 +20,18 @@
       }],
     "min":5
   },
+  "drops":{
+    "drops":[{
+        "droptype":"food",
+        "droprate":2
+      }]
+  },
   "rooms":{
     "minh":3,
-    "maxh":9,
+    "count":24,
     "minw":3,
     "tries":256,
-    "count":24,
+    "maxh":9,
     "rmar":1,
     "maxw":9
   },

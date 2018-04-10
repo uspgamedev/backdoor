@@ -16,13 +16,19 @@
       }],
     "min":4
   },
+  "drops":{
+    "drops":[{
+        "droptype":"food",
+        "droprate":1
+      }]
+  },
   "rooms":{
     "minh":3,
     "minw":3,
     "rmar":1,
     "tries":256,
-    "maxh":9,
     "count":24,
+    "maxh":9,
     "maxw":9
   },
   "holes":false,

@@ -20,20 +20,26 @@
       }],
     "min":6
   },
+  "drops":{
+    "drops":[{
+        "droptype":"food",
+        "droprate":2
+      }]
+  },
   "rooms":{
     "tries":256,
-    "maxh":9,
+    "count":32,
     "minw":3,
     "minh":3,
-    "count":32,
+    "maxh":9,
     "rmar":1,
     "maxw":9
   },
-  "maze":{
-    "double":false
-  },
   "deadends":{
     "amount":24
+  },
+  "maze":{
+    "double":false
   },
   "bootstrap":{
     "w":48,

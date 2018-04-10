@@ -16,17 +16,20 @@
       }],
     "min":6
   },
+  "drops":{
+    "drops":[{
+        "droptype":"food",
+        "droprate":1
+      }]
+  },
   "rooms":{
     "minh":3,
     "rmar":1,
     "minw":3,
     "tries":256,
-    "count":24,
     "maxh":9,
+    "count":24,
     "maxw":9
-  },
-  "deadends":{
-    "amount":48
   },
   "exits":{
     "distance":5,
@@ -38,6 +41,9 @@
       },{
         "target_specname":"sector_final"
       }]
+  },
+  "deadends":{
+    "amount":48
   },
   "bootstrap":{
     "w":56,
