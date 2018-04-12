@@ -11,6 +11,7 @@ local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
+local vec2        = require 'cpml'.vec2
 
 local SECTOR_TILEMAP = require 'view.sector.tilemap'
 
@@ -254,10 +255,20 @@ function SectorView:draw()
           table.insert(draw_bodies, {body, x, 0})
           table.insert(all_bodies, body)
         end
+        local dropcount = #tile.drops
+        local angle = math.pi*2/dropcount
+        local phase = 3*math.pi/4
         for k,drop in ipairs(tile.drops) do
           if not self.fov or (self.fov[i+1][j+1] and
                               self.fov[i+1][j+1] ~= 0) then
-            table.insert(draw_drops, {drop, x, 0, k})
+            local offset = vec2(0,0)
+            local radius = _TILE_W/4
+            local t = k-1
+            local alpha = t*angle + phase
+            if dropcount > 1 then
+              offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
+            end
+            table.insert(draw_drops, {drop, x + offset.x, 0 + offset.y, k})
           end
         end
       end
@@ -312,13 +323,16 @@ function SectorView:draw()
       end
     end
 
-    -- Draw drops
+    -- Draw drop shadows
+    for _,drop in ipairs(draw_drops) do
+      local specname, x, y, i = unpack(drop)
+      g.setColor(0, 0, 0, 0.4)
+      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
+    end
+    -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
       local specname, x, y, i = unpack(drop)
       local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
-
-      g.setColor(0, 0, 0, 0.4)
-      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
       g.setColor(COLORS.NEUTRAL)
       g.draw(sprite, x + _TILE_W/2, y - _TILE_H*.25, 0, 1, 1, 32, 24)
     end
