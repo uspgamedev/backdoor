@@ -29,6 +29,7 @@ end
 local function _cancel()
   _last_focus = _menu_view:getCurrentFocus()
   _menu_view:close()
+  PLAYSFX 'back-menu'
   SWITCHER.pop({})
 end
 

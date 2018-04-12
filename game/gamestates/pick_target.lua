@@ -2,6 +2,7 @@
 local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DIR = require 'domain.definitions.dir'
+local PLAYSFX = require 'helpers.playsfx'
 
 --STATE--
 local state = {}
@@ -45,6 +46,7 @@ function state:enter(_, sector_view, target_opt)
     local args = {
       target_is_valid = false,
     }
+    PLAYSFX 'back-menu'
     SWITCHER.pop(args)
   end
 
