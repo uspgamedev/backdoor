@@ -263,6 +263,7 @@ _ACTION[DEFS.ACTION.INTERACT] = function()
 end
 
 _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
+  PLAYSFX 'ok-menu'
   _useAction(DEFS.ACTION.USE_SIGNATURE)
 end
 
@@ -277,6 +278,7 @@ end
 
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   if MANEUVERS['draw_new_hand'].validate(_route.getControlledActor(), {}) then
+    PLAYSFX 'ok-menu'
     _useAction(DEFS.ACTION.DRAW_NEW_HAND)
   elseif _was_on_menu then
     PLAYSFX 'denied'
@@ -286,12 +288,14 @@ end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
   if #_view.hand.hand > 0 then
+    PLAYSFX 'ok-menu'
     SWITCHER.push(GS.CARD_SELECT, _route, _view)
     local args = coroutine.yield(_task)
     if args.chose_a_card then
       if args.action_type == 'play' then
         if _useAction(DEFS.ACTION.PLAY_CARD,
                       { card_index = args.card_index }) then
+          PLAYSFX 'ok-menu'
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
         end
       end
@@ -305,6 +309,7 @@ end
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   local actor = _route.getControlledActor()
   if actor:getBackBufferSize() > 0 then
+    PLAYSFX 'ok-menu'
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
     local args = coroutine.yield(_task)
     _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
@@ -317,6 +322,7 @@ end
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   local actor = _route.getControlledActor()
   if actor:getPrizePackCount() > 0 then
+    PLAYSFX 'ok-menu'
     SWITCHER.push(GS.OPEN_PACK, actor:getPrizePacks())
     local args = coroutine.yield(_task)
     if args.pack == nil then return end
