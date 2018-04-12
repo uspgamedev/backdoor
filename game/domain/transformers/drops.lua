@@ -28,7 +28,8 @@ function transformer.process(sectorinfo, params)
     for j, i, tile in grid.iterate() do
       drops[i] = drops[i] or {}
       drops[i][j] = drops[i][j] or {}
-      if tile == SCHEMATICS.FLOOR and RANDOM.generate(_RATE_MAX) <= droprate then
+      if tile == SCHEMATICS.FLOOR and
+         RANDOM.generate(_RATE_MAX) <= droprate then
         table.insert(drops[i][j], droptype)
       end
     end
