@@ -1,12 +1,13 @@
 --MODULE FOR THE GAMESTATE: MAIN MENU--
-local DB = require 'database'
-local MENU = require 'infra.menu'
-local DIRECTIONALS = require 'infra.dir'
-local INPUT = require 'input'
+local DB              = require 'database'
+local MENU            = require 'infra.menu'
+local DIRECTIONALS    = require 'infra.dir'
+local INPUT           = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
-local PROFILE = require 'infra.profile'
-local StartMenuView = require 'view.startmenu'
-local FadeView = require 'view.fade'
+local PROFILE         = require 'infra.profile'
+local Activity        = require 'common.activity'
+local StartMenuView   = require 'view.startmenu'
+local FadeView        = require 'view.fade'
 
 local state = {}
 
@@ -15,18 +16,42 @@ local state = {}
 local _menu_view
 local _menu_context
 local _locked
+local _activity = Activity()
 
 -- LOCAL METHODS --
 
-local function _quit()
+function _activity:quit()
   _locked = true
-  local _fade_view = FadeView(FadeView.STATE_UNFADED)
-  _fade_view:addElement("GUI")
-  _fade_view:fadeOutAndThen(function()
-    _menu_view:destroy()
-    _fade_view:destroy()
-    love.event.quit()
-  end)
+  local fade_view = FadeView(FadeView.STATE_UNFADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeOutAndThen(self.resume)
+  self.yield()
+  love.event.quit()
+end
+
+function _activity:enterMenu()
+  _locked = true
+  local fade_view = FadeView(FadeView.STATE_FADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeInAndThen(self.resume)
+  self.yield()
+  _locked = false
+  fade_view:destroy()
+end
+
+function _activity:changeState(mode, to, ...)
+  _locked = true
+  local fade_view = FadeView(FadeView.STATE_UNFADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeOutAndThen(self.resume)
+  self.yield()
+  fade_view:destroy()
+  _menu_view.invisible = true
+  if mode == 'push' then
+    SWITCHER.push(to, ...)
+  elseif mode == 'switch' then
+    SWITCHER.switch(to, ...)
+  end
 end
 
 
@@ -38,13 +63,7 @@ function state:enter()
   _menu_view = StartMenuView()
   _menu_view:addElement("HUD")
 
-  _locked = true
-  local _fade_view = FadeView(FadeView.STATE_FADED)
-  _fade_view:addElement("GUI")
-  _fade_view:fadeInAndThen(function()
-    _locked = false
-    _fade_view:destroy()
-  end)
+  _activity:enterMenu()
 end
 
 function state:leave()
@@ -60,13 +79,7 @@ function state:resume(from, player_info)
   else
     _menu_context = "START_MENU"
     _menu_view.invisible = false
-    _locked = true
-    local _fade_view = FadeView(FadeView.STATE_FADED)
-    _fade_view:addElement("GUI")
-    _fade_view:fadeInAndThen(function()
-      _locked = false
-      _fade_view:destroy()
-    end)
+    _activity:enterMenu()
   end
 end
 
@@ -108,13 +121,7 @@ function state:update(dt)
     if _menu_context == "START_MENU" then
       if MENU.item("New route") then
         _locked = true
-        local _fade_view = FadeView(FadeView.STATE_UNFADED)
-        _fade_view:addElement("GUI")
-        _fade_view:fadeOutAndThen(function()
-          _fade_view:destroy()
-          _menu_view.invisible = true
-          SWITCHER.push(GS.CHARACTER_BUILD)
-        end)
+        _activity:changeState('push', GS.CHARACTER_BUILD)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
@@ -123,7 +130,7 @@ function state:update(dt)
         CONFIGURE_INPUT(INPUT, INPUT.getMap())
       end
       if MENU.item("Quit") then
-        _quit()
+        _activity:quit()
       end
     elseif _menu_context == "LOAD_LIST" then
       local savelist = PROFILE.getSaveList()
@@ -131,13 +138,8 @@ function state:update(dt)
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
           if MENU.item(savename) then
-            _locked = true
-            local _fade_view = FadeView(FadeView.STATE_UNFADED)
-            _fade_view:addElement("GUI")
-            _fade_view:fadeOutAndThen(function()
-              _fade_view:destroy()
-              SWITCHER.switch(GS.PLAY, PROFILE.loadRoute(route_id))
-            end)
+            local route_data = PROFILE.loadRoute(route_id)
+            _activity:changeState('switch', GS.PLAY, route_data)
           end
         end
       else
@@ -148,7 +150,7 @@ function state:update(dt)
     end
   else
     if _menu_context == "START_MENU" then
-      _quit()
+      _activity:quit()
     elseif _menu_context == "LOAD_LIST" then
       _menu_context = "START_MENU"
     end
