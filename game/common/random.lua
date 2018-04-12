@@ -73,5 +73,7 @@ function RANDOM.setState(state)
   return _rng:setState(state)
 end
 
+love.math.setRandomSeed(RANDOM.generateSeed())
+
 return RANDOM
 
