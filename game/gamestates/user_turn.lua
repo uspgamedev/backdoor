@@ -294,9 +294,9 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function()
     local args = coroutine.yield(_task)
     if args.chose_a_card then
       if args.action_type == 'play' then
+        PLAYSFX 'ok-menu'
         if _useAction(DEFS.ACTION.PLAY_CARD,
                       { card_index = args.card_index }) then
-          PLAYSFX 'ok-menu'
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
         end
       end
