@@ -178,6 +178,7 @@ local function _generateRouteData(route_id, player_info)
   data.current_sector_id = data.sectors[1].id
   data.player_name = BUILDDATA.route_names[route_name_idx]
   data.player_id = data.sectors[1].actors[1].id
+  data.behaviors = { ai = {} }
   return data
 end
 

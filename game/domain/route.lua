@@ -8,6 +8,7 @@ local PROFILE = require 'infra.profile'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
+local Behaviors = require 'domain.behaviors'
 
 function Route:instance(obj)
 
@@ -17,6 +18,7 @@ function Route:instance(obj)
   local _player_name = "Unknown"
   local _player_id
   local _sectors = {}
+  local _behaviors = Behaviors()
   local _current_sector = nil
   local _controlled_actor = nil
 
@@ -51,6 +53,9 @@ function Route:instance(obj)
       table.insert(_sectors, sector)
     end
 
+    -- behaviors
+    _behaviors.load(state.behaviors)
+
     -- current sector
     obj.setCurrentSector(state.current_sector_id)
   end
@@ -72,9 +77,15 @@ function Route:instance(obj)
       local sector_state = sector:saveState()
       table.insert(state.sectors, sector_state)
     end
+    -- behaviors
+    state.behaviors = _behaviors.save()
     -- current sector
     state.current_sector_id = _current_sector.id
     return state
+  end
+
+  function obj.getBehaviors()
+    return _behaviors
   end
 
   function obj.setCurrentSector(id)
