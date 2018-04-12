@@ -11,9 +11,13 @@ local ActorView   = require 'view.actor'
 local WidgetView  = require 'view.widgethud'
 local FadeView    = require 'view.fade'
 
+local Activity    = require 'common.activity'
+
 local state = {}
 
 --LOCAL VARIABLES--
+
+local _activity = Activity()
 
 local _route
 local _player
@@ -36,19 +40,7 @@ local function _playTurns(...)
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
-    local fade_view = FadeView(FadeView.STATE_UNFADED)
-    fade_view:addElement("GUI")
-    fade_view:fadeOutAndThen(function()
-      local change_sector_ok = _route.checkSector()
-      assert(change_sector_ok, "Sector Change fuck up")
-      _view.sector:sectorChanged()
-      MAIN_TIMER:after(FadeView.FADE_TIME, function()
-        fade_view:fadeInAndThen(function()
-          fade_view:destroy()
-          return _playTurns()
-        end)
-      end)
-    end)
+    _activity:changeSector(...)
   elseif request == "report" then
     _view.sector:startVFX(extra)
     _alert = _alert or (extra.type == 'number_rise')
@@ -58,17 +50,43 @@ local function _playTurns(...)
   _next_action = nil
 end
 
-local function _saveAndQuit()
+function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   local route_data = _route.saveState()
   PROFILE.saveRoute(route_data)
   fade_view:addElement("GUI")
-  fade_view:fadeOutAndThen(function()
-    SWITCHER.switch(GS.START_MENU)
-    fade_view:fadeInAndThen(function()
-      fade_view:destroy()
-    end)
-  end)
+  fade_view:fadeOutAndThen(self.resume)
+  self.yield()
+  SWITCHER.switch(GS.START_MENU)
+  fade_view:fadeInAndThen(self.resume)
+  self.yield()
+  fade_view:destroy()
+end
+
+function _activity:changeSector()
+  local fade_view = FadeView(FadeView.STATE_UNFADED)
+  fade_view:addElement("GUI")
+  fade_view:fadeOutAndThen(self.resume)
+  self.yield()
+  local change_sector_ok = _route.checkSector()
+  assert(change_sector_ok, "Sector Change fuck up")
+  _view.sector:sectorChanged()
+  MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
+  self.yield()
+  fade_view:fadeInAndThen(self.resume)
+  self.yield()
+  fade_view:destroy()
+  return _playTurns()
+end
+
+function _activity:fadeInGUI()
+  local fade_view = FadeView(FadeView.STATE_FADED)
+  fade_view:addElement("GUI")
+  MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
+  self.yield()
+  fade_view:fadeInAndThen(self.resume)
+  self.yield()
+  fade_view:destroy()
 end
 
 --STATE FUNCTIONS--
@@ -126,13 +144,7 @@ function state:enter(pre, route_data)
   -- set player
   _player = _route.getControlledActor()
 
-  local fade_view = FadeView(FadeView.STATE_FADED)
-  fade_view:addElement("GUI")
-  MAIN_TIMER:after(FadeView.FADE_TIME, function()
-    fade_view:fadeInAndThen(function()
-      fade_view:destroy()
-    end)
-  end)
+  _activity:fadeInGUI()
 
 end
 
@@ -164,8 +176,7 @@ end
 function state:resume(state, args)
 
   if state == GS.USER_TURN then
-    if args == "SAVE_AND_QUIT" then return _saveAndQuit() end
-    if args == "EXIT_SECTOR" then return _exitSector() end
+    if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _playTurns()
