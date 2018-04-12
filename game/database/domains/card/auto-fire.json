@@ -1,55 +1,57 @@
 {
-  "pp":0,
-  "desc":"Adubiraba",
-  "one_time":true,
+  "attr":"COR",
   "icon":false,
+  "set":false,
+  "desc":false,
+  "type-description":"",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":false,
-    "charges":1,
     "auto_activation":{
+      "trigger":"on_cycle",
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "target":"=target",
+            "type":"effect",
+            "name":"damage_on_target",
+            "base":5
+          }],
         "inputs":[{
             "type":"input",
             "name":"pos",
             "output":"pos_self"
           },{
-            "count":1,
-            "type":"input",
             "body-type":false,
+            "output":"count",
             "ignore-owner":true,
             "pos":"=pos_self",
-            "range":3,
+            "ignore-same-faction":true,
+            "type":"input",
+            "count":1,
             "name":"has_nearby_bodies",
-            "output":"count"
+            "range":3
           },{
-            "type":"operator",
-            "range":3,
             "ignore-owner":true,
             "pos":"=pos_self",
-            "name":"find_nearest_body",
-            "output":"target"
+            "ignore-same-faction":true,
+            "type":"operator",
+            "output":"target",
+            "range":3,
+            "name":"find_nearest_body"
           },{
             "which":"COR",
-            "type":"operator",
+            "output":"cor",
             "name":"get_attribute",
-            "output":"cor"
-          }],
-        "effects":[{
-            "type":"effect",
-            "target":"=target",
-            "name":"damage_on_target",
-            "attr":"=cor",
-            "base":5
+            "type":"operator"
           }]
-      },
-      "trigger":"on_cycle"
+      }
     },
-    "trigger":"on_done"
+    "status-tags":[],
+    "trigger":"on_done",
+    "charges":1,
+    "placement":false
   },
+  "pp":0,
   "name":"Auto-Fire",
-  "type-description":"",
-  "set":false,
-  "attr":"COR"
+  "one_time":true
 }
