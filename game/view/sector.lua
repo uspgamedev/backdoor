@@ -11,6 +11,7 @@ local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
+local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
 
 local SECTOR_TILEMAP = require 'view.sector.tilemap'
@@ -108,17 +109,15 @@ function SectorView:updateVFX(dt)
 end
 
 function SectorView:startVFX(extra)
-  local spritefx = SPRITEFX[extra.type]
   --Play SFX if any
-  local sfx
   if extra.sfx then
-    sfx = RES.loadSFX(extra.sfx)
-    sfx:setVolume(1)
-    sfx:stop()
-    sfx:play()
+    PLAYSFX(extra.sfx)
   end
-  self.vfx = spritefx
-  spritefx.apply(self, extra)
+  if extra.type then
+    local spritefx = SPRITEFX[extra.type]
+    self.vfx = spritefx
+    spritefx.apply(self, extra)
+  end
 end
 
 function SectorView:finishVFX()
