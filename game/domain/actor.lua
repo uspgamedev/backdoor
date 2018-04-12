@@ -214,6 +214,10 @@ function Actor:getPos()
   return self:getBody():getPos()
 end
 
+function Actor:getSector()
+  return self:getBody():getSector()
+end
+
 --[[ Action methods ]]--
 
 function Actor:isWidget(slot)
@@ -367,7 +371,7 @@ end
 
 function Actor:getVisibleBodies()
   local seen = {}
-  local sector = self:getBody():getSector()
+  local sector = self:getSector()
   local w, h = sector:getDimensions()
 
   local range = self:getFovRange()
@@ -386,6 +390,18 @@ function Actor:getVisibleBodies()
   end
 
   return seen
+end
+
+function Actor:canSee(target)
+  local sector = self:getSector()
+  local target_sector = target:getSector()
+  if sector ~= target_sector then
+    return false
+  end
+  local fov = self:getFov(sector)
+  local i, j = target:getPos()
+  local visible = fov[i][j]
+  return visible and visible > 0
 end
 
 function Actor:purgeFov(sector)
