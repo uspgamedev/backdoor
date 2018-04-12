@@ -3,6 +3,7 @@
 
 local INPUT          = require 'input'
 local DIRECTIONALS   = require 'infra.dir'
+local PLAYSFX        = require 'helpers.playsfx'
 local ActionMenuView = require 'view.actionmenu'
 
 local state = {}
@@ -15,6 +16,7 @@ local _last_focus
 --[[ LOCAL FUNCTIONS ]]--
 
 local function _moveFocus(dir)
+  PLAYSFX 'select-menu'
   _menu_view:moveFocus(dir)
 end
 

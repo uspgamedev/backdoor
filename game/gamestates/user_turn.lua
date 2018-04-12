@@ -164,6 +164,7 @@ function state:update(dt)
     elseif INPUT.wasActionPressed('ACTION_3') then
       _startTask(DEFS.ACTION.RECEIVE_PACK)
     elseif INPUT.wasActionPressed('EXTRA') then
+      PLAYSFX 'open-menu'
       return SWITCHER.push(GS.ACTION_MENU, _route)
     elseif INPUT.wasActionPressed('PAUSE') then
       _save_and_quit = true
