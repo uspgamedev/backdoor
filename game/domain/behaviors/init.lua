@@ -10,7 +10,8 @@ function Behaviors:instance(obj)
     local ai = {}
     for actor_id, actor_ai_state in pairs(_ai) do
       local actor_ai = {}
-      actor_ai.target = Util.findId(actor_id)
+      local target_id = actor_ai_state.target
+      actor_ai.target = target_id and Util.findId(target_id)
       actor_ai.target_pos = actor_ai_state.target_pos
       ai[actor_id] = actor_ai
     end
@@ -22,7 +23,8 @@ function Behaviors:instance(obj)
     local ai_states = {}
     for actor_id, actor_ai in pairs(_ai) do
       local actor_ai_state = {}
-      actor_ai_state.target = actor_ai.target:getId()
+      local target = actor_ai.target
+      actor_ai_state.target = target and target:getId()
       actor_ai_state.target_pos = actor_ai.target_pos
       ai_states[actor_id] = actor_ai_state
     end
@@ -41,6 +43,10 @@ function Behaviors:instance(obj)
 
   function obj.getAI(actor)
     return _ai[actor:getId()]
+  end
+
+  function obj.removeAI(actor)
+    _ai[actor:getId()] = nil
   end
 
 end
