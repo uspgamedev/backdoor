@@ -1,47 +1,78 @@
 
-local TILE       = require 'common.tile'
-local Action     = require 'domain.action'
 local MANEUVERS  = require 'lux.pack' 'domain.maneuver'
 local ACTIONDEFS = require 'domain.definitions.action'
+local FindTarget = require 'domain.behaviors.helpers.findtarget'
 local FindPath   = require 'domain.behaviors.helpers.findpath'
-local RandomWalk = require 'domain.behaviors.helpers.random'
+local RandomWalk = require 'domain.behaviors.helpers.randomwalk'
+
+local _USE_SIGNATURE = ACTIONDEFS.USE_SIGNATURE
+local _MOVE          = ACTIONDEFS.MOVE
 
 return function (actor)
-  local target, dist
-  local sector = actor:getBody():getSector()
+  local sector = actor:getSector()
+  local behaviors = sector:getRoute().getBehaviors()
+  local ai = behaviors.getAI(actor) or behaviors.newAI(actor)
   local i, j = actor:getPos()
 
-  -- i can't see anybody!
-  local visible_bodies = actor:getVisibleBodies()
+  local target = ai.target
+  local target_pos = ai.target_pos
 
-  -- create list of opponents
-  for body_id in pairs(visible_bodies) do
-    local opponent = Util.findId(body_id)
-    if opponent and opponent:getFaction() ~= actor:getBody():getFaction() then
-      local k, l = opponent:getPos()
-      local d = TILE.dist(i, j, k, l)
-      if not target or not dist or d < dist then
-        target = opponent
-        dist = d
-      end
-    end
+  -- if i don't have a target, i'll look for one
+  if not target then
+    target = FindTarget.getTarget(actor)
   end
 
+  print()
   if target then
-    local inputs = { pos = { target:getPos() } }
-    if MANEUVERS[ACTIONDEFS.USE_SIGNATURE].validate(actor, inputs) then
-      -- attack if close!
-      return ACTIONDEFS.USE_SIGNATURE, inputs
+    -- if i have a target, can i see it?
+    if actor:canSee(target) then
+      -- if so, lock on to it
+      local k, l = target:getPos()
+      target_pos = { k, l }
+      printf("%s: %s", actor:getTitle(),
+             "\"I have a target and I can see them!\"")
     else
-      -- chase if far away!
-      inputs.pos = FindPath.getNextStep({i, j}, inputs.pos, sector)
-      if inputs.pos and MANEUVERS[ACTIONDEFS.MOVE].validate(actor, inputs) then
-        return ACTIONDEFS.MOVE, inputs
-      end
+      -- if not, lose the target, but not its position
+      target = false
+      printf("%s: %s", actor:getTitle(),
+             "\"I have a target but I just lost them...!\"")
+    end
+  elseif target_pos then
+    -- if i don't have a target, but i have its last position...
+    -- ...am i in the target's position?
+    local k, l = unpack(target_pos)
+    if i == k and l == j then
+      -- if so, then i lost them completely
+      printf("%s: %s", actor:getTitle(),
+             "\"I am where I last saw my target, but I lost them completely.\"")
+      target_pos = false
     end
   end
 
-  -- there are valid targets, but i can't reach them
+  -- update AI state
+  ai.target = target
+  ai.target_pos = target_pos
+
+  -- if i have a position targetted
+  if target_pos then
+    -- ...if i have a target, then try to attack!
+    local inputs = { pos = target_pos }
+    if target and MANEUVERS[_USE_SIGNATURE].validate(actor, inputs) then
+      printf("%s: %s", actor:getTitle(),
+             "\"I will attack my target!\"")
+      return _USE_SIGNATURE, inputs
+    end
+    -- ...if i can't see or reach them, then at least chase it!
+    local next_step = FindPath.getNextStep({i, j}, target_pos, sector)
+    inputs.pos = next_step
+    if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
+      printf("%s: %s", actor:getTitle(),
+             "\"I will pursue my target!\"")
+      return _MOVE, inputs
+    end
+  end
+
+  -- i don't have targets or any clue to my last target's position
   return RandomWalk.execute(actor)
 end
 
