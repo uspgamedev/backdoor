@@ -3,36 +3,37 @@
   "icon":"card-teleport",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
-      "effects":[{
-          "vfx-spd":1,
-          "vfx":false,
-          "type":"effect",
-          "body":"=Body",
-          "name":"move_to",
-          "pos":"=target_pos"
-        }],
       "inputs":[{
+          "aoe-hint":0,
+          "max-range":7,
+          "name":"choose_target",
+          "non-wall":true,
+          "type":"input",
           "empty-tile":true,
           "output":"target_pos",
-          "aoe-hint":0,
-          "dif-fact":false,
-          "type":"input",
-          "non-wall":true,
-          "name":"choose_target",
-          "max-range":7
+          "dif-fact":false
         },{
           "type":"operator",
           "name":"self",
           "output":"Actor"
         },{
           "type":"operator",
-          "output":"Body",
           "name":"get_actor_body",
+          "output":"Body",
           "actor":"=Actor"
+        }],
+      "effects":[{
+          "vfx-spd":1,
+          "vfx":false,
+          "pos":"=target_pos",
+          "type":"effect",
+          "body":"=Body",
+          "name":"move_to",
+          "sfx":"teleport"
         }]
-    },
-    "cost":20
+    }
   },
   "desc":false,
   "type-description":"",

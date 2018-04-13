@@ -1,8 +1,9 @@
 
-local INPUT = require 'input'
-local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local ManageBufferView = require 'view.cardlist'
+local INPUT             = require 'input'
+local DIRECTIONALS      = require 'infra.dir'
+local DEFS              = require 'domain.definitions'
+local PLAYSFX           = require 'helpers.playsfx'
+local ManageBufferView  = require 'view.cardlist'
 
 local state = {}
 
@@ -47,6 +48,7 @@ function state:update(dt)
   MAIN_TIMER:update(dt)
 
   if _leave or _view:isCardListEmpty() then
+    PLAYSFX 'back-menu'
     SWITCHER.pop({consumed = _view:getConsumeLog()})
   else
 

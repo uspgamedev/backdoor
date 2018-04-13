@@ -2,6 +2,7 @@
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DIR          = require 'domain.definitions.dir'
+local PLAYSFX      = require 'helpers.playsfx'
 local state = {}
 
 local _sector_view
@@ -27,6 +28,7 @@ function state:update(dt)
     SWITCHER.pop(_current_dir)
   elseif INPUT.wasActionPressed('CANCEL') then
     _sector_view:setRayDir()
+    PLAYSFX 'back-menu'
     SWITCHER.pop()
   else
     for _,dir in ipairs(DIR) do

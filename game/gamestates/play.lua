@@ -3,6 +3,7 @@
 
 local GUI         = require 'debug.gui'
 local PROFILE     = require 'infra.profile'
+local PLAYSFX     = require 'helpers.playsfx'
 
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
@@ -65,6 +66,7 @@ end
 
 function _activity:changeSector()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
+  PLAYSFX 'change-sector'
   fade_view:addElement("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()

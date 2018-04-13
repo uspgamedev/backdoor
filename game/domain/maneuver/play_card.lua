@@ -51,6 +51,9 @@ function PLAYCARD.perform(actor, inputvalues)
     actor:exhaust(ACTIONDEFS.PLAY_UPGRADE_COST)
     actor:modifyExpBy(-card:getUpgradeCost())
     local upgrades = card:getUpgradesList()
+    coroutine.yield('report', {
+      sfx = 'upgrade'
+    })
     for _,upgrade in ipairs(upgrades.actor) do
       local attr = upgrade.attr
       local val = upgrade.val

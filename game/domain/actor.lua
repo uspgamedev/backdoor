@@ -426,6 +426,9 @@ function Actor:grabDrops(tile)
     if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1
+      coroutine.yield('report', {
+        sfx = 'get-item'
+      })
       ABILITY.execute(dropspec.ability, self, inputvalues)
     else
       i = i+1

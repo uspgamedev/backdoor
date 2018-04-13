@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: SELECTING A CARD IN HAND--
 local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-
+local PLAYSFX        = require 'helpers.playsfx'
 
 local state = {}
 
@@ -35,6 +35,7 @@ local function _cancel()
   local args = {
     chose_a_card = false,
   }
+  PLAYSFX 'back-menu'
   SWITCHER.pop(args)
 end
 

@@ -3,6 +3,7 @@ local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
+local PLAYSFX = require 'helpers.playsfx'
 local PackView = require 'view.packlist'
 local CardView = require 'view.cardlist'
 
@@ -67,13 +68,17 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if _status == "choosing_pack" and (_leave or _card_list_view:isPackListEmpty()) then
+  if _status == "choosing_pack" and
+     (_leave or _card_list_view:isPackListEmpty()) then
+    PLAYSFX 'back-menu'
     SWITCHER.pop({
       consumed = {},
       pack = nil,
       pack_index = nil,
     })
-  elseif _status == "choosing_card" and (_leave or _card_list_view:isCardListEmpty()) then
+  elseif _status == "choosing_card" and
+         (_leave or _card_list_view:isCardListEmpty()) then
+    PLAYSFX 'back-menu'
     SWITCHER.pop({
       consumed = _card_list_view:getConsumeLog(),
       pack = _pack_list_view,
