@@ -22,20 +22,15 @@ return function (actor)
     target = FindTarget.getTarget(actor)
   end
 
-  print()
   if target then
     -- if i have a target, can i see it?
     if actor:canSee(target) then
       -- if so, lock on to it
       local k, l = target:getPos()
       target_pos = { k, l }
-      printf("%s: %s", actor:getTitle(),
-             "\"I have a target and I can see them!\"")
     else
       -- if not, lose the target, but not its position
       target = false
-      printf("%s: %s", actor:getTitle(),
-             "\"I have a target but I just lost them...!\"")
     end
   elseif target_pos then
     -- if i don't have a target, but i have its last position...
@@ -43,8 +38,6 @@ return function (actor)
     local k, l = unpack(target_pos)
     if i == k and l == j then
       -- if so, then i lost them completely
-      printf("%s: %s", actor:getTitle(),
-             "\"I am where I last saw my target, but I lost them completely.\"")
       target_pos = false
     end
   end
@@ -58,16 +51,12 @@ return function (actor)
     -- ...if i have a target, then try to attack!
     local inputs = { pos = target_pos }
     if target and MANEUVERS[_USE_SIGNATURE].validate(actor, inputs) then
-      printf("%s: %s", actor:getTitle(),
-             "\"I will attack my target!\"")
       return _USE_SIGNATURE, inputs
     end
     -- ...if i can't see or reach them, then at least chase it!
     local next_step = FindPath.getNextStep({i, j}, target_pos, sector)
     inputs.pos = next_step
     if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
-      printf("%s: %s", actor:getTitle(),
-             "\"I will pursue my target!\"")
       return _MOVE, inputs
     end
   end
