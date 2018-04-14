@@ -439,6 +439,7 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
         break
       end
     end
+    sector:getRoute().getBehaviors().removeAI(dead_actor)
     dead_actor:kill()
   end
 end
