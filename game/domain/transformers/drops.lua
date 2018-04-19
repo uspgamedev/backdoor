@@ -12,7 +12,7 @@ transformer.schema = {
     schema = {
       { id = 'droptype', name = "Drop Type", type = 'enum',
         options = 'domains.drop' },
-      { id = 'droprate', name = "Food Drop Rate", type = 'integer',
+      { id = 'droprate', name = "Drop Rate", type = 'integer',
         range = {0, _RATE_MAX} },
     },
   }

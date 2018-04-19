@@ -10,6 +10,14 @@ return {
   { id = 'vit', name = "Vitality", type = "integer", range = {-4,4} },
   { id = 'def', name = "Defense", type = "integer", range = {-4,4} },
   { id = 'def_die', name = "Defense Die", type = "integer", range = {1,999} },
+  { id = 'drops', name = 'Drops', type = 'array',
+    schema = {
+      { id = 'droptype', name = "Drop Type", type = 'enum',
+        options = 'domains.drop' },
+      { id = 'droprate', name = "Drop Rate", type = 'integer',
+        range = {0, 100} },
+    },
+  },
   { id = 'description', name = "Description", type = 'text' },
 }
 
