@@ -3,15 +3,18 @@
   "def_die":4,
   "drops":[{
       "droptype":"pack",
-      "droprate":100
+      "droprate":10
     },{
       "droptype":"food",
-      "droprate":20
+      "droprate":80
+    },{
+      "droptype":"pack",
+      "droprate":10
     }],
-  "name":"Slime",
+  "def":0,
   "faction":"agressive",
   "appearance":"slime",
-  "def":0,
+  "name":"Slime",
   "vit":-1,
   "description":"Delicious when fried."
 }
