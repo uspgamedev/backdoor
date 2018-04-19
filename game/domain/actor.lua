@@ -521,12 +521,6 @@ function Actor:getPP()
   return self.playpoints
 end
 
-function Actor:calculatePP(killer)
-  local killerpwrlvl = killer:getPowerLevel()
-  local selfpwrlvl = self:getPowerLevel()
-  return math.round((selfpwrlvl / killerpwrlvl) ^ 2 * 10)
-end
-
 function Actor:getPowerLevel()
   local lvl = 0
   local body_powerlvl = self:getBody():getPowerLevel()

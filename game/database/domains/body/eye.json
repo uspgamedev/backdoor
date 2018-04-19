@@ -1,8 +1,12 @@
 {
   "extends":"imp",
   "faction":"agressive",
-  "vit":-2,
+  "drops":[{
+      "droptype":"pack",
+      "droprate":50
+    }],
   "def_die":3,
+  "vit":-2,
   "appearance":"eyedemon",
   "name":"Eye",
   "def":-2,

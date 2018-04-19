@@ -1,8 +1,18 @@
 {
   "extends":false,
-  "faction":"agressive",
-  "def":0,
   "def_die":4,
+  "drops":[{
+      "droptype":"pack",
+      "droprate":10
+    },{
+      "droptype":"food",
+      "droprate":80
+    },{
+      "droptype":"pack",
+      "droprate":10
+    }],
+  "def":0,
+  "faction":"agressive",
   "appearance":"slime",
   "name":"Slime",
   "vit":-1,

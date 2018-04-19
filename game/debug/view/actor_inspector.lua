@@ -18,7 +18,6 @@ return function (actor)
       actor:getBody():setHP(newhp)
     end
     IMGUI.Text(("PWRLVL: %d"):format(actor:getPowerLevel()))
-    IMGUI.Text(("PP AWARD: %d"):format(actor:calculatePP(player)))
     IMGUI.Separator()
     IMGUI.Text(("COR: %d"):format(actor:getCOR()))
     IMGUI.Text(("ARC: %d"):format(actor:getARC()))

@@ -329,11 +329,19 @@ function Sector:removeDeadBodies()
       local body = self:getBodyAt(i,j)
 
       if body and body:getHP() <= 0 then
+        local drops_table = {}
+        local drops = body:getDrops()
+        for _,drop in ipairs(drops) do
+          if love.math.random(101)-1 < drop["droprate"] then
+            table.insert(drops_table, drop["droptype"])
+          end
+        end
+
         local actor = self:removeBodyAt(i,j, body)
         if actor then
           table.insert(dead_actor_list, actor)
         end
-        table.insert(drop_points, {i, j, {'food', 'food', 'food'}})
+        table.insert(drop_points, {i, j, drops_table})
       end
 
     end
@@ -430,11 +438,6 @@ end
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   local dead_actor_list, drop_points = sector:removeDeadBodies()
   for _, dead_actor in ipairs(dead_actor_list) do
-    local killer_actor = Util.findId(dead_actor:getBody():getKiller())
-    if killer_actor then
-      -- award pack
-      killer_actor:addPrizePack(dead_actor:getSpec('collection'))
-    end
     for i, act in ipairs(actors_queue) do
       if dead_actor == act then
         table.remove(actors_queue, i)

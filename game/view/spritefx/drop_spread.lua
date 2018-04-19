@@ -15,6 +15,10 @@ function SPRITEFX.apply(sectorview, args)
   local finished = 0
   local total = #drops
   local count = 1
+  
+  if total <= 0 then
+    return sectorview:finishVFX()
+  end
 
   local offsets = {}
   for t,drop in ipairs(drops) do
