@@ -28,12 +28,25 @@ function WIDGET.draw(widget, x, y, alpha)
   _font:setLineHeight(_LH)
   _font.set()
   g.setColor(1, 1, 1, alpha)
-  g.printf(_fmt("%s\n[%s]\n%02d/%02d", widget:getName():sub(1,16),
-                widget:getWidgetTrigger():gsub("_", " "),
-                widget:getWidgetCharges() - widget:getUsages(),
-                widget:getWidgetCharges()
-          ), x, y, _WIDTH - _PD*2
-  )
+  if not widget:isWidgetPermanent() then
+    g.printf(_fmt("%s\n[%s]\n%02d/%02d", widget:getName():sub(1,16),
+                  widget:getWidgetTrigger():gsub("_", " "),
+                  widget:getWidgetCharges() - widget:getUsages(),
+                  widget:getWidgetCharges()
+            ), x, y, _WIDTH - _PD*2, 'left'
+    )
+  elseif not not widget:getWidgetPlacement() then
+    local lh2 = _font:getLineHeight() * _font:getHeight() / 2
+    g.printf(_fmt("%s\n[%s]", widget:getName():sub(1,16),
+                  widget:getWidgetPlacement():gsub("^%l", string.upper)
+             ), x, y+lh2, _WIDTH - _PD*2, 'left'
+    )
+  else
+    local lh2 = _font:getLineHeight() * _font:getHeight()
+    g.printf(_fmt("%s", widget:getName():sub(1,16)
+             ), x, y+lh2, _WIDTH - _PD*2, 'left'
+    )
+  end
   g.pop()
 
 end
@@ -46,7 +59,7 @@ function WIDGET.getHeight(widget)
   if not _HEIGHT then
     if not _font then _init() end
     _font:setLineHeight(_LH)
-    _HEIGHT = _font:getHeight()*3 + 2*_PD
+    _HEIGHT = _font:getHeight()*3 + 2*_PD - 4
   end
   return _HEIGHT
 end

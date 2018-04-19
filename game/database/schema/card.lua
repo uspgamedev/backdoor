@@ -50,7 +50,7 @@ return {
     id = 'widget', name = "Widget",
     type = 'section',
     schema = {
-      { id = 'charges', name = "Charges", type = 'integer', range = {1} },
+      { id = 'charges', name = "Charges", type = 'integer', range = {0}, },
       { id = 'trigger', name = "Spend Trigger", type = 'enum',
         options = DEFS.TRIGGERS },
       { id = 'trigger-condition', name = "Spend Trigger Condition",

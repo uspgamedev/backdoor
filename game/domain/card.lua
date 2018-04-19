@@ -150,6 +150,10 @@ function Card:getWidgetCharges()
   return self:getSpec('widget').charges
 end
 
+function Card:isWidgetPermanent()
+  return self:getWidgetCharges() == 0
+end
+
 function Card:resetUsages()
   self.usages = 0
 end
