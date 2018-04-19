@@ -54,7 +54,9 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
       local inputspec = IN[cmd.name]
       if inputspec.isValid(actor, unrefd_field_values,
                            inputvalues[cmd.output]) then
-        values[cmd.output] = inputvalues[cmd.output]
+        if cmd.output then
+          values[cmd.output] = inputvalues[cmd.output]
+        end
       else
         return false
       end
