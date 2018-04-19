@@ -35,10 +35,15 @@ function WIDGET.draw(widget, x, y, alpha)
                   widget:getWidgetCharges()
             ), x, y, _WIDTH - _PD*2, 'left'
     )
-  else
+  elseif not not widget:getWidgetPlacement() then
     local lh2 = _font:getLineHeight() * _font:getHeight() / 2
     g.printf(_fmt("%s\n[%s]", widget:getName():sub(1,16),
                   widget:getWidgetPlacement():gsub("^%l", string.upper)
+             ), x, y+lh2, _WIDTH - _PD*2, 'left'
+    )
+  else
+    local lh2 = _font:getLineHeight() * _font:getHeight()
+    g.printf(_fmt("%s", widget:getName():sub(1,16)
              ), x, y+lh2, _WIDTH - _PD*2, 'left'
     )
   end
