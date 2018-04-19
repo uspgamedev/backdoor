@@ -50,6 +50,9 @@ local function _moveCamera(target, force)
   end
 end
 
+local function _dropId(i, j, k)
+  return ("%d:%d:%d"):format(i, j, k)
+end
 
 function SectorView:init(route)
 
@@ -65,6 +68,7 @@ function SectorView:init(route)
 
   self.route = route
   self.body_sprites = {}
+  self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
 
@@ -106,6 +110,10 @@ end
 
 function SectorView:updateVFX(dt)
 
+end
+
+function SectorView:setDropOffset(i, j, k, offset)
+  self.drop_offsets[_dropId(i, j, k)] = offset
 end
 
 function SectorView:startVFX(extra)
@@ -267,7 +275,17 @@ function SectorView:draw()
             if dropcount > 1 then
               offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
             end
-            table.insert(draw_drops, {drop, x + offset.x, 0 + offset.y, k})
+            local spread_off = self.drop_offsets[_dropId(i+1, j+1, k)]
+            local dx, dy, t = 0, 0, 0
+            if spread_off then
+              dx = (spread_off.j - (j+1))*_TILE_W
+              dy = (spread_off.i - (i+1))*_TILE_H
+              t = spread_off.t
+            end
+            table.insert(draw_drops, {
+              drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
+              2*_TILE_H*(0.25 - (t - 0.5)^2)
+            })
           end
         end
       end
@@ -324,16 +342,18 @@ function SectorView:draw()
 
     -- Draw drop shadows
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, i = unpack(drop)
+      local specname, x, y, z = unpack(drop)
       g.setColor(0, 0, 0, 0.4)
       g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
     end
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, i = unpack(drop)
+      local specname, x, y, z, id = unpack(drop)
+      local offset = self.drop_offsets[id] or vec2(0,0)
       local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, x + _TILE_W/2, y - _TILE_H*.25, 0, 1, 1, 32, 24)
+      g.draw(sprite, x + _TILE_W/2 + offset.x, y - _TILE_H*.25 + offset.y - z,
+             0, 1, 1, 32, 24)
     end
 
 

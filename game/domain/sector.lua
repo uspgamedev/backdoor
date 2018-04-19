@@ -321,6 +321,7 @@ end
 --  @return A table containing all removed actors
 function Sector:removeDeadBodies()
   local dead_actor_list = {}
+  local drop_points = {}
 
   for i = 1, self.h do
     for j = 1, self.w do
@@ -332,13 +333,13 @@ function Sector:removeDeadBodies()
         if actor then
           table.insert(dead_actor_list, actor)
         end
-        self:spreadDrops(i, j, {'food', 'food', 'food'})
+        table.insert(drop_points, {i, j, {'food', 'food', 'food'}})
       end
 
     end
   end
 
-  return dead_actor_list
+  return dead_actor_list, drop_points
 end
 
 function Sector:putActor(actor, i, j)
@@ -427,7 +428,7 @@ end
 
 --- Check for dead bodies if any, and remove associated actors from the queue.
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
-  local dead_actor_list = sector:removeDeadBodies()
+  local dead_actor_list, drop_points = sector:removeDeadBodies()
   for _, dead_actor in ipairs(dead_actor_list) do
     local killer_actor = Util.findId(dead_actor:getBody():getKiller())
     if killer_actor then
@@ -443,18 +444,29 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
     sector:getRoute().getBehaviors().removeAI(dead_actor)
     dead_actor:kill()
   end
+  for _,drop_point in ipairs(drop_points) do
+    sector:spreadDrops(unpack(drop_point))
+  end
 end
 
 function Sector:spreadDrops(i, j, drops)
   local ti, tj
   local tile
+  local new_drops = {}
   for _,drop in ipairs(drops) do
     repeat
       ti, tj = self:randomNeighbor(i, j, true)
     until self:isWalkable(ti, tj)
     tile = self.tiles[ti][tj]
     table.insert(tile.drops, drop)
+    table.insert(new_drops, {ti, tj, #tile.drops})
   end
+  coroutine.yield('report', {
+    type = 'drop_spread',
+    drops = new_drops,
+    origin = {i, j}
+  })
+
 end
 
 function _turnLoop(self, ...)
