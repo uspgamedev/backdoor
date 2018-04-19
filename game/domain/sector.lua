@@ -438,11 +438,6 @@ end
 local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   local dead_actor_list, drop_points = sector:removeDeadBodies()
   for _, dead_actor in ipairs(dead_actor_list) do
-    local killer_actor = Util.findId(dead_actor:getBody():getKiller())
-    if killer_actor then
-      -- award pack
-      killer_actor:addPrizePack(dead_actor:getSpec('collection'))
-    end
     for i, act in ipairs(actors_queue) do
       if dead_actor == act then
         table.remove(actors_queue, i)
