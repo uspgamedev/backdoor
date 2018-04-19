@@ -328,7 +328,7 @@ function Body:triggerOneWidget(index, trigger, inputs)
   local widget = self:getWidget(index)
   local owner = widget:getOwner()
   inputs = inputs or {}
-  inputs.widget_self = widget 
+  inputs.widget_self = widget
   inputs.body_self = self
   inputs.pos_self = {self:getPos()}
   if widget:getWidgetTrigger() == trigger then
