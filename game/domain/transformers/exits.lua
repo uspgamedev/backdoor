@@ -83,7 +83,9 @@ function transformer.process(sectorinfo, params)
           -- if there is only one last possible exit, check it:
           i, j = unpack(possible_exits[1])
           -- if it's not a good position, tough luck, break it up
-          if not _isPossibleExit(sectorgrid, j, i) then return end
+          if not _isPossibleExit(sectorgrid, j, i) then
+            return error("Not enough possible exits. Invalid sector.")
+          end
         else
           -- if there are many possible exits, get a random one:
           local idx = RANDOM.generate(1, COUNT)
