@@ -145,6 +145,13 @@ function Body:getFaction()
   return self:getSpec('faction')
 end
 
+--[[ Drops methods ]]--
+
+function Body:getDrops()
+  return self:getSpec('drops') or {}
+end
+
+
 --[[ HP methods ]]--
 
 function Body:getVIT()
