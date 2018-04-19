@@ -116,7 +116,6 @@ function SectorView:startVFX(extra)
       PLAYSFX(extra.sfx)
     else
       if target:canSee(extra.body) then
-        printf("playing sfx from %s's action: %s", extra.body, extra.sfx)
         PLAYSFX(extra.sfx)
       end
     end
