@@ -443,7 +443,6 @@ function Actor:grabDrops(tile)
       table.remove(drops, i)
       n = n-1
       coroutine.yield('report', {
-        body = self:getBody(),
         sfx = 'get-item'
       })
       ABILITY.execute(dropspec.ability, self, inputvalues)
