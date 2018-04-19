@@ -34,6 +34,7 @@ function Graph:instance(obj)
     assert(idx1 <= _size and idx2 <= _size)
     _edges[idx1][idx2] = true
     _edges[idx2][idx1] = true
+    printf("Connecting [Node#%d] to [Node#%d]", idx1, idx2)
   end
 
   function obj.disconnect(idx1, idx2)
