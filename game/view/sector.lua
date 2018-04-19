@@ -119,7 +119,14 @@ end
 function SectorView:startVFX(extra)
   --Play SFX if any
   if extra.sfx then
-    PLAYSFX(extra.sfx)
+    local target = self.target
+    if not target or not target.fov or not extra.body then
+      PLAYSFX(extra.sfx)
+    else
+      if target:canSee(extra.body) then
+        PLAYSFX(extra.sfx)
+      end
+    end
   end
   if extra.type then
     local spritefx = SPRITEFX[extra.type]
