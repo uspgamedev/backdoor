@@ -330,8 +330,9 @@ function Sector:removeDeadBodies()
       if body and body:getHP() <= 0 then
         local actor = self:removeBodyAt(i,j, body)
         if actor then
-          table.insert(dead_actor_list,actor)
+          table.insert(dead_actor_list, actor)
         end
+        self:spreadDrops(i, j, {'food', 'food', 'food'})
       end
 
     end
@@ -414,13 +415,13 @@ function Sector:randomValidTile()
   return i, j
 end
 
-function Sector:randomNeighbor(i, j)
+function Sector:randomNeighbor(i, j, allow_bodies)
   local rand = love.math.random
   repeat
     local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
     i = math.max(1, math.min(self.h, i+di))
     j = math.max(1, math.min(self.w, j+dj))
-  until not self.bodies[i][j]
+  until allow_bodies or not self.bodies[i][j]
   return i, j
 end
 
@@ -444,6 +445,17 @@ local function manageDeadBodiesAndUpdateActorsQueue(sector, actors_queue)
   end
 end
 
+function Sector:spreadDrops(i, j, drops)
+  local ti, tj
+  local tile
+  for _,drop in ipairs(drops) do
+    repeat
+      ti, tj = self:randomNeighbor(i, j, true)
+    until self:isWalkable(ti, tj)
+    tile = self.tiles[ti][tj]
+    table.insert(tile.drops, drop)
+  end
+end
 
 function _turnLoop(self, ...)
   local actors_queue = self.actors_queue
