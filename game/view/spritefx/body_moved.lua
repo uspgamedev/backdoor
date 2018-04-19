@@ -12,9 +12,9 @@ function SPRITEFX.apply(sectorview, args)
   local di, dj = unpack(offset)
   local dist   = (di*di + dj*dj)^0.5
   local body_sprite = sectorview:getBodySprite(body)
-  local current_obsever = sectorview:getTarget()
-  if current_obsever and current_obsever.fov then
-    local fov = current_obsever:getFov()
+  local current_observer = sectorview:getTarget()
+  if current_observer and current_observer.fov then
+    local fov = current_observer:getFov()
     if (not fov[i0][j0] or fov[i0][j0] == 0) and
        (not fov[i][j] or fov[i][j] == 0) then
       return sectorview:finishVFX()
