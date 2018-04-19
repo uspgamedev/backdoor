@@ -67,7 +67,7 @@ inputs.text = _makeCommon(
   "",
   function(value, field)
     IMGUI.PushItemWidth(360)
-    local changed, newvalue = IMGUI.InputTextMultiline("", value, 1024)
+    local newvalue, changed = IMGUI.InputTextMultiline("", value, 1024)
     IMGUI.PopItemWidth()
     return newvalue, changed
   end
