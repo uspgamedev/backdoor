@@ -1,0 +1,15 @@
+{
+  "sprite":"pack-drop",
+  "name":"Pack",
+  "ability":{
+    "effects":[{
+        "type":"effect",
+        "name":"give_pack",
+        "collection":"anything"
+      }],
+    "inputs":[{
+        "type":"input",
+        "name":"is_controlled_actor"
+      }]
+  }
+}
