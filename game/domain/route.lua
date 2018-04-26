@@ -49,6 +49,10 @@ function Route:instance(obj)
     for _,sector_state in ipairs(state.sectors) do
       local sector = Sector(sector_state.specname, obj)
       sector:loadState(sector_state, _register)
+      -- state at start only has:
+      -- > zone
+      -- > exits
+      -- > depth
       _register(sector)
       table.insert(_sectors, sector)
     end

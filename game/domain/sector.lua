@@ -20,15 +20,12 @@ local _turnLoop
 
 local function _initBodies(w, h)
   local t = {}
-  for i = 1, h do
+  for i = 0, h do
     t[i] = {}
-    for j = 1, w do
+    for j = 0, w do
       t[i][j] = false
     end
   end
-  -- A special tile where we can always remove things from...
-  -- Because nothing is ever there!
-  t[0] = { [0]=false }
   return t
 end
 
@@ -41,6 +38,7 @@ function Sector:init(spec_name, route)
 
   self.route = route
   self.tiles = {{ false }}
+  self.generated = false
   self.bodies = _initBodies(1,1)
   self.actors = {}
   self.depth = 0
@@ -52,14 +50,14 @@ function Sector:init(spec_name, route)
 end
 
 function Sector:loadState(state, register)
-  self.w = state.w or self.w
-  self.h = state.h or self.h
   self.id = state.id
   self.depth = state.depth
   self.exits = state.exits
   self:setId(state.id)
-  if state.tiles then
+  if state.generated then
     self.tiles = state.tiles
+    self.w = state.w or self.w
+    self.h = state.h or self.h
     self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
@@ -89,12 +87,13 @@ end
 function Sector:saveState()
   local state = {}
   state.specname = self.specname
-  state.w = self.w
-  state.h = self.h
   state.id = self.id
   state.depth = self.depth
   state.exits = self.exits
+  state.generated = self.generated
   state.tiles = self.tiles
+  state.w = self.w
+  state.h = self.h
   state.actors = {}
   state.bodies = {}
   for _,actor in ipairs(self.actors) do
@@ -125,6 +124,10 @@ function Sector:getTileSet()
   return self:getSpec('bootstrap').tileset
 end
 
+function Sector:isGenerated()
+  return self.generated
+end
+
 function Sector:generate(register, depth)
 
   -- load sector's specs
@@ -142,6 +145,8 @@ function Sector:generate(register, depth)
   self:makeTiles(base.grid, base.drops)
   self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
+
+  self.generated = true
 end
 
 function Sector:getTile(i, j)
