@@ -13,14 +13,14 @@ local _glow
 function COOLDOWNBAR.init()
   _barstates = {}
   _preview = 0
-  _glow = 0
+  _glow = {}
 end
 
 function COOLDOWNBAR.setCooldownPreview(value)
   _preview = value or 0
 end
 
-function COOLDOWNBAR.draw(actor, x, y, show_preview)
+function COOLDOWNBAR.draw(actor, x, y, is_controlled)
   local g = love.graphics
   local cooldown = actor:getCooldown()
   local last = _barstates[actor:getId()] or 0
@@ -39,11 +39,22 @@ function COOLDOWNBAR.draw(actor, x, y, show_preview)
   g.arc('line', 'open', 0, 0, 36, 0, 2*math.pi, 32)
   g.setColor(1, 1, 1, 0.8)
   g.arc('line', 'open', 0, 0, 36, 0, percent*2*math.pi, 32)
-  if show_preview then
-    _glow = _glow + love.timer.getDelta()
-    local alpha = 0.5 + 0.3*math.sin(2 * _glow * 2 * math.pi)
+
+  local glow = _glow[actor:getId()] or 0
+  glow = glow + love.timer.getDelta()
+  local alpha = 0.5 + 0.3*math.sin(2 * glow * 2 * math.pi)
+  _glow[actor:getId()] = glow
+
+  if is_controlled then
     g.setColor(1, 1, 0, alpha)
     g.arc('line', 'open', 0, 0, 36, 0, (_preview/unit)*2*math.pi, 32)
+  elseif _preview > 0 then
+    local controlled = actor:getSector():getRoute().getControlledActor()
+    local turns = math.ceil(_preview / controlled:getSPD())
+    local recovered = math.min(actor:getSPD() * turns, value)
+    g.setColor(.8, .2, 0, alpha)
+    g.arc('line', 'open', 0, 0, 36, (value - recovered)/unit*2*math.pi,
+                                    percent*2*math.pi, 32)
   end
   g.pop()
 end

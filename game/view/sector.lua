@@ -325,7 +325,7 @@ function SectorView:draw()
         local actor = body:getActor() if actor then
           SECTOR_COOLDOWNBAR.draw(
             actor, x + _TILE_W/2, y + _TILE_H/2,
-            actor == self.sector:getRoute():getControlledActor()
+            actor == self.sector:getRoute().getControlledActor()
           )
         end
       end
