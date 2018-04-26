@@ -93,6 +93,7 @@ function state:enter(_, route, view, alert)
 end
 
 function state:resume(from, args)
+  _view.sector.setCooldownPreview(0)
   _resumeTask(args)
   if from == GS.ACTION_MENU and args.action then
     _was_on_menu = true
@@ -193,6 +194,9 @@ local function _useAction(action_slot, params)
   params = params or {}
   local param = ACTION.pendingInput(action_slot, controlled_actor, params)
   while param do
+    _view.sector:setCooldownPreview(
+      ACTION.exhaustionCost(action_slot, controlled_actor, params)
+    )
     if param.name == 'choose_dir' then
       SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'])
       local dir = coroutine.yield(_task)

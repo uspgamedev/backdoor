@@ -9,6 +9,10 @@ function ACTION.exists(action_name)
   return not not MANEUVERS[action_name]
 end
 
+function ACTION.exhaustionCost(action_name, actor, inputvalues)
+  return MANEUVERS[action_name].exhaustionCost(actor, inputvalues)
+end
+
 function ACTION.pendingInput(action_name, actor, inputvalues)
   local maneuver = MANEUVERS[action_name]
   for _,input_spec in ipairs(maneuver.input_specs) do

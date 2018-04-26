@@ -9,6 +9,10 @@ function CONSUME.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function CONSUME.exhaustionCost(actor, inputvalues)
+  return 0
+end
+
 function CONSUME.validate(actor, inputvalues)
   return inputvalues.consumed
 end

@@ -12,6 +12,10 @@ function MOVE.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function MOVE.exhaustionCost(actor, inputvalues)
+  return ACTIONDEFS.MOVE_COST
+end
+
 function MOVE.validate(actor, inputvalues)
   local sector = actor:getBody():getSector()
   return sector:isValid(unpack(inputvalues.pos))

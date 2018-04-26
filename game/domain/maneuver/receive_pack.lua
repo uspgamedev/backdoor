@@ -10,6 +10,10 @@ function RECEIVEPACK.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function RECEIVEPACK.exhaustionCost(actor, inputvalues)
+  return 0
+end
+
 function RECEIVEPACK.validate(actor, inputvalues)
   return inputvalues.consumed and inputvalues.pack
 end

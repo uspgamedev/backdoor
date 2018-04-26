@@ -8,6 +8,10 @@ function IDLE.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function IDLE.exhaustionCost(actor, inputvalues)
+  return ACTIONDEFS.IDLE_COST
+end
+
 function IDLE.validate(actor, inputvalues)
   return true
 end

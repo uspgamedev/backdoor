@@ -18,6 +18,18 @@ function PLAYCARD.activatedAbility(actor, inputvalues)
   return card:isArt() and card:getArtAbility()
 end
 
+function PLAYCARD.exhaustionCost(actor, inputvalues)
+  local card = _card(actor, inputvalues)
+  if card:isArt() then
+    return card:getArtCost()
+  elseif card:isWidget() then
+    return ACTIONDEFS.PLAY_WIDGET_COST
+  elseif card:isUpgrade() then
+    return ACTIONDEFS.PLAY_UPGRADE_COST
+  end
+  return 0
+end
+
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local valid = false

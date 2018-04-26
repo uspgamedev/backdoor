@@ -82,6 +82,10 @@ function SectorView:getTarget()
   return self.target
 end
 
+function SectorView:setCooldownPreview(value)
+  return SECTOR_COOLDOWNBAR.setCooldownPreview(value)
+end
+
 function SectorView:initSector(sector)
   if sector and sector ~= self.sector then
     local g = love.graphics
@@ -345,7 +349,10 @@ function SectorView:draw()
 
         local body_sprite = self:getBodySprite(body)
         local actor = body:getActor() if actor then
-          SECTOR_COOLDOWNBAR.draw(actor, x + _TILE_W/2, y + _TILE_H/2)
+          SECTOR_COOLDOWNBAR.draw(
+            actor, x + _TILE_W/2, y + _TILE_H/2,
+            actor == self.sector:getRoute():getControlledActor()
+          )
         end
         g.setColor(COLORS.NEUTRAL)
         body_sprite:draw(x, y)
