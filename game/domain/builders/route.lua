@@ -49,17 +49,10 @@ function BUILDER.build(route_id, player_info)
   data.rng_state = RANDOM.getState()
   data.sectors = SECTORS_BUILDER.build(idgenerator, player_info)
   data.next_id = idgenerator.getNextID()
-  local first_sector
-  for sector_state in ipairs(data.sectors) do
-    if sector_state.player_info then
-      first_sector = sector_state
-      break
-    end
-  end
-  assert(first_sector, "NO FIRST SECTOR!")
+  local first_sector = data.sectors[#data.sectors]
   data.current_sector_id = first_sector.id
   data.player_name = player_info.name
-  data.player_id = player_info.id
+  data.player_id = first_sector.actors[1].id
   data.behaviors = { ai = {} }
   return data
 end

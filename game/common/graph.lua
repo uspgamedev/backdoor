@@ -23,7 +23,7 @@ end
 
 -- Create Node in Graph
 function Graph:addNode(zone, symb)
-  local id = self.idgen.getNextID()
+  local id = self.idgen.newID()
   local node = Node(id, zone, symb)
   self.nodes[id] = node
   return id

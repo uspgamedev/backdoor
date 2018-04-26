@@ -98,15 +98,36 @@ function BUILDER.build(idgenerator, player_data)
   route_map:connect(z4_5, s8)
 
   local sectors = {}
-  local first_sector = route_map:getNode(r_0)
   for id, sector_state in pairs(route_map.nodes) do
     table.insert(sectors, sector_state)
   end
 
   -- generate player
-  first_sector.player_info = player_info
-  player_info.id = idgenerator.getNextID()
+  local species = player_info.species
+  local background = player_info.background
+  local pbody = BODY_BUILDER.build(idgenerator, species, 16, 12)
+  local pactor = ACTOR_BUILDER.build(idgenerator, pbody.id, background)
 
+  -- generate sample sector
+  local tiledata = DB.loadSetting('init_tiledata')
+  local first_sector = {
+    specname = 'initial',
+    id = idgenerator.newID(),
+    tiles = tiledata.tiles,
+    h = #tiledata.tiles,
+    w = #tiledata.tiles[1],
+    depth = 0,
+    bodies = { pbody },
+    actors = { pactor },
+    exits = {
+      {
+        pos = tiledata.exit,
+        target_specname = r_0,
+      },
+    }
+  }
+
+  table.insert(sectors, first_sector)
   return sectors
 end
 
