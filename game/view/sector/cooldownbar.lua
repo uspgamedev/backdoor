@@ -3,7 +3,7 @@ local ACTIONDEFS = require 'domain.definitions.action'
 
 local COOLDOWNBAR = {}
 
-local _BARSCALE = 5
+local _BARSCALE = 10
 local _SMOOTH_FACTOR = 0.5
 
 local _barstates

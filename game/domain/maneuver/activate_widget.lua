@@ -13,8 +13,8 @@ function ACTIVATE.activatedAbility(actor, inputvalues)
 end
 
 function ACTIVATE.exhaustionCost(actor, inputvalues)
-  return actor:getBody():getWidget(inputvalues.widget_slot)
-                        :getWidgetActivationCost()
+  local widget = actor:getBody():getWidget(inputvalues.widget_slot)
+  return widget and widget:getWidgetActivationCost() or 0
 end
 
 function ACTIVATE.validate(actor, inputvalues)

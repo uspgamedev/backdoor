@@ -316,6 +316,21 @@ function SectorView:draw()
       g.rectangle('fill', x, y, w, h)
     end
 
+    -- Draw cooldown bars
+    for _, bodyinfo in ipairs(draw_bodies) do
+      local body, x, y = unpack(bodyinfo)
+      local i,j = body:getPos()
+      --Draw only if player is seeing them
+      if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+        local actor = body:getActor() if actor then
+          SECTOR_COOLDOWNBAR.draw(
+            actor, x + _TILE_W/2, y + _TILE_H/2,
+            actor == self.sector:getRoute():getControlledActor()
+          )
+        end
+      end
+    end
+
     --Draw Cursor, if it exists
     if self.cursor then
       local c_i, c_j = self:getCursorPos()
@@ -348,12 +363,6 @@ function SectorView:draw()
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
 
         local body_sprite = self:getBodySprite(body)
-        local actor = body:getActor() if actor then
-          SECTOR_COOLDOWNBAR.draw(
-            actor, x + _TILE_W/2, y + _TILE_H/2,
-            actor == self.sector:getRoute():getControlledActor()
-          )
-        end
         g.setColor(COLORS.NEUTRAL)
         body_sprite:draw(x, y)
 
