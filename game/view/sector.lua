@@ -15,7 +15,8 @@ local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
 
-local SECTOR_TILEMAP = require 'view.sector.tilemap'
+local SECTOR_TILEMAP      = require 'view.sector.tilemap'
+local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -93,6 +94,7 @@ function SectorView:initSector(sector)
     _tile_quads = _tileset.quads
 
     SECTOR_TILEMAP.init(sector, _tileset)
+    SECTOR_COOLDOWNBAR.init()
     _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
@@ -343,18 +345,7 @@ function SectorView:draw()
 
         local body_sprite = self:getBodySprite(body)
         local actor = body:getActor() if actor then
-          local cooldown = actor:getCooldown()
-          local unit = ACTION.EXHAUSTION_UNIT*5
-          local percent = math.fmod(cooldown, unit)/unit
-          g.push()
-          g.translate(x + _TILE_W/2, y + _TILE_H/2)
-          g.scale(1, 1/2)
-          g.setLineWidth(8)
-          g.setColor(1, 1, 1, 0.2)
-          g.arc('line', 'open', 0, 0, 40, 0, 2*math.pi, 32)
-          g.setColor(1, 1, 1, 0.8)
-          g.arc('line', 'open', 0, 0, 40, 0, percent*2*math.pi, 32)
-          g.pop()
+          SECTOR_COOLDOWNBAR.draw(actor, x + _TILE_W/2, y + _TILE_H/2)
         end
         g.setColor(COLORS.NEUTRAL)
         body_sprite:draw(x, y)
