@@ -7,6 +7,7 @@ local CAM         = require 'common.camera'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
+local ACTION      = require 'domain.definitions.action'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
@@ -341,6 +342,20 @@ function SectorView:draw()
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
 
         local body_sprite = self:getBodySprite(body)
+        local actor = body:getActor() if actor then
+          local cooldown = actor:getCooldown()
+          local unit = ACTION.EXHAUSTION_UNIT*5
+          local percent = math.fmod(cooldown, unit)/unit
+          g.push()
+          g.translate(x + _TILE_W/2, y + _TILE_H/2)
+          g.scale(1, 1/2)
+          g.setLineWidth(8)
+          g.setColor(1, 1, 1, 0.2)
+          g.arc('line', 'open', 0, 0, 40, 0, 2*math.pi, 32)
+          g.setColor(1, 1, 1, 0.8)
+          g.arc('line', 'open', 0, 0, 40, 0, percent*2*math.pi, 32)
+          g.pop()
+        end
         g.setColor(COLORS.NEUTRAL)
         body_sprite:draw(x, y)
 
@@ -379,10 +394,10 @@ function SectorView:draw()
       g.push()
       g.translate(x, y)
       g.setColor(0, 20/255, 0, 200/255)
-      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H,
                   (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
       g.setColor(cr, cg, cb, 200/255)
-      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H,
                   hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
 
       -- NAME

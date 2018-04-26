@@ -110,6 +110,10 @@ function Body:getSector()
   return Util.findId(self.sector_id)
 end
 
+function Body:getActor()
+  return self:getSector():getActorFromBody(self)
+end
+
 function Body:getPos()
   return self:getSector():getBodyPos(self)
 end
