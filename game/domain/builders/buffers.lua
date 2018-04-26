@@ -1,5 +1,7 @@
 
 local DB = require 'database'
+local RANDOM = require 'common.random'
+local DEFS = require 'domain.definitions'
 local BUILDER = {}
 
 local function _card(specname)

@@ -1,6 +1,9 @@
 
+local DB = require 'database'
 local Graph = require 'common.graph'
 local REGIONDEFS = require 'domain.definitions.regions'
+local BODY_BUILDER = require 'domain.builders.body'
+local ACTOR_BUILDER = require 'domain.builders.actor'
 
 local BUILDER = {}
 
@@ -103,8 +106,8 @@ function BUILDER.build(idgenerator, player_data)
   end
 
   -- generate player
-  local species = player_info.species
-  local background = player_info.background
+  local species = player_data.species
+  local background = player_data.background
   local pbody = BODY_BUILDER.build(idgenerator, species, 16, 12)
   local pactor = ACTOR_BUILDER.build(idgenerator, pbody.id, background)
 
@@ -124,8 +127,10 @@ function BUILDER.build(idgenerator, player_data)
         pos = tiledata.exit,
         target_specname = r_0,
       },
-    }
+    },
+    generated = true,
   }
+
 
   table.insert(sectors, first_sector)
   return sectors

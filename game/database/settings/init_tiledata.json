@@ -1,84 +1,84 @@
 {
   "tiles":[[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":">"
+            "type":">","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },{
-            "type":"."
+            "type":".","drops":[]
           },false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]],
           "exit":[10, 12]
 }

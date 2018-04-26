@@ -40,6 +40,8 @@ function Route:instance(obj)
     _player_name = state.player_name
     _player_id = state.player_id
 
+    printf("player id: %s", _player_id)
+
     -- rng
     -- setState is theoretically enough to reproduce seed as well
     RANDOM.setState(state.rng_state)
@@ -61,6 +63,7 @@ function Route:instance(obj)
     _behaviors.load(state.behaviors)
 
     -- current sector
+    printf("current sector: %s", state.current_sector_id)
     obj.setCurrentSector(state.current_sector_id)
   end
 

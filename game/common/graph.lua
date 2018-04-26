@@ -19,6 +19,7 @@ function Graph:create(idgenerator)
   newgraph.idgen = idgenerator
   newgraph.nodes = {}
   newgraph.edges = {}
+  return newgraph
 end
 
 -- Create Node in Graph

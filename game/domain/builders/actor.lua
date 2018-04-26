@@ -1,5 +1,6 @@
 
-local BUFFER_BUILDER = require 'domain.buffer'
+local BUFFER_BUILDER = require 'domain.builders.buffers'
+local DEFS = require 'domain.definitions'
 
 local BUILDER = {}
 
