@@ -1,81 +1,64 @@
 
-local function Node(zone, symb)
-  return ("%s:%s"):format(zone, symb)
+local Prototype = require 'lux.prototype' :new {}
+local Graph = Prototype:new {}
+
+-- Nodes are basically sector states
+local function Node(id, zone, symb)
+  local state = {}
+  state.id = id
+  state.zone = zone
+  state.specname = symb
+  state.depth = 1
+  state.exits = {}
+  return state
 end
 
-local Graph = require 'lux.class' :new()
+-- Create Graph
+function Graph:create(idgenerator)
+  local newgraph = Graph:new {}
+  newgraph.idgen = idgenerator
+  newgraph.nodes = {}
+  newgraph.edges = {}
+end
 
-function Graph:instance(obj)
-  local _edges = {}
-  local _nodes = {}
-  local _size = 0
+-- Create Node in Graph
+function Graph:addNode(zone, symb)
+  local id = self.idgen.getNextID()
+  local node = Node(id, zone, symb)
+  self.nodes[id] = node
+  return id
+end
 
-  function obj.addNode(zone, symb)
-    local node = Node(zone, symb)
-    local idx = _size + 1
-    _size = idx
-    _nodes[idx] = node
-    _edges[idx] = {}
-    for j = 1, _size do
-      _edges[j][idx] = false
-      _edges[idx][j] = false
-    end
-    return idx
+-- Remove Node from Graph
+function Graph:removeNode(id)
+  local node = _nodes[id]
+  for other_id in pairs(node.exits) do
+    self:disconnect(id, other_id)
   end
+  self.nodes[id] = nil
+end
 
-  function obj.removeNode(idx)
-    for j = 1, _size do
-      _edges[idx][j] = false
-      _edges[j][idx] = false
-    end
-  end
+-- Connect Nodes in Graph
+function Graph:connect(id1, id2)
+  local nodes = self.nodes
+  assert(nodes[id1] and nodes[id2], "Invalid node id.")
+  nodes[id1].exits[id2] = true
+  nodes[id2].exits[id1] = true
+  printf("Connecting [Node %s] to [Node %s]", id1, id2)
+end
 
-  function obj.connect(idx1, idx2)
-    assert(idx1 <= _size and idx2 <= _size)
-    _edges[idx1][idx2] = true
-    _edges[idx2][idx1] = true
-    printf("Connecting [Node#%d] to [Node#%d]", idx1, idx2)
-  end
+-- Disconnect Nodes in Graph
+function Graph:disconnect(id1, id2)
+  local nodes = self.nodes
+  assert(nodes[id1] and nodes[id2], "Invalid node id.")
+  nodes[id1].exits[id2] = nil
+  nodes[id2].exits[id1] = nil
+  printf("Disconnecting [Node %s] to [Node %s]", id1, id2)
+end
 
-  function obj.disconnect(idx1, idx2)
-    assert(idx1 <= _size and idx2 <= _size)
-    _edges[idx1][idx2] = false
-    _edges[idx2][idx1] = false
-  end
-
-  function obj.clone()
-    local clone = Graph()
-    for idx in ipairs(_nodes) do
-      local zone, symb = obj.getNodeInfo(idx)
-      clone.addNode(zone, symb)
-    end
-    for i = 1, _size do
-      for j = 1, _size do
-        if _edges[i][j] then
-          clone.connect(i, j)
-        end
-      end
-    end
-    return clone
-  end
-
-  function obj.eachNode()
-    return ipairs(_nodes)
-  end
-
-  function obj.getConnections(idx)
-    local connections = {}
-    for j = 1, _size do
-      if _edges[idx][j] then
-        table.insert(connections, j)
-      end
-    end
-    return connections
-  end
-
-  function obj.getNodeInfo(idx)
-    return _nodes[idx]:match("(%a):(%a)")
-  end
+-- Get Node in Graph
+function Graph:getNode(id)
+  return self.nodes[id]
 end
 
 return Graph
