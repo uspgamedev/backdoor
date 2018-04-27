@@ -101,10 +101,7 @@ function state:enter(pre, route_data)
 
   -- load route
   _route = Route()
-  print("loading route")
-  printf("player_id: %s", route_data.player_id)
   _route.loadState(route_data)
-  print("route loaded")
 
   -- View table
   _view = {}

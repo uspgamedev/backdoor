@@ -23,12 +23,9 @@ local function _seek(actor, inputvalues)
     local i, j = actor:getPos()
     local id, exit = sector:findExit(i, j, true)
     if id then
-      print("found sector!")
       inputvalues.interaction = 'CHANGE_SECTOR'
       inputvalues.sector = id
       inputvalues.pos = exit.target_pos
-    else
-      print("no sector found...")
     end
   end
   return inputvalues.interaction
