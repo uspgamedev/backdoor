@@ -10,41 +10,43 @@ local BUILDER = {}
 function BUILDER.build(idgenerator, player_data)
   local route_map = Graph:create(idgenerator)
   local ZONES = REGIONDEFS.ZONES
-  local SYMBOLS = REGIONDEFS.ZONES
+  local SYMBOLS = REGIONDEFS.SYMBOLS
+  local first_sector_id = route_map:addNode(ZONES.A, "initial")
   local r_0 = route_map:addNode(ZONES.A, SYMBOLS.O)
   local r_1 = route_map:addNode(ZONES.A, SYMBOLS.O)
   local r_2 = route_map:addNode(ZONES.A, SYMBOLS.O)
   local r_3 = route_map:addNode(ZONES.A, SYMBOLS.O)
   local r_4 = route_map:addNode(ZONES.A, SYMBOLS.O)
-  local z1_1 = route_map:addNode(ZONES.B, SYMBOLS.O)
-  local z1_2 = route_map:addNode(ZONES.B, SYMBOLS.O)
-  local z1_3 = route_map:addNode(ZONES.B, SYMBOLS.O)
-  local z1_4 = route_map:addNode(ZONES.B, SYMBOLS.O)
-  local z1_5 = route_map:addNode(ZONES.B, SYMBOLS.O)
-  local z2_1 = route_map:addNode(ZONES.C, SYMBOLS.O)
-  local z2_2 = route_map:addNode(ZONES.C, SYMBOLS.O)
-  local z2_3 = route_map:addNode(ZONES.C, SYMBOLS.O)
-  local z2_4 = route_map:addNode(ZONES.C, SYMBOLS.O)
-  local z2_5 = route_map:addNode(ZONES.C, SYMBOLS.O)
-  local z3_1 = route_map:addNode(ZONES.D, SYMBOLS.O)
-  local z3_2 = route_map:addNode(ZONES.D, SYMBOLS.O)
-  local z3_3 = route_map:addNode(ZONES.D, SYMBOLS.O)
-  local z3_4 = route_map:addNode(ZONES.D, SYMBOLS.O)
-  local z3_5 = route_map:addNode(ZONES.D, SYMBOLS.O)
-  local z4_1 = route_map:addNode(ZONES.E, SYMBOLS.O)
-  local z4_2 = route_map:addNode(ZONES.E, SYMBOLS.O)
-  local z4_3 = route_map:addNode(ZONES.E, SYMBOLS.O)
-  local z4_4 = route_map:addNode(ZONES.E, SYMBOLS.O)
-  local z4_5 = route_map:addNode(ZONES.E, SYMBOLS.O)
-  local s1 = route_map:addNode(ZONES.F, SYMBOLS.O)
-  local s2 = route_map:addNode(ZONES.G, SYMBOLS.O)
-  local s3 = route_map:addNode(ZONES.H, SYMBOLS.O)
-  local s4 = route_map:addNode(ZONES.I, SYMBOLS.O)
-  local s5 = route_map:addNode(ZONES.J, SYMBOLS.O)
-  local s6 = route_map:addNode(ZONES.K, SYMBOLS.O)
-  local s7 = route_map:addNode(ZONES.L, SYMBOLS.O)
-  local s8 = route_map:addNode(ZONES.M, SYMBOLS.O)
+  local z1_1 = route_map:addNode(ZONES.B, SYMBOLS.V)
+  local z1_2 = route_map:addNode(ZONES.B, SYMBOLS.V)
+  local z1_3 = route_map:addNode(ZONES.B, SYMBOLS.V)
+  local z1_4 = route_map:addNode(ZONES.B, SYMBOLS.V)
+  local z1_5 = route_map:addNode(ZONES.B, SYMBOLS.V)
+  local z2_1 = route_map:addNode(ZONES.C, SYMBOLS.V)
+  local z2_2 = route_map:addNode(ZONES.C, SYMBOLS.V)
+  local z2_3 = route_map:addNode(ZONES.C, SYMBOLS.V)
+  local z2_4 = route_map:addNode(ZONES.C, SYMBOLS.V)
+  local z2_5 = route_map:addNode(ZONES.C, SYMBOLS.V)
+  local z3_1 = route_map:addNode(ZONES.D, SYMBOLS.v)
+  local z3_2 = route_map:addNode(ZONES.D, SYMBOLS.v)
+  local z3_3 = route_map:addNode(ZONES.D, SYMBOLS.v)
+  local z3_4 = route_map:addNode(ZONES.D, SYMBOLS.v)
+  local z3_5 = route_map:addNode(ZONES.D, SYMBOLS.v)
+  local z4_1 = route_map:addNode(ZONES.E, SYMBOLS.v)
+  local z4_2 = route_map:addNode(ZONES.E, SYMBOLS.v)
+  local z4_3 = route_map:addNode(ZONES.E, SYMBOLS.v)
+  local z4_4 = route_map:addNode(ZONES.E, SYMBOLS.v)
+  local z4_5 = route_map:addNode(ZONES.E, SYMBOLS.v)
+  local s1 = route_map:addNode(ZONES.F, SYMBOLS.e)
+  local s2 = route_map:addNode(ZONES.G, SYMBOLS.e)
+  local s3 = route_map:addNode(ZONES.H, SYMBOLS.e)
+  local s4 = route_map:addNode(ZONES.I, SYMBOLS.e)
+  local s5 = route_map:addNode(ZONES.J, SYMBOLS.e)
+  local s6 = route_map:addNode(ZONES.K, SYMBOLS.e)
+  local s7 = route_map:addNode(ZONES.L, SYMBOLS.e)
+  local s8 = route_map:addNode(ZONES.M, SYMBOLS.e)
   -- building ruins
+  route_map:connect(first_sector_id, r_0)
   route_map:connect(r_0, r_1)
   route_map:connect(r_0, r_2)
   route_map:connect(r_0, r_3)
@@ -113,25 +115,16 @@ function BUILDER.build(idgenerator, player_data)
 
   -- generate sample sector
   local tiledata = DB.loadSetting('init_tiledata')
-  local first_sector = {
-    specname = 'initial',
-    id = idgenerator.newID(),
-    tiles = tiledata.tiles,
-    h = #tiledata.tiles,
-    w = #tiledata.tiles[1],
-    depth = 0,
-    bodies = { pbody },
-    actors = { pactor },
-    exits = {
-      [r_0] = {
-        pos = tiledata.exit,
-      },
-    },
-    generated = true,
-  }
+  local first_sector = route_map:getNode(first_sector_id)
+  first_sector.tiles = tiledata.tiles
+  first_sector.h = #tiledata.tiles
+  first_sector.w = #tiledata.tiles[1]
+  first_sector.depth = 0
+  first_sector.bodies = { pbody }
+  first_sector.actors = { pactor }
+  first_sector.generated = true
+  first_sector.exits[r_0].pos = tiledata.exit
 
-
-  table.insert(sectors, first_sector)
   return sectors
 end
 

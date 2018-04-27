@@ -50,9 +50,11 @@ function Graph:connect(id1, id2)
   assert(nodes[id1] and nodes[id2], "Invalid node id.")
   nodes[id1].exits[id2] = {pos = false, target_pos = false}
   nodes[id2].exits[id1] = {pos = false, target_pos = false}
+  --[[--
   printf("Connecting [%s] to [%s]",
          NodeInfo(self:getNode(id1)),
          NodeInfo(self:getNode(id2)))
+  --]]--
 end
 
 -- Disconnect Nodes in Graph
@@ -61,7 +63,11 @@ function Graph:disconnect(id1, id2)
   assert(nodes[id1] and nodes[id2], "Invalid node id.")
   nodes[id1].exits[id2] = nil
   nodes[id2].exits[id1] = nil
-  printf("Disconnecting [Node %s] to [Node %s]", id1, id2)
+  --[[--
+  printf("Disconnecting [%s] to [%s]",
+         NodeInfo(self:getNode(id1)),
+         NodeInfo(self:getNode(id2)))
+  --]]--
 end
 
 -- Get Node in Graph

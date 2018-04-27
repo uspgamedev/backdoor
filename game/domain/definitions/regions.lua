@@ -26,10 +26,10 @@ REGIONDEFS.ZONES = {
 
 REGIONDEFS.SYMBOLS = {
   'O', 'V', 'v', 'e',
-  O = 'O',
-  V = 'V',
-  v = 'v',
-  e = 'e',
+  O = 'sector01',
+  V = 'sector02',
+  v = 'sector03',
+  e = 'sector_final',
 }
 
 
