@@ -13,6 +13,11 @@ local function Node(id, zone, symb)
   return state
 end
 
+
+local function NodeInfo(node)
+  return string.format("%s(%s:%s)", node.id, node.zone, node.specname)
+end
+
 -- Create Graph
 function Graph:create(idgenerator)
   local newgraph = Graph:new {}
@@ -45,7 +50,9 @@ function Graph:connect(id1, id2)
   assert(nodes[id1] and nodes[id2], "Invalid node id.")
   nodes[id1].exits[id2] = {pos = false, target_pos = false}
   nodes[id2].exits[id1] = {pos = false, target_pos = false}
-  printf("Connecting [Node %s] to [Node %s]", id1, id2)
+  printf("Connecting [%s] to [%s]",
+         NodeInfo(self:getNode(id1)),
+         NodeInfo(self:getNode(id2)))
 end
 
 -- Disconnect Nodes in Graph

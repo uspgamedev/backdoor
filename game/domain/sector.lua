@@ -131,7 +131,9 @@ end
 function Sector:generate(register, depth)
 
   -- load sector's specs
-  local base = {}
+  local base = {
+    exits = self.exits
+  }
 
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
@@ -143,7 +145,6 @@ function Sector:generate(register, depth)
 
   self:setDepth(depth)
   self:makeTiles(base.grid, base.drops)
-  self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
 
   self.generated = true
@@ -170,17 +171,6 @@ function Sector:makeTiles(grid, drops)
       self.tiles[i][j] = tile
       self.bodies[i][j] = false
     end
-  end
-end
-
-function Sector:makeExits(exits)
-  local generated_exits = exits or {}
-  for i, exit in ipairs(generated_exits) do
-    self.exits[i] = {
-      pos = exit.pos,
-      target_specname = exit.target_specname,
-      target_id = false,
-    }
   end
 end
 
@@ -231,7 +221,7 @@ end
 function Sector:getExit(id, generate)
   local exit = self.exits[id]
   assert(exit,
-    ("No exit of index: %d"):format(idx))
+    ("No such exit: %s"):format(id))
   local result = {
     pos         = exit.pos,
     target_pos  = exit.target_pos
@@ -250,7 +240,9 @@ end
 --  @return[1]      The target sector's id
 --  @return[2]      The corresponding result of Sector:getExit
 function Sector:findExit(i, j, generate)
-  for id, exit in ipairs(self.exits) do
+  print(self.exits, next(self.exits))
+  for id, exit in pairs(self.exits) do
+    printf("exit to %s, at (%d, %d)", id, unpack(exit.pos))
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
       return id, self:getExit(id, generate)

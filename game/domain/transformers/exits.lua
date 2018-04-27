@@ -9,15 +9,6 @@ transformer.schema = {
     range = {0} },
   { id = 'distance', name = "Distance between exits", type = 'integer',
     range = {1} },
-  {
-    id = 'exits', name = "Exit", type = 'array', preview = {1},
-    schema = {
-      {
-        id = "target_specname", name = "Target Sector Spec", type = 'enum',
-        options = "domains.sector"
-      }
-    }
-  },
 }
 
 local FLOOR_THRESHOLD = 1
@@ -55,10 +46,9 @@ end
 
 function transformer.process(sectorinfo, params)
   local sectorgrid = sectorinfo.grid
-  local exits_specs = params.exits
+  local exits_specs = sectorinfo.exits
 
   local possible_exits = {}
-  local chosen_exits = {}
 
   FLOOR_THRESHOLD = params.threshold or FLOOR_THRESHOLD
   EXIT_THRESHOLD = params.distance or EXIT_THRESHOLD
@@ -73,9 +63,8 @@ function transformer.process(sectorinfo, params)
   end
 
   -- get a number of random possible exits from that list
-  local function chooseExits()
-    local N = #exits_specs -- max number of exits
-    for edx = 1, N do
+  do
+    for id, exit in pairs(exits_specs) do
       local i, j
       repeat
         local COUNT = #possible_exits
@@ -91,25 +80,18 @@ function transformer.process(sectorinfo, params)
           local idx = RANDOM.generate(1, COUNT)
           i, j = unpack(possible_exits[idx])
           -- remove found position from list of possible exits
-          possible_exits[idx] = possible_exits[COUNT]
-          possible_exits[COUNT] = nil
+          table.remove(possible_exits, idx)
         end
         -- repeat until you find a position that:
         -- > is not an exit or around another exit
       until _isPossibleExit(sectorgrid, j, i)
-      local exit = {
-        pos = {i, j},
-        target_specname = exits_specs[edx].target_specname
-      }
+      exit.pos = {i, j}
       -- add exit info to sectorinfo
       -- and set and exit tile on the sectorgrid
-      table.insert(chosen_exits, exit)
       sectorgrid.set(j, i, SCHEMATICS.EXIT)
     end
   end
 
-  chooseExits()
-  sectorinfo.exits = chosen_exits
   return sectorinfo
 end
 
