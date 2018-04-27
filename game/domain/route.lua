@@ -122,7 +122,7 @@ function Route:instance(obj)
       if not to_sector:isGenerated() then
         to_sector:generate(_register, depth)
       end
-      local entry = to_sector:getExit(from_sector)
+      local entry = to_sector:getExit(from_sector.id)
       to_sector:link(from_sector.id, unpack(exit.pos))
       from_sector:link(target_sector_id, unpack(entry.pos))
     end

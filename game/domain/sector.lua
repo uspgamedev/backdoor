@@ -147,6 +147,9 @@ function Sector:generate(register, depth)
   self:makeTiles(base.grid, base.drops)
   self:makeEncounters(base.encounters, register)
 
+  print(base.grid)
+  printf("> width %d\n> height %d", self.w, self.h)
+
   self.generated = true
 end
 
@@ -229,6 +232,7 @@ function Sector:getExit(id, generate)
   if not exit.target_pos and generate then
     self.route.linkSectorExit(self, id, result)
     result.target_pos = exit.target_pos
+    print(unpack(result.target_pos))
   end
   return result
 end
@@ -240,9 +244,7 @@ end
 --  @return[1]      The target sector's id
 --  @return[2]      The corresponding result of Sector:getExit
 function Sector:findExit(i, j, generate)
-  print(self.exits, next(self.exits))
   for id, exit in pairs(self.exits) do
-    printf("exit to %s, at (%d, %d)", id, unpack(exit.pos))
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
       return id, self:getExit(id, generate)
@@ -251,8 +253,10 @@ function Sector:findExit(i, j, generate)
   return false
 end
 
-function Sector:link(id, sector_id, i, j)
+function Sector:link(id, i, j)
   local exit = self.exits[id]
+  printf("linking sector %s to sector %s at pos: (%d, %d)",
+         self:getId(), id, i, j)
   exit.target_pos = {i, j}
 end
 
