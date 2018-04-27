@@ -104,13 +104,6 @@ function Route:instance(obj)
     return _controlled_actor
   end
 
-  function obj.makeSector(sector_spec, depth)
-    local id,sector = _register(Sector(sector_spec, obj))
-    sector:generate(_register, depth)
-    table.insert(_sectors, sector)
-    return id, sector
-  end
-
   --- Links an exit with the next sector over, generating it
   --  @param from_sector  The sector where to exit from
   --  @param idx          The exit index
@@ -144,9 +137,6 @@ function Route:instance(obj)
 
   function obj.getPlayerActor()
     return Util.findId(_player_id)
-  end
-
-  function obj.takeExit()
   end
 
   function obj.checkSector()
