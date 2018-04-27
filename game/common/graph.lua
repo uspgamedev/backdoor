@@ -43,8 +43,8 @@ end
 function Graph:connect(id1, id2)
   local nodes = self.nodes
   assert(nodes[id1] and nodes[id2], "Invalid node id.")
-  nodes[id1].exits[id2] = true
-  nodes[id2].exits[id1] = true
+  nodes[id1].exits[id2] = {pos = false, target_pos = false}
+  nodes[id2].exits[id1] = {pos = false, target_pos = false}
   printf("Connecting [Node %s] to [Node %s]", id1, id2)
 end
 

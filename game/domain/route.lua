@@ -40,8 +40,6 @@ function Route:instance(obj)
     _player_name = state.player_name
     _player_id = state.player_id
 
-    printf("player id: %s", _player_id)
-
     -- rng
     -- setState is theoretically enough to reproduce seed as well
     RANDOM.setState(state.rng_state)
@@ -63,7 +61,6 @@ function Route:instance(obj)
     _behaviors.load(state.behaviors)
 
     -- current sector
-    printf("current sector: %s", state.current_sector_id)
     obj.setCurrentSector(state.current_sector_id)
   end
 
@@ -118,13 +115,16 @@ function Route:instance(obj)
   --  @param from_sector  The sector where to exit from
   --  @param idx          The exit index
   --  @param exit         The exit data
-  function obj.linkSectorExit(from_sector, idx, exit)
-    if not exit.id then
+  function obj.linkSectorExit(from_sector, target_sector_id, exit)
+    if not exit.target_pos then
       local depth = from_sector:getDepth() + 1
-      local id, to_sector = obj.makeSector(exit.specname, depth)
-      local entry = to_sector:getExit(1)
-      to_sector:link(1, from_sector.id, unpack(exit.pos))
-      from_sector:link(idx, id, unpack(entry.pos))
+      local to_sector = Util.findId(target_sector_id)
+      if not to_sector:isGenerated() then
+        to_sector:generate(_register, depth)
+      end
+      local entry = to_sector:getExit(from_sector)
+      to_sector:link(from_sector.id, unpack(exit.pos))
+      from_sector:link(target_sector_id, unpack(entry.pos))
     end
   end
 

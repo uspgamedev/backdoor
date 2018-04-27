@@ -123,9 +123,8 @@ function BUILDER.build(idgenerator, player_data)
     bodies = { pbody },
     actors = { pactor },
     exits = {
-      {
+      [r_0] = {
         pos = tiledata.exit,
-        target_specname = r_0,
       },
     },
     generated = true,

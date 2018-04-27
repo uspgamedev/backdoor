@@ -54,7 +54,6 @@ function BUILDER.build(route_id, player_info)
   data.player_name = player_info.name
   data.player_id = first_sector.actors[1].id
   data.behaviors = { ai = {} }
-  print("first actor id:", data.player_id)
   return data
 end
 

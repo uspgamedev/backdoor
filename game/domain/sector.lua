@@ -228,19 +228,16 @@ end
 --  @param idx      The exit index (must be valid)
 --  @param generate Flag indicating whether to generate the next sector over
 --                  or not.
-function Sector:getExit(idx, generate)
-  local exit = self.exits[idx]
+function Sector:getExit(id, generate)
+  local exit = self.exits[id]
   assert(exit,
     ("No exit of index: %d"):format(idx))
   local result = {
     pos         = exit.pos,
-    specname    = exit.target_specname,
-    id          = exit.target_id,
     target_pos  = exit.target_pos
   }
-  if not exit.target_id and generate then
-    self.route.linkSectorExit(self, idx, result)
-    result.id = exit.target_id
+  if not exit.target_pos and generate then
+    self.route.linkSectorExit(self, id, result)
     result.target_pos = exit.target_pos
   end
   return result
@@ -250,21 +247,20 @@ end
 --  @param i        The i-position of the possible exit
 --  @param j        The j-position of the possible exit
 --  @param generate A flag passed on to Sector:getExit()
---  @return[1]      The exit index
+--  @return[1]      The target sector's id
 --  @return[2]      The corresponding result of Sector:getExit
 function Sector:findExit(i, j, generate)
-  for idx, exit in ipairs(self.exits) do
+  for id, exit in ipairs(self.exits) do
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
-      return idx, self:getExit(idx, generate)
+      return id, self:getExit(id, generate)
     end
   end
   return false
 end
 
-function Sector:link(idx, sector_id, i, j)
-  local exit = self.exits[idx]
-  exit.target_id = sector_id
+function Sector:link(id, sector_id, i, j)
+  local exit = self.exits[id]
   exit.target_pos = {i, j}
 end
 
