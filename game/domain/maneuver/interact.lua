@@ -9,6 +9,10 @@ function INTERACT.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function INTERACT.exhaustionCost(actor, inputvalues)
+  return ACTIONDEFS.MOVE_COST
+end
+
 -- FIXME: CHANGE_SECTOR should be an activated ability of interaction with
 --        stairs, portals, etc.
 

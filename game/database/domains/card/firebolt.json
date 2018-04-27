@@ -1,56 +1,56 @@
 {
-  "pp":4,
-  "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
+  "attr":"ARC",
+  "icon":"card-firebolt",
+  "one_time":false,
   "art":{
-    "cost":1,
     "art_ability":{
+      "effects":[{
+          "attr":4,
+          "target":"=body",
+          "type":"effect",
+          "base":"=(arc*2)-2",
+          "name":"damage_on_target",
+          "sfx":"example"
+        }],
       "inputs":[{
+          "max-range":7,
+          "name":"choose_target",
           "type":"input",
+          "empty-tile":false,
           "output":"tgt",
           "body-only":{
-          },
-          "empty-tile":false,
-          "name":"choose_target",
-          "max-range":7
+          }
         },{
-          "pos":"=tgt",
           "type":"operator",
+          "pos":"=tgt",
           "name":"get_body_at",
           "output":"body"
         },{
-          "output":"arc",
           "type":"operator",
-          "name":"get_attribute",
-          "which":"ARC"
+          "which":"ARC",
+          "output":"arc",
+          "name":"get_attribute"
         },{
           "op":"*",
-          "rhs":2,
-          "lhs":"=arc",
+          "output":"arc*2",
           "type":"operator",
           "name":"integer_binop",
-          "output":"arc*2"
+          "rhs":2,
+          "lhs":"=arc"
         },{
           "op":"-",
-          "rhs":2,
-          "lhs":"=arc*2",
+          "output":"(arc*2)-2",
           "type":"operator",
           "name":"integer_binop",
-          "output":"(arc*2)-2"
-        }],
-      "effects":[{
-          "sfx":"example",
-          "type":"effect",
-          "target":"=body",
-          "base":"=(arc*2)-2",
-          "attr":4,
-          "name":"damage_on_target"
+          "rhs":2,
+          "lhs":"=arc*2"
         }]
-    }
+    },
+    "cost":10
   },
-  "one_time":false,
-  "icon":"card-firebolt",
-  "set":false,
+  "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Firebolt"
+  "pp":4,
+  "name":"Firebolt",
+  "set":false
 }

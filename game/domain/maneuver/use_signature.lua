@@ -10,6 +10,10 @@ function SIGNATURE.activatedAbility(actor, inputvalues)
   return actor:getSignature().ability
 end
 
+function SIGNATURE.exhaustionCost(actor, inputvalues)
+  return actor:getSignature().cost
+end
+
 function SIGNATURE.validate(actor, inputvalues)
   return ABILITY.checkInputs(actor:getSignature().ability, actor, inputvalues)
 end

@@ -12,6 +12,11 @@ function ACTIVATE.activatedAbility(actor, inputvalues)
   return actor:getBody():getWidget(inputvalues.widget_slot):getWidgetAbility()
 end
 
+function ACTIVATE.exhaustionCost(actor, inputvalues)
+  local widget = actor:getBody():getWidget(inputvalues.widget_slot)
+  return widget and widget:getWidgetActivationCost() or 0
+end
+
 function ACTIVATE.validate(actor, inputvalues)
   if not inputvalues.widget_slot then return false end
   local widget = actor:getBody():getWidget(inputvalues.widget_slot)

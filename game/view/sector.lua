@@ -7,6 +7,7 @@ local CAM         = require 'common.camera'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
+local ACTION      = require 'domain.definitions.action'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
@@ -14,7 +15,8 @@ local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
 
-local SECTOR_TILEMAP = require 'view.sector.tilemap'
+local SECTOR_TILEMAP      = require 'view.sector.tilemap'
+local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -80,6 +82,10 @@ function SectorView:getTarget()
   return self.target
 end
 
+function SectorView:setCooldownPreview(value)
+  return SECTOR_COOLDOWNBAR.setCooldownPreview(value)
+end
+
 function SectorView:initSector(sector)
   if sector and sector ~= self.sector then
     local g = love.graphics
@@ -92,6 +98,7 @@ function SectorView:initSector(sector)
     _tile_quads = _tileset.quads
 
     SECTOR_TILEMAP.init(sector, _tileset)
+    SECTOR_COOLDOWNBAR.init()
     _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
@@ -309,6 +316,21 @@ function SectorView:draw()
       g.rectangle('fill', x, y, w, h)
     end
 
+    -- Draw cooldown bars
+    for _, bodyinfo in ipairs(draw_bodies) do
+      local body, x, y = unpack(bodyinfo)
+      local i,j = body:getPos()
+      --Draw only if player is seeing them
+      if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+        local actor = body:getActor() if actor then
+          SECTOR_COOLDOWNBAR.draw(
+            actor, x + _TILE_W/2, y + _TILE_H/2,
+            actor == self.sector:getRoute().getControlledActor()
+          )
+        end
+      end
+    end
+
     --Draw Cursor, if it exists
     if self.cursor then
       local c_i, c_j = self:getCursorPos()
@@ -379,10 +401,10 @@ function SectorView:draw()
       g.push()
       g.translate(x, y)
       g.setColor(0, 20/255, 0, 200/255)
-      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H,
                   (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
       g.setColor(cr, cg, cb, 200/255)
-      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H-20,
+      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H,
                   hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
 
       -- NAME

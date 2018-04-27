@@ -146,6 +146,10 @@ function Actor:getExp()
   return self.exp
 end
 
+function Actor:getCooldown()
+  return self.cooldown
+end
+
 function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end

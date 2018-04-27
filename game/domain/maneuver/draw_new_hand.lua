@@ -9,6 +9,10 @@ function DRAWHAND.activatedAbility(actor, inputvalues)
   return nil
 end
 
+function DRAWHAND.exhaustionCost(actor, inputvalues)
+  return 0
+end
+
 function DRAWHAND.validate(actor, inputvalues)
   return not actor:isBufferEmpty()
          and actor:getPP() >= DEFS.ACTION.NEW_HAND_COST
