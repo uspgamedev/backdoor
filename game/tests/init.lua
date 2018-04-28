@@ -30,7 +30,7 @@ if _module_name then
   if require_success then
     print(("Running test: %s"):format(_module_name))
     local test_successful, err = pcall(module_test)
-    assert(test_successful, ("TEST FAILED!\n\n%s"):format(err))
+    assert(test_successful, ("TEST FAILED!\n\n%s\n"):format(err))
     print("Test Successful!")
   else
     print(module_test)

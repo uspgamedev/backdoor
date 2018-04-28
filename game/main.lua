@@ -84,13 +84,13 @@ function love.load(arg)
   Res.init()
   love.graphics.setDefaultFilter("nearest", "nearest")
 
-  require 'tests'
-
   -- init DB
   DB.init()
 
   -- initializes save & load system
   PROFILE.init()
+
+  require 'tests'
 
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 end

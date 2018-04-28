@@ -20,15 +20,12 @@ local _turnLoop
 
 local function _initBodies(w, h)
   local t = {}
-  for i = 1, h do
+  for i = 0, h do
     t[i] = {}
-    for j = 1, w do
+    for j = 0, w do
       t[i][j] = false
     end
   end
-  -- A special tile where we can always remove things from...
-  -- Because nothing is ever there!
-  t[0] = { [0]=false }
   return t
 end
 
@@ -41,6 +38,7 @@ function Sector:init(spec_name, route)
 
   self.route = route
   self.tiles = {{ false }}
+  self.generated = false
   self.bodies = _initBodies(1,1)
   self.actors = {}
   self.depth = 0
@@ -52,14 +50,14 @@ function Sector:init(spec_name, route)
 end
 
 function Sector:loadState(state, register)
-  self.w = state.w or self.w
-  self.h = state.h or self.h
   self.id = state.id
   self.depth = state.depth
   self.exits = state.exits
   self:setId(state.id)
-  if state.tiles then
+  if state.generated then
     self.tiles = state.tiles
+    self.w = state.w or self.w
+    self.h = state.h or self.h
     self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
@@ -89,12 +87,13 @@ end
 function Sector:saveState()
   local state = {}
   state.specname = self.specname
-  state.w = self.w
-  state.h = self.h
   state.id = self.id
   state.depth = self.depth
   state.exits = self.exits
+  state.generated = self.generated
   state.tiles = self.tiles
+  state.w = self.w
+  state.h = self.h
   state.actors = {}
   state.bodies = {}
   for _,actor in ipairs(self.actors) do
@@ -125,10 +124,16 @@ function Sector:getTileSet()
   return self:getSpec('bootstrap').tileset
 end
 
+function Sector:isGenerated()
+  return self.generated
+end
+
 function Sector:generate(register, depth)
 
   -- load sector's specs
-  local base = {}
+  local base = {
+    exits = self.exits
+  }
 
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
@@ -140,8 +145,9 @@ function Sector:generate(register, depth)
 
   self:setDepth(depth)
   self:makeTiles(base.grid, base.drops)
-  self:makeExits(base.exits)
   self:makeEncounters(base.encounters, register)
+
+  self.generated = true
 end
 
 function Sector:getTile(i, j)
@@ -165,17 +171,6 @@ function Sector:makeTiles(grid, drops)
       self.tiles[i][j] = tile
       self.bodies[i][j] = false
     end
-  end
-end
-
-function Sector:makeExits(exits)
-  local generated_exits = exits or {}
-  for i, exit in ipairs(generated_exits) do
-    self.exits[i] = {
-      pos = exit.pos,
-      target_specname = exit.target_specname,
-      target_id = false,
-    }
   end
 end
 
@@ -223,19 +218,16 @@ end
 --  @param idx      The exit index (must be valid)
 --  @param generate Flag indicating whether to generate the next sector over
 --                  or not.
-function Sector:getExit(idx, generate)
-  local exit = self.exits[idx]
+function Sector:getExit(id, generate)
+  local exit = self.exits[id]
   assert(exit,
-    ("No exit of index: %d"):format(idx))
+    ("No such exit: %s"):format(id))
   local result = {
     pos         = exit.pos,
-    specname    = exit.target_specname,
-    id          = exit.target_id,
     target_pos  = exit.target_pos
   }
-  if not exit.target_id and generate then
-    self.route.linkSectorExit(self, idx, result)
-    result.id = exit.target_id
+  if not exit.target_pos and generate then
+    self.route.linkSectorExit(self, id, result)
     result.target_pos = exit.target_pos
   end
   return result
@@ -245,21 +237,20 @@ end
 --  @param i        The i-position of the possible exit
 --  @param j        The j-position of the possible exit
 --  @param generate A flag passed on to Sector:getExit()
---  @return[1]      The exit index
+--  @return[1]      The target sector's id
 --  @return[2]      The corresponding result of Sector:getExit
 function Sector:findExit(i, j, generate)
-  for idx, exit in ipairs(self.exits) do
+  for id, exit in pairs(self.exits) do
     local di, dj = unpack(exit.pos)
     if di == i and dj == j then
-      return idx, self:getExit(idx, generate)
+      return id, self:getExit(id, generate)
     end
   end
   return false
 end
 
-function Sector:link(idx, sector_id, i, j)
-  local exit = self.exits[idx]
-  exit.target_id = sector_id
+function Sector:link(id, i, j)
+  local exit = self.exits[id]
   exit.target_pos = {i, j}
 end
 

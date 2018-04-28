@@ -4,7 +4,7 @@ local INPUT        = require 'input'
 
 local IDGenerator  = require 'common.idgenerator'
 local RUNFLAGS     = require 'infra.runflags'
-local ROUTEBUILDER = require 'infra.routebuilder'
+local ROUTEBUILDER = require 'domain.builders.route'
 local DB           = require 'database'
 local ZIP          = love.math
 

@@ -24,7 +24,7 @@ local function _seek(actor, inputvalues)
     local id, exit = sector:findExit(i, j, true)
     if id then
       inputvalues.interaction = 'CHANGE_SECTOR'
-      inputvalues.sector = exit.id
+      inputvalues.sector = id
       inputvalues.pos = exit.target_pos
     end
   end
