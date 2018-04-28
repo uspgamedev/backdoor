@@ -1,8 +1,5 @@
 
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
-local BUFFER_BUILDER = require 'domain.builders.buffers'
-local Actor = require 'domain.actor'
-local Body = require 'domain.body'
 
 local transformer = {}
 
@@ -20,7 +17,6 @@ function transformer.process(sectorinfo, params)
   local _h = params.h
   local _mw = params.mw
   local _mh = params.mh
-
 
   sectorinfo.grid = SectorGrid(_w, _h, _mw, _mh)
   return sectorinfo
