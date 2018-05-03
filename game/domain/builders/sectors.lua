@@ -46,7 +46,6 @@ function BUILDER.build(idgenerator, player_data)
   first_sector.tiles = tiledata.tiles
   first_sector.h = #tiledata.tiles
   first_sector.w = #tiledata.tiles[1]
-  first_sector.depth = 0
   first_sector.bodies = { pbody }
   first_sector.actors = { pactor }
   first_sector.generated = true

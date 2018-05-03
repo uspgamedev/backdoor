@@ -49,10 +49,6 @@ function Route:instance(obj)
     for _,sector_state in ipairs(state.sectors) do
       local sector = Sector(sector_state.specname, obj)
       sector:loadState(sector_state, _register)
-      -- state at start only has:
-      -- > zone
-      -- > exits
-      -- > depth
       _register(sector)
       table.insert(_sectors, sector)
     end
@@ -110,10 +106,9 @@ function Route:instance(obj)
   --  @param exit         The exit data
   function obj.linkSectorExit(from_sector, target_sector_id, exit)
     if not exit.target_pos then
-      local depth = from_sector:getDepth() + 1
       local to_sector = Util.findId(target_sector_id)
       if not to_sector:isGenerated() then
-        to_sector:generate(_register, depth)
+        to_sector:generate(_register)
       end
       local entry = to_sector:getExit(from_sector.id)
       to_sector:link(from_sector.id, unpack(exit.pos))
