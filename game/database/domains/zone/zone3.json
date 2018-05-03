@@ -1,5 +1,5 @@
 {
-  "tileset":"ruins",
-  "name":"Zone 3",
-  "difficulty":4
+  "theme":"zones",
+  "difficulty":4,
+  "name":"Zone 3"
 }

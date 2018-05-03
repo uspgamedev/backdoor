@@ -41,7 +41,6 @@
   "maze":{
     "double":false
   },
-  "theme":"ruins",
   "deadends":{
     "amount":12
   },

@@ -36,7 +36,6 @@
         "target_specname":"sector03"
       }]
   },
-  "theme":"ruins",
   "rooms":{
     "tries":256,
     "maxh":9,
