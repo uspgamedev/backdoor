@@ -46,7 +46,7 @@ function inputs.vector(spec, field)
       IMGUI.PushID(("%s#%d"):format(field.name, subfield.id))
       IMGUI.Text(("%s"):format(subfield.name))
       IMGUI.SameLine()
-      local changed, new = IMGUI.InputInt("", vector[i])
+      local new, changed = IMGUI.InputInt("", vector[i])
       IMGUI.PopID()
       if changed then vector[i] = check_range(new) end
       if i % 2 == 0 then IMGUI.NextColumn() end
