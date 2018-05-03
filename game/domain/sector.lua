@@ -53,6 +53,7 @@ function Sector:loadState(state, register)
   self.exits = state.exits
   self.zone = GameElement('zone', state.zone)
   self:setId(state.id)
+  self.generated = state.generated
   if state.generated then
     self.tiles = state.tiles
     self.w = state.w or self.w
