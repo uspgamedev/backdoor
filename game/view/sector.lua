@@ -242,7 +242,11 @@ function SectorView:draw()
           elseif self.fov and self.fov[i+1][j+1] == 0 then
             _tall_batch:setColor(COLORS.HALF_VISIBLE)
           else
-            _tall_batch:setColor(COLORS.NEUTRAL)
+            if sector:getBodyAt(i, j+1) then
+              _tall_batch:setColor(COLORS.SEMITRANSP)
+            else
+              _tall_batch:setColor(COLORS.NEUTRAL)
+            end
           end
           _tall_batch:add(_tile_quads[tile.type], x, 0,
                           0, 1, 1, unpack(_tile_offset[tile.type]))
