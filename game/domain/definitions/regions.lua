@@ -5,27 +5,25 @@ local REGIONDEFS = {}
 -- Node Zones
 
 REGIONDEFS.ZONES = {
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-  A = 'A',
-  B = 'B',
-  C = 'C',
-  D = 'D',
-  E = 'E',
-  F = 'F',
-  G = 'G',
-  H = 'H',
-  I = 'I',
-  J = 'J',
-  K = 'K',
-  L = 'L',
-  M = 'M',
+  A = 'ruins',
+  B = 'zone1',
+  C = 'zone2',
+  D = 'zone3',
+  E = 'zone4',
+  F = 'seed1',
+  G = 'seed2',
+  H = 'seed3',
+  I = 'seed4',
+  J = 'seed5',
+  K = 'seed6',
+  L = 'seed7',
+  M = 'seed8',
 }
 
 
 -- Node Symbols
 
 REGIONDEFS.SYMBOLS = {
-  'O', 'V', 'v', 'e',
   O = 'sector01',
   V = 'sector02',
   v = 'sector03',

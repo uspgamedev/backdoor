@@ -41,7 +41,6 @@ function Sector:init(spec_name, route)
   self.generated = false
   self.bodies = _initBodies(1,1)
   self.actors = {}
-  self.depth = 0
   self.exits = {}
   self.actors_queue = {}
 
@@ -51,7 +50,6 @@ end
 
 function Sector:loadState(state, register)
   self.id = state.id
-  self.depth = state.depth
   self.exits = state.exits
   printf("Loading sector of zone: `%s`", state.zone)
   self.zone = GameElement('zone', state.zone)
@@ -90,7 +88,6 @@ function Sector:saveState()
   local state = {}
   state.specname = self.specname
   state.id = self.id
-  state.depth = self.depth
   printf("Saving sector of zone: `%s`", self.zone:getSpecName())
   state.zone = self.zone:getSpecName()
   state.exits = self.exits
@@ -128,19 +125,27 @@ function Sector:getDimensions()
   return self.w, self.h
 end
 
-function Sector:getTileSet()
-  return self.zone:getSpec('tileset')
+function Sector:getZone()
+  return self.zone
 end
 
-function Sector:getDificulty()
-  return self.zone:getSpec('dificulty')
+function Sector:getZoneName()
+  return self:getZone():getSpec('name')
+end
+
+function Sector:getTileSet()
+  return self:getZone():getSpec('tileset')
+end
+
+function Sector:getDifficulty()
+  return self:getZone():getSpec('difficulty')
 end
 
 function Sector:isGenerated()
   return self.generated
 end
 
-function Sector:generate(register, depth)
+function Sector:generate(register)
 
   -- load sector's specs
   local base = {
@@ -155,7 +160,6 @@ function Sector:generate(register, depth)
     end
   end
 
-  self:setDepth(depth)
   self:makeTiles(base.grid, base.drops)
   self:makeEncounters(base.encounters, register)
 
@@ -192,10 +196,10 @@ function Sector:makeEncounters(encounters, register)
     local i, j = unpack(encounter.pos)
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
-    local depth_multiplier = 1 + self:getDepth() / 3
+    local difficulty_multiplier = 1 + self:getDifficulty() / 3
     local upgradexp = encounter.upgrade_power
 
-    upgradexp = math.floor(upgradexp * depth_multiplier)
+    upgradexp = math.floor(upgradexp * difficulty_multiplier)
 
     -- allocating exp
     if upgradexp > 0 then
@@ -394,18 +398,6 @@ end
 
 function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
-end
-
-function Sector:getZone()
-  return self.zone
-end
-
-function Sector:getDepth()
-  return self.depth
-end
-
-function Sector:setDepth(n)
-  self.depth = n
 end
 
 function Sector:isInside(i, j)

@@ -19,7 +19,7 @@ local _FONT_SIZE = 24
 local _MINIMAP_ALPHA = 180 / 255
 
 local _initialized = false
-local _exptext, _statstext, _depthtext, _buffertext
+local _exptext, _statstext, _difficultytext, _buffertext
 local _width, _height, _font
 local _display_handle
 local _tile_colors = {}
@@ -33,7 +33,7 @@ local function _initGraphicValues()
   _exptext = "EXP: %d"
   _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
   _actor_text = "HP: %d/%d"
-  _depthtext = "DEPTH: %d"
+  _difficultytext = "Danger Level: %d"
   _buffertext = "%d cards in buffer\n%d in backbuffer\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
   _tile_colors = {
@@ -100,7 +100,7 @@ function ActorView:draw()
     self:drawHP(g, actor)
     self:drawAttributes(g, actor)
     self:drawBuffers(g, actor)
-    self:drawDepth(g)
+    self:drawDifficulty(g)
   end
 end
 
@@ -176,9 +176,9 @@ function ActorView:drawAttributes(g, actor)
   g.pop()
 end
 
-function ActorView:drawDepth(g)
+function ActorView:drawDifficulty(g)
   local sector = self.route.getCurrentSector()
-  local str = _depthtext:format(sector:getDepth())
+  local str = _difficultytext:format(sector:getDifficulty())
   local w = _font:getWidth(str)
   g.push()
   g.translate(_width - 40 - w, 40)
@@ -203,15 +203,15 @@ function ActorView:drawMiniMap(g, actor)
   local w, h = sector:getDimensions()
   local ai, aj = actor:getPos()
   local tiles = sector.tiles
-  local sectorname = sector:getSpecName()
+  local zonename = sector:getZoneName()
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = actor:getFov(sector)
   g.push()
   g.setColor(nr, ng, nb, self.alpha)
   g.translate(320, 20)
-  g.printf(sectorname,
-           -_font:getWidth(sectorname)/2, 0,
-           _font:getWidth(sectorname), "center")
+  g.printf(zonename,
+           -_font:getWidth(zonename)/2, 0,
+           _font:getWidth(zonename), "center")
   g.translate(- (w/2) * _TILE_W, _font:getHeight())
   for n=1,4 do
     _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, _MINIMAP_ALPHA*self.alpha)
