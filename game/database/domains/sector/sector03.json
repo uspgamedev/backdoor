@@ -36,7 +36,6 @@
   "maze":{
     "double":false
   },
-  "theme":"ruins",
   "rooms":{
     "minh":3,
     "rmar":1,

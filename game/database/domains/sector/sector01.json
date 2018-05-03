@@ -32,7 +32,6 @@
   "maze":{
     "double":false
   },
-  "theme":"ruins",
   "exits":{
     "distance":5,
     "threshold":2,

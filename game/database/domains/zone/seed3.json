@@ -1,5 +1,5 @@
 {
-  "tileset":"otherdemo",
-  "name":"Seed 3",
-  "difficulty":8
+  "theme":"seeds",
+  "difficulty":8,
+  "name":"Seed 3"
 }
