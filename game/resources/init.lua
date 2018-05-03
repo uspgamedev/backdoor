@@ -24,7 +24,9 @@ local _initResource = {
     return love.audio.newSource(path, "static")
   end,
   bgm = function(path)
-    return love.audio.newSource(path, "stream")
+    local src = love.audio.newSource(path, "stream")
+    src:setLooping(true)
+    return src
   end,
 }
 
