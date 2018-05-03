@@ -53,6 +53,8 @@ function Sector:loadState(state, register)
   self.id = state.id
   self.depth = state.depth
   self.exits = state.exits
+  printf("Loading sector of zone: `%s`", state.zone)
+  self.zone = GameElement('zone', state.zone)
   self:setId(state.id)
   if state.generated then
     self.tiles = state.tiles
@@ -89,6 +91,8 @@ function Sector:saveState()
   state.specname = self.specname
   state.id = self.id
   state.depth = self.depth
+  printf("Saving sector of zone: `%s`", self.zone:getSpecName())
+  state.zone = self.zone:getSpecName()
   state.exits = self.exits
   state.generated = self.generated
   state.tiles = self.tiles
@@ -125,7 +129,7 @@ function Sector:getDimensions()
 end
 
 function Sector:getTileSet()
-  return self:getSpec('bootstrap').tileset
+  return self.zone:getSpec('tileset')
 end
 
 function Sector:isGenerated()
@@ -386,6 +390,10 @@ end
 
 function Sector:getActorPos(actor)
   return self:getBodyPos(actor:getBody())
+end
+
+function Sector:getZone()
+  return self.zone
 end
 
 function Sector:getDepth()

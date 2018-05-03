@@ -4,8 +4,6 @@ local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local transformer = {}
 
 transformer.schema = {
-  { id= 'tileset', name = "TileSet", type = 'enum',
-    options = "resources.tileset" },
   { id = 'w', name = "Width", type = 'integer', range = {1} },
   { id = 'h', name = "Height", type = 'integer', range = {1} },
   { id = 'mw', name = "Horizontal Margin", type = 'integer', range = {1} },
