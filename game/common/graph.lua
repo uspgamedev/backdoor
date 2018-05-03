@@ -8,7 +8,6 @@ local function Node(id, zone, symb)
   state.id = id
   state.zone = zone
   state.specname = symb
-  state.depth = 1
   state.exits = {}
   return state
 end
