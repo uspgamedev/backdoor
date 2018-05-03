@@ -112,10 +112,6 @@ function Sector:saveState()
   return state
 end
 
-function Sector:getTheme()
-  return DB.loadSpec('theme', self:getSpec('theme'))
-end
-
 function Sector:getRoute()
   return self.route
 end
@@ -128,12 +124,16 @@ function Sector:getZone()
   return self.zone
 end
 
-function Sector:getZoneName()
-  return self:getZone():getSpec('name')
+function Sector:getTheme()
+  return DB.loadSpec('theme', self:getZone():getSpec('theme'))
 end
 
 function Sector:getTileSet()
-  return self:getZone():getSpec('tileset')
+  return self:getTheme()['tileset']
+end
+
+function Sector:getZoneName()
+  return self:getZone():getSpec('name')
 end
 
 function Sector:getDifficulty()
@@ -154,7 +154,7 @@ function Sector:generate(register)
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
     local spec = self:getSpec(transformer.id)
-    if spec and transformer.id ~= 'theme' then
+    if spec then
       base = TRANSFORMERS[transformer.id].process(base, spec)
     end
   end
