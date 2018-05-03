@@ -81,8 +81,13 @@ function CARD.draw(card, x, y, focused, alpha)
   g.printf(card:getType(), w-pd-typewidth, 0, typewidth, "right")
 
   if card:isWidget() then
-    g.printf(("[%d]"):format(card:getWidgetCharges()-card:getUsages()),
+    g.printf(("[%d charges]"):format(card:getWidgetCharges()-card:getUsages()),
              pd, h-pd-_info_font:getHeight(), w-pd*2, "left"
+    )
+  end
+  if card:isUpgrade() then
+    g.printf(("[%d exp]"):format(card:getUpgradeCost()),
+             pd, h-pd-1.25*_info_font:getHeight(), w-pd*2, "left"
     )
   end
 
