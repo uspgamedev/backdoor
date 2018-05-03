@@ -13,7 +13,7 @@ local GUI = Class {
 local DOMAINS = {
   'body', 'actor', 'appearance', 'sector',
   'card', 'cardset', 'collection', 'action',
-  'drop', 'faction',
+  'drop', 'faction', 'theme',
   body = "Body Type",
   actor = "Actor Type",
   appearance = "Appearance",
@@ -23,14 +23,16 @@ local DOMAINS = {
   collection = "Collection",
   action = "Signature",
   drop = "Drop",
-  faction = "Faction"
+  faction = "Faction",
+  theme = "Theme"
 }
 
 local RESOURCES = {
-  'font', 'texture', 'sfx', 'sprite', 'tileset',
+  'font', 'texture', 'sprite', 'tileset', 'sfx', 'bgm',
   font = "Font",
   texture = "Texture",
   sfx = "Sound Effect",
+  bgm = "Background Music",
   sprite = "Animated Sprite",
   tileset = "TileSet",
 }
