@@ -51,7 +51,6 @@ end
 function Sector:loadState(state, register)
   self.id = state.id
   self.exits = state.exits
-  printf("Loading sector of zone: `%s`", state.zone)
   self.zone = GameElement('zone', state.zone)
   self:setId(state.id)
   if state.generated then
@@ -88,7 +87,6 @@ function Sector:saveState()
   local state = {}
   state.specname = self.specname
   state.id = self.id
-  printf("Saving sector of zone: `%s`", self.zone:getSpecName())
   state.zone = self.zone:getSpecName()
   state.exits = self.exits
   state.generated = self.generated
