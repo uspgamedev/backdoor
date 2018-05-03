@@ -132,6 +132,10 @@ function Sector:getTileSet()
   return self.zone:getSpec('tileset')
 end
 
+function Sector:getDificulty()
+  return self.zone:getSpec('dificulty')
+end
+
 function Sector:isGenerated()
   return self.generated
 end
