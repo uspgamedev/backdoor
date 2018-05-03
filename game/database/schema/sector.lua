@@ -1,5 +1,6 @@
 
 return  {
+  { id = 'theme', name = "Theme", type = 'enum', options = 'domains.theme' },
   { id = 'bootstrap', name = "Base Settings", type = 'section',
     schema = 'transformers.bootstrap', required = true },
   { id = 'holes', name = "Holes Settings", type = 'section',

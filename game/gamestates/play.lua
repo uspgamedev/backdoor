@@ -11,6 +11,7 @@ local HandView    = require 'view.hand'
 local ActorView   = require 'view.actor'
 local WidgetView  = require 'view.widgethud'
 local FadeView    = require 'view.fade'
+local SoundTrack  = require 'view.soundtrack'
 
 local Activity    = require 'common.activity'
 
@@ -26,6 +27,7 @@ local _next_action
 
 local _view
 local _gui
+local _soundtrack
 
 local _switch_to
 local _alert
@@ -73,6 +75,7 @@ function _activity:changeSector()
   local change_sector_ok = _route.checkSector()
   assert(change_sector_ok, "Sector Change fuck up")
   _view.sector:sectorChanged()
+  _soundtrack.playTheme(_route.getCurrentSector():getTheme())
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
   self.yield()
   fade_view:fadeInAndThen(self.resume)
@@ -108,6 +111,7 @@ function state:enter(pre, route_data)
 
   -- sector view
   local sector = _route.getCurrentSector()
+
   _view.sector = SectorView(_route)
   _view.sector:addElement("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
@@ -140,6 +144,10 @@ function state:enter(pre, route_data)
   _gui = GUI(_view.sector)
   _gui:addElement("GUI")
 
+  -- Sound Track
+  _soundtrack = SoundTrack()
+  _soundtrack.playTheme(sector:getTheme())
+
   -- start gamestate
   _playTurns()
 
@@ -157,6 +165,7 @@ function state:leave()
     view:destroy()
   end
   _gui:destroy()
+  _soundtrack.playTheme(nil)
   Util.destroyAll()
 
 end

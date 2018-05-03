@@ -1,5 +1,10 @@
 {
   "bootstrap":{
-    "tileset":"demo"
-  }
+    "w":0,
+    "mh":0,
+    "tileset":"demo",
+    "h":0,
+    "mw":0
+  },
+  "theme":"ruins"
 }

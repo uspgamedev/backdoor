@@ -22,15 +22,6 @@
         "droprate":1
       }]
   },
-  "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
-    "tries":256,
-    "maxh":9,
-    "count":24,
-    "maxw":9
-  },
   "exits":{
     "distance":5,
     "threshold":2,
@@ -42,8 +33,18 @@
         "target_specname":"sector_final"
       }]
   },
-  "deadends":{
-    "amount":48
+  "maze":{
+    "double":false
+  },
+  "theme":"ruins",
+  "rooms":{
+    "minh":3,
+    "rmar":1,
+    "minw":3,
+    "tries":256,
+    "count":24,
+    "maxh":9,
+    "maxw":9
   },
   "bootstrap":{
     "w":56,
@@ -52,7 +53,7 @@
     "tileset":"otherdemo",
     "mw":9
   },
-  "maze":{
-    "double":false
+  "deadends":{
+    "amount":48
   }
 }
