@@ -18,6 +18,7 @@ local vec2        = require 'cpml'.vec2
 local SECTOR_TILEMAP      = require 'view.sector.tilemap'
 local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
 local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
+local SECTOR_WALLMESH     = require 'view.sector.wallmesh'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -101,6 +102,7 @@ function SectorView:initSector(sector)
     SECTOR_TILEMAP.init(sector, _tileset)
     SECTOR_COOLDOWNBAR.init()
     _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
+    SECTOR_WALLMESH.load(sector)
     --FIXME: Get tile info from resource cache or something
   end
 end
