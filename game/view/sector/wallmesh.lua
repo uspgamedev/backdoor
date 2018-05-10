@@ -80,6 +80,10 @@ local function _empty(neighbors, r, s)
   return not neighbors[r][s] or neighbors[r][s].type ~= SCHEMATICS.WALL
 end
 
+local function _walled(neighbors, r, s)
+  return neighbors[r][s] and neighbors[r][s].type == SCHEMATICS.WALL
+end
+
 local function _makeQuad(wall, count, x, y, w, h, color)
   _concat(_vertices, _quad(x, y, w, h, color))
   _concat(wall, _quadFaces(count))
@@ -131,6 +135,64 @@ function WALLMESH.load(sector)
           local y = y0 + _GRID_H - _WALL_H
           count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
                             _TOP_COLOR)
+        end
+
+        -- topleft
+        if _walled(neighbors, 2, 1) and _empty(neighbors, 1, 2) then
+          -- straight left
+          local x = x0
+          local y = y0 + _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _GRID_W, _WALL_H, _BACK_COLOR)
+          count = _makeQuad(wall, count, x, y, _GRID_W, _MARGIN_H, _TOP_COLOR)
+        elseif _walled(neighbors, 1, 2) and _empty(neighbors, 2, 1) then
+          -- straight up
+          local x = x0 + _MARGIN_W
+          local y = y0 - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        end
+
+        -- topright
+        if _walled(neighbors, 2, 3) and _empty(neighbors, 1, 2) then
+          -- straight right
+          local x = x0 + _TILE_W - _GRID_W
+          local y = y0 + _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _GRID_W, _WALL_H, _BACK_COLOR)
+          count = _makeQuad(wall, count, x, y, _GRID_W, _MARGIN_H, _TOP_COLOR)
+        elseif _walled(neighbors, 1, 2) and _empty(neighbors, 2, 3) then
+          -- straight up
+          local x = x0 + _TILE_W - 2*_MARGIN_W
+          local y = y0 - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        end
+
+        -- bottomleft
+        if _walled(neighbors, 2, 1) and _empty(neighbors, 3, 2) then
+          -- straight left
+          local x = x0
+          local y = y0 + _TILE_H - _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _GRID_W, _WALL_H, _FRONT_COLOR)
+          count = _makeQuad(wall, count, x, y - _MARGIN_H, _GRID_W,
+                            _MARGIN_H, _TOP_COLOR)
+        elseif _walled(neighbors, 3, 2) and _empty(neighbors, 2, 1) then
+          -- straight down
+          local x = x0 + _MARGIN_W
+          local y = y0 + _TILE_H - _WALL_H - _GRID_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        end
+
+        -- bottomright
+        if _walled(neighbors, 2, 3) and _empty(neighbors, 3, 2) then
+          -- straight right
+          local x = x0 + _TILE_W - _GRID_W
+          local y = y0 + _TILE_H - _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _GRID_W, _WALL_H, _FRONT_COLOR)
+          count = _makeQuad(wall, count, x, y - _MARGIN_H, _GRID_W,
+                            _MARGIN_H, _TOP_COLOR)
+        elseif _walled(neighbors, 3, 2) and _empty(neighbors, 2, 3) then
+          -- straight down
+          local x = x0 + _TILE_W - 2*_MARGIN_W
+          local y = y0 + _TILE_H - _WALL_H - _GRID_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
         end
       end
       table.insert(_walldata, wall)
