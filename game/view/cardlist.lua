@@ -3,6 +3,7 @@ local math = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
+local COLORS = require 'domain.definitions.colors'
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -22,7 +23,7 @@ local _PD = 40
 local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
-local _CONSUME_TEXT = "consume"
+local _CONSUME_TEXT = "consume (+1 EXP)"
 local _WIDTH, _HEIGHT
 local _CW, _CH
 
@@ -63,6 +64,9 @@ function View:init(hold_actions)
   self.consumed = {}
   self.consume_log = false
   self.holdbar = HoldBar(hold_actions)
+  self.exp_gained = 0
+  self.exp_gained_offset = 0
+  self.exp_gained_alpha = 1
 
   _initGraphicValues()
 end
@@ -87,7 +91,7 @@ function View:close()
   self.consume_log = _EMPTY
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
-                _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
+                _ENTER_SPEED, self, { enter=0, text=0, exp_gained_alpha = 0}, "out-quad",
                 function ()
                   self.card_list = _EMPTY
                   self:destroy()
@@ -164,6 +168,8 @@ end
 function View:consumeCard()
   local idx, card = self:popSelectedCard()
   self:updateSelection()
+  self.exp_gained = self.exp_gained + 1
+  self.exp_gained_offset = -10
   table.insert(self.consume_log, idx)
 end
 
@@ -180,6 +186,7 @@ function View:draw()
     self:drawBG(g, enter)
     self:drawCards(g, enter)
     self:drawConsumed(g, enter)
+    self:drawGainedEXP(g)
   end
 
   g.pop()
@@ -294,6 +301,26 @@ function View:drawHoldBar(g)
     self:consumeCard()
   end
   self.holdbar:draw(0, 0)
+end
+
+
+function View:drawGainedEXP(g)
+  local offset_speed = 120
+  if self.exp_gained > 0 then
+    local font = FONT.get("Text", 24)
+    local str = ("+%d"):format(self.exp_gained)
+    local x, y = 100, g.getHeight()-100-font:getHeight(str)
+
+    font:set()
+    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], self.exp_gained_alpha)
+    g.print(str, x, y - 1 + self.exp_gained_offset)
+    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], self.exp_gained_alpha)
+    g.print(str, x, y - 3 + self.exp_gained_offset)
+
+    if self.exp_gained_offset < 0 then
+      self.exp_gained_offset = math.min(0, self.exp_gained_offset + offset_speed*love.timer.getDelta())
+    end
+  end
 end
 
 
