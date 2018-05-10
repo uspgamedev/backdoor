@@ -290,6 +290,10 @@ function SectorView:draw()
             local radius = _TILE_W/4
             local t = k-1
             local alpha = t*angle + phase
+            local frequency = 3.5
+            local amplitude = _TILE_H/8
+            local seed = love.timer.getTime() + i*2 + j*3 + k*2
+            local oscilation = (math.sin(seed * frequency) - 1) * amplitude
             if dropcount > 1 then
               offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
             end
@@ -302,7 +306,7 @@ function SectorView:draw()
             end
             table.insert(draw_drops, {
               drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
-              2*_TILE_H*(0.25 - (t - 0.5)^2)
+              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation
             })
           end
         end
@@ -375,17 +379,18 @@ function SectorView:draw()
 
     -- Draw drop shadows
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z = unpack(drop)
+      local specname, x, y, z, oscilation = unpack(drop)
+      local decrease = 1 + math.abs(oscilation)/18
       g.setColor(0, 0, 0, 0.4)
-      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16, 6, 16)
+      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease, 16)
     end
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, id = unpack(drop)
-      local offset = self.drop_offsets[id] or vec2(0,0)
+      local specname, x, y, z, oscilation = unpack(drop)
+      local offset = vec2(0,0)
       local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, x + _TILE_W/2 + offset.x, y - _TILE_H*.25 + offset.y - z,
+      g.draw(sprite, x + _TILE_W/2 + offset.x, y - _TILE_H*.25 + offset.y - z + oscilation,
              0, 1, 1, 32, 24)
     end
 
