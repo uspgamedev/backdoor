@@ -17,6 +17,7 @@ local vec2        = require 'cpml'.vec2
 
 local SECTOR_TILEMAP      = require 'view.sector.tilemap'
 local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
+local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -325,10 +326,12 @@ function SectorView:draw()
       local body, x, y = unpack(bodyinfo)
       local i,j = body:getPos()
       --Draw only if player is seeing them
+      x, y = x + _TILE_W/2, y + _TILE_H/2
+      SECTOR_LIFEBAR.draw(body, x, y)
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
         local actor = body:getActor() if actor then
           SECTOR_COOLDOWNBAR.draw(
-            actor, x + _TILE_W/2, y + _TILE_H/2,
+            actor, x, y,
             actor == self.sector:getRoute().getControlledActor()
           )
         end
@@ -394,23 +397,13 @@ function SectorView:draw()
   end
   g.pop()
 
-  -- HP, above everything
+  -- name, above everything
   for _,body in ipairs(all_bodies) do
     local i, j = body:getPos()
     if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
       local x, y = (j-1)*_TILE_W, (i-1)*_TILE_H
-      local hp_percent = body:getHP()/body:getMaxHP()
-      local hsvcol = { 0 + 100*hp_percent, 240, 200 - 50*hp_percent }
-      local cr, cg, cb = Color.fromHSV(unpack(hsvcol)):unpack()
       g.push()
       g.translate(x, y)
-      g.setColor(0, 20/255, 0, 200/255)
-      g.rectangle("fill", (_TILE_W + _HEALTHBAR_WIDTH)/2, _TILE_H,
-                  (hp_percent-1)*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-      g.setColor(cr, cg, cb, 200/255)
-      g.rectangle("fill", (_TILE_W - _HEALTHBAR_WIDTH)/2, _TILE_H,
-                  hp_percent*_HEALTHBAR_WIDTH, _HEALTHBAR_HEIGHT)
-
       -- NAME
       if named == body then
         local name
