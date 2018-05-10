@@ -327,8 +327,8 @@ function SectorView:draw()
       local i,j = body:getPos()
       --Draw only if player is seeing them
       x, y = x + _TILE_W/2, y + _TILE_H/2
-      SECTOR_LIFEBAR.draw(body, x, y)
       if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+        SECTOR_LIFEBAR.draw(body, x, y)
         local actor = body:getActor() if actor then
           SECTOR_COOLDOWNBAR.draw(
             actor, x, y,
