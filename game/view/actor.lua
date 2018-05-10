@@ -5,6 +5,7 @@ local ACTIONDEFS = require 'domain.definitions.action'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
 local Color      = require 'common.color'
+local DEFS       = require 'domain.definitions'
 
 local math = require 'common.math'
 
@@ -105,7 +106,7 @@ function ActorView:draw()
 end
 
 function ActorView:drawImportantHUD(g, actor)
-  local pptext = ("%d/%d PP"):format(actor:getPP(), ACTIONDEFS.NEW_HAND_COST)
+  local pptext = ("%d/%d PP"):format(actor:getPP(), DEFS.MAX_PP)
   local xptext = _exptext:format(actor:getExp())
   local pcktext = ("%d PACK(S) UNOPENED!"):format(actor:getPrizePackCount())
   local fh = _font:getHeight()
