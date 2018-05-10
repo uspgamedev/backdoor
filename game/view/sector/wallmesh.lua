@@ -12,12 +12,12 @@ local _MARGIN_H = 6
 local _GRID_W = 20
 local _GRID_H = 15
 
-local _BACK_COLOR = {31/256, 44/256, 38/256, 0.2}
+local _BACK_COLOR = {31/256, 44/256, 38/256, 0.4}
 local _FRONT_COLOR = {31/256, 44/256, 38/256, 1}
 local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 
 local _W, _H
-local _MAX_VTX = 512
+local _MAX_VTX = 1024
 local _QUADFACES = {1, 2, 3, 2, 4, 3}
 
 local _walldata
@@ -27,7 +27,7 @@ local _mesh
 --[[
 + [x] Make normal walls
 + [x] Hide off-camera ones
-+ [ ] Divide in 9-patch, but keep drawing simple
++ [x] Divide in 9-patch, but keep drawing simple
 + [ ] Handle cases one by one
 --]]
 
@@ -50,6 +50,13 @@ local function _quad(x, y, w, h, color)
   return {
     _vtx(x, y, color), _vtx(x+w, y, color),
     _vtx(x, y+h, color), _vtx(x+w, y+h, color)
+  }
+end
+
+local function _custom(color, x1, y1, x2, y2, x3, y3, x4, y4)
+  return {
+    _vtx(x1, y1, color), _vtx(x2, y2, color),
+    _vtx(x3, y3, color), _vtx(x4, y4, color)
   }
 end
 
@@ -90,6 +97,12 @@ local function _makeQuad(wall, count, x, y, w, h, color)
   return count + 4
 end
 
+local function _makeCustom(wall, count, ...)
+  _concat(_vertices, _custom(...))
+  _concat(wall, _quadFaces(count))
+  return count + 4
+end
+
 function WALLMESH.load(sector)
   local count = 0
   _W, _H = sector:getDimensions()
@@ -104,6 +117,7 @@ function WALLMESH.load(sector)
         local x0 = (j-1)*_TILE_W
         local y0 = 0
         wall = {}
+
         -- top
         if _empty(neighbors, 1, 2) then
           local x = x0 + _GRID_W
@@ -111,29 +125,6 @@ function WALLMESH.load(sector)
           count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _WALL_H,
                             _BACK_COLOR)
           count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _MARGIN_H,
-                            _TOP_COLOR)
-        end
-        -- front
-        if _empty(neighbors, 3, 2) then
-          local x = x0 + _GRID_W
-          local y = y0 + _TILE_H - _MARGIN_H - _WALL_H
-          count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _WALL_H,
-                            _FRONT_COLOR)
-          count = _makeQuad(wall, count, x, y - _MARGIN_H, _TILE_W - 2*_GRID_W,
-                            _MARGIN_H, _TOP_COLOR)
-        end
-        -- left
-        if _empty(neighbors, 2, 1) then
-          local x = x0 + _MARGIN_W
-          local y = y0 + _GRID_H - _WALL_H
-          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
-                            _TOP_COLOR)
-        end
-        -- right
-        if _empty(neighbors, 2, 3) then
-          local x = x0 + _TILE_W - 2*_MARGIN_W
-          local y = y0 + _GRID_H - _WALL_H
-          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
                             _TOP_COLOR)
         end
 
@@ -149,6 +140,20 @@ function WALLMESH.load(sector)
           local x = x0 + _MARGIN_W
           local y = y0 - _WALL_H
           count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        elseif _empty(neighbors, 2, 1) and _empty(neighbors, 1, 2) then
+          -- outer corner
+          local x = x0
+          local y = y0 - _WALL_H
+          count = _makeCustom(wall, count, _BACK_COLOR,
+                              x + _MARGIN_W, y + _GRID_H,
+                              x + _GRID_W, y + _MARGIN_H,
+                              x + _MARGIN_W, y + _GRID_H + _WALL_H,
+                              x + _GRID_W, y + _MARGIN_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x + _MARGIN_W, y + _GRID_H,
+                              x + _GRID_W, y + _MARGIN_H,
+                              x + 2*_MARGIN_W, y + _GRID_H,
+                              x + _GRID_W, y + 2*_MARGIN_H)
         end
 
         -- topright
@@ -163,6 +168,46 @@ function WALLMESH.load(sector)
           local x = x0 + _TILE_W - 2*_MARGIN_W
           local y = y0 - _WALL_H
           count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        elseif _empty(neighbors, 1, 2) and _empty(neighbors, 2, 3) then
+          -- outer corner
+          local x = x0 + _TILE_W
+          local y = y0 - _WALL_H
+          count = _makeCustom(wall, count, _BACK_COLOR,
+                              x - _GRID_W, y + _MARGIN_H,
+                              x - _MARGIN_W, y + _GRID_H,
+                              x - _GRID_W, y + _MARGIN_H + _WALL_H,
+                              x - _MARGIN_W, y + _GRID_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x - _GRID_W, y + _MARGIN_H,
+                              x - _MARGIN_W, y + _GRID_H,
+                              x - _GRID_W, y + 2*_MARGIN_H,
+                              x - 2*_MARGIN_W, y + _GRID_H)
+        end
+
+        -- left
+        if _empty(neighbors, 2, 1) then
+          local x = x0 + _MARGIN_W
+          local y = y0 + _GRID_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
+                            _TOP_COLOR)
+        end
+
+        -- right
+        if _empty(neighbors, 2, 3) then
+          local x = x0 + _TILE_W - 2*_MARGIN_W
+          local y = y0 + _GRID_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
+                            _TOP_COLOR)
+        end
+
+        -- front
+        if _empty(neighbors, 3, 2) then
+          local x = x0 + _GRID_W
+          local y = y0 + _TILE_H - _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _WALL_H,
+                            _FRONT_COLOR)
+          count = _makeQuad(wall, count, x, y - _MARGIN_H, _TILE_W - 2*_GRID_W,
+                            _MARGIN_H, _TOP_COLOR)
         end
 
         -- bottomleft
@@ -178,6 +223,20 @@ function WALLMESH.load(sector)
           local x = x0 + _MARGIN_W
           local y = y0 + _TILE_H - _WALL_H - _GRID_H
           count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        elseif _empty(neighbors, 2, 1) and _empty(neighbors, 3, 2) then
+          -- outer corner
+          local x = x0
+          local y = y0 + _TILE_H - _WALL_H
+          count = _makeCustom(wall, count, _FRONT_COLOR,
+                              x + _MARGIN_W, y - _GRID_H,
+                              x + _GRID_W, y - _MARGIN_H,
+                              x + _MARGIN_W, y - _GRID_H + _WALL_H,
+                              x + _GRID_W, y - _MARGIN_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x + _MARGIN_W, y - _GRID_H,
+                              x + 2*_MARGIN_W, y - _GRID_H,
+                              x + _GRID_W, y - _MARGIN_H,
+                              x + _GRID_W, y - 2*_MARGIN_H)
         end
 
         -- bottomright
@@ -193,6 +252,20 @@ function WALLMESH.load(sector)
           local x = x0 + _TILE_W - 2*_MARGIN_W
           local y = y0 + _TILE_H - _WALL_H - _GRID_H
           count = _makeQuad(wall, count, x, y, _MARGIN_W, _GRID_H, _TOP_COLOR)
+        elseif _empty(neighbors, 2, 3) and _empty(neighbors, 3, 2) then
+          -- outer corner
+          local x = x0 + _TILE_W
+          local y = y0 + _TILE_H - _WALL_H
+          count = _makeCustom(wall, count, _FRONT_COLOR,
+                              x - _GRID_W, y - _MARGIN_H,
+                              x - _MARGIN_W, y - _GRID_H,
+                              x - _GRID_W, y - _MARGIN_H + _WALL_H,
+                              x - _MARGIN_W, y - _GRID_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x - 2*_MARGIN_W, y - _GRID_H,
+                              x - _MARGIN_W, y - _GRID_H,
+                              x - _GRID_W, y - 2*_MARGIN_H,
+                              x - _GRID_W, y - _MARGIN_H)
         end
       end
       table.insert(_walldata, wall)
