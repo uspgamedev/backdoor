@@ -233,13 +233,16 @@ function SectorView:draw()
     local draw_drops = {}
     local highlights = {}
     _tall_batch:clear()
+    local wallrowmask = {}
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
+      wallrowmask[j+1] = false
       if CAM:isTileInFrame(i, j) and tile then
         -- Add tiles to spritebatch
         local body = sector.bodies[i+1][j+1]
         local x = j*_TILE_W
         if tile.type == SCHEMATICS.WALL then
+          wallrowmask[j+1] = self.fov and self.fov[i+1][j+1]
           if self.fov and not self.fov[i+1][j+1] then
             _tall_batch:setColor(COLORS.BLACK)
           elseif self.fov and self.fov[i+1][j+1] == 0 then
@@ -318,7 +321,7 @@ function SectorView:draw()
 
     -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
-    g.draw(_tall_batch, 0, 0)
+    SECTOR_WALLMESH.drawRow(i+1, wallrowmask)
 
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
