@@ -23,6 +23,7 @@ vec4 effect(vec4 color, Image tex, vec2 uv, vec2 screen_coords) {
 ]=])
 
 local _MG = 16
+local _SLANT = 32
 
 local _window_cache = {}
 
@@ -32,53 +33,70 @@ end
 
 
 local function _createWindow(width, height)
-  local canvas = g.newCanvas(width + _MG * 2, height + _MG * 2)
+  local canvas = g.newCanvas(width + _MG * 4, height + _MG * 4)
   local polygon = {
     0, 0,
-    width - 20, 0,
-    width, 20,
+    width - _SLANT, 0,
+    width, _SLANT,
     width, height,
-    20, height,
-    0, height - 20,
+    _SLANT, height,
+    0, height - _SLANT,
   }
   local box
   local hard
   local glow
 
-  g.setCanvas(canvas)
-  g.push()
-  g.translate(_MG, _MG)
 
   -- box texture
-  g.setColor(16/255, 16/255, 16/255)
+  g.setCanvas(canvas)
+  g.clear()
+  g.push()
+  g.translate(_MG, _MG)
   g.setBackgroundColor(0, 0, 0, 0)
   g.setLineWidth(_MG)
+  g.setColor(1, 1, 1)
   g.polygon("fill", polygon)
+  g.setCanvas()
+  g.pop()
   box = g.newImage(canvas:newImageData())
-  g.clear()
 
   -- hard texture
-  g.setColor(1, 1, 1)
-  g.setLineWidth(4)
-  g.polygon("line", polygon)
-  hard = g.newImage(canvas:newImageData())
+  g.setCanvas(canvas)
   g.clear()
+  g.push()
+  g.translate(_MG, _MG)
+  g.setLineWidth(4)
+  g.setColor(1, 1, 1)
+  g.polygon("line", polygon)
+  g.setCanvas()
+  g.pop()
+  hard = g.newImage(canvas:newImageData())
 
   -- soft texture
-  g.setLineWidth(12)
-  g.polygon("line", polygon)
-  soft = g.newImage(canvas:newImageData())
+  g.setCanvas(canvas)
   g.clear()
+  g.push()
+  g.translate(_MG, _MG)
+  g.setLineWidth(16)
+  g.setColor(1, 1, 1)
+  g.polygon("line", polygon)
+  g.setCanvas()
+  g.pop()
+  soft = g.newImage(canvas:newImageData())
 
   -- create texture
-  g.pop()
+  g.setCanvas(canvas)
+  g.clear()
   _GAUSSIAN:send("tex_size", {width, height})
   g.setShader(_GAUSSIAN)
+  g.setColor(0.1, 0.1, 0.8, 0.333)
   g.draw(box, 0, 0)
   g.setShader()
+  g.setColor(1, 1, 1, 1)
   g.draw(hard, 0, 0)
   _GAUSSIAN:send("tex_size", {width, height})
   g.setShader(_GAUSSIAN)
+  g.setColor(1, 1, 1, 0.5)
   g.draw(soft, 0, 0)
   g.setShader()
   g.setCanvas()
@@ -92,7 +110,7 @@ function WINDOW.getTexture(width, height)
   if not _window_cache[windowname] then
     _window_cache[windowname] = _createWindow(width, height)
   end
-  return windowname
+  return _window_cache[windowname]
 end
 
 return WINDOW
