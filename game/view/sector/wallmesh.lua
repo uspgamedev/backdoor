@@ -6,19 +6,27 @@ local VIEWDEFS    = require 'view.definitions'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
-local _WALL_H = 40
+local _WALL_H = 80
+local _MARGIN_W = 8
+local _MARGIN_H = 6
+local _GRID_W = 20
+local _GRID_H = 15
+
+local _BACK_COLOR = {31/256, 44/256, 38/256, 0.2}
 local _FRONT_COLOR = {31/256, 44/256, 38/256, 1}
 local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
+
 local _W, _H
 local _MAX_VTX = 512
+local _QUADFACES = {1, 2, 3, 2, 4, 3}
 
 local _walldata
 local _vertices
 local _mesh
 
 --[[
-+ [ ] Make normal walls
-+ [ ] Hide off-camera ones
++ [x] Make normal walls
++ [x] Hide off-camera ones
 + [ ] Divide in 9-patch, but keep drawing simple
 + [ ] Handle cases one by one
 --]]
@@ -31,6 +39,53 @@ local function _vtx(x, y, color)
   return {x, y, 0, 0, unpack(color)}
 end
 
+local function _concat(t1, t2)
+  local n = #t1
+  for i,v in ipairs(t2) do
+    t1[n+i] = v
+  end
+end
+
+local function _quad(x, y, w, h, color)
+  return {
+    _vtx(x, y, color), _vtx(x+w, y, color),
+    _vtx(x, y+h, color), _vtx(x+w, y+h, color)
+  }
+end
+
+local function _quadFaces(base)
+  local faces = {}
+  for i,v in ipairs(_QUADFACES) do
+    faces[i] = v + base
+  end
+  return faces
+end
+
+local function _neighbors(sector, i, j)
+  local neighbors = {}
+  for r=1,3 do
+    local di = r - 2
+    neighbors[r] = {}
+    for s=1,3 do
+      local dj = s - 2
+      neighbors[r][s] = sector:isInside(i + di, j + dj)
+                        and sector:getTile(i + di, j + dj)
+                        or false
+    end
+  end
+  return neighbors
+end
+
+local function _empty(neighbors, r, s)
+  return not neighbors[r][s] or neighbors[r][s].type ~= SCHEMATICS.WALL
+end
+
+local function _makeQuad(wall, count, x, y, w, h, color)
+  _concat(_vertices, _quad(x, y, w, h, color))
+  _concat(wall, _quadFaces(count))
+  return count + 4
+end
+
 function WALLMESH.load(sector)
   local count = 0
   _W, _H = sector:getDimensions()
@@ -38,28 +93,45 @@ function WALLMESH.load(sector)
   _walldata = {}
   for i=1,_H do
     for j=1,_W do
+      local neighbors = _neighbors(sector, i, j)
       local tile = sector:getTile(i,j)
       local wall = false
       if tile and tile.type == SCHEMATICS.WALL then
-        local base = 8*count
-        local x = (j-1)*_TILE_W
-        local y = _TILE_H - _WALL_H
-        count = count + 1
-        -- wall front (topleft, topright, bottomleft, bottomright)
-        table.insert(_vertices, _vtx(x, y, _FRONT_COLOR))
-        table.insert(_vertices, _vtx(x + _TILE_W, y, _FRONT_COLOR))
-        table.insert(_vertices, _vtx(x, y + _WALL_H, _FRONT_COLOR))
-        table.insert(_vertices, _vtx(x + _TILE_W, y + _WALL_H, _FRONT_COLOR))
-        -- wall top (topleft, topright, bottomleft, bottomright)
-        y = y - _TILE_H
-        table.insert(_vertices, _vtx(x, y, _TOP_COLOR))
-        table.insert(_vertices, _vtx(x + _TILE_W, y, _TOP_COLOR))
-        table.insert(_vertices, _vtx(x, y + _TILE_H, _TOP_COLOR))
-        table.insert(_vertices, _vtx(x + _TILE_W, y + _TILE_H, _TOP_COLOR))
-        wall = { base+1, base+2, base+3,
-                 base+2, base+4, base+3,
-                 base+5, base+6, base+7,
-                 base+6, base+8, base+7 }
+        local x0 = (j-1)*_TILE_W
+        local y0 = 0
+        wall = {}
+        -- top
+        if _empty(neighbors, 1, 2) then
+          local x = x0 + _GRID_W
+          local y = y0 + _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _WALL_H,
+                            _BACK_COLOR)
+          count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _MARGIN_H,
+                            _TOP_COLOR)
+        end
+        -- front
+        if _empty(neighbors, 3, 2) then
+          local x = x0 + _GRID_W
+          local y = y0 + _TILE_H - _MARGIN_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _TILE_W - 2*_GRID_W, _WALL_H,
+                            _FRONT_COLOR)
+          count = _makeQuad(wall, count, x, y - _MARGIN_H, _TILE_W - 2*_GRID_W,
+                            _MARGIN_H, _TOP_COLOR)
+        end
+        -- left
+        if _empty(neighbors, 2, 1) then
+          local x = x0 + _MARGIN_W
+          local y = y0 + _GRID_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
+                            _TOP_COLOR)
+        end
+        -- right
+        if _empty(neighbors, 2, 3) then
+          local x = x0 + _TILE_W - 2*_MARGIN_W
+          local y = y0 + _GRID_H - _WALL_H
+          count = _makeQuad(wall, count, x, y, _MARGIN_W, _TILE_H - 2*_GRID_H,
+                            _TOP_COLOR)
+        end
       end
       table.insert(_walldata, wall)
     end
