@@ -31,7 +31,6 @@ local _HEALTHBAR_HEIGHT = 4
 local _texture
 local _tile_offset
 local _tile_quads
-local _tall_batch
 local _tileset
 local _cursor_sprite
 local _font
@@ -101,7 +100,6 @@ function SectorView:initSector(sector)
 
     SECTOR_TILEMAP.init(sector, _tileset)
     SECTOR_COOLDOWNBAR.init()
-    _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     SECTOR_WALLMESH.load(sector)
     --FIXME: Get tile info from resource cache or something
   end
@@ -232,7 +230,6 @@ function SectorView:draw()
     local draw_bodies = {}
     local draw_drops = {}
     local highlights = {}
-    _tall_batch:clear()
     local wallrowmask = {}
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
@@ -243,19 +240,6 @@ function SectorView:draw()
         local x = j*_TILE_W
         if tile.type == SCHEMATICS.WALL then
           wallrowmask[j+1] = self.fov and self.fov[i+1][j+1]
-          if self.fov and not self.fov[i+1][j+1] then
-            _tall_batch:setColor(COLORS.BLACK)
-          elseif self.fov and self.fov[i+1][j+1] == 0 then
-            _tall_batch:setColor(COLORS.HALF_VISIBLE)
-          else
-            if sector:getBodyAt(i, j+1) then
-              _tall_batch:setColor(COLORS.SEMITRANSP)
-            else
-              _tall_batch:setColor(COLORS.NEUTRAL)
-            end
-          end
-          _tall_batch:add(_tile_quads[tile.type], x, 0,
-                          0, 1, 1, unpack(_tile_offset[tile.type]))
         elseif self.cursor then
           local current_body = self.route.getControlledActor():getBody()
           if not self.fov or (self.fov[i+1][j+1] and
