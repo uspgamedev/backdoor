@@ -103,6 +103,12 @@ function ActorView:draw()
     self:drawBuffers(g, actor)
     self:drawDifficulty(g)
   end
+
+  if DEV then
+    local fps_str = ("fps: %d"):format(love.timer.getFPS())
+    g.setColor(1, 1, 1, 1)
+    g.print(fps_str, g.getWidth()- 40 - _font:getWidth(fps_str), 12)
+  end
 end
 
 function ActorView:drawImportantHUD(g, actor)
