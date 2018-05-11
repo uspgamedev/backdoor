@@ -34,6 +34,7 @@ local _tile_quads
 local _tileset
 local _cursor_sprite
 local _font
+local _sparkles
 
 local _isInCone
 
@@ -101,6 +102,20 @@ function SectorView:initSector(sector)
     SECTOR_TILEMAP.init(sector, _tileset)
     SECTOR_COOLDOWNBAR.init()
     SECTOR_WALL.load(sector)
+
+    local pixel = RES.loadTexture('pixel')
+    _sparkles = g.newParticleSystem(pixel, 256)
+    _sparkles:setParticleLifetime(1, 2)
+    _sparkles:setEmissionRate(5)
+    _sparkles:setSizeVariation(1)
+    _sparkles:setLinearAcceleration(0, -40, 0, -5)
+    _sparkles:setColors(COLORS.TRANSP,
+                        COLORS.NEUTRAL,
+                        COLORS.TRANSP)
+    _sparkles:setEmissionArea("uniform", 16, 16, 0, false)
+    _sparkles:setSizes(2, 4)
+
+    _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
 end
@@ -178,6 +193,7 @@ end
 
 function SectorView:draw()
   local g = love.graphics
+  local dt = love.timer.getDelta()
   local sector = self.route.getCurrentSector()
   self:initSector(sector)
   if not self.sector then return end
@@ -185,6 +201,10 @@ function SectorView:draw()
     _moveCamera(self.target, self.sector_changed)
     self.sector_changed = false
   end
+
+  -- update particles
+  _sparkles:update(dt)
+
 
   -- draw background
   g.setBackgroundColor(COLORS.BACKGROUND)
@@ -359,14 +379,18 @@ function SectorView:draw()
       g.setColor(0, 0, 0, 0.4)
       g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease, 16)
     end
+
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
       local specname, x, y, z, oscilation = unpack(drop)
       local offset = vec2(0,0)
       local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
+      local rx = x + _TILE_W/2 + offset.x
+      local ry = y - _TILE_H*.25 + offset.y - z + oscilation
+      local iw, ih = sprite:getDimensions()
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, x + _TILE_W/2 + offset.x, y - _TILE_H*.25 + offset.y - z + oscilation,
-             0, 1, 1, 32, 24)
+      g.draw(sprite, rx, ry, 0, 1, 1, 32, 24)
+      g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
     end
 
 
