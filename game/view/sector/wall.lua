@@ -29,8 +29,8 @@ local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 local _W, _H
 local _MAX_VTX = 4096
 
-local _walldata
 local _mesh
+local _rowmeshes
 local _vertexcount = 0
 
 local function _wallidx(i, j)
@@ -63,8 +63,10 @@ end
 function WALL.load(sector)
   local count = 0
   _W, _H = sector:getDimensions()
-  _walldata = {}
+  _rowmeshes = {}
   for i=1,_H do
+    local vertices = {}
+    local map = {}
     for j=1,_W do
       local neighbors = _neighbors(sector, i, j)
       local tile = sector:getTile(i,j)
@@ -197,7 +199,22 @@ function WALL.load(sector)
                                      vec2(0, -_BORDER_H), vec2(-_BORDER_W, 0))
         end
       end
-      table.insert(_walldata, wall)
+      if wall then
+        local n, m = #vertices, #map
+        for k,vtx in ipairs(wall.vertices) do
+          vertices[n+k] = vtx
+        end
+        for k,idx in ipairs(wall.faces) do
+          map[m+k] = n+idx
+        end
+      end
+    end
+    if #vertices > 0 then
+      local rowmesh = love.graphics.newMesh(vertices, 'triangles', 'static')
+      rowmesh:setVertexMap(map)
+      _rowmeshes[i] = rowmesh
+    else
+      _rowmeshes[i] = false
     end
   end
   _mesh = love.graphics.newMesh(_MAX_VTX, 'triangles', 'stream')
@@ -206,36 +223,7 @@ end
 local _NULL_VTX = {0, 0, 0, 0, 0, 0, 0, 0}
 
 function WALL.drawRow(i, mask)
-  assert(_mesh)
-  local vertices = {}
-  local count = 0
-  for j,check in ipairs(mask) do
-    local wall = _walldata[_wallidx(i, j)] if wall then
-      for _,idx in wall:map() do
-        local vertex = wall:getVertex(idx)
-        if check and check < 1 then
-          vertex[5] = vertex[5] * 0.5
-          vertex[6] = vertex[6] * 0.5
-          vertex[7] = vertex[7] * 0.5
-        elseif not check then
-          vertex[5] = 0
-          vertex[6] = 0
-          vertex[7] = 0
-        end
-        table.insert(vertices, vertex)
-        count = count + 1
-      end
-    end
-  end
-  assert(count <= _MAX_VTX)
-  if count > 0 then
-    for i=count+1,_vertexcount do
-      vertices[i] = _NULL_VTX
-    end
-    _vertexcount = count
-    _mesh:setVertices(vertices)
-    love.graphics.draw(_mesh, 0, 0)
-  end
+  if _rowmeshes[i] then love.graphics.draw(_rowmeshes[i]) end
 end
 
 return WALL
