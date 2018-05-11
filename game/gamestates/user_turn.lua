@@ -137,9 +137,12 @@ function state:update(dt)
     end
   else
     local action_request
+    local faction = _route.getControlledActor():getBody():getFaction()
+    local hostile_bodies = _route.getControlledActor():getHostileBodies()
     for _,dir in ipairs(DIR) do
       if DIRECTIONALS.wasDirectionTriggered(dir) then
-        if not _long_walk and INPUT.isActionDown('MODIFIER') then
+        if not _long_walk and #hostile_bodies == 0
+                          and INPUT.isActionDown('MODIFIER') then
           _long_walk = dir
           _alert = false
           break
@@ -169,7 +172,8 @@ function state:update(dt)
 
     -- execute action
     if _long_walk then
-      if not action_request and _continueLongWalk() then
+      if not action_request and #hostile_bodies == 0
+                            and _continueLongWalk() then
         _startTask(DEFS.ACTION.MOVE, _long_walk)
       else
         _long_walk = false
