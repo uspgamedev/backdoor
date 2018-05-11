@@ -17,7 +17,7 @@ local _FRONT_COLOR = {31/256, 44/256, 38/256, 1}
 local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 
 local _W, _H
-local _MAX_VTX = 1024
+local _MAX_VTX = 2048
 local _QUADFACES = {1, 2, 3, 2, 4, 3}
 
 local _walldata
@@ -154,6 +154,21 @@ function WALLMESH.load(sector)
                               x + _GRID_W, y + _MARGIN_H,
                               x + 2*_MARGIN_W, y + _GRID_H,
                               x + _GRID_W, y + 2*_MARGIN_H)
+        elseif _walled(neighbors, 2, 1) and _walled(neighbors, 1, 2) and
+               _empty(neighbors, 1, 1) then
+          -- inner corner
+          local x = x0
+          local y = y0 - _WALL_H
+          count = _makeCustom(wall, count, _BACK_COLOR,
+                              x, y + _MARGIN_H,
+                              x + _MARGIN_W, y,
+                              x, y + _MARGIN_H + _WALL_H,
+                              x + _MARGIN_W, y + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x, y + _MARGIN_H,
+                              x + _MARGIN_W, y,
+                              x, y + 2*_MARGIN_H,
+                              x + 2*_MARGIN_W, y)
         end
 
         -- topright
@@ -182,6 +197,21 @@ function WALLMESH.load(sector)
                               x - _MARGIN_W, y + _GRID_H,
                               x - _GRID_W, y + 2*_MARGIN_H,
                               x - 2*_MARGIN_W, y + _GRID_H)
+        elseif _walled(neighbors, 1, 2) and _walled(neighbors, 2, 3) and
+               _empty(neighbors, 1, 3) then
+          -- inner corner
+          local x = x0 + _TILE_W
+          local y = y0 - _WALL_H
+          count = _makeCustom(wall, count, _BACK_COLOR,
+                              x - _MARGIN_W, y,
+                              x, y + _MARGIN_H,
+                              x - _MARGIN_W, y + _WALL_H,
+                              x, y + _MARGIN_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x - _MARGIN_W, y,
+                              x, y + _MARGIN_H,
+                              x - 2*_MARGIN_W, y,
+                              x, y + 2*_MARGIN_H)
         end
 
         -- left
@@ -237,6 +267,21 @@ function WALLMESH.load(sector)
                               x + 2*_MARGIN_W, y - _GRID_H,
                               x + _GRID_W, y - _MARGIN_H,
                               x + _GRID_W, y - 2*_MARGIN_H)
+        elseif _walled(neighbors, 2, 1) and _walled(neighbors, 3, 2) and
+               _empty(neighbors, 3, 1) then
+          -- inner corner
+          local x = x0
+          local y = y0 + _TILE_H - _WALL_H
+          count = _makeCustom(wall, count, _FRONT_COLOR,
+                              x, y - _MARGIN_H,
+                              x + _MARGIN_W, y,
+                              x, y - _MARGIN_H + _WALL_H,
+                              x + _MARGIN_W, y + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x, y - 2*_MARGIN_H,
+                              x + 2*_MARGIN_W, y,
+                              x, y - _MARGIN_H,
+                              x + _MARGIN_W, y)
         end
 
         -- bottomright
@@ -266,6 +311,21 @@ function WALLMESH.load(sector)
                               x - _MARGIN_W, y - _GRID_H,
                               x - _GRID_W, y - 2*_MARGIN_H,
                               x - _GRID_W, y - _MARGIN_H)
+        elseif _walled(neighbors, 2, 3) and _walled(neighbors, 3, 2) and
+               _empty(neighbors, 3, 3) then
+          -- inner corner
+          local x = x0 + _TILE_W
+          local y = y0 + _TILE_H - _WALL_H
+          count = _makeCustom(wall, count, _FRONT_COLOR,
+                              x - _MARGIN_W, y,
+                              x, y - _MARGIN_H,
+                              x - _MARGIN_W, y + _WALL_H,
+                              x, y - _MARGIN_H + _WALL_H)
+          count = _makeCustom(wall, count, _TOP_COLOR,
+                              x - 2*_MARGIN_W, y,
+                              x, y - 2*_MARGIN_H,
+                              x - _MARGIN_W, y,
+                              x, y - _MARGIN_H)
         end
       end
       table.insert(_walldata, wall)
@@ -281,18 +341,20 @@ function WALLMESH.drawRow(i, mask)
   local vertices = {}
   local count = 0
   for j,check in ipairs(mask) do
-    if check then
-      local wall = _walldata[_wallidx(i, j)] if wall then
-        for _,vtx in ipairs(wall) do
-          local vertex = { unpack(_vertices[vtx]) }
-          if check < 1 then
-            vertex[5] = vertex[5] * 0.5
-            vertex[6] = vertex[6] * 0.5
-            vertex[7] = vertex[7] * 0.5
-          end
-          table.insert(vertices, vertex)
-          count = count + 1
+    local wall = _walldata[_wallidx(i, j)] if wall then
+      for _,vtx in ipairs(wall) do
+        local vertex = { unpack(_vertices[vtx]) }
+        if check and check < 1 then
+          vertex[5] = vertex[5] * 0.5
+          vertex[6] = vertex[6] * 0.5
+          vertex[7] = vertex[7] * 0.5
+        elseif not check then
+          vertex[5] = 0
+          vertex[6] = 0
+          vertex[7] = 0
         end
+        table.insert(vertices, vertex)
+        count = count + 1
       end
     end
   end
