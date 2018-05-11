@@ -31,6 +31,7 @@ local _MAX_VTX = 2048
 
 local _walldata
 local _mesh
+local _vertexcount = 0
 
 local function _wallidx(i, j)
   return (i-1)*_W + j
@@ -228,9 +229,10 @@ function WALL.drawRow(i, mask)
   end
   assert(count <= _MAX_VTX)
   if count > 0 then
-    for i=count+1,_MAX_VTX do
+    for i=count+1,_vertexcount do
       vertices[i] = _NULL_VTX
     end
+    _vertexcount = count
     _mesh:setVertices(vertices)
     love.graphics.draw(_mesh, 0, 0)
   end
