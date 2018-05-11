@@ -29,6 +29,17 @@ local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 local _W, _H
 local _MAX_VTX = 4096
 
+local _VTXCODE = [[
+uniform Image mask;
+
+vec4 position(mat4 transform_projection, vec4 vertex_position) {
+  vec4 pos = ProjectionMatrix * TransformMatrix * vertex_position;
+  VaryingColor *= Texel(mask, pos.xy/2 + 0.5);
+  return transform_projection * vertex_position;
+}
+]]
+local _VTXSHADER
+
 local _mesh
 local _rowmeshes
 local _vertexcount = 0
@@ -64,6 +75,7 @@ function WALL.load(sector)
   local count = 0
   _W, _H = sector:getDimensions()
   _rowmeshes = {}
+  if not _VTXSHADER then _VTXSHADER = love.graphics.newShader(_VTXCODE) end
   for i=1,_H do
     local vertices = {}
     local map = {}
@@ -223,7 +235,13 @@ end
 local _NULL_VTX = {0, 0, 0, 0, 0, 0, 0, 0}
 
 function WALL.drawRow(i, mask)
-  if _rowmeshes[i] then love.graphics.draw(_rowmeshes[i]) end
+  local g = love.graphics
+  _VTXSHADER:send('mask', mask)
+  if _rowmeshes[i] then
+    g.setShader(_VTXSHADER)
+    g.draw(_rowmeshes[i])
+    g.setShader()
+  end
 end
 
 return WALL
