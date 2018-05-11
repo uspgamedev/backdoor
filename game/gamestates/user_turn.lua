@@ -129,12 +129,6 @@ function state:update(dt)
     _hideHUD()
   end
 
-  if _next_action then
-    SWITCHER.pop({next_action = _next_action})
-    _next_action = nil
-    return
-  end
-
   if _extended_hud then
     if DIRECTIONALS.wasDirectionTriggered('UP') then
       _view.widget:scrollUp()
@@ -147,9 +141,11 @@ function state:update(dt)
       if DIRECTIONALS.wasDirectionTriggered(dir) then
         if not _long_walk and INPUT.isActionDown('MODIFIER') then
           _long_walk = dir
-        else
-          action_request = {DEFS.ACTION.MOVE, dir}
+          _alert = false
+          break
         end
+        action_request = {DEFS.ACTION.MOVE, dir}
+        break
       end
     end
 
@@ -176,7 +172,6 @@ function state:update(dt)
       if not action_request and _continueLongWalk() then
         _startTask(DEFS.ACTION.MOVE, _long_walk)
       else
-        print("Long Walk end")
         _long_walk = false
       end
     elseif action_request == _OPEN_MENU then
@@ -190,6 +185,12 @@ function state:update(dt)
       _startTask(unpack(action_request))
     end
 
+  end
+
+  if _next_action then
+    SWITCHER.pop({next_action = _next_action})
+    _next_action = nil
+    return
   end
 
   Util.destroyAll()
