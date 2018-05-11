@@ -145,6 +145,18 @@ function ActorView:drawImportantHUD(g, actor)
     g.setColor(COLORS.NOTIFICATION)
     g.print(pcktext, 40, _height-y)
   end
+
+  -- draw hand countdown
+  local percent = self.route.getControlledActor():getHandCountdown()
+                / ACTIONDEFS.HAND_DURATION,
+  g.push()
+  g.translate(2,2)
+  g.setColor(COLORS.DARK)
+  g.rectangle('fill', x, y - 32, handwidth/2, 8)
+  g.pop()
+  g.setColor(COLORS.WARNING)
+  g.rectangle('fill', x, y - 32, handwidth/2 * percent, 8)
+
   g.pop()
 end
 

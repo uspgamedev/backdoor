@@ -120,17 +120,6 @@ function HandView:draw()
   g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
   g.pop()
 
-  -- draw hand countdown
-  local percent = self.route.getControlledActor():getHandCountdown()
-                / ACTIONDEFS.HAND_DURATION,
-  g.push()
-  g.translate(2,2)
-  g.setColor(COLORS.DARK)
-  g.rectangle('fill', x, y - 64, handwidth/2 * percent, 8)
-  g.pop()
-  g.setColor(COLORS.WARNING)
-  g.rectangle('fill', x, y - 64, handwidth/2 * percent, 8)
-
   -- draw each card
   local infoy = self.initial_y + - CARD.getHeight() - 40
   for i, card in ipairs(self.hand) do
