@@ -27,7 +27,7 @@ local _FRONT_COLOR = {31/256, 44/256, 38/256, 1}
 local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 
 local _W, _H
-local _MAX_VTX = 2048
+local _MAX_VTX = 4096
 
 local _walldata
 local _mesh
