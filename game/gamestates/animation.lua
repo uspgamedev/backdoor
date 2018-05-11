@@ -1,7 +1,4 @@
 
-local DB           = require 'database'
-local DIR          = require 'domain.definitions.dir'
-local DIRECTIONALS = require 'infra.dir'
 local INPUT        = require 'input'
 
 local state = {}
@@ -36,19 +33,9 @@ function state:update(dt)
 
   MAIN_TIMER:update(dt)
 
-  if not _alert then
-    for _,dir in ipairs(DIR) do
-      if DIRECTIONALS.wasDirectionTriggered(dir) then
-        _alert = true
-      end
-    end
-    for input in pairs(DB.loadSetting('controls').digital) do
-      if INPUT.wasActionPressed(input) then
-        _alert = true
-      end
-    end
+  if INPUT.wasAnyPressed(0.5) then
+    _alert = true
   end
-
 
   if not _sector_view:hasPendingVFX() then
     SWITCHER.pop(_alert)

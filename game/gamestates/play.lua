@@ -1,6 +1,7 @@
 
 --MODULE FOR THE GAMESTATE: GAME--
 
+local INPUT       = require 'input'
 local GUI         = require 'debug.gui'
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
@@ -173,6 +174,10 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    if INPUT.wasAnyPressed(0.5) then
+      _alert = true
+    end
+
     MAIN_TIMER:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
