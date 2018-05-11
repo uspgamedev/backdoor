@@ -10,6 +10,7 @@ local setup = {}
 function setup.config()
 
     VERSION = "0.0.4"
+    DEV = true
 
     --RANDOM SEED--
     love.math.setRandomSeed( os.time() )
