@@ -110,9 +110,9 @@ function ActorView:drawImportantHUD(g, actor)
   local xptext = _exptext:format(actor:getExp())
   local pcktext = ("%d PACK(S) UNOPENED!"):format(actor:getPrizePackCount())
   local fh = _font:getHeight()
-  local normal_y = 100
-  local unfocus_y = 440
-  local spd = 15
+  local normal_y = 144
+  local unfocus_y = 480
+  local spd = 16
   local dt = love.timer.getDelta()
   local y = self.importanthud_y or normal_y
 
@@ -145,6 +145,36 @@ function ActorView:drawImportantHUD(g, actor)
     g.setColor(COLORS.NOTIFICATION)
     g.print(pcktext, 40, _height-y)
   end
+  g.pop()
+
+  -- draw hand countdown
+  local handcountdown = actor:getHandCountdown()
+  local current = self.hand_count_down or 0
+  current = current + (handcountdown - current) * 0.2
+  if math.abs(current - handcountdown) < 1 then
+    current = handcountdown
+  end
+  self.hand_count_down = current
+  local handbar_percent = current / ACTIONDEFS.HAND_DURATION
+  local handbar_width = 492
+  local handbar_height = 12
+  g.push()
+  g.translate(40, _height - y + fh + handbar_height*2)
+  g.setLineWidth(1)
+  g.setColor(COLORS.BLACK)
+  g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
+  g.setColor(COLORS.DARK)
+  g.rectangle('fill', 0, 0, handbar_width/2, handbar_height)
+  g.setColor(COLORS.WARNING)
+  g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
+  g.translate(0, -18)
+  local font = FONT.get("Text", 18)
+  font:set()
+  g.setColor(COLORS.BLACK)
+  g.print("Hand Duration", 0, 0)
+  g.translate(-1, -1)
+  g.setColor(COLORS.NEUTRAL)
+  g.print("Hand Duration", 0, 0)
   g.pop()
 end
 
