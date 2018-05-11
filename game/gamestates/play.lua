@@ -190,6 +190,7 @@ function state:resume(state, args)
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
+    _alert = _alert or args
     _playTurns()
   end
 

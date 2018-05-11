@@ -14,6 +14,10 @@ local PLAYSFX       = require 'helpers.playsfx'
 
 local state = {}
 
+-- [[ Constant Variables ]]--
+local _OPEN_MENU = "OPEN_MENU"
+local _SAVE_QUIT = "SAVE_QUIT"
+
 --[[ Local Variables ]]--
 
 local _task
@@ -58,6 +62,7 @@ local function _continueLongWalk()
     return false
   end
   if _alert then
+    _alert = false
     return false
   end
   return true
@@ -117,6 +122,7 @@ function state:update(dt)
 
   if INPUT.isActionDown("ACTION_4") and not _extended_hud then
     _extended_hud = true
+    _long_walk = false
     _showHUD()
   elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
     _extended_hud = false
@@ -136,41 +142,54 @@ function state:update(dt)
       _view.widget:scrollDown()
     end
   else
-    if _long_walk then
-      if _continueLongWalk() then
-        return _startTask(DEFS.ACTION.MOVE, _long_walk)
-      else
-        _long_walk = false
-      end
-    end
+    local action_request
     for _,dir in ipairs(DIR) do
       if DIRECTIONALS.wasDirectionTriggered(dir) then
-        if INPUT.isActionDown('MODIFIER') then
+        if not _long_walk and INPUT.isActionDown('MODIFIER') then
           _long_walk = dir
+        else
+          action_request = {DEFS.ACTION.MOVE, dir}
         end
-        return _startTask(DEFS.ACTION.MOVE, dir)
       end
     end
 
     if INPUT.wasActionPressed('CONFIRM') then
-      _startTask(DEFS.ACTION.INTERACT)
+      action_request = {DEFS.ACTION.INTERACT}
     elseif INPUT.wasActionPressed('CANCEL') then
-      _startTask(DEFS.ACTION.IDLE)
+      action_request = {DEFS.ACTION.IDLE}
     elseif INPUT.wasActionPressed('SPECIAL') then
-      _startTask(DEFS.ACTION.USE_SIGNATURE)
+      action_request = {DEFS.ACTION.USE_SIGNATURE}
     elseif INPUT.wasActionPressed('ACTION_1') then
-      _startTask(DEFS.ACTION.PLAY_CARD)
+      action_request = {DEFS.ACTION.PLAY_CARD}
     elseif INPUT.wasActionPressed('ACTION_2') then
-      _startTask(DEFS.ACTION.ACTIVATE_WIDGET)
+      action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
     elseif INPUT.wasActionPressed('ACTION_3') then
-      _startTask(DEFS.ACTION.RECEIVE_PACK)
+      action_request = {DEFS.ACTION.RECEIVE_PACK}
     elseif INPUT.wasActionPressed('EXTRA') then
-      PLAYSFX 'open-menu'
-      return SWITCHER.push(GS.ACTION_MENU, _route)
+      action_request = _OPEN_MENU
     elseif INPUT.wasActionPressed('PAUSE') then
+      action_request = _SAVE_QUIT
+    end
+
+    -- execute action
+    if _long_walk then
+      if not action_request and _continueLongWalk() then
+        _startTask(DEFS.ACTION.MOVE, _long_walk)
+      else
+        print("Long Walk end")
+        _long_walk = false
+      end
+    elseif action_request == _OPEN_MENU then
+      PLAYSFX 'open-menu'
+      SWITCHER.push(GS.ACTION_MENU, _route)
+      return
+    elseif action_request == _SAVE_QUIT then
       _save_and_quit = true
       return
+    elseif action_request then
+      _startTask(unpack(action_request))
     end
+
   end
 
   Util.destroyAll()
