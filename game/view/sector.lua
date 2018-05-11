@@ -18,7 +18,7 @@ local vec2        = require 'cpml'.vec2
 local SECTOR_TILEMAP      = require 'view.sector.tilemap'
 local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
 local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
-local SECTOR_WALLMESH     = require 'view.sector.wallmesh'
+local SECTOR_WALL         = require 'view.sector.wall'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -100,7 +100,7 @@ function SectorView:initSector(sector)
 
     SECTOR_TILEMAP.init(sector, _tileset)
     SECTOR_COOLDOWNBAR.init()
-    SECTOR_WALLMESH.load(sector)
+    SECTOR_WALL.load(sector)
     --FIXME: Get tile info from resource cache or something
   end
 end
@@ -305,7 +305,7 @@ function SectorView:draw()
 
     -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
-    SECTOR_WALLMESH.drawRow(i+1, wallrowmask)
+    SECTOR_WALL.drawRow(i+1, wallrowmask)
 
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
