@@ -215,7 +215,7 @@ function SectorView:draw()
 
   local fov = self.fov
   SECTOR_TILEMAP.drawAbyss(g, fov)
-  SECTOR_TILEMAP.drawFloor(g, fov)
+  local fovmask = SECTOR_TILEMAP.drawFloor(g, fov)
 
   -- setting up rays
   local rays = {}
@@ -250,17 +250,13 @@ function SectorView:draw()
     local draw_bodies = {}
     local draw_drops = {}
     local highlights = {}
-    local wallrowmask = {}
     for j = 0, sector.w-1 do
       local tile = sector.tiles[i+1][j+1]
-      wallrowmask[j+1] = false
       if CAM:isTileInFrame(i, j) and tile then
         -- Add tiles to spritebatch
         local body = sector.bodies[i+1][j+1]
         local x = j*_TILE_W
-        if tile.type == SCHEMATICS.WALL then
-          wallrowmask[j+1] = self.fov and self.fov[i+1][j+1]
-        elseif self.cursor then
+        if self.cursor then
           local current_body = self.route.getControlledActor():getBody()
           if not self.fov or (self.fov[i+1][j+1] and
                               self.fov[i+1][j+1] > 0)
@@ -325,7 +321,7 @@ function SectorView:draw()
 
     -- Actually Draw tiles
     g.setColor(COLORS.NEUTRAL)
-    SECTOR_WALL.drawRow(i+1, wallrowmask)
+    SECTOR_WALL.drawRow(i+1, fovmask)
 
     -- Draw highlights
     for _, highlight in ipairs(highlights) do
@@ -377,7 +373,8 @@ function SectorView:draw()
       local specname, x, y, z, oscilation = unpack(drop)
       local decrease = 1 + math.abs(oscilation)/18
       g.setColor(0, 0, 0, 0.4)
-      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease, 16)
+      g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease,
+                        16)
     end
 
     -- Draw drop sprites
@@ -438,6 +435,15 @@ function SectorView:draw()
   end
 
   g.pop()
+  g.push()
+  g.origin()
+  g.translate(10, 10)
+  g.scale(0.5, 0.5)
+  g.setColor(1, 1, 1, 0.2)
+  g.draw(fovmask, 0, 0)
+  g.rectangle('line', 0, 0, fovmask:getDimensions())
+  g.pop()
+
 end
 
 --CURSOR FUNCTIONS
