@@ -27,6 +27,7 @@ local _view
 local _extended_hud
 
 local _long_walk
+local _adjacency = {}
 local _alert
 local _save_and_quit
 local _was_on_menu
@@ -68,6 +69,23 @@ local function _continueLongWalk()
   return true
 end
 
+--[[ Adjacency function ]]--
+local function _updateAdjacency()
+  local i, j = _route.getControlledActor():getPos()
+  local sector = _route.getCurrentSector()
+  for di = i-1, i+1 do
+    for dj = j-1, j+1 do
+      local tile = sector:isInside(di, dj) and sector:getTile(di, dj)
+      local ai, aj = di-i+2, dj-j+2
+      local current = _adjacency[ai][aj]
+      _adjacency[ai][aj] = tile and { type = tile.type }
+      if (tile and tile.type) ~= (current and current.type) then
+        _alert = true
+      end
+    end
+  end
+end
+
 --[[ HUD Functions ]]--
 
 local function _showHUD()
@@ -82,6 +100,12 @@ end
 
 function state:init()
   _long_walk = false
+  for i = 1, 3 do
+    _adjacency[i] = {}
+    for j = 1, 3 do
+      _adjacency[i][j] = false
+    end
+  end
 end
 
 function state:enter(_, route, view, alert)
@@ -172,6 +196,7 @@ function state:update(dt)
 
     -- execute action
     if _long_walk then
+      _updateAdjacency()
       if not action_request and #hostile_bodies == 0
                             and _continueLongWalk() then
         _startTask(DEFS.ACTION.MOVE, _long_walk)
