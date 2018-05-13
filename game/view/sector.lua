@@ -434,6 +434,8 @@ function SectorView:draw()
     end
   end
 
+  g.pop()
+
 end
 
 --CURSOR FUNCTIONS
