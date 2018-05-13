@@ -434,16 +434,6 @@ function SectorView:draw()
     end
   end
 
-  g.pop()
-  g.push()
-  g.origin()
-  g.translate(10, 10)
-  g.scale(0.5, 0.5)
-  g.setColor(1, 1, 1, 0.2)
-  g.draw(fovmask, 0, 0)
-  g.rectangle('line', 0, 0, fovmask:getDimensions())
-  g.pop()
-
 end
 
 --CURSOR FUNCTIONS

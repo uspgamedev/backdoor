@@ -11,12 +11,23 @@ local _VIEW_W = VIEWDEFS.HALF_W*2 - 2
 local _VIEW_H = VIEWDEFS.HALF_H*2 - 2
 local _SEEN_ABYSS = COLORS.BACKGROUND * COLORS.HALF_VISIBLE
 
+local _FXCODE = [[
+uniform Image mask;
+
+vec4 effect(vec4 color, Image tex, vec2 uv, vec2 pos) {
+  vec2 p = pos/love_ScreenSize.xy;
+  return color * Texel(tex, uv) * Texel(mask, p);
+}
+]]
+local _FXSHADER
+
 local TileMap = {}
 
 local _sector
 local _tile_batch
 local _abyss_batch
 local _fovmask
+local _tilemask
 
 function TileMap.init(sector, tileset)
   local pixel_texture = RES.loadTexture("pixel")
@@ -27,6 +38,21 @@ function TileMap.init(sector, tileset)
   _tile_quads = tileset.quads
   _sector = sector
   _fovmask = love.graphics.newCanvas(_VIEW_W * _TILE_W, _VIEW_H * _TILE_H)
+  _FXSHADER = _FXSHADER or love.graphics.newShader(_FXCODE)
+  if not _tilemask then
+    local data = love.image.newImageData(_TILE_W*3, _TILE_H*3)
+    data:mapPixel(
+      function (x, y)
+        y = y*_TILE_W/_TILE_H
+        local px = math.max(_TILE_W, math.min(2*_TILE_W, x))
+        local py = math.max(_TILE_W, math.min(2*_TILE_W, y))
+        local d = math.sqrt((x - px)^2 + (y - py)^2)/_TILE_W*2
+        local c = math.max(0, (1-d^2))
+        return c, c, c, 1
+      end
+    )
+    _tilemask = love.graphics.newImage(data)
+  end
 end
 
 function TileMap.drawAbyss(g, fov)
@@ -59,6 +85,9 @@ function TileMap.drawFloor(g, fov)
   _tile_batch:clear()
   g.setCanvas(_fovmask)
   g.clear()
+  g.setColor(COLORS.BLACK)
+  g.rectangle('fill', 0, 0, _fovmask:getWidth()*10, _fovmask:getHeight()*10)
+  g.setBlendMode('lighten', 'premultiplied')
   for i, j in CAM:tilesInRange() do
     local ti, tj = i+1, j+1 -- logic coordinates
     local tile = _sector.tiles[ti] and _sector.tiles[ti][tj]
@@ -78,16 +107,24 @@ function TileMap.drawFloor(g, fov)
         end
       end
       g.setColor(color)
-      g.rectangle('fill', x, y, _TILE_W, _TILE_H)
-      _tile_batch:setColor(color)
+      g.draw(_tilemask, x - _TILE_W, y - _TILE_H)
+      --g.rectangle('fill', x, y, _TILE_W, _TILE_H)
+      --_tile_batch:setColor(color)
       _tile_batch:add(_tile_quads[tile_type], x, y,
                   0, 1, 1, unpack(_tile_offset[tile.type]))
     end
   end
+  g.setBlendMode('alpha', 'alphamultiply')
   g.setCanvas()
+
+  _FXSHADER:send('mask', _fovmask)
+  g.setShader(_FXSHADER)
   g.setColor(COLORS.NEUTRAL)
   g.draw(_tile_batch, 0, 0)
+  g.setShader()
+
   _tile_batch:clear()
+
   return _fovmask
 end
 

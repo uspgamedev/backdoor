@@ -29,13 +29,22 @@ local _TOP_COLOR   = {43/256, 100/256, 112/256, 1}
 local _W, _H
 local _MAX_VTX = 4096
 
+local _VTX_FORMAT = {
+  {'VertexPosition', 'float', 2},
+  {'Height', 'float', 1},
+  {'VertexColor', 'float', 4},
+}
+
 local _VTXCODE = [[
 uniform Image mask;
+attribute number Height;
 
 vec4 position(mat4 transform_projection, vec4 vertex_position) {
+  vec4 h = Height * vec4(0, 1, 0, 0);
   vec4 pos = ProjectionMatrix * TransformMatrix * vertex_position;
+  pos.y = -pos.y;
   VaryingColor *= Texel(mask, pos.xy/2 + 0.5);
-  return transform_projection * vertex_position;
+  return transform_projection * (vertex_position+h);
 }
 ]]
 local _VTXSHADER
@@ -222,7 +231,8 @@ function WALL.load(sector)
       end
     end
     if #vertices > 0 then
-      local rowmesh = love.graphics.newMesh(vertices, 'triangles', 'static')
+      local rowmesh = love.graphics.newMesh(_VTX_FORMAT, vertices, 'triangles',
+                                            'static')
       rowmesh:setVertexMap(map)
       _rowmeshes[i] = rowmesh
     else
