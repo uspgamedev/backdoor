@@ -214,8 +214,9 @@ function SectorView:draw()
   g.push()
 
   local fov = self.fov
-  SECTOR_TILEMAP.drawAbyss(g, fov)
-  local fovmask = SECTOR_TILEMAP.drawFloor(g, fov)
+  local fovmask = SECTOR_TILEMAP.calculateFOVMask(g, fov)
+  SECTOR_TILEMAP.drawAbyss(g)
+  SECTOR_TILEMAP.drawFloor(g)
 
   -- setting up rays
   local rays = {}

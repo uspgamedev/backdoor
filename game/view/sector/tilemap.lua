@@ -21,18 +21,16 @@ vec4 effect(vec4 color, Image tex, vec2 uv, vec2 pos) {
 ]]
 local _FXSHADER
 
-local TileMap = {}
+local TILEMAP = {}
 
 local _sector
 local _tile_batch
-local _abyss_batch
 local _fovmask
 local _tilemask
 
-function TileMap.init(sector, tileset)
+function TILEMAP.init(sector, tileset)
   local pixel_texture = RES.loadTexture("pixel")
   local texture = RES.loadTexture(tileset.texture)
-  _abyss_batch = love.graphics.newSpriteBatch(pixel_texture, 512, "stream")
   _tile_batch = love.graphics.newSpriteBatch(texture, 512, "stream")
   _tile_offset = tileset.offsets
   _tile_quads = tileset.quads
@@ -55,39 +53,55 @@ function TileMap.init(sector, tileset)
   end
 end
 
-function TileMap.drawAbyss(g, fov)
-  g.push()
-  _abyss_batch:clear()
-  for i, j in CAM:tilesInRange() do
-    local ti, tj = i+1, j+1
-    if _sector:isInside(ti, tj) then
-      _abyss_batch:setColor(COLORS.BLACK)
-      if fov and fov[ti] then
-        local visibility = fov[ti][tj]
-        if visibility then
-          if visibility == 0 then
-            _abyss_batch:setColor(_SEEN_ABYSS)
-          else
-            _abyss_batch:setColor(COLORS.BACKGROUND)
-          end
-        end
-      end
-      local x, y = j*_TILE_W, i*_TILE_H
-      _abyss_batch:add(x, y, 0, _TILE_W, _TILE_H)
-    end
-  end
-  g.draw(_abyss_batch, 0, 0)
-  g.pop()
-end
-
-function TileMap.drawFloor(g, fov)
-  -- draw flat tiles
-  _tile_batch:clear()
+function TILEMAP.calculateFOVMask(g, fov)
   g.setCanvas(_fovmask)
   g.clear()
   g.setColor(COLORS.BLACK)
-  g.rectangle('fill', 0, 0, _fovmask:getWidth()*10, _fovmask:getHeight()*10)
+
+  g.push()
+  g.origin()
+  g.rectangle('fill', 0, 0, _fovmask:getWidth(), _fovmask:getHeight())
+  g.pop()
+
   g.setBlendMode('lighten', 'premultiplied')
+  for i, j in CAM:tilesInRange() do
+    local ti, tj = i+1, j+1 -- logic coordinates
+    local x, y = j*_TILE_W, i*_TILE_H
+    local color = COLORS.NEUTRAL
+    if fov and fov[ti] then
+      local visibility = fov[ti][tj]
+      if not visibility then
+        color = COLORS.BLACK
+      elseif visibility == 0 then
+        color = COLORS.HALF_VISIBLE
+      else
+        color = COLORS.NEUTRAL
+      end
+    end
+    g.setColor(color)
+    g.draw(_tilemask, x - _TILE_W, y - _TILE_H)
+  end
+  g.setBlendMode('alpha', 'alphamultiply')
+  g.setCanvas()
+
+  return _fovmask
+end
+
+function TILEMAP.drawAbyss(g, fov)
+  g.push()
+
+  g.origin()
+  _FXSHADER:send('mask', _fovmask)
+  g.setShader(_FXSHADER)
+  g.setColor(COLORS.BACKGROUND)
+  g.rectangle('fill', 0, 0, _VIEW_W*_TILE_W, _VIEW_H*_TILE_H)
+  g.setShader()
+
+  g.pop()
+end
+
+function TILEMAP.drawFloor(g)
+  _tile_batch:clear()
   for i, j in CAM:tilesInRange() do
     local ti, tj = i+1, j+1 -- logic coordinates
     local tile = _sector.tiles[ti] and _sector.tiles[ti][tj]
@@ -95,27 +109,10 @@ function TileMap.drawFloor(g, fov)
       local tile_type = (tile.type == SCHEMATICS.WALL)
                         and SCHEMATICS.FLOOR or tile.type
       local x, y = j*_TILE_W, i*_TILE_H
-      local color = COLORS.NEUTRAL
-      if fov and fov[ti] then
-        local visibility = fov[ti][tj]
-        if not visibility then
-          color = COLORS.BLACK
-        elseif visibility == 0 then
-          color = COLORS.HALF_VISIBLE
-        else
-          color = COLORS.NEUTRAL
-        end
-      end
-      g.setColor(color)
-      g.draw(_tilemask, x - _TILE_W, y - _TILE_H)
-      --g.rectangle('fill', x, y, _TILE_W, _TILE_H)
-      --_tile_batch:setColor(color)
       _tile_batch:add(_tile_quads[tile_type], x, y,
                   0, 1, 1, unpack(_tile_offset[tile.type]))
     end
   end
-  g.setBlendMode('alpha', 'alphamultiply')
-  g.setCanvas()
 
   _FXSHADER:send('mask', _fovmask)
   g.setShader(_FXSHADER)
@@ -124,13 +121,11 @@ function TileMap.drawFloor(g, fov)
   g.setShader()
 
   _tile_batch:clear()
-
-  return _fovmask
 end
 
-function TileMap.drawWallInLine(g, i, fov)
+function TILEMAP.drawWallInLine(g, i, fov)
   -- to be implemented in v11.0
 end
 
-return TileMap
+return TILEMAP
 
