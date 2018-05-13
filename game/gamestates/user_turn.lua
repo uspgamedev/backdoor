@@ -5,6 +5,7 @@
 
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
+local SCHEMATICS    = require 'domain.definitions.schematics'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
@@ -52,7 +53,62 @@ local function _startTask(action, ...)
   end
 end
 
+--[[ Adjacency function ]]--
+
+local function _updateAdjacency(dir)
+  local i, j = _route.getControlledActor():getPos()
+  local sector = _route.getCurrentSector()
+  local changed = false
+  local side1, side2
+  if dir[1] ~= 0 and dir[2] ~= 0 then
+    side1 = {0, dir[2]}
+    side2 = {dir[1], 0}
+  elseif dir[1] == 0 then
+    side1 = {-1, dir[2]}
+    side2 = { 1, dir[2]}
+  elseif dir[2] == 0 then
+    side1 = {dir[1], -1}
+    side2 = {dir[1],  1}
+  end
+  local range = {dir, side1, side2}
+
+  for idx, adj_move in ipairs(range) do
+    local ti = adj_move[1] + i
+    local tj = adj_move[2] + j
+    local tile = sector:isInside(ti, tj) and sector:getTile(ti, tj)
+    local tile_type = tile and tile.type
+    local current = _adjacency[idx]
+    _adjacency[idx] = tile_type
+    if current ~= -1 then
+      if tile_type ~= current then
+        changed = true
+      end
+    end
+  end
+
+  return changed
+end
+
+local function _unsetAdjacency()
+  _adjacency_changes = 0
+  for i = 1, 3 do
+    _adjacency[i] = -1
+  end
+end
+
 --[[ Long walk functionf ]]--
+
+local function _canLongWalk()
+  local hostile_bodies = _route.getControlledActor():getHostileBodies()
+  return (not _long_walk) and #hostile_bodies == 0
+end
+
+local function _startLongWalk(dir)
+  print("> Start long walk!")
+  _unsetAdjacency()
+  _long_walk = dir
+  _alert = false
+end
 
 local function _continueLongWalk()
   local dir = _long_walk
@@ -60,52 +116,39 @@ local function _continueLongWalk()
   local i, j = _route.getControlledActor():getPos()
   i, j = i+dir[1], j+dir[2]
   if not _route.getCurrentSector():isValid(i,j) then
+    printf("> Stop long walk (%s)!", "can't go further")
     return false
   end
   if _alert then
     _alert = false
+    printf("> Stop long walk (%s)!", "input or damage")
     return false
   end
-  return true
-end
 
---[[ Adjacency function ]]--
-local function _updateAdjacency()
-  local i, j = _route.getControlledActor():getPos()
-  local sector = _route.getCurrentSector()
-  for di = i-1, i+1 do
-    for dj = j-1, j+1 do
-      local tile = sector:isInside(di, dj) and sector:getTile(di, dj)
-      local ai, aj = di-i+2, dj-j+2
-      local current = _adjacency[ai][aj]
-      _adjacency[ai][aj] = tile and { type = tile.type }
-      if (tile and tile.type) ~= (current and current.type) then
-        _alert = true
-      end
-    end
+  local hostile_bodies = _route.getControlledActor():getHostileBodies()
+  if #hostile_bodies > 0 or _updateAdjacency(dir) then
+    printf("> Stop long walk (%s)!", "hostile bodies or adjacency changed")
+    return false
   end
+
+  return true
 end
 
 --[[ HUD Functions ]]--
 
 local function _showHUD()
-  _view.actor:show()
+  return _view.actor:show()
 end
 
 local function _hideHUD()
-  _view.actor:hide()
+  return _view.actor:hide()
 end
 
 --[[ State Methods ]]--
 
 function state:init()
   _long_walk = false
-  for i = 1, 3 do
-    _adjacency[i] = {}
-    for j = 1, 3 do
-      _adjacency[i][j] = false
-    end
-  end
+  return _unsetAdjacency()
 end
 
 function state:enter(_, route, view, alert)
@@ -128,6 +171,10 @@ function state:resume(from, args)
     _was_on_menu = true
     _startTask(args.action)
   else
+  if INPUT.wasAnyPressed() then
+    _alert = true
+  end
+
     _was_on_menu = false
   end
 end
@@ -138,11 +185,21 @@ function state:update(dt)
     return SWITCHER.push(GS.DEVMODE)
   end
 
+  MAIN_TIMER:update(dt)
+
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
 
-  MAIN_TIMER:update(dt)
+  if INPUT.wasAnyPressed() then
+    _alert = true
+  end
+
+  if _next_action then
+    SWITCHER.pop({next_action = _next_action})
+    _next_action = nil
+    return
+  end
 
   if INPUT.isActionDown("ACTION_4") and not _extended_hud then
     _extended_hud = true
@@ -161,14 +218,10 @@ function state:update(dt)
     end
   else
     local action_request
-    local faction = _route.getControlledActor():getBody():getFaction()
-    local hostile_bodies = _route.getControlledActor():getHostileBodies()
     for _,dir in ipairs(DIR) do
       if DIRECTIONALS.wasDirectionTriggered(dir) then
-        if not _long_walk and #hostile_bodies == 0
-                          and INPUT.isActionDown('MODIFIER') then
-          _long_walk = dir
-          _alert = false
+        if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
+          _startLongWalk(dir)
           break
         end
         action_request = {DEFS.ACTION.MOVE, dir}
@@ -196,9 +249,7 @@ function state:update(dt)
 
     -- execute action
     if _long_walk then
-      _updateAdjacency()
-      if not action_request and #hostile_bodies == 0
-                            and _continueLongWalk() then
+      if not action_request and _continueLongWalk() then
         _startTask(DEFS.ACTION.MOVE, _long_walk)
       else
         _long_walk = false
@@ -214,12 +265,6 @@ function state:update(dt)
       _startTask(unpack(action_request))
     end
 
-  end
-
-  if _next_action then
-    SWITCHER.pop({next_action = _next_action})
-    _next_action = nil
-    return
   end
 
   Util.destroyAll()
