@@ -408,6 +408,19 @@ function Actor:canSee(target)
   return visible and visible > 0
 end
 
+function Actor:getHostileBodies()
+  local visible_bodies = self:getVisibleBodies()
+  local hostile_bodies = {}
+  local actor_body_faction = self:getBody():getFaction()
+  for body_id in pairs(visible_bodies) do
+    local body = Util.findId(body_id)
+    if body:getFaction() ~= actor_body_faction then
+      table.insert(hostile_bodies, body)
+    end
+  end
+  return hostile_bodies
+end
+
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then

@@ -5,6 +5,7 @@
 
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
+local SCHEMATICS    = require 'domain.definitions.schematics'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
@@ -13,6 +14,10 @@ local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 
 local state = {}
+
+-- [[ Constant Variables ]]--
+local _OPEN_MENU = "OPEN_MENU"
+local _SAVE_QUIT = "SAVE_QUIT"
 
 --[[ Local Variables ]]--
 
@@ -23,6 +28,7 @@ local _view
 local _extended_hud
 
 local _long_walk
+local _adjacency = {}
 local _alert
 local _save_and_quit
 local _was_on_menu
@@ -47,7 +53,62 @@ local function _startTask(action, ...)
   end
 end
 
+--[[ Adjacency function ]]--
+
+local function _updateAdjacency(dir)
+  local i, j = _route.getControlledActor():getPos()
+  local sector = _route.getCurrentSector()
+  local changed = false
+  local side1, side2
+  if dir[1] ~= 0 and dir[2] ~= 0 then
+    side1 = {0, dir[2]}
+    side2 = {dir[1], 0}
+  elseif dir[1] == 0 then
+    side1 = {-1, dir[2]}
+    side2 = { 1, dir[2]}
+  elseif dir[2] == 0 then
+    side1 = {dir[1], -1}
+    side2 = {dir[1],  1}
+  end
+  local range = {dir, side1, side2}
+
+  for idx, adj_move in ipairs(range) do
+    local ti = adj_move[1] + i
+    local tj = adj_move[2] + j
+    local tile = sector:isInside(ti, tj) and sector:getTile(ti, tj)
+    local tile_type = tile and tile.type
+    local current = _adjacency[idx]
+    _adjacency[idx] = tile_type
+    if current ~= -1 then
+      if tile_type ~= current then
+        changed = true
+      end
+    end
+  end
+
+  return changed
+end
+
+local function _unsetAdjacency()
+  _adjacency_changes = 0
+  for i = 1, 3 do
+    _adjacency[i] = -1
+  end
+end
+
 --[[ Long walk functionf ]]--
+
+local function _canLongWalk()
+  local hostile_bodies = _route.getControlledActor():getHostileBodies()
+  return (not _long_walk) and #hostile_bodies == 0
+end
+
+local function _startLongWalk(dir)
+  print("> Start long walk!")
+  _unsetAdjacency()
+  _long_walk = dir
+  _alert = false
+end
 
 local function _continueLongWalk()
   local dir = _long_walk
@@ -55,28 +116,39 @@ local function _continueLongWalk()
   local i, j = _route.getControlledActor():getPos()
   i, j = i+dir[1], j+dir[2]
   if not _route.getCurrentSector():isValid(i,j) then
+    printf("> Stop long walk (%s)!", "can't go further")
     return false
   end
   if _alert then
+    _alert = false
+    printf("> Stop long walk (%s)!", "input or damage")
     return false
   end
+
+  local hostile_bodies = _route.getControlledActor():getHostileBodies()
+  if #hostile_bodies > 0 or _updateAdjacency(dir) then
+    printf("> Stop long walk (%s)!", "hostile bodies or adjacency changed")
+    return false
+  end
+
   return true
 end
 
 --[[ HUD Functions ]]--
 
 local function _showHUD()
-  _view.actor:show()
+  return _view.actor:show()
 end
 
 local function _hideHUD()
-  _view.actor:hide()
+  return _view.actor:hide()
 end
 
 --[[ State Methods ]]--
 
 function state:init()
   _long_walk = false
+  return _unsetAdjacency()
 end
 
 function state:enter(_, route, view, alert)
@@ -99,6 +171,10 @@ function state:resume(from, args)
     _was_on_menu = true
     _startTask(args.action)
   else
+  if INPUT.wasAnyPressed() then
+    _alert = true
+  end
+
     _was_on_menu = false
   end
 end
@@ -109,24 +185,29 @@ function state:update(dt)
     return SWITCHER.push(GS.DEVMODE)
   end
 
+  MAIN_TIMER:update(dt)
+
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
 
-  MAIN_TIMER:update(dt)
-
-  if INPUT.isActionDown("ACTION_4") and not _extended_hud then
-    _extended_hud = true
-    _showHUD()
-  elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
-    _extended_hud = false
-    _hideHUD()
+  if INPUT.wasAnyPressed() then
+    _alert = true
   end
 
   if _next_action then
     SWITCHER.pop({next_action = _next_action})
     _next_action = nil
     return
+  end
+
+  if INPUT.isActionDown("ACTION_4") and not _extended_hud then
+    _extended_hud = true
+    _long_walk = false
+    _showHUD()
+  elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
+    _extended_hud = false
+    _hideHUD()
   end
 
   if _extended_hud then
@@ -136,41 +217,54 @@ function state:update(dt)
       _view.widget:scrollDown()
     end
   else
-    if _long_walk then
-      if _continueLongWalk() then
-        return _startTask(DEFS.ACTION.MOVE, _long_walk)
-      else
-        _long_walk = false
-      end
-    end
+    local action_request
     for _,dir in ipairs(DIR) do
       if DIRECTIONALS.wasDirectionTriggered(dir) then
-        if INPUT.isActionDown('MODIFIER') then
-          _long_walk = dir
+        if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
+          _startLongWalk(dir)
+          break
         end
-        return _startTask(DEFS.ACTION.MOVE, dir)
+        action_request = {DEFS.ACTION.MOVE, dir}
+        break
       end
     end
 
     if INPUT.wasActionPressed('CONFIRM') then
-      _startTask(DEFS.ACTION.INTERACT)
+      action_request = {DEFS.ACTION.INTERACT}
     elseif INPUT.wasActionPressed('CANCEL') then
-      _startTask(DEFS.ACTION.IDLE)
+      action_request = {DEFS.ACTION.IDLE}
     elseif INPUT.wasActionPressed('SPECIAL') then
-      _startTask(DEFS.ACTION.USE_SIGNATURE)
+      action_request = {DEFS.ACTION.USE_SIGNATURE}
     elseif INPUT.wasActionPressed('ACTION_1') then
-      _startTask(DEFS.ACTION.PLAY_CARD)
+      action_request = {DEFS.ACTION.PLAY_CARD}
     elseif INPUT.wasActionPressed('ACTION_2') then
-      _startTask(DEFS.ACTION.ACTIVATE_WIDGET)
+      action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
     elseif INPUT.wasActionPressed('ACTION_3') then
-      _startTask(DEFS.ACTION.RECEIVE_PACK)
+      action_request = {DEFS.ACTION.RECEIVE_PACK}
     elseif INPUT.wasActionPressed('EXTRA') then
-      PLAYSFX 'open-menu'
-      return SWITCHER.push(GS.ACTION_MENU, _route)
+      action_request = _OPEN_MENU
     elseif INPUT.wasActionPressed('PAUSE') then
+      action_request = _SAVE_QUIT
+    end
+
+    -- execute action
+    if _long_walk then
+      if not action_request and _continueLongWalk() then
+        _startTask(DEFS.ACTION.MOVE, _long_walk)
+      else
+        _long_walk = false
+      end
+    elseif action_request == _OPEN_MENU then
+      PLAYSFX 'open-menu'
+      SWITCHER.push(GS.ACTION_MENU, _route)
+      return
+    elseif action_request == _SAVE_QUIT then
       _save_and_quit = true
       return
+    elseif action_request then
+      _startTask(unpack(action_request))
     end
+
   end
 
   Util.destroyAll()

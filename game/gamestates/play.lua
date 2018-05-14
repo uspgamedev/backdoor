@@ -1,6 +1,7 @@
 
 --MODULE FOR THE GAMESTATE: GAME--
 
+local INPUT       = require 'input'
 local GUI         = require 'debug.gui'
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
@@ -173,6 +174,10 @@ end
 function state:update(dt)
 
   if not DEBUG then
+    if INPUT.wasAnyPressed(0.5) then
+      _alert = true
+    end
+
     MAIN_TIMER:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
@@ -190,6 +195,7 @@ function state:resume(state, args)
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
+    _alert = _alert or args
     _playTurns()
   end
 
