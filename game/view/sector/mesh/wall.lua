@@ -62,5 +62,12 @@ function WallMesh:addSide(color, v1, v2, b1, b2)
   end
 end
 
+function WallMesh:addTop(color, v1, v2, v3, v4)
+  local height = vec3(0,0,-1)*_WALL_H
+  v1, v2, v3, v4 = _tov3(v1), _tov3(v2), _tov3(v3), _tov3(v4)
+  _appendQuad(self, color, v1 + height, v2 + height, v3 + height,
+              v4 + height)
+end
+
 return WallMesh
 
