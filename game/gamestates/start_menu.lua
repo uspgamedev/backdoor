@@ -103,7 +103,9 @@ function state:update(dt)
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
     _menu_view:setItem("Load route")
-    _menu_view:setItem("Controls")
+    if DEV then
+      _menu_view:setItem("Controls")
+    end
     _menu_view:setItem("Quit")
   elseif _menu_context == "LOAD_LIST" then
     local savelist = PROFILE.getSaveList()
@@ -126,7 +128,7 @@ function state:update(dt)
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
       end
-      if MENU.item("Controls") then
+      if DEV and MENU.item("Controls") then
         CONFIGURE_INPUT(INPUT, INPUT.getMap())
       end
       if MENU.item("Quit") then
