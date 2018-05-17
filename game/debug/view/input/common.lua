@@ -1,6 +1,9 @@
 
 local IMGUI = require 'imgui'
 
+local max = math.max
+local min = math.min
+
 local inputs = {}
 
 local function _makeCommon(default, call)
@@ -35,8 +38,8 @@ inputs.float = _makeCommon(
     local range = field.range
     local newvalue, changed = IMGUI.InputFloat("", value, 0.1, 0.5)
     if range then
-      newvalue = math.max(range[1],
-                          range[2] and math.min(range[2], newvalue) or newvalue)
+      newvalue = max(range[1],
+                          range[2] and min(range[2], newvalue) or newvalue)
     end
     return newvalue, changed
   end
@@ -49,8 +52,8 @@ inputs.integer = _makeCommon(
     local range = field.range
     local newvalue, changed = IMGUI.InputInt("", value, 1, 10)
     if range then
-      newvalue = math.max(range[1],
-                          range[2] and math.min(range[2], newvalue) or newvalue)
+      newvalue = max(range[1],
+                          range[2] and min(range[2], newvalue) or newvalue)
     end
     return newvalue, changed
   end
@@ -78,6 +81,17 @@ inputs.description = _makeCommon(
   function(value, field)
     IMGUI.Text(field.info)
     return "", false
+  end
+)
+
+inputs.range = _makeCommon(
+  0,
+  function(value, field)
+    assert(field.max, "No 'max' field in range input.")
+    assert(field.min, "No 'min' field in range input.")
+    value = max(0, min(field.max, value or 0))
+    local newvalue, changed = IMGUI.SliderInt("", value, field.min, field.max)
+    return newvalue, changed
   end
 )
 
