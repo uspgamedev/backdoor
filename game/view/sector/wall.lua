@@ -103,7 +103,7 @@ function WALL.load(sector)
           local base = vec2(_GRID_W, _GRID_H)
           local width = vec2(_TILE_W - 2*_GRID_W, 0)
           local height = vec2(0, _TILE_H - 2*_GRID_H)
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
+          wall:addTop({0,1,0,1}, base, base + width, base + height,
                                   base + width + height)
         end
 
