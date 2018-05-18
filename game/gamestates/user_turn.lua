@@ -104,7 +104,6 @@ local function _canLongWalk()
 end
 
 local function _startLongWalk(dir)
-  print("> Start long walk!")
   _unsetAdjacency()
   _long_walk = dir
   _alert = false
@@ -116,18 +115,15 @@ local function _continueLongWalk()
   local i, j = _route.getControlledActor():getPos()
   i, j = i+dir[1], j+dir[2]
   if not _route.getCurrentSector():isValid(i,j) then
-    printf("> Stop long walk (%s)!", "can't go further")
     return false
   end
   if _alert then
     _alert = false
-    printf("> Stop long walk (%s)!", "input or damage")
     return false
   end
 
   local hostile_bodies = _route.getControlledActor():getHostileBodies()
   if #hostile_bodies > 0 or _updateAdjacency(dir) then
-    printf("> Stop long walk (%s)!", "hostile bodies or adjacency changed")
     return false
   end
 
