@@ -27,13 +27,16 @@ local HEIGHT = 720
 local COLORS = {
   WHITE = {1, 1, 1},
   BLACK = {0, 0, 0},
-  DARK = {16/255, 16/255, 16/255},
+  DARK = {12/255, 12/255, 12/255},
   NEUTRAL = {0, 0, 0, 0},
   GREEN = {0.1, 0.9, 0.3},
+  PP = {0.6, 0.2, 0.6},
   LIGHT = {0.75, 0.75, 0.75},
-  EMPTY = {0.2, .15, 0.05}
+  EMPTY = {0.2, .15, 0.05},
+  COR = {0xbe/255, 0x76/255, 0x3a/255},
+  ARC = {0x6e/255, 0x60/255, 0xaa/255},
+  ANI = {0x77/255, 0xb9/255, 0x55/255},
 }
-
 
 local QUIT_KEY = {
   escape = true,
@@ -150,7 +153,7 @@ return function ()
     --_gaussian_shader:send("tex_size", {1, 1})
     --graphics.setShader(_gaussian_shader)
     graphics.draw(shape, -8, 0)
-    graphics.setColor(COLORS.BLACK)
+    graphics.setColor(COLORS.DARK)
     graphics.setShader()
     graphics.draw(shape, 0, 0)
     graphics.setColor(COLORS.WHITE)
@@ -166,18 +169,19 @@ return function ()
     _fontBold(24)
     graphics.translate(mg, mg)
     graphics.setColor(COLORS.WHITE)
-    graphics.printf("Namer Namington", 0, -8, length, "left")
+    graphics.printf("Charname the Background", 0, -8, length, "left")
 
     -- lifebar
     _fontText(20)
     graphics.translate(0, 48)
+    graphics.push()
     graphics.setColor(COLORS.EMPTY)
     graphics.rectangle("fill", 0, 0, length, 12)
+    graphics.translate(-1, -1)
     graphics.setColor(COLORS.GREEN)
     graphics.rectangle("fill", 0, 0, 28/32*length, 12)
-    graphics.push()
     graphics.translate(8, -16)
-    graphics.setColor(COLORS.DARK)
+    graphics.setColor(COLORS.BLACK)
     graphics.printf("HP 28/032", 0, 0, length-8, "left")
     graphics.translate(-2, -2)
     graphics.setColor(COLORS.WHITE)
@@ -186,14 +190,15 @@ return function ()
 
     -- cooldown bar
     graphics.translate(0, 32)
+    graphics.push()
     graphics.setColor(COLORS.EMPTY)
     graphics.setLineWidth(1)
     graphics.rectangle("fill", 0, 0, length, 12)
-    graphics.setColor(COLORS.LIGHT)
+    graphics.translate(-1, -1)
+    graphics.setColor(COLORS.PP)
     graphics.rectangle("fill", 0, 0, 0.6*length, 12)
-    graphics.push()
     graphics.translate(8, -16)
-    graphics.setColor(COLORS.DARK)
+    graphics.setColor(COLORS.BLACK)
     graphics.printf("PP 60/100", 0, 0, length-8, "left")
     graphics.translate(-2, -2)
     graphics.setColor(COLORS.WHITE)
@@ -214,32 +219,32 @@ return function ()
     graphics.push()
     -- COR
     graphics.setColor(COLORS.WHITE)
-    graphics.printf("COR: 5", 0, 0, attr_width, "center")
+    graphics.printf("COR: 5", 0, 0, attr_width, "left")
     graphics.translate(0, mg*1.5)
     graphics.setColor(COLORS.EMPTY)
     graphics.rectangle("fill", 0, 0, attr_width, 16)
-    graphics.setColor(COLORS.LIGHT)
+    graphics.setColor(COLORS.COR)
     graphics.rectangle("fill", 0, 0, 0.4*attr_width, 16)
     graphics.pop()
     -- ARC
     graphics.translate(attr_width + mg/2, 0)
     graphics.push()
     graphics.setColor(COLORS.WHITE)
-    graphics.printf("ARC: 7", 0, 0, attr_width, "center")
+    graphics.printf("ARC: 7", 0, 0, attr_width, "left")
     graphics.translate(0, mg*1.5)
     graphics.setColor(COLORS.EMPTY)
     graphics.rectangle("fill", 0, 0, attr_width, 16)
-    graphics.setColor(COLORS.LIGHT)
+    graphics.setColor(COLORS.ARC)
     graphics.rectangle("fill", 0, 0, 0.8*attr_width, 16)
     graphics.pop()
     -- ANI
     graphics.translate(attr_width + mg/2, 0)
     graphics.setColor(COLORS.WHITE)
-    graphics.printf("ANI: 3", 0, 0, attr_width, "center")
+    graphics.printf("ANI: 3", 0, 0, attr_width, "left")
     graphics.translate(0, mg*1.5)
     graphics.setColor(COLORS.EMPTY)
     graphics.rectangle("fill", 0, 0, attr_width, 16)
-    graphics.setColor(COLORS.LIGHT)
+    graphics.setColor(COLORS.ANI)
     graphics.rectangle("fill", 0, 0, 0.2*attr_width, 16)
     graphics.pop()
 
