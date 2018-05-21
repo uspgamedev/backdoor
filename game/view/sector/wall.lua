@@ -81,6 +81,21 @@ local function _walled(neighbors, r, s)
   return neighbors[r][s] and neighbors[r][s].type == SCHEMATICS.WALL
 end
 
+local function _rect(left, right, top, bottom)
+  return vec2(left, top), vec2(right, top), vec2(left, bottom),
+         vec2(right, bottom)
+end
+
+local function _rectH(left, top, bottom, width)
+  return vec2(left, top), vec2(left + width, top), vec2(left, bottom),
+         vec2(left + width, bottom)
+end
+
+local function _rectV(top, left, right, height)
+  return vec2(left, top), vec2(right, top), vec2(left, top + height),
+         vec2(right, top + height)
+end
+
 function WALL.load(sector)
   local count = 0
   _W, _H = sector:getDimensions()
@@ -98,31 +113,15 @@ function WALL.load(sector)
         local y0 = 0
         wall = WallMesh:new { pos = vec2(x0,y0), border_color = _BORDER_COLOR }
 
-        -- middle
-        do
-          local base = vec2(_GRID_W, _GRID_H)
-          local width = vec2(_TILE_W - 2*_GRID_W, 0)
-          local height = vec2(0, _TILE_H - 2*_GRID_H)
-          wall:addTop({0,1,0,1}, base, base + width, base + height,
-                                  base + width + height)
-        end
-
         -- top
         if _empty(neighbors, 1, 2) then
           wall:addSide(_BACK_COLOR, vec2(_GRID_W, _MARGIN_H),
                                     vec2(_TILE_W - _GRID_W, _MARGIN_H),
                                     vec2(0, _BORDER_H))
-          local base = vec2(_GRID_W, _MARGIN_H + _BORDER_H)
-          local width = vec2(_TILE_W - 2*_GRID_W, 0)
-          local height = vec2(0, _GRID_H - (_MARGIN_H + _BORDER_H))
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W,
+                                        _MARGIN_H + _BORDER_H, _GRID_H))
         else
-          local base = vec2(_GRID_W, 0)
-          local width = vec2(_TILE_W - 2*_GRID_W, 0)
-          local height = vec2(0, _GRID_H)
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W, 0, _GRID_H))
         end
 
         -- topleft
@@ -131,15 +130,23 @@ function WALL.load(sector)
           wall:addSide(_BACK_COLOR, vec2(0, _MARGIN_H),
                                     vec2(_GRID_W, _MARGIN_H),
                                     vec2(0, _BORDER_H))
+          wall:addTop(_TOP_COLOR, _rect(0, _GRID_W, _MARGIN_H + _BORDER_H,
+                                        _GRID_H))
         elseif _walled(neighbors, 1, 2) and _empty(neighbors, 2, 1) then
           -- straight up
           wall:addSide(nil, vec2(_MARGIN_W, 0), vec2(_MARGIN_W, _GRID_H),
                             vec2(_BORDER_W, 0)) 
+          wall:addTop(_TOP_COLOR, _rect(_MARGIN_W + _BORDER_W, _GRID_W,
+                                        0, _GRID_H))
         elseif _empty(neighbors, 2, 1) and _empty(neighbors, 1, 2) then
           -- outer corner
           wall:addSide(_BACK_COLOR, vec2(_MARGIN_W, _GRID_H),
                                     vec2(_GRID_W, _MARGIN_H),
                                     vec2(_BORDER_W, 0), vec2(0, _BORDER_H))
+          wall:addTop(_TOP_COLOR, vec2(_MARGIN_W + _BORDER_W, _GRID_H),
+                                  vec2(_GRID_W, _MARGIN_H + _BORDER_H),
+                                  vec2(_GRID_W, _GRID_H),
+                                  vec2(_GRID_W, _GRID_H))
         elseif _walled(neighbors, 2, 1) and _walled(neighbors, 1, 2) and
                _empty(neighbors, 1, 1) then
           -- inner corner
@@ -176,17 +183,16 @@ function WALL.load(sector)
           local border = vec2(_BORDER_W,0)
           wall:addSide(nil, vec2(_MARGIN_W, _GRID_H),
                             vec2(_MARGIN_W, _TILE_H - _GRID_H), border)
-          local base = vec2(_MARGIN_W + _BORDER_W, _GRID_H)
-          local width = vec2(_GRID_W - (_MARGIN_W + _BORDER_W), 0)
-          local height = vec2(0, _TILE_H - 2*_GRID_H)
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(_MARGIN_W + _BORDER_W, _GRID_W,
+                                        _GRID_H, _TILE_H - _GRID_H))
         else
-          local base = vec2(0, _GRID_H)
-          local width = vec2(_GRID_W, 0)
-          local height = vec2(0, _TILE_H - 2*_GRID_H)
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(0, _GRID_W, _GRID_H, _TILE_H - _GRID_H))
+        end
+
+        -- middle
+        do
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W, _GRID_H, 
+                                        _TILE_H - _GRID_H))
         end
 
         -- right
@@ -195,6 +201,12 @@ function WALL.load(sector)
           wall:addSide(nil, vec2(_TILE_W - _MARGIN_W, _GRID_H),
                             vec2(_TILE_W - _MARGIN_W, _TILE_H - _GRID_H),
                             border)
+          wall:addTop(_TOP_COLOR, _rect(_TILE_W - _GRID_W,
+                                        _TILE_W - (_MARGIN_W + _BORDER_W),
+                                        _GRID_H, _TILE_H - _GRID_H))
+        else
+          wall:addTop(_TOP_COLOR, _rect(_TILE_W - _GRID_W, _TILE_W, _GRID_H,
+                                        _TILE_H - _GRID_H))
         end
 
         -- front
@@ -202,17 +214,12 @@ function WALL.load(sector)
           wall:addSide(_FRONT_COLOR, _BOTLEFT + vec2(_GRID_W, -_MARGIN_H),
                                      _BOTRIGHT - vec2(_GRID_W, _MARGIN_H),
                                      vec2(0, -_BORDER_H))
-          local base = vec2(_GRID_W, _TILE_H - _GRID_H)
-          local width = vec2(_TILE_W - 2*_GRID_W, 0)
-          local height = vec2(0, _GRID_H - (_MARGIN_H + _BORDER_H))
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W,
+                                        _TILE_H - _GRID_H,
+                                        _TILE_H - (_MARGIN_H + _BORDER_H)))
         else
-          local base = vec2(_GRID_W, _TILE_H - _GRID_H)
-          local width = vec2(_TILE_W - 2*_GRID_W, 0)
-          local height = vec2(0, _GRID_H)
-          wall:addTop(_TOP_COLOR, base, base + width, base + height,
-                                  base + width + height)
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W,
+                                        _TILE_H - _GRID_H , _TILE_H))
         end
 
         -- bottomleft
