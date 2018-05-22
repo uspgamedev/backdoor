@@ -152,6 +152,12 @@ function WALL.load(sector)
           -- inner corner
           wall:addSide(_BACK_COLOR, vec2(0, _MARGIN_H), vec2(_MARGIN_W, 0),
                                     vec2(0, _BORDER_H), vec2(_BORDER_W, 0))
+          wall:addTop(_TOP_COLOR, vec2(0, _MARGIN_H + _BORDER_H),
+                                  vec2(_MARGIN_W + _BORDER_W, 0),
+                                  vec2(0, _GRID_H), vec2(_GRID_W, 0))
+          wall:addTop(_TOP_COLOR, vec2(0, _GRID_H), vec2(_GRID_W, 0),
+                                  vec2(_GRID_W, _GRID_H),
+                                  vec2(_GRID_W, _GRID_H))
         end
 
         -- topright
