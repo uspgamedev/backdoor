@@ -25,7 +25,7 @@ local _BOTRIGHT = vec2(_TILE_W, _TILE_H)
 local _BACK_COLOR = {31/256, 44/256, 38/256, 0.4}
 local _FRONT_COLOR = {31/256, 44/256, 38/256, 1}
 local _BORDER_COLOR  = {43/256, 100/256, 112/256, 1}
-local _TOP_COLOR  = {1, 0.2, 0.2, 0.4}
+local _TOP_COLOR  = {0.2, 0.2, 0.2, 0.6}
 
 local _W, _H
 local _MAX_VTX = 4096
@@ -103,6 +103,7 @@ local _CORNER_OUT = _pack{ vec2(_MARGIN_W + _BORDER_W, _GRID_H),
 local _CORNER_INN = _pack{ vec2(0, _MARGIN_H + _BORDER_H), 
                            vec2(_MARGIN_W + _BORDER_W, 0), vec2(0, _GRID_H),
                            vec2(_GRID_W, 0), vec2(_GRID_W, _GRID_H) }
+local _CORNER_ALL = _pack{ _rect(0, _GRID_W, 0, _GRID_H) }
 
 function WALL.load(sector)
   local count = 0
@@ -156,6 +157,8 @@ function WALL.load(sector)
           wall:addSide(_BACK_COLOR, vec2(0, _MARGIN_H), vec2(_MARGIN_W, 0),
                                     vec2(0, _BORDER_H), vec2(_BORDER_W, 0))
           wall:addTop(_TOP_COLOR, _CORNER_INN())
+        else
+          wall:addTop(_TOP_COLOR, _CORNER_ALL())
         end
 
         -- topright
@@ -184,6 +187,8 @@ function WALL.load(sector)
                                     vec2(_TILE_W - _MARGIN_W, 0),
                                     vec2(0, _BORDER_H), vec2(-_BORDER_W, 0))
           wall:addTop(_TOP_COLOR, _xform(_TOPRIGHT, -1, 1, _CORNER_INN()))
+        else
+          wall:addTop(_TOP_COLOR, _xform(_TOPRIGHT, -1, 1, _CORNER_ALL()))
         end
 
         -- left
@@ -236,22 +241,28 @@ function WALL.load(sector)
           wall:addSide(_FRONT_COLOR, _BOTLEFT - vec2(0, _MARGIN_H),
                                      _BOTLEFT + vec2(_GRID_W, -_MARGIN_H),
                                      vec2(0, -_BORDER_H))
+          wall:addTop(_TOP_COLOR, _xform(_BOTLEFT, 1, -1, _CORNER_HOR()))
         elseif _walled(neighbors, 3, 2) and _empty(neighbors, 2, 1) then
           -- straight down
           wall:addSide(nil, _BOTLEFT + vec2(_MARGIN_W, -_GRID_H),
                             _BOTLEFT + vec2(_MARGIN_W, 0),
                             vec2(_BORDER_W, 0))
+          wall:addTop(_TOP_COLOR, _xform(_BOTLEFT, 1, -1, _CORNER_VER()))
         elseif _empty(neighbors, 2, 1) and _empty(neighbors, 3, 2) then
           -- outer corner
           wall:addSide(_FRONT_COLOR, _BOTLEFT + vec2(_MARGIN_W, -_GRID_H),
                                      _BOTLEFT + vec2(_GRID_W, -_MARGIN_H),
                                      vec2(_BORDER_W, 0), vec2(0, -_BORDER_H))
+          wall:addTop(_TOP_COLOR, _xform(_BOTLEFT, 1, -1, _CORNER_OUT()))
         elseif _walled(neighbors, 2, 1) and _walled(neighbors, 3, 2) and
                _empty(neighbors, 3, 1) then
           -- inner corner
           wall:addSide(_FRONT_COLOR, _BOTLEFT + vec2(0, -_MARGIN_H),
                                      _BOTLEFT + vec2(_MARGIN_W, 0),
                                      vec2(0, -_BORDER_H), vec2(_BORDER_W, 0))
+          wall:addTop(_TOP_COLOR, _xform(_BOTLEFT, 1, -1, _CORNER_INN()))
+        else
+          wall:addTop(_TOP_COLOR, _xform(_BOTLEFT, 1, -1, _CORNER_ALL()))
         end
 
         -- bottomright
@@ -260,22 +271,28 @@ function WALL.load(sector)
           wall:addSide(_FRONT_COLOR, _BOTRIGHT - vec2(0, _MARGIN_H),
                                      _BOTRIGHT - vec2(_GRID_W, _MARGIN_H),
                                      vec2(0, -_BORDER_H))
+          wall:addTop(_TOP_COLOR, _xform(_BOTRIGHT, -1, -1, _CORNER_HOR()))
         elseif _walled(neighbors, 3, 2) and _empty(neighbors, 2, 3) then
           -- straight down
           wall:addSide(nil, _BOTRIGHT - vec2(_MARGIN_W, _GRID_H),
                             _BOTRIGHT - vec2(_MARGIN_W, 0),
                             vec2(-_BORDER_W, 0))
+          wall:addTop(_TOP_COLOR, _xform(_BOTRIGHT, -1, -1, _CORNER_VER()))
         elseif _empty(neighbors, 2, 3) and _empty(neighbors, 3, 2) then
           -- outer corner
           wall:addSide(_FRONT_COLOR, _BOTRIGHT - vec2(_MARGIN_W, _GRID_H),
                                      _BOTRIGHT - vec2(_GRID_W, _MARGIN_H),
                                      vec2(-_BORDER_W, 0), vec2(0, -_BORDER_H))
+          wall:addTop(_TOP_COLOR, _xform(_BOTRIGHT, -1, -1, _CORNER_OUT()))
         elseif _walled(neighbors, 2, 3) and _walled(neighbors, 3, 2) and
                _empty(neighbors, 3, 3) then
           -- inner corner
           wall:addSide(_FRONT_COLOR, _BOTRIGHT - vec2(0, _MARGIN_H),
                                      _BOTRIGHT - vec2(_MARGIN_W, 0),
                                      vec2(0, -_BORDER_H), vec2(-_BORDER_W, 0))
+          wall:addTop(_TOP_COLOR, _xform(_BOTRIGHT, -1, -1, _CORNER_INN()))
+        else
+          wall:addTop(_TOP_COLOR, _xform(_BOTRIGHT, -1, -1, _CORNER_ALL()))
         end
       end
       if wall then
