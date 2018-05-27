@@ -19,12 +19,16 @@ local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
 local _MINIMAP_ALPHA = 180 / 255
 
+local _PD = 8
+local _MG = 24
+
 local _initialized = false
 local _exptext, _statstext, _difficultytext, _buffertext
 local _width, _height, _font
 local _display_handle
 local _tile_colors = {}
 local _tile_mesh
+local _panelgeom
 
 
 local function _initGraphicValues()
@@ -50,28 +54,36 @@ local function _initGraphicValues()
   _initialized = true
 end
 
+local function _newPanelGeom(g, width, height)
+  local mg = _MG
+  local points = {
+    {width+mg, 0},
+    {0, 0},
+    {0, mg+height/2},
+    {mg, 2*mg+height/2},
+    {mg, height},
+    {width+mg, height},
+  }
+  for _,point in ipairs(points) do
+    point[3] = point[1]/width
+    point[4] = point[2]/height
+  end
+  local mesh = g.newMesh(points, 'fan', 'static')
+  local theme = RES.loadTexture("panel-theme")
+  theme:setWrap('repeat')
+  mesh:setTexture(theme)
+  return mesh
+end
+
 function ActorView:init(route)
 
   ELEMENT.init(self)
 
   self.route = route
   self.actor = false
-  self.alpha = 0
 
   if not _initialized then _initGraphicValues() end
 
-end
-
-function ActorView:show()
-  self:removeTimer(_display_handle, MAIN_TIMER)
-  self:addTimer(_display_handle, MAIN_TIMER, "tween",
-                .2, self, { alpha = 1 }, "out-quad")
-end
-
-function ActorView:hide()
-  self:removeTimer(_display_handle, MAIN_TIMER)
-  self:addTimer(_display_handle, MAIN_TIMER, "tween",
-                .2, self, { alpha = 0 }, "out-quad")
 end
 
 function ActorView:loadActor()
@@ -92,26 +104,35 @@ function ActorView:draw()
   _font:setLineHeight(1)
 
   -- always visible
-  self:drawImportantHUD(g, actor)
+  self:drawPackAndPP(g, actor)
+  self:drawHandCountDown(g, actor)
+  self:drawPanel(g)
+  self:drawMiniMap(g, actor)
+  self:drawHP(g, actor)
+  self:drawAttributes(g, actor)
+  self:drawBuffers(g, actor)
+  self:drawDifficulty(g)
 
   -- only visible when holding button
-  g.setColor(cr, cg, cb, self.alpha)
-  if self.alpha > 0 then
-    self:drawMiniMap(g, actor)
-    self:drawHP(g, actor)
-    self:drawAttributes(g, actor)
-    self:drawBuffers(g, actor)
-    self:drawDifficulty(g)
-  end
-
   if DEV then
     local fps_str = ("fps: %d"):format(love.timer.getFPS())
     g.setColor(1, 1, 1, 1)
-    g.print(fps_str, g.getWidth()- 40 - _font:getWidth(fps_str), 12)
+    g.print(fps_str, g.getWidth()- 40 - _font:getWidth(fps_str),
+            g.getHeight() - 24)
   end
 end
 
-function ActorView:drawImportantHUD(g, actor)
+function ActorView:drawPanel(g)
+  g.push()
+  g.translate(3/4*g.getWidth()-_MG, 0)
+  local width = g.getWidth()/4
+  local height = g.getHeight()
+  _panel = _panel or _newPanelGeom(g, width, height)
+  g.draw(_panel, 0, 0)
+  g.pop()
+end
+
+function ActorView:drawPackAndPP(g, actor)
   local pptext = ("%d/%d PP"):format(actor:getPP(), DEFS.MAX_PP)
   local xptext = _exptext:format(actor:getExp())
   local pcktext = ("%d PACK(S) UNOPENED!"):format(actor:getPrizePackCount())
@@ -152,10 +173,13 @@ function ActorView:drawImportantHUD(g, actor)
     g.print(pcktext, 40, _height-y)
   end
   g.pop()
+end
 
+function ActorView:drawHandCountDown(g, actor)
   -- draw hand countdown
   local handcountdown = actor:getHandCountdown()
   local current = self.hand_count_down or 0
+  local y = 144
   current = current + (handcountdown - current) * 0.2
   if math.abs(current - handcountdown) < 1 then
     current = handcountdown
@@ -164,6 +188,9 @@ function ActorView:drawImportantHUD(g, actor)
   local handbar_percent = current / ACTIONDEFS.HAND_DURATION
   local handbar_width = 492
   local handbar_height = 12
+  local font = FONT.get("Text", 18)
+  local fh = font:getHeight()*font:getLineHeight()
+  font:set()
   g.push()
   g.translate(40, _height - y + fh + handbar_height*2)
   g.setLineWidth(1)
@@ -174,8 +201,6 @@ function ActorView:drawImportantHUD(g, actor)
   g.setColor(COLORS.WARNING)
   g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
   g.translate(0, -18)
-  local font = FONT.get("Text", 18)
-  font:set()
   g.setColor(COLORS.BLACK)
   g.print("Hand Duration", 0, 0)
   g.translate(-1, -1)
@@ -192,10 +217,10 @@ function ActorView:drawHP(g, actor)
   local str = _actor_text:format(hp, max_hp)
   local w = _font:getWidth(str) + _font:getHeight()
   g.translate(_width/2 - w/2, _height/2 + 20)
-  g.setColor(0, 0, 0, self.alpha)
+  g.setColor(0, 0, 0, 1)
   g.printf(str, 0, 0, w, "center")
   g.translate(-2, -2)
-  g.setColor(cr, cg, cb, self.alpha)
+  g.setColor(cr, cg, cb, 1)
   g.printf(str, 0, 0, w, "center")
   g.pop()
 end
@@ -244,14 +269,14 @@ function ActorView:drawMiniMap(g, actor)
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = actor:getFov(sector)
   g.push()
-  g.setColor(nr, ng, nb, self.alpha)
+  g.setColor(nr, ng, nb, 1)
   g.translate(320, 20)
   g.printf(zonename,
            -_font:getWidth(zonename)/2, 0,
            _font:getWidth(zonename), "center")
   g.translate(- (w/2) * _TILE_W, _font:getHeight())
   for n=1,4 do
-    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, _MINIMAP_ALPHA*self.alpha)
+    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, _MINIMAP_ALPHA*1)
   end
   for i = 0, h-1 do
     for j = 0, w-1 do
@@ -263,7 +288,7 @@ function ActorView:drawMiniMap(g, actor)
         g.setColor(cr, cg, cb)
         g.draw(_tile_mesh, x, y)
         if ai == ti and aj == tj then
-          g.setColor(1, 160/255, 40/255, self.alpha)
+          g.setColor(1, 160/255, 40/255, 1)
           g.circle("fill", x+_TILE_W/2, y+_TILE_H/2, _TILE_W/2, _TILE_H/2)
         end
       end
