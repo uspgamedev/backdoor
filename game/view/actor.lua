@@ -1,6 +1,7 @@
 
 local RES        = require 'resources'
 local FONT       = require 'view.helpers.font'
+local SHADERS    = require 'view.shaders'
 local ACTIONDEFS = require 'domain.definitions.action'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
@@ -69,10 +70,39 @@ local function _newPanelGeom(g, width, height)
     point[4] = point[2]/height
   end
   local mesh = g.newMesh(points, 'fan', 'static')
+  local canvas = g.newCanvas(width+3*mg, height+2*mg)
   local theme = RES.loadTexture("panel-theme")
   theme:setWrap('repeat')
   mesh:setTexture(theme)
-  return mesh
+  canvas:setFilter('linear', 'linear')
+  canvas:renderTo(function()
+    g.push()
+    g.setBackgroundColor(COLORS.VOID)
+    g.clear()
+    g.origin()
+    g.translate(mg, mg)
+    g.setColor(1, 1, 1)
+    g.draw(mesh, 0, 0)
+    g.pop()
+  end)
+  local dropshadow = g.newImage(canvas:newImageData())
+  canvas:renderTo(function ()
+    g.push()
+    g.setBackgroundColor(COLORS.VOID)
+    g.clear()
+    g.origin()
+    g.translate(mg, mg)
+    SHADERS.gaussian:send('tex_size', { canvas:getDimensions() })
+    SHADERS.gaussian:send('range', 12)
+    g.setShader(SHADERS.gaussian)
+    g.setColor(0, 0, 0, 1)
+    g.draw(dropshadow, -1.5*mg, -mg)
+    g.setShader()
+    g.setColor(1, 1, 1)
+    g.draw(mesh, 0, 0)
+    g.pop()
+  end)
+  return canvas
 end
 
 function ActorView:init(route)
@@ -124,10 +154,11 @@ end
 
 function ActorView:drawPanel(g)
   g.push()
-  g.translate(3/4*g.getWidth()-_MG, 0)
+  g.translate(3/4*g.getWidth()-_MG*2, -_MG)
   local width = g.getWidth()/4
   local height = g.getHeight()
   _panel = _panel or _newPanelGeom(g, width, height)
+  g.setColor(COLORS.NEUTRAL)
   g.draw(_panel, 0, 0)
   g.pop()
 end
