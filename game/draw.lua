@@ -17,7 +17,7 @@ function draw.allTables()
 
   DrawTable(DRAW_TABLE.BG)
 
-  CAM:attach() --Start tracking camera
+  CAM:attach(nil, nil, 960) --Start tracking camera
 
   DrawTable(DRAW_TABLE.L1)
 
