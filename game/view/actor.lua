@@ -1,12 +1,14 @@
 
 local RES        = require 'resources'
 local FONT       = require 'view.helpers.font'
-local SHADERS    = require 'view.shaders'
 local ACTIONDEFS = require 'domain.definitions.action'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
 local Color      = require 'common.color'
 local DEFS       = require 'domain.definitions'
+
+local ACTOR_PANEL = require 'view.actor.panel'
+local ACTOR_HEADER = require 'view.actor.header'
 
 local math = require 'common.math'
 
@@ -24,7 +26,6 @@ local _PD = 8
 local _MG = 24
 local _PANEL_IN_WIDTH = 320-2*_PD-2*_MG
 
-local _initialized = false
 local _exptext, _statstext, _difficultytext, _buffertext
 local _width, _height, _font
 local _display_handle
@@ -53,68 +54,11 @@ local function _initGraphicValues()
   _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
   _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
   _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
-  _initialized = true
-end
 
-local function _newPanelGeom(g, width, height)
-  local mg = _MG
-  local points = {
-    {width+mg, 0},
-    {0, 0},
-    {0, mg+height/2},
-    {mg, 2*mg+height/2},
-    {mg, height},
-    {width+mg, height},
-  }
-  local contour = {
-    mg/2, -2*mg,
-    mg/2, mg+height/2,
-    3/2*mg, 2*mg+height/2,
-    3/2*mg, height+2*mg,
-  }
-  for _,point in ipairs(points) do
-    point[3] = point[1]/width
-    point[4] = point[2]/height
-  end
-  local mesh = g.newMesh(points, 'fan', 'static')
-  local canvas = g.newCanvas(width+3*mg, height+2*mg)
-  local theme = RES.loadTexture("panel-theme")
-  theme:setWrap('repeat')
-  mesh:setTexture(theme)
-  canvas:setFilter('linear', 'linear')
-  canvas:renderTo(function()
-    g.push()
-    g.setBackgroundColor(COLORS.VOID)
-    g.clear()
-    g.origin()
-    g.translate(mg, mg)
-    g.setColor(1, 1, 1)
-    g.draw(mesh, 0, 0)
-    g.pop()
-  end)
-  local dropshadow = g.newImage(canvas:newImageData())
-  canvas:renderTo(function ()
-    g.push()
-    g.setBackgroundColor(COLORS.VOID)
-    g.clear()
-    g.origin()
-    g.translate(mg, mg)
-    SHADERS.gaussian:send('tex_size', { canvas:getDimensions() })
-    SHADERS.gaussian:send('range', 12)
-    g.setShader(SHADERS.gaussian)
-    g.setColor(0, 0, 0, 1)
-    g.draw(dropshadow, -1.5*mg, -mg)
-    g.setShader()
-    g.setColor(1, 1, 1)
-    g.draw(mesh, 0, 0)
-    g.setColor(COLORS.NEUTRAL)
-    g.setLineWidth(2)
-    g.line(contour)
-    g.translate(8, 0)
-    g.line(contour)
-    g.pop()
-  end)
-  return canvas
+  -- panel
+  _PANEL_WIDTH = g.getWidth()/4
+  _PANEL_HEIGHT = g.getHeight()
+  ACTOR_PANEL.init(_PANEL_WIDTH, _PANEL_HEIGHT, _MG)
 end
 
 function ActorView:init(route)
@@ -124,7 +68,7 @@ function ActorView:init(route)
   self.route = route
   self.actor = false
 
-  if not _initialized then _initGraphicValues() end
+  _initGraphicValues()
 
 end
 
@@ -166,14 +110,8 @@ function ActorView:draw()
 end
 
 function ActorView:drawPanel(g)
-  g.push()
-  g.translate(3/4*g.getWidth()-_MG*2, -_MG)
-  local width = g.getWidth()/4
-  local height = g.getHeight()
-  _panel = _panel or _newPanelGeom(g, width, height)
   g.setColor(COLORS.NEUTRAL)
-  g.draw(_panel, 0, 0)
-  g.pop()
+  ACTOR_PANEL.draw(g, 3/4*g.getWidth()-_MG*2, -_MG)
 end
 
 local function _drawBar(g, signature, progress, max, color_full, color_empty)
