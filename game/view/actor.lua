@@ -59,6 +59,7 @@ local function _initGraphicValues()
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
   ACTOR_PANEL.init(_PANEL_WIDTH, _PANEL_HEIGHT, _MG)
+  ACTOR_HEADER.init(_PANEL_WIDTH, _MG, _PD)
 end
 
 function ActorView:init(route)
@@ -93,9 +94,8 @@ function ActorView:draw()
   g.push()
   self:drawPanel(g)
   self:drawHP(g, actor)
-  self:drawPackAndPP(g, actor)
-  self:drawHandCountDown(g, actor)
   self:drawMiniMap(g, actor)
+  self:drawHandCountDown(g, actor)
   self:drawAttributes(g, actor)
   self:drawBuffers(g, actor)
   g.pop()
@@ -111,98 +111,24 @@ end
 
 function ActorView:drawPanel(g)
   g.setColor(COLORS.NEUTRAL)
-  ACTOR_PANEL.draw(g, 3/4*g.getWidth()-_MG*2, -_MG)
-end
-
-local function _drawBar(g, signature, progress, max, color_full, color_empty)
-  local current = math.round(progress * max)
-  local length = _PANEL_IN_WIDTH
-  local progress_color = (progress*color_full) + ( (1-progress)*color_empty )
-  FONT.set("Text", 20)
-  g.push()
-  g.setColor(COLORS.DARK)
-  g.rectangle("fill", 0, 0, length, 12)
-  g.translate(-1, -1)
-  g.setColor(progress_color)
-  g.rectangle("fill", 0, 0, progress*length, 12)
-  g.translate(8, -16)
-  g.setColor(COLORS.BLACK)
-  g.printf(signature:format(current, max), 0, 0, length-8, "left")
-  g.translate(-2, -2)
-  g.setColor(COLORS.NEUTRAL)
-  g.printf(signature:format(current, max), 0, 0, length-8, "left")
-  g.pop()
+  g.translate(3/4*g.getWidth(), 0)
+  ACTOR_PANEL.draw(g, -_MG*2, -_MG)
 end
 
 function ActorView:drawHP(g, actor)
   local body = actor:getBody()
-  local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
   local hp, pp = body:getHP(), actor:getPP()
-  local hp_state = self.hp_state or 0
-  local pp_state = self.pp_state or 0
-  local hp_progress = hp/max_hp
-  local pp_progress = pp/max_pp
-  -- animating hp/pp progress
-  hp_state = hp_state + 1/8 * (hp_progress - hp_state)
-  pp_state = pp_state + 1/8 * (pp_progress - pp_state)
-  if math.abs(hp_progress - hp_state) <= 0.001 then hp_state = hp/max_hp end
-  if math.abs(pp_progress - pp_state) <= 0.001 then pp_state = pp/max_pp end
-  self.hp_state = hp_state
-  self.pp_state = pp_state
+  local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
   -- character name
   FONT.set("TextBold", 24)
-  g.translate(3/4*g.getWidth()+24, 24)
+  g.translate(_MG, _MG)
   g.setColor(COLORS.NEUTRAL)
   g.printf(actor:getTitle(), 0, -8, _PANEL_IN_WIDTH, "left")
   -- character hp & pp
   g.translate(0, 48)
-  _drawBar(g, "HP %3d/%3d", hp_state, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
+  ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
   g.translate(0, 32)
-  _drawBar(g, "PP %3d/%3d", pp_state, max_pp, COLORS.PP, COLORS.PP)
-end
-
-
-function ActorView:drawPackAndPP(g, actor)
-  local pptext = ("%d/%d PP"):format(actor:getPP(), DEFS.MAX_PP)
-  local xptext = _exptext:format(actor:getExp())
-  local pcktext = ("%d PACK(S) UNOPENED!"):format(actor:getPrizePackCount())
-  local fh = _font:getHeight()
-  local normal_y = 144
-  local unfocus_y = 480
-  local spd = 16
-  local dt = love.timer.getDelta()
-  local y = self.importanthud_y or normal_y
-
-  if self.onhandview then
-    y = math.round(y + (unfocus_y - y) * spd * dt)
-    if math.abs(unfocus_y-y) < 1 then y = unfocus_y end
-  else
-    y = math.round(y + (normal_y - y) * spd * dt)
-    if math.abs(normal_y-y) < 1 then y = normal_y end
-  end
-  self.importanthud_y = y
-
-  g.push()
-  g.setColor(COLORS.DARK)
-  g.print(pptext, 40, _height-y-fh*2)
-  g.print(xptext, 40, _height-y-fh)
-  if actor:getPrizePackCount() > 0 then
-    g.print(pcktext, 40, _height-y)
-  end
-  g.translate(-2, -2)
-  if actor:getPP() >= ACTIONDEFS.NEW_HAND_COST then
-    g.setColor(COLORS.SUCCESS)
-  else
-    g.setColor(COLORS.WARNING)
-  end
-  g.print(pptext, 40, _height-y-fh*2)
-  g.setColor(COLORS.NEUTRAL)
-  g.print(xptext, 40, _height-y-fh)
-  if actor:getPrizePackCount() > 0 then
-    g.setColor(COLORS.NOTIFICATION)
-    g.print(pcktext, 40, _height-y)
-  end
-  g.pop()
+  ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
 end
 
 function ActorView:drawHandCountDown(g, actor)
@@ -222,6 +148,7 @@ function ActorView:drawHandCountDown(g, actor)
   local fh = font:getHeight()*font:getLineHeight()
   font:set()
   g.push()
+  g.origin()
   g.translate(40, _height - y + fh + handbar_height*2)
   g.setLineWidth(1)
   g.setColor(COLORS.BLACK)
