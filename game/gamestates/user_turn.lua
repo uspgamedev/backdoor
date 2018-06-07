@@ -407,7 +407,6 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
     PLAYSFX 'ok-menu'
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
     local args = coroutine.yield(_task)
-    _useAction(DEFS.ACTION.CONSUME_CARDS, { consumed = args.consumed })
   elseif _was_on_menu then
     PLAYSFX 'denied'
     SWITCHER.push(GS.ACTION_MENU, _route)
