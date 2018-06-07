@@ -1,7 +1,6 @@
 --DEPENDENCIES--
 local RES = require 'resources'
 local FONT = require 'view.helpers.font'
-local WINDOW = require 'view.helpers.window'
 local COLORS = require 'domain.definitions.colors'
 local Queue = require 'lux.common.Queue'
 
@@ -22,15 +21,12 @@ local _FADE_TIME = .5
 
 local _menu_font, _title_font
 local _width, _height
-local _menu_window
 
 local function _initFontValues()
   local g = love.graphics
   _title_font = _title_font or FONT.get("Title", _TITLE_FONT_SIZE)
   _menu_font = _menu_font or FONT.get("Text", _MENU_FONT_SIZE)
   _width, _height = g.getDimensions()
-  _menu_window = WINDOW.getTexture(320, 212)
-  print(_menu_window)
 end
 
 
@@ -48,10 +44,6 @@ end
 local function _renderOptions(g, q, selection, scrolltop)
   g.push()
   g.translate(0, _height/2)
-  g.push()
-  g.translate(-60, -40)
-  g.draw(_menu_window, 0, 0)
-  g.pop()
   _menu_font:set()
   _menu_font:setLineHeight(_LH)
   local count = 0
