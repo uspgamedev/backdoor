@@ -35,7 +35,8 @@ function SPRITEFX.apply(sectorview, args)
       body_sprite:render(x, y, ...)
       y = y - _TILE_H/2 - animation_info.y
       _font:set()
-      local transparency = COLORS.NEUTRAL * Color:new {1, 1, 1, animation_info.a}
+      local transparency = COLORS.NEUTRAL
+                         * Color:new {1, 1, 1, animation_info.a}
       g.setColor(COLORS.DARK * transparency)
       g.printf(number_text, x + 2, y + 2,
                _TILE_W, 'center')
