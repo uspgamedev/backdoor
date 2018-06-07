@@ -182,6 +182,7 @@ end
 
 function View:removeConsume()
   self.exp_gained = self.exp_gained - 1
+  self.exp_gained_offset = -10
 end
 
 function View:draw()
@@ -314,16 +315,19 @@ function View:drawGainedEXP(g)
   if self.exp_gained > 0 then
     local font = FONT.get("Text", 24)
     local str = ("+%d"):format(self.exp_gained)
-    local x, y = 100, g.getHeight()-100-font:getHeight(str)
+    local x, y = 100, g.getHeight()-143-font:getHeight(str)
 
     font:set()
-    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], self.exp_gained_alpha)
+    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3],
+               self.exp_gained_alpha)
     g.print(str, x, y - 1 + self.exp_gained_offset)
-    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], self.exp_gained_alpha)
+    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3],
+               self.exp_gained_alpha)
     g.print(str, x, y - 3 + self.exp_gained_offset)
 
     if self.exp_gained_offset < 0 then
-      self.exp_gained_offset = math.min(0, self.exp_gained_offset + offset_speed*love.timer.getDelta())
+      self.exp_gained_offset = math.min(0, self.exp_gained_offset +
+                                           offset_speed*love.timer.getDelta())
     end
   end
 end
