@@ -22,18 +22,20 @@ local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
 local _PI = math.pi
-local _CONSUME_TEXT = "consume (+1 EXP)"
+local _CONSUME_TEXT = "consume (+%d EXP)"
 local _WIDTH, _HEIGHT
 local _CW, _CH
 
 -- LOCAL VARS
 local _font
+local _otherfont
 
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get("TextBold", 21)
+  _otherfont = FONT.get("Text", 21)
   _CW = CARD.getWidth()
   _CH = CARD.getHeight()
 end
@@ -271,7 +273,8 @@ function View:drawArrow(g, enter)
 
   g.translate(0, -text_height*.5)
   g.setColor(1, 1, 1, enter)
-  g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
+  g.printf(_CONSUME_TEXT:format(self.exp_gained), -text_width/2, 0, text_width,
+           "center")
 
   g.translate(0, text_height*1.0)
   self:drawHoldBar(g)
@@ -287,6 +290,9 @@ function View:drawCardDesc(g, card, enter)
   g.setColor(COLORS.NEUTRAL)
   g.line(-_WIDTH/3, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, _WIDTH/3, 0)
+  _otherfont.set()
+  g.print("Keep", maxw + _PD, -1.5 * _otherfont:getHeight())
+  g.print("Consume", maxw + _PD, 0.5 * _otherfont:getHeight())
 
   g.push()
   g.translate(-maxw, -CARD.getInfoHeight(3)/2)

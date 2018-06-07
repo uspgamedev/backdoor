@@ -19,15 +19,15 @@ local function _next()
 end
 
 local function _confirm()
-  if not _view:isLocked() then _leave = true end
+  _leave = true
 end
 
 local function _cancel()
-  if not _view:isLocked() then _leave = true end
+  _leave = true
 end
 
 function state:enter(from, actor)
-  _view = ManageBufferView({"UP"})
+  _view = ManageBufferView()
   if actor:getBackBufferSize() > 0 then
     _leave = false
     _view:addElement("HUD")
@@ -49,7 +49,7 @@ function state:update(dt)
 
   if _leave or _view:isCardListEmpty() then
     PLAYSFX 'back-menu'
-    SWITCHER.pop({consumed = _view:getConsumeLog()})
+    SWITCHER.pop()
   else
 
     if DIRECTIONALS.wasDirectionTriggered('LEFT') then

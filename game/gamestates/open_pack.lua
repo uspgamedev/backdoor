@@ -103,8 +103,9 @@ function state:update(dt)
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
-    elseif DIRECTIONALS.wasDirectionTriggered('UP')
-           or DIRECTIONALS.wasDirectionTriggered('DOWN') then
+    elseif _status == "choosing_card" and
+           (DIRECTIONALS.wasDirectionTriggered('UP') or
+            DIRECTIONALS.wasDirectionTriggered('DOWN')) then
       _toggle()
     elseif INPUT.wasActionPressed('CANCEL') then
       _cancel()
