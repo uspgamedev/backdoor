@@ -1,18 +1,30 @@
 {
-  "name":"Anything",
   "image":"card-rage",
   "cards":[{
-      "set":"upgrades_common",
-      "drop":80
-    },{
-      "drop":60,
+      "drop":80,
       "set":"upgrades_common"
     },{
       "set":"upgrades_common",
-      "drop":40
+      "drop":60
     },{
-      "set":"consumables",
-      "drop":80
+      "drop":40,
+      "set":"upgrades_common"
+    },{
+      "drop":80,
+      "set":"consumables"
+    },{
+      "drop":90,
+      "set":"consumables"
+    },{
+      "drop":90,
+      "set":"consumables"
+    },{
+      "drop":90,
+      "set":"consumables"
+    },{
+      "drop":90,
+      "set":"consumables"
     }],
-  "description":false
+  "name":"Anything",
+  "description":""
 }

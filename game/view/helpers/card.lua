@@ -27,9 +27,10 @@ end
 
 --Draw a card starting its upper left corner on given x,y values
 --Alpha is a float value between [0,1] applied to all graphics
-function CARD.draw(card, x, y, focused, alpha)
+function CARD.draw(card, x, y, focused, alpha, scale)
   if not _is_init then _init() end
   alpha = alpha or 1
+  scale = scale or 1
   --Draw card background
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[card:getRelatedAttr()])
@@ -37,7 +38,7 @@ function CARD.draw(card, x, y, focused, alpha)
   local typewidth = _info_font:getWidth(card:getType())
   local pd = 12
   g.push()
-
+  g.scale(scale, scale)
 
   if focused then
     -- shine!

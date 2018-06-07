@@ -5,12 +5,12 @@ local DEFS = require 'domain.definitions'
 local PACK = require 'domain.pack'
 local PLAYSFX = require 'helpers.playsfx'
 local PackView = require 'view.packlist'
-local CardView = require 'view.cardlist'
+local CardView = require 'view.consumelist'
 
 local state = {}
 
 local _card_list_view
-local _pack_list_view
+local _pack
 local _leave
 local _status
 local _pack_index
@@ -26,14 +26,18 @@ local function _next()
   _card_list_view:selectNext()
 end
 
+local function _toggle()
+  _card_list_view:toggleSelected()
+end
+
 local function _confirm()
   if _status == "choosing_pack" then
     _status = "choosing_card"
-    _pack_list_view = PACK.generatePackFrom(_card_list_view:getChosenPack())
+    _pack = PACK.generatePackFrom(_card_list_view:getChosenPack())
     _pack_index = _card_list_view:getSelection()
     _card_list_view:close()
     _card_list_view = CardView({"UP"})
-    _card_list_view:open(_pack_list_view)
+    _card_list_view:open(_pack)
     _card_list_view:addElement("HUD")
   elseif not _card_list_view:isLocked() then
     _card_list_view:collectCards(function() _leave = true end)
@@ -48,7 +52,7 @@ end
 
 function state:enter(from, packlist)
   _status = "choosing_pack"
-  _pack_list_view = nil
+  _pack = nil
   _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
     _card_list_view:addElement("HUD")
@@ -81,7 +85,7 @@ function state:update(dt)
     PLAYSFX 'back-menu'
     SWITCHER.pop({
       consumed = _card_list_view:getConsumeLog(),
-      pack = _pack_list_view,
+      pack = _pack,
       pack_index = _pack_index
     })
   else
@@ -91,6 +95,9 @@ function state:update(dt)
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
       _next()
+    elseif DIRECTIONALS.wasDirectionTriggered('UP')
+           or DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      _toggle()
     elseif _status == "choosing_card" and INPUT.wasActionPressed('CONFIRM') then
       _confirm()
     elseif INPUT.wasActionPressed('CANCEL') then
