@@ -20,23 +20,27 @@ local _TILE_W = 8
 local _TILE_H = 8
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 24
-local _MINIMAP_ALPHA = 180 / 255
+local _TILE_COLORS = {
+  [SCHEMATICS.WALL]  = Color.fromInt {200, 128,  50},
+  [SCHEMATICS.FLOOR] = Color.fromInt { 50, 128, 255},
+  [SCHEMATICS.EXIT]  = Color.fromInt {200, 200,  40},
+}
 
-local _PD = 8
-local _MG = 24
-local _PANEL_IN_WIDTH = 320-2*_PD-2*_MG
+local _PANEL_MG = 24
+local _PANEL_PD = 8
+local _PANEL_WIDTH
+local _PANEL_HEIGHT
+local _PANEL_INNERWIDTH
 
 local _exptext, _statstext, _difficultytext, _buffertext
-local _width, _height, _font
+local _WIDTH, _HEIGHT, _font
 local _display_handle
-local _tile_colors = {}
 local _tile_mesh
-local _panelgeom
 
 
 local function _initGraphicValues()
   local g = love.graphics
-  _width, _height = g.getDimensions()
+  _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get(_FONT_NAME, _FONT_SIZE)
   _exptext = "EXP: %d"
   _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
@@ -44,22 +48,21 @@ local function _initGraphicValues()
   _difficultytext = "Danger Level: %d"
   _buffertext = "%d cards in buffer\n%d in backbuffer\n%d in hand\n%d in total"
   _display_handle = "toggle_show_hide_actorview"
-  _tile_colors = {
-    [SCHEMATICS.WALL] = Color.fromInt {200, 128, 50},
-    [SCHEMATICS.FLOOR] = Color.fromInt {50, 128, 255},
-    [SCHEMATICS.EXIT] = Color.fromInt {200, 200, 40},
-  }
-  _tile_mesh = g.newMesh(4, "fan", "dynamic")
-  _tile_mesh:setVertex(1, 0, 0, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(2, _TILE_W, 0, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
-  _tile_mesh:setVertex(4, 0, _TILE_H, 0, 0, 1, 1, 1, _MINIMAP_ALPHA)
 
   -- panel
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
-  ACTOR_PANEL.init(_PANEL_WIDTH, _PANEL_HEIGHT, _MG)
-  ACTOR_HEADER.init(_PANEL_WIDTH, _MG, _PD)
+  _PANEL_INNERWIDTH = _PANEL_WIDTH - 2*_PANEL_PD - 2*_PANEL_MG
+  ACTOR_PANEL.init(_PANEL_WIDTH, _PANEL_HEIGHT, _PANEL_MG)
+  -- header
+  ACTOR_HEADER.init(_PANEL_WIDTH, _PANEL_MG, _PANEL_PD)
+  -- minimap
+  _tile_mesh = g.newMesh(4, "fan", "dynamic")
+  _tile_mesh:setVertex(1,       0,       0, 0, 0, 1, 1, 1)
+  _tile_mesh:setVertex(2, _TILE_W,       0, 0, 0, 1, 1, 1)
+  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1)
+  _tile_mesh:setVertex(4,       0, _TILE_H, 0, 0, 1, 1, 1)
+  --
 end
 
 function ActorView:init(route)
@@ -112,7 +115,7 @@ end
 function ActorView:drawPanel(g)
   g.setColor(COLORS.NEUTRAL)
   g.translate(3/4*g.getWidth(), 0)
-  ACTOR_PANEL.draw(g, -_MG*2, -_MG)
+  ACTOR_PANEL.draw(g, -_PANEL_MG*2, -_PANEL_MG)
 end
 
 function ActorView:drawHP(g, actor)
@@ -121,9 +124,9 @@ function ActorView:drawHP(g, actor)
   local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
   -- character name
   FONT.set("TextBold", 24)
-  g.translate(_MG, _MG)
+  g.translate(_PANEL_MG, _PANEL_MG)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(actor:getTitle(), 0, -8, _PANEL_IN_WIDTH, "left")
+  g.printf(actor:getTitle(), 0, -8, _PANEL_INNERWIDTH, "left")
   -- character hp & pp
   g.translate(0, 48)
   ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
@@ -149,7 +152,7 @@ function ActorView:drawHandCountDown(g, actor)
   font:set()
   g.push()
   g.origin()
-  g.translate(40, _height - y + fh + handbar_height*2)
+  g.translate(40, _HEIGHT - y + fh + handbar_height*2)
   g.setLineWidth(1)
   g.setColor(COLORS.BLACK)
   g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
@@ -184,7 +187,7 @@ function ActorView:drawDifficulty(g)
   local str = _difficultytext:format(sector:getDifficulty())
   local w = _font:getWidth(str)
   g.push()
-  g.translate(_width - 40 - w, 40)
+  g.translate(_WIDTH - 40 - w, 40)
   g.printf(str, 0, 0, w, "right")
   g.pop()
 end
@@ -217,7 +220,7 @@ function ActorView:drawMiniMap(g, actor)
            _font:getWidth(zonename), "center")
   g.translate(- (w/2) * _TILE_W, _font:getHeight())
   for n=1,4 do
-    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, _MINIMAP_ALPHA*1)
+    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, 1)
   end
   for i = 0, h-1 do
     for j = 0, w-1 do
@@ -225,7 +228,7 @@ function ActorView:drawMiniMap(g, actor)
       local tile = tiles[ti][tj]
       if tile and fov[i+1][j+1] then
         local x, y = j*_TILE_W, i*_TILE_H
-        local cr,cg,cb = _tile_colors[tile.type]:unpack()
+        local cr,cg,cb = _TILE_COLORS[tile.type]:unpack()
         g.setColor(cr, cg, cb)
         g.draw(_tile_mesh, x, y)
         if ai == ti and aj == tj then
