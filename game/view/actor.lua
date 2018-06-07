@@ -7,8 +7,9 @@ local COLORS     = require 'domain.definitions.colors'
 local Color      = require 'common.color'
 local DEFS       = require 'domain.definitions'
 
-local ACTOR_PANEL = require 'view.actor.panel'
+local ACTOR_PANEL  = require 'view.actor.panel'
 local ACTOR_HEADER = require 'view.actor.header'
+local ACTOR_ATTR   = require 'view.actor.attr'
 
 local math = require 'common.math'
 
@@ -32,9 +33,9 @@ local _PANEL_WIDTH
 local _PANEL_HEIGHT
 local _PANEL_INNERWIDTH
 
-local _exptext, _statstext, _difficultytext, _buffertext
-local _WIDTH, _HEIGHT, _font
-local _display_handle
+local _WIDTH, _HEIGHT
+local _exptext, _statstext
+local _font
 local _tile_mesh
 
 
@@ -42,13 +43,8 @@ local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get(_FONT_NAME, _FONT_SIZE)
-  _exptext = "EXP: %d"
+  _exptext = "Available EXP: %02d"
   _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
-  _actor_text = "HP: %d/%d"
-  _difficultytext = "Danger Level: %d"
-  _buffertext = "%d cards in buffer\n%d in backbuffer\n%d in hand\n%d in total"
-  _display_handle = "toggle_show_hide_actorview"
-
   -- panel
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
@@ -62,7 +58,8 @@ local function _initGraphicValues()
   _tile_mesh:setVertex(2, _TILE_W,       0, 0, 0, 1, 1, 1)
   _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1)
   _tile_mesh:setVertex(4,       0, _TILE_H, 0, 0, 1, 1, 1)
-  --
+  -- attributes
+  ACTOR_ATTR.init(_PANEL_WIDTH)
 end
 
 function ActorView:init(route)
@@ -100,7 +97,6 @@ function ActorView:draw()
   self:drawMiniMap(g, actor)
   self:drawHandCountDown(g, actor)
   self:drawAttributes(g, actor)
-  self:drawBuffers(g, actor)
   g.pop()
 
   -- only visible when holding button
@@ -170,6 +166,7 @@ function ActorView:drawHandCountDown(g, actor)
 end
 
 function ActorView:drawAttributes(g, actor)
+  g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
   g.push()
   local cor = actor:getCOR()
   local arc = actor:getARC()
@@ -182,28 +179,6 @@ function ActorView:drawAttributes(g, actor)
   g.pop()
 end
 
-function ActorView:drawDifficulty(g)
-  local sector = self.route.getCurrentSector()
-  local str = _difficultytext:format(sector:getDifficulty())
-  local w = _font:getWidth(str)
-  g.push()
-  g.translate(_WIDTH - 40 - w, 40)
-  g.printf(str, 0, 0, w, "right")
-  g.pop()
-end
-
-function ActorView:drawBuffers(g, actor)
-  g.push()
-  g.translate(40, 40 + 8.5*_font:getHeight())
-  local buffer_size = actor:getBufferSize()
-  local back_buffer_size = actor:getBackBufferSize()
-  local hand_size = actor:getHandSize()
-  local str = _buffertext:format(buffer_size, back_buffer_size, hand_size,
-                                 buffer_size + back_buffer_size + hand_size)
-  g.print(str, 0, 0)
-  g.pop()
-end
-
 function ActorView:drawMiniMap(g, actor)
   local sector = self.route.getCurrentSector()
   local w, h = sector:getDimensions()
@@ -212,6 +187,7 @@ function ActorView:drawMiniMap(g, actor)
   local zonename = sector:getZoneName()
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = actor:getFov(sector)
+  g.translate(0, 48)
   g.push()
   g.setColor(nr, ng, nb, 1)
   g.translate(320, 20)

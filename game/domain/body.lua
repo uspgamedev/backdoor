@@ -128,6 +128,10 @@ function Body:getAttribute(which)
   return math.max(1,self:applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
+function Body:getAptitude(which)
+  return self:getSpec(which:lower())
+end
+
 function Body:updateAttr(which)
   self.attr_lv[which] = APT.ATTR_LEVEL(self, which)
 end

@@ -154,6 +154,10 @@ function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end
 
+function Actor:getAptitude(which)
+  return self:getSpec(which:lower())
+end
+
 function Actor:getAttrLevel(which)
   return self.attr_lv[which]
 end
