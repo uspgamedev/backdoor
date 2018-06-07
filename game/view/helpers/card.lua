@@ -121,6 +121,15 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.pop()
 end
 
+function CARD.getInfoHeight(lines)
+  _title_font:setLineHeight(1.5)
+  return _text_font:getHeight() * _text_font:getLineHeight() * lines
+end
+
+function CARD.getInfoWidth(card, width)
+  return _text_font:getWrap(card:getDescription(), width)
+end
+
 function CARD.getWidth()
   if not _is_init then _init() end
   return _card_base:getWidth()

@@ -225,7 +225,7 @@ function View:drawCards(g, enter)
     local focus = selection == i
     local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
-    local consumed = self.consumed[i] and 2*_HEIGHT/7 or 0
+    local consumed = self.consumed[i] and 4*_HEIGHT/7 or 0
 
     -- smooth offset when consuming cards
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
@@ -233,7 +233,7 @@ function View:drawCards(g, enter)
     g.translate((_CW+_PD)*(i-1+offset), consumed)
     g.translate(0, self.y_offset[i])
     CARD.draw(card_list[i], 0, 0, focus,
-              dist>0 and enter/dist or enter, 0.8)
+              dist>0 and enter/dist or enter, 0.9)
     g.pop()
   end
   g.pop()
@@ -241,7 +241,7 @@ function View:drawCards(g, enter)
   -- draw selection
   g.push()
   g.translate(math.round(_WIDTH/2),
-              math.round(3*_HEIGHT/7-_CH/2))
+              math.round(_HEIGHT/2))
   enter = self.text
   if enter > 0 then
     self:drawArrow(g, enter)
@@ -284,8 +284,12 @@ end
 
 function View:drawCardDesc(g, card, enter)
   g.push()
-  g.translate(-1.5*_CW, _CH+_PD)
-  CARD.drawInfo(card, 0, 0, 4*_CW, enter)
+  g.setLineWidth(2)
+  local maxw = 4*_CW
+  g.line(-_WIDTH/3, 0, -maxw/2 - _PD, 0)
+  g.line(maxw/2 + _PD, 0, _WIDTH/3, 0)
+  g.translate(-2.0*_CW, -CARD.getInfoHeight(3)/2)
+  CARD.drawInfo(card, 0, 0, maxw, enter)
   g.pop()
 end
 
