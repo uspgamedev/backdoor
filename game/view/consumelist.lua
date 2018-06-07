@@ -21,7 +21,6 @@ local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
-local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _CONSUME_TEXT = "consume (+1 EXP)"
 local _WIDTH, _HEIGHT
@@ -57,7 +56,9 @@ function View:init(hold_actions)
   self.text = 0
   self.selection = 1
   self.cursor = 0
-  self.y_offset = {}
+  self.buffered_offset = {}
+  self.consumed_offset = {}
+  self.card_alpha = {}
   self.move = self.selection
   self.offsets = {}
   self.card_list = _EMPTY
@@ -68,6 +69,7 @@ function View:init(hold_actions)
   self.exp_gained_offset = 0
   self.exp_gained_alpha = 1
   self.ready_to_leave = false
+  self.is_leaving = false
 
   _initGraphicValues()
 end
@@ -82,7 +84,9 @@ function View:open(card_list)
   self.holdbar:unlock()
   self.selection = math.ceil(#card_list/2)
   for i=1,#card_list do
-    self.y_offset[i] = 0
+    self.buffered_offset[i] = 0
+    self.consumed_offset[i] = 0
+    self.card_alpha[i] = 1
     self.consumed[i] = false
   end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
@@ -100,23 +104,6 @@ function View:close()
                   self.card_list = _EMPTY
                   self:destroy()
                 end)
-end
-
-function View:collectCards()
-  self.holdbar:lock()
-  self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
-                self, {text=0}, "in-quad")
-  for i = 1, #self.card_list do
-    self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  i*3/60 + .05,
-                  function()
-                    self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                  "tween", .3, self.y_offset,
-                                  {[i] = _MAX_Y_OFFSET}, "in-back")
-                  end)
-  end
-  self:addTimer("finish_collection", MAIN_TIMER, "after",
-                0.65, function() self.card_list = _EMPTY end)
 end
 
 function View:selectPrev(n)
@@ -137,32 +124,32 @@ function View:setSelection(n)
   self.selection = n
 end
 
-function View:updateSelection()
-  local selection = self.selection
-  local card_list_size = #self.card_list
-  for i = selection, card_list_size do
-    self.offsets[i] = 1
+function View:startLeaving()
+  self.holdbar:lock()
+  self.is_leaving = true
+  self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
+                self, {text=0}, "in-quad")
+  for i = 1, #self.card_list do
+    self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
+                  i*3/60 + .05,
+                  function()
+                    if not self.consumed[i] then
+                      self:addTimer("getting_card_"..i, MAIN_TIMER,
+                                    "tween", .3, self.buffered_offset,
+                                    {[i] = -_WIDTH}, "in-back")
+                    else
+                      self:addTimer("consuming_card_off"..i, MAIN_TIMER,
+                                    "tween", .3, self.consumed_offset,
+                                    {[i] = 30}, "in-quad")
+                      self:addTimer("consuming_card_alpha"..i, MAIN_TIMER,
+                                    "tween", .3, self.card_alpha,
+                                    {[i] = 0}, "in-quad")
+                    end
+                  end)
   end
-  self.selection = math.min(selection, card_list_size)
-end
+  self:addTimer("finish_collection", MAIN_TIMER, "after",
+                0.65, function() self.ready_to_leave = true end)
 
-function View:popSelectedCard()
-  local card = table.remove(self.card_list, self.selection)
-  table.insert(self.consumed, {
-    card = card,
-    consumation = 0,
-  })
-  local index = #self.consumed
-  local holdbar = self.holdbar
-  holdbar:lock()
-  self:addTimer(_CONSUMED_TIMER..index, MAIN_TIMER, "tween",
-                _ENTER_SPEED, self.consumed[index], {consumation=1},
-                "out-quad", function()
-                              holdbar:unlock()
-                              table.remove(self.consumed, index)
-                            end)
-
-  return self.selection, card
 end
 
 function View:isReadyToLeave()
@@ -244,9 +231,9 @@ function View:drawCards(g, enter)
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), consumed)
-    g.translate(0, self.y_offset[i])
-    CARD.draw(card_list[i], 0, 0, focus,
-              dist>0 and enter/dist or enter, 0.9)
+    g.translate(self.buffered_offset[i],self.consumed_offset[i])
+    CARD.draw(card_list[i], 0, 0, focus and not self.is_leaving,
+              dist>0 and enter/dist*self.card_alpha[i] or enter*self.card_alpha[i], 0.9)
     g.pop()
   end
   g.pop()
@@ -313,23 +300,10 @@ function View:drawCardDesc(g, card, enter)
   g.pop()
 end
 
-function View:drawConsumed(g, enter)
-  local consumed = self.consumed
-
-  g.push()
-  g.translate(math.round(_WIDTH/2-_CW/2), math.round(3*_HEIGHT/7-_CH/2))
-
-  for i, info in ipairs(consumed) do
-    local consumation = info.consumation
-    CARD.draw(info.card, 0, -_CH*info.consumation, false, enter*(1-info.consumation))
-  end
-
-  g.pop()
-end
 
 function View:drawHoldBar(g)
   if self.holdbar:update() then
-    self.ready_to_leave = true
+    self:startLeaving()
   end
   self.holdbar:draw(0, 0)
 end

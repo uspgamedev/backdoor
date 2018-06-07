@@ -48,6 +48,14 @@ local function _cancel()
   end
 end
 
+local function _consumeCards(consumed)
+  local count = 0
+  for _,i in ipairs(consumed) do
+    table.remove(_pack, i-count)
+    count = count + 1
+  end
+end
+
 function state:enter(from, packlist)
   _status = "choosing_pack"
   _pack = nil
@@ -82,11 +90,7 @@ function state:update(dt)
          (_leave or _card_list_view:isReadyToLeave()) then
     PLAYSFX 'back-menu'
     local consume_log = _card_list_view:getConsumeLog()
-    local count = 0
-    for _,i in ipairs(consume_log) do
-      table.remove(_pack, i-count)
-      count = count + 1
-    end
+    _consumeCards(consume_log)
     SWITCHER.pop({
       consumed = consume_log,
       pack = _pack,
