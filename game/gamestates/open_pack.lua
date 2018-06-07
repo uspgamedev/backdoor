@@ -36,11 +36,9 @@ local function _confirm()
     _pack = PACK.generatePackFrom(_card_list_view:getChosenPack())
     _pack_index = _card_list_view:getSelection()
     _card_list_view:close()
-    _card_list_view = CardView({"UP"})
+    _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
     _card_list_view:addElement("HUD")
-  elseif not _card_list_view:isLocked() then
-    _card_list_view:collectCards(function() _leave = true end)
   end
 end
 
@@ -81,10 +79,16 @@ function state:update(dt)
       pack_index = nil,
     })
   elseif _status == "choosing_card" and
-         (_leave or _card_list_view:isCardListEmpty()) then
+         (_leave or _card_list_view:isReadyToLeave()) then
     PLAYSFX 'back-menu'
+    local consume_log = _card_list_view:getConsumeLog()
+    local count = 0
+    for _,i in ipairs(consume_log) do
+      table.remove(_pack, i-count)
+      count = count + 1
+    end
     SWITCHER.pop({
-      consumed = _card_list_view:getConsumeLog(),
+      consumed = consume_log,
       pack = _pack,
       pack_index = _pack_index
     })
@@ -98,8 +102,6 @@ function state:update(dt)
     elseif DIRECTIONALS.wasDirectionTriggered('UP')
            or DIRECTIONALS.wasDirectionTriggered('DOWN') then
       _toggle()
-    elseif _status == "choosing_card" and INPUT.wasActionPressed('CONFIRM') then
-      _confirm()
     elseif INPUT.wasActionPressed('CANCEL') then
       _cancel()
     end

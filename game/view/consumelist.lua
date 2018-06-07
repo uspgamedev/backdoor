@@ -67,6 +67,7 @@ function View:init(hold_actions)
   self.exp_gained = 0
   self.exp_gained_offset = 0
   self.exp_gained_alpha = 1
+  self.ready_to_leave = false
 
   _initGraphicValues()
 end
@@ -164,24 +165,36 @@ function View:popSelectedCard()
   return self.selection, card
 end
 
-function View:isCardListEmpty()
-  return #self.card_list == 0
+function View:isReadyToLeave()
+  return self.ready_to_leave
 end
 
 function View:toggleSelected()
+  if self.consumed[self.selection] then
+    self:removeConsume()
+  else
+    self:addConsume()
+  end
   self.consumed[self.selection] = not self.consumed[self.selection]
 end
 
-function View:consumeCard()
-  local idx, card = self:popSelectedCard()
-  self:updateSelection()
-  self.exp_gained = self.exp_gained + 1
-  self.exp_gained_offset = -10
-  table.insert(self.consume_log, idx)
+function View:getConsumeLog()
+  local t = {}
+  for i, consumed in ipairs(self.consumed) do
+    if consumed then
+      table.insert(t,i)
+    end
+  end
+  return t
 end
 
-function View:getConsumeLog()
-  return self.consume_log or _EMPTY
+function View:addConsume()
+  self.exp_gained = self.exp_gained + 1
+  self.exp_gained_offset = -10
+end
+
+function View:removeConsume()
+  self.exp_gained = self.exp_gained - 1
 end
 
 function View:draw()
@@ -244,7 +257,6 @@ function View:drawCards(g, enter)
               math.round(_HEIGHT/2))
   enter = self.text
   if enter > 0 then
-    self:drawArrow(g, enter)
     if card_list[selection] then
       self:drawCardDesc(g, card_list[selection], enter)
     end
@@ -269,27 +281,35 @@ function View:drawArrow(g, enter)
   _font.set()
   text_height = _font:getHeight()*lh
 
-  g.translate(0, -_PD - text_height*2.5)
-  self:drawHoldBar(g)
-
-  g.translate(0, text_height*.5)
+  g.translate(0, -text_height*.5)
   g.setColor(1, 1, 1, enter)
   g.printf(_CONSUME_TEXT, -text_width/2, 0, text_width, "center")
 
-  g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)
-  g.polygon("fill", 0, 0, _ARRSIZE/2, -_ARRSIZE, _ARRSIZE, 0)
+  g.translate(0, text_height*1.0)
+  self:drawHoldBar(g)
 
   g.pop()
 end
 
 function View:drawCardDesc(g, card, enter)
   g.push()
+
   g.setLineWidth(2)
-  local maxw = 4*_CW
-  g.line(-_WIDTH/3, 0, -maxw/2 - _PD, 0)
-  g.line(maxw/2 + _PD, 0, _WIDTH/3, 0)
-  g.translate(-2.0*_CW, -CARD.getInfoHeight(3)/2)
+  local maxw = 2*_CW
+  g.setColor(COLORS.NEUTRAL)
+  g.line(-_WIDTH/3, 0, -maxw - _PD, 0)
+  g.line(maxw + _PD, 0, _WIDTH/3, 0)
+
+  g.push()
+  g.translate(-maxw, -CARD.getInfoHeight(3)/2)
   CARD.drawInfo(card, 0, 0, maxw, enter)
+  g.pop()
+
+  g.push()
+  g.translate(maxw/2, 0)
+  self:drawArrow(g, enter)
+  g.pop()
+
   g.pop()
 end
 
@@ -309,7 +329,7 @@ end
 
 function View:drawHoldBar(g)
   if self.holdbar:update() then
-    --self:consumeCard()
+    self.ready_to_leave = true
   end
   self.holdbar:draw(0, 0)
 end
