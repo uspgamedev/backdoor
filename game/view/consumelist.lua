@@ -316,19 +316,17 @@ function View:drawHoldBar(g)
 end
 
 
-function View:drawGainedEXP(g)
+function View:drawGainedEXP(g, enter)
   local offset_speed = 120
   if self.exp_gained > 0 then
-    local font = FONT.get("Text", 24)
+    local font = FONT.get("Text", 20)
     local str = ("+%d"):format(self.exp_gained)
-    local x, y = 100, g.getHeight()-143-font:getHeight(str)
+    local x, y = 3/4*g.getWidth()+120, g.getHeight()/2 + 2
 
     font:set()
-    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3],
-               self.exp_gained_alpha)
+    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], self.enter)
     g.print(str, x, y - 1 + self.exp_gained_offset)
-    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3],
-               self.exp_gained_alpha)
+    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], self.enter)
     g.print(str, x, y - 3 + self.exp_gained_offset)
 
     if self.exp_gained_offset < 0 then

@@ -119,7 +119,7 @@ function state:enter(pre, route_data)
 
   -- hand view
   _view.hand = HandView(_route)
-  _view.hand:addElement("HUD", nil, "hand_view")
+  _view.hand:addElement("HUD_BG", nil, "hand_view")
   Signal.register(
     "actor_draw",
     function(actor, card)
@@ -135,11 +135,11 @@ function state:enter(pre, route_data)
 
   -- Actor view
   _view.actor = ActorView(_route)
-  _view.actor:addElement("HUD")
+  _view.actor:addElement("HUD_BG")
 
   -- Widget view
   _view.widget = WidgetView(_route)
-  _view.widget:addElement("HUD")
+  _view.widget:addElement("HUD_BG")
 
   -- GUI
   _gui = GUI(_view.sector)

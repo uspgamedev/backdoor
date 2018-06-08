@@ -34,7 +34,6 @@ local _PANEL_HEIGHT
 local _PANEL_INNERWIDTH
 
 local _WIDTH, _HEIGHT
-local _exptext, _statstext
 local _font
 local _tile_mesh
 
@@ -43,8 +42,6 @@ local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = FONT.get(_FONT_NAME, _FONT_SIZE)
-  _exptext = "Available EXP: %02d"
-  _statstext = "STATS\nCOR: %d\nARC: %d\nANI: %d\nSPD: %d\nDEF: %dd%d"
   -- panel
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
@@ -130,8 +127,12 @@ function ActorView:drawHP(g, actor)
 end
 
 function ActorView:drawAttributes(g, actor)
+  FONT.set("Text", 20)
   g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
   g.push()
+  g.setColor(COLORS.NEUTRAL)
+  g.printf(("EXP: %02d"):format(actor:getExp()), 0, -32,
+           _PANEL_INNERWIDTH - _PANEL_MG)
   ACTOR_ATTR.draw(g, actor, 'COR')
   g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
   ACTOR_ATTR.draw(g, actor, 'ARC')
@@ -149,6 +150,8 @@ function ActorView:drawMiniMap(g, actor)
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = actor:getFov(sector)
   g.translate(0, 48)
+  g.setColor(COLORS.BACKGROUND)
+  g.rectangle("fill", 0, 0, _PANEL_INNERWIDTH, 192)
   g.push()
   g.setColor(nr, ng, nb, 1)
   g.translate(320, 20)
