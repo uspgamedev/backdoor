@@ -167,6 +167,10 @@ function Actor:getAttribute(which)
                         :applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
+function Actor:getAttrUpgrade(which)
+  return self.upgrades[which]
+end
+
 function Actor:updateAttr(which)
   self.attr_lv[which] = DEFS.APT.ATTR_LEVEL(self, which)
 end

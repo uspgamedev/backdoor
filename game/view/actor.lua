@@ -59,7 +59,7 @@ local function _initGraphicValues()
   _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1)
   _tile_mesh:setVertex(4,       0, _TILE_H, 0, 0, 1, 1, 1)
   -- attributes
-  ACTOR_ATTR.init(_PANEL_WIDTH)
+  ACTOR_ATTR.init(_PANEL_INNERWIDTH)
 end
 
 function ActorView:init(route)
@@ -168,14 +168,11 @@ end
 function ActorView:drawAttributes(g, actor)
   g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
   g.push()
-  local cor = actor:getCOR()
-  local arc = actor:getARC()
-  local ani = actor:getANI()
-  local spd = actor:getSPD()
-  local def = actor:getBody():getDEF()
-  local base_def = actor:getBody():getBaseDEF()
-  g.translate(40, 40)
-  g.print(_statstext:format(cor, arc, ani, spd, def, base_def))
+  ACTOR_ATTR.draw(g, actor, 'COR')
+  g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
+  ACTOR_ATTR.draw(g, actor, 'ARC')
+  g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
+  ACTOR_ATTR.draw(g, actor, 'ANI')
   g.pop()
 end
 
