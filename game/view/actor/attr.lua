@@ -37,7 +37,7 @@ function ATTR.draw(g, actor, attrname)
   g.printf({ COLORS.NEUTRAL, attrname .. ": ",
              color,  ("%02d"):format(val) }, 0, 0, _barwidth, "left")
   g.translate(0, 32)
-  g.setColor(COLORS.DARK)
+  g.setColor(COLORS.EMPTY)
   g.rectangle("fill", 0, 0, _barwidth, 16)
   g.setColor(COLORS[attrname])
   g.rectangle("fill", 0, 0, percent*_barwidth, 16)

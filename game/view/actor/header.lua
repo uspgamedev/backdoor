@@ -25,7 +25,7 @@ function HEADER.drawBar(g, attrname, current, max, color_full, color_empty)
 
   FONT.set("Text", 20)
   g.push()
-  g.setColor(COLORS.DARK)
+  g.setColor(COLORS.EMPTY)
   g.rectangle("fill", 0, 0, _LENGTH, 12)
   g.translate(-1, -1)
   g.setColor(state*color_full + (1-state)*color_empty)
