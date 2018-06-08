@@ -23,9 +23,9 @@ function APT.ATTR_LEVEL(owner, which)
   local lv = 0
   local required = 0
   repeat
+    lv = lv + 1
     required = required +
                APT.REQUIRED_ATTR_UPGRADE(owner:getAptitude(which), lv)
-    lv = lv + 1
   until owner.upgrades[which] < required
   return lv-1
 end
