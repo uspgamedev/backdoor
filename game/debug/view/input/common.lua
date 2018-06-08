@@ -89,7 +89,7 @@ inputs.range = _makeCommon(
   function(value, field)
     assert(field.max, "No 'max' field in range input.")
     assert(field.min, "No 'min' field in range input.")
-    value = max(0, min(field.max, value or 0))
+    value = max(field.min, min(field.max, value or field.min))
     local newvalue, changed = IMGUI.SliderInt("", value, field.min, field.max)
     return newvalue, changed
   end
