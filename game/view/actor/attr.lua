@@ -33,13 +33,6 @@ function ATTR.draw(g, actor, attrname)
                 or COLORS.NEUTRAL
   FONT.set("Text", 20)
   g.push()
-  printf([=[%s:
-  current: %d (%03.02f%%)
-  previous: %d
-  next: %d
-  level %d
-  apt: %d
-  ]=], attrname, upgrade, 100*percent, total_prev, total_next, lvl, aptitude)
   g.setColor(COLORS.NEUTRAL)
   g.printf({ COLORS.NEUTRAL, attrname .. ": ",
              color,  ("%02d"):format(val) }, 0, 0, _barwidth, "left")

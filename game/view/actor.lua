@@ -95,7 +95,6 @@ function ActorView:draw()
   self:drawPanel(g)
   self:drawHP(g, actor)
   self:drawMiniMap(g, actor)
-  self:drawHandCountDown(g, actor)
   self:drawAttributes(g, actor)
   g.pop()
 
@@ -128,41 +127,6 @@ function ActorView:drawHP(g, actor)
   ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
   g.translate(0, 32)
   ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
-end
-
-function ActorView:drawHandCountDown(g, actor)
-  -- draw hand countdown
-  local handcountdown = actor:getHandCountdown()
-  local current = self.hand_count_down or 0
-  local y = 144
-  current = current + (handcountdown - current) * 0.2
-  if math.abs(current - handcountdown) < 1 then
-    current = handcountdown
-  end
-  self.hand_count_down = current
-  local handbar_percent = current / ACTIONDEFS.HAND_DURATION
-  local handbar_width = 492
-  local handbar_height = 12
-  local font = FONT.get("Text", 18)
-  local fh = font:getHeight()*font:getLineHeight()
-  font:set()
-  g.push()
-  g.origin()
-  g.translate(40, _HEIGHT - y + fh + handbar_height*2)
-  g.setLineWidth(1)
-  g.setColor(COLORS.BLACK)
-  g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
-  g.setColor(COLORS.DARK)
-  g.rectangle('fill', 0, 0, handbar_width/2, handbar_height)
-  g.setColor(COLORS.WARNING)
-  g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
-  g.translate(0, -18)
-  g.setColor(COLORS.BLACK)
-  g.print("Hand Duration", 0, 0)
-  g.translate(-1, -1)
-  g.setColor(COLORS.NEUTRAL)
-  g.print("Hand Duration", 0, 0)
-  g.pop()
 end
 
 function ActorView:drawAttributes(g, actor)

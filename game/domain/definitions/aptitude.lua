@@ -14,7 +14,6 @@ function APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(apt, lv)
   local required = 0
   for i = 1, lv do
     required = required + APT.REQUIRED_ATTR_UPGRADE(apt, i)
-    print(i,'/',lv, required)
   end
   return required
 end
