@@ -10,6 +10,15 @@ function APT.REQUIRED_ATTR_UPGRADE(apt, lv)
   return math.ceil((15 - 1.5*apt) ^ (1 + lv/10))
 end
 
+function APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(apt, lv)
+  local required = 0
+  for i = 1, lv do
+    required = required + APT.REQUIRED_ATTR_UPGRADE(apt, i)
+    print(i,'/',lv, required)
+  end
+  return required
+end
+
 function APT.ATTR_LEVEL(owner, which)
   local lv = 0
   local required = 0

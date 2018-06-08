@@ -15,27 +15,32 @@ function ATTR.init(width)
 end
 
 function ATTR.draw(g, actor, attrname)
-  local attrlvl = actor:getAttrLevel(attrname)
-  local attrval = actor:getAttribute(attrname)
-  local attrupgrade = actor:getAttrUpgrade(attrname)
-  local attraptitude = actor:getAptitude(attrname)
-  local required_next = APT.REQUIRED_ATTR_UPGRADE(attraptitude, attrlvl)
-  local required_prev = APT.REQUIRED_ATTR_UPGRADE(attraptitude, attrlvl-1)
-  local current = _states[attrname] or required_prev
-  current = current + (attrupgrade - current)/8
-  if abs(current - attrupgrade) < 1 then current = attrupgrade end
+  local lvl = actor:getAttrLevel(attrname)
+  local val = actor:getAttribute(attrname)
+  local diff = val - lvl
+  local upgrade = actor:getAttrUpgrade(attrname)
+  local aptitude = actor:getAptitude(attrname)
+  local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl-1)
+  local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl)
+  local current = _states[attrname] or total_prev
+  current = current + (upgrade - current)/8
+  if abs(current - upgrade) < 1 then current = upgrade end
   _states[attrname] = current
-  local percent = (current - required_prev) / (required_next - required_prev)
+  local percent = (current - total_prev) / (total_next - total_prev)
+  local color = (diff > 0 and COLORS.VALID) or (diff < 0 and COLORS.WARNING)
+                or COLORS.NEUTRAL
   FONT.set("Text", 20)
   g.push()
+  printf([=[%s:
+  current: %d (%03.02f%%)
+  previous: %d
+  next: %d
+  level %d
+  apt: %d
+  ]=], attrname, upgrade, 100*percent, total_prev, total_next, lvl, aptitude)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(
-    {
-      COLORS.NEUTRAL, attrname .. ": ",
-      (attrval < attrlvl and COLORS.WARNING) or
-      (attrval > attrlvl and COLORS.VALID) or
-      COLORS.NEUTRAL,  ("%02d"):format(attrval),
-    }, 0, 0, _barwidth, "left")
+  g.printf({ COLORS.NEUTRAL, attrname .. ": ",
+             color,  ("%02d"):format(val) }, 0, 0, _barwidth, "left")
   g.translate(0, 32)
   g.setColor(COLORS.DARK)
   g.rectangle("fill", 0, 0, _barwidth, 16)
