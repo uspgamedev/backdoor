@@ -20,8 +20,8 @@ function ATTR.draw(g, actor, attrname)
   local diff = val - lvl
   local upgrade = actor:getAttrUpgrade(attrname)
   local aptitude = actor:getAptitude(attrname)
-  local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl-1)
-  local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl)
+  local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl)
+  local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl+1)
   local current = _states[attrname] or total_prev
   current = current + (upgrade - current)/8
   if abs(current - upgrade) < 1 then current = upgrade end
@@ -45,7 +45,7 @@ function ATTR.draw(g, actor, attrname)
   g.setColor(COLORS.DARK)
   g.rectangle("fill", 0, 0, _barwidth, 16)
   g.setColor(COLORS[attrname])
-  g.rectangle("fill", 0, 0, 0.5*_barwidth, 16)
+  g.rectangle("fill", 0, 0, percent*_barwidth, 16)
   g.pop()
 end
 
