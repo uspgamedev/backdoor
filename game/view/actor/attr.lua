@@ -4,6 +4,8 @@ local COLORS = require 'domain.definitions.colors'
 local FONT   = require 'view.helpers.font'
 
 local abs = math.abs
+local min = math.min
+local max = math.max
 
 local _barwidth
 local _states = {}
@@ -23,7 +25,7 @@ function ATTR.draw(g, actor, attrname)
   local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl)
   local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl+1)
   local current = _states[attrname] or total_prev
-  current = current + (upgrade - current)/8
+  current = min(total_next, max(total_prev, current + (upgrade - current)/8))
   if abs(current - upgrade) < 1 then current = upgrade end
   _states[attrname] = current
   local percent = (current - total_prev) / (total_next - total_prev)
