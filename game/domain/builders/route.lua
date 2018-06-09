@@ -1,4 +1,5 @@
 
+local RUNFLAGS        = require 'infra.runflags'
 local RANDOM          = require 'common.random'
 local IDGenerator     = require 'common.idgenerator'
 local SECTORS_BUILDER = require 'domain.builders.sectors'
@@ -39,7 +40,7 @@ local _ROUTE_NAMES = {
 }
 
 function BUILDER.build(route_id, player_info)
-  RANDOM.setSeed(RANDOM.generateSeed())
+  RANDOM.setSeed(RUNFLAGS.SEED or RANDOM.generateSeed())
   local idgenerator = IDGenerator()
   local data = {}
   player_info.name = _ROUTE_NAMES[RANDOM.safeGenerate(#_ROUTE_NAMES)]
