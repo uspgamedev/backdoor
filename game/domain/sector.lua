@@ -338,7 +338,7 @@ function Sector:removeDeadBodies()
         local drops_table = {}
         local drops = body:getDrops()
         for _,drop in ipairs(drops) do
-          if love.math.random(101)-1 < drop["droprate"] then
+          if RANDOM.generate(101)-1 < drop["droprate"] then
             table.insert(drops_table, drop["droptype"])
           end
         end
@@ -414,7 +414,7 @@ function Sector:isValid(i, j)
 end
 
 function Sector:randomValidTile()
-  local rand = love.math.random
+  local rand = RANDOM.generate
   local i, j
   repeat
     i, j = rand(self.h), rand(self.w)
@@ -423,7 +423,7 @@ function Sector:randomValidTile()
 end
 
 function Sector:randomNeighbor(i, j, allow_bodies)
-  local rand = love.math.random
+  local rand = RANDOM.generate
   repeat
     local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
     i = math.max(1, math.min(self.h, i+di))
