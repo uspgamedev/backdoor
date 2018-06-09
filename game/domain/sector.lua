@@ -425,10 +425,11 @@ end
 function Sector:randomNeighbor(i, j, allow_bodies)
   local rand = RANDOM.generate
   repeat
-    local di, dj = 2*(1 - rand(2)) + 1, 2*(1 - rand(2)) + 1
+    local di, dj = rand(-1, 1), rand(-1, 1)
     i = math.max(1, math.min(self.h, i+di))
     j = math.max(1, math.min(self.w, j+dj))
-  until allow_bodies or not self.bodies[i][j]
+  until not (di == dj and di == 0) and
+        allow_bodies or not self.bodies[i][j]
   return i, j
 end
 
