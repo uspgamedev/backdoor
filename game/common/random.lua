@@ -1,14 +1,25 @@
 
+local RUNFLAGS = require 'infra.runflags'
+
 --HELPERS--
 local floor = math.floor
 
 --LOCALS--
 local RANDOM = {}
 local _rng = love.math.newRandomGenerator()
+local _safe = love.math.random
 
 --METHODS--
 function RANDOM.safeGenerate(e, d)
-  return love.math.random(e, d)
+  return _safe(e, d)
+end
+
+function RANDOM.setSafeSeed(safeseed)
+  love.math.setRandomSeed(safeseed)
+end
+
+function RANDOM.getSafeSeed()
+  return love.math.getRandomSeed()
 end
 
 function RANDOM.generate(e, d)
@@ -72,8 +83,6 @@ end
 function RANDOM.setState(state)
   return _rng:setState(state)
 end
-
-love.math.setRandomSeed(RANDOM.generateSeed())
 
 return RANDOM
 
