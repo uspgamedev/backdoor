@@ -4,7 +4,6 @@ local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
 local Queue = require 'lux.common.Queue'
 
-
 --CLASS VIEW--
 local StartMenuView = Class{
   __includes = { ELEMENT }

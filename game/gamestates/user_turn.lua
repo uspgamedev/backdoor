@@ -25,7 +25,6 @@ local _task
 local _route
 local _next_action
 local _view
-local _extended_hud
 
 local _long_walk
 local _adjacency = {}
@@ -130,16 +129,6 @@ local function _continueLongWalk()
   return true
 end
 
---[[ HUD Functions ]]--
-
-local function _showHUD()
-  return _view.actor:show()
-end
-
-local function _hideHUD()
-  return _view.actor:hide()
-end
-
 --[[ State Methods ]]--
 
 function state:init()
@@ -197,71 +186,54 @@ function state:update(dt)
     return
   end
 
-  if INPUT.isActionDown("ACTION_4") and not _extended_hud then
-    _extended_hud = true
-    _long_walk = false
-    _showHUD()
-  elseif _extended_hud and not INPUT.isActionDown("ACTION_4") then
-    _extended_hud = false
-    _hideHUD()
-  end
-
-  if _extended_hud then
-    if DIRECTIONALS.wasDirectionTriggered('UP') then
-      _view.widget:scrollUp()
-    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-      _view.widget:scrollDown()
-    end
-  else
-    local action_request
-    for _,dir in ipairs(DIR) do
-      if DIRECTIONALS.wasDirectionTriggered(dir) then
-        if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
-          _startLongWalk(dir)
-          break
-        end
-        action_request = {DEFS.ACTION.MOVE, dir}
+  local action_request
+  for _,dir in ipairs(DIR) do
+    if DIRECTIONALS.wasDirectionTriggered(dir) then
+      if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
+        _startLongWalk(dir)
         break
       end
+      action_request = {DEFS.ACTION.MOVE, dir}
+      break
     end
-
-    if INPUT.wasActionPressed('CONFIRM') then
-      action_request = {DEFS.ACTION.INTERACT}
-    elseif INPUT.wasActionPressed('CANCEL') then
-      action_request = {DEFS.ACTION.IDLE}
-    elseif INPUT.wasActionPressed('SPECIAL') then
-      action_request = {DEFS.ACTION.USE_SIGNATURE}
-    elseif INPUT.wasActionPressed('ACTION_1') then
-      action_request = {DEFS.ACTION.PLAY_CARD}
-    elseif INPUT.wasActionPressed('ACTION_2') then
-      action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
-    elseif INPUT.wasActionPressed('ACTION_3') then
-      action_request = {DEFS.ACTION.RECEIVE_PACK}
-    elseif INPUT.wasActionPressed('EXTRA') then
-      action_request = _OPEN_MENU
-    elseif INPUT.wasActionPressed('PAUSE') then
-      action_request = _SAVE_QUIT
-    end
-
-    -- execute action
-    if _long_walk then
-      if not action_request and _continueLongWalk() then
-        _startTask(DEFS.ACTION.MOVE, _long_walk)
-      else
-        _long_walk = false
-      end
-    elseif action_request == _OPEN_MENU then
-      PLAYSFX 'open-menu'
-      SWITCHER.push(GS.ACTION_MENU, _route)
-      return
-    elseif action_request == _SAVE_QUIT then
-      _save_and_quit = true
-      return
-    elseif action_request then
-      _startTask(unpack(action_request))
-    end
-
   end
+
+  if INPUT.wasActionPressed('CONFIRM') then
+    action_request = {DEFS.ACTION.INTERACT}
+  elseif INPUT.wasActionPressed('CANCEL') then
+    action_request = {DEFS.ACTION.IDLE}
+  elseif INPUT.wasActionPressed('SPECIAL') then
+    action_request = {DEFS.ACTION.USE_SIGNATURE}
+  elseif INPUT.wasActionPressed('ACTION_1') then
+    action_request = {DEFS.ACTION.PLAY_CARD}
+  elseif INPUT.wasActionPressed('ACTION_2') then
+    action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
+  elseif INPUT.wasActionPressed('ACTION_3') then
+    action_request = {DEFS.ACTION.RECEIVE_PACK}
+  elseif INPUT.wasActionPressed('EXTRA') then
+    action_request = _OPEN_MENU
+  elseif INPUT.wasActionPressed('PAUSE') then
+    action_request = _SAVE_QUIT
+  end
+
+  -- execute action
+  if _long_walk then
+    if not action_request and _continueLongWalk() then
+      _startTask(DEFS.ACTION.MOVE, _long_walk)
+    else
+      _long_walk = false
+    end
+  elseif action_request == _OPEN_MENU then
+    PLAYSFX 'open-menu'
+    SWITCHER.push(GS.ACTION_MENU, _route)
+    return
+  elseif action_request == _SAVE_QUIT then
+    _save_and_quit = true
+    return
+  elseif action_request then
+    _startTask(unpack(action_request))
+  end
+
 
   Util.destroyAll()
 

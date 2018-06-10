@@ -1,5 +1,6 @@
 
 local math = require 'common.math'
+local vec3 = require 'cpml'.vec3
 
 local Color = require 'lux.prototype' :new { __type = 'color' }
 
@@ -13,9 +14,7 @@ function Color:__init()
     local ccode = self[i]
     local ccode_type = type(ccode)
     self[i] = ccode or 1
-    assert(type(ccode == 'number') and ccode >= 0 and ccode <= 1,
-           ("Invalid color ccode %s:%s"):format(ccode, ccode_type) ..
-           "Colors are represented with normalized floats (between 0 and 1).")
+    assert(type(ccode == 'number'), "Cannot create color using non-number value!")
   end
 end
 
@@ -39,13 +38,17 @@ function Color.__add(a, b)
   if type(a) == 'table' and type(b) == 'table'
      and a.__type == 'color' and b.__type == 'color' then
     return Color:new {
-      math.max(1, a[1] + b[1]),
-      math.max(1, a[2] + b[2]),
-      math.max(1, a[3] + b[3]),
-      math.max(1, a[4] + b[4]),
+      math.min(1, a[1] + b[1]),
+      math.min(1, a[2] + b[2]),
+      math.min(1, a[3] + b[3]),
+      math.min(1, a[4] + b[4]),
     }
   end
   return _err_type_mismatch(a, b, '+')
+end
+
+function Color.__sub(a, b)
+  return Color.__add(a, -1*b)
 end
 
 function Color:__tostring()

@@ -5,10 +5,10 @@ return {
   "suit",
   "tool",
   "accessory",
-  weapon = "Weapon",
-  offhand = "Off Hand",
-  suit = "Suit",
-  tool = "Tool",
-  accessory = "Accessory",
+  weapon    = "Wpn",
+  offhand   = "Off",
+  suit      = "Suit",
+  tool      = "Tool",
+  accessory = "Acc",
 }
 

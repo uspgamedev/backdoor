@@ -128,6 +128,10 @@ function Body:getAttribute(which)
   return math.max(1,self:applyStaticOperators(which, self:getAttrLevel(which)))
 end
 
+function Body:getAptitude(which)
+  return self:getSpec(which:lower())
+end
+
 function Body:updateAttr(which)
   self.attr_lv[which] = APT.ATTR_LEVEL(self, which)
 end
@@ -202,7 +206,7 @@ end
 
 --[[ Widget methods ]]--
 
-function Body:isEquipped(place)
+function Body:getEquipmentAt(place)
   return place and self.equipped[place]
 end
 
@@ -210,7 +214,7 @@ function Body:equip(place, card)
   if not place then return end
   -- check if placement is being used
   -- if it is, then remove card from that slot
-  if self:isEquipped(place) then
+  if self:getEquipmentAt(place) then
     local index
     for i,widget in ipairs(self.widgets) do
       if widget == self.equipped[place] then

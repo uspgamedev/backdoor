@@ -1,7 +1,8 @@
 
-local FONT = require 'view.helpers.font'
-local CARD = require 'view.helpers.card'
-local COLORS = require 'domain.definitions.colors'
+local FONT       = require 'view.helpers.font'
+local CARD       = require 'view.helpers.card'
+local EXP        = require 'view.helpers.exp'
+local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
 
 local math = require 'common.math'
@@ -128,8 +129,47 @@ function HandView:draw()
     if self.focus_index == i then
       local infox = self.x + 5*gap + 20
       CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
+      EXP.drawNeededEXP(g, card)
     end
   end
+
+  self:drawHandCountDown(g, self.route.getControlledActor())
+end
+
+function HandView:drawHandCountDown(g, actor)
+  if not actor then return end
+  -- draw hand countdown
+  local handcountdown = actor:getHandCountdown()
+  local current = self.hand_count_down or 0
+  local y = 144
+  current = current + (handcountdown - current) * 0.2
+  if math.abs(current - handcountdown) < 1 then
+    current = handcountdown
+  end
+  self.hand_count_down = current
+  local handbar_percent = current / ACTIONDEFS.HAND_DURATION
+  local handbar_width = 492
+  local handbar_height = 12
+  local font = FONT.get("Text", 18)
+  local fh = font:getHeight()*font:getLineHeight()
+  font:set()
+  g.push()
+  g.origin()
+  g.translate(40, _HEIGHT - y + fh + handbar_height*2)
+  g.setLineWidth(1)
+  g.setColor(COLORS.BLACK)
+  g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
+  g.setColor(COLORS.DARK)
+  g.rectangle('fill', 0, 0, handbar_width/2, handbar_height)
+  g.setColor(COLORS.WARNING)
+  g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
+  g.translate(0, -18)
+  g.setColor(COLORS.BLACK)
+  g.print("Hand Duration", 0, 0)
+  g.translate(-1, -1)
+  g.setColor(COLORS.NEUTRAL)
+  g.print("Hand Duration", 0, 0)
+  g.pop()
 end
 
 function HandView:addCard(actor, card)

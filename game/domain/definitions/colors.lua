@@ -7,6 +7,7 @@ COLORS.NEUTRAL = Color.fromInt {0xff, 0xff, 0xff, 0xff}
 COLORS.TRANSP = Color.fromInt {0xff, 0xff, 0xff, 0x00}
 COLORS.SEMITRANSP = Color.fromInt {0xff, 0xff, 0xff, 0x80}
 COLORS.BLACK = Color.fromInt {0x00, 0x00, 0x00, 0xff}
+COLORS.VOID = Color.fromInt {0, 0, 0, 0}
 COLORS.HALF_VISIBLE = Color.fromInt {0x80, 0x80, 0x80, 0xff}
 COLORS.DARK = Color.fromInt {0x1f, 0x1f, 0x1f, 0xff}
 COLORS.BACKGROUND = Color.fromInt {50, 80, 80, 255}
@@ -14,9 +15,10 @@ COLORS.EXIT = Color.fromInt {0x77, 0xba, 0x99, 0xff}
 COLORS.FLOOR1 = Color.fromInt {25, 73, 95, 0xff}
 COLORS.FLOOR2 = Color.fromInt {25, 73, 95 + 20, 0xff}
 
+COLORS.EMPTY = Color:new {0.2, .15, 0.05}
+COLORS.WARNING = Color:new {1, 0.8, 0.2, 1}
+COLORS.VALID = Color:new {0, 0.7, 1, 1}
 COLORS.NOTIFICATION = Color.fromInt {0xD9, 0x53, 0x4F, 0xff}
-COLORS.WARNING = Color.fromInt {0xF0, 0xAD, 0x4E, 0xff}
-COLORS.VALID = Color.fromInt {0x00, 0x7b, 0xff, 0xff}
 COLORS.SUCCESS = Color.fromInt {0x33, 0xAA, 0x3F, 0xff}
 
 COLORS.STASH = Color.fromInt {0x41, 0x6e, 0x8e, 0xff}
@@ -25,6 +27,7 @@ COLORS.PLAY  = Color.fromInt {0xa3, 0x78, 0x71, 0xff}
 COLORS.COR = Color.fromInt {0xbe, 0x76, 0x3a, 0xff}
 COLORS.ARC = Color.fromInt {0x6e, 0x60, 0xaa, 0xff}
 COLORS.ANI = Color.fromInt {0x77, 0xb9, 0x55, 0xff}
+COLORS.PP = Color.fromInt {153, 51, 153, 255}
 
 return COLORS
 

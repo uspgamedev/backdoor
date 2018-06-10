@@ -154,6 +154,10 @@ function Actor:modifyExpBy(n)
   self.exp = math.max(0, self.exp + n)
 end
 
+function Actor:getAptitude(which)
+  return self:getSpec(which:lower())
+end
+
 function Actor:getAttrLevel(which)
   return self.attr_lv[which]
 end
@@ -161,6 +165,10 @@ end
 function Actor:getAttribute(which)
   return math.max(1,self:getBody()
                         :applyStaticOperators(which, self:getAttrLevel(which)))
+end
+
+function Actor:getAttrUpgrade(which)
+  return self.upgrades[which]
 end
 
 function Actor:updateAttr(which)
