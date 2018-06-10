@@ -16,9 +16,9 @@ COLORS.FLOOR1 = Color.fromInt {25, 73, 95, 0xff}
 COLORS.FLOOR2 = Color.fromInt {25, 73, 95 + 20, 0xff}
 
 COLORS.EMPTY = Color:new {0.2, .15, 0.05}
+COLORS.WARNING = Color:new {1, 0.8, 0.2, 1}
+COLORS.VALID = Color:new {0, 0.7, 1, 1}
 COLORS.NOTIFICATION = Color.fromInt {0xD9, 0x53, 0x4F, 0xff}
-COLORS.WARNING = Color.fromInt {0xF0, 0xAD, 0x4E, 0xff}
-COLORS.VALID = Color.fromInt {0x00, 0x7b, 0xff, 0xff}
 COLORS.SUCCESS = Color.fromInt {0x33, 0xAA, 0x3F, 0xff}
 
 COLORS.STASH = Color.fromInt {0x41, 0x6e, 0x8e, 0xff}

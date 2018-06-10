@@ -119,10 +119,27 @@ end
 function ActorView:drawAttributes(g, actor)
   FONT.set("Text", 20)
   g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
+
+  -- exp
   g.push()
+  g.translate(0, -32)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(("EXP: %02d"):format(actor:getExp()), 0, -32,
-           _PANEL_INNERWIDTH - _PANEL_MG)
+  g.print(("EXP: %02d"):format(actor:getExp()), 0, 0)
+
+  -- packs
+  local packcount = actor:getPrizePackCount()
+  local packcolor = packcount > 0 and COLORS.VALID or COLORS.NEUTRAL
+  local packstr = {
+    COLORS.NEUTRAL, "PACKS: ",
+    packcolor, ("%02d"):format(packcount)
+  }
+  g.translate(_PANEL_INNERWIDTH/2 - 24, 0)
+  g.setColor(COLORS.NEUTRAL)
+  g.print(packstr, 0, 0)
+  g.pop()
+
+  -- attributes
+  g.push()
   ACTOR_ATTR.draw(g, actor, 'COR')
   g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
   ACTOR_ATTR.draw(g, actor, 'ARC')
