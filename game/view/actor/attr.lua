@@ -21,8 +21,6 @@ local delta = love.timer.getDelta
 local _dt
 local _barwidth
 local _font
-local _rot = 0
-local _particles = {}
 local _states = {}
 
 local function _newParticleSource()
@@ -40,9 +38,8 @@ local function _newParticleSource()
   return particles
 end
 
-local function _renderAttribute(data)
+local function _renderAttribute(actor, attrname, particles)
   local g = love.graphics
-  local actor, attrname, particles = unpack(data)
   local progress = 0
   local lvl = actor:getAttrLevel(attrname)
   while true do
@@ -101,8 +98,9 @@ function ATTR.draw(g, actor, attrname)
     particles = _newParticleSource()
   }
   local particles = attrstate.particles
-  local data = {actor, attrname, particles}
-  local _, rawlvl, offset, percent, rise = assert(coresume(attrstate.co, data))
+  local _, rawlvl, offset, percent, rise = assert(
+    coresume(attrstate.co, actor, attrname, particles)
+  )
   actorstate[attrname] = attrstate
   _states[actor] = actorstate
 
@@ -139,8 +137,7 @@ function ATTR.draw(g, actor, attrname)
   g.rectangle("fill", 0, 0, percent*_barwidth, 16)
   g.setColor(COLORS.NEUTRAL)
   g.pop()
-  --_rot = fmod(_rot - 0.5*pi*_dt, 2*pi)
-  g.draw(particles, 48, -_font:getHeight()/2, _rot)
+  g.draw(particles, 48, -_font:getHeight()/2)
   g.pop()
 end
 

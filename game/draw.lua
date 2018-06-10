@@ -4,7 +4,9 @@ local CAM = require 'common.camera'
 local tween = require 'helpers.tween'
 local first_time = false
 
-local fade = 1
+local _GAMEFRAMEWIDTH = 960
+
+local _fade
 
 local draw = {}
 
@@ -17,7 +19,7 @@ function draw.allTables()
 
   DrawTable(DRAW_TABLE.BG)
 
-  CAM:attach(nil, nil, 960) --Start tracking camera
+  CAM:attach(nil, nil, _GAMEFRAMEWIDTH) --Start tracking camera
 
   DrawTable(DRAW_TABLE.L1)
 
@@ -30,14 +32,14 @@ function draw.allTables()
   DrawTable(DRAW_TABLE.HUD)
 
   if DEBUG and first_time then
-    fade = tween.start(0, 50, 5)
+    _fade = tween.start(0, 50, 5)
     first_time = false
   elseif not DEBUG and not first_time then
-    fade = tween.start(50, 0, 5)
+    _fade = tween.start(50, 0, 5)
     first_time = true
   end
   local g = love.graphics
-  g.setColor(1, 1, 1, fade()/255)
+  g.setColor(1, 1, 1, _fade()/255)
   g.rectangle('fill', 0, 0, g.getDimensions())
 
   DrawTable(DRAW_TABLE.GUI)

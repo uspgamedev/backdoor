@@ -7,10 +7,23 @@ local FONT       = require 'view.helpers.font'
 local min = math.min
 local max = math.max
 
+local _WIDTH, _HEIGHT
 local _TILE_W = 8
 local _TILE_H = 8
 local _RAD_W = _TILE_W/2
 local _RAD_H = _TILE_H/2
+local _TILE_POLYGON = {
+  0, 0,
+  1, 0,
+  1, 1,
+  0, 1,
+}
+local _BODY_POLYGON = {
+  0.5, 0,
+  1, 0.5,
+  0.5, 1,
+  0, 0.5,
+}
 
 local _TILE_COLORS = {
   [SCHEMATICS.WALL]  = Color:new {0.3, 0.5, 0.9, 1},
@@ -18,28 +31,13 @@ local _TILE_COLORS = {
   [SCHEMATICS.EXIT]  = Color.fromInt {200, 200,  40, 255},
 }
 
-local _width, _height
-local _tile
-local _body
 local _map
 
 local MINIMAP = {}
 
 function MINIMAP.init(width, height)
-  _width, _height = width, height
+  _WIDTH, _HEIGHT = width, height
   _map = love.graphics.newCanvas(width, height)
-  _tile = {
-    0, 0,
-    1, 0,
-    1, 1,
-    0, 1,
-  }
-  _body = {
-    0.5, 0,
-    1, 0.5,
-    0.5, 1,
-    0, 0.5,
-  }
   _font = FONT.get("Text", 20)
 end
 
@@ -59,10 +57,10 @@ function MINIMAP.draw(g, actor, sector)
     g.origin()
     g.clear()
     g.setColor(COLORS.EMPTY)
-    g.rectangle("fill", 0, 0, _width, _height)
+    g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
     g.setColor(COLORS.NEUTRAL)
-    local translation_x = -aj*_TILE_W + _width/2
-    local translation_y = -ai*_TILE_H + _height/2
+    local translation_x = -aj*_TILE_W + _WIDTH/2
+    local translation_y = -ai*_TILE_H + _HEIGHT/2
     g.translate(
       translation_x,
       translation_y
@@ -79,13 +77,13 @@ function MINIMAP.draw(g, actor, sector)
           g.push()
           g.setColor(_TILE_COLORS[tile.type])
           g.translate(x, y)
-          g.polygon("fill", _tile)
+          g.polygon("fill", _TILE_POLYGON)
           if ai == ti and aj == tj then
             g.setColor(COLORS.NEUTRAL)
-            g.polygon("fill", _body)
+            g.polygon("fill", _BODY_POLYGON)
           elseif seen > 0 and sector:getBodyAt(ti, tj) then
             g.setColor(1, 0.4, 0.1)
-            g.polygon("fill", _body)
+            g.polygon("fill", _BODY_POLYGON)
           end
           g.pop()
         end
@@ -97,12 +95,12 @@ function MINIMAP.draw(g, actor, sector)
   g.setColor(COLORS.NEUTRAL)
   g.draw(_map, 0, 0)
   g.push()
-  g.translate(2, _height-20)
+  g.translate(2, _HEIGHT-20)
   g.setColor(COLORS.BLACK)
-  g.printf(zonename:upper(), 0, 0, _width-8, "right")
+  g.printf(zonename:upper(), 0, 0, _WIDTH-8, "right")
   g.translate(-2, -2)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(zonename:upper(), 0, 0, _width-8, "right")
+  g.printf(zonename:upper(), 0, 0, _WIDTH-8, "right")
   g.pop()
 end
 

@@ -10,13 +10,13 @@ local _OFFSET_SPEED = 120
 
 local _card
 local _offset = 0
-local _darkcolor = COLORS.DARK
-local _positivecolor = COLORS.VALID
-local _negativecolor = COLORS.WARNING
+local _DARKCOLOR = COLORS.DARK
+local _POSITIVECOLOR = COLORS.VALID
+local _NEGATIVECOLOR = COLORS.WARNING
 
 local function _drawEXP(g, exptext, color)
   local x, y = 3/4*g.getWidth()+120, g.getHeight()/2 + 2
-  local dr, dg, db = _darkcolor:unpack()
+  local dr, dg, db = _DARKCOLOR:unpack()
   local red, green, blue = color:unpack()
   local alpha = (_offset+15)/15
   FONT.set("Text", 20)
@@ -50,7 +50,7 @@ function GAINED.drawNeededEXP(g, card)
   _checkChangedCard(card)
   if exp then
     local exptext = ("-%d"):format(exp)
-    _drawEXP(g, exptext, _negativecolor)
+    _drawEXP(g, exptext, _NEGATIVECOLOR)
     _updateOffset()
   end
 end

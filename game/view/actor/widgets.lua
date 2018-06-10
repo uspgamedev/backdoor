@@ -5,9 +5,9 @@ local COLORS     = require 'domain.definitions.colors'
 local FONT       = require 'view.helpers.font'
 
 local _font
-local _mg = 24
-local _pd = 4
-local _sqrsize = 36
+local _MG = 24
+local _PD = 4
+local _SQRSIZE = 36
 
 local _widgetgetter
 local _widgetstring = {
@@ -64,7 +64,7 @@ function WIDGETS.draw(g, actor, wtype)
   local widgets = _widgetgetter[wtype](actor:getBody())
 
   -- set position
-  g.translate(0, _mg*2)
+  g.translate(0, _MG*2)
   g.setColor(COLORS.NEUTRAL)
   g.print(_widgetstring[wtype], 0, 0)
   g.translate(0, _font:getHeight())
@@ -72,21 +72,21 @@ function WIDGETS.draw(g, actor, wtype)
   for i = 1, 5 do
     -- draw the first 5 widgets
     g.push()
-    g.translate((i - 1) * (_sqrsize + _pd), 0)
+    g.translate((i - 1) * (_SQRSIZE + _PD), 0)
     g.setColor(COLORS.EMPTY)
-    g.rectangle("fill", 0, 0, _sqrsize, _sqrsize)
+    g.rectangle("fill", 0, 0, _SQRSIZE, _SQRSIZE)
     local widget = widgets[i]
     if widget then
       local icon = RES.loadTexture(widget:getIconTexture() or 'icon-none')
       local iw, ih = icon:getDimensions()
       icon:setFilter('linear', 'linear')
       g.setColor(COLORS[widget:getRelatedAttr()])
-      g.rectangle("fill", 0, 0, _sqrsize, _sqrsize)
+      g.rectangle("fill", 0, 0, _SQRSIZE, _SQRSIZE)
       g.setColor(COLORS.BLACK)
-      g.draw(icon, 0, 0, 0, _sqrsize/iw, _sqrsize/ih)
+      g.draw(icon, 0, 0, 0, _SQRSIZE/iw, _SQRSIZE/ih)
     elseif wtype == 1 then
       g.setColor(COLORS.BLACK)
-      g.printf(PLACEMENTS[PLACEMENTS[i]]:lower(), 0, 0, _sqrsize, "center")
+      g.printf(PLACEMENTS[PLACEMENTS[i]]:lower(), 0, 0, _SQRSIZE, "center")
     end
     g.pop()
   end
@@ -94,11 +94,11 @@ function WIDGETS.draw(g, actor, wtype)
   if widgets[6] then
     -- if there are more than 5 widgets
     g.push()
-    g.translate(5 * (_sqrsize + _pd), 0)
+    g.translate(5 * (_SQRSIZE + _PD), 0)
     g.setColor(COLORS.DARK)
-    g.rectangle("fill", 0, 0, _sqrsize, _sqrsize)
+    g.rectangle("fill", 0, 0, _SQRSIZE, _SQRSIZE)
     g.setColor(COLORS.NEUTRAL)
-    g.printf("...", 0, 0, _sqrsize, "center")
+    g.printf("...", 0, 0, _SQRSIZE, "center")
     g.pop()
   end
 end
