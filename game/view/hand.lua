@@ -1,7 +1,8 @@
 
-local FONT = require 'view.helpers.font'
-local CARD = require 'view.helpers.card'
-local COLORS = require 'domain.definitions.colors'
+local FONT       = require 'view.helpers.font'
+local CARD       = require 'view.helpers.card'
+local EXP        = require 'view.helpers.exp'
+local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
 
 local math = require 'common.math'
@@ -128,6 +129,7 @@ function HandView:draw()
     if self.focus_index == i then
       local infox = self.x + 5*gap + 20
       CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
+      EXP.drawNeededEXP(g, card)
     end
   end
 
