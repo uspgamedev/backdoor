@@ -1,48 +1,56 @@
 
 local RES     = require 'resources'
+local RANDOM  = require 'common.random'
 local APT     = require 'domain.definitions.aptitude'
 local COLORS  = require 'domain.definitions.colors'
 local FONT    = require 'view.helpers.font'
 local PLAYSFX = require 'helpers.playsfx'
 
-local abs = math.abs
-local min = math.min
-local max = math.max
+local abs  = math.abs
+local min  = math.min
+local max  = math.max
+local pi   = math.pi
+local fmod = math.fmod
+
 local coresume = coroutine.resume
 local cocreate = coroutine.create
-local coyield = coroutine.yield
+local coyield  = coroutine.yield
+
 local delta = love.timer.getDelta
 
 local _dt
 local _barwidth
 local _font
+local _rot = 0
 local _particles = {}
 local _states = {}
 
 local function _newParticleSource()
   local pixel = RES.loadTexture('pixel')
-  local particles = love.graphics.newParticleSystem(pixel, 64)
-  particles:setParticleLifetime(2)
-  particles:setSizeVariation(1)
-  particles:setRadialAcceleration(-16)
-  particles:setSpeed(128)
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.75)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(6)
+  particles:setSpeed(256)
+  particles:setSpread(2*pi)
   particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
-  particles:setEmissionArea("ellipse", 16, 16, 0, false)
-  particles:setSizes(2, 4)
+  particles:setSizes(4)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
   return particles
 end
 
-local function _renderAttribute(g, data)
+local function _renderAttribute(data)
+  local g = love.graphics
   local actor, attrname, particles = unpack(data)
   local progress = 0
-  local lvl = actor:getAttribute(attrname)
-  local rawlvl = actor:getAttrLevel(attrname)
+  local lvl = actor:getAttrLevel(attrname)
   while true do
     -- update bar progress
     local upgrade = actor:getAttrUpgrade(attrname)
     local aptitude = actor:getAptitude(attrname)
-    local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, rawlvl)
-    local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, rawlvl+1)
+    local total_prev = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl)
+    local total_next = APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(aptitude, lvl+1)
     local target = min(1 ,
       max(0, (upgrade - total_prev) / (total_next - total_prev))
     )
@@ -54,24 +62,26 @@ local function _renderAttribute(g, data)
     end
 
     -- check if level up
-    local newrawlvl = actor:getAttrLevel(attrname)
-    local step = (newrawlvl - rawlvl) / abs(newrawlvl - rawlvl)
-    if newrawlvl ~= rawlvl and progress == 1 then
-      PLAYSFX('get-item')
-      particles:emit(32)
-      local start = 0
-      while start <= 0.5 do
-        particles:emit(4)
-        start = start + _dt
-        coyield(rawlvl, lvl, progress)
-      end
-      rawlvl = rawlvl + step
+    local newlvl = actor:getAttrLevel(attrname)
+    local offset = newlvl - lvl
+    local step = offset / abs(offset)
+    if newlvl ~= lvl and progress == 1 then
       lvl = lvl + step
+      offset = offset - step
       progress = 0
+      particles:emit(48)
+      PLAYSFX('get-item')
+      local start = 0
+      local rand = RANDOM.safeGenerate
+      while start <= 0.5 do
+        g.translate(2*(rand()*2-1), 2*(rand()*2-1))
+        start = start + _dt
+        coyield(lvl, offset, progress, true)
+      end
     end
 
     -- yield
-    coyield(rawlvl, lvl, progress)
+    coyield(lvl, offset, progress)
   end
 end
 
@@ -83,6 +93,7 @@ function ATTR.init(width)
 end
 
 function ATTR.draw(g, actor, attrname)
+  g.push()
   _dt = delta()
   local actorstate = _states[actor] or {}
   local attrstate = actorstate[attrname] or {
@@ -91,38 +102,50 @@ function ATTR.draw(g, actor, attrname)
   }
   local particles = attrstate.particles
   local data = {actor, attrname, particles}
-  local _, rawlvl, lvl, percent = assert(coresume(attrstate.co, g, data))
+  local _, rawlvl, offset, percent, rise = assert(coresume(attrstate.co, data))
   actorstate[attrname] = attrstate
   _states[actor] = actorstate
 
 
   -- check if attribute is modified
+  local lvl = actor:getAttribute(attrname) - offset
   local diff = lvl - rawlvl
-  local color = (diff > 0 and COLORS.VALID) or (diff < 0 and COLORS.WARNING)
-                 or COLORS.NEUTRAL
+  local color = (diff > 0 and COLORS.VALID) or
+                (diff < 0 and COLORS.WARNING) or
+                COLORS.NEUTRAL
 
   -- render bar
   particles:update(_dt)
   _font:set()
-  g.push()
+  if rise then
+    g.setBlendMode('add')
+  end
   g.setColor(COLORS.NEUTRAL)
   g.printf(
     {
-      COLORS.NEUTRAL, attrname .. ": ",
-      color,          ("%02d"):format(lvl)
+      COLORS.NEUTRAL,
+      ("%s: "):format(attrname),
+      rise and COLORS.NEUTRAL or color,
+      ("%02d"):format(lvl)
     },
     0, 0, _barwidth, "left"
   )
   g.translate(0, 32)
   g.push()
-  g.setColor(COLORS.EMPTY)
+  if not rise then
+    g.setColor(COLORS.EMPTY)
+  end
   g.rectangle("fill", 0, 0, _barwidth, 16)
-  g.setColor(COLORS[attrname])
+  if not rise then 
+    g.setColor(COLORS[attrname])
+  end
   g.rectangle("fill", 0, 0, percent*_barwidth, 16)
   g.setColor(COLORS.NEUTRAL)
-  g.draw(particles, 32, -_font:getHeight()/2)
   g.pop()
+  --_rot = fmod(_rot - 0.5*pi*_dt, 2*pi)
+  g.draw(particles, 48, -_font:getHeight()/2, _rot)
   g.pop()
+  g.setBlendMode('alpha')
 end
 
 return ATTR
