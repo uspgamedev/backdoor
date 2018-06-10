@@ -9,8 +9,8 @@ local _MG = 24
 local _PD = 4
 local _SQRSIZE = 36
 
-local _widgetgetter
-local _widgetstring = {
+local _WIDGETGETTER
+local _WIDGETSTRING = {
   "PLACEMENTS",
   "TRAITS",
   "CONDITIONS",
@@ -53,7 +53,7 @@ local WIDGETS = {}
 
 function WIDGETS.init()
   _font = FONT.get("Text", 20)
-  _widgetgetter = {
+  _WIDGETGETTER = {
     _getPlacements,
     _getTraits,
     _getConditions
@@ -61,12 +61,12 @@ function WIDGETS.init()
 end
 
 function WIDGETS.draw(g, actor, wtype)
-  local widgets = _widgetgetter[wtype](actor:getBody())
+  local widgets = _WIDGETGETTER[wtype](actor:getBody())
 
   -- set position
   g.translate(0, _MG*2)
   g.setColor(COLORS.NEUTRAL)
-  g.print(_widgetstring[wtype], 0, 0)
+  g.print(_WIDGETSTRING[wtype], 0, 0)
   g.translate(0, _font:getHeight())
 
   for i = 1, 5 do
