@@ -100,10 +100,11 @@ function ActorView:drawHP(g, actor)
   local hp, pp = body:getHP(), actor:getPP()
   local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
   -- character name
-  FONT.set("TextBold", 24)
+  FONT.set("TextBold", 22)
   g.translate(_PANEL_MG, _PANEL_MG)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(actor:getTitle(), 0, -8, _PANEL_INNERWIDTH, "left")
+  g.print(("%s the %s"):format(self.route.getPlayerName(), actor:getTitle()),
+           0, -8)
   -- character hp & pp
   g.translate(0, 48)
   ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)

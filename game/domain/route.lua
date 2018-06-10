@@ -84,6 +84,10 @@ function Route:instance(obj)
     return state
   end
 
+  function obj.getPlayerName()
+    return _player_name
+  end
+
   function obj.getBehaviors()
     return _behaviors
   end
