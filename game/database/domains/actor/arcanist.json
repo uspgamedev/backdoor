@@ -5,7 +5,9 @@
   "cor":-4,
   "arc":4,
   "collection":false,
-  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
+  "spd":1,
+  "name":"Arcanist",
+  "ani":-2,
   "initial_buffer":[{
       "amount":1,
       "card":"teleport"
@@ -36,11 +38,6 @@
     },{
       "amount":1,
       "card":"soul_robe"
-    },{
-      "amount":4,
-      "card":"arc_1"
     }],
-  "ani":-2,
-  "name":"Arcanist",
-  "spd":1
+  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
 }

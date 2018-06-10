@@ -2,29 +2,18 @@
 local RES        = require 'resources'
 local FONT       = require 'view.helpers.font'
 local ACTIONDEFS = require 'domain.definitions.action'
-local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
-local Color      = require 'common.color'
 local DEFS       = require 'domain.definitions'
 
-local ACTOR_PANEL  = require 'view.actor.panel'
-local ACTOR_HEADER = require 'view.actor.header'
-local ACTOR_ATTR   = require 'view.actor.attr'
+local ACTOR_PANEL   = require 'view.actor.panel'
+local ACTOR_HEADER  = require 'view.actor.header'
+local ACTOR_ATTR    = require 'view.actor.attr'
+local ACTOR_MINIMAP = require 'view.actor.minimap'
 
 local math = require 'common.math'
 
 local ActorView = Class{
   __includes = { ELEMENT }
-}
-
-local _TILE_W = 8
-local _TILE_H = 8
-local _FONT_NAME = "Text"
-local _FONT_SIZE = 24
-local _TILE_COLORS = {
-  [SCHEMATICS.WALL]  = Color.fromInt {200, 128,  50},
-  [SCHEMATICS.FLOOR] = Color.fromInt { 50, 128, 255},
-  [SCHEMATICS.EXIT]  = Color.fromInt {200, 200,  40},
 }
 
 local _PANEL_MG = 24
@@ -34,14 +23,11 @@ local _PANEL_HEIGHT
 local _PANEL_INNERWIDTH
 
 local _WIDTH, _HEIGHT
-local _font
-local _tile_mesh
 
 
 local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
-  _font = FONT.get(_FONT_NAME, _FONT_SIZE)
   -- panel
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
@@ -50,11 +36,7 @@ local function _initGraphicValues()
   -- header
   ACTOR_HEADER.init(_PANEL_WIDTH, _PANEL_MG, _PANEL_PD)
   -- minimap
-  _tile_mesh = g.newMesh(4, "fan", "dynamic")
-  _tile_mesh:setVertex(1,       0,       0, 0, 0, 1, 1, 1)
-  _tile_mesh:setVertex(2, _TILE_W,       0, 0, 0, 1, 1, 1)
-  _tile_mesh:setVertex(3, _TILE_W, _TILE_H, 0, 0, 1, 1, 1)
-  _tile_mesh:setVertex(4,       0, _TILE_H, 0, 0, 1, 1, 1)
+  ACTOR_MINIMAP.init(_PANEL_INNERWIDTH, 192)
   -- attributes
   ACTOR_ATTR.init(_PANEL_INNERWIDTH)
 end
@@ -84,9 +66,6 @@ function ActorView:draw()
   if not actor then return end
   local cr,cg,cb = unpack(COLORS.NEUTRAL)
 
-  _font:set()
-  _font:setLineHeight(1)
-
   -- always visible
   g.push()
   self:drawPanel(g)
@@ -97,9 +76,11 @@ function ActorView:draw()
 
   -- only visible when holding button
   if DEV then
+    local font = FONT.get("Text", 20)
     local fps_str = ("fps: %d"):format(love.timer.getFPS())
+    font:set()
     g.setColor(1, 1, 1, 1)
-    g.print(fps_str, g.getWidth()- 40 - _font:getWidth(fps_str),
+    g.print(fps_str, g.getWidth()- 40 - font:getWidth(fps_str),
             g.getHeight() - 24)
   end
 end
@@ -126,6 +107,11 @@ function ActorView:drawHP(g, actor)
   ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
 end
 
+function ActorView:drawMiniMap(g, actor)
+  local sector = self.route.getCurrentSector()
+  ACTOR_MINIMAP.draw(g, actor, sector)
+end
+
 function ActorView:drawAttributes(g, actor)
   FONT.set("Text", 20)
   g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
@@ -138,46 +124,6 @@ function ActorView:drawAttributes(g, actor)
   ACTOR_ATTR.draw(g, actor, 'ARC')
   g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
   ACTOR_ATTR.draw(g, actor, 'ANI')
-  g.pop()
-end
-
-function ActorView:drawMiniMap(g, actor)
-  local sector = self.route.getCurrentSector()
-  local w, h = sector:getDimensions()
-  local ai, aj = actor:getPos()
-  local tiles = sector.tiles
-  local zonename = sector:getZoneName()
-  local nr, ng, nb = unpack(COLORS.NEUTRAL)
-  local fov = actor:getFov(sector)
-  g.translate(0, 48)
-  g.setColor(COLORS.BACKGROUND)
-  g.rectangle("fill", 0, 0, _PANEL_INNERWIDTH, 192)
-  g.push()
-  g.setColor(nr, ng, nb, 1)
-  g.translate(320, 20)
-  g.printf(zonename,
-           -_font:getWidth(zonename)/2, 0,
-           _font:getWidth(zonename), "center")
-  g.translate(- (w/2) * _TILE_W, _font:getHeight())
-  for n=1,4 do
-    _tile_mesh:setVertexAttribute(n, 3, 1, 1, 1, 1)
-  end
-  for i = 0, h-1 do
-    for j = 0, w-1 do
-      local ti, tj = i+1, j+1
-      local tile = tiles[ti][tj]
-      if tile and fov[i+1][j+1] then
-        local x, y = j*_TILE_W, i*_TILE_H
-        local cr,cg,cb = _TILE_COLORS[tile.type]:unpack()
-        g.setColor(cr, cg, cb)
-        g.draw(_tile_mesh, x, y)
-        if ai == ti and aj == tj then
-          g.setColor(1, 160/255, 40/255, 1)
-          g.circle("fill", x+_TILE_W/2, y+_TILE_H/2, _TILE_W/2, _TILE_H/2)
-        end
-      end
-    end
-  end
   g.pop()
 end
 

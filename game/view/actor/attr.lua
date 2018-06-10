@@ -117,9 +117,6 @@ function ATTR.draw(g, actor, attrname)
   -- render bar
   particles:update(_dt)
   _font:set()
-  if rise then
-    g.setBlendMode('add')
-  end
   g.setColor(COLORS.NEUTRAL)
   g.printf(
     {
@@ -145,7 +142,6 @@ function ATTR.draw(g, actor, attrname)
   --_rot = fmod(_rot - 0.5*pi*_dt, 2*pi)
   g.draw(particles, 48, -_font:getHeight()/2, _rot)
   g.pop()
-  g.setBlendMode('alpha')
 end
 
 return ATTR
