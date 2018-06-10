@@ -110,8 +110,8 @@ function ATTR.draw(g, actor, attrname)
   -- check if attribute is modified
   local lvl = actor:getAttribute(attrname) - offset
   local diff = lvl - rawlvl
-  local color = (diff > 0 and COLORS.VALID) or
-                (diff < 0 and COLORS.WARNING) or
+  local color = (diff > 0 and {0, 0.7, 1}) or
+                (diff < 0 and {1, 0.8, 0.2}) or
                 COLORS.NEUTRAL
 
   -- render bar
