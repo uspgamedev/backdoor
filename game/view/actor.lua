@@ -7,8 +7,9 @@ local DEFS       = require 'domain.definitions'
 
 local ACTOR_PANEL   = require 'view.actor.panel'
 local ACTOR_HEADER  = require 'view.actor.header'
-local ACTOR_ATTR    = require 'view.actor.attr'
 local ACTOR_MINIMAP = require 'view.actor.minimap'
+local ACTOR_ATTR    = require 'view.actor.attr'
+local ACTOR_WIDGETS = require 'view.actor.widgets'
 
 local math = require 'common.math'
 
@@ -39,6 +40,8 @@ local function _initGraphicValues()
   ACTOR_MINIMAP.init(_PANEL_INNERWIDTH, 192)
   -- attributes
   ACTOR_ATTR.init(_PANEL_INNERWIDTH)
+  -- widgets
+  ACTOR_WIDGETS.init()
 end
 
 function ActorView:init(route)
@@ -72,6 +75,7 @@ function ActorView:draw()
   self:drawHP(g, actor)
   self:drawMiniMap(g, actor)
   self:drawAttributes(g, actor)
+  self:drawWidgets(g, actor)
   g.pop()
 
   -- only visible when holding button
@@ -124,6 +128,15 @@ function ActorView:drawAttributes(g, actor)
   ACTOR_ATTR.draw(g, actor, 'ARC')
   g.translate(_PANEL_INNERWIDTH/4 + _PANEL_MG/2, 0)
   ACTOR_ATTR.draw(g, actor, 'ANI')
+  g.pop()
+end
+
+function ActorView:drawWidgets(g, actor)
+  g.push()
+  g.translate(0, 16)
+  for wtype = 1, 3 do
+    ACTOR_WIDGETS.draw(g, actor, wtype)
+  end
   g.pop()
 end
 
