@@ -195,7 +195,7 @@ function View:draw()
   if enter > 0 then
     self:drawBG(g, enter)
     self:drawCards(g, enter)
-    self:drawGainedEXP(g)
+    self:drawGainedEXP(g, enter)
   end
 
   g.pop()
@@ -324,9 +324,9 @@ function View:drawGainedEXP(g, enter)
     local x, y = 3/4*g.getWidth()+120, g.getHeight()/2 + 2
 
     font:set()
-    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], self.enter)
+    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], enter)
     g.print(str, x, y - 1 + self.exp_gained_offset)
-    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], self.enter)
+    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], enter)
     g.print(str, x, y - 3 + self.exp_gained_offset)
 
     if self.exp_gained_offset < 0 then
