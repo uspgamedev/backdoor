@@ -24,6 +24,7 @@ local _ARRSIZE = 20
 local _PI = math.pi
 local _CONSUME_TEXT = "consume (+%d EXP)"
 local _WIDTH, _HEIGHT
+local _LIST_VALIGN
 local _CW, _CH
 
 -- LOCAL VARS
@@ -34,6 +35,8 @@ local _otherfont
 local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
+  _WIDTH = 3*_WIDTH/4
+  _LIST_VALIGN = 0.5*_HEIGHT
   _font = FONT.get("TextBold", 21)
   _otherfont = FONT.get("Text", 21)
   _CW = CARD.getWidth()
@@ -138,7 +141,7 @@ function View:startLeaving()
                     if not self.consumed[i] then
                       self:addTimer("getting_card_"..i, MAIN_TIMER,
                                     "tween", .3, self.buffered_offset,
-                                    {[i] = -_WIDTH}, "in-back")
+                                    {[i] = _HEIGHT}, "in-back")
                     else
                       self:addTimer("consuming_card_off"..i, MAIN_TIMER,
                                     "tween", .3, self.consumed_offset,
@@ -228,15 +231,16 @@ function View:drawCards(g, enter)
     local focus = selection == i
     local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
-    local consumed = self.consumed[i] and 4*_HEIGHT/7 or 0
+    local consumed = self.consumed[i] and _LIST_VALIGN or 0
 
     -- smooth offset when consuming cards
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
     self.offsets[i] = offset
-    g.translate((_CW+_PD)*(i-1+offset), consumed)
-    g.translate(self.buffered_offset[i],self.consumed_offset[i])
+    g.translate((_CW+_PD)*(i-1+offset), _LIST_VALIGN - consumed)
+    g.translate(0, self.buffered_offset[i] + -self.consumed_offset[i])
     CARD.draw(card_list[i], 0, 0, focus and not self.is_leaving,
-              dist>0 and enter/dist*self.card_alpha[i] or enter*self.card_alpha[i], 0.9)
+              dist > 0 and enter/dist*self.card_alpha[i]
+                        or enter*self.card_alpha[i], 0.9)
     g.pop()
   end
   g.pop()
@@ -288,11 +292,11 @@ function View:drawCardDesc(g, card, enter)
   g.setLineWidth(2)
   local maxw = 2*_CW
   g.setColor(COLORS.NEUTRAL)
-  g.line(-_WIDTH/3, 0, -maxw - _PD, 0)
-  g.line(maxw + _PD, 0, _WIDTH/3, 0)
+  g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
+  g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
   _otherfont.set()
-  g.print("Keep", maxw + _PD, -1.5 * _otherfont:getHeight())
-  g.print("Consume", maxw + _PD, 0.5 * _otherfont:getHeight())
+  g.print("Keep", maxw + _PD, 0.5 * _otherfont:getHeight())
+  g.print("Consume", maxw + _PD, -1.5 * _otherfont:getHeight())
 
   g.push()
   g.translate(-maxw, -CARD.getInfoHeight(3)/2)
