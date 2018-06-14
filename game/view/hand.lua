@@ -17,6 +17,7 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
+local _BG = {12/256, 12/256, 12/256, 1}
 local _ACTION_TYPES = {
   'play',
 }
@@ -39,7 +40,7 @@ function HandView:init(route)
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.action_type = -1
-  self.x, self.y = (3*_WIDTH/4)/2, O_WIN_H - 30
+  self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
@@ -101,7 +102,7 @@ function HandView:draw()
   local size = #self.hand
   local gap = _GAP * self.gap_scale 
   local step = CARD.getWidth() + gap
-  local x, y = self.x - (size*CARD.getWidth() + (size-1)*gap)/2, self.y
+  local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
   local boxwidth = 128
   local g = love.graphics
@@ -132,8 +133,9 @@ function HandView:draw()
   local infoy = self.initial_y + - CARD.getHeight() - 40
   for i=size,1,-1 do
     local card = self.hand[i]
-    local dx = (i-1)*step
-    CARD.draw(card, x - dx, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
+    local dx = (size-i+1)*step
+    CARD.draw(card, x - dx + gap,
+              y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
               i == self.focus_index)
     if self.focus_index == i then
       local infox = self.x + 5*step + 20
@@ -161,16 +163,18 @@ function HandView:drawHandCountDown(g, actor)
   local handbar_height = 12
   local font = FONT.get("Text", 18)
   local fh = font:getHeight()*font:getLineHeight()
-  local mx, my = 20, 20
+  local mx, my = 60, 20
+  local slope = handbar_height + 2*my
   font:set()
   g.push()
   g.origin()
   g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
-  g.setColor(COLORS.DARK)
-  g.rectangle('fill', -mx, -my, handbar_width+2*mx, handbar_height+2*my)
+  g.setColor(_BG)
+  g.polygon('fill', -mx, handbar_height+my,
+                    -mx + slope, -my,
+                    handbar_width + mx - slope, -my,
+                    handbar_width + mx, handbar_height + my)
   g.setLineWidth(1)
-  g.setColor(COLORS.BLACK)
-  g.rectangle('line', 0, 0, handbar_width, handbar_height)
   g.setColor(COLORS.EMPTY)
   g.rectangle('fill', 0, 0, handbar_width, handbar_height)
   g.setColor(COLORS.WARNING)
