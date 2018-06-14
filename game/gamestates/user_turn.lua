@@ -354,22 +354,21 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
 end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function()
-  if #_view.hand.hand > 0 then
-    PLAYSFX 'ok-menu'
-    SWITCHER.push(GS.CARD_SELECT, _route, _view)
-    local args = coroutine.yield(_task)
-    if args.chose_a_card then
-      if args.action_type == 'play' then
-        PLAYSFX 'ok-menu'
+  PLAYSFX 'ok-menu'
+  SWITCHER.push(GS.CARD_SELECT, _route, _view)
+  local args = coroutine.yield(_task)
+  if args.chose_a_card then
+    if args.action_type == 'play' then
+      PLAYSFX 'ok-menu'
+      if args.card_index > #_view.hand.hand then
+        _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+      else
         if _useAction(DEFS.ACTION.PLAY_CARD,
                       { card_index = args.card_index }) then
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
         end
       end
     end
-  elseif _was_on_menu then
-    PLAYSFX 'denied'
-    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 

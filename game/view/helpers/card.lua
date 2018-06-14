@@ -25,11 +25,36 @@ local function _init()
   _is_init = true
 end
 
+local _DRAW = {}
+
+function _DRAW:getRelatedAttr()
+  return 'HALF_VISIBLE'
+end
+
+function _DRAW:getType()
+  return ''
+end
+
+function _DRAW:getName()
+  return "New Hand"
+end
+
+function _DRAW:getIconTexture()
+end
+
+function _DRAW:isWidget()
+end
+
+function _DRAW:isUpgrade()
+end
 
 --Draw a card starting its upper left corner on given x,y values
 --Alpha is a float value between [0,1] applied to all graphics
 function CARD.draw(card, x, y, focused, alpha, scale)
   if not _is_init then _init() end
+  if card == 'draw' then
+    card = _DRAW
+  end
   alpha = alpha or 1
   scale = scale or 1
   --Draw card background
@@ -76,12 +101,10 @@ function CARD.draw(card, x, y, focused, alpha, scale)
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2
   )
-
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, alpha)
   g.printf(card:getType(), w-pd-typewidth, 0, typewidth, "right")
-
   if card:isWidget() then
     g.printf(("[%d]"):format(card:getWidgetCharges()-card:getUsages()),
              pd, h-pd-_card_font:getHeight(), w-pd*2, "left"

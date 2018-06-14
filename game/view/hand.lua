@@ -56,9 +56,9 @@ end
 
 function HandView:moveFocus(dir)
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index + #self.hand - 2) % #self.hand + 1
+    self.focus_index = (self.focus_index + #self.hand - 1) % (#self.hand+1) + 1
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % #self.hand + 1
+    self.focus_index = self.focus_index % (#self.hand+1) + 1
   end
 end
 
@@ -99,7 +99,9 @@ function HandView:deactivate()
 end
 
 function HandView:draw()
-  local size = #self.hand
+  local hand = { unpack(self.hand) }
+  table.insert(hand, "draw")
+  local size = #hand
   local gap = _GAP * self.gap_scale 
   local step = CARD.getWidth() + gap
   local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
@@ -118,26 +120,16 @@ function HandView:draw()
     -20, _HEIGHT/2 + 60,
   }
   local offset = self.x+boxwidth
-  --g.push()
-  --g.translate(math.round(-offset+offset*enter), 0)
-  --g.setColor(COLORS.DARK)
-  --g.polygon("fill", poly)
-  --g.translate(-2,-2)
-  --g.setColor(COLORS[colorname])
-  --g.polygon("fill", poly)
-  --g.setColor(COLORS.NEUTRAL)
-  --g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
-  --g.pop()
 
   -- draw each card
   local infoy = self.initial_y + - CARD.getHeight() - 40
   for i=size,1,-1 do
-    local card = self.hand[i]
+    local card = hand[i]
     local dx = (size-i+1)*step
     CARD.draw(card, x - dx + gap,
               y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
               i == self.focus_index)
-    if self.focus_index == i then
+    if self.focus_index == i and card ~= 'draw' then
       local infox = self.x + 5*step + 20
       CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
       EXP.drawNeededEXP(g, card)
