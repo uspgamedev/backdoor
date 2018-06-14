@@ -21,6 +21,8 @@ local _SIGNALS = {
   food = '+',
 }
 
+local _font
+
 function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local number_type = args.number_type
