@@ -204,7 +204,7 @@ function state:update(dt)
     action_request = {DEFS.ACTION.USE_SIGNATURE}
   elseif INPUT.wasActionPressed('ACTION_1') then
     action_request = {DEFS.ACTION.PLAY_CARD}
-  elseif INPUT.wasActionPressed('ACTION_2') then
+  elseif INPUT.wasActionPressed('ACTION_4') then
     action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
@@ -289,7 +289,7 @@ local function _useAction(action_slot, params)
       end
     elseif param.name == "choose_widget_slot" then
       SWITCHER.push(
-        GS.PICK_WIDGET_SLOT, controlled_actor,
+        GS.PICK_WIDGET_SLOT, params.widgets,
         function (which_slot)
           return ABILITY.validate('choose_widget_slot', controlled_actor, param,
                                   which_slot)
@@ -341,8 +341,16 @@ _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
 end
 
 _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  if _route.getControlledActor():getBody():getWidgetCount() > 0 then
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
+  local widget_abilities = {}
+  local controlled_body = _route.getControlledActor():getBody()
+  for _,widget in controlled_body:eachWidget() do
+    if widget:getWidgetAbility() then
+      table.insert(widget_abilities, widget)
+    end
+  end
+  if widget_abilities[1] then
+    PLAYSFX 'open-menu'
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widgets = widget_abilities })
   elseif _was_on_menu then
     PLAYSFX 'denied'
     SWITCHER.push(GS.ACTION_MENU, _route)

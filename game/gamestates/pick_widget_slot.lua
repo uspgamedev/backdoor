@@ -1,31 +1,41 @@
 
-local INPUT = require 'input'
-local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
+local INPUT          = require 'input'
+local DIRECTIONALS   = require 'infra.dir'
+local DEFS           = require 'domain.definitions'
+local PLAYSFX        = require 'helpers.playsfx'
 local PickWidgetView = require 'view.pickwidget'
 
-local state = {}
+local max = math.max
+local min = math.min
+
+local _HOLDTIME = 0.25
+
 
 local _view
 local _selection
 local _validate
-local _target
-local _leave
+local _widgets
+local _ability_count
+local _quick_toggle
 
 
 local function _prev()
-  _selection = (_selection - 2) % _target:getBody():getWidgetCount() + 1
+  _selection = (_selection - 2) % _ability_count + 1
+  PLAYSFX 'select-menu'
 end
 
 local function _next()
-  _selection = _selection % _target:getBody():getWidgetCount() + 1
+  _selection = _selection % _ability_count + 1
+  PLAYSFX 'select-menu'
 end
 
 local function _confirm()
   if _validate(_selection) then
+    PLAYSFX 'ok-menu'
     _view:fadeOut()
     SWITCHER.pop({ picked_slot = _selection })
+  else
+    PLAYSFX 'denied'
   end
 end
 
@@ -35,38 +45,41 @@ local function _cancel()
   SWITCHER.pop({})
 end
 
-function state:enter(from, actor, validator)
-  _target = actor
+
+local state = {}
+
+function state:enter(from, widgets, validator)
+  _widgets = widgets
   _validate = validator
   _selection = 1
-  _leave = actor:getBody():getWidgetCount() <= 0
-
-  if not _leave then
-    _view = PickWidgetView(actor)
-    _view:addElement("HUD")
-    _view:fadeIn()
-  end
+  _ability_count = #_widgets
+  _quick_toggle = 0
+  _view = PickWidgetView(widgets)
+  _view:addElement("HUD")
+  _view:fadeIn()
 end
 
 function state:update(dt)
-  if not DEBUG then
-    MAIN_TIMER:update(dt)
-    if _leave then
-      (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
-      SWITCHER.pop({})
+  if DEBUG then return end
+  MAIN_TIMER:update(dt)
+  _quick_toggle = min(_HOLDTIME, _quick_toggle + dt)
+  if INPUT.wasActionReleased('ACTION_4') then
+    if _quick_toggle < _HOLDTIME then
+      _next()
+      _confirm()
     else
-      if DIRECTIONALS.wasDirectionTriggered('UP') then
-        _prev()
-      elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-        _next()
-      elseif INPUT.wasActionPressed('CONFIRM') then
-        _confirm()
-      elseif INPUT.wasActionPressed('CANCEL') then
-        _cancel()
-      end
-      _view:setSelection(_selection)
+      _confirm()
     end
+  elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+    _quick_toggle = _HOLDTIME
+    _next()
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+    _quick_toggle = _HOLDTIME
+    _prev()
+  elseif INPUT.wasActionPressed('CONFIRM') then
+    _confirm()
   end
+  _view:setSelection(_selection)
 end
 
 function state:draw()
