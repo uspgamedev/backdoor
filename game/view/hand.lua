@@ -177,14 +177,25 @@ function HandView:drawHandCountDown(g, actor)
   g.setLineWidth(1)
   g.setColor(COLORS.EMPTY)
   g.rectangle('fill', 0, 0, handbar_width, handbar_height)
-  g.setColor(COLORS.WARNING)
+  g.setColor(COLORS.NOTIFICATION)
   g.rectangle('fill', 0, 0, handbar_width * handbar_percent, handbar_height)
-  g.translate(0, -18)
+  g.setColor(COLORS.NEUTRAL)
+  g.setLineWidth(2)
+  g.line(-mx, handbar_height+my,
+         -mx + slope, -my,
+         handbar_width + mx - slope, -my,
+         handbar_width + mx, handbar_height + my)
+  local c = 8
+  --g.line(-mx+c, handbar_height+my,
+    --     -mx + slope, -my+c,
+      --   handbar_width + mx - slope, -my+c,
+       --  handbar_width + mx-c, handbar_height + my)
+  g.translate(0, -14)
   g.setColor(COLORS.BLACK)
-  g.print("Hand Duration", 0, 0)
+  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.translate(-1, -1)
   g.setColor(COLORS.NEUTRAL)
-  g.print("Hand Duration", 0, 0)
+  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.pop()
 end
 
