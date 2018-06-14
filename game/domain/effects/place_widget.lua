@@ -11,8 +11,16 @@ FX.schema = {
 
 function FX.process(actor, fieldvalues)
   local card = Card(fieldvalues['card'])
+  local body = fieldvalues['body']
   card:setOwner(actor)
-  fieldvalues['body']:placeWidget(card)
+  body:placeWidget(card)
+  coroutine.yield('report', {
+    type = 'text_rise',
+    number_type = 'status',
+    body = body,
+    string = card:getName(),
+    sfx = fieldvalues.sfx,
+  })
 end
 
 return FX

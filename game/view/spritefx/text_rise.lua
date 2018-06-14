@@ -12,6 +12,7 @@ local _NUMBER_COLOR = {
   damage = 'NOTIFICATION',
   heal = 'SUCCESS',
   food = 'WARNING',
+  status = 'WARNING'
 }
 
 local _SIGNALS = {
@@ -20,6 +21,8 @@ local _SIGNALS = {
   food = '+',
 }
 
+local _font
+
 function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local number_type = args.number_type
@@ -27,7 +30,12 @@ function SPRITEFX.apply(sectorview, args)
   local i, j = body:getPos()
   local body_sprite = sectorview:getBodySprite(body)
   local animation_info = { y = 0, a = 0.5}
-  local number_text = ("%s%d"):format(signal, amount)
+  local text
+  if args.string then
+    text = args.string
+  else
+    text = ("%s%d"):format(signal, amount)
+  end
   _font = _font or FONT.get('Text', 32)
   body_sprite:setDecorator(
     function (self, x, y, ...)
@@ -38,17 +46,17 @@ function SPRITEFX.apply(sectorview, args)
       local transparency = COLORS.NEUTRAL
                          * Color:new {1, 1, 1, animation_info.a}
       g.setColor(COLORS.DARK * transparency)
-      g.printf(number_text, x + 2, y + 2,
+      g.printf(text, x + 2, y + 2,
                _TILE_W, 'center')
       g.setColor(COLORS[_NUMBER_COLOR[number_type]] * transparency)
-      g.printf(number_text, x, y,
+      g.printf(text, x, y,
                _TILE_W, 'center')
     end
   )
   sectorview:addTimer(nil, MAIN_TIMER, "tween", 0.2,
                       animation_info, { y = 96, a = 1 }, "out-cubic",
                       function()
-                        sectorview:addTimer(nil, MAIN_TIMER, "after", 0.1,
+                        sectorview:addTimer(nil, MAIN_TIMER, "after", 0.3,
                                             function ()
                                               body_sprite:clearDecorator()
                                               sectorview:finishVFX()

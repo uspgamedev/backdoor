@@ -25,6 +25,13 @@ function FX.process (actor, fieldvalues)
           local card = Card(cardspec)
           card:setOwner(actor)
           body:placeWidget(card)
+          coroutine.yield('report', {
+            type = 'text_rise',
+            number_type = 'status',
+            body = body,
+            string = card:getName(),
+            sfx = fieldvalues.sfx,
+          })
         end
       end
     end
