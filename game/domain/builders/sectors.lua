@@ -29,7 +29,7 @@ function BUILDER.build(idgenerator, player_data)
   local species = player_data.species
   local background = player_data.background
   local pbody = BODY_BUILDER.build(idgenerator, species, 16, 12)
-  local pactor = ACTOR_BUILDER.build(idgenerator, pbody.id, background)
+  local pactor = ACTOR_BUILDER.build(idgenerator, background, pbody)
 
   -- generate first sector
   local tiledata = DB.loadSetting('init_tiledata')

@@ -1,13 +1,17 @@
 
+local DB = require 'database'
 local BUFFER_BUILDER = require 'domain.builders.buffers'
-local DEFS = require 'domain.definitions'
+local DEFS           = require 'domain.definitions'
+local Card           = require 'domain.card'
 
 local BUILDER = {}
 
-function BUILDER.build(idgenerator, body_id, background)
+function BUILDER.build(idgenerator, background, body_state)
+  local signature = Card(DB.loadSpec('actor', background)['signature'])
+  table.insert(body_state.widgets, signature:saveState())
   return {
     id = idgenerator.newID(),
-    body_id = body_id,
+    body_id = body_state.id,
     specname = background,
     cooldown = 10,
     exp = 0,

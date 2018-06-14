@@ -56,16 +56,16 @@ function Actor:init(spec_name)
 end
 
 function Actor:loadState(state)
-  self.cooldown = state.cooldown
-  self.body_id = state.body_id
-  self:setId(state.id)
-  self.exp = state.exp
-  self.playpoints = state.playpoints
-  self.upgrades = state.upgrades
+  self.cooldown = state.cooldown or self.cooldown
+  self.body_id = state.body_id or self.body_id
+  self:setId(state.id or self.id)
+  self.exp = state.exp or self.exp
+  self.playpoints = state.playpoints or self.playpoints
+  self.upgrades = state.upgrades or self.upgrades
   self.attr_lv = {}
-  self.prizes = state.prizes
-  self.hand_limit = state.hand_limit
-  self.hand = {}
+  self.prizes = state.prizes or self.prizes
+  self.hand_limit = state.hand_limit or self.hand_limit
+  self.hand = state.hand and {} or self.hand
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
     card:loadState(card_state)
@@ -74,7 +74,7 @@ function Actor:loadState(state)
     end
     table.insert(self.hand, card)
   end
-  self.buffer = {}
+  self.buffer = state.buffer and {} or self.buffer
   for i,card_state in ipairs(state.buffer) do
     local card = DEFS.DONE
     if card_state ~= card then
