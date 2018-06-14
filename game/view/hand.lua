@@ -15,6 +15,8 @@ local _drawCard
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
+local _GAP = 20
+local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
 local _ACTION_TYPES = {
   'play',
 }
@@ -32,16 +34,18 @@ local HandView = Class{
 function HandView:init(route)
 
   ELEMENT.init(self)
+  
+  _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.action_type = -1
-  self.x, self.y = 100, O_WIN_H - 30
+  self.x, self.y = (3*_WIDTH/4)/2, O_WIN_H - 30
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
+  self.gap_scale = _GAP_SCALE.MIN
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
-  _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
 end
 
@@ -77,7 +81,8 @@ function HandView:activate()
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
-                { y = self.initial_y - CARD.getHeight() }, 'out-back')
+                { y = self.initial_y - CARD.getHeight(),
+                  gap_scale = _GAP_SCALE.MAX }, 'out-back')
 end
 
 function HandView:deactivate()
@@ -87,15 +92,17 @@ function HandView:deactivate()
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
 
-  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self, {y = self.initial_y},
+  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self,
+                { y = self.initial_y, gap_scale = _GAP_SCALE.MIN },
                 'out-back')
 end
 
 function HandView:draw()
-  local x, y = self.x, self.y
+  local size = #self.hand
+  local gap = _GAP * self.gap_scale 
+  local step = CARD.getWidth() + gap
+  local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
-  local gap = CARD.getWidth() + 20
-  local handwidth = gap*5*2 - 40
   local boxwidth = 128
   local g = love.graphics
 
@@ -110,24 +117,26 @@ function HandView:draw()
     -20, _HEIGHT/2 + 60,
   }
   local offset = self.x+boxwidth
-  g.push()
-  g.translate(math.round(-offset+offset*enter), 0)
-  g.setColor(COLORS.DARK)
-  g.polygon("fill", poly)
-  g.translate(-2,-2)
-  g.setColor(COLORS[colorname])
-  g.polygon("fill", poly)
-  g.setColor(COLORS.NEUTRAL)
-  g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
-  g.pop()
+  --g.push()
+  --g.translate(math.round(-offset+offset*enter), 0)
+  --g.setColor(COLORS.DARK)
+  --g.polygon("fill", poly)
+  --g.translate(-2,-2)
+  --g.setColor(COLORS[colorname])
+  --g.polygon("fill", poly)
+  --g.setColor(COLORS.NEUTRAL)
+  --g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
+  --g.pop()
 
   -- draw each card
   local infoy = self.initial_y + - CARD.getHeight() - 40
-  for i, card in ipairs(self.hand) do
-    CARD.draw(card, x, y, i == self.focus_index)
-    x = x + gap
+  for i=size,1,-1 do
+    local card = self.hand[i]
+    CARD.draw(card, x, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
+              i == self.focus_index)
+    x = x - step
     if self.focus_index == i then
-      local infox = self.x + 5*gap + 20
+      local infox = self.x + 5*step + 20
       CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
       EXP.drawNeededEXP(g, card)
     end

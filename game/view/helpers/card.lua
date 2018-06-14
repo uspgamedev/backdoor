@@ -72,7 +72,7 @@ function CARD.draw(card, x, y, focused, alpha, scale)
   local icon_texture = TEXTURE.get(card:getIconTexture() or 'icon-none')
   g.setColor(br, bg, bb, alpha)
   icon_texture:setFilter('linear', 'linear')
-  icon_texture:draw(x+w/2, y+h/2, 0, 0.5, 0.5,
+  icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2
   )
