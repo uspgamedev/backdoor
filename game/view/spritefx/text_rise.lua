@@ -25,8 +25,8 @@ local _font
 
 function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
-  local number_type = args.number_type
-  local signal = _SIGNALS[number_type]
+  local text_type = args.text_type
+  local signal = _SIGNALS[text_type]
   local i, j = body:getPos()
   local body_sprite = sectorview:getBodySprite(body)
   local animation_info = { y = 0, a = 0.5}
@@ -48,7 +48,7 @@ function SPRITEFX.apply(sectorview, args)
       g.setColor(COLORS.DARK * transparency)
       g.printf(text, x + 2, y + 2,
                _TILE_W, 'center')
-      g.setColor(COLORS[_NUMBER_COLOR[number_type]] * transparency)
+      g.setColor(COLORS[_NUMBER_COLOR[text_type]] * transparency)
       g.printf(text, x, y,
                _TILE_W, 'center')
     end

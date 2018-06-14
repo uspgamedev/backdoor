@@ -30,7 +30,7 @@ function FX.process (actor, fieldvalues)
           local dmg = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
             type = 'text_rise',
-            number_type = 'damage',
+            text_type = 'damage',
             body = body,
             amount = dmg,
           })

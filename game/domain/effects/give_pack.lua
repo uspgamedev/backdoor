@@ -8,6 +8,13 @@ FX.schema = {
 
 function FX.process (actor, fieldvalues)
   actor:addPrizePack(fieldvalues['collection'])
+  coroutine.yield('report', {
+    type = 'text_rise',
+    text_type = 'status',
+    body = actor:getBody(),
+    string = "+Pack",
+    sfx = fieldvalues.sfx,
+  })
 end
 
 return FX

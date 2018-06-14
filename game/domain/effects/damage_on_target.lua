@@ -21,7 +21,7 @@ function FX.process (actor, fieldvalues)
 
   coroutine.yield('report', {
     type = 'text_rise',
-    number_type = 'damage',
+    text_type = 'damage',
     body = fieldvalues['target'],
     amount = dmg,
     sfx = fieldvalues.sfx,

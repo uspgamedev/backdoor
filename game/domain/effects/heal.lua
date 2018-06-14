@@ -11,7 +11,7 @@ function FX.process (actor, fieldvalues)
   fieldvalues.target:heal(fieldvalues.amount or 2)
   coroutine.yield('report', {
     type = 'text_rise',
-    number_type = 'heal',
+    text_type = 'heal',
     body = fieldvalues['target'],
     amount = fieldvalues['amount'],
   })

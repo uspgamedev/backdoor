@@ -27,7 +27,7 @@ function FX.process (actor, fieldvalues)
           body:placeWidget(card)
           coroutine.yield('report', {
             type = 'text_rise',
-            number_type = 'status',
+            text_type = 'status',
             body = body,
             string = card:getName(),
             sfx = fieldvalues.sfx,
