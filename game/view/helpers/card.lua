@@ -39,6 +39,10 @@ function _DRAW:getName()
   return "New Hand"
 end
 
+function _DRAW:getDescription()
+  return "Discard your hand, draw five cards, spend PP"
+end
+
 function _DRAW:getIconTexture()
 end
 
@@ -122,6 +126,9 @@ end
 --Draw the description of a card.
 function CARD.drawInfo(card, x, y, width, alpha)
   alpha = alpha or 1
+  if card == 'draw' then
+    card = _DRAW
+  end
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
 

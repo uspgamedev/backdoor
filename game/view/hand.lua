@@ -122,17 +122,19 @@ function HandView:draw()
   local offset = self.x+boxwidth
 
   -- draw each card
-  local infoy = self.initial_y + - CARD.getHeight() - 40
+  local infoy = 40
   for i=size,1,-1 do
     local card = hand[i]
     local dx = (size-i+1)*step
     CARD.draw(card, x - dx + gap,
               y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
               i == self.focus_index)
-    if self.focus_index == i and card ~= 'draw' then
-      local infox = self.x + 5*step + 20
-      CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
-      EXP.drawNeededEXP(g, card)
+    if self.focus_index == i then
+      local infox = _GAP
+      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter)
+      if card ~= 'draw' then
+        EXP.drawNeededEXP(g, card)
+      end
     end
   end
 
