@@ -101,7 +101,7 @@ function HandView:draw()
   local size = #self.hand
   local gap = _GAP * self.gap_scale 
   local step = CARD.getWidth() + gap
-  local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
+  local x, y = self.x - (size*CARD.getWidth() + (size-1)*gap)/2, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
   local boxwidth = 128
   local g = love.graphics
@@ -132,9 +132,9 @@ function HandView:draw()
   local infoy = self.initial_y + - CARD.getHeight() - 40
   for i=size,1,-1 do
     local card = self.hand[i]
-    CARD.draw(card, x, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
+    local dx = (i-1)*step
+    CARD.draw(card, x - dx, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
               i == self.focus_index)
-    x = x - step
     if self.focus_index == i then
       local infox = self.x + 5*step + 20
       CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
@@ -157,21 +157,24 @@ function HandView:drawHandCountDown(g, actor)
   end
   self.hand_count_down = current
   local handbar_percent = current / ACTIONDEFS.HAND_DURATION
-  local handbar_width = 492
+  local handbar_width = 492/2
   local handbar_height = 12
   local font = FONT.get("Text", 18)
   local fh = font:getHeight()*font:getLineHeight()
+  local mx, my = 20, 20
   font:set()
   g.push()
   g.origin()
-  g.translate(40, _HEIGHT - y + fh + handbar_height*2)
+  g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
+  g.setColor(COLORS.DARK)
+  g.rectangle('fill', -mx, -my, handbar_width+2*mx, handbar_height+2*my)
   g.setLineWidth(1)
   g.setColor(COLORS.BLACK)
-  g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
-  g.setColor(COLORS.DARK)
-  g.rectangle('fill', 0, 0, handbar_width/2, handbar_height)
+  g.rectangle('line', 0, 0, handbar_width, handbar_height)
+  g.setColor(COLORS.EMPTY)
+  g.rectangle('fill', 0, 0, handbar_width, handbar_height)
   g.setColor(COLORS.WARNING)
-  g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
+  g.rectangle('fill', 0, 0, handbar_width * handbar_percent, handbar_height)
   g.translate(0, -18)
   g.setColor(COLORS.BLACK)
   g.print("Hand Duration", 0, 0)
