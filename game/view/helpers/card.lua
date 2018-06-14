@@ -7,9 +7,10 @@ local round = require 'common.math' .round
 
 --CARDVIEW PROPERTIES--
 
-local _title_font = FONT.get("TextBold", 21)
-local _text_font = FONT.get("Text", 21)
+local _title_font = FONT.get("TextBold", 20)
+local _text_font = FONT.get("Text", 20)
 local _info_font = FONT.get("Text", 18)
+local _card_font = FONT.get("Text", 12)
 local _card_base
 local _neutral_icon
 
@@ -24,11 +25,40 @@ local function _init()
   _is_init = true
 end
 
+local _DRAW = {}
+
+function _DRAW:getRelatedAttr()
+  return 'HALF_VISIBLE'
+end
+
+function _DRAW:getType()
+  return ''
+end
+
+function _DRAW:getName()
+  return "New Hand"
+end
+
+function _DRAW:getDescription()
+  return "Discard your hand, draw five cards, spend PP"
+end
+
+function _DRAW:getIconTexture()
+end
+
+function _DRAW:isWidget()
+end
+
+function _DRAW:isUpgrade()
+end
 
 --Draw a card starting its upper left corner on given x,y values
 --Alpha is a float value between [0,1] applied to all graphics
 function CARD.draw(card, x, y, focused, alpha, scale)
   if not _is_init then _init() end
+  if card == 'draw' then
+    card = _DRAW
+  end
   alpha = alpha or 1
   scale = scale or 1
   --Draw card background
@@ -56,7 +86,7 @@ function CARD.draw(card, x, y, focused, alpha, scale)
              namewidth, "center")
   end
 
-  _info_font.set()
+  _card_font.set()
 
   --shadow
   g.setColor(0, 0, 0, alpha)
@@ -71,24 +101,22 @@ function CARD.draw(card, x, y, focused, alpha, scale)
   local icon_texture = TEXTURE.get(card:getIconTexture() or 'icon-none')
   g.setColor(br, bg, bb, alpha)
   icon_texture:setFilter('linear', 'linear')
-  icon_texture:draw(x+w/2, y+h/2, 0, 1, 1,
+  icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2
   )
-
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, alpha)
   g.printf(card:getType(), w-pd-typewidth, 0, typewidth, "right")
-
   if card:isWidget() then
-    g.printf(("[%d charges]"):format(card:getWidgetCharges()-card:getUsages()),
-             pd, h-pd-_info_font:getHeight(), w-pd*2, "left"
+    g.printf(("[%d]"):format(card:getWidgetCharges()-card:getUsages()),
+             pd, h-pd-_card_font:getHeight(), w-pd*2, "left"
     )
   end
   if card:isUpgrade() then
-    g.printf(("[%d exp]"):format(card:getUpgradeCost()),
-             pd, h-pd-1.25*_info_font:getHeight(), w-pd*2, "left"
+    g.printf(("+%d"):format(card:getUpgradeCost()),
+             pd, h-pd-1.25*_card_font:getHeight(), w-pd*2, "left"
     )
   end
 
@@ -98,6 +126,9 @@ end
 --Draw the description of a card.
 function CARD.drawInfo(card, x, y, width, alpha)
   alpha = alpha or 1
+  if card == 'draw' then
+    card = _DRAW
+  end
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
 

@@ -15,6 +15,9 @@ local _drawCard
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
+local _GAP = 20
+local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
+local _BG = {12/256, 12/256, 12/256, 1}
 local _ACTION_TYPES = {
   'play',
 }
@@ -32,16 +35,18 @@ local HandView = Class{
 function HandView:init(route)
 
   ELEMENT.init(self)
+  
+  _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.action_type = -1
-  self.x, self.y = 100, O_WIN_H - 30
+  self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
+  self.gap_scale = _GAP_SCALE.MIN
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
-  _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
 end
 
@@ -51,9 +56,9 @@ end
 
 function HandView:moveFocus(dir)
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index + #self.hand - 2) % #self.hand + 1
+    self.focus_index = (self.focus_index + #self.hand - 1) % (#self.hand+1) + 1
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % #self.hand + 1
+    self.focus_index = self.focus_index % (#self.hand+1) + 1
   end
 end
 
@@ -77,7 +82,8 @@ function HandView:activate()
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
-                { y = self.initial_y - CARD.getHeight() }, 'out-back')
+                { y = self.initial_y - CARD.getHeight(),
+                  gap_scale = _GAP_SCALE.MAX }, 'out-back')
 end
 
 function HandView:deactivate()
@@ -87,15 +93,19 @@ function HandView:deactivate()
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
 
-  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self, {y = self.initial_y},
+  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self,
+                { y = self.initial_y, gap_scale = _GAP_SCALE.MIN },
                 'out-back')
 end
 
 function HandView:draw()
-  local x, y = self.x, self.y
+  local hand = { unpack(self.hand) }
+  table.insert(hand, "draw")
+  local size = #hand
+  local gap = _GAP * self.gap_scale 
+  local step = CARD.getWidth() + gap
+  local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
-  local gap = CARD.getWidth() + 20
-  local handwidth = gap*5*2 - 40
   local boxwidth = 128
   local g = love.graphics
 
@@ -110,26 +120,21 @@ function HandView:draw()
     -20, _HEIGHT/2 + 60,
   }
   local offset = self.x+boxwidth
-  g.push()
-  g.translate(math.round(-offset+offset*enter), 0)
-  g.setColor(COLORS.DARK)
-  g.polygon("fill", poly)
-  g.translate(-2,-2)
-  g.setColor(COLORS[colorname])
-  g.polygon("fill", poly)
-  g.setColor(COLORS.NEUTRAL)
-  g.printf(self:getActionType() or "", self.x, _HEIGHT/2+10, boxwidth, "left")
-  g.pop()
 
   -- draw each card
-  local infoy = self.initial_y + - CARD.getHeight() - 40
-  for i, card in ipairs(self.hand) do
-    CARD.draw(card, x, y, i == self.focus_index)
-    x = x + gap
+  local infoy = 40
+  for i=size,1,-1 do
+    local card = hand[i]
+    local dx = (size-i+1)*step
+    CARD.draw(card, x - dx + gap,
+              y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
+              i == self.focus_index)
     if self.focus_index == i then
-      local infox = self.x + 5*gap + 20
-      CARD.drawInfo(card, infox, infoy, _WIDTH - infox - 40, enter)
-      EXP.drawNeededEXP(g, card)
+      local infox = _GAP
+      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter)
+      if card ~= 'draw' then
+        EXP.drawNeededEXP(g, card)
+      end
     end
   end
 
@@ -148,27 +153,43 @@ function HandView:drawHandCountDown(g, actor)
   end
   self.hand_count_down = current
   local handbar_percent = current / ACTIONDEFS.HAND_DURATION
-  local handbar_width = 492
+  local handbar_width = 492/2
   local handbar_height = 12
   local font = FONT.get("Text", 18)
   local fh = font:getHeight()*font:getLineHeight()
+  local mx, my = 60, 20
+  local slope = handbar_height + 2*my
   font:set()
   g.push()
   g.origin()
-  g.translate(40, _HEIGHT - y + fh + handbar_height*2)
+  g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
+  g.setColor(_BG)
+  g.polygon('fill', -mx, handbar_height+my,
+                    -mx + slope, -my,
+                    handbar_width + mx - slope, -my,
+                    handbar_width + mx, handbar_height + my)
   g.setLineWidth(1)
+  g.setColor(COLORS.EMPTY)
+  g.rectangle('fill', 0, 0, handbar_width, handbar_height)
+  g.setColor(COLORS.NOTIFICATION)
+  g.rectangle('fill', 0, 0, handbar_width * handbar_percent, handbar_height)
+  g.setColor(COLORS.NEUTRAL)
+  g.setLineWidth(2)
+  g.line(-mx, handbar_height+my,
+         -mx + slope, -my,
+         handbar_width + mx - slope, -my,
+         handbar_width + mx, handbar_height + my)
+  local c = 8
+  --g.line(-mx+c, handbar_height+my,
+    --     -mx + slope, -my+c,
+      --   handbar_width + mx - slope, -my+c,
+       --  handbar_width + mx-c, handbar_height + my)
+  g.translate(0, -14)
   g.setColor(COLORS.BLACK)
-  g.rectangle('line', 0, 0, handbar_width/2, handbar_height)
-  g.setColor(COLORS.DARK)
-  g.rectangle('fill', 0, 0, handbar_width/2, handbar_height)
-  g.setColor(COLORS.WARNING)
-  g.rectangle('fill', 0, 0, handbar_width/2 * handbar_percent, handbar_height)
-  g.translate(0, -18)
-  g.setColor(COLORS.BLACK)
-  g.print("Hand Duration", 0, 0)
+  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.translate(-1, -1)
   g.setColor(COLORS.NEUTRAL)
-  g.print("Hand Duration", 0, 0)
+  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.pop()
 end
 
