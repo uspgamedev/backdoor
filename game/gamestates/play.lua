@@ -46,7 +46,7 @@ local function _playTurns(...)
     _activity:changeSector(...)
   elseif request == "report" then
     _view.sector:startVFX(extra)
-    _alert = _alert or (extra.type == 'number_rise')
+    _alert = _alert or (extra.type == 'text_rise')
                     and (extra.body == _player:getBody())
     SWITCHER.push(GS.ANIMATION, _view.sector)
   end
