@@ -19,7 +19,7 @@ function FX.process (actor, fieldvalues)
 
   coroutine.yield('report', {
     type = 'text_rise',
-    number_type = 'food',
+    text_type = 'food',
     body = target or actor:getBody(),
     amount = amount,
   })
