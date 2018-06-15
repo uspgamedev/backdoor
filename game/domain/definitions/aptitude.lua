@@ -7,7 +7,7 @@ local APT = {}
 --  $ make FLAGS=--test=aptitude
 --  ```
 function APT.REQUIRED_ATTR_UPGRADE(apt, lv)
-  return math.ceil((15 - 1.5*apt) ^ (1 + lv/10))
+  return math.ceil((15 - 3*apt) ^ (1 + lv/10))
 end
 
 function APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(apt, lv)

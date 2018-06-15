@@ -8,11 +8,11 @@
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime",
-        "upgrade_power":0
+        "upgrade_power":50
       },{
         "actorspec":"grinful",
         "bodyspec":"imp",
-        "upgrade_power":50
+        "upgrade_power":100
       }],
     "min":4
   },
@@ -25,13 +25,20 @@
         "droprate":1
       }]
   },
+  "rooms":{
+    "tries":256,
+    "maxh":9,
+    "rmar":1,
+    "minh":3,
+    "count":24,
+    "minw":3,
+    "maxw":9
+  },
   "holes":false,
   "deadends":{
     "amount":128
   },
-  "maze":{
-    "double":false
-  },
+  "theme":false,
   "exits":{
     "distance":5,
     "threshold":2,
@@ -50,13 +57,7 @@
     "h":48,
     "mw":9
   },
-  "rooms":{
-    "tries":256,
-    "count":24,
-    "rmar":1,
-    "minh":3,
-    "maxh":9,
-    "minw":3,
-    "maxw":9
+  "maze":{
+    "double":false
   }
 }

@@ -16,7 +16,7 @@ transformer.schema = {
       { id = 'bodyspec', name = "Body Specification", type = 'enum',
         options = 'domains.body' },
       { id = 'upgrade_power', name = "Upgrade Power", type = 'integer',
-        range = {0} },
+        range = {1,100} },
     } }
 }
 

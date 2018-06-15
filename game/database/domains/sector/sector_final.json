@@ -8,15 +8,15 @@
     "recipes":[{
         "bodyspec":"rewasvat",
         "actorspec":"newbieslayer",
-        "upgrade_power":200
+        "upgrade_power":100
       },{
         "bodyspec":"eye",
         "actorspec":"fiendish",
-        "upgrade_power":150
+        "upgrade_power":60
       },{
         "bodyspec":"imp",
         "actorspec":"grinful",
-        "upgrade_power":150
+        "upgrade_power":60
       }],
     "min":6
   },
@@ -26,24 +26,25 @@
         "droprate":2
       }]
   },
-  "deadends":{
-    "amount":24
+  "rooms":{
+    "tries":256,
+    "count":32,
+    "minw":3,
+    "minh":3,
+    "maxh":9,
+    "rmar":1,
+    "maxw":9
   },
+  "maze":{
+    "double":false
+  },
+  "theme":false,
   "exits":{
     "distance":5,
     "threshold":2,
     "exits":[{
         "target_specname":"sector03"
       }]
-  },
-  "rooms":{
-    "tries":256,
-    "maxh":9,
-    "minw":3,
-    "minh":3,
-    "count":32,
-    "rmar":1,
-    "maxw":9
   },
   "bootstrap":{
     "w":48,
@@ -52,7 +53,7 @@
     "h":48,
     "mw":9
   },
-  "maze":{
-    "double":false
+  "deadends":{
+    "amount":24
   }
 }

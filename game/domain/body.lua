@@ -136,7 +136,7 @@ function Body:getVIT()
 end
 
 function Body:getRES()
-  return self:getAptitude('CON')
+  return self:getAptitude('RES')
 end
 
 function Body:getFIN()

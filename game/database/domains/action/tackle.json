@@ -1,35 +1,36 @@
 {
-  "cost":20,
-  "playpoints":0,
   "ability":{
-    "effects":[{
-        "attr":"=cor",
-        "type":"effect",
-        "name":"damage_on_target",
-        "base":4,
-        "target":"=target"
-      }],
     "inputs":[{
-        "output":"pos",
-        "non-wall":false,
+        "aoe-hint":0,
+        "type":"input",
         "empty-tile":false,
+        "name":"choose_target",
+        "max-range":1,
+        "non-wall":false,
         "body-only":{
           "body-type":false
         },
-        "name":"choose_target",
-        "aoe-hint":0,
-        "max-range":1,
-        "type":"input"
+        "output":"pos"
       },{
+        "type":"operator",
+        "which":"COR",
         "output":"cor",
-        "name":"get_attribute",
-        "type":"operator",
-        "which":"COR"
+        "name":"get_attribute"
       },{
-        "output":"target",
-        "name":"get_body_at",
         "type":"operator",
-        "pos":"=pos"
+        "pos":"=pos",
+        "output":"target",
+        "name":"get_body_at"
+      }],
+    "effects":[{
+        "attr":"=cor",
+        "target":"=target",
+        "base":6,
+        "type":"effect",
+        "name":"damage_on_target",
+        "sfx":false
       }]
-  }
+  },
+  "cost":20,
+  "playpoints":0
 }

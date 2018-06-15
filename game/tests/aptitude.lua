@@ -5,14 +5,14 @@ local APT = require 'domain.definitions.aptitude'
 return function()
 
   print[[
-| lv | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  |
-|----|-----|-----|-----|-----|-----|-----|-----|-----|-----|]]
+| lv | -2  | -1  |  0  | +1  | +2  |
+|----|-----|-----|-----|-----|-----|]]
 
   local acc = {}
   for lv=1,20 do
     local line = ("| %2d |"):format(lv)
     local line2 = "|    |"
-    for apt=-4,4 do
+    for apt=-2,2 do
       local xp = APT.REQUIRED_ATTR_UPGRADE(apt, lv)
       local i = apt+5
       line = line .. ("%s%+5d%s|"):format(ANSICOLOR.green, xp, ANSICOLOR.white)

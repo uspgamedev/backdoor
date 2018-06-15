@@ -32,7 +32,7 @@ return {
         id = 'attr_list', name = "Attribute", type = 'array',
         schema = {
           { id = 'attr', name = "Primary Attribute", type = 'enum',
-            options = DEFS.ATTRIBUTES },
+            options = DEFS.PRIMARY_ATTRIBUTES },
           { id = 'val', name = "Value", type = 'integer' },
         }
       },

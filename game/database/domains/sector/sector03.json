@@ -8,11 +8,11 @@
     "recipes":[{
         "bodyspec":"eye",
         "actorspec":"fiendish",
-        "upgrade_power":120
+        "upgrade_power":100
       },{
         "bodyspec":"imp",
         "actorspec":"grinful",
-        "upgrade_power":120
+        "upgrade_power":80
       }],
     "min":6
   },
@@ -21,6 +21,29 @@
         "droptype":"food",
         "droprate":1
       }]
+  },
+  "rooms":{
+    "minh":3,
+    "rmar":1,
+    "minw":3,
+    "tries":256,
+    "maxh":9,
+    "count":24,
+    "maxw":9
+  },
+  "deadends":{
+    "amount":48
+  },
+  "theme":false,
+  "maze":{
+    "double":false
+  },
+  "bootstrap":{
+    "w":56,
+    "mh":7,
+    "h":56,
+    "tileset":"otherdemo",
+    "mw":9
   },
   "exits":{
     "distance":5,
@@ -32,27 +55,5 @@
       },{
         "target_specname":"sector_final"
       }]
-  },
-  "maze":{
-    "double":false
-  },
-  "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
-    "tries":256,
-    "count":24,
-    "maxh":9,
-    "maxw":9
-  },
-  "bootstrap":{
-    "w":56,
-    "mh":7,
-    "h":56,
-    "tileset":"otherdemo",
-    "mw":9
-  },
-  "deadends":{
-    "amount":48
   }
 }

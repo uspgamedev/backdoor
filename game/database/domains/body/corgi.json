@@ -2,27 +2,27 @@
   "extends":"demihuman",
   "faction":"agressive",
   "drops":{
-    "1":{
-      "droptype":"pack",
-      "droprate":100
-    },
     "2":{
       "droptype":"pack",
       "droprate":10
     },
-    "3":{
-      "droptype":"food",
-      "droprate":50
-    },
     "drops":[{
         "droptype":"pack",
         "droprate":7
-      }]
+      }],
+    "1":{
+      "droptype":"pack",
+      "droprate":100
+    },
+    "3":{
+      "droptype":"food",
+      "droprate":50
+    }
   },
-  "con":0,
-  "res":1,
+  "res":-1,
+  "con":-1,
   "appearance":"corgi",
-  "fin":0,
+  "fin":-1,
   "name":"Corgiborn",
   "description":"Stubby legs, a heart-shaped butt,\na happy goofy face. But don't be fooled!\nNot all of them are friendly..."
 }

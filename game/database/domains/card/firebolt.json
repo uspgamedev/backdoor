@@ -3,23 +3,16 @@
   "icon":"card-firebolt",
   "one_time":false,
   "art":{
+    "cost":10,
     "art_ability":{
-      "effects":[{
-          "attr":4,
-          "target":"=body",
-          "type":"effect",
-          "base":"=(arc*2)-2",
-          "name":"damage_on_target",
-          "sfx":"example"
-        }],
       "inputs":[{
-          "max-range":7,
-          "name":"choose_target",
-          "type":"input",
-          "empty-tile":false,
-          "output":"tgt",
           "body-only":{
-          }
+          },
+          "output":"tgt",
+          "max-range":7,
+          "empty-tile":false,
+          "name":"choose_target",
+          "type":"input"
         },{
           "type":"operator",
           "pos":"=tgt",
@@ -27,26 +20,19 @@
           "output":"body"
         },{
           "type":"operator",
-          "which":"ARC",
+          "name":"get_attribute",
           "output":"arc",
-          "name":"get_attribute"
-        },{
-          "op":"*",
-          "output":"arc*2",
-          "type":"operator",
-          "name":"integer_binop",
-          "rhs":2,
-          "lhs":"=arc"
-        },{
-          "op":"-",
-          "output":"(arc*2)-2",
-          "type":"operator",
-          "name":"integer_binop",
-          "rhs":2,
-          "lhs":"=arc*2"
+          "which":"ARC"
+        }],
+      "effects":[{
+          "attr":"=arc",
+          "target":"=body",
+          "base":12,
+          "type":"effect",
+          "name":"damage_on_target",
+          "sfx":"example"
         }]
-    },
-    "cost":10
+    }
   },
   "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
   "type-description":"",
