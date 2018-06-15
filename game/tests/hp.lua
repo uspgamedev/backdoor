@@ -2,7 +2,7 @@
 local APT = require 'domain.definitions.aptitude'
 
 local function hp(vit, con)
-  return math.floor(20 + (1+con)*vit*vit - (4+con)*vit)
+  return APT.HP(vit, con-3)
 end
 
 return function()

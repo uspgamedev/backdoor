@@ -33,5 +33,15 @@ function APT.VIT2HP(vit)
   return 20 + vit * vit - vit
 end
 
+function APT.HP(vit, con)
+  return math.floor(20 + (4+con)*vit*vit - (7+con)*vit)
+end
+
+function APT.STAMINA(efc, mtb)
+  local min, max = 7 - 2.5*mtb, 25 - mtb
+  local food = max - (max-min)*efc/12
+  return math.floor(food)
+end
+
 return APT
 

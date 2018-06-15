@@ -2,10 +2,7 @@
 local APT = require 'domain.definitions.aptitude'
 
 local function food(efc, mtb)
-  mtb = mtb-3
-  local min, max = 7 - 2.5*mtb, 25 - mtb
-  local food = max - (max-min)*efc/12
-  return math.floor(food)
+  return APT.STAMINA(efc, mtb-3)
 end
 
 return function()
