@@ -1,5 +1,9 @@
 {
+  "attr":"ANI",
+  "icon":false,
+  "one_time":true,
   "desc":"SPD -4 for 3 turns",
+  "type-description":"",
   "widget":{
     "operators":[{
         "attr":"SPD",
@@ -7,9 +11,10 @@
         "val":4
       }],
     "trigger":"on_turn",
-    "charges":3
+    "charges":3,
+    "status-tags":[],
+    "placement":false
   },
-  "one_time":true,
-  "attr":"ANI",
-  "name":"Tipsy"
+  "name":"Tipsy",
+  "set":false
 }

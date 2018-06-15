@@ -5,14 +5,10 @@
     "operators":[{
         "attr":"DEF",
         "op":"+",
-        "val":5
-      },{
-        "attr":"SPD",
-        "op":"-",
-        "val":4
+        "val":2
       }],
-    "trigger":"on_hit",
-    "charges":8,
+    "trigger":false,
+    "charges":0,
     "status-tags":[],
     "placement":"suit"
   },
