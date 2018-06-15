@@ -5,10 +5,10 @@
       "droptype":"pack",
       "droprate":50
     }],
-  "def_die":3,
-  "vit":-2,
+  "res":-2,
+  "con":-2,
   "appearance":"eyedemon",
   "name":"Eye",
-  "def":-2,
+  "fin":2,
   "description":"Floating demon, a hellish eye which stares\nits victims into shivers. A stink eye is not\nall it does, however: this fiend can cast powerful\narcane spells to strike down its foe."
 }

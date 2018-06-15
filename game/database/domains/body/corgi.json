@@ -19,10 +19,10 @@
         "droprate":7
       }]
   },
-  "vit":0,
-  "def_die":5,
+  "con":0,
+  "res":1,
   "appearance":"corgi",
-  "def":0,
+  "fin":0,
   "name":"Corgiborn",
   "description":"Stubby legs, a heart-shaped butt,\na happy goofy face. But don't be fooled!\nNot all of them are friendly..."
 }

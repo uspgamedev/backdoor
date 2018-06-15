@@ -1,6 +1,6 @@
 {
   "extends":false,
-  "def_die":4,
+  "res":2,
   "drops":[{
       "droptype":"pack",
       "droprate":10
@@ -11,10 +11,10 @@
       "droptype":"pack",
       "droprate":10
     }],
-  "def":0,
+  "fin":-1,
   "faction":"agressive",
   "appearance":"slime",
   "name":"Slime",
-  "vit":-1,
+  "con":-1,
   "description":"Delicious when fried."
 }

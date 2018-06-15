@@ -1,13 +1,12 @@
 {
-  "ani":-4,
+  "ani":-2,
   "signature":"tackle",
   "behavior":"aggro",
-  "cor":-4,
-  "arc":-4,
+  "cor":-2,
+  "arc":-2,
   "collection":"anything",
   "extends":false,
   "description":"Oh honey...",
   "name":"Dumb",
-  "initial_buffer":[],
-  "spd":-2
+  "initial_buffer":[]
 }
