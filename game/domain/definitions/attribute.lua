@@ -10,5 +10,9 @@ ATTR.INFLUENCE = {
   VIT = {'ANI', 'COR'}
 }
 
+function ATTR.MAXDMG(attr, base)
+  return attr * base
+end
+
 return ATTR
 

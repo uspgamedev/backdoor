@@ -39,10 +39,8 @@ function APT.STAMINA(efc, mtb)
   return math.floor(food)
 end
 
-APT._DEFDIE = {4, 6, 8, 12, 20}
-
-function APT.DEFDIE(res)
-  return APT._DEFDIE[res+3]
+function APT.MAXDR(def, res)
+  return def * (12 + res*2)
 end
 
 return APT

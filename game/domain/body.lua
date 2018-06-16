@@ -147,8 +147,8 @@ function Body:getCON()
   return self:getAptitude('CON')
 end
 
-function Body:getDEFDie()
-  return APT.DEFDIE(self:getRES())
+function Body:getMAXDR()
+  return APT.MAXDR(self:getDEF(), self:getRES())
 end
 
 function Body:getConsumption()
@@ -359,7 +359,7 @@ end
 --[[ Combat methods ]]--
 
 function Body:takeDamageFrom(amount, source)
-  local defroll = RANDOM.rollDice(self:getDEF(), self:getDEFDie())
+  local defroll = RANDOM.generate(self:getMAXDR())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers

@@ -33,7 +33,7 @@ return function (actor)
     IMGUI.Text(("FIN: %d"):format(actor:getBody():getFIN()))
     IMGUI.Text(("CON: %d"):format(actor:getBody():getCON()))
     IMGUI.Separator()
-    IMGUI.Text(("DEFDIE: d%d"):format(actor:getBody():getDEFDie()))
+    IMGUI.Text(("Max DR: %d"):format(actor:getBody():getMAXDR()))
     IMGUI.Text(("Consumption: %d"):format(actor:getBody():getConsumption()))
   end
 

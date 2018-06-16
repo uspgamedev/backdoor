@@ -1,5 +1,6 @@
 
-local RANDOM = require 'common.random'
+local RANDOM  = require 'common.random'
+local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
@@ -22,7 +23,7 @@ function FX.process (actor, fieldvalues)
   local attr    = fieldvalues['attr']
   local base    = fieldvalues['base']
   local ignore_owner = fieldvalues['ignore_owner']
-  local amount = RANDOM.rollDice(base, attr)
+  local amount = RANDOM.generate(ATTR.MAXDMG(attr, base))
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
