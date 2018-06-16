@@ -1,15 +1,26 @@
 {
-  "pp":0,
-  "desc":"Don't stand so close to me!",
-  "one_time":true,
+  "attr":"COR",
   "icon":false,
+  "one_time":true,
+  "desc":"Don't stand so close to me!",
+  "type-description":"",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":false,
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
+        "effects":[{
+            "type":"effect",
+            "target":"=body_self",
+            "name":"destroy_body"
+          },{
+            "attr":"=cor",
+            "center":"=pos",
+            "size":2,
+            "type":"effect",
+            "ignore_owner":false,
+            "name":"damage_on_area",
+            "base":20
+          }],
         "inputs":[{
             "type":"input",
             "name":"body",
@@ -20,48 +31,37 @@
             "name":"get_body_pos",
             "output":"pos"
           },{
-            "output":"cor",
             "type":"operator",
-            "name":"get_attribute",
-            "which":"COR"
-          }],
-        "effects":[{
-            "type":"effect",
-            "target":"=body_self",
-            "name":"destroy_body"
-          },{
-            "type":"effect",
-            "size":2,
-            "center":"=pos",
-            "base":16,
-            "ignore_owner":false,
-            "attr":"=cor",
-            "name":"damage_on_area"
+            "which":"COR",
+            "output":"cor",
+            "name":"get_attribute"
           }]
-      }
+      },
+      "trigger":"on_done"
     },
-    "charges":1,
+    "trigger":"on_tick",
+    "status-tags":[],
     "trigger-condition":{
+      "effects":[],
       "inputs":[{
           "type":"input",
           "name":"pos",
           "output":"pos_self"
         },{
-          "count":1,
-          "type":"input",
+          "ignore-owner":true,
           "body-type":false,
-          "output":"yup",
-          "pos":"=pos_self",
-          "range":1,
           "name":"has_nearby_bodies",
-          "ignore-owner":true
-        }],
-      "effects":[]
+          "range":1,
+          "type":"input",
+          "count":1,
+          "output":"yup",
+          "pos":"=pos_self"
+        }]
     },
-    "trigger":"on_tick"
+    "charges":1,
+    "placement":false
   },
-  "set":false,
-  "type-description":"",
-  "attr":"COR",
-  "name":"Proximity Detector"
+  "pp":0,
+  "name":"Proximity Detector",
+  "set":false
 }

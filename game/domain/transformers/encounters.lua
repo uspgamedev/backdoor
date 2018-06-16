@@ -16,7 +16,7 @@ transformer.schema = {
       { id = 'bodyspec', name = "Body Specification", type = 'enum',
         options = 'domains.body' },
       { id = 'upgrade_power', name = "Upgrade Power", type = 'integer',
-        range = {1,100} },
+        range = {10,1000} },
     } }
 }
 
@@ -34,7 +34,7 @@ function transformer.process(sectorinfo, params)
   for i=1,total do
     local encounter = {}
     local recipe = recipes[RANDOM.generate(1,#recipes)]
-    local upgrade_power = math.floor(RANDOM.generate(.8, 1.2)
+    local upgrade_power = math.floor(0.8 + 0.4*RANDOM.generate()
                                      * recipe.upgrade_power)
     encounter.upgrade_power = upgrade_power
     encounter.monster = { recipe.actorspec, recipe.bodyspec }
