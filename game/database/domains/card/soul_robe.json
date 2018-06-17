@@ -2,24 +2,24 @@
   "attr":"ANI",
   "icon":"card-soul-robe",
   "one_time":false,
-  "desc":false,
+  "desc":"",
   "type-description":"",
+  "set":false,
+  "pp":3,
+  "name":"Soul Robe",
   "widget":{
     "operators":[{
         "op":"+",
         "attr":"ANI",
-        "val":3
+        "val":2
       }],
     "trigger":false,
     "status-tags":[],
     "trigger-condition":{
-      "effects":[],
-      "inputs":[]
+      "inputs":[],
+      "effects":[]
     },
     "charges":0,
     "placement":"suit"
-  },
-  "pp":3,
-  "name":"Soul Robe",
-  "set":false
+  }
 }
