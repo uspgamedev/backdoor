@@ -24,6 +24,7 @@ INPUT_REPO=externals/input
 
 IMGUI_LIB=imgui.so
 IMGUI_DLL=imgui.dll
+LUAJIT_DLL=lua51.dll
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 
@@ -89,7 +90,7 @@ $(INPUT_REPO):
 
 ## IMGUI
 
-$(IMGUI_DLL): $(BIN_DIR_WIN32)
+$(IMGUI_DLL):
 	wget -O $(IMGUI_DLL) https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll
 
 $(IMGUI_LIB): $(IMGUI_BUILD_DIR)
@@ -122,16 +123,19 @@ $(DKJSON_LIB):
 $(BIN_DIR_WIN32): $(BIN_DIR)
 	mkdir -p $(BIN_DIR_WIN32)
 
-$(GAME_WIN32): $(BIN_DIR) $(IMGUI_DLL) $(LOVE_WIN32) $(GAME)
+$(GAME_WIN32): $(BIN_DIR) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32) $(GAME)
 	rm -rf $(BIN_DIR_WIN32)
 	unzip $(LOVE_WIN32) -d $(BIN_DIR)
 	mv $(BIN_DIR)/love-11.1.0-win32 $(BIN_DIR_WIN32)
-	cp $(IMGUI_DLL) $(BIN_DIR_WIN32)
+	cp $(IMGUI_DLL) $(LUAJIT_DLL) $(BIN_DIR_WIN32)
 	cat $(BIN_DIR_WIN32)/love.exe $(GAME) > $(GAME_WIN32)
 	rm $(BIN_DIR_WIN32)/love.exe $(BIN_DIR_WIN32)/lovec.exe
 
 $(LOVE_WIN32): $(BIN_DIR)
 	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip
+
+$(LUAJIT_DLL):
+	wget -O $(LUAJIT_DLL) https://uspgamedev.org/downloads/libs/windows/x86/lua51.dll
 
 ## Deploy
 
