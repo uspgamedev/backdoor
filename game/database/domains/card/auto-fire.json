@@ -4,13 +4,19 @@
   "set":false,
   "desc":"",
   "type-description":"",
-  "one_time":true,
-  "pp":0,
-  "name":"Auto-Fire",
   "widget":{
     "operators":[],
     "auto_activation":{
+      "trigger":"on_cycle",
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "target":"=target",
+            "base":4,
+            "type":"effect",
+            "name":"damage_on_target",
+            "sfx":false
+          }],
         "inputs":[{
             "type":"input",
             "name":"pos",
@@ -20,39 +26,33 @@
             "output":"count",
             "ignore-owner":true,
             "ignore-same-faction":true,
-            "range":3,
+            "pos":"=pos_self",
             "type":"input",
             "count":1,
             "name":"has_nearby_bodies",
-            "pos":"=pos_self"
+            "range":3
           },{
             "ignore-owner":true,
             "pos":"=pos_self",
-            "name":"find_nearest_body",
+            "ignore-same-faction":true,
             "type":"operator",
-            "range":3,
             "output":"target",
-            "ignore-same-faction":true
+            "name":"find_nearest_body",
+            "range":3
           },{
             "which":"COR",
-            "type":"operator",
+            "name":"get_attribute",
             "output":"cor",
-            "name":"get_attribute"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=target",
-            "type":"effect",
-            "base":6,
-            "name":"damage_on_target",
-            "sfx":false
+            "type":"operator"
           }]
-      },
-      "trigger":"on_cycle"
+      }
     },
     "status-tags":[],
     "trigger":"on_done",
     "charges":1,
     "placement":false
-  }
+  },
+  "pp":0,
+  "name":"Auto-Fire",
+  "one_time":true
 }
