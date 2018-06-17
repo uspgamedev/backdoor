@@ -117,8 +117,8 @@ end
 function Body:getAttribute(which)
   local actor = self:getActor()
   local inf   = ATTR.INFLUENCE[which]
-  local base  = actor and (actor:getAttribute(inf[1]) +
-                           actor:getAttribute(inf[2]))/2
+  local base  = actor and (2 * actor:getAttribute(inf[1]) +
+                           1 * actor:getAttribute(inf[2])) / 3
                        or 1
   return self:getWithMod(which, base)
 end
@@ -148,15 +148,15 @@ function Body:getCON()
 end
 
 function Body:getMAXDR()
-  return APT.MAXDR(self:getDEF(), self:getRES())
+  return math.floor(APT.MAXDR(self:getDEF(), self:getRES()))
 end
 
 function Body:getConsumption()
-  return APT.STAMINA(self:getEFC(), self:getFIN())
+  return math.floor(APT.STAMINA(self:getEFC(), self:getFIN()))
 end
 
 function Body:getMaxHP()
-  return APT.HP(self:getVIT(), self:getCON())
+  return math.floor(APT.HP(self:getVIT(), self:getCON()))
 end
 
 --[[ Appearance methods ]]--

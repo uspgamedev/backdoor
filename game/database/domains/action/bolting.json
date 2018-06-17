@@ -1,16 +1,25 @@
 {
+  "playpoints":0,
   "ability":{
+    "effects":[{
+        "attr":"=arc",
+        "target":"=target",
+        "type":"effect",
+        "base":4,
+        "name":"damage_on_target",
+        "sfx":false
+      }],
     "inputs":[{
         "aoe-hint":1,
+        "type":"input",
+        "output":"pos",
+        "non-wall":false,
+        "max-range":5,
         "empty-tile":false,
         "body-only":{
           "body-type":false
         },
-        "name":"choose_target",
-        "max-range":5,
-        "non-wall":false,
-        "output":"pos",
-        "type":"input"
+        "name":"choose_target"
       },{
         "type":"operator",
         "pos":"=pos",
@@ -18,19 +27,10 @@
         "output":"target"
       },{
         "which":"ARC",
-        "type":"operator",
+        "output":"arc",
         "name":"get_attribute",
-        "output":"arc"
-      }],
-    "effects":[{
-        "attr":"=arc",
-        "target":"=target",
-        "base":4,
-        "type":"effect",
-        "name":"damage_on_target",
-        "sfx":false
+        "type":"operator"
       }]
   },
-  "cost":20,
-  "playpoints":0
+  "cost":20
 }

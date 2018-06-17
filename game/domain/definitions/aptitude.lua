@@ -40,7 +40,7 @@ function APT.STAMINA(efc, mtb)
 end
 
 function APT.MAXDR(def, res)
-  return def * (12 + res*2)
+  return def * (8 + res*2)
 end
 
 return APT

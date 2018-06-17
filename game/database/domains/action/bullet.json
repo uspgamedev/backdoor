@@ -1,53 +1,53 @@
 {
-  "cost":20,
-  "playpoints":0,
   "ability":{
-    "effects":[{
-        "attr":"=cor",
-        "type":"effect",
-        "base":6,
-        "name":"damage_on_area",
-        "center":"=target_pos",
-        "size":1,
-        "ignore_owner":false
-      }],
     "inputs":[{
-        "name":"choose_dir",
-        "body-block":true,
         "type":"input",
-        "output":"dir"
+        "output":"dir",
+        "name":"choose_dir",
+        "body-block":true
       },{
-        "name":"self",
         "type":"operator",
+        "name":"self",
         "output":"self"
       },{
-        "name":"get_actor_body",
-        "output":"body_self",
         "type":"operator",
+        "output":"body_self",
+        "name":"get_actor_body",
         "actor":"=self"
       },{
-        "name":"get_body_pos",
-        "body":"=body_self",
         "type":"operator",
+        "body":"=body_self",
+        "name":"get_body_pos",
         "output":"origin"
       },{
-        "dir":"=dir",
-        "type":"operator",
-        "name":"hitscan",
         "maxrange":5,
-        "output":"hit_pos",
-        "pos":"=origin"
-      },{
-        "output":"target_pos",
-        "pos":"=hit_pos",
-        "name":"translated",
         "dir":"=dir",
-        "type":"operator"
-      },{
-        "name":"get_attribute",
-        "which":"COR",
         "type":"operator",
-        "output":"cor"
+        "pos":"=origin",
+        "name":"hitscan",
+        "output":"hit_pos"
+      },{
+        "pos":"=hit_pos",
+        "dir":"=dir",
+        "type":"operator",
+        "name":"translated",
+        "output":"target_pos"
+      },{
+        "which":"COR",
+        "output":"cor",
+        "name":"get_attribute",
+        "type":"operator"
+      }],
+    "effects":[{
+        "attr":"=cor",
+        "center":"=target_pos",
+        "size":1,
+        "base":5,
+        "ignore_owner":false,
+        "name":"damage_on_area",
+        "type":"effect"
       }]
-  }
+  },
+  "cost":20,
+  "playpoints":0
 }
