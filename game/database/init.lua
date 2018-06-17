@@ -2,15 +2,18 @@
 local json = require 'dkjson'
 local SCHEMA = require 'lux.pack' 'database.schema'
 local DEFS = require 'domain.definitions'
+local FS = love.filesystem
 
 local DB = {}
+
 
 local _dbcache = {}
 local _subschemas = {}
 
 local function _fullpath(relpath)
-  local srcpath = love.filesystem.getSource()
-  return ("%s/%s"):format(srcpath, relpath)
+  return relpath
+  --local srcpath = love.filesystem.getSource()
+  --return ("%s/%s"):format(srcpath, relpath)
 end
 
 function _loadSubschema(base)
@@ -74,14 +77,14 @@ local function _deleteFile(relpath)
 end
 
 local function _loadFile(relpath)
-  local file = assert(io.open(_fullpath(relpath), 'r'))
-  local data, _, err = json.decode(file:read('*a'))
+  local file = assert(FS.newFile(_fullpath(relpath), 'r'))
+  local data, _, err = json.decode((file:read())) -- drop second value
   file:close()
   return assert(data, err)
 end
 
 local function _writeFile(relpath, rawdata)
-  local file = assert(io.open(_fullpath(relpath), 'w'))
+  local file = assert(FS.newFile(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true})
   assert(file:write(data))
   return file:close()
