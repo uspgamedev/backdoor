@@ -3,37 +3,32 @@
   "icon":"card-heal",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
-      "effects":[{
-          "amount":"=amount",
-          "target":"=self",
-          "name":"heal",
-          "type":"effect"
-        }],
       "inputs":[{
           "dif-fact":false,
           "output":"body-pos",
           "aoe-hint":1,
+          "type":"input",
           "empty-tile":false,
-          "body-only":{
-            "body-type":false
-          },
           "max-range":0,
           "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "body-only":{
+            "body-type":false
+          }
         },{
           "type":"operator",
-          "which":"ANI",
+          "output":"ANI",
           "name":"get_attribute",
-          "output":"ANI"
+          "which":"ANI"
         },{
           "op":"*",
-          "output":"max",
+          "lhs":"=ANI",
           "type":"operator",
+          "rhs":8,
           "name":"integer_binop",
-          "rhs":4,
-          "lhs":"=ANI"
+          "output":"max"
         },{
           "rolls":1,
           "type":"operator",
@@ -45,9 +40,14 @@
           "pos":"=body-pos",
           "name":"get_body_at",
           "output":"self"
+        }],
+      "effects":[{
+          "amount":"=amount",
+          "target":"=self",
+          "name":"heal",
+          "type":"effect"
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"",
   "type-description":"",
