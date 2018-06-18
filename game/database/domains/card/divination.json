@@ -1,21 +1,21 @@
 {
-  "pp":2,
-  "desc":"Draws two cards, a bit slow.",
+  "attr":"ARC",
+  "icon":"card-divination",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[],
       "effects":[{
           "amount":2,
-          "type":"effect",
-          "name":"draw_card"
-        }]
-    }
+          "name":"draw_card",
+          "type":"effect"
+        }],
+      "inputs":[]
+    },
+    "cost":20
   },
-  "one_time":false,
-  "icon":"card-divination",
-  "set":false,
+  "desc":"Close your eyes and see beyond.",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Divination"
+  "pp":2,
+  "name":"Divination",
+  "set":false
 }

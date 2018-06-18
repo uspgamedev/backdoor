@@ -3,30 +3,7 @@
   "icon":"card-stomp",
   "one_time":false,
   "art":{
-    "cost":60,
     "art_ability":{
-      "inputs":[{
-          "aoe-hint":3,
-          "non-wall":false,
-          "output":"self_pos",
-          "type":"input",
-          "max-range":0,
-          "empty-tile":false,
-          "body-only":{
-            "body-type":false
-          },
-          "name":"choose_target"
-        },{
-          "type":"operator",
-          "name":"get_attribute",
-          "output":"ani",
-          "which":"ANI"
-        },{
-          "type":"operator",
-          "pos":"=self_pos",
-          "name":"get_body_at",
-          "output":"body"
-        }],
       "effects":[{
           "center":"=self_pos",
           "size":3,
@@ -42,10 +19,33 @@
           "ignore_owner":true,
           "name":"damage_on_area",
           "base":4
+        }],
+      "inputs":[{
+          "aoe-hint":3,
+          "name":"choose_target",
+          "body-only":{
+            "body-type":false
+          },
+          "empty-tile":false,
+          "type":"input",
+          "non-wall":false,
+          "output":"self_pos",
+          "max-range":0
+        },{
+          "type":"operator",
+          "which":"ANI",
+          "name":"get_attribute",
+          "output":"ani"
+        },{
+          "type":"operator",
+          "pos":"=self_pos",
+          "name":"get_body_at",
+          "output":"body"
         }]
-    }
+    },
+    "cost":60
   },
-  "desc":"Stuns and damages in a 3-tile radius area",
+  "desc":"",
   "type-description":"",
   "pp":0,
   "name":"Stomp",

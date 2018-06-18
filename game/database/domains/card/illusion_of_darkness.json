@@ -1,33 +1,33 @@
 {
-  "pp":3,
-  "desc":"Makes target enemy Blind temporary. Blind enemies have they FoV greatly reduced.",
+  "attr":"ANI",
+  "icon":"card-illusion-of-darkness",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "output":"target_pos",
-          "body-only":[],
-          "name":"choose_target",
-          "max-range":6
-        },{
-          "pos":"=target_pos",
-          "type":"operator",
-          "name":"get_body_at",
-          "output":"target_body"
-        }],
       "effects":[{
           "type":"effect",
           "body":"=target_body",
           "name":"place_widget",
           "card":"blind"
+        }],
+      "inputs":[{
+          "max-range":6,
+          "type":"input",
+          "body-only":[],
+          "name":"choose_target",
+          "output":"target_pos"
+        },{
+          "type":"operator",
+          "pos":"=target_pos",
+          "name":"get_body_at",
+          "output":"target_body"
         }]
-    }
+    },
+    "cost":20
   },
-  "one_time":false,
-  "icon":"card-illusion-of-darkness",
-  "set":false,
+  "desc":"Goodnight sweet prince.",
   "type-description":"",
-  "attr":"ANI",
-  "name":"Illusion of Darkness"
+  "pp":3,
+  "name":"Illusion of Darkness",
+  "set":false
 }

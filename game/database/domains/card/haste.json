@@ -1,25 +1,25 @@
 {
-  "pp":4,
-  "desc":"Makes you fast.\n\n\"Gotta go fast!\"",
-  "one_time":false,
-  "name":"Haste",
-  "widget":{
-    "status-tags":[],
-    "operators":[{
-        "val":2,
-        "op":"*",
-        "attr":"SPD"
-      }],
-    "placement":false,
-    "charges":10,
-    "trigger-condition":{
-      "inputs":[],
-      "effects":[]
-    },
-    "trigger":"on_turn"
-  },
-  "set":false,
-  "type-description":"",
+  "attr":"ANI",
   "icon":"card-haste",
-  "attr":"ANI"
+  "one_time":false,
+  "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
+  "type-description":"",
+  "widget":{
+    "operators":[{
+        "op":"*",
+        "attr":"SPD",
+        "val":2
+      }],
+    "trigger":"on_turn",
+    "status-tags":[],
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "charges":10,
+    "placement":false
+  },
+  "pp":4,
+  "name":"Haste",
+  "set":false
 }

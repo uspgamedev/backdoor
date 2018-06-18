@@ -3,46 +3,7 @@
   "icon":"card-rush",
   "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "name":"choose_dir",
-          "output":"dir",
-          "body-block":true
-        },{
-          "type":"operator",
-          "name":"self",
-          "output":"self"
-        },{
-          "type":"operator",
-          "name":"get_actor_body",
-          "output":"body_self",
-          "actor":"=self"
-        },{
-          "type":"operator",
-          "body":"=body_self",
-          "name":"get_body_pos",
-          "output":"origin"
-        },{
-          "maxrange":6,
-          "dir":"=dir",
-          "type":"operator",
-          "pos":"=origin",
-          "output":"target_pos",
-          "name":"hitscan"
-        },{
-          "pos":"=target_pos",
-          "dir":"=dir",
-          "type":"operator",
-          "name":"translated",
-          "output":"damage_pos"
-        },{
-          "type":"operator",
-          "name":"get_attribute",
-          "output":"cor",
-          "which":"COR"
-        }],
       "effects":[{
           "vfx-spd":1,
           "vfx":"SLIDE",
@@ -58,10 +19,49 @@
           "ignore_owner":false,
           "name":"damage_on_area",
           "base":8
+        }],
+      "inputs":[{
+          "type":"input",
+          "body-block":true,
+          "name":"choose_dir",
+          "output":"dir"
+        },{
+          "type":"operator",
+          "name":"self",
+          "output":"self"
+        },{
+          "type":"operator",
+          "output":"body_self",
+          "name":"get_actor_body",
+          "actor":"=self"
+        },{
+          "type":"operator",
+          "body":"=body_self",
+          "name":"get_body_pos",
+          "output":"origin"
+        },{
+          "maxrange":6,
+          "dir":"=dir",
+          "type":"operator",
+          "name":"hitscan",
+          "output":"target_pos",
+          "pos":"=origin"
+        },{
+          "pos":"=target_pos",
+          "dir":"=dir",
+          "type":"operator",
+          "name":"translated",
+          "output":"damage_pos"
+        },{
+          "type":"operator",
+          "which":"COR",
+          "name":"get_attribute",
+          "output":"cor"
         }]
-    }
+    },
+    "cost":20
   },
-  "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
+  "desc":"It's rush hour.And I'm not talking about kong-fu.",
   "type-description":"",
   "pp":10,
   "name":"Rush",

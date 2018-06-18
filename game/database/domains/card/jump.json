@@ -3,31 +3,7 @@
   "icon":"card-jump",
   "one_time":false,
   "art":{
-    "cost":40,
     "art_ability":{
-      "inputs":[{
-          "aoe-hint":2,
-          "empty-tile":true,
-          "output":"pos",
-          "type":"input",
-          "non-wall":true,
-          "name":"choose_target",
-          "max-range":4
-        },{
-          "type":"operator",
-          "name":"get_attribute",
-          "output":"cor",
-          "which":"COR"
-        },{
-          "type":"operator",
-          "name":"self",
-          "output":"self"
-        },{
-          "type":"operator",
-          "name":"get_actor_body",
-          "output":"body",
-          "actor":"=self"
-        }],
       "effects":[{
           "vfx-spd":1,
           "vfx":"JUMP",
@@ -43,10 +19,34 @@
           "ignore_owner":true,
           "name":"damage_on_area",
           "base":6
+        }],
+      "inputs":[{
+          "aoe-hint":2,
+          "max-range":4,
+          "name":"choose_target",
+          "type":"input",
+          "empty-tile":true,
+          "output":"pos",
+          "non-wall":true
+        },{
+          "type":"operator",
+          "which":"COR",
+          "name":"get_attribute",
+          "output":"cor"
+        },{
+          "type":"operator",
+          "name":"self",
+          "output":"self"
+        },{
+          "type":"operator",
+          "output":"body",
+          "name":"get_actor_body",
+          "actor":"=self"
         }]
-    }
+    },
+    "cost":40
   },
-  "desc":"Jump at target pos, dealing 12dCOR in a\n2-tile radius.",
+  "desc":"Take THAT gravity!",
   "type-description":"",
   "pp":3,
   "name":"Jump",

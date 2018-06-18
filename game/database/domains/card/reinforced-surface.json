@@ -1,8 +1,8 @@
 {
   "attr":"ARC",
   "icon":false,
-  "one_time":true,
-  "desc":"DEF +2 for the next ten hits.",
+  "set":false,
+  "desc":"",
   "type-description":"",
   "widget":{
     "operators":[{
@@ -11,10 +11,10 @@
         "val":4
       }],
     "trigger":"on_hit",
-    "charges":10,
     "status-tags":[],
+    "charges":10,
     "placement":false
   },
   "name":"Reinforced Surface",
-  "set":false
+  "one_time":true
 }

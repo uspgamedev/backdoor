@@ -1,34 +1,34 @@
 {
-  "pp":0,
-  "desc":"Temporarily boost target machine's DEF.",
+  "attr":"ARC",
+  "icon":"card-reinforce",
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "body-only":{
-            "body-type":"machine"
-          },
-          "type":"input",
-          "name":"choose_target",
-          "output":"target"
-        },{
-          "pos":"=target",
-          "type":"operator",
-          "name":"get_body_at",
-          "output":"machine"
-        }],
       "effects":[{
           "type":"effect",
           "body":"=machine",
           "name":"place_widget",
           "card":"reinforced-surface"
+        }],
+      "inputs":[{
+          "type":"input",
+          "output":"target",
+          "body-only":{
+            "body-type":"machine"
+          },
+          "name":"choose_target"
+        },{
+          "type":"operator",
+          "pos":"=target",
+          "name":"get_body_at",
+          "output":"machine"
         }]
-    }
+    },
+    "cost":20
   },
-  "one_time":false,
-  "icon":"card-reinforce",
-  "set":false,
+  "desc":"",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Reinforce"
+  "pp":0,
+  "name":"Reinforce",
+  "set":false
 }

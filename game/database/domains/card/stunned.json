@@ -1,14 +1,18 @@
 {
-  "desc":"Can't take actions.",
+  "attr":"COR",
+  "icon":false,
+  "one_time":true,
+  "desc":"",
+  "type-description":"",
   "widget":{
     "operators":[],
     "trigger":"on_cycle",
+    "charges":8,
     "status-tags":[{
         "tag":"stun"
       }],
-    "charges":8
+    "placement":false
   },
-  "attr":"COR",
-  "one_time":true,
-  "name":"Stunned"
+  "name":"Stunned",
+  "set":false
 }

@@ -1,35 +1,35 @@
 {
-  "pp":0,
-  "desc":"Kachink",
+  "attr":"COR",
+  "icon":"card-turret",
+  "one_time":false,
   "art":{
-    "cost":100,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "output":"pos",
-          "non-wall":true,
-          "aoe-hint":4,
-          "empty-tile":true,
-          "name":"choose_target",
-          "max-range":1
-        }],
       "effects":[{
-          "def":50,
-          "type":"effect",
-          "bodyspec":"machine",
           "widgets":[{
               "spec":"auto-fire"
             }],
           "pos":"=pos",
+          "vit":50,
+          "type":"effect",
           "name":"make_body",
-          "vit":50
+          "def":50,
+          "bodyspec":"machine"
+        }],
+      "inputs":[{
+          "aoe-hint":4,
+          "max-range":1,
+          "name":"choose_target",
+          "type":"input",
+          "non-wall":true,
+          "output":"pos",
+          "empty-tile":true
         }]
-    }
+    },
+    "cost":100
   },
-  "one_time":false,
-  "icon":"card-turret",
-  "set":false,
+  "desc":"A true friend never let's you down.\n\nAnd also shoots your enemies in the face.",
   "type-description":"",
-  "attr":"COR",
-  "name":"Turret"
+  "pp":0,
+  "name":"Turret",
+  "set":false
 }

@@ -2,13 +2,13 @@
   "attr":"ARC",
   "icon":"card-upgrade",
   "set":"upgrades_arc",
-  "desc":"Upgrades your Arcana attribute by 10.",
+  "desc":"",
   "upgrade":{
+    "cost":2,
     "attr_list":[{
         "attr":"ARC",
         "val":50
-      }],
-    "cost":2
+      }]
   },
   "type-description":"",
   "pp":0,

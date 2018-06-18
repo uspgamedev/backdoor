@@ -1,66 +1,66 @@
 {
-  "pp":0,
-  "desc":"Up you gooooooo",
+  "attr":"ARC",
+  "icon":"card-fireball",
+  "one_time":false,
   "art":{
-    "cost":40,
     "art_ability":{
+      "effects":[{
+          "vfx-spd":1.1000000238419,
+          "vfx":"JUMP",
+          "type":"effect",
+          "body":"=victim_body",
+          "name":"move_to",
+          "pos":"=target_pos"
+        },{
+          "attr":3,
+          "target":"=victim_body",
+          "type":"effect",
+          "name":"damage_on_target",
+          "base":"=arc*3"
+        }],
       "inputs":[{
-          "output":"victim_pos",
-          "type":"input",
-          "empty-tile":false,
-          "non-wall":false,
           "aoe-hint":0,
+          "max-range":3,
+          "name":"choose_target",
           "body-only":{
             "body-type":false
           },
-          "name":"choose_target",
-          "max-range":3
-        },{
           "type":"input",
-          "output":"target_pos",
-          "non-wall":false,
-          "aoe-hint":0,
-          "empty-tile":true,
-          "name":"choose_target",
-          "max-range":6
+          "empty-tile":false,
+          "output":"victim_pos",
+          "non-wall":false
         },{
-          "pos":"=victim_pos",
+          "aoe-hint":0,
+          "max-range":6,
+          "name":"choose_target",
+          "type":"input",
+          "non-wall":false,
+          "output":"target_pos",
+          "empty-tile":true
+        },{
           "type":"operator",
+          "pos":"=victim_pos",
           "name":"get_body_at",
           "output":"victim_body"
         },{
-          "output":"arc",
           "type":"operator",
-          "name":"get_attribute",
-          "which":"ARC"
+          "which":"ARC",
+          "output":"arc",
+          "name":"get_attribute"
         },{
           "op":"*",
-          "rhs":3,
-          "lhs":"=arc",
+          "output":"arc*3",
           "type":"operator",
           "name":"integer_binop",
-          "output":"arc*3"
-        }],
-      "effects":[{
-          "body":"=victim_body",
-          "pos":"=target_pos",
-          "vfx-spd":1.1000000238419,
-          "vfx":"JUMP",
-          "name":"move_to",
-          "type":"effect"
-        },{
-          "type":"effect",
-          "target":"=victim_body",
-          "name":"damage_on_target",
-          "base":"=arc*3",
-          "attr":3
+          "rhs":3,
+          "lhs":"=arc"
         }]
-    }
+    },
+    "cost":40
   },
-  "one_time":false,
-  "icon":"card-fireball",
-  "set":false,
+  "desc":"Up you goooooooooo...",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Meteor Blast"
+  "pp":0,
+  "name":"Meteor Blast",
+  "set":false
 }

@@ -2,8 +2,11 @@
   "attr":"ANI",
   "icon":"card-rage",
   "set":false,
-  "desc":"For 10 turns, increase COR and SPD but reduce DEF.",
+  "desc":"They say Rage is all the rage with the kids.",
   "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Rage",
   "widget":{
     "operators":[{
         "attr":"COR",
@@ -19,11 +22,8 @@
         "val":2
       }],
     "trigger":"on_turn",
-    "status-tags":[],
     "charges":10,
+    "status-tags":[],
     "placement":false
-  },
-  "pp":0,
-  "name":"Rage",
-  "one_time":false
+  }
 }
