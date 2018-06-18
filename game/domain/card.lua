@@ -47,7 +47,7 @@ function Card:getEffect()
           .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
   elseif self:isUpgrade() then
     effect = ("Upgrades %s"):format(
-      table.concat(self:getUpgradesList().actor, ', ')
+      table.concat(self:getUpgradesList(), ', ')
     )
   elseif self:isWidget() then
     effect = "Widget"
