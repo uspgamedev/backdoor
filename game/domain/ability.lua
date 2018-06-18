@@ -124,7 +124,7 @@ function ABILITY.preview(ability, actor, inputvalues)
       end
     end
   end
-  return table.concat(values, "\n\n")
+  return table.concat(values, ". ") .. "."
 end
 
 return ABILITY

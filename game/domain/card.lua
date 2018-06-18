@@ -40,23 +40,6 @@ function Card:getDescription()
   return self:getSpec('desc')
 end
 
-function Card:getEffect()
-  local effect
-  if self:isArt() then
-    effect = ("[%d exhaustion]\n\n"):format(self:getArtCost())
-          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
-  elseif self:isUpgrade() then
-    local ups,n = {}, 1
-    for _,up in ipairs(self:getUpgradesList()) do
-      ups[n] = "+" .. up.val .. " " .. up.attr
-    end
-    effect = ("Upgrades %s"):format(table.concat(ups, ', '))
-  elseif self:isWidget() then
-    effect = "Widget"
-  end
-  return effect .. "\n\n---"
-end
-
 function Card:getIconTexture()
   return self:getSpec('icon')
 end
@@ -196,6 +179,49 @@ function Card:tick()
     return true
   end
   return false
+end
+
+function Card:getEffect()
+  local effect
+  if self:isArt() then
+    effect = ("Art [%d exhaustion]\n\n"):format(self:getArtCost())
+          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
+  elseif self:isUpgrade() then
+    local ups,n = {}, 0
+    for _,up in ipairs(self:getUpgradesList()) do
+      n = n + 1
+      ups[n] = "+" .. up.val .. " " .. up.attr
+    end
+    effect = ("Upgrade [%s]"):format(table.concat(ups, ', '))
+  elseif self:isWidget() then
+    effect = "Widget"
+    local place = self:getWidgetPlacement() if place then
+      effect = effect .. " [" .. place .. "]"
+    end
+    local charges = self:getWidgetCharges() if charges > 0 then
+      local trigger = self:getWidgetTrigger()
+      effect = effect .. (" [%d/%s charges]"):format(charges, trigger)
+    end
+    local activation = self:getWidgetActivation() if activation then
+      local ability, cost = activation.ability, activation.cost
+      effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
+                      .. ABILITY.preview(ability, self:getOwner(), {})
+    end
+    local auto = self:getWidgetTriggeredAbility() if auto then
+      local ability, trigger = auto.ability, auto.trigger
+      effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
+                      .. ABILITY.preview(ability, self:getOwner(), {})
+    end
+    local ops, n = {}, 0
+    for _,op in self:getStaticOperators() do
+      n = n + 1
+      ops[n] = ("%s%d %s"):format(op.op, op.val, op.attr)
+    end
+    if n > 0 then
+      effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
+    end
+  end
+  return effect .. "\n\n---"
 end
 
 return Card
