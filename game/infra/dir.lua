@@ -123,5 +123,39 @@ function DIRECTIONALS.isDirectionDown(direction)
   return dir == hat or dir == axis or INPUT.isActionDown(direction)
 end
 
-return DIRECTIONALS
+--Check the if any direction is triggered, including diagonals
+function DIRECTIONALS.hasDirectionTriggered()
+  if DIRECTIONALS.wasDirectionTriggered('UPLEFT') then
+    return 'UPLEFT'
+  elseif DIRECTIONALS.wasDirectionTriggered('UPRIGHT') then
+    return 'UPRIGHT'
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWNLEFT') then
+    return 'DOWNLEFT'
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWNRIGHT') then
+    return 'DOWNRIGHT'
+  elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+     if DIRECTIONALS.wasDirectionTriggered('LEFT') then
+       return  'UPLEFT'
+     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+       return 'UPRIGHT'
+     else
+       return 'UP'
+     end
+  elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+     if DIRECTIONALS.wasDirectionTriggered('LEFT') then
+       return 'DOWNLEFT'
+     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+       return 'DOWNRIGHT'
+     else
+       return 'DOWN'
+     end
+  elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
+    return 'LEFT'
+  elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+    return 'RIGHT'
+  end
 
+  return nil
+end
+
+return DIRECTIONALS
