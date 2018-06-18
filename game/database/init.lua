@@ -11,9 +11,8 @@ local _dbcache = {}
 local _subschemas = {}
 
 local function _fullpath(relpath)
-  return relpath
-  --local srcpath = love.filesystem.getSource()
-  --return ("%s/%s"):format(srcpath, relpath)
+  local srcpath = love.filesystem.getSource()
+  return ("%s/%s"):format(srcpath, relpath)
 end
 
 function _loadSubschema(base)
@@ -70,6 +69,8 @@ local function _listFilesIn(relpath)
 end
 
 local function _deleteFile(relpath)
+  -- We need os.remove and fullpath to write to files
+  -- This only works in development mode
   if love.filesystem.getInfo(relpath, 'file') then
     local path = _fullpath(relpath)
     return os.remove(_fullpath(relpath))
@@ -77,14 +78,16 @@ local function _deleteFile(relpath)
 end
 
 local function _loadFile(relpath)
-  local file = assert(FS.newFile(_fullpath(relpath), 'r'))
+  local file = assert(FS.newFile(relpath, 'r'))
   local data, _, err = json.decode((file:read())) -- drop second value
   file:close()
   return assert(data, err)
 end
 
 local function _writeFile(relpath, rawdata)
-  local file = assert(FS.newFile(_fullpath(relpath), 'w'))
+  -- We need io.open and fullpath to write to files
+  -- This only works in development mode
+  local file = assert(io.open(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true})
   assert(file:write(data))
   return file:close()
