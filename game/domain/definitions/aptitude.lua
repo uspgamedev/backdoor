@@ -39,8 +39,9 @@ function APT.STAMINA(efc, mtb)
   return math.floor(food)
 end
 
-function APT.MAXDR(def, res)
-  return def * (8 + res*2)
+function APT.DR(def, res)
+  local power = def * (8 + res*2) 
+  return power/4, 3*power/4
 end
 
 return APT

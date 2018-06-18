@@ -18,7 +18,7 @@ FX.schema = {
 
 function FX.process (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = RANDOM.generate(ATTR.MAXDMG(attr, base))
+  local amount = RANDOM.generate(ATTR.DMG(attr, base))
   local dmg = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
