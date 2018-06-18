@@ -7,20 +7,18 @@ DEFS.DELETE = "__DELETE_VALUE__"
 DEFS.CONSUME_EXP = 1
 DEFS.MAX_PP = 100
 DEFS.CARD_TYPES = {'ART', 'WIDGET', 'UPGRADE'}
-DEFS.PRIMARY_ATTRIBUTES = {"COR", "ARC", "ANI"}
-DEFS.ATTRIBUTES = {
-  "COR", "ARC", "ANI", "SPD",
+DEFS.PRIMARY_ATTRIBUTES = {
+  "COR", "ARC", "ANI",
   COR = "COR",
   ARC = "ARC",
   ANI = "ANI",
-  SPD = "SPD",
 }
-DEFS.BODY_ATTRIBUTES = {
-  "VIT", "DEF",
-  VIT = "VIT",
-  DEF = "DEF",
+DEFS.ALL_ATTRIBUTES = {
+  "COR", "ARC", "ANI",
+  "SPD", "FOV",
+  "DEF", "EFC", "VIT",
+  "RES", "FIN", "CON"
 }
-DEFS.ALL_ATTRIBUTES = {"COR", "ARC", "ANI", "SPD", "VIT", "DEF", "FOV"}
 DEFS.PACK_SIZE = 5
 DEFS.HAND_LIMIT = 5
 
@@ -28,6 +26,7 @@ DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
 DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
 DEFS.APT          = require 'domain.definitions.aptitude'
+DEFS.ATTR         = require 'domain.definitions.attribute'
 DEFS.STATUS_TAGS  = require 'domain.definitions.status_tags'
 
 return DEFS

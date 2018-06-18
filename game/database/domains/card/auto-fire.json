@@ -2,7 +2,7 @@
   "attr":"COR",
   "icon":false,
   "set":false,
-  "desc":false,
+  "desc":"",
   "type-description":"",
   "widget":{
     "operators":[],
@@ -12,9 +12,10 @@
         "effects":[{
             "attr":"=cor",
             "target":"=target",
+            "base":4,
             "type":"effect",
             "name":"damage_on_target",
-            "base":5
+            "sfx":false
           }],
         "inputs":[{
             "type":"input",
@@ -24,8 +25,8 @@
             "body-type":false,
             "output":"count",
             "ignore-owner":true,
-            "pos":"=pos_self",
             "ignore-same-faction":true,
+            "pos":"=pos_self",
             "type":"input",
             "count":1,
             "name":"has_nearby_bodies",
@@ -36,12 +37,12 @@
             "ignore-same-faction":true,
             "type":"operator",
             "output":"target",
-            "range":3,
-            "name":"find_nearest_body"
+            "name":"find_nearest_body",
+            "range":3
           },{
             "which":"COR",
-            "output":"cor",
             "name":"get_attribute",
+            "output":"cor",
             "type":"operator"
           }]
       }

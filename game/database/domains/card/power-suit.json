@@ -5,21 +5,17 @@
     "operators":[{
         "attr":"DEF",
         "op":"+",
-        "val":5
-      },{
-        "attr":"SPD",
-        "op":"-",
-        "val":4
+        "val":1
       }],
-    "trigger":"on_hit",
-    "charges":8,
+    "trigger":false,
     "status-tags":[],
+    "charges":0,
     "placement":"suit"
   },
   "desc":"While wearing, increase your DEF by 5, but decrease your SPD by 4.\n\n\"'You won't feel anything your enemies throw at you*!\n*Side-effects include not feeling your feet.'\n-Tark Tech slogan for Power Suit.\"\n",
   "type-description":"",
-  "set":false,
+  "one_time":true,
   "pp":0,
   "name":"Power Suit",
-  "one_time":true
+  "set":false
 }

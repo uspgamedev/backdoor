@@ -1,75 +1,76 @@
 {
-  "pp":0,
-  "desc":"Deal XdCOR damage where X=5+nearby machines",
-  "one_time":false,
+  "attr":"COR",
   "icon":"card-wrench",
+  "set":false,
+  "desc":"Deal XdCOR damage where X=5+nearby machines",
+  "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Wrench",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":"weapon",
+    "trigger":false,
     "activation":{
       "cost":20,
       "ability":{
         "inputs":[{
             "body-only":[],
+            "max-range":1,
             "type":"input",
-            "output":"pos",
             "name":"choose_target",
-            "max-range":1
+            "output":"pos"
           },{
-            "output":"cor",
             "type":"operator",
             "name":"get_attribute",
+            "output":"cor",
             "which":"COR"
           },{
             "type":"operator",
             "name":"self",
             "output":"self"
           },{
-            "actor":"=self",
             "type":"operator",
             "name":"get_actor_body",
-            "output":"body"
+            "output":"body",
+            "actor":"=self"
           },{
-            "body":"=body",
             "type":"operator",
+            "body":"=body",
             "name":"get_body_pos",
             "output":"center"
           },{
-            "type":"operator",
             "ignore-owner":true,
             "body-type":"machine",
             "pos":"=center",
+            "type":"operator",
             "range":5,
-            "name":"count_nearby_bodies",
-            "output":"count"
+            "output":"count",
+            "name":"count_nearby_bodies"
           },{
             "op":"+",
-            "rhs":7,
             "lhs":"=count",
             "type":"operator",
+            "rhs":"=cor",
             "name":"integer_binop",
             "output":"base"
           },{
-            "pos":"=pos",
             "type":"operator",
+            "pos":"=pos",
             "name":"get_body_at",
             "output":"target"
           }],
         "effects":[{
-            "type":"effect",
+            "attr":"=base",
             "target":"=target",
+            "base":12,
+            "type":"effect",
             "name":"damage_on_target",
-            "attr":"=cor",
-            "base":"=base"
+            "sfx":false
           }]
       }
     },
-    "charges":10,
-    "trigger":"on_use"
-  },
-  "name":"Wrench",
-  "type-description":"",
-  "set":false,
-  "attr":"COR"
+    "status-tags":[],
+    "charges":0,
+    "placement":"weapon"
+  }
 }

@@ -1,68 +1,69 @@
 {
-  "pp":10,
-  "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
+  "attr":"COR",
+  "icon":"card-rush",
+  "one_time":false,
   "art":{
     "cost":20,
     "art_ability":{
       "inputs":[{
-          "body-block":true,
           "type":"input",
           "name":"choose_dir",
-          "output":"dir"
+          "output":"dir",
+          "body-block":true
         },{
           "type":"operator",
           "name":"self",
           "output":"self"
         },{
           "type":"operator",
-          "actor":"=self",
           "name":"get_actor_body",
-          "output":"body_self"
+          "output":"body_self",
+          "actor":"=self"
         },{
           "type":"operator",
           "body":"=body_self",
           "name":"get_body_pos",
           "output":"origin"
         },{
-          "type":"operator",
           "maxrange":6,
           "dir":"=dir",
-          "pos":"=origin",
-          "name":"hitscan",
-          "output":"target_pos"
-        },{
           "type":"operator",
-          "dir":"=dir",
+          "pos":"=origin",
+          "output":"target_pos",
+          "name":"hitscan"
+        },{
           "pos":"=target_pos",
+          "dir":"=dir",
+          "type":"operator",
           "name":"translated",
           "output":"damage_pos"
         },{
-          "output":"cor",
           "type":"operator",
           "name":"get_attribute",
+          "output":"cor",
           "which":"COR"
         }],
       "effects":[{
-          "body":"=body_self",
-          "pos":"=target_pos",
           "vfx-spd":1,
           "vfx":"SLIDE",
-          "name":"move_to",
-          "type":"effect"
-        },{
           "type":"effect",
+          "body":"=body_self",
+          "name":"move_to",
+          "pos":"=target_pos"
+        },{
+          "attr":"=cor",
           "center":"=damage_pos",
           "size":1,
+          "type":"effect",
+          "ignore_owner":false,
           "name":"damage_on_area",
-          "attr":"=cor",
-          "base":10
+          "base":8
         }]
     }
   },
-  "one_time":false,
-  "icon":"card-rush",
-  "set":false,
+  "desc":"Run in a direction until an obstacle is hit.\n\nIf you hit something, it takes 10dCOR damage.",
   "type-description":"",
-  "attr":"COR",
-  "name":"Rush"
+  "pp":10,
+  "name":"Rush",
+  "set":false
 }

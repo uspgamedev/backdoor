@@ -6,13 +6,13 @@
   "encounters":{
     "max":12,
     "recipes":[{
-        "bodyspec":"eye",
         "actorspec":"fiendish",
-        "upgrade_power":120
+        "bodyspec":"eye",
+        "upgrade_power":150
       },{
-        "bodyspec":"imp",
         "actorspec":"grinful",
-        "upgrade_power":120
+        "bodyspec":"imp",
+        "upgrade_power":180
       }],
     "min":6
   },
@@ -22,28 +22,29 @@
         "droprate":1
       }]
   },
+  "rooms":{
+    "tries":256,
+    "count":24,
+    "minw":3,
+    "minh":3,
+    "maxh":9,
+    "rmar":1,
+    "maxw":9
+  },
+  "maze":{
+    "double":false
+  },
+  "theme":false,
   "exits":{
     "distance":5,
-    "threshold":2,
     "exits":[{
         "target_specname":"sector02"
       },{
         "target_specname":"sector03"
       },{
         "target_specname":"sector_final"
-      }]
-  },
-  "maze":{
-    "double":false
-  },
-  "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
-    "tries":256,
-    "count":24,
-    "maxh":9,
-    "maxw":9
+      }],
+    "threshold":2
   },
   "bootstrap":{
     "w":56,

@@ -8,15 +8,15 @@
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime",
-        "upgrade_power":50
+        "upgrade_power":100
       },{
         "actorspec":"grinful",
         "bodyspec":"imp",
-        "upgrade_power":80
+        "upgrade_power":120
       },{
         "actorspec":"fiendish",
         "bodyspec":"eye",
-        "upgrade_power":80
+        "upgrade_power":150
       }],
     "min":5
   },
@@ -25,6 +25,15 @@
         "droptype":"food",
         "droprate":2
       }]
+  },
+  "rooms":{
+    "minh":3,
+    "count":24,
+    "minw":3,
+    "tries":256,
+    "maxh":9,
+    "rmar":1,
+    "maxw":9
   },
   "holes":false,
   "exits":{
@@ -38,9 +47,7 @@
         "target_specname":"sector03"
       }]
   },
-  "maze":{
-    "double":false
-  },
+  "theme":false,
   "deadends":{
     "amount":12
   },
@@ -51,13 +58,7 @@
     "h":56,
     "mw":9
   },
-  "rooms":{
-    "minh":3,
-    "maxh":9,
-    "minw":3,
-    "tries":256,
-    "count":24,
-    "rmar":1,
-    "maxw":9
+  "maze":{
+    "double":false
   }
 }

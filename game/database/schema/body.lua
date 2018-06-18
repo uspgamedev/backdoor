@@ -7,9 +7,9 @@ return {
     options = 'domains.appearance' },
   { id = 'faction', name = "Faction", type = "enum",
     options = 'domains.faction'},
-  { id = 'vit', name = "Vitality", type = "integer", range = {-4,4} },
-  { id = 'def', name = "Defense", type = "integer", range = {-4,4} },
-  { id = 'def_die', name = "Defense Die", type = "integer", range = {1,999} },
+  { id = 'res', name = "Resistance", type = "integer", range = {-2,2} },
+  { id = 'fin', name = "Finesse", type = "integer", range = {-2,2} },
+  { id = 'con', name = "Constitution", type = "integer", range = {-2,2} },
   { id = 'drops', name = 'Drops', type = 'array',
     schema = {
       { id = 'droptype', name = "Drop Type", type = 'enum',

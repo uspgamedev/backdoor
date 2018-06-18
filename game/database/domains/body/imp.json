@@ -1,6 +1,6 @@
 {
   "extends":"slime",
-  "def_die":4,
+  "faction":"agressive",
   "drops":[{
       "droptype":"pack",
       "droprate":70
@@ -8,10 +8,10 @@
       "droptype":"pack",
       "droprate":20
     }],
-  "name":"Imp",
-  "faction":"agressive",
+  "res":-2,
+  "con":-2,
   "appearance":"imp",
-  "vit":-1,
-  "def":0,
+  "fin":-1,
+  "name":"Imp",
   "description":"Lesser demons, mischievious little miscreations.\nThey are known for their trickster grin and their\naptitude with arcane spells. They are hella weak,\nthough: one strong blow and they are dead meat."
 }

@@ -32,16 +32,14 @@ function Actor:init(spec_name)
   self.hand_limit = 5
   self.hand_countdown = 0
   self.upgrades = {
-    COR = 100,
-    ARC = 100,
-    ANI = 100,
-    SPD = 100,
+    COR = DEFS.ATTR.INITIAL_UPGRADE,
+    ARC = DEFS.ATTR.INITIAL_UPGRADE,
+    ANI = DEFS.ATTR.INITIAL_UPGRADE,
   }
   self.attr_lv = {
     COR = 0,
     ARC = 0,
     ANI = 0,
-    SPD = 0,
   }
   self.exp = 0
   self.playpoints = DEFS.MAX_PP
@@ -55,7 +53,6 @@ function Actor:init(spec_name)
   self:updateAttr('COR')
   self:updateAttr('ARC')
   self:updateAttr('ANI')
-  self:updateAttr('SPD')
 end
 
 function Actor:loadState(state)
@@ -93,7 +90,6 @@ function Actor:loadState(state)
   self:updateAttr('COR')
   self:updateAttr('ARC')
   self:updateAttr('ANI')
-  self:updateAttr('SPD')
 end
 
 function Actor:saveState()
@@ -158,13 +154,18 @@ function Actor:getAptitude(which)
   return self:getSpec(which:lower())
 end
 
+--[[ Attribute and co methods ]]--
+
 function Actor:getAttrLevel(which)
   return self.attr_lv[which]
 end
 
+function Actor:getWithMod(which, value)
+  return self:getBody():getWithMod(which, value)
+end
+
 function Actor:getAttribute(which)
-  return math.max(1,self:getBody()
-                        :applyStaticOperators(which, self:getAttrLevel(which)))
+  return self:getWithMod(which, self:getAttrLevel(which))
 end
 
 function Actor:getAttrUpgrade(which)
@@ -205,11 +206,7 @@ function Actor:upgradeANI(n)
 end
 
 function Actor:getSPD()
-  return self:getAttribute('SPD')
-end
-
-function Actor:upgradeSPD(n)
-  self:upgradeAttr('SPD', n)
+  return self:getWithMod('SPD', DEFS.ATTR.BASE_SPD)
 end
 
 --[[ Body methods ]]--
@@ -548,11 +545,10 @@ end
 
 function Actor:getPowerLevel()
   local lvl = 0
-  local body_powerlvl = self:getBody():getPowerLevel()
   for attr,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
-  return lvl + body_powerlvl
+  return lvl
 end
 
 return Actor

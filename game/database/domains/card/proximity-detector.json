@@ -1,12 +1,14 @@
 {
-  "pp":0,
-  "desc":"Don't stand so close to me!",
-  "one_time":true,
+  "attr":"COR",
   "icon":false,
+  "one_time":true,
+  "desc":"Don't stand so close to me!",
+  "type-description":"",
+  "set":false,
+  "pp":0,
+  "name":"Proximity Detector",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":false,
     "auto_activation":{
       "trigger":"on_done",
       "ability":{
@@ -20,9 +22,9 @@
             "name":"get_body_pos",
             "output":"pos"
           },{
-            "output":"cor",
             "type":"operator",
             "name":"get_attribute",
+            "output":"cor",
             "which":"COR"
           }],
         "effects":[{
@@ -30,16 +32,18 @@
             "target":"=body_self",
             "name":"destroy_body"
           },{
-            "type":"effect",
-            "size":2,
-            "center":"=pos",
-            "base":16,
-            "ignore_owner":false,
             "attr":"=cor",
-            "name":"damage_on_area"
+            "center":"=pos",
+            "size":2,
+            "type":"effect",
+            "ignore_owner":false,
+            "name":"damage_on_area",
+            "base":10
           }]
       }
     },
+    "trigger":"on_tick",
+    "status-tags":[],
     "charges":1,
     "trigger-condition":{
       "inputs":[{
@@ -47,21 +51,17 @@
           "name":"pos",
           "output":"pos_self"
         },{
-          "count":1,
-          "type":"input",
+          "ignore-owner":true,
           "body-type":false,
-          "output":"yup",
           "pos":"=pos_self",
-          "range":1,
+          "output":"yup",
+          "type":"input",
+          "count":1,
           "name":"has_nearby_bodies",
-          "ignore-owner":true
+          "range":1
         }],
       "effects":[]
     },
-    "trigger":"on_tick"
-  },
-  "set":false,
-  "type-description":"",
-  "attr":"COR",
-  "name":"Proximity Detector"
+    "placement":false
+  }
 }

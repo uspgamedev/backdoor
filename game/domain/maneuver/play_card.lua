@@ -67,17 +67,10 @@ function PLAYCARD.perform(actor, inputvalues)
       body = actor:getBody(),
       sfx = 'upgrade'
     })
-    for _,upgrade in ipairs(upgrades.actor) do
+    for _,upgrade in ipairs(upgrades) do
       local attr = upgrade.attr
       local val = upgrade.val
       actor["upgrade"..attr](actor, val)
-    end
-    local body = actor:getBody() if body then
-      for _,upgrade in ipairs(upgrades.body) do
-        local attr = upgrade.attr
-        local val = upgrade.val
-        body["upgrade"..attr](body, val)
-      end
     end
   end
 

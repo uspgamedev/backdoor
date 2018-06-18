@@ -1,54 +1,55 @@
 {
-  "pp":0,
-  "desc":"Deal 14dCOR damage to melee target, but\ndeals 10% of your MaxHP as recoil damage\nto yourself.",
+  "attr":"COR",
+  "icon":"card-dropkick",
+  "one_time":false,
   "art":{
     "cost":20,
     "art_ability":{
       "inputs":[{
+          "aoe-hint":0,
+          "non-wall":false,
           "output":"pos",
           "type":"input",
+          "max-range":1,
           "empty-tile":false,
-          "non-wall":false,
-          "aoe-hint":0,
           "body-only":{
             "body-type":false
           },
-          "name":"choose_target",
-          "max-range":1
+          "name":"choose_target"
         },{
-          "output":"cor",
           "type":"operator",
           "name":"get_attribute",
+          "output":"cor",
           "which":"COR"
         },{
-          "pos":"=pos",
           "type":"operator",
+          "pos":"=pos",
           "name":"get_body_at",
           "output":"target"
         }],
       "effects":[{
-          "type":"effect",
+          "attr":"=cor",
           "target":"=target",
+          "base":10,
+          "type":"effect",
           "name":"damage_on_target",
-          "base":14,
-          "attr":"=cor"
+          "sfx":false
         },{
           "type":"operator",
           "name":"self",
           "output":"self"
         },{
-          "percentage":10,
+          "target":"=self",
           "type":"effect",
-          "name":"lose_life",
           "stay_alive":false,
-          "target":"=self"
+          "name":"lose_life",
+          "percentage":25
         }]
     }
   },
-  "one_time":false,
-  "icon":"card-dropkick",
-  "set":false,
+  "desc":"Deal 12dCOR damage to melee target, but\ndeals 10% of your MaxHP as recoil damage\nto yourself.",
   "type-description":"",
-  "attr":"COR",
-  "name":"Unreserved Punch"
+  "pp":0,
+  "name":"Unreserved Punch",
+  "set":false
 }

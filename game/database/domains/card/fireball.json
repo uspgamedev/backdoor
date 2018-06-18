@@ -1,38 +1,38 @@
 {
-  "pp":0,
-  "desc":"Deal 12dARC damage in a 3-tile radius area\nsurrounding target position.\n\n\"Ages does by, and the fireball spell remains the\nbread and butter of arcane artists.\"",
+  "attr":"ARC",
+  "icon":"card-fireball",
+  "one_time":false,
   "art":{
     "cost":40,
     "art_ability":{
       "inputs":[{
-          "type":"input",
-          "output":"target",
-          "non-wall":true,
           "aoe-hint":3,
           "empty-tile":false,
+          "output":"target",
+          "type":"input",
+          "non-wall":true,
           "name":"choose_target",
           "max-range":6
         },{
-          "output":"arc",
           "type":"operator",
           "name":"get_attribute",
+          "output":"arc",
           "which":"ARC"
         }],
       "effects":[{
-          "type":"effect",
-          "size":3,
-          "center":"=target",
-          "base":12,
-          "ignore_owner":false,
           "attr":"=arc",
-          "name":"damage_on_area"
+          "center":"=target",
+          "size":3,
+          "type":"effect",
+          "ignore_owner":false,
+          "name":"damage_on_area",
+          "base":8
         }]
     }
   },
-  "one_time":false,
-  "icon":"card-fireball",
-  "set":false,
+  "desc":"Deal 12dARC damage in a 3-tile radius area\nsurrounding target position.\n\n\"Ages does by, and the fireball spell remains the\nbread and butter of arcane artists.\"",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Fireball"
+  "pp":0,
+  "name":"Fireball",
+  "set":false
 }

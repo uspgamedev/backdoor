@@ -5,21 +5,21 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":4,
+          "attr":"=arc",
           "target":"=body",
           "type":"effect",
-          "base":"=(arc*2)-2",
+          "base":8,
           "name":"damage_on_target",
           "sfx":"example"
         }],
       "inputs":[{
-          "max-range":7,
-          "name":"choose_target",
           "type":"input",
+          "name":"choose_target",
+          "max-range":7,
           "empty-tile":false,
-          "output":"tgt",
           "body-only":{
-          }
+          },
+          "output":"tgt"
         },{
           "type":"operator",
           "pos":"=tgt",
@@ -28,22 +28,8 @@
         },{
           "type":"operator",
           "which":"ARC",
-          "output":"arc",
-          "name":"get_attribute"
-        },{
-          "op":"*",
-          "output":"arc*2",
-          "type":"operator",
-          "name":"integer_binop",
-          "rhs":2,
-          "lhs":"=arc"
-        },{
-          "op":"-",
-          "output":"(arc*2)-2",
-          "type":"operator",
-          "name":"integer_binop",
-          "rhs":2,
-          "lhs":"=arc*2"
+          "name":"get_attribute",
+          "output":"arc"
         }]
     },
     "cost":10

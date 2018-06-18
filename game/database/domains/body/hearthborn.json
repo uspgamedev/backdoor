@@ -1,10 +1,10 @@
 {
   "extends":"demihuman",
-  "def_die":5,
-  "def":0,
+  "res":0,
+  "fin":-1,
   "faction":"allied",
   "appearance":"hearthborn",
-  "vit":0,
+  "con":1,
   "name":"Hearthborn",
   "description":"With dark-orange skin, colorful hair and round\nnoses, these humanoids can boost their muscles for\na few bare seconds by pumping their blood faster\nand hotter, unleashing steam from their bodies."
 }

@@ -2,12 +2,11 @@
   "extends":"sentient",
   "signature":"punch",
   "behavior":"player",
-  "cor":4,
-  "arc":-4,
+  "cor":1,
+  "arc":-2,
   "collection":false,
-  "spd":0,
   "name":"Brawler",
-  "ani":-4,
+  "ani":1,
   "initial_buffer":[{
       "amount":1,
       "card":"spark_rod"

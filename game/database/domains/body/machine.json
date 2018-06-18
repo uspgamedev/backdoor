@@ -2,9 +2,9 @@
   "extends":false,
   "name":"Machine",
   "faction":"allied",
-  "def_die":2,
+  "res":2,
   "appearance":"demobody",
-  "def":-2,
-  "vit":-4,
+  "fin":0,
+  "con":0,
   "description":"Heavy Metal."
 }

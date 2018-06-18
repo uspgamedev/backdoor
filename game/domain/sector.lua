@@ -195,7 +195,7 @@ function Sector:makeEncounters(encounters, register)
     local i, j = unpack(encounter.pos)
     local bid, body = register(Body(body_spec))
     local aid, actor = register(Actor(actor_spec))
-    local difficulty_multiplier = 1 + self:getDifficulty() / 3
+    local difficulty_multiplier = 1 + self:getDifficulty()
     local upgradexp = encounter.upgrade_power
 
     upgradexp = math.floor(upgradexp * difficulty_multiplier)
@@ -205,11 +205,7 @@ function Sector:makeEncounters(encounters, register)
       local unit, total = 0, 0
       local aptitudes = {}
       for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
-        aptitudes[attr] = actor:getSpec(attr:lower()) + 4 -- min of 0
-        total = total + aptitudes[attr]
-      end
-      for _,attr in ipairs(DEFS.BODY_ATTRIBUTES) do
-        aptitudes[attr] = body:getSpec(attr:lower()) + 4 -- min of 0
+        aptitudes[attr] = actor:getSpec(attr:lower()) + 3 -- min of 1
         total = total + aptitudes[attr]
       end
       unit = upgradexp / total
@@ -217,8 +213,6 @@ function Sector:makeEncounters(encounters, register)
         local award = math.floor(unit * priority)
         if DEFS.PRIMARY_ATTRIBUTES[attr] then
           actor:upgradeAttr(attr, award)
-        elseif DEFS.BODY_ATTRIBUTES[attr] then
-          body:upgradeAttr(attr, math.floor(award / 2))
         end
       end
     end

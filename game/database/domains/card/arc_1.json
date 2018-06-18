@@ -4,8 +4,7 @@
   "set":"upgrades_arc",
   "desc":"Upgrades your Arcana attribute by 10.",
   "upgrade":{
-    "body_list":[],
-    "actor_list":[{
+    "attr_list":[{
         "attr":"ARC",
         "val":50
       }],

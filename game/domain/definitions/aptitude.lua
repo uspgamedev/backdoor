@@ -7,7 +7,7 @@ local APT = {}
 --  $ make FLAGS=--test=aptitude
 --  ```
 function APT.REQUIRED_ATTR_UPGRADE(apt, lv)
-  return math.ceil((15 - 1.5*apt) ^ (1 + lv/10))
+  return math.ceil((15 - 3*apt) ^ (1 + lv/10))
 end
 
 function APT.CUMULATIVE_REQUIRED_ATTR_UPGRADE(apt, lv)
@@ -29,8 +29,19 @@ function APT.ATTR_LEVEL(owner, which)
   return lv-1
 end
 
-function APT.VIT2HP(vit)
-  return 20 + vit * vit - vit
+function APT.HP(vit, con)
+  return math.floor(20 + (4+con)*vit*vit - (7+con)*vit)
+end
+
+function APT.STAMINA(efc, mtb)
+  local min, max = 7 - 2.5*mtb, 25 - mtb
+  local food = max - (max-min)*efc/12
+  return math.floor(food)
+end
+
+function APT.DR(def, res)
+  local power = def * (8 + res*2) 
+  return power/4, 3*power/4
 end
 
 return APT

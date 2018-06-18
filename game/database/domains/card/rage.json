@@ -16,7 +16,7 @@
       },{
         "attr":"DEF",
         "op":"-",
-        "val":3
+        "val":2
       }],
     "trigger":"on_turn",
     "status-tags":[],

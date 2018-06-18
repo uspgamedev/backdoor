@@ -4,6 +4,7 @@ local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local APT         = require 'domain.definitions.aptitude'
+local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
 
@@ -28,24 +29,12 @@ function Body:init(specname)
   for placement in ipairs(PLACEMENTS) do
     self.equipped[placement] = false
   end
-  self.upgrades = {
-    DEF = 100,
-    VIT = 100,
-  }
-  self.attr_lv = {
-    DEF = 0,
-    VIT = 0,
-  }
   self.sector_id = nil
-
-  self:updateAttr('DEF')
-  self:updateAttr('VIT')
 end
 
 function Body:loadState(state)
   self.damage = state.damage
   self.killer = state.killer
-  self.upgrades = state.upgrades
   self.attr_lv = {}
   self.sector_id = state.sector_id
   self:setId(state.id)
@@ -58,8 +47,6 @@ function Body:loadState(state)
       self.widgets[index] = card
     end
   end
-  self:updateAttr('DEF')
-  self:updateAttr('VIT')
 end
 
 function Body:saveState()
@@ -67,7 +54,6 @@ function Body:saveState()
   state.specname = self.specname
   state.damage = self.damage
   state.killer = self.killer
-  state.upgrades = self.upgrades
   state.sector_id = self.sector_id
   state.id = self.id
   state.equipped = self.equipped
@@ -118,27 +104,60 @@ function Body:getPos()
   return self:getSector():getBodyPos(self)
 end
 
---[[ Attribute getter ]]--
+--[[ Attribute getters ]]--
 
-function Body:getAttrLevel(which)
-  return self.attr_lv[which]
-end
-
-function Body:getAttribute(which)
-  return math.max(1,self:applyStaticOperators(which, self:getAttrLevel(which)))
+function Body:getWithMod(which, value)
+  return math.max(1, self:applyStaticOperators(which, value))
 end
 
 function Body:getAptitude(which)
   return self:getSpec(which:lower())
 end
 
-function Body:updateAttr(which)
-  self.attr_lv[which] = APT.ATTR_LEVEL(self, which)
+function Body:getAttribute(which)
+  local actor = self:getActor()
+  local inf   = ATTR.INFLUENCE[which]
+  local base  = actor and (2 * actor:getAttribute(inf[1]) +
+                           1 * actor:getAttribute(inf[2])) / 3
+                       or 1
+  return self:getWithMod(which, base)
 end
 
-function Body:upgradeAttr(which, amount)
-  self.upgrades[which] = self.upgrades[which] + amount
-  self:updateAttr(which)
+function Body:getDEF()
+  return self:getAttribute('DEF')
+end
+
+function Body:getEFC()
+  return self:getAttribute('EFC')
+end
+
+function Body:getVIT()
+  return self:getAttribute('VIT')
+end
+
+function Body:getRES()
+  return self:getAptitude('RES')
+end
+
+function Body:getFIN()
+  return self:getAptitude('FIN')
+end
+
+function Body:getCON()
+  return self:getAptitude('CON')
+end
+
+function Body:getDR()
+  local min, max = APT.DR(self:getDEF(), self:getRES())
+  return math.floor(min), math.floor(max)
+end
+
+function Body:getConsumption()
+  return math.floor(APT.STAMINA(self:getEFC(), self:getFIN()))
+end
+
+function Body:getMaxHP()
+  return math.floor(APT.HP(self:getVIT(), self:getCON()))
 end
 
 --[[ Appearance methods ]]--
@@ -162,20 +181,8 @@ end
 
 --[[ HP methods ]]--
 
-function Body:getVIT()
-  return self:getAttribute('VIT')
-end
-
 function Body:getHP()
   return self:getMaxHP() - self.damage
-end
-
-function Body:getMaxHP()
-  return APT.VIT2HP(self:getAttribute('VIT'))
-end
-
-function Body:upgradeVIT(val)
-  self:upgradeAttr('VIT', val)
 end
 
 function Body:isDead()
@@ -188,20 +195,6 @@ end
 
 function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
-end
-
---[[ DEF methods ]]--
-
-function Body:getDEF()
-  return self:getAttribute('DEF')
-end
-
-function Body:getBaseDEF()
-  return self:getSpec('def_die')
-end
-
-function Body:upgradeDEF(val)
-  self:upgradeAttr('DEF', val)
 end
 
 --[[ Widget methods ]]--
@@ -367,7 +360,7 @@ end
 --[[ Combat methods ]]--
 
 function Body:takeDamageFrom(amount, source)
-  local defroll = RANDOM.rollDice(self:getDEF(), self:getBaseDEF())
+  local defroll = RANDOM.generate(self:getDR())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers
@@ -402,15 +395,6 @@ end
 
 function Body:getKiller()
   return self.killer
-end
-
---POWERLEVEL--
-function Body:getPowerLevel()
-  local lvl = 0
-  for attr,value in pairs(self.upgrades) do
-    lvl = value + lvl
-  end
-  return lvl
 end
 
 return Body

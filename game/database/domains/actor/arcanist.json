@@ -2,12 +2,11 @@
   "extends":"sentient",
   "signature":"bolting",
   "behavior":"player",
-  "cor":-4,
-  "arc":4,
+  "cor":-2,
+  "arc":1,
   "collection":false,
-  "spd":1,
   "name":"Arcanist",
-  "ani":-2,
+  "ani":1,
   "initial_buffer":[{
       "amount":1,
       "card":"teleport"

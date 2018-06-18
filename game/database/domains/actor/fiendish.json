@@ -2,12 +2,11 @@
   "extends":"grinful",
   "signature":"glare",
   "behavior":"aggro",
-  "cor":-2,
-  "arc":4,
+  "cor":-1,
+  "arc":2,
   "collection":"anything",
   "description":"Stronger spellcaster monster, evil by nature.",
   "name":"Fiendish",
-  "ani":-2,
-  "initial_buffer":[],
-  "spd":1
+  "ani":-1,
+  "initial_buffer":[]
 }

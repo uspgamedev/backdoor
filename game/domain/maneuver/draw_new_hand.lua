@@ -19,7 +19,7 @@ function DRAWHAND.validate(actor, inputvalues)
 end
 
 function DRAWHAND.perform(actor, inputvalues)
-  actor:spendPP(DEFS.ACTION.NEW_HAND_COST)
+  actor:spendPP(actor:getBody():getConsumption())
   while not actor:isHandEmpty() do
     local card = actor:removeHandCard(1)
     actor:addCardToBackbuffer(card)

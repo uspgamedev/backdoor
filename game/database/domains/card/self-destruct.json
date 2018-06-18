@@ -1,9 +1,8 @@
 {
+  "attr":"ARC",
+  "icon":false,
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":false,
-    "charges":8,
     "auto_activation":{
       "ability":{
         "inputs":[{
@@ -17,8 +16,8 @@
           },{
             "which":"ARC",
             "type":"operator",
-            "name":"get_attribute",
-            "output":"arc"
+            "output":"arc",
+            "name":"get_attribute"
           },{
             "type":"operator",
             "body":"=body_self",
@@ -26,13 +25,13 @@
             "output":"pos"
           }],
         "effects":[{
-            "type":"effect",
-            "size":3,
+            "attr":"=arc",
             "center":"=pos",
-            "name":"damage_on_area",
-            "base":12,
+            "size":3,
+            "type":"effect",
             "ignore_owner":false,
-            "attr":"=arc"
+            "name":"damage_on_area",
+            "base":8
           },{
             "type":"effect",
             "target":"=body_self",
@@ -41,13 +40,14 @@
       },
       "trigger":"on_done"
     },
-    "trigger":"on_cycle"
+    "status-tags":[],
+    "trigger":"on_cycle",
+    "charges":8,
+    "placement":false
   },
-  "attr":"ARC",
   "desc":"",
-  "icon":false,
-  "one_time":true,
   "type-description":"",
   "set":false,
-  "name":"Self Destruction"
+  "name":"Self Destruction",
+  "one_time":true
 }

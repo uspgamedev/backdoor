@@ -1,70 +1,64 @@
 {
-  "pp":4,
-  "desc":"Deals 3d(2*COR) damage to target enemy, and afterwards creates a shocking wave that deals 4dCOR area damage. \n\n\"Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children\"",
-  "one_time":true,
+  "attr":"COR",
   "icon":"card-spark-rod",
+  "one_time":true,
+  "desc":"Deals 3d(2*COR) damage to target enemy, and afterwards creates a shocking wave that deals 4dCOR area damage. \n\n\"Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children\"",
+  "type-description":"",
+  "set":false,
+  "pp":4,
+  "name":"Spark Rod 2000",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":"weapon",
+    "trigger":false,
     "activation":{
       "cost":20,
       "ability":{
         "inputs":[{
+            "aoe-hint":3,
+            "output":"first_target",
             "body-only":{
               "body-type":false
             },
-            "type":"input",
-            "output":"first_target",
             "non-wall":false,
-            "aoe-hint":3,
+            "max-range":1,
             "empty-tile":false,
             "name":"choose_target",
-            "max-range":1
+            "type":"input"
           },{
-            "pos":"=first_target",
             "type":"operator",
+            "pos":"=first_target",
             "name":"get_body_at",
             "output":"target_body"
           },{
-            "output":"cor",
             "type":"operator",
             "name":"get_attribute",
+            "output":"cor",
             "which":"COR"
-          },{
-            "op":"*",
-            "rhs":2,
-            "lhs":"=cor",
-            "type":"operator",
-            "name":"integer_binop",
-            "output":"cor*2"
           }],
         "effects":[{
-            "type":"effect",
+            "attr":"=cor",
             "target":"=target_body",
-            "name":"damage_on_target",
-            "base":"=cor*2",
-            "attr":3
-          },{
+            "base":6,
             "type":"effect",
-            "size":3,
+            "name":"damage_on_target",
+            "sfx":false
+          },{
+            "attr":"=cor",
             "center":"=first_target",
+            "size":3,
+            "type":"effect",
             "ignore_owner":true,
             "name":"damage_on_area",
-            "attr":4,
-            "base":"=cor"
+            "base":4
           }]
       }
     },
-    "charges":20,
+    "status-tags":[],
     "trigger-condition":{
       "inputs":[],
       "effects":[]
     },
-    "trigger":"on_use"
-  },
-  "set":false,
-  "type-description":"",
-  "attr":"COR",
-  "name":"Spark Rod 2000"
+    "charges":0,
+    "placement":"weapon"
+  }
 }
