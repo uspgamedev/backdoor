@@ -3,39 +3,45 @@
   "icon":"card-reassemble",
   "one_time":false,
   "art":{
+    "cost":60,
     "art_ability":{
-      "effects":[{
-          "vfx-spd":0.5,
-          "vfx":"SLIDE",
-          "type":"effect",
-          "body":"=body",
-          "name":"move_to",
-          "pos":"=to"
-        }],
       "inputs":[{
-          "max-range":1,
-          "type":"input",
+          "dif-fact":false,
+          "output":"from",
+          "aoe-hint":0,
           "body-only":{
             "body-type":"machine"
           },
-          "name":"choose_target",
-          "output":"from"
-        },{
-          "aoe-hint":1,
-          "max-range":1,
-          "name":"choose_target",
+          "empty-tile":false,
           "type":"input",
-          "non-wall":true,
+          "non-wall":false,
+          "name":"choose_target",
+          "max-range":4
+        },{
+          "dif-fact":false,
           "output":"to",
-          "empty-tile":true
+          "aoe-hint":1,
+          "empty-tile":true,
+          "max-range":4,
+          "non-wall":true,
+          "name":"choose_target",
+          "type":"input"
         },{
           "type":"operator",
           "pos":"=from",
           "name":"get_body_at",
           "output":"body"
+        }],
+      "effects":[{
+          "vfx-spd":0.5,
+          "vfx":"SLIDE",
+          "pos":"=to",
+          "type":"effect",
+          "body":"=body",
+          "name":"move_to",
+          "sfx":false
         }]
-    },
-    "cost":60
+    }
   },
   "desc":"Take your best friend with you!",
   "type-description":"",
