@@ -6,6 +6,10 @@ FX.schema = {
     type = 'enum', options = 'domains.collection' }, 
 }
 
+function FX.preview()
+  return "Get card pack"
+end
+
 function FX.process (actor, fieldvalues)
   actor:addPrizePack(fieldvalues['collection'])
   coroutine.yield('report', {

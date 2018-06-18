@@ -39,8 +39,12 @@ function _DRAW:getName()
   return "New Hand"
 end
 
-function _DRAW:getDescription()
+function _DRAW:getEffect()
   return "Discard your hand, draw five cards, spend PP"
+end
+
+function _DRAW:getDescription()
+  return ""
 end
 
 function _DRAW:getIconTexture()
@@ -144,7 +148,8 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.translate(0, _title_font:getHeight())
 
   _text_font.set()
-  local desc = card:getDescription() or "[No description]"
+  local desc = card:getEffect()
+  desc = desc .. '\n\n' .. (card:getDescription() or "[No description]")
   desc = desc:gsub("([^\n])[\n]([^\n])", "%1 %2")
   desc = desc:gsub("\n\n", "\n")
   g.printf(desc, 0, 0, width)

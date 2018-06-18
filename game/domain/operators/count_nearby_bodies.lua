@@ -38,5 +38,7 @@ function OP.process(actor, fieldvalues)
   return count
 end
 
+OP.preview = OP.process
+
 return OP
 

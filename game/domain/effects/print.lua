@@ -6,6 +6,10 @@ FX.schema = {
     range = {0} }
 }
 
+function FX.preview()
+  return "Debug"
+end
+
 function FX.process (actor,fieldvalues)
   print(fieldvalues.text)
 end

@@ -16,6 +16,12 @@ FX.schema = {
     optional = true },
 }
 
+function FX.preview (actor, fieldvalues)
+  local attr, base = fieldvalues.attr, fieldvalues.base
+  local min, max = ATTR.DMG(attr, base)
+  return ("Deal %s - %s damage to target"):format(min, max)
+end
+
 function FX.process (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = RANDOM.generate(ATTR.DMG(attr, base))

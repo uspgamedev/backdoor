@@ -13,6 +13,10 @@ FX.schema = {
     optional = true },
 }
 
+function FX.preview(_, fieldvalues)
+  return "Movement effect"
+end
+
 function FX.process (actor, fieldvalues)
   local pos = {actor:getPos()}
   local body = fieldvalues['body']

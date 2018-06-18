@@ -1,5 +1,6 @@
 
 local Card = require 'domain.card'
+local DB = require 'database'
 local FX = {}
 
 FX.schema = {
@@ -18,6 +19,22 @@ FX.schema = {
     }
   }
 }
+
+function FX.preview(_, fieldvalues)
+  local name = DB.loadSpec('body', fieldvalues['bodyspec'])['name']
+  local str = ("Create %s"):format(name)
+  local widgets = fieldvalues['widgets']
+  if widgets and #widgets > 0 then
+    str = str .. " with "
+    local list, n = {}, 0
+    for _,widget in ipairs(widgets) do
+      n = n + 1
+      list[n] = DB.loadSpec('card', widget.spec)['name']
+    end
+    str = str .. table.concat(list, ', ')
+  end
+  return str
+end
 
 function FX.process (actor, fieldvalues)
   local sector = actor:getBody():getSector()
