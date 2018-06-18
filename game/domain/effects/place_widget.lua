@@ -1,5 +1,6 @@
 
 local Card = require 'domain.card'
+local DB = require 'database'
 
 local FX = {}
 
@@ -8,6 +9,11 @@ FX.schema = {
   { id = 'card', name = "Card Specname", type = 'enum',
     options = "domains.card" },
 }
+
+function FX.preview(_, fieldvalues)
+  local name = DB.loadSpec('card', fieldvalues['card'])['name']
+  return ("Cause %s"):format(name)
+end
 
 function FX.process(actor, fieldvalues)
   local card = Card(fieldvalues['card'])

@@ -6,6 +6,10 @@ FX.schema = {
     range = {1} }, 
 }
 
+function FX.preview(actor, fieldvalues)
+  return ("Draw %s cards"):format(fieldvalues['amount'])
+end
+
 function FX.process (actor, fieldvalues)
   for i = 1, fieldvalues.amount do
     actor:drawCard()

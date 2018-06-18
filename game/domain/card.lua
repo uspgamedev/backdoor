@@ -40,6 +40,21 @@ function Card:getDescription()
   return self:getSpec('desc')
 end
 
+function Card:getEffect()
+  local effect
+  if self:isArt() then
+    effect = ("[%d exhaustion]\n\n"):format(self:getArtCost())
+          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
+  elseif self:isUpgrade() then
+    effect = ("Upgrades %s"):format(
+      table.concat(self:getUpgradesList().actor, ', ')
+    )
+  elseif self:isWidget() then
+    effect = "Widget"
+  end
+  return effect .. "\n\n---"
+end
+
 function Card:getIconTexture()
   return self:getSpec('icon')
 end

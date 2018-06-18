@@ -1,5 +1,6 @@
 
 local RANDOM = require 'common.random'
+local DB = require 'database'
 local Card = require 'domain.card'
 local FX = {}
 
@@ -11,6 +12,12 @@ FX.schema = {
   { id = 'card', name = "Card Specname", type = 'enum',
     options = "domains.card" },
 }
+
+function FX.preview(_, fieldvalues)
+  local name = DB.loadSpec('card', fieldvalues['card'])['name']
+  local size = fieldvalues['size'] * 2 - 1
+  return ("Cause %s on %sx%s area"):format(name, size, size)
+end
 
 function FX.process (actor, fieldvalues)
   local sector        = actor:getBody():getSector()

@@ -9,6 +9,10 @@ FX.schema = {
     match = 'body' },
 }
 
+function FX.preview()
+  return ("Give %s PP"):format(fieldvalues['amount'])
+end
+
 function FX.process (actor, fieldvalues)
   local target = fieldvalues['target']
   local amount = fieldvalues['amount']

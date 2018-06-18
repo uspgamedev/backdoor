@@ -92,5 +92,40 @@ function ABILITY.execute(ability, actor, inputvalues)
   end
 end
 
+function _NOPREVIEW()
+  return nil
+end
+
+function ABILITY.preview(ability, actor, inputvalues)
+  local values = {}
+  local prevs = {}
+  for _,cmdlist in ipairs(_CMDLISTS) do
+    for _,cmd in ipairs(ability[cmdlist]) do
+      local prev, value
+      local type, name = cmd.type, cmd.name
+      local unrefd_field_values = _unrefFieldValues(cmd, values)
+      if type == 'input' then
+        value = inputvalues[cmd.output]
+      else
+        if type == 'operator' then
+          value = OP[name].preview
+        elseif type == 'effect' then
+          prev = FX[name].preview
+        else
+          return error("Invalid command type")
+        end
+      end
+      if cmd.output and value then
+        values[cmd.output] = value(actor, unrefd_field_values)
+      end
+      local text = (prev or _NOPREVIEW)(actor, unrefd_field_values)
+      if text then
+        table.insert(values, text)
+      end
+    end
+  end
+  return table.concat(values, "\n\n")
+end
+
 return ABILITY
 

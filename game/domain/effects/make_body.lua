@@ -1,5 +1,6 @@
 
 local Card = require 'domain.card'
+local DB = require 'database'
 local FX = {}
 
 FX.schema = {
@@ -18,6 +19,11 @@ FX.schema = {
     }
   }
 }
+
+function FX.preview(_, fieldvalues)
+  local name = DB.loadSpec('body', fieldvalues['bodyspec'])['name']
+  return ("Create %s"):format(name)
+end
 
 function FX.process (actor, fieldvalues)
   local sector = actor:getBody():getSector()

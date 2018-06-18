@@ -16,6 +16,13 @@ FX.schema = {
     range = {1} },
 }
 
+function FX.preview (actor, fieldvalues)
+  local attr, base = fieldvalues.attr, fieldvalues.base
+  local min, max = ATTR.DMG(attr, base)
+  local size = fieldvalues['size'] * 2 - 1
+  return ("Deal %s - %s damage on %sx%s area"):format(min, max, size, size)
+end
+
 function FX.process (actor, fieldvalues)
   local sector  = actor:getBody():getSector()
   local ci, cj  = unpack(fieldvalues['center'])

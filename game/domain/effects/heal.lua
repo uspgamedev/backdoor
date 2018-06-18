@@ -7,7 +7,11 @@ FX.schema = {
     range = {0} },
 }
 
-function FX.process (actor, fieldvalues)
+function FX.preview(actor, fieldvalues)
+  return ("Heal %s hit points"):format(fieldvalues['amount'])
+end
+
+function FX.process(actor, fieldvalues)
   fieldvalues.target:heal(fieldvalues.amount or 2)
   coroutine.yield('report', {
     type = 'text_rise',

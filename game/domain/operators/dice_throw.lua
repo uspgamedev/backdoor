@@ -12,6 +12,10 @@ OP.schema = {
 
 OP.type = 'integer'
 
+function OP.preview(actor, fieldvalues)
+  return ("%sd%s"):format(fieldvalues['rolls'], fieldvalues['sides'])
+end
+
 function OP.process(actor, fieldvalues)
   return RANDOM.rollDice(fieldvalues.rolls, fieldvalues.sides)
 end
