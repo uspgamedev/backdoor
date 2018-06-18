@@ -1,6 +1,12 @@
 
 GAME_DIR=game
+BIN_DIR=bin
 LIBS_DIR=$(GAME_DIR)/libs
+GAME=$(BIN_DIR)/backdoor.love
+
+LOVE_WIN32=$(BIN_DIR)/love-11.1-win32.zip
+BIN_DIR_WIN32=$(BIN_DIR)/win32
+GAME_WIN32=$(BIN_DIR_WIN32)/backdoor.exe
 
 LUX_LIB=$(LIBS_DIR)/lux
 LUX_REPO=externals/luxproject
@@ -17,6 +23,8 @@ INPUT_LIB=$(LIBS_DIR)/input
 INPUT_REPO=externals/input
 
 IMGUI_LIB=imgui.so
+IMGUI_DLL=imgui.dll
+LUAJIT_DLL=lua51.dll
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
 
@@ -36,6 +44,24 @@ update:
 	cd $(LUX_REPO); git pull
 	cd $(STEAMING_REPO); git pull
 	cd $(INPUT_REPO); git pull
+
+$(BIN_DIR):
+	mkdir $(BIN_DIR)
+
+.PHONY: export
+export: $(GAME)
+
+.PHONY: windows
+windows: $(BIN_DIR_WIN32)/backdoor.exe
+
+.PHONY: deploy
+deploy: $(GAME) $(GAME_WIN32)
+	cd $(BIN_DIR_WIN32); zip -r backdoor-win32.zip *; mv backdoor-win32.zip ..
+	scp $(GAME) $(BIN_DIR)/backdoor-win32.zip kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/nightly/
+
+$(GAME): $(DEPENDENCIES) $(BIN_DIR)
+	cd game; zip -r backdoor.love *
+	mv game/backdoor.love $(GAME)
 
 ## LUX
 
@@ -64,6 +90,9 @@ $(INPUT_REPO):
 
 ## IMGUI
 
+$(IMGUI_DLL):
+	wget -O $(IMGUI_DLL) https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll
+
 $(IMGUI_LIB): $(IMGUI_BUILD_DIR)
 	cd $(IMGUI_BUILD_DIR); cmake .. && $(MAKE)
 	cp $(IMGUI_BUILD_DIR)/imgui.so $(IMGUI_LIB)
@@ -72,7 +101,7 @@ $(IMGUI_BUILD_DIR): $(IMGUI_REPO)
 	mkdir $(IMGUI_BUILD_DIR)
 
 $(IMGUI_REPO):
-	git clone https://github.com/Kazuo256/love-imgui.git $(IMGUI_REPO)
+	git clone https://github.com/slages/love-imgui.git $(IMGUI_REPO)
 
 ## CPML
 
@@ -88,6 +117,28 @@ $(CPML_REPO):
 
 $(DKJSON_LIB):
 	wget -O $(DKJSON_LIB) -- http://dkolf.de/src/dkjson-lua.fsl/raw/dkjson.lua?name=16cbc26080996d9da827df42cb0844a25518eeb3
+
+## Windows
+
+$(BIN_DIR_WIN32): $(BIN_DIR)
+	mkdir -p $(BIN_DIR_WIN32)
+
+$(GAME_WIN32): $(BIN_DIR) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32) $(GAME)
+	rm -rf $(BIN_DIR_WIN32)
+	unzip $(LOVE_WIN32) -d $(BIN_DIR)
+	mv $(BIN_DIR)/love-11.1.0-win32 $(BIN_DIR_WIN32)
+	cp $(IMGUI_DLL) $(LUAJIT_DLL) $(BIN_DIR_WIN32)
+	cat $(BIN_DIR_WIN32)/love.exe $(GAME) > $(GAME_WIN32)
+	rm $(BIN_DIR_WIN32)/love.exe $(BIN_DIR_WIN32)/lovec.exe
+
+$(LOVE_WIN32): $(BIN_DIR)
+	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip
+
+$(LUAJIT_DLL):
+	wget -O $(LUAJIT_DLL) https://uspgamedev.org/downloads/libs/windows/x86/lua51.dll
+
+## Deploy
+
 
 ## CLEAN UP
 
