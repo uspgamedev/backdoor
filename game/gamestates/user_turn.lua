@@ -187,14 +187,12 @@ function state:update(dt)
   end
 
   local action_request
-  for _,dir in ipairs(DIR) do
-    if DIRECTIONALS.wasDirectionTriggered(dir) then
-      if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
-        _startLongWalk(dir)
-        break
-      end
+  local dir = DIRECTIONALS.hasDirectionTriggered()
+  if dir then
+    if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
+      _startLongWalk(dir)
+    else
       action_request = {DEFS.ACTION.MOVE, dir}
-      break
     end
   end
 
@@ -405,4 +403,3 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 return state
-
