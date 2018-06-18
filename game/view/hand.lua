@@ -35,7 +35,7 @@ local HandView = Class{
 function HandView:init(route)
 
   ELEMENT.init(self)
-  
+
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.focus_index = -1 --What card is focused. -1 if none
@@ -102,7 +102,7 @@ function HandView:draw()
   local hand = { unpack(self.hand) }
   table.insert(hand, "draw")
   local size = #hand
-  local gap = _GAP * self.gap_scale 
+  local gap = _GAP * self.gap_scale
   local step = CARD.getWidth() + gap
   local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
   local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
@@ -131,7 +131,7 @@ function HandView:draw()
               i == self.focus_index)
     if self.focus_index == i then
       local infox = _GAP
-      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter)
+      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter, self.route:getPlayerActor())
       if card ~= 'draw' then
         EXP.drawNeededEXP(g, card)
       end
@@ -219,4 +219,3 @@ function HandView:reset()
 end
 
 return HandView
-
