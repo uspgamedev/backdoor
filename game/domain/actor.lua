@@ -476,17 +476,6 @@ end
 
 function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
-  if not self:isHandEmpty() then
-    self.hand_countdown = math.max(0, self.hand_countdown - 1)
-  else
-    self.hand_countdown = 0
-  end
-  if self.hand_countdown == 0 then
-    while not self:isHandEmpty() do
-      local card = self:removeHandCard(1)
-      self:addCardToBackbuffer(card)
-    end
-  end
 end
 
 function Actor:resetHandCountdown()
@@ -508,6 +497,17 @@ end
 
 function Actor:turn()
   self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN)
+  if not self:isHandEmpty() then
+    self.hand_countdown = math.max(0, self.hand_countdown - 1)
+  else
+    self.hand_countdown = 0
+  end
+  if self.hand_countdown == 0 then
+    while not self:isHandEmpty() do
+      local card = self:removeHandCard(1)
+      self:addCardToBackbuffer(card)
+    end
+  end
 end
 
 function Actor:makeAction()
