@@ -13,5 +13,7 @@ function OP.process(actor, fieldvalues)
   return actor
 end
 
+OP.preview = OP.process
+
 return OP
 

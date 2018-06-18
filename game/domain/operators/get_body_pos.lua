@@ -14,4 +14,6 @@ function OP.process(actor, fieldvalues)
   return { fieldvalues['body']:getPos() }
 end
 
+OP.preview = OP.process
+
 return OP

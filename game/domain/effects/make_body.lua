@@ -22,7 +22,18 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('body', fieldvalues['bodyspec'])['name']
-  return ("Create %s"):format(name)
+  local str = ("Create %s"):format(name)
+  local widgets = fieldvalues['widgets']
+  if widgets and #widgets > 0 then
+    str = str .. " with "
+    local list, n = {}, 0
+    for _,widget in ipairs(widgets) do
+      n = n + 1
+      list[n] = DB.loadSpec('card', widget.spec)['name']
+    end
+    str = str .. table.concat(list, ', ')
+  end
+  return str
 end
 
 function FX.process (actor, fieldvalues)

@@ -183,9 +183,10 @@ end
 
 function Card:getEffect()
   local effect
+  local inputs = { self = self:getOwner() }
   if self:isArt() then
     effect = ("Art [%d exhaustion]\n\n"):format(self:getArtCost())
-          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
+          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
   elseif self:isUpgrade() then
     local ups,n = {}, 0
     for _,up in ipairs(self:getUpgradesList()) do
@@ -205,12 +206,12 @@ function Card:getEffect()
     local activation = self:getWidgetActivation() if activation then
       local ability, cost = activation.ability, activation.cost
       effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
-                      .. ABILITY.preview(ability, self:getOwner(), {})
+                      .. ABILITY.preview(ability, self:getOwner(), inputs)
     end
     local auto = self:getWidgetTriggeredAbility() if auto then
       local ability, trigger = auto.ability, auto.trigger
       effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
-                      .. ABILITY.preview(ability, self:getOwner(), {})
+                      .. ABILITY.preview(ability, self:getOwner(), inputs)
     end
     local ops, n = {}, 0
     for _,op in self:getStaticOperators() do

@@ -14,5 +14,7 @@ function OP.process(actor, fieldvalues)
   return actor:getBody()
 end
 
+OP.preview = OP.process
+
 return OP
 
