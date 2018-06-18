@@ -4,8 +4,7 @@
   "one_time":true,
   "desc":"Upgrades your Athletics attribute by 10.",
   "upgrade":{
-    "body_list":[],
-    "actor_list":[{
+    "attr_list":[{
         "attr":"COR",
         "val":50
       }],

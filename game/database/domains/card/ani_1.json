@@ -4,8 +4,7 @@
   "set":"upgrades_ani",
   "desc":"Upgrades your Mechanics attribute by 10.",
   "upgrade":{
-    "body_list":[],
-    "actor_list":[{
+    "attr_list":[{
         "attr":"ANI",
         "val":50
       }],
