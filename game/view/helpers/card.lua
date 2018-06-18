@@ -43,11 +43,9 @@ end
 function _DRAW:getEffect(player_actor)
   local pp
   if player_actor then
-    local body = player_actor:getBody()
-    pp = APT.STAMINA(body:getEFC(), body:getFIN())
+    pp = player_actor:getBody():getConsumption()
   end
-
-  return ("Action [%d PP]\n\nDiscard your hand, draw five cards."):format(pp)
+  return ("Action [-%s PP]\n\nDiscard your hand, draw five cards."):format(pp)
 end
 
 function _DRAW:getDescription()
