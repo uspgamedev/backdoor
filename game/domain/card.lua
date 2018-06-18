@@ -92,10 +92,7 @@ function Card:getArtCost()
 end
 
 function Card:getUpgradesList()
-  return {
-    actor = self:getSpec('upgrade').actor_list,
-    body = self:getSpec('upgrade').body_list,
-  }
+  return self:getSpec('upgrade').attr_list
 end
 
 function Card:getUpgradeCost()
