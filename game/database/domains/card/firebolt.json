@@ -3,23 +3,16 @@
   "icon":"card-firebolt",
   "one_time":false,
   "art":{
+    "cost":10,
     "art_ability":{
-      "effects":[{
-          "attr":"=arc",
-          "target":"=body",
-          "type":"effect",
-          "base":8,
-          "name":"damage_on_target",
-          "sfx":"example"
-        }],
       "inputs":[{
-          "type":"input",
-          "name":"choose_target",
-          "max-range":7,
-          "empty-tile":false,
+          "output":"tgt",
           "body-only":{
           },
-          "output":"tgt"
+          "type":"input",
+          "empty-tile":false,
+          "name":"choose_target",
+          "max-range":7
         },{
           "type":"operator",
           "pos":"=tgt",
@@ -27,14 +20,21 @@
           "output":"body"
         },{
           "type":"operator",
-          "which":"ARC",
+          "output":"arc",
           "name":"get_attribute",
-          "output":"arc"
+          "which":"ARC"
+        }],
+      "effects":[{
+          "attr":"=arc",
+          "target":"=body",
+          "base":8,
+          "type":"effect",
+          "name":"damage_on_target",
+          "sfx":"example"
         }]
-    },
-    "cost":10
+    }
   },
-  "desc":"Deal 6d(2*ARC - 2) damage to target enemy.\n\n\"'Ouch that hurts! - Imp with his face on fire.\"",
+  "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "type-description":"",
   "pp":4,
   "name":"Firebolt",

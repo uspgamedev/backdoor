@@ -2,13 +2,13 @@
   "attr":"COR",
   "icon":"card-upgrade",
   "one_time":true,
-  "desc":"Upgrades your Athletics attribute by 10.",
+  "desc":"",
   "upgrade":{
+    "cost":2,
     "attr_list":[{
         "attr":"COR",
         "val":50
-      }],
-    "cost":2
+      }]
   },
   "type-description":"",
   "type":"UPGRADE",

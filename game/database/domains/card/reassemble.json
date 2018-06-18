@@ -1,45 +1,45 @@
 {
-  "pp":0,
-  "desc":"Move target machine",
+  "attr":"COR",
+  "icon":"card-reassemble",
+  "one_time":false,
   "art":{
-    "cost":60,
     "art_ability":{
+      "effects":[{
+          "vfx-spd":0.5,
+          "vfx":"SLIDE",
+          "type":"effect",
+          "body":"=body",
+          "name":"move_to",
+          "pos":"=to"
+        }],
       "inputs":[{
+          "max-range":1,
           "type":"input",
-          "output":"from",
           "body-only":{
             "body-type":"machine"
           },
           "name":"choose_target",
-          "max-range":1
+          "output":"from"
         },{
-          "type":"input",
-          "output":"to",
-          "non-wall":true,
           "aoe-hint":1,
-          "empty-tile":true,
+          "max-range":1,
           "name":"choose_target",
-          "max-range":1
+          "type":"input",
+          "non-wall":true,
+          "output":"to",
+          "empty-tile":true
         },{
-          "pos":"=from",
           "type":"operator",
+          "pos":"=from",
           "name":"get_body_at",
           "output":"body"
-        }],
-      "effects":[{
-          "body":"=body",
-          "pos":"=to",
-          "vfx-spd":0.5,
-          "vfx":"SLIDE",
-          "name":"move_to",
-          "type":"effect"
         }]
-    }
+    },
+    "cost":60
   },
-  "one_time":false,
-  "icon":"card-reassemble",
-  "set":false,
+  "desc":"Take your best friend with you!",
   "type-description":"",
-  "attr":"COR",
-  "name":"Reassemble"
+  "pp":0,
+  "name":"Reassemble",
+  "set":false
 }

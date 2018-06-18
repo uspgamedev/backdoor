@@ -1,57 +1,57 @@
 {
-  "pp":0,
-  "desc":"Allows you to dash in straight lines.",
-  "one_time":false,
+  "attr":"COR",
   "icon":"card-jetboots",
+  "set":false,
+  "desc":"'Now with less Carbon Dioxide emission!' - Jetboots UltraSlim Model commercial slogan.",
+  "type-description":"",
   "widget":{
-    "status-tags":[],
     "operators":[],
-    "placement":false,
+    "trigger":"on_use",
     "activation":{
-      "cost":10,
       "ability":{
+        "effects":[{
+            "vfx-spd":1,
+            "vfx":"SLIDE",
+            "type":"effect",
+            "body":"=body",
+            "name":"move_to",
+            "pos":"=target-pos"
+          }],
         "inputs":[{
-            "body-block":true,
             "type":"input",
-            "name":"choose_dir",
-            "output":"dir"
+            "output":"dir",
+            "body-block":true,
+            "name":"choose_dir"
           },{
             "type":"operator",
             "name":"self",
             "output":"self"
           },{
-            "actor":"=self",
             "type":"operator",
+            "output":"body",
             "name":"get_actor_body",
-            "output":"body"
+            "actor":"=self"
           },{
-            "body":"=body",
             "type":"operator",
+            "body":"=body",
             "name":"get_body_pos",
             "output":"origin"
           },{
-            "type":"operator",
             "maxrange":5,
             "dir":"=dir",
-            "pos":"=origin",
+            "type":"operator",
+            "output":"target-pos",
             "name":"hitscan",
-            "output":"target-pos"
-          }],
-        "effects":[{
-            "body":"=body",
-            "pos":"=target-pos",
-            "vfx-spd":1,
-            "vfx":"SLIDE",
-            "name":"move_to",
-            "type":"effect"
+            "pos":"=origin"
           }]
-      }
+      },
+      "cost":10
     },
+    "status-tags":[],
     "charges":8,
-    "trigger":"on_use"
+    "placement":false
   },
+  "pp":0,
   "name":"Jetboots",
-  "type-description":"",
-  "set":false,
-  "attr":"COR"
+  "one_time":false
 }

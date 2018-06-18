@@ -1,5 +1,9 @@
 {
-  "desc":"This actor has its FoV greatly reduced for a while.",
+  "attr":"ANI",
+  "icon":false,
+  "one_time":true,
+  "desc":"",
+  "type-description":"",
   "widget":{
     "operators":[{
         "attr":"FOV",
@@ -7,9 +11,10 @@
         "val":3
       }],
     "trigger":"on_cycle",
-    "charges":8
+    "charges":8,
+    "status-tags":[],
+    "placement":false
   },
-  "one_time":true,
-  "attr":"ANI",
-  "name":"Blind"
+  "name":"Blind",
+  "set":false
 }

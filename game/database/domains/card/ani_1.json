@@ -2,13 +2,13 @@
   "attr":"ANI",
   "icon":"card-upgrade",
   "set":"upgrades_ani",
-  "desc":"Upgrades your Mechanics attribute by 10.",
+  "desc":"",
   "upgrade":{
+    "cost":2,
     "attr_list":[{
         "attr":"ANI",
         "val":50
-      }],
-    "cost":2
+      }]
   },
   "type-description":"",
   "pp":0,
