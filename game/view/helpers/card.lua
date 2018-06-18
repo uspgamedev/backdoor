@@ -2,6 +2,7 @@
 local FONT = require 'view.helpers.font'
 local TEXTURE = require 'view.helpers.texture'
 local RES = require 'resources'
+local APT = require 'domain.definitions.aptitude'
 local COLORS = require 'domain.definitions.colors'
 local round = require 'common.math' .round
 
@@ -39,8 +40,14 @@ function _DRAW:getName()
   return "New Hand"
 end
 
-function _DRAW:getEffect()
-  return "Discard your hand, draw five cards, spend PP"
+function _DRAW:getEffect(player_actor)
+  local pp
+  if player_actor then
+    local body = player_actor:getBody()
+    pp = APT.STAMINA(body:getEFC(), body:getFIN())
+  end
+
+  return ("Action [%d PP]\n\nDiscard your hand, draw five cards."):format(pp)
 end
 
 function _DRAW:getDescription()
@@ -128,7 +135,7 @@ function CARD.draw(card, x, y, focused, alpha, scale)
 end
 
 --Draw the description of a card.
-function CARD.drawInfo(card, x, y, width, alpha)
+function CARD.drawInfo(card, x, y, width, alpha, player_actor)
   alpha = alpha or 1
   if card == 'draw' then
     card = _DRAW
@@ -148,7 +155,7 @@ function CARD.drawInfo(card, x, y, width, alpha)
   g.translate(0, _title_font:getHeight())
 
   _text_font.set()
-  local desc = card:getEffect()
+  local desc = card:getEffect(player_actor)
   desc = desc .. '\n\n' .. (card:getDescription() or "[No description]")
   desc = desc:gsub("([^\n])[\n]([^\n])", "%1 %2")
   desc = desc:gsub("\n\n", "\n")

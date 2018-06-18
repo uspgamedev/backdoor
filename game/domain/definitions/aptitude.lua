@@ -33,16 +33,15 @@ function APT.HP(vit, con)
   return math.floor(20 + (4+con)*vit*vit - (7+con)*vit)
 end
 
-function APT.STAMINA(efc, mtb)
-  local min, max = 7 - 2.5*mtb, 25 - mtb
+function APT.STAMINA(efc, fin)
+  local min, max = 7 - 2.5*fin, 25 - fin
   local food = max - (max-min)*efc/12
   return math.floor(food)
 end
 
 function APT.DR(def, res)
-  local power = def * (8 + res*2) 
+  local power = def * (8 + res*2)
   return power/4, 3*power/4
 end
 
 return APT
-
