@@ -9,9 +9,9 @@
       "droprate":20
     }],
   "res":-2,
-  "con":-1,
+  "con":-2,
   "appearance":"imp",
-  "fin":0,
+  "fin":-1,
   "name":"Imp",
   "description":"Lesser demons, mischievious little miscreations.\nThey are known for their trickster grin and their\naptitude with arcane spells. They are hella weak,\nthough: one strong blow and they are dead meat."
 }

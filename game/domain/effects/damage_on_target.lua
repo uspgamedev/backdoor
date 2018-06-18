@@ -1,5 +1,6 @@
 
-local RANDOM = require 'common.random'
+local RANDOM  = require 'common.random'
+local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
@@ -16,7 +17,8 @@ FX.schema = {
 }
 
 function FX.process (actor, fieldvalues)
-  local amount = RANDOM.rollDice(fieldvalues.base, fieldvalues.attr)
+  local attr, base = fieldvalues.attr, fieldvalues.base
+  local amount = RANDOM.generate(ATTR.DMG(attr, base))
   local dmg = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {

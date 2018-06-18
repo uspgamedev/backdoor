@@ -1,32 +1,32 @@
 {
+  "cost":20,
   "ability":{
+    "effects":[{
+        "attr":"=cor",
+        "target":"=target",
+        "type":"effect",
+        "base":6,
+        "name":"damage_on_target",
+        "sfx":"example"
+      }],
     "inputs":[{
+        "output":"pos",
         "max-range":1,
         "type":"input",
-        "name":"choose_target",
         "body-only":{
         },
-        "output":"pos"
+        "name":"choose_target"
       },{
         "type":"operator",
-        "which":"COR",
+        "name":"get_attribute",
         "output":"cor",
-        "name":"get_attribute"
+        "which":"COR"
       },{
         "type":"operator",
         "pos":"=pos",
         "output":"target",
         "name":"get_body_at"
-      }],
-    "effects":[{
-        "attr":"=cor",
-        "target":"=target",
-        "base":8,
-        "type":"effect",
-        "name":"damage_on_target",
-        "sfx":"example"
       }]
   },
-  "playpoints":0,
-  "cost":20
+  "playpoints":0
 }

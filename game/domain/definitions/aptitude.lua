@@ -39,10 +39,9 @@ function APT.STAMINA(efc, mtb)
   return math.floor(food)
 end
 
-APT._DEFDIE = {4, 6, 8, 12, 20}
-
-function APT.DEFDIE(res)
-  return APT._DEFDIE[res+3]
+function APT.DR(def, res)
+  local power = def * (8 + res*2) 
+  return power/4, 3*power/4
 end
 
 return APT

@@ -3,12 +3,35 @@
   "icon":"card-dropkick",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
+      "inputs":[{
+          "aoe-hint":0,
+          "non-wall":false,
+          "output":"pos",
+          "type":"input",
+          "max-range":1,
+          "empty-tile":false,
+          "body-only":{
+            "body-type":false
+          },
+          "name":"choose_target"
+        },{
+          "type":"operator",
+          "name":"get_attribute",
+          "output":"cor",
+          "which":"COR"
+        },{
+          "type":"operator",
+          "pos":"=pos",
+          "name":"get_body_at",
+          "output":"target"
+        }],
       "effects":[{
           "attr":"=cor",
           "target":"=target",
+          "base":10,
           "type":"effect",
-          "base":20,
           "name":"damage_on_target",
           "sfx":false
         },{
@@ -18,34 +41,11 @@
         },{
           "target":"=self",
           "type":"effect",
+          "stay_alive":false,
           "name":"lose_life",
-          "percentage":10,
-          "stay_alive":false
-        }],
-      "inputs":[{
-          "aoe-hint":0,
-          "max-range":1,
-          "name":"choose_target",
-          "body-only":{
-            "body-type":false
-          },
-          "type":"input",
-          "empty-tile":false,
-          "output":"pos",
-          "non-wall":false
-        },{
-          "type":"operator",
-          "which":"COR",
-          "output":"cor",
-          "name":"get_attribute"
-        },{
-          "type":"operator",
-          "pos":"=pos",
-          "name":"get_body_at",
-          "output":"target"
+          "percentage":25
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"Deal 12dCOR damage to melee target, but\ndeals 10% of your MaxHP as recoil damage\nto yourself.",
   "type-description":"",

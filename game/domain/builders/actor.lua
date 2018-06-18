@@ -16,7 +16,6 @@ function BUILDER.build(idgenerator, body_id, background)
       COR = 100,
       ARC = 100,
       ANI = 100,
-      SPD = 100,
     },
     buffer = BUFFER_BUILDER.build(background),
     hand_limit = 5,

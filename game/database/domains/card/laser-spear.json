@@ -4,21 +4,25 @@
   "set":false,
   "desc":"Deals 10dCOR damage to target.\n\n\"A mass-produced weapon.\"",
   "type-description":"",
-  "one_time":true,
-  "pp":0,
-  "name":"Laser Spear",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "target":"=body",
+            "type":"effect",
+            "base":8,
+            "name":"damage_on_target",
+            "sfx":false
+          }],
         "inputs":[{
-            "body-only":[],
+            "output":"target",
             "max-range":1,
             "type":"input",
             "name":"choose_target",
-            "output":"target"
+            "body-only":[]
           },{
             "type":"operator",
             "pos":"=target",
@@ -26,22 +30,18 @@
             "output":"body"
           },{
             "type":"operator",
+            "which":"COR",
             "name":"get_attribute",
-            "output":"cor",
-            "which":"COR"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=body",
-            "base":12,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
+            "output":"cor"
           }]
-      }
+      },
+      "cost":20
     },
     "status-tags":[],
     "charges":0,
     "placement":"weapon"
-  }
+  },
+  "pp":0,
+  "name":"Laser Spear",
+  "one_time":true
 }

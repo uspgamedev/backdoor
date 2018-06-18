@@ -1,29 +1,10 @@
 {
   "attr":"ARC",
   "icon":false,
-  "one_time":true,
-  "desc":"",
-  "type-description":"",
-  "set":false,
-  "name":"Self Destruction",
   "widget":{
     "operators":[],
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
-        "effects":[{
-            "attr":"=arc",
-            "center":"=pos",
-            "size":3,
-            "type":"effect",
-            "ignore_owner":false,
-            "name":"damage_on_area",
-            "base":12
-          },{
-            "type":"effect",
-            "target":"=body_self",
-            "name":"destroy_body"
-          }],
         "inputs":[{
             "type":"input",
             "name":"body",
@@ -34,20 +15,39 @@
             "output":"actor"
           },{
             "which":"ARC",
+            "type":"operator",
             "output":"arc",
-            "name":"get_attribute",
-            "type":"operator"
+            "name":"get_attribute"
           },{
             "type":"operator",
             "body":"=body_self",
             "name":"get_body_pos",
             "output":"pos"
+          }],
+        "effects":[{
+            "attr":"=arc",
+            "center":"=pos",
+            "size":3,
+            "type":"effect",
+            "ignore_owner":false,
+            "name":"damage_on_area",
+            "base":8
+          },{
+            "type":"effect",
+            "target":"=body_self",
+            "name":"destroy_body"
           }]
-      }
+      },
+      "trigger":"on_done"
     },
     "status-tags":[],
     "trigger":"on_cycle",
     "charges":8,
     "placement":false
-  }
+  },
+  "desc":"",
+  "type-description":"",
+  "set":false,
+  "name":"Self Destruction",
+  "one_time":true
 }

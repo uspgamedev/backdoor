@@ -117,8 +117,8 @@ end
 function Body:getAttribute(which)
   local actor = self:getActor()
   local inf   = ATTR.INFLUENCE[which]
-  local base  = actor and (actor:getAttribute(inf[1]) +
-                           actor:getAttribute(inf[2]))/2
+  local base  = actor and (2 * actor:getAttribute(inf[1]) +
+                           1 * actor:getAttribute(inf[2])) / 3
                        or 1
   return self:getWithMod(which, base)
 end
@@ -147,16 +147,17 @@ function Body:getCON()
   return self:getAptitude('CON')
 end
 
-function Body:getDEFDie()
-  return APT.DEFDIE(self:getRES())
+function Body:getDR()
+  local min, max = APT.DR(self:getDEF(), self:getRES())
+  return math.floor(min), math.floor(max)
 end
 
 function Body:getConsumption()
-  return APT.STAMINA(self:getEFC(), self:getFIN())
+  return math.floor(APT.STAMINA(self:getEFC(), self:getFIN()))
 end
 
 function Body:getMaxHP()
-  return APT.HP(self:getVIT(), self:getCON())
+  return math.floor(APT.HP(self:getVIT(), self:getCON()))
 end
 
 --[[ Appearance methods ]]--
@@ -359,7 +360,7 @@ end
 --[[ Combat methods ]]--
 
 function Body:takeDamageFrom(amount, source)
-  local defroll = RANDOM.rollDice(self:getDEF(), self:getDEFDie())
+  local defroll = RANDOM.generate(self:getDR())
   local dmg = math.max(math.min(1, amount), amount - defroll)
   -- this calculus above makes values below the minimum stay below the minimum
   -- this is so immunities and absorb resistances work with multipliers

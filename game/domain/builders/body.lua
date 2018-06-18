@@ -6,10 +6,6 @@ function BUILDER.build(idgenerator, species, i, j)
     id = idgenerator.newID(),
     specname = species,
     damage = 0,
-    upgrades = {
-      DEF = 100,
-      VIT = 100,
-    },
     i = i,
     j = j,
     equipped = {

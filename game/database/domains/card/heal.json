@@ -10,31 +10,31 @@
           "output":"body-pos",
           "aoe-hint":1,
           "type":"input",
-          "body-only":{
-            "body-type":false
-          },
+          "empty-tile":false,
           "max-range":0,
           "non-wall":false,
           "name":"choose_target",
-          "empty-tile":false
+          "body-only":{
+            "body-type":false
+          }
         },{
           "type":"operator",
-          "name":"get_attribute",
           "output":"ANI",
+          "name":"get_attribute",
           "which":"ANI"
         },{
           "op":"*",
           "lhs":"=ANI",
           "type":"operator",
-          "rhs":2,
+          "rhs":8,
           "name":"integer_binop",
-          "output":"2*ANI"
+          "output":"max"
         },{
-          "rolls":5,
+          "rolls":1,
           "type":"operator",
           "output":"amount",
           "name":"dice_throw",
-          "sides":"=2*ANI"
+          "sides":"=max"
         },{
           "type":"operator",
           "pos":"=body-pos",
@@ -49,7 +49,7 @@
         }]
     }
   },
-  "desc":false,
+  "desc":"",
   "type-description":"",
   "pp":3,
   "name":"Heal",

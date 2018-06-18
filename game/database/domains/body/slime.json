@@ -11,7 +11,7 @@
       "droptype":"pack",
       "droprate":10
     }],
-  "res":0,
+  "res":-1,
   "con":-2,
   "appearance":"slime",
   "fin":-2,
