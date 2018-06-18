@@ -46,9 +46,11 @@ function Card:getEffect()
     effect = ("[%d exhaustion]\n\n"):format(self:getArtCost())
           .. ABILITY.preview(self:getArtAbility(), self:getOwner(), {})
   elseif self:isUpgrade() then
-    effect = ("Upgrades %s"):format(
-      table.concat(self:getUpgradesList(), ', ')
-    )
+    local ups,n = {}, 1
+    for _,up in ipairs(self:getUpgradesList()) do
+      ups[n] = "+" .. up.val .. " " .. up.attr
+    end
+    effect = ("Upgrades %s"):format(table.concat(ups, ', '))
   elseif self:isWidget() then
     effect = "Widget"
   end
