@@ -7,14 +7,20 @@ do
 end
 
 return {
-  { id = 'extends', name = "Prototype", type = 'enum', options = 'domains.actor',
-    optional = true },
+  { id = 'extends', name = "Prototype", type = 'enum',
+    options = 'domains.actor', optional = true },
   { id = 'name', name = "Full Name", type = 'string' },
   { id = 'description', name = "Description", type = 'text' },
   { id = 'behavior', name = "Behavior", type = 'enum',
     options = behaviors },
   { id = 'signature', name = "Signature Ability", type = 'enum',
     options = 'domains.action' },
+  { id = 'traits', name = "Traits", type = 'array',
+    schema = {
+      { id = 'specname', name = "Trait", type = 'enum',
+      options = "domains.card" },
+    }
+  },
   { id = 'cor', name = "COR Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'arc', name = "ARC Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'ani', name = "ANI Aptitude", type = 'range', min = -2, max = 2 },
