@@ -13,7 +13,6 @@ local _HOLDTIME = 0.25
 
 local _view
 local _selection
-local _validate
 local _widgets
 local _ability_count
 local _quick_toggle
@@ -30,13 +29,9 @@ local function _next()
 end
 
 local function _confirm()
-  if _validate(_selection) then
-    PLAYSFX 'ok-menu'
-    _view:fadeOut()
-    SWITCHER.pop({ picked_slot = _selection })
-  else
-    PLAYSFX 'denied'
-  end
+  PLAYSFX 'ok-menu'
+  _view:fadeOut()
+  SWITCHER.pop({ picked_slot = _selection })
 end
 
 local function _cancel()
@@ -48,9 +43,8 @@ end
 
 local state = {}
 
-function state:enter(from, widgets, validator)
+function state:enter(from, widgets)
   _widgets = widgets
-  _validate = validator
   _selection = 1
   _ability_count = #_widgets
   _quick_toggle = 0
