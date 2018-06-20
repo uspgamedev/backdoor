@@ -48,11 +48,11 @@ function Sector:init(spec_name, route)
 
 end
 
-function Sector:loadState(state, register)
-  self.id = state.id
+function Sector:loadState(state)
+  self:setId(state.id or self.id)
+  self:setSubtype(self.spectype)
   self.exits = state.exits
   self.zone = GameElement('zone', state.zone)
-  self:setId(state.id)
   self.generated = state.generated
   if state.generated then
     self.tiles = state.tiles
@@ -63,13 +63,11 @@ function Sector:loadState(state, register)
     for _,body_state in ipairs(state.bodies) do
       local body = Body(body_state.specname)
       body:loadState(body_state)
-      register(body)
       bodies[body.id] = body_state
     end
     for _,actor_state in ipairs(state.actors) do
       local actor = Actor(actor_state.specname)
       actor:loadState(actor_state)
-      register(actor)
       local body_id = actor.body_id
       local body_state = bodies[body_id]
       local i, j = body_state.i, body_state.j
@@ -86,8 +84,8 @@ end
 
 function Sector:saveState()
   local state = {}
+  state.id = self:getId()
   state.specname = self.specname
-  state.id = self.id
   state.zone = self.zone:getSpecName()
   state.exits = self.exits
   state.generated = self.generated

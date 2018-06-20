@@ -56,9 +56,10 @@ function Actor:init(spec_name)
 end
 
 function Actor:loadState(state)
+  self:setId(state.id or self.id)
+  self:setSubtype(self.spectype)
   self.cooldown = state.cooldown or self.cooldown
   self.body_id = state.body_id or self.body_id
-  self:setId(state.id or self.id)
   self.exp = state.exp or self.exp
   self.playpoints = state.playpoints or self.playpoints
   self.upgrades = state.upgrades or self.upgrades
@@ -94,10 +95,10 @@ end
 
 function Actor:saveState()
   local state = {}
+  state.id = self:getId()
   state.specname = self.specname
   state.cooldown = self.cooldown
   state.body_id = self.body_id
-  state.id = self.id
   state.exp = self.exp
   state.playpoints = self.playpoints
   state.upgrades = self.upgrades
@@ -319,6 +320,17 @@ end
 
 function Actor:getHandLimit()
   return self.hand_limit
+end
+
+function Actor:eachCardInBuffer()
+  local buffer = self.buffer
+  local function iterate(state)
+    local i = state[0] + 1
+    local card = buffer[i]
+    state[0] = i
+    return card == DEFS.DONE and iterate(state) or i, card
+  end
+  return iterate, { 0 }, 0
 end
 
 --- Draw a card from actor's buffer
