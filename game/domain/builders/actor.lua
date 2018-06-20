@@ -7,15 +7,19 @@ local Actor          = require 'domain.actor'
 
 local BUILDER = {}
 
-function BUILDER.build(idgenerator, background, body_state, is_state)
+function BUILDER.buildState(idgenerator, background, body_state)
+  -- WARNING: Do not instantiate body before building the actor!
+  -- Build only bodystate instead. If not possible (body already exists),
+  -- you will have to reload its state after calling this function. If so,
+  -- do not lose the 'body_state' reference, as it is edited in-place here.
   local traits_specs = DB.loadSpec('actor', background)['traits']
   if traits_specs then
     for _,trait_spec in ipairs(traits_specs) do
-      local trait = CARD_BUILDER.build(trait_spec.specname, true)
+      local trait = CARD_BUILDER.buildState(trait_spec.specname, true)
       table.insert(body_state.widgets, trait)
     end
   end
-  local state = {
+  return {
     id = idgenerator.newID(),
     body_id = body_state.id,
     specname = background,
@@ -32,13 +36,13 @@ function BUILDER.build(idgenerator, background, body_state, is_state)
     hand = {},
     prizes = {},
   }
-  if is_state then
-    return state
-  else
-    local actor = Actor(background)
-    actor:loadState(state)
-    return actor
-  end
+end
+
+function BUILDER.buildElement(idgenerator, background, body_state)
+  local state = BUILDER.buildState(idgenerator, background, body_state)
+  local actor = Actor(background)
+  actor:loadState(state)
+  return actor
 end
 
 return BUILDER
