@@ -6,6 +6,7 @@ local RANDOM = require 'common.random'
 local PROFILE = require 'infra.profile'
 
 local BUILDERS = require 'lux.pack' 'domain.builders'
+local PACK = require 'domain.pack'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
@@ -119,6 +120,21 @@ function Route:instance(obj)
       to_sector:link(from_sector.id, unpack(exit.pos))
       from_sector:link(target_sector_id, unpack(entry.pos))
     end
+  end
+
+  function obj.makeCard(cardspec)
+    local card = BUILDERS.card.buildElement(_id_generator, cardspec)
+    _register(card)
+    return card
+  end
+
+  function obj.makePack(collection)
+    local speclist = PACK.generatePackFrom(collection)
+    local pack = {}
+    for i,cardspec in ipairs(speclist) do
+      pack[i] = obj.makeCard(cardspec)
+    end
+    return pack
   end
 
   function obj.makeBody(sector, bodyspec, i, j)

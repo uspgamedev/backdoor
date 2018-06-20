@@ -386,7 +386,7 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   local actor = _route.getControlledActor()
   if actor:getPrizePackCount() > 0 then
     PLAYSFX 'ok-menu'
-    SWITCHER.push(GS.OPEN_PACK, actor:getPrizePacks())
+    SWITCHER.push(GS.OPEN_PACK, _route, actor:getPrizePacks())
     local args = coroutine.yield(_task)
     if args.pack == nil then return end
     _route.getControlledActor():removePrizePack(args.pack_index)

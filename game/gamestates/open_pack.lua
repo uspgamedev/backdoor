@@ -2,13 +2,13 @@
 local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS = require 'domain.definitions'
-local PACK = require 'domain.pack'
 local PLAYSFX = require 'helpers.playsfx'
 local PackView = require 'view.packlist'
 local CardView = require 'view.consumelist'
 
 local state = {}
 
+local _route
 local _card_list_view
 local _pack
 local _leave
@@ -33,7 +33,8 @@ end
 local function _confirm()
   if _status == "choosing_pack" then
     _status = "choosing_card"
-    _pack = PACK.generatePackFrom(_card_list_view:getChosenPack())
+    local collection = _card_list_view:getChosenPack()
+    _pack = _route.makePack(collection)
     _pack_index = _card_list_view:getSelection()
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})
@@ -56,8 +57,9 @@ local function _consumeCards(consumed)
   end
 end
 
-function state:enter(from, packlist)
+function state:enter(from, route, packlist)
   _status = "choosing_pack"
+  _route = route
   _pack = nil
   _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
