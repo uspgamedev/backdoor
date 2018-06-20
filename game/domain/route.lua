@@ -5,6 +5,7 @@ local IDGenerator = require 'common.idgenerator'
 local RANDOM = require 'common.random'
 local PROFILE = require 'infra.profile'
 
+local BUILDERS = require 'lux.pack' 'domain.builders'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
@@ -121,12 +122,16 @@ function Route:instance(obj)
   end
 
   function obj.makeBody(bodyspec, i, j)
-    local bid, body = _register(Body(bodyspec))
+    local body_state = BUILDERS.body.build(_id_generator, bodyspec, i, j)
+    local body = Body(bodyspec)
+    body:loadState(body_state)
+    _register(body)
     _current_sector:putBody(body, i, j)
     return body
   end
 
   function obj.makeActor(bodyspec, actorspec, i, j)
+
     local bid, body = _register(Body(bodyspec))
     local aid, actor = _register(Actor(actorspec))
     actor:setBody(bid)
