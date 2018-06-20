@@ -33,11 +33,12 @@ function Body:init(specname)
 end
 
 function Body:loadState(state)
+  self:setId(state.id or self.id)
+  self:setSubtype(self.spectype)
   self.damage = state.damage or self.damage
   self.killer = state.killer or false
   self.attr_lv = {}
   self.sector_id = state.sector_id or self.sector_id
-  self:setId(state.id or self.id)
   self.widgets = state.widgets and {} or self.widgets
   for index, card_state in pairs(state.widgets) do
     if card_state then
@@ -58,11 +59,11 @@ end
 
 function Body:saveState()
   local state = {}
+  state.id = self:getId()
   state.specname = self.specname
   state.damage = self.damage
   state.killer = self.killer
   state.sector_id = self.sector_id
-  state.id = self.id
   local equipped = {}
   for _,placement in ipairs(PLACEMENTS) do
     local equip = self:getEquipmentAt(placement)

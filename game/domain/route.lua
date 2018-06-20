@@ -26,13 +26,6 @@ function Route:instance(obj)
 
   Util.destroyAll 'true_force'
 
-  local function _register(element)
-    local id = element.id or _id_generator.newID()
-    element:setId(id)
-    element:setSubtype(element.spectype)
-    return id, element
-  end
-
   function obj.loadState(state)
     -- id
     _id = state.id
@@ -50,8 +43,7 @@ function Route:instance(obj)
     _sectors = {}
     for _,sector_state in ipairs(state.sectors) do
       local sector = Sector(sector_state.specname, obj)
-      sector:loadState(sector_state, _register)
-      _register(sector)
+      sector:loadState(sector_state)
       table.insert(_sectors, sector)
     end
 
@@ -124,7 +116,6 @@ function Route:instance(obj)
 
   function obj.makeCard(cardspec)
     local card = BUILDERS.card.buildElement(_id_generator, cardspec)
-    _register(card)
     return card
   end
 
@@ -139,7 +130,6 @@ function Route:instance(obj)
 
   function obj.makeBody(sector, bodyspec, i, j)
     local body = BUILDERS.body.buildElement(_id_generator, bodyspec, i, j)
-    _register(body)
     sector:putBody(body, i, j)
     return body
   end
@@ -149,8 +139,6 @@ function Route:instance(obj)
     local actor = BUILDERS.actor.buildElement(_id_generator, actorspec, b_state)
     local body = Body(bodyspec)
     body:loadState(b_state)
-    _register(actor)
-    _register(body)
     sector:putActor(actor, i, j)
     return actor, body
   end

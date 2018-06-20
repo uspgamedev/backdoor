@@ -17,7 +17,8 @@ function Card:init(specname)
 end
 
 function Card:loadState(state)
-  self:setId(state.id)
+  self:setId(state.id or self.id)
+  self:setSubtype(self.spectype)
   self.specname = state.specname or self.specname
   self.usages = state.usages or self.usages
   self.owner_id = state.owner_id or self.owner_id
