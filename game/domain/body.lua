@@ -35,7 +35,6 @@ end
 function Body:loadState(state)
   self.damage = state.damage or self.damage
   self.killer = state.killer or false
-  self.upgrades = state.upgrades or self.upgrades
   self.attr_lv = {}
   self.sector_id = state.sector_id or self.sector_id
   self:setId(state.id or self.id)
@@ -55,8 +54,6 @@ function Body:loadState(state)
     end
   end
   self.equipped = equipped
-  self:updateAttr('DEF')
-  self:updateAttr('VIT')
 end
 
 function Body:saveState()
@@ -67,7 +64,7 @@ function Body:saveState()
   state.sector_id = self.sector_id
   state.id = self.id
   local equipped = {}
-  for _,placement in ipairs(DEFS.PLACEMENTS) do
+  for _,placement in ipairs(PLACEMENTS) do
     local equip = self:getEquipmentAt(placement)
     if equip then
       local index = self:findWidget(equip)

@@ -40,8 +40,8 @@ function FX.process (actor, fieldvalues)
   local sector = actor:getBody():getSector()
   local bodyspec = fieldvalues['bodyspec']
   local i,j = unpack(fieldvalues['pos'])
-  local body = sector:getRoute().makeBody(bodyspec, i, j)
-  local state = {}
+  local body = sector:getRoute().makeBody(sector, bodyspec, i, j)
+  local state = body:saveState()
   state.widgets = {}
   for _,widget_fieldvalues in ipairs(fieldvalues['widgets']) do
     local widgetspec = widget_fieldvalues['spec']
@@ -52,11 +52,7 @@ function FX.process (actor, fieldvalues)
       table.insert(state.widgets, widget)
     end
   end
-  state.upgrades = {
-    VIT = fieldvalues['vit'],
-    DEF = fieldvalues['def'],
-  }
-  body:loadState(setmetatable(state, { __index = body:saveState() }))
+  body:loadState(state)
 end
 
 return FX
