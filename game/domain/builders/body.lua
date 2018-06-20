@@ -1,5 +1,5 @@
 
-local Body require 'domain.body'
+local Body = require 'domain.body'
 
 local BUILDER = {}
 

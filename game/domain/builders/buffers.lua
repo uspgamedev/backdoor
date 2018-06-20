@@ -5,6 +5,8 @@ local DEFS = require 'domain.definitions'
 
 local _buildCard = require 'domain.builders.card' .buildState
 
+local BUILDER = {}
+
 function BUILDER.build(background)
   local buffer = {}
   for _,cardinfo in ipairs(DB.loadSpec('actor', background).initial_buffer) do

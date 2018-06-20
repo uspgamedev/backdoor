@@ -1,5 +1,5 @@
 
-local DB = require 'database'
+local DB             = require 'database'
 local CARD_BUILDER   = require 'domain.builders.card'
 local BUFFER_BUILDER = require 'domain.builders.buffers'
 local DEFS           = require 'domain.definitions'
