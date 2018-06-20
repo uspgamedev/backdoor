@@ -1,7 +1,6 @@
 
 local DB = require 'database'
 local RANDOM = require 'common.random'
-local Card = require 'domain.card'
 
 local _EMPTY = {}
 local CARDSET = {}
@@ -35,7 +34,7 @@ function CARDSET.getRandomCardFrom(setname)
   if parent and RANDOM.generate(1, 10) == 1 then
     return CARDSET.getRandomCardFrom(parent)
   end
-  return Card(cardlist[RANDOM.generate(1, #cardlist)])
+  return cardlist[RANDOM.generate(1, #cardlist)]
 end
 
 return CARDSET

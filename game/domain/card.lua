@@ -17,6 +17,7 @@ function Card:init(specname)
 end
 
 function Card:loadState(state)
+  self:setId(state.id)
   self.specname = state.specname or self.specname
   self.usages = state.usages or self.usages
   self.owner_id = state.owner_id or self.owner_id
@@ -25,6 +26,7 @@ end
 
 function Card:saveState()
   local state = {}
+  state.id = self:getId()
   state.specname = self.specname
   state.usages = self.usages
   state.owner_id = self.owner_id
