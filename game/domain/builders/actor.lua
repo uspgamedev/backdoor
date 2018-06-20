@@ -15,7 +15,7 @@ function BUILDER.buildState(idgenerator, background, body_state)
   local traits_specs = DB.loadSpec('actor', background)['traits']
   if traits_specs then
     for _,trait_spec in ipairs(traits_specs) do
-      local trait = CARD_BUILDER.buildState(trait_spec.specname, true)
+      local trait = CARD_BUILDER.buildState(idgenerator, trait_spec.specname)
       table.insert(body_state.widgets, trait)
     end
   end
@@ -31,7 +31,7 @@ function BUILDER.buildState(idgenerator, background, body_state)
       ARC = 100,
       ANI = 100,
     },
-    buffer = BUFFER_BUILDER.build(background),
+    buffer = BUFFER_BUILDER.build(idgenerator, background),
     hand_limit = 5,
     hand = {},
     prizes = {},
