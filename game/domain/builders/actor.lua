@@ -1,15 +1,21 @@
 
 local DB = require 'database'
+local CARD_BUILDER   = require 'domain.builders.card'
 local BUFFER_BUILDER = require 'domain.builders.buffers'
 local DEFS           = require 'domain.definitions'
-local Card           = require 'domain.card'
+local Actor          = require 'domain.actor'
 
 local BUILDER = {}
 
-function BUILDER.build(idgenerator, background, body_state)
-  local signature = Card(DB.loadSpec('actor', background)['signature'])
-  table.insert(body_state.widgets, signature:saveState())
-  return {
+function BUILDER.build(idgenerator, background, body_state, is_state)
+  local traits_specs = DB.loadSpec('actor', background)['traits']
+  if traits_specs then
+    for _,trait_spec in ipairs(traits_specs) do
+      local trait = CARD_BUILDER.build(trait_spec.specname, true)
+      table.insert(body_state.widgets, trait)
+    end
+  end
+  local state = {
     id = idgenerator.newID(),
     body_id = body_state.id,
     specname = background,
@@ -26,6 +32,13 @@ function BUILDER.build(idgenerator, background, body_state)
     hand = {},
     prizes = {},
   }
+  if is_state then
+    return state
+  else
+    local actor = Actor(background)
+    actor:loadState(state)
+    return actor
+  end
 end
 
 return BUILDER
