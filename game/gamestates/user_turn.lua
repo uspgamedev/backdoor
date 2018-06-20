@@ -26,6 +26,7 @@ local _route
 local _next_action
 local _view
 
+local _widget_abilities = {}
 local _long_walk
 local _adjacency = {}
 local _alert
@@ -289,7 +290,7 @@ local function _useAction(action_slot, params)
       end
     elseif param.name == "choose_widget_slot" then
       SWITCHER.push(
-        GS.PICK_WIDGET_SLOT, params.widgets,
+        GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
           return ABILITY.validate('choose_widget_slot', controlled_actor, param,
                                   which_slot)
@@ -350,7 +351,7 @@ _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
   end
   if widget_abilities[1] then
     PLAYSFX 'open-menu'
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widgets = widget_abilities })
+    SWITCHER.push(widget_abilities)
   elseif _was_on_menu then
     PLAYSFX 'denied'
     SWITCHER.push(GS.ACTION_MENU, _route)

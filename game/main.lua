@@ -51,6 +51,8 @@ GS = {
   CARD_SELECT = require "gamestates.card_select", -- Player is selecting a card
                                                   -- to use
   ACTION_MENU = require "gamestates.action_menu", -- Player's action menu
+  READY_ABILITY= require "gamestates.ready_ability",
+                                                  -- Player readies an ability
   OPEN_PACK = require "gamestates.open_pack",     -- Player opens a pack
   MANAGE_BUFFER = require "gamestates.manage_buffer",
                                                   -- Player manages their buffer
