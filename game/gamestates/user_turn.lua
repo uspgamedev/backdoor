@@ -18,6 +18,7 @@ local state = {}
 -- [[ Constant Variables ]]--
 local _OPEN_MENU = "OPEN_MENU"
 local _SAVE_QUIT = "SAVE_QUIT"
+local _READY_ABILITY_ACTION = "READY_ABILITY"
 
 --[[ Local Variables ]]--
 
@@ -206,7 +207,7 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('ACTION_1') then
     action_request = {DEFS.ACTION.PLAY_CARD}
   elseif INPUT.wasActionPressed('ACTION_2') then
-    action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
+    action_request = {_READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
   elseif INPUT.wasActionPressed('EXTRA') then
@@ -342,16 +343,10 @@ _ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
 end
 
 _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  local widget_abilities = {}
-  local controlled_body = _route.getControlledActor():getBody()
-  for _,widget in controlled_body:eachWidget() do
-    if widget:getWidgetAbility() then
-      table.insert(widget_abilities, widget)
-    end
-  end
-  if widget_abilities[1] then
-    PLAYSFX 'open-menu'
-    SWITCHER.push(GS.READY_ABILITY, widget_abilities)
+  local has_widget = _route.getControlledActor():getBody():hasWidgetAt(1)
+  if has_widget then
+    PLAYSFX 'ok-menu'
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
   elseif _was_on_menu then
     PLAYSFX 'denied'
     SWITCHER.push(GS.ACTION_MENU, _route)
@@ -419,4 +414,21 @@ _ACTION[DEFS.ACTION.IDLE] = function()
   _useAction(DEFS.ACTION.IDLE)
 end
 
+_ACTION[_READY_ABILITY_ACTION] = function()
+  local widget_abilities = {}
+  local controlled_body = _route.getControlledActor():getBody()
+  for _,widget in controlled_body:eachWidget() do
+    if widget:getWidgetAbility() then
+      table.insert(widget_abilities, widget)
+    end
+  end
+  if widget_abilities[1] then
+    PLAYSFX 'open-menu'
+    SWITCHER.push(GS.READY_ABILITY, widget_abilities)
+  else
+    PLAYSFX 'denied'
+  end
+end
+
 return state
+
