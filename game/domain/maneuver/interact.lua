@@ -1,4 +1,5 @@
 
+local ABILITY    = require 'domain.ability'
 local ACTIONDEFS = require 'domain.definitions.action'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local INTERACT = {}
@@ -83,7 +84,7 @@ function INTERACT.perform(actor, inputvalues)
     actor:exhaust(ACTIONDEFS.MOVE_COST)
     local target_sector = Util.findId(inputvalues.sector)
     target_sector:putActor(actor, unpack(inputvalues.pos))
-  elseif inputvalues.interaction == 'CHANGE_SECTOR' then
+  elseif inputvalues.interaction == 'CONSUME_CARDS' then
     ABILITY.execute(CONSUME_ABILITY, actor, inputvalues)
     actor:getSector():getTile(actor:getPos()).type = SCHEMATICS.FLOOR
   end
