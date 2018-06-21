@@ -29,6 +29,7 @@ local _TILE_COLORS = {
   [SCHEMATICS.WALL]  = Color:new {0.3, 0.5, 0.9, 1},
   [SCHEMATICS.FLOOR] = Color:new {0.1, 0.3, 0.7, 1},
   [SCHEMATICS.EXIT]  = Color.fromInt {200, 200,  40, 255},
+  [SCHEMATICS.ALTAR]  = Color.fromInt {30, 100,  240, 255},
 }
 
 local _map

@@ -4,5 +4,6 @@ return {
   FLOOR  = ".",
   WALL   = "#",
   EXIT   = ">",
+  ALTAR  = "&",
 }
 
