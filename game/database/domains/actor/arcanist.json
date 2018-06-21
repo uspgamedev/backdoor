@@ -2,10 +2,10 @@
   "extends":"sentient",
   "signature":"bolting",
   "behavior":"player",
+  "traits":[],
   "cor":-2,
   "arc":1,
   "collection":false,
-  "name":"Arcanist",
   "ani":1,
   "initial_buffer":[{
       "amount":1,
@@ -24,7 +24,7 @@
       "card":"focus"
     },{
       "amount":2,
-      "card":"divination"
+      "card":"consume"
     },{
       "amount":1,
       "card":"haste"
@@ -38,5 +38,6 @@
       "amount":1,
       "card":"soul_robe"
     }],
+  "name":"Arcanist",
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
 }

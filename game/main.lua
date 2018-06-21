@@ -47,6 +47,7 @@ GS = {
   PICK_WIDGET_SLOT = require "gamestates.pick_widget_slot",
                                                   -- Player is choosing widget
                                                   -- slot to equip widget
+  CONSUME_CARDS = require "gamestates.consume_cards",
   CARD_SELECT = require "gamestates.card_select", -- Player is selecting a card
                                                   -- to use
   ACTION_MENU = require "gamestates.action_menu", -- Player's action menu

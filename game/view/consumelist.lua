@@ -68,6 +68,7 @@ function View:init(hold_actions)
   self.offsets = {}
   self.card_list = _EMPTY
   self.consumed = {}
+  self.consumed_count = 0
   self.consume_log = false
   self.holdbar = HoldBar(hold_actions)
   self.exp_gained = 0
@@ -83,11 +84,12 @@ function View:isLocked()
   return self.holdbar:isLocked()
 end
 
-function View:open(card_list)
+function View:open(card_list, maxconsume)
   self.card_list = card_list
   self.consume_log = {}
   self.holdbar:unlock()
   self.selection = math.ceil(#card_list/2)
+  self.maxconsume = maxconsume
   for i=1,#card_list do
     self.buffered_offset[i] = 0
     self.consumed_offset[i] = 0
@@ -162,12 +164,17 @@ function View:isReadyToLeave()
 end
 
 function View:toggleSelected()
+  local changed = false
   if self.consumed[self.selection] then
+    changed = true
     self:removeConsume()
-  else
+  elseif self.maxconsume and self.consumed_count < self.maxconsume then
+    changed = true
     self:addConsume()
   end
-  self.consumed[self.selection] = not self.consumed[self.selection]
+  if changed then
+    self.consumed[self.selection] = not self.consumed[self.selection]
+  end
 end
 
 function View:getConsumeLog()
@@ -183,11 +190,13 @@ end
 function View:addConsume()
   self.exp_gained = self.exp_gained + 1
   self.exp_gained_offset = -10
+  self.consumed_count = self.consumed_count + 1
 end
 
 function View:removeConsume()
   self.exp_gained = self.exp_gained - 1
   self.exp_gained_offset = -10
+  self.consumed_count = self.consumed_count - 1
 end
 
 function View:draw()
