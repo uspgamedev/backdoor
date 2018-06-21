@@ -1,6 +1,11 @@
 {
   "attr":"COR",
   "icon":"card-power-suit",
+  "one_time":false,
+  "desc":"Increases DEF sligthly.",
+  "type-description":"",
+  "set":false,
+  "name":"Impact Vest",
   "widget":{
     "operators":[{
         "attr":"DEF",
@@ -8,13 +13,8 @@
         "val":1
       }],
     "trigger":false,
-    "charges":0,
     "status-tags":[],
+    "charges":0,
     "placement":"suit"
-  },
-  "desc":"Increases DEF sligthly.",
-  "type-description":"",
-  "set":false,
-  "name":"Impact Vest",
-  "one_time":false
+  }
 }
