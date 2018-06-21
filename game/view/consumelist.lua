@@ -301,10 +301,15 @@ function View:drawCardDesc(g, card, enter)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
   _otherfont.set()
   g.print("Keep", maxw + _PD, 0.5 * _otherfont:getHeight())
-  g.print("Consume", maxw + _PD, -1.5 * _otherfont:getHeight())
+  local consume, extra = "Consume", 0
+  if self.maxconsume then
+    consume = ("Consume [%d/%d]"):format(self.consumed_count, self.maxconsume)
+    extra = _CW/2 + 10
+  end
+  g.print(consume, maxw + _PD, -1.5 * _otherfont:getHeight())
 
   g.push()
-  g.translate(maxw + _PD + 1.5*_CW, -0.6 * _otherfont:getHeight())
+  g.translate(maxw + _PD + 1.5*_CW + extra, -0.6 * _otherfont:getHeight())
   self:drawArrow(g, enter)
   g.pop()
 
