@@ -9,34 +9,16 @@
   "ani":1,
   "initial_buffer":[{
       "amount":1,
-      "card":"teleport"
+      "card":"heal"
     },{
       "amount":1,
       "card":"fireball"
     },{
-      "amount":1,
-      "card":"stick_flame"
-    },{
-      "amount":2,
-      "card":"firebolt"
-    },{
-      "amount":1,
-      "card":"focus"
-    },{
-      "amount":2,
-      "card":"consume"
-    },{
-      "amount":1,
+      "amount":4,
       "card":"haste"
     },{
-      "amount":2,
-      "card":"heal"
-    },{
-      "amount":1,
-      "card":"illusion_of_darkness"
-    },{
-      "amount":1,
-      "card":"soul_robe"
+      "amount":4,
+      "card":"firebolt"
     }],
   "name":"Arcanist",
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."

@@ -2,41 +2,24 @@
   "extends":"sentient",
   "signature":"bullet",
   "behavior":"player",
+  "traits":[],
   "cor":1,
   "arc":1,
   "collection":false,
-  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry.",
+  "ani":-2,
+  "name":"Gagdeteer",
   "initial_buffer":[{
       "amount":1,
-      "card":"goggles"
+      "card":"impact-vest"
     },{
       "amount":1,
-      "card":"rusty-blaster"
-    },{
-      "amount":2,
-      "card":"sensor-bomb"
-    },{
-      "amount":2,
-      "card":"reinforce"
-    },{
-      "amount":1,
-      "card":"wrench"
-    },{
-      "amount":2,
       "card":"turret"
     },{
-      "amount":2,
-      "card":"reassemble"
+      "amount":4,
+      "card":"push"
     },{
-      "amount":2,
-      "card":"flash"
-    },{
-      "amount":2,
-      "card":"jetboots"
-    },{
-      "amount":2,
-      "card":"timebomb-drone"
+      "amount":4,
+      "card":"fix-turret"
     }],
-  "ani":-2,
-  "name":"Gagdeteer"
+  "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

@@ -1,0 +1,38 @@
+{
+  "attr":"ARC",
+  "icon":"box",
+  "one_time":false,
+  "art":{
+    "cost":0,
+    "art_ability":{
+      "inputs":[{
+          "dif-fact":false,
+          "output":"tgt",
+          "aoe-hint":0,
+          "type":"input",
+          "body-only":{
+            "body-type":"machine"
+          },
+          "max-range":1,
+          "non-wall":false,
+          "name":"choose_target",
+          "empty-tile":false
+        },{
+          "type":"operator",
+          "pos":"=tgt",
+          "name":"get_body_at",
+          "output":"turret"
+        }],
+      "effects":[{
+          "type":"effect",
+          "target":"=turret",
+          "name":"heal",
+          "amount":4
+        }]
+    }
+  },
+  "desc":"A love kick and it's ready to go.",
+  "type-description":"",
+  "name":"Fix Turret",
+  "set":false
+}
