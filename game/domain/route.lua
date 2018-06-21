@@ -5,6 +5,7 @@ local IDGenerator = require 'common.idgenerator'
 local RANDOM = require 'common.random'
 local PROFILE = require 'infra.profile'
 
+local BUILDERS = require 'lux.pack' 'domain.builders'
 local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
@@ -112,7 +113,7 @@ function Route:instance(obj)
     if not exit.target_pos then
       local to_sector = Util.findId(target_sector_id)
       if not to_sector:isGenerated() then
-        to_sector:generate(_register)
+        to_sector:generate()
       end
       local entry = to_sector:getExit(from_sector.id)
       to_sector:link(from_sector.id, unpack(exit.pos))
@@ -120,18 +121,22 @@ function Route:instance(obj)
     end
   end
 
-  function obj.makeBody(bodyspec, i, j)
-    local bid, body = _register(Body(bodyspec))
-    _current_sector:putBody(body, i, j)
+  function obj.makeBody(sector, bodyspec, i, j)
+    local body = BUILDERS.body.buildElement(_id_generator, bodyspec, i, j)
+    _register(body)
+    sector:putBody(body, i, j)
     return body
   end
 
-  function obj.makeActor(bodyspec, actorspec, i, j)
-    local bid, body = _register(Body(bodyspec))
-    local aid, actor = _register(Actor(actorspec))
-    actor:setBody(bid)
-    _current_sector:putActor(actor, i, j)
-    return actor
+  function obj.makeActor(sector, actorspec, bodyspec, i, j)
+    local b_state = BUILDERS.body.buildState(_id_generator, bodyspec, i, j)
+    local actor = BUILDERS.actor.buildElement(_id_generator, actorspec, b_state)
+    local body = Body(bodyspec)
+    body:loadState(b_state)
+    _register(actor)
+    _register(body)
+    sector:putActor(actor, i, j)
+    return actor, body
   end
 
   function obj.getPlayerActor()

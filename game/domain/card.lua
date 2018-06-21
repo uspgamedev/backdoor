@@ -17,10 +17,10 @@ function Card:init(specname)
 end
 
 function Card:loadState(state)
-  self.specname = state.specname
-  self.usages = state.usages
-  self.owner_id = state.owner_id
-  self.ticks = state.ticks
+  self.specname = state.specname or self.specname
+  self.usages = state.usages or self.usages
+  self.owner_id = state.owner_id or self.owner_id
+  self.ticks = state.ticks or self.ticks
 end
 
 function Card:saveState()

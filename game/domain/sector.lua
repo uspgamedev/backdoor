@@ -144,7 +144,7 @@ function Sector:isGenerated()
   return self.generated
 end
 
-function Sector:generate(register)
+function Sector:generate()
 
   -- load sector's specs
   local base = {
@@ -160,7 +160,7 @@ function Sector:generate(register)
   end
 
   self:makeTiles(base.grid, base.drops)
-  self:makeEncounters(base.encounters, register)
+  self:makeEncounters(base.encounters)
 
   self.generated = true
 end
@@ -189,12 +189,11 @@ function Sector:makeTiles(grid, drops)
   end
 end
 
-function Sector:makeEncounters(encounters, register)
+function Sector:makeEncounters(encounters)
   for _,encounter in ipairs(encounters) do
-    local actor_spec, body_spec = unpack(encounter.monster)
+    local actorspec, bodyspec = unpack(encounter.monster)
     local i, j = unpack(encounter.pos)
-    local bid, body = register(Body(body_spec))
-    local aid, actor = register(Actor(actor_spec))
+    local actor, body = self.route.makeActor(self, actorspec, bodyspec, i, j)
     local difficulty_multiplier = 1 + self:getDifficulty()
     local upgradexp = encounter.upgrade_power
 
@@ -216,10 +215,6 @@ function Sector:makeEncounters(encounters, register)
         end
       end
     end
-
-    -- putting actor and body in sector
-    actor:setBody(bid)
-    self:putActor(actor, i, j)
   end
 end
 

@@ -33,13 +33,12 @@ function Body:init(specname)
 end
 
 function Body:loadState(state)
-  self.damage = state.damage
-  self.killer = state.killer
+  self.damage = state.damage or self.damage
+  self.killer = state.killer or false
   self.attr_lv = {}
-  self.sector_id = state.sector_id
-  self:setId(state.id)
-  self.equipped = state.equipped
-  self.widgets = {}
+  self.sector_id = state.sector_id or self.sector_id
+  self:setId(state.id or self.id)
+  self.widgets = state.widgets and {} or self.widgets
   for index, card_state in pairs(state.widgets) do
     if card_state then
       local card = Card(card_state.specname)
@@ -47,6 +46,14 @@ function Body:loadState(state)
       self.widgets[index] = card
     end
   end
+  local equipped = self.equipped
+  if state.equipped then
+    equipped = {}
+    for _,placement in ipairs(PLACEMENTS) do
+      equipped[placement] = self.widgets[state.equipped[placement]]
+    end
+  end
+  self.equipped = equipped
 end
 
 function Body:saveState()
@@ -56,7 +63,15 @@ function Body:saveState()
   state.killer = self.killer
   state.sector_id = self.sector_id
   state.id = self.id
-  state.equipped = self.equipped
+  local equipped = {}
+  for _,placement in ipairs(PLACEMENTS) do
+    local equip = self:getEquipmentAt(placement)
+    if equip then
+      local index = self:findWidget(equip)
+      equipped[placement] = index
+    end
+  end
+  state.equipped = equipped
   state.widgets = {}
   for index, card in pairs(self.widgets) do
     if card then
@@ -264,6 +279,15 @@ end
 function Body:getWidgetNameAt(index)
   local card = self.widgets[index]
   if card then return card:getName() end
+end
+
+function Body:findWidget(target)
+  for index, widget in self:eachWidget() do
+    if widget == target then
+      return index
+    end
+  end
+  return -1
 end
 
 function Body:spendWidget(index)
