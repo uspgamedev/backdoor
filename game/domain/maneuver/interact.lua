@@ -34,7 +34,8 @@ local function _seek(actor, inputvalues)
       inputvalues.interaction = 'CHANGE_SECTOR'
       inputvalues.sector = id
       inputvalues.pos = exit.target_pos
-    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR then
+    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR
+       and actor:isHandEmpty() then
       inputvalues.interaction = 'CONSUME_CARDS'
     end
   end
@@ -52,26 +53,6 @@ end
 
 function INTERACT.exhaustionCost(actor, inputvalues)
   return ACTIONDEFS.MOVE_COST
-end
-
--- FIXME: CHANGE_SECTOR should be an activated ability of interaction with
---        stairs, portals, etc.
-
-local function _seek(actor, inputvalues)
-  local sector = actor:getBody():getSector()
-  if not inputvalues.interaction then
-    -- Try to go through exit
-    local i, j = actor:getPos()
-    local id, exit = sector:findExit(i, j, true)
-    if id then
-      inputvalues.interaction = 'CHANGE_SECTOR'
-      inputvalues.sector = id
-      inputvalues.pos = exit.target_pos
-    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR then
-      inputvalues.interaction = 'CONSUME_CARDS'
-    end
-  end
-  return inputvalues.interaction
 end
 
 function INTERACT.validate(actor, inputvalues)
