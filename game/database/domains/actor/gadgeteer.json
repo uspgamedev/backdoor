@@ -7,9 +7,10 @@
   "arc":1,
   "collection":false,
   "ani":-2,
+  "name":"Gagdeteer",
   "initial_buffer":[{
       "amount":1,
-      "card":"power-suit"
+      "card":"impact-vest"
     },{
       "amount":1,
       "card":"turret"
@@ -20,6 +21,5 @@
       "amount":4,
       "card":"fix-turret"
     }],
-  "name":"Gagdeteer",
   "description":"There is nothing like the low buzzing of your\ntrinkets and drones floating around the workplace.\nTo you, every unexpected situation is but an\nopportunity to show off your newest gadgetry."
 }

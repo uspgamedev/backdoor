@@ -1,9 +1,45 @@
 {
   "attr":"COR",
   "icon":"hearthborn",
-  "one_time":false,
   "set":false,
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "target":"=body",
+          "type":"effect",
+          "base":"=cor",
+          "name":"damage_on_target",
+          "sfx":false
+        }],
+      "inputs":[{
+          "empty-tile":false,
+          "output":"tgt",
+          "aoe-hint":0,
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":false,
+          "max-range":1,
+          "non-wall":false,
+          "name":"choose_target",
+          "type":"input"
+        },{
+          "type":"operator",
+          "pos":"=tgt",
+          "name":"get_body_at",
+          "output":"body"
+        },{
+          "type":"operator",
+          "which":"COR",
+          "name":"get_attribute",
+          "output":"cor"
+        }]
+    },
+    "cost":0
+  },
   "desc":"Jab and cross. Jab and cross.",
+  "type-description":"",
   "name":"High Punch",
-  "type-description":""
+  "one_time":false
 }
