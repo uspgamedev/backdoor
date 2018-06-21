@@ -18,6 +18,7 @@ local state = {}
 -- [[ Constant Variables ]]--
 local _OPEN_MENU = "OPEN_MENU"
 local _SAVE_QUIT = "SAVE_QUIT"
+local _USE_READY_ABILITY = "USE_READY_ABILITY"
 local _READY_ABILITY_ACTION = "READY_ABILITY"
 
 --[[ Local Variables ]]--
@@ -163,6 +164,13 @@ local function _updateAbilityList()
   printf("Readied ability: %s", ready and Util.findId(ready))
 end
 
+function _selectedAbilitySlot()
+  local ready = _widget_abilities.ready
+  if not ready then return false end
+  local widget = Util.findId(ready)
+  return _route.getControlledActor():getBody():findWidget(widget)
+end
+
 --[[ State Methods ]]--
 
 function state:init()
@@ -244,7 +252,7 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CANCEL') then
     action_request = {DEFS.ACTION.IDLE}
   elseif INPUT.wasActionPressed('SPECIAL') then
-    action_request = {DEFS.ACTION.USE_SIGNATURE}
+    action_request = {_USE_READY_ABILITY}
   elseif INPUT.wasActionPressed('ACTION_1') then
     action_request = {DEFS.ACTION.PLAY_CARD}
   elseif INPUT.wasActionPressed('ACTION_2') then
@@ -378,11 +386,6 @@ _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
 end
 
-_ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
-  PLAYSFX 'ok-menu'
-  _useAction(DEFS.ACTION.USE_SIGNATURE)
-end
-
 _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
   local has_widget = _route.getControlledActor():getBody():hasWidgetAt(1)
   if has_widget then
@@ -459,6 +462,16 @@ _ACTION[_READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[1] then
     PLAYSFX 'open-menu'
     SWITCHER.push(GS.READY_ABILITY, _widget_abilities)
+  else
+    PLAYSFX 'denied'
+  end
+end
+
+_ACTION[_USE_READY_ABILITY] = function()
+  local slot = _selectedAbilitySlot()
+  if slot then
+    PLAYSFX 'ok-menu'
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widget_slot = slot })
   else
     PLAYSFX 'denied'
   end
