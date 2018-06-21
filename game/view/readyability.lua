@@ -5,16 +5,21 @@ local DEFS = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
 local FONT = require 'view.helpers.font'
 
+local min = math.min
+local abs = math.abs
+local floor = math.floor
+
 local ReadyAbilityView = Class{
   __includes = { ELEMENT }
 }
 
 local _FADE_TIMER = "FADE_TIMER"
 local _LIST_TIMER = "LIST_TIMER"
+local _OFFSET_TIMER = "READY_ABILITY_OFFSET_TIMER"
 
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 20
-local _MARGIN = 4
+local _MARGIN = 8
 local _PADDING = 4
 local _FMT = "%s (%d)"
 local _TRIGGERS = {
@@ -33,11 +38,23 @@ local function _initGraphicValues()
   _font = _font or FONT.get(_FONT_NAME, _FONT_SIZE)
 end
 
-function ReadyAbilityView:init(widgets)
+local function _next(i, len, n)
+  if n == 0 then return i end
+  return _next(i % len + 1, len, n - 1)
+end
+
+local function _prev(i, len, n)
+  if n == 0 then return i end
+  return _prev((i - 2) % len + 1, len, n - 1)
+end
+
+function ReadyAbilityView:init(widgets, selection)
   ELEMENT.init(self)
 
   self.widgets = widgets
-  self.selection = 1
+  self.widget_count = #widgets
+  self.selection = selection
+  self.offset = 0
   self.alpha = 0
   self.list_alpha = 0
 
@@ -45,7 +62,20 @@ function ReadyAbilityView:init(widgets)
 end
 
 function ReadyAbilityView:setSelection(n)
+  self.offset = self.selection - n
   self.selection = n
+end
+
+function ReadyAbilityView:getSelection()
+  return self.selection
+end
+
+function ReadyAbilityView:selectNext()
+  self.selection = self.selection % self.widget_count + 1
+end
+
+function ReadyAbilityView:selectPrev()
+  self.selection = (self.selection - 2) % self.widget_count + 1
 end
 
 function ReadyAbilityView:draw()
@@ -53,32 +83,50 @@ function ReadyAbilityView:draw()
   local alpha = self.alpha
   local list_alpha = self.list_alpha
   local widgets = self.widgets
+  local widget_count = #widgets
+  local selection = self.selection
   local fh = _font:getHeight()
   _font:set()
 
   -- draw stuff
-  local strs = {}
+  local names = {}
   local width = 0
   for index, widget in ipairs(widgets) do
-    strs[index] = _FMT:format(widget:getName(),
-                              widget:getWidgetCharges() - widget:getUsages())
-    width = math.max(width, _font:getWidth(strs[index]))
+    local str = widget:getName()
+    if not widget:isWidgetPermanent() then
+      str = _FMT:format(str, widget:getWidgetCharges() - widget:getUsages())
+    end
+    names[index] = str
+    width = math.max(width, _font:getWidth(names[index]))
   end
 
   g.push()
-  g.translate(3/4*_WIDTH - width - 4*_MARGIN, _HEIGHT - _MARGIN - fh)
+  g.translate(3/4*_WIDTH - width - 4*_MARGIN, _HEIGHT - _MARGIN*4 - fh)
 
-  for index, info_str in ipairs(strs) do
-    local selected = self.selection == index
-    local a = selected and alpha or alpha * list_alpha
+  local offset = self.offset
+  offset = offset + (0 - offset) * 8 * love.timer.getDelta()
+  self.offset = offset
+
+  local range = min(4, widget_count)
+  local max_dist = floor(range / 2)
+  local count = widget_count > 1 and 0 or 1
+  while range > 0 and count <= range do
+    local index = (selection + count - 2) % widget_count + 1
+    local name = names[index]
+    local selected = (selection == index)
+    local a = (selected and alpha or alpha * list_alpha)
     local transp = Color:new {1, 1, 1, a}
     local bgcolor = (selected and COLORS.NEUTRAL or COLORS.DARK) * transp
     local fgcolor = (selected and COLORS.DARK or COLORS.NEUTRAL) * transp
+    local block_height = fh + _MARGIN
+    g.push()
+    g.translate(0, - block_height * (offset + count - 1) )
     g.setColor(bgcolor)
     g.rectangle("fill", 0, 0, width+4*_PADDING, _font:getHeight())
     g.setColor(fgcolor)
-    g.printf(info_str, 2*_PADDING, 0, width)
-    g.translate(0, - _font:getHeight() - _MARGIN)
+    g.printf(name, 2*_PADDING, 0, width)
+    g.pop()
+    count = count + 1
   end
 
   g.pop()

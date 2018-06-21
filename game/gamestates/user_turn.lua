@@ -189,10 +189,17 @@ function state:enter(_, route, view, alert)
 
   _view = view
   _view.hand:reset()
-  local readyability_view = ReadyAbilityView(_widget_abilities.list)
-  readyability_view:addElement("HUD")
-  readyability_view:enter()
-  _view.readyability = readyability_view
+  local ability_idx = 1
+  for i, widget in ipairs(_widget_abilities.list) do
+    if widget:getId() == _widget_abilities.ready then
+      ability_idx = i
+      break
+    end
+  end
+  local ability_view = ReadyAbilityView(_widget_abilities.list, ability_idx)
+  ability_view:addElement("HUD")
+  ability_view:enter()
+  _view.ability = ability_view
 
   _was_on_menu = false
 
@@ -202,8 +209,8 @@ function state:leave()
   for i = #_widget_abilities.list, 1, -1 do
     _widget_abilities.list[i] = nil
   end
-  _view.readyability:exit()
-  _view.readyability = nil
+  _view.ability:exit()
+  _view.ability = nil
 end
 
 function state:resume(from, args)
@@ -468,7 +475,7 @@ end
 _ACTION[_READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[1] then
     PLAYSFX 'open-menu'
-    SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.readyability)
+    SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
   else
     PLAYSFX 'denied'
   end
