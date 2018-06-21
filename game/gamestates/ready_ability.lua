@@ -3,7 +3,7 @@ local INPUT          = require 'input'
 local DIRECTIONALS   = require 'infra.dir'
 local DEFS           = require 'domain.definitions'
 local PLAYSFX        = require 'helpers.playsfx'
-local PickWidgetView = require 'view.pickwidget'
+local ReadyAbilityView = require 'view.readyability'
 
 local max = math.max
 local min = math.min
@@ -48,7 +48,7 @@ function state:enter(from, widgets)
   _selection = 1
   _ability_count = #_widgets
   _quick_toggle = 0
-  _view = PickWidgetView(widgets)
+  _view = ReadyAbilityView(widgets)
   _view:addElement("HUD")
   _view:fadeIn()
 end
@@ -57,7 +57,7 @@ function state:update(dt)
   if DEBUG then return end
   MAIN_TIMER:update(dt)
   _quick_toggle = min(_HOLDTIME, _quick_toggle + dt)
-  if INPUT.wasActionReleased('ACTION_4') then
+  if INPUT.wasActionReleased('ACTION_2') then
     if _quick_toggle < _HOLDTIME then
       _next()
       _confirm()

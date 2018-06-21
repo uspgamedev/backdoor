@@ -205,7 +205,7 @@ function state:update(dt)
     action_request = {DEFS.ACTION.USE_SIGNATURE}
   elseif INPUT.wasActionPressed('ACTION_1') then
     action_request = {DEFS.ACTION.PLAY_CARD}
-  elseif INPUT.wasActionPressed('ACTION_4') then
+  elseif INPUT.wasActionPressed('ACTION_2') then
     action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
@@ -351,7 +351,7 @@ _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
   end
   if widget_abilities[1] then
     PLAYSFX 'open-menu'
-    SWITCHER.push(widget_abilities)
+    SWITCHER.push(GS.READY_ABILITY, widget_abilities)
   elseif _was_on_menu then
     PLAYSFX 'denied'
     SWITCHER.push(GS.ACTION_MENU, _route)
