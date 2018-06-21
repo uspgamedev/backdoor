@@ -13,7 +13,7 @@ local _HOLDTIME = 0.25
 
 local _view
 local _selection
-local _widgets
+local _abilities
 local _ability_count
 local _quick_toggle
 
@@ -31,7 +31,8 @@ end
 local function _confirm()
   PLAYSFX 'ok-menu'
   _view:fadeOut()
-  SWITCHER.pop({ picked_slot = _selection })
+  _abilities.ready = _abilities.list[_selection]:getId()
+  SWITCHER.pop()
 end
 
 local function _cancel()
@@ -43,12 +44,18 @@ end
 
 local state = {}
 
-function state:enter(from, widgets)
-  _widgets = widgets
+function state:enter(from, abilities)
+  _abilities = abilities
   _selection = 1
-  _ability_count = #_widgets
+  for i,ability in ipairs(abilities.list) do
+    if ability:getId() == abilities.ready then
+      _selection = i
+      break
+    end
+  end
+  _ability_count = #_abilities.list
   _quick_toggle = 0
-  _view = ReadyAbilityView(widgets)
+  _view = ReadyAbilityView(abilities.list)
   _view:addElement("HUD")
   _view:fadeIn()
 end

@@ -27,7 +27,10 @@ local _route
 local _next_action
 local _view
 
-local _widget_abilities = {}
+local _widget_abilities = {
+  ready = false,
+  list = {},
+}
 local _long_walk
 local _adjacency = {}
 local _alert
@@ -131,6 +134,35 @@ local function _continueLongWalk()
   return true
 end
 
+--[[ Abilities ]]--
+
+local function _updateAbilityList()
+  local n = 0
+  local list = _widget_abilities.list
+  local ready = _widget_abilities.ready
+  for _,widget in _route.getControlledActor():getBody():eachWidget() do
+    if widget:getWidgetAbility() then
+      n = n + 1
+      list[n] = widget
+    end
+  end
+  if n > 0 then
+    local is_ready
+    for i = 1, n do
+      -- if there is a ready ability, keep it ready
+      is_ready = is_ready or list[i]:getId() == ready
+    end
+    -- if there isn't, select the first one
+    ready = is_ready and ready or list[1]:getId()
+  else
+    -- no ability to select
+    ready = false
+  end
+  _widget_abilities.ready = ready
+  _widget_abilities.list = list
+  printf("Readied ability: %s", ready and Util.findId(ready))
+end
+
 --[[ State Methods ]]--
 
 function state:init()
@@ -144,11 +176,19 @@ function state:enter(_, route, view, alert)
   _save_and_quit = false
   _alert = alert
 
+  _updateAbilityList()
+
   _view = view
   _view.hand:reset()
 
   _was_on_menu = false
 
+end
+
+function state:exit()
+  for i = #_widget_abilities.list, 1, -1 do
+    _widget_abilities.list[i] = nil
+  end
 end
 
 function state:resume(from, args)
@@ -187,6 +227,7 @@ function state:update(dt)
     _next_action = nil
     return
   end
+
 
   local action_request
   local dir = DIRECTIONALS.hasDirectionTriggered()
@@ -415,16 +456,9 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 _ACTION[_READY_ABILITY_ACTION] = function()
-  local widget_abilities = {}
-  local controlled_body = _route.getControlledActor():getBody()
-  for _,widget in controlled_body:eachWidget() do
-    if widget:getWidgetAbility() then
-      table.insert(widget_abilities, widget)
-    end
-  end
-  if widget_abilities[1] then
+  if _widget_abilities.list[1] then
     PLAYSFX 'open-menu'
-    SWITCHER.push(GS.READY_ABILITY, widget_abilities)
+    SWITCHER.push(GS.READY_ABILITY, _widget_abilities)
   else
     PLAYSFX 'denied'
   end
