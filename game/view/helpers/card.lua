@@ -133,7 +133,7 @@ function CARD.draw(card, x, y, focused, alpha, scale)
 end
 
 --Draw the description of a card.
-function CARD.drawInfo(card, x, y, width, alpha, player_actor)
+function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
   alpha = alpha or 1
   if card == 'draw' then
     card = _DRAW
@@ -154,7 +154,10 @@ function CARD.drawInfo(card, x, y, width, alpha, player_actor)
 
   _text_font.set()
   local desc = card:getEffect(player_actor)
-  desc = desc .. '\n\n' .. (card:getDescription() or "[No description]")
+  if not no_desc then
+    desc = desc .. "\n\n---"
+    desc = desc .. '\n\n' .. (card:getDescription() or "[No description]")
+  end
   desc = desc:gsub("([^\n])[\n]([^\n])", "%1 %2")
   desc = desc:gsub("\n\n", "\n")
   g.printf(desc, 0, 0, width)

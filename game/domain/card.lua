@@ -225,7 +225,7 @@ function Card:getEffect()
       effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
     end
   end
-  return effect .. "\n\n---"
+  return effect
 end
 
 return Card

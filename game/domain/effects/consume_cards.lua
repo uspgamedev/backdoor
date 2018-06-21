@@ -6,6 +6,10 @@ FX.schema = {
     match = 'consume_list' },
 }
 
+function FX.preview(actor, fieldvalues)
+  return ("Consume up to %s cards"):format(fieldvalues['card_list'])
+end
+
 function FX.process (actor, fieldvalues)
   local consume_list = fieldvalues['card_list']
   local bufsize = actor:getBufferSize()

@@ -105,7 +105,9 @@ function ABILITY.preview(ability, actor, inputvalues)
       local type, name = cmd.type, cmd.name
       local unrefd_field_values = _unrefFieldValues(cmd, values)
       if type == 'input' then
-        value = function() return inputvalues[cmd.output] end
+        value = IN[name].preview or function()
+          return inputvalues[cmd.output]
+        end
       else
         if type == 'operator' then
           value = OP[name].preview

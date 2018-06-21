@@ -9,6 +9,10 @@ INPUT.schema = {
 
 INPUT.type = 'consume_list'
 
+function INPUT.preview(actor, fieldvalues)
+  return fieldvalues['max']
+end
+
 function INPUT.isValid(actor, fieldvalues, value)
   return true
 end

@@ -168,7 +168,7 @@ function View:toggleSelected()
   if self.consumed[self.selection] then
     changed = true
     self:removeConsume()
-  elseif self.maxconsume and self.consumed_count < self.maxconsume then
+  elseif not self.maxconsume or self.consumed_count < self.maxconsume then
     changed = true
     self:addConsume()
   end
@@ -286,10 +286,6 @@ function View:drawArrow(g, enter)
 
   g.translate(0, -text_height*.5)
   g.setColor(1, 1, 1, enter)
-  g.printf(_CONSUME_TEXT:format(self.exp_gained), -text_width/2, 0, text_width,
-           "center")
-
-  g.translate(0, text_height*1.0)
   self:drawHoldBar(g)
 
   g.pop()
@@ -308,13 +304,13 @@ function View:drawCardDesc(g, card, enter)
   g.print("Consume", maxw + _PD, -1.5 * _otherfont:getHeight())
 
   g.push()
-  g.translate(-maxw, -CARD.getInfoHeight(3)/2)
-  CARD.drawInfo(card, 0, 0, maxw, enter)
+  g.translate(maxw + _PD + 1.5*_CW, -0.6 * _otherfont:getHeight())
+  self:drawArrow(g, enter)
   g.pop()
 
   g.push()
-  g.translate(maxw/2, 0)
-  self:drawArrow(g, enter)
+  g.translate(-maxw, -CARD.getInfoHeight(3)/2)
+  CARD.drawInfo(card, 0, 0, 2*maxw, enter, nil, true)
   g.pop()
 
   g.pop()
