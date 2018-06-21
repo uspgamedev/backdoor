@@ -9,6 +9,9 @@ local ReadyAbilityView = Class{
   __includes = { ELEMENT }
 }
 
+local _FADE_TIMER = "FADE_TIMER"
+local _LIST_TIMER = "LIST_TIMER"
+
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 20
 local _MARGIN = 4
@@ -36,6 +39,7 @@ function ReadyAbilityView:init(widgets)
   self.widgets = widgets
   self.selection = 1
   self.alpha = 0
+  self.list_alpha = 0
 
   _initGraphicValues()
 end
@@ -47,6 +51,7 @@ end
 function ReadyAbilityView:draw()
   local g = love.graphics
   local alpha = self.alpha
+  local list_alpha = self.list_alpha
   local widgets = self.widgets
   local fh = _font:getHeight()
   _font:set()
@@ -65,7 +70,8 @@ function ReadyAbilityView:draw()
 
   for index, info_str in ipairs(strs) do
     local selected = self.selection == index
-    local transp = Color:new {1, 1, 1, selected and 1 or alpha}
+    local a = selected and alpha or alpha * list_alpha
+    local transp = Color:new {1, 1, 1, a}
     local bgcolor = (selected and COLORS.NEUTRAL or COLORS.DARK) * transp
     local fgcolor = (selected and COLORS.DARK or COLORS.NEUTRAL) * transp
     g.setColor(bgcolor)
@@ -78,17 +84,29 @@ function ReadyAbilityView:draw()
   g.pop()
 end
 
-function ReadyAbilityView:fadeOut()
-  self:removeTimer("widget_picker_fade", MAIN_TIMER)
-  self:addTimer("widget_picker_fade", MAIN_TIMER, "tween",
-                 .2, self, { alpha = 0 }, "out-quad",
+function ReadyAbilityView:enter()
+  self:removeTimer(_FADE_TIMER, MAIN_TIMER)
+  self:addTimer(_FADE_TIMER, MAIN_TIMER, "tween",
+                .25, self, { alpha = 1 }, "linear")
+end
+
+function ReadyAbilityView:exit()
+  self:removeTimer(_FADE_TIMER, MAIN_TIMER)
+  self:addTimer(_FADE_TIMER, MAIN_TIMER, "tween",
+                 .2, self, { alpha = 0 }, "linear",
                  function() self:destroy() end)
 end
 
-function ReadyAbilityView:fadeIn()
-  self:removeTimer("widget_picker_fade", MAIN_TIMER)
-  self:addTimer("widget_picker_fade", MAIN_TIMER, "tween",
-                .25, self, { alpha = 1 }, "out-quad")
+function ReadyAbilityView:enterList()
+  self:removeTimer(_LIST_TIMER, MAIN_TIMER)
+  self:addTimer(_LIST_TIMER, MAIN_TIMER, "tween",
+                .25, self, { list_alpha = 1 }, "linear")
+end
+
+function ReadyAbilityView:exitList()
+  self:removeTimer(_LIST_TIMER, MAIN_TIMER)
+  self:addTimer(_LIST_TIMER, MAIN_TIMER, "tween",
+                 .2, self, { list_alpha = 0 }, "linear")
 end
 
 return ReadyAbilityView

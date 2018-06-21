@@ -13,6 +13,8 @@ local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 
+local ReadyAbilityView = require 'view.readyability'
+
 local state = {}
 
 -- [[ Constant Variables ]]--
@@ -161,7 +163,6 @@ local function _updateAbilityList()
   end
   _widget_abilities.ready = ready
   _widget_abilities.list = list
-  printf("Readied ability: %s", ready and Util.findId(ready))
 end
 
 function _selectedAbilitySlot()
@@ -188,15 +189,21 @@ function state:enter(_, route, view, alert)
 
   _view = view
   _view.hand:reset()
+  local readyability_view = ReadyAbilityView(_widget_abilities.list)
+  readyability_view:addElement("HUD")
+  readyability_view:enter()
+  _view.readyability = readyability_view
 
   _was_on_menu = false
 
 end
 
-function state:exit()
+function state:leave()
   for i = #_widget_abilities.list, 1, -1 do
     _widget_abilities.list[i] = nil
   end
+  _view.readyability:exit()
+  _view.readyability = nil
 end
 
 function state:resume(from, args)
@@ -461,7 +468,7 @@ end
 _ACTION[_READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[1] then
     PLAYSFX 'open-menu'
-    SWITCHER.push(GS.READY_ABILITY, _widget_abilities)
+    SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.readyability)
   else
     PLAYSFX 'denied'
   end

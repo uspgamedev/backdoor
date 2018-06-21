@@ -30,13 +30,13 @@ end
 
 local function _confirm()
   PLAYSFX 'ok-menu'
-  _view:fadeOut()
+  _view:exitList()
   _abilities.ready = _abilities.list[_selection]:getId()
   SWITCHER.pop()
 end
 
 local function _cancel()
-  _view:fadeOut()
+  _view:exitList()
   PLAYSFX 'back-menu'
   SWITCHER.pop({})
 end
@@ -44,7 +44,7 @@ end
 
 local state = {}
 
-function state:enter(from, abilities)
+function state:enter(from, abilities, view)
   _abilities = abilities
   _selection = 1
   for i,ability in ipairs(abilities.list) do
@@ -55,9 +55,8 @@ function state:enter(from, abilities)
   end
   _ability_count = #_abilities.list
   _quick_toggle = 0
-  _view = ReadyAbilityView(abilities.list)
-  _view:addElement("HUD")
-  _view:fadeIn()
+  _view = view
+  _view:enterList()
 end
 
 function state:update(dt)
