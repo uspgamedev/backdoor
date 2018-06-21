@@ -30,25 +30,20 @@
     "minw":3,
     "rmar":1,
     "tries":256,
-    "maxh":9,
     "count":24,
+    "maxh":9,
     "maxw":9
   },
   "holes":false,
-  "deadends":{
-    "amount":128
-  },
-  "theme":false,
   "maze":{
     "double":false
   },
-  "bootstrap":{
-    "w":48,
-    "mh":7,
-    "tileset":"demo",
-    "h":48,
-    "mw":9
+  "altars":{
+    "max":10,
+    "min":10,
+    "threshold":1
   },
+  "theme":false,
   "exits":{
     "distance":5,
     "exits":[{
@@ -59,5 +54,15 @@
         "target_specname":"sector02"
       }],
     "threshold":2
+  },
+  "bootstrap":{
+    "w":48,
+    "mh":7,
+    "tileset":"demo",
+    "h":48,
+    "mw":9
+  },
+  "deadends":{
+    "amount":128
   }
 }

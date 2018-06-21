@@ -322,15 +322,14 @@ function Actor:getHandLimit()
   return self.hand_limit
 end
 
-function Actor:eachCardInBuffer()
-  local buffer = self.buffer
-  local function iterate(state)
-    local i = state[0] + 1
-    local card = buffer[i]
-    state[0] = i
-    return card == DEFS.DONE and iterate(state) or i, card
+function Actor:copyBuffer()
+  local copy = {}
+  for i = 1, #self.buffer do
+    if self.buffer[i] ~= DEFS.DONE then
+      table.insert(copy, self.buffer[i])
+    end
   end
-  return iterate, { 0 }, 0
+  return copy
 end
 
 --- Draw a card from actor's buffer

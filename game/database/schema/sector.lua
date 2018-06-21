@@ -19,6 +19,8 @@ return  {
     schema = 'transformers.exits' },
   { id = 'drops', name = "Drops Settings", type = 'section',
     schema = 'transformers.drops' },
+  { id = 'altars', name = "Altar Settings", type = 'section',
+    schema = 'transformers.altars' },
   { id = 'encounters', name = "Encounter Settings", type = 'section',
     schema = 'transformers.encounters' },
 }

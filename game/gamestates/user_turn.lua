@@ -301,6 +301,14 @@ local function _useAction(action_slot, params)
       else
         return false
       end
+    elseif param.name == "choose_consume_list" then
+      SWITCHER.push(GS.CONSUME_CARDS, controlled_actor, param.max)
+      local args = coroutine.yield(_task)
+      if args.consumed then
+        params[param.output] = args.consumed
+      else
+        return false
+      end
     end
     param = ACTION.pendingInput(action_slot, controlled_actor, params)
   end
