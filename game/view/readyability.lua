@@ -36,6 +36,7 @@ local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = _font or FONT.get(_FONT_NAME, _FONT_SIZE)
+  _font:setFilter('linear', 'linear', 1)
 end
 
 local function _next(i, len, n)
@@ -46,6 +47,16 @@ end
 local function _prev(i, len, n)
   if n == 0 then return i end
   return _prev((i - 2) % len + 1, len, n - 1)
+end
+
+local function _dist(i, j, len)
+  local d = i - j
+  if d > len/2 then
+    d = d - len
+  elseif d < -len/2 then
+    d = d + len
+  end
+  return d
 end
 
 function ReadyAbilityView:init(widgets, selection)
@@ -72,19 +83,19 @@ end
 function ReadyAbilityView:selectNext()
   local previous = self.selection
   self.selection = _next(self.selection, self.widget_count, 1)
-  self.offset = self.selection - previous
+  self.offset = _dist(self.selection, previous, self.widget_count)
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
-  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.2,
-                self, {offset = 0}, "out-quad")
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.7,
+                self, {offset = 0}, "out-back")
 end
 
 function ReadyAbilityView:selectPrev()
   local previous = self.selection
   self.selection = _prev(self.selection, self.widget_count, 1)
-  self.offset = self.selection - previous
+  self.offset = _dist(self.selection, previous, self.widget_count)
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
-  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.2,
-                self, {offset = 0}, "out-quad")
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.7,
+                self, {offset = 0}, "out-back")
 end
 
 function ReadyAbilityView:draw()
@@ -115,13 +126,19 @@ function ReadyAbilityView:draw()
   g.push()
   g.translate(3/4*_WIDTH - width - 4*_MARGIN, _HEIGHT - _MARGIN*4 - fh)
 
-  local range = min(4, widget_count)
-  local idx = _prev(selection, widget_count, floor(range/2))
+  local idx = _prev(selection, widget_count, 2)
   local count = 0
-  while range > 0 and count < range do
+  while widget_count > 0 and count <= 5 do
     local name = names[floor(idx)]
-    local dist = selection - idx
-    local a = (dist == 0) and alpha or alpha * list_alpha
+    local dist = _dist(selection, idx, widget_count)
+    local a
+    if dist == 0 then
+      a = alpha
+    elseif widget_count == 2 then
+      a = alpha * list_alpha * 0.5
+    else
+      a = alpha * list_alpha * min(1, (1-abs(dist/widget_count*2)))
+    end
     local transp = Color:new {1, 1, 1, a}
     local bgcolor = COLORS.DARK * transp
     local fgcolor
@@ -131,7 +148,14 @@ function ReadyAbilityView:draw()
       fgcolor = COLORS.HALF_VISIBLE * transp
     end
     g.push()
-    g.translate(0, - block_height * (idx - selection + offset))
+    if widget_count > 2 then
+      g.translate(0, - block_height * (count - 2 + offset))
+    else
+      g.translate(0, - block_height * (-dist + offset))
+    end
+    if dist == 0 and count - 2 == 0 then
+      g.scale(1.1, 1.1)
+    end
     g.setColor(bgcolor)
     g.rectangle("fill", 0, 0, width+4*_PADDING, _font:getHeight())
     g.setColor(fgcolor)
