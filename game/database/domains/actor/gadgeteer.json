@@ -2,12 +2,13 @@
   "extends":"sentient",
   "signature":"bullet",
   "behavior":"player",
-  "traits":[],
+  "traits":[{
+      "specname":"bullet"
+    }],
   "cor":1,
   "arc":1,
-  "collection":false,
-  "ani":-2,
   "name":"Gagdeteer",
+  "ani":-2,
   "initial_buffer":[{
       "amount":1,
       "card":"impact-vest"
