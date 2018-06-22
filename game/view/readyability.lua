@@ -62,7 +62,6 @@ function ReadyAbilityView:init(widgets, selection)
 end
 
 function ReadyAbilityView:setSelection(n)
-  self.offset = self.selection - n
   self.selection = n
 end
 
@@ -71,11 +70,13 @@ function ReadyAbilityView:getSelection()
 end
 
 function ReadyAbilityView:selectNext()
-  self.selection = self.selection % self.widget_count + 1
+  self.selection = _next(self.selection, self.widget_count, 1)
+  self.offset = 1
 end
 
 function ReadyAbilityView:selectPrev()
-  self.selection = (self.selection - 2) % self.widget_count + 1
+  self.selection = _prev(self.selection, self.widget_count, 1)
+  self.offset = -1
 end
 
 function ReadyAbilityView:draw()
@@ -120,7 +121,7 @@ function ReadyAbilityView:draw()
     local fgcolor = (selected and COLORS.DARK or COLORS.NEUTRAL) * transp
     local block_height = fh + _MARGIN
     g.push()
-    g.translate(0, - block_height * (offset + count - 1) )
+    g.translate(0, - block_height * (count - 1 + offset) )
     g.setColor(bgcolor)
     g.rectangle("fill", 0, 0, width+4*_PADDING, _font:getHeight())
     g.setColor(fgcolor)
