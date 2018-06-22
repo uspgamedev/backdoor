@@ -1,29 +1,31 @@
 {
-  "attr":"ARC",
+  "attr":"COR",
   "icon":false,
-  "one_time":false,
-  "desc":"",
-  "type-description":"",
-  "set":false,
-  "name":"Bolting",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "target":"=target",
+            "type":"effect",
+            "base":6,
+            "name":"damage_on_target",
+            "sfx":"example"
+          }],
         "inputs":[{
-            "dif-fact":true,
+            "empty-tile":false,
             "output":"target_pos",
             "aoe-hint":0,
-            "type":"input",
             "body-only":{
               "body-type":false
             },
-            "max-range":4,
+            "dif-fact":true,
+            "max-range":1,
             "non-wall":true,
             "name":"choose_target",
-            "empty-tile":false
+            "type":"input"
           },{
             "type":"operator",
             "pos":"=target_pos",
@@ -31,22 +33,20 @@
             "output":"target"
           },{
             "type":"operator",
-            "output":"arc",
+            "which":"COR",
             "name":"get_attribute",
-            "which":"ARC"
-          }],
-        "effects":[{
-            "attr":"=arc",
-            "target":"=target",
-            "base":4,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":"example"
+            "output":"cor"
           }]
-      }
+      },
+      "cost":20
     },
     "charges":0,
     "status-tags":[],
     "placement":false
-  }
+  },
+  "desc":"",
+  "type-description":"",
+  "set":false,
+  "name":"Punch",
+  "one_time":false
 }
