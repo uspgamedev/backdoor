@@ -2,7 +2,9 @@
   "extends":"sentient",
   "signature":"bolting",
   "behavior":"player",
-  "traits":[],
+  "traits":[{
+      "specname":"bolting"
+    }],
   "cor":-2,
   "arc":1,
   "collection":false,
