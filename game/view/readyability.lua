@@ -94,7 +94,7 @@ end
 function ReadyAbilityView:selectNext()
   local previous = self.selection
   self.selection = _next(self.selection, self.widget_count, 1)
-  self.offset = _dist(self.selection, previous, self.widget_count)
+  self.offset = abs(_dist(self.selection, previous, self.widget_count))
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
   self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", _MOVE_SPEED,
                 self, {offset = 0}, "in-out-back")
@@ -103,7 +103,7 @@ end
 function ReadyAbilityView:selectPrev()
   local previous = self.selection
   self.selection = _prev(self.selection, self.widget_count, 1)
-  self.offset = _dist(self.selection, previous, self.widget_count)
+  self.offset = -abs(_dist(self.selection, previous, self.widget_count))
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
   self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", _MOVE_SPEED,
                 self, {offset = 0}, "in-out-back")
