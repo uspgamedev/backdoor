@@ -473,7 +473,7 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 _ACTION[_READY_ABILITY_ACTION] = function()
-  if _widget_abilities.list[1] then
+  if _widget_abilities.list[2] then
     PLAYSFX 'open-menu'
     SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
   else
