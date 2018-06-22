@@ -70,13 +70,21 @@ function ReadyAbilityView:getSelection()
 end
 
 function ReadyAbilityView:selectNext()
+  local previous = self.selection
   self.selection = _next(self.selection, self.widget_count, 1)
-  self.offset = 1
+  self.offset = self.selection - previous
+  self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.2,
+                self, {offset = 0}, "out-quad")
 end
 
 function ReadyAbilityView:selectPrev()
+  local previous = self.selection
   self.selection = _prev(self.selection, self.widget_count, 1)
-  self.offset = -1
+  self.offset = self.selection - previous
+  self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.2,
+                self, {offset = 0}, "out-quad")
 end
 
 function ReadyAbilityView:draw()
@@ -86,12 +94,15 @@ function ReadyAbilityView:draw()
   local widgets = self.widgets
   local widget_count = #widgets
   local selection = self.selection
+  local offset = self.offset
   local fh = _font:getHeight()
   _font:set()
 
   -- draw stuff
   local names = {}
   local width = 0
+  local block_height = fh + _MARGIN
+
   for index, widget in ipairs(widgets) do
     local str = widget:getName()
     if not widget:isWidgetPermanent() then
@@ -104,29 +115,29 @@ function ReadyAbilityView:draw()
   g.push()
   g.translate(3/4*_WIDTH - width - 4*_MARGIN, _HEIGHT - _MARGIN*4 - fh)
 
-  local offset = self.offset
-  offset = offset + (0 - offset) * 8 * love.timer.getDelta()
-  self.offset = offset
-
   local range = min(4, widget_count)
-  local max_dist = floor(range / 2)
-  local count = widget_count > 1 and 0 or 1
-  while range > 0 and count <= range do
-    local index = (selection + count - 2) % widget_count + 1
-    local name = names[index]
-    local selected = (selection == index)
-    local a = (selected and alpha or alpha * list_alpha)
+  local idx = _prev(selection, widget_count, floor(range/2))
+  local count = 0
+  while range > 0 and count < range do
+    local name = names[floor(idx)]
+    local dist = selection - idx
+    local a = (dist == 0) and alpha or alpha * list_alpha
     local transp = Color:new {1, 1, 1, a}
-    local bgcolor = (selected and COLORS.NEUTRAL or COLORS.DARK) * transp
-    local fgcolor = (selected and COLORS.DARK or COLORS.NEUTRAL) * transp
-    local block_height = fh + _MARGIN
+    local bgcolor = COLORS.DARK * transp
+    local fgcolor
+    if dist == 0 then
+      fgcolor = COLORS.NEUTRAL * transp
+    else
+      fgcolor = COLORS.HALF_VISIBLE * transp
+    end
     g.push()
-    g.translate(0, - block_height * (count - 1 + offset) )
+    g.translate(0, - block_height * (idx - selection + offset))
     g.setColor(bgcolor)
     g.rectangle("fill", 0, 0, width+4*_PADDING, _font:getHeight())
     g.setColor(fgcolor)
     g.printf(name, 2*_PADDING, 0, width)
     g.pop()
+    idx = _next(idx, widget_count, 1)
     count = count + 1
   end
 
