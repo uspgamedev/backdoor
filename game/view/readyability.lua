@@ -164,7 +164,7 @@ function ReadyAbilityView:draw()
       a = alpha * list_alpha * min(1, (1-abs((count - 2)/7*2)))
     end
     local transp = Color:new {1, 1, 1, a}
-    local bgcolor = COLORS.DARK * transp
+    local bgcolor = COLORS.DARKER * transp
     local fgcolor
     if (widget_count > 1 and count == 2)
        or (dist == 0 and widget_count == 1) then
