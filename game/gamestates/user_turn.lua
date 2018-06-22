@@ -13,11 +13,15 @@ local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 
+local ReadyAbilityView = require 'view.readyability'
+
 local state = {}
 
 -- [[ Constant Variables ]]--
 local _OPEN_MENU = "OPEN_MENU"
 local _SAVE_QUIT = "SAVE_QUIT"
+local _USE_READY_ABILITY = "USE_READY_ABILITY"
+local _READY_ABILITY_ACTION = "READY_ABILITY"
 
 --[[ Local Variables ]]--
 
@@ -26,6 +30,10 @@ local _route
 local _next_action
 local _view
 
+local _widget_abilities = {
+  ready = false,
+  list = {},
+}
 local _long_walk
 local _adjacency = {}
 local _alert
@@ -129,6 +137,41 @@ local function _continueLongWalk()
   return true
 end
 
+--[[ Abilities ]]--
+
+local function _updateAbilityList()
+  local n = 0
+  local list = _widget_abilities.list
+  local ready = _widget_abilities.ready
+  for _,widget in _route.getControlledActor():getBody():eachWidget() do
+    if widget:getWidgetAbility() then
+      n = n + 1
+      list[n] = widget
+    end
+  end
+  if n > 0 then
+    local is_ready
+    for i = 1, n do
+      -- if there is a ready ability, keep it ready
+      is_ready = is_ready or list[i]:getId() == ready
+    end
+    -- if there isn't, select the first one
+    ready = is_ready and ready or list[1]:getId()
+  else
+    -- no ability to select
+    ready = false
+  end
+  _widget_abilities.ready = ready
+  _widget_abilities.list = list
+end
+
+function _selectedAbilitySlot()
+  local ready = _widget_abilities.ready
+  if not ready then return false end
+  local widget = Util.findId(ready)
+  return _route.getControlledActor():getBody():findWidget(widget)
+end
+
 --[[ State Methods ]]--
 
 function state:init()
@@ -142,11 +185,32 @@ function state:enter(_, route, view, alert)
   _save_and_quit = false
   _alert = alert
 
+  _updateAbilityList()
+
   _view = view
   _view.hand:reset()
+  local ability_idx = 1
+  for i, widget in ipairs(_widget_abilities.list) do
+    if widget:getId() == _widget_abilities.ready then
+      ability_idx = i
+      break
+    end
+  end
+  local ability_view = ReadyAbilityView(_widget_abilities.list, ability_idx)
+  ability_view:addElement("HUD")
+  ability_view:enter()
+  _view.ability = ability_view
 
   _was_on_menu = false
 
+end
+
+function state:leave()
+  for i = #_widget_abilities.list, 1, -1 do
+    _widget_abilities.list[i] = nil
+  end
+  _view.ability:exit()
+  _view.ability = nil
 end
 
 function state:resume(from, args)
@@ -186,6 +250,7 @@ function state:update(dt)
     return
   end
 
+
   local action_request
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if dir then
@@ -201,11 +266,11 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('CANCEL') then
     action_request = {DEFS.ACTION.IDLE}
   elseif INPUT.wasActionPressed('SPECIAL') then
-    action_request = {DEFS.ACTION.USE_SIGNATURE}
+    action_request = {_USE_READY_ABILITY}
   elseif INPUT.wasActionPressed('ACTION_1') then
     action_request = {DEFS.ACTION.PLAY_CARD}
   elseif INPUT.wasActionPressed('ACTION_2') then
-    action_request = {DEFS.ACTION.ACTIVATE_WIDGET}
+    action_request = {_READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
   elseif INPUT.wasActionPressed('EXTRA') then
@@ -335,13 +400,10 @@ _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
 end
 
-_ACTION[DEFS.ACTION.USE_SIGNATURE] = function()
-  PLAYSFX 'ok-menu'
-  _useAction(DEFS.ACTION.USE_SIGNATURE)
-end
-
 _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  if _route.getControlledActor():getBody():getWidgetCount() > 0 then
+  local has_widget = _route.getControlledActor():getBody():hasWidgetAt(1)
+  if has_widget then
+    PLAYSFX 'ok-menu'
     _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
   elseif _was_on_menu then
     PLAYSFX 'denied'
@@ -410,4 +472,24 @@ _ACTION[DEFS.ACTION.IDLE] = function()
   _useAction(DEFS.ACTION.IDLE)
 end
 
+_ACTION[_READY_ABILITY_ACTION] = function()
+  if _widget_abilities.list[2] then
+    PLAYSFX 'open-menu'
+    SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
+  else
+    PLAYSFX 'denied'
+  end
+end
+
+_ACTION[_USE_READY_ABILITY] = function()
+  local slot = _selectedAbilitySlot()
+  if slot then
+    PLAYSFX 'ok-menu'
+    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widget_slot = slot })
+  else
+    PLAYSFX 'denied'
+  end
+end
+
 return state
+
