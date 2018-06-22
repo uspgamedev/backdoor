@@ -16,11 +16,12 @@ local ReadyAbilityView = Class{
 local _FADE_TIMER = "FADE_TIMER"
 local _LIST_TIMER = "LIST_TIMER"
 local _OFFSET_TIMER = "READY_ABILITY_OFFSET_TIMER"
+local _MOVE_SPEED = 0.25
 
 local _FONT_NAME = "Text"
 local _FONT_SIZE = 20
 local _MARGIN = 8
-local _PADDING = 4
+local _PADDING = 8
 local _FMT = "%s (%d)"
 local _TRIGGERS = {
   [DEFS.TRIGGERS.ON_USE] = " uses",
@@ -59,6 +60,16 @@ local function _dist(i, j, len)
   return d
 end
 
+local function _drawContainer(g, width)
+  local h = _font:getHeight() + _PADDING*2 + 2*_MARGIN + 4
+  g.rectangle("fill",
+    -_MARGIN*4,
+    -h - _MARGIN,
+    width + 4*_PADDING + _MARGIN*8,
+    h*3
+  )
+end
+
 function ReadyAbilityView:init(widgets, selection)
   ELEMENT.init(self)
 
@@ -85,8 +96,8 @@ function ReadyAbilityView:selectNext()
   self.selection = _next(self.selection, self.widget_count, 1)
   self.offset = _dist(self.selection, previous, self.widget_count)
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
-  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.7,
-                self, {offset = 0}, "out-back")
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", _MOVE_SPEED,
+                self, {offset = 0}, "in-out-back")
 end
 
 function ReadyAbilityView:selectPrev()
@@ -94,8 +105,8 @@ function ReadyAbilityView:selectPrev()
   self.selection = _prev(self.selection, self.widget_count, 1)
   self.offset = _dist(self.selection, previous, self.widget_count)
   self:removeTimer(_OFFSET_TIMER, MAIN_TIMER)
-  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", 0.7,
-                self, {offset = 0}, "out-back")
+  self:addTimer(_OFFSET_TIMER, MAIN_TIMER, "tween", _MOVE_SPEED,
+                self, {offset = 0}, "in-out-back")
 end
 
 function ReadyAbilityView:draw()
@@ -112,7 +123,7 @@ function ReadyAbilityView:draw()
   -- draw stuff
   local names = {}
   local width = 0
-  local block_height = fh + _MARGIN
+  local block_height = fh + 2*_PADDING + 2*_MARGIN + 4
 
   for index, widget in ipairs(widgets) do
     local str = widget:getName()
@@ -124,46 +135,70 @@ function ReadyAbilityView:draw()
   end
 
   g.push()
-  g.translate(3/4*_WIDTH - width - 4*_MARGIN, _HEIGHT - _MARGIN*4 - fh)
+  g.translate(
+    3/4*_WIDTH - width - 64,
+    _HEIGHT - _MARGIN - block_height)
+  g.stencil(function()
+    _drawContainer(g, width)
+  end, "replace", 1)
 
+  g.setStencilTest("gequal", 1)
+
+  local box = {
+    _MARGIN, 0,
+    width + 2*_PADDING, 0,
+    width + 2*_PADDING, fh + 2*_PADDING - _MARGIN,
+    width + 2*_PADDING - _MARGIN, fh + 2*_PADDING,
+    0, fh + 2*_PADDING,
+    0, _MARGIN
+  }
   local idx = _prev(selection, widget_count, 2)
   local count = 0
-  while widget_count > 0 and count <= 5 do
+  while widget_count > 0 and count < 5 do
     local name = names[floor(idx)]
     local dist = _dist(selection, idx, widget_count)
     local a
-    if dist == 0 then
-      a = alpha
-    elseif widget_count == 2 then
-      a = alpha * list_alpha * 0.5
+    if (widget_count > 1 and count == 2)
+       or (dist == 0 and widget_count == 1) then a = alpha
     else
-      a = alpha * list_alpha * min(1, (1-abs(dist/widget_count*2)))
+      a = alpha * list_alpha * min(1, (1-abs((count - 2)/7*2)))
     end
     local transp = Color:new {1, 1, 1, a}
     local bgcolor = COLORS.DARK * transp
     local fgcolor
-    if dist == 0 then
+    if (widget_count > 1 and count == 2)
+       or (dist == 0 and widget_count == 1) then
       fgcolor = COLORS.NEUTRAL * transp
     else
       fgcolor = COLORS.HALF_VISIBLE * transp
     end
     g.push()
-    if widget_count > 2 then
+    if widget_count > 1 then
       g.translate(0, - block_height * (count - 2 + offset))
     else
       g.translate(0, - block_height * (-dist + offset))
     end
-    if dist == 0 and count - 2 == 0 then
+    if (widget_count > 1 and dist == 0 and count == 2)
+       or (dist == 0 and widget_count <= 1) then
+      g.translate(
+        -0.1*(width + 2*(_PADDING + 2)),
+        -0.1*(block_height)
+      )
       g.scale(1.1, 1.1)
     end
     g.setColor(bgcolor)
-    g.rectangle("fill", 0, 0, width+4*_PADDING, _font:getHeight())
+    g.polygon("fill", box)
+    g.setLineWidth(2)
+    g.setColor(COLORS.HALF_VISIBLE * transp)
+    g.polygon("line", box)
     g.setColor(fgcolor)
-    g.printf(name, 2*_PADDING, 0, width)
+    g.printf(name, _PADDING, _PADDING, width)
     g.pop()
     idx = _next(idx, widget_count, 1)
     count = count + 1
   end
+
+  g.setStencilTest()
 
   g.pop()
 end
@@ -171,14 +206,14 @@ end
 function ReadyAbilityView:enter()
   self:removeTimer(_FADE_TIMER, MAIN_TIMER)
   self:addTimer(_FADE_TIMER, MAIN_TIMER, "tween",
-                .25, self, { alpha = 1 }, "linear")
+                .1, self, { alpha = 1 }, "linear")
 end
 
 function ReadyAbilityView:exit()
   self:removeTimer(_FADE_TIMER, MAIN_TIMER)
   self:addTimer(_FADE_TIMER, MAIN_TIMER, "tween",
-                 .2, self, { alpha = 0 }, "linear",
-                 function() self:destroy() end)
+                .1, self, { alpha = 0 }, "linear",
+                function() self:destroy() end)
 end
 
 function ReadyAbilityView:enterList()
