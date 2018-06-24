@@ -6,6 +6,10 @@ RECEIVEPACK.input_specs = {
   { output = 'pack', name = 'pack_list'}
 }
 
+function RECEIVEPACK.card(actor, inputvalues)
+  return nil
+end
+
 function RECEIVEPACK.activatedAbility(actor, inputvalues)
   return nil
 end

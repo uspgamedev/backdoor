@@ -8,6 +8,10 @@ MOVE.input_specs = {
   { output = 'pos', name = 'direction' },
 }
 
+function MOVE.card(actor, inputvalues)
+  return nil
+end
+
 function MOVE.activatedAbility(actor, inputvalues)
   return nil
 end

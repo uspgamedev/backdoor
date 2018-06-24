@@ -8,6 +8,10 @@ ACTIVATE.input_specs = {
   { output = 'widget_slot', name = 'choose_widget_slot' }
 }
 
+function ACTIVATE.card(actor, inputvalues)
+  return actor:getBody():getWidget(inputvalues.widget_slot)
+end
+
 function ACTIVATE.activatedAbility(actor, inputvalues)
   return actor:getBody():getWidget(inputvalues.widget_slot):getWidgetAbility()
 end

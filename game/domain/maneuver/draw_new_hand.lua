@@ -5,6 +5,10 @@ local DRAWHAND = {}
 
 DRAWHAND.input_specs = {}
 
+function DRAWHAND.card(actor, inputvalues)
+  return nil
+end
+
 function DRAWHAND.activatedAbility(actor, inputvalues)
   return nil
 end

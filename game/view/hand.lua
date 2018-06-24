@@ -131,7 +131,8 @@ function HandView:draw()
               i == self.focus_index)
     if self.focus_index == i then
       local infox = _GAP
-      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter, self.route:getPlayerActor())
+      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter,
+                    self.route:getPlayerActor())
       if card ~= 'draw' then
         EXP.drawNeededEXP(g, card)
       end

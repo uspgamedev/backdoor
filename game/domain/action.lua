@@ -13,6 +13,10 @@ function ACTION.exhaustionCost(action_name, actor, inputvalues)
   return MANEUVERS[action_name].exhaustionCost(actor, inputvalues)
 end
 
+function ACTION.card(action_name, actor, inputvalues)
+  return MANEUVERS[action_name].card(actor, inputvalues)
+end
+
 function ACTION.pendingInput(action_name, actor, inputvalues)
   local maneuver = MANEUVERS[action_name]
   for _,input_spec in ipairs(maneuver.input_specs) do
@@ -28,10 +32,6 @@ function ACTION.pendingInput(action_name, actor, inputvalues)
       end
     end
   end
-end
-
-function ACTION.ability(action_name)
-  return (DB.loadSpec('action', action_name) or {}).ability
 end
 
 function ACTION.execute(action_slot, actor, inputvalues)
