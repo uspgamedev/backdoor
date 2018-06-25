@@ -11,6 +11,7 @@ return {
   "on_play",
   "on_leave",
   "on_act",
+  "on_focus_end",
   ON_TICK = 'on_tick',
   ON_CYCLE = 'on_cycle',
   ON_TURN = 'on_turn',
@@ -21,7 +22,8 @@ return {
   ON_PLACE = 'on_place',
   ON_PLAY = 'on_play',
   ON_LEAVE = 'on_leave',
-  ON_ACT = 'on_act'
+  ON_ACT = 'on_act',
+  ON_FOCUS_END = 'on_focus_end',
 }
 
 

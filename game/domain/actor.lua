@@ -518,6 +518,7 @@ function Actor:turn()
       local card = self:removeHandCard(1)
       self:addCardToBackbuffer(card)
     end
+    self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
   end
 end
 
