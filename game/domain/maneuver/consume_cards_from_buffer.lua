@@ -5,6 +5,10 @@ CONSUME.input_specs = {
   { output = 'consumed', name = 'consume_list' },
 }
 
+function CONSUME.card(actor, inputvalues)
+  return nil
+end
+
 function CONSUME.activatedAbility(actor, inputvalues)
   return nil
 end

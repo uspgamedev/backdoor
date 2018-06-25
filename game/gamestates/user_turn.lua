@@ -323,7 +323,8 @@ local function _useAction(action_slot, params)
       ACTION.exhaustionCost(action_slot, controlled_actor, params)
     )
     if param.name == 'choose_dir' then
-      SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'])
+      SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'],
+                    ACTION.card(action_slot, controlled_actor, params))
       local dir = coroutine.yield(_task)
       if dir then
         params[param.output] = dir
@@ -334,6 +335,7 @@ local function _useAction(action_slot, params)
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
+          card = ACTION.card(action_slot, controlled_actor, params),
           pos = { controlled_actor:getPos() },
           aoe_hint = param['aoe-hint'],
           range_checker = function(i, j)

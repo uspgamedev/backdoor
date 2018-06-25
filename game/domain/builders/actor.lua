@@ -13,14 +13,16 @@ function BUILDER.buildState(idgenerator, background, body_state)
   -- you will have to reload its state after calling this function. If so,
   -- do not lose the 'body_state' reference, as it is edited in-place here.
   local traits_specs = DB.loadSpec('actor', background)['traits']
+  local id = idgenerator.newID()
   if traits_specs then
     for _,trait_spec in ipairs(traits_specs) do
-      local trait = CARD_BUILDER.buildState(idgenerator, trait_spec.specname)
+      local trait = CARD_BUILDER.buildState(idgenerator, trait_spec.specname,
+                                            id)
       table.insert(body_state.widgets, trait)
     end
   end
   return {
-    id = idgenerator.newID(),
+    id = id,
     body_id = body_state.id,
     specname = background,
     cooldown = 10,

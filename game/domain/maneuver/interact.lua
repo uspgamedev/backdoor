@@ -42,6 +42,10 @@ local function _seek(actor, inputvalues)
   return inputvalues.interaction
 end
 
+function INTERACT.card(actor, inputvalues)
+  return nil
+end
+
 function INTERACT.activatedAbility(actor, inputvalues)
   _seek(actor, inputvalues)
   if inputvalues.interaction == 'CONSUME_CARDS' then

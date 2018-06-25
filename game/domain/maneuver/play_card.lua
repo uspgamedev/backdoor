@@ -13,6 +13,10 @@ local function _card(actor, inputvalues)
   return actor:getHandCard(inputvalues.card_index)
 end
 
+function PLAYCARD.card(actor, inputvalues)
+  return _card(actor, inputvalues)
+end
+
 function PLAYCARD.activatedAbility(actor, inputvalues)
   local card = _card(actor, inputvalues)
   return card:isArt() and card:getArtAbility()

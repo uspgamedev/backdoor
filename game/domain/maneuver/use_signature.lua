@@ -6,6 +6,10 @@ local SIGNATURE   = {}
 
 SIGNATURE.input_specs = {}
 
+function SIGNATURE.card(actor, inputvalues)
+  return nil
+end
+
 function SIGNATURE.activatedAbility(actor, inputvalues)
   return actor:getSignature().ability
 end
