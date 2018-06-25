@@ -4,21 +4,25 @@
   "set":false,
   "desc":"A mass-produced weapon.",
   "type-description":"",
-  "one_time":true,
-  "pp":0,
-  "name":"Laser Spear",
   "widget":{
     "operators":[],
-    "trigger":false,
+    "trigger":"on_focus_end",
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "target":"=body",
+            "type":"effect",
+            "base":8,
+            "name":"damage_on_target",
+            "sfx":false
+          }],
         "inputs":[{
-            "body-only":[],
+            "output":"target",
             "max-range":1,
             "type":"input",
             "name":"choose_target",
-            "output":"target"
+            "body-only":[]
           },{
             "type":"operator",
             "pos":"=target",
@@ -26,22 +30,18 @@
             "output":"body"
           },{
             "type":"operator",
+            "which":"COR",
             "output":"cor",
-            "name":"get_attribute",
-            "which":"COR"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=body",
-            "base":8,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
+            "name":"get_attribute"
           }]
-      }
+      },
+      "cost":20
     },
     "status-tags":[],
-    "charges":0,
+    "charges":1,
     "placement":"weapon"
-  }
+  },
+  "pp":0,
+  "name":"Laser Spear",
+  "one_time":true
 }
