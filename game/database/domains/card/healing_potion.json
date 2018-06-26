@@ -3,44 +3,44 @@
   "icon":"card-potion",
   "one_time":true,
   "art":{
-    "cost":20,
     "art_ability":{
+      "effects":[{
+          "attr":"=vit",
+          "target":"=self_body",
+          "base":8,
+          "name":"heal",
+          "type":"effect"
+        }],
       "inputs":[{
           "empty-tile":false,
           "output":"self_pos",
           "aoe-hint":0,
+          "max-range":0,
           "dif-fact":false,
-          "name":"choose_target",
           "type":"input",
           "non-wall":false,
           "body-only":{
             "body-type":false
           },
-          "max-range":0
+          "name":"choose_target"
         },{
           "type":"operator",
           "name":"self",
           "output":"self"
         },{
           "type":"operator",
-          "output":"self_body",
           "name":"get_actor_body",
+          "output":"self_body",
           "actor":"=self"
         },{
-          "output":"vit",
+          "which":"VIT",
           "type":"operator",
           "body":"=self_body",
-          "name":"get_body_attribite",
-          "which":"VIT"
-        }],
-      "effects":[{
-          "target":"=body",
-          "base":8,
-          "attr":"=vit",
-          "name":"heal",
-          "type":"effect"
+          "output":"vit",
+          "name":"get_body_attribite"
         }]
-    }
+    },
+    "cost":20
   },
   "desc":"Gulp. Down the hatch, foxy.",
   "type-description":"",
