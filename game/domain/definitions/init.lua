@@ -19,6 +19,13 @@ DEFS.ALL_ATTRIBUTES = {
   "DEF", "EFC", "VIT",
   "RES", "FIN", "CON"
 }
+DEFS.BODY_ATTRIBUTES = {
+  "DEF", "EFC", "VIT",
+  "RES", "FIN", "CON"
+}
+DEFS.CARD_ATTRIBUTES = {
+  "COR", "ARC", "ANI", "NONE"
+}
 DEFS.PACK_SIZE = 5
 DEFS.HAND_LIMIT = 5
 

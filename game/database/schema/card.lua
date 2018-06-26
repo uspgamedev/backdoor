@@ -11,7 +11,7 @@ return {
   { id = 'set', name = "Card Set", type = 'enum', options = 'domains.cardset' },
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
-    options = DEFS.PRIMARY_ATTRIBUTES },
+    options = DEFS.CARD_ATTRIBUTES },
   { id = 'type-description', type = 'description',
     info = "Cards can be either Arts, Upgrades, or Widgets" },
   {

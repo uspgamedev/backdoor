@@ -12,8 +12,10 @@
         "effects":[{
             "amount":5,
             "target":"=actor_body",
+            "type":"effect",
+            "attr":"=ani",
             "name":"heal",
-            "type":"effect"
+            "base":2
           }],
         "inputs":[{
             "type":"operator",
@@ -24,12 +26,19 @@
             "output":"actor_body",
             "name":"get_actor_body",
             "actor":"=self_actor"
+          },{
+            "type":"operator",
+            "which":"ANI",
+            "name":"get_attribute",
+            "output":"ani"
           }]
       }
     },
-    "status-tags":[],
-    "trigger":"on_act",
-    "charges":1,
+    "status-tags":[{
+        "tag":"stun"
+      }],
+    "trigger":"on_cycle",
+    "charges":4,
     "placement":false
   },
   "pp":4,

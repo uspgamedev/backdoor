@@ -4,21 +4,19 @@ local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
-  {
-    id = 'attr', name = "Attribute", type = 'value',
-    match = 'integer', range = {1}
-  },
-  { id = 'base', name = "Base Power", type = 'value',
-    match = 'integer', range = {1} },
   { id = 'center', name = "Target position", type = 'value', match = 'pos' },
-  { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
   { id = 'size', name = "Area Size", type = 'value', match = 'integer',
     range = {1} },
+  { id = 'base', name = "Base Power", type = 'value',
+    match = 'integer', range = {1} },
+  { id = 'attr', name = "Mod Power", type = 'integer',
+    range = {1} },
+  { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
 }
 
 function FX.preview (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
-  local min, max = ATTR.DMG(attr, base)
+  local min, max = ATTR.POWER_RANGE(base, attr)
   local size = fieldvalues['size'] * 2 - 1
   return ("Deal %s - %s damage on %sx%s area"):format(min, max, size, size)
 end
@@ -30,7 +28,7 @@ function FX.process (actor, fieldvalues)
   local attr    = fieldvalues['attr']
   local base    = fieldvalues['base']
   local ignore_owner = fieldvalues['ignore_owner']
-  local amount = RANDOM.generate(ATTR.DMG(attr, base))
+  local amount = RANDOM.generate(ATTR.POWER_RANGE(base, attr))
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then

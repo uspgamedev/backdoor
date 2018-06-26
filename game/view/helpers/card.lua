@@ -29,7 +29,7 @@ end
 local _DRAW = {}
 
 function _DRAW:getRelatedAttr()
-  return 'HALF_VISIBLE'
+  return 'NONE'
 end
 
 function _DRAW:getType()
