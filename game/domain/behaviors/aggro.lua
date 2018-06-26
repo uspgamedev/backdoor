@@ -17,8 +17,8 @@ return function (actor)
   local target = ai.target
   local target_pos = ai.target_pos
 
-  -- if i don't have a target, i'll look for one
-  if not target then
+  -- if i don't have a target or it is dead, i'll look for one
+  if not target or target:isDead() then
     target = FindTarget.getTarget(actor)
   end
 
