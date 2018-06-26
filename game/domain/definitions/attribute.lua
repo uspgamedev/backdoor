@@ -1,4 +1,6 @@
 
+local round = require 'common.math' .round
+
 local ATTR = {}
 
 ATTR.BASE_SPD = 3
@@ -9,13 +11,6 @@ ATTR.INFLUENCE = {
   EFC = {'ARC', 'ANI'},
   VIT = {'ANI', 'COR'}
 }
-
-local floor = math.floor
-local function round(x, ...)
-  if x then
-    return floor(x + 0.5), round(...)
-  end
-end
 
 function ATTR.POWER_RANGE(base, mod)
   local power = base * mod
