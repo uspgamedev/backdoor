@@ -29,7 +29,6 @@
           "output":"self"
         }],
       "effects":[{
-          "amount":"=amount",
           "target":"=self",
           "type":"effect",
           "attr":"=ANI",

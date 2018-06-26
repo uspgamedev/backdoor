@@ -29,7 +29,6 @@
           "which":"ARC"
         }],
       "effects":[{
-          "amount":4,
           "target":"=turret",
           "type":"effect",
           "base":6,
