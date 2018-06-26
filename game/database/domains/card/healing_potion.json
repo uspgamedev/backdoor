@@ -34,7 +34,6 @@
           "which":"VIT"
         }],
       "effects":[{
-          "amount":20,
           "target":"=body",
           "base":8,
           "attr":"=vit",

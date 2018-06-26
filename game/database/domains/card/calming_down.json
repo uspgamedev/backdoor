@@ -10,7 +10,6 @@
       "trigger":"on_cycle",
       "ability":{
         "effects":[{
-            "amount":5,
             "target":"=actor_body",
             "type":"effect",
             "attr":"=ani",
