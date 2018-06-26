@@ -10,9 +10,16 @@ ATTR.INFLUENCE = {
   VIT = {'ANI', 'COR'}
 }
 
-function ATTR.DMG(attr, base)
-  local power = attr * base
-  return power/4, 3*power/4
+local floor = math.floor
+local function round(x, ...)
+  if x then
+    return floor(x + 0.5), round(...)
+  end
+end
+
+function ATTR.POWER_RANGE(base, mod)
+  local power = base * mod
+  return round(power/4, 3*power/4)
 end
 
 return ATTR

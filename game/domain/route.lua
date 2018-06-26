@@ -114,16 +114,16 @@ function Route:instance(obj)
     end
   end
 
-  function obj.makeCard(cardspec)
-    local card = BUILDERS.card.buildElement(_id_generator, cardspec)
+  function obj.makeCard(cardspec, owner_id)
+    local card = BUILDERS.card.buildElement(_id_generator, cardspec, owner_id)
     return card
   end
 
-  function obj.makePack(collection)
+  function obj.makePack(collection, owner)
     local speclist = PACK.generatePackFrom(collection)
     local pack = {}
     for i,cardspec in ipairs(speclist) do
-      pack[i] = obj.makeCard(cardspec)
+      pack[i] = obj.makeCard(cardspec, owner:getId())
     end
     return pack
   end

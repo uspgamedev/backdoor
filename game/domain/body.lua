@@ -415,7 +415,9 @@ function Body:exterminate()
 end
 
 function Body:heal(amount)
+  local olddamage = self.damage
   self.damage = math.max(0, self.damage - amount)
+  return olddamage - self.damage
 end
 
 function Body:getKiller()

@@ -3,31 +3,38 @@
   "icon":"box",
   "one_time":false,
   "art":{
-    "cost":0,
+    "cost":20,
     "art_ability":{
       "inputs":[{
           "dif-fact":false,
           "output":"tgt",
           "aoe-hint":0,
           "type":"input",
-          "body-only":{
-            "body-type":"machine"
-          },
+          "empty-tile":false,
           "max-range":1,
           "non-wall":false,
           "name":"choose_target",
-          "empty-tile":false
+          "body-only":{
+            "body-type":"machine"
+          }
         },{
           "type":"operator",
           "pos":"=tgt",
           "name":"get_body_at",
           "output":"turret"
+        },{
+          "type":"operator",
+          "output":"arc",
+          "name":"get_attribute",
+          "which":"ARC"
         }],
       "effects":[{
-          "type":"effect",
+          "amount":4,
           "target":"=turret",
+          "type":"effect",
+          "base":6,
           "name":"heal",
-          "amount":4
+          "attr":"=arc"
         }]
     }
   },

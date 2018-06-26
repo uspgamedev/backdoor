@@ -34,7 +34,7 @@ local function _confirm()
   if _status == "choosing_pack" then
     _status = "choosing_card"
     local collection = _card_list_view:getChosenPack()
-    _pack = _route.makePack(collection)
+    _pack = _route.makePack(collection, _route.getControlledActor())
     _pack_index = _card_list_view:getSelection()
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})

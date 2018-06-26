@@ -3,51 +3,40 @@
   "icon":"card-heal",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
-      "effects":[{
-          "amount":"=amount",
-          "target":"=self",
-          "name":"heal",
-          "type":"effect"
-        }],
       "inputs":[{
-          "dif-fact":false,
+          "empty-tile":false,
           "output":"body-pos",
           "aoe-hint":1,
+          "type":"input",
           "body-only":{
             "body-type":false
           },
-          "empty-tile":false,
           "max-range":0,
           "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "dif-fact":false
         },{
           "type":"operator",
-          "which":"ANI",
+          "name":"get_attribute",
           "output":"ANI",
-          "name":"get_attribute"
-        },{
-          "op":"*",
-          "output":"max",
-          "type":"operator",
-          "name":"integer_binop",
-          "rhs":2,
-          "lhs":"=ANI"
-        },{
-          "rolls":1,
-          "type":"operator",
-          "output":"amount",
-          "name":"dice_throw",
-          "sides":"=max"
+          "which":"ANI"
         },{
           "type":"operator",
           "pos":"=body-pos",
           "name":"get_body_at",
           "output":"self"
+        }],
+      "effects":[{
+          "amount":"=amount",
+          "target":"=self",
+          "type":"effect",
+          "attr":"=ANI",
+          "name":"heal",
+          "base":5
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"",
   "type-description":"",
