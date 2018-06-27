@@ -1,31 +1,35 @@
 {
-  "attr":"COR",
+  "attr":"NONE",
   "icon":"card-jetboots",
   "set":"gadgeteer",
   "desc":"'Now with less Carbon Dioxide emission!' - Jetboots UltraSlim Model commercial slogan.",
   "type-description":"",
-  "one_time":false,
-  "pp":0,
-  "name":"Jetboots",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
-      "cost":10,
       "ability":{
+        "effects":[{
+            "vfx-spd":1,
+            "vfx":"SLIDE",
+            "type":"effect",
+            "body":"=body",
+            "name":"move_to",
+            "pos":"=target-pos"
+          }],
         "inputs":[{
             "type":"input",
+            "body-block":true,
             "name":"choose_dir",
-            "output":"dir",
-            "body-block":true
+            "output":"dir"
           },{
             "type":"operator",
             "name":"self",
             "output":"self"
           },{
             "type":"operator",
-            "name":"get_actor_body",
             "output":"body",
+            "name":"get_actor_body",
             "actor":"=self"
           },{
             "type":"operator",
@@ -36,22 +40,18 @@
             "maxrange":5,
             "dir":"=dir",
             "type":"operator",
-            "pos":"=origin",
+            "name":"hitscan",
             "output":"target-pos",
-            "name":"hitscan"
-          }],
-        "effects":[{
-            "vfx-spd":1,
-            "vfx":"SLIDE",
-            "type":"effect",
-            "body":"=body",
-            "name":"move_to",
-            "pos":"=target-pos"
+            "pos":"=origin"
           }]
-      }
+      },
+      "cost":10
     },
     "status-tags":[],
     "charges":8,
     "placement":false
-  }
+  },
+  "pp":0,
+  "name":"Jetboots",
+  "one_time":false
 }

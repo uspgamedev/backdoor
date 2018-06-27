@@ -1,17 +1,26 @@
 {
-  "attr":"COR",
+  "attr":"ARC",
   "icon":false,
   "one_time":true,
   "desc":"Don't stand so close to me!",
   "type-description":"",
-  "set":false,
-  "pp":0,
-  "name":"Proximity Detector",
   "widget":{
     "operators":[],
     "auto_activation":{
-      "trigger":"on_done",
       "ability":{
+        "effects":[{
+            "type":"effect",
+            "target":"=body_self",
+            "name":"destroy_body"
+          },{
+            "attr":"=arc",
+            "center":"=pos",
+            "size":2,
+            "type":"effect",
+            "ignore_owner":false,
+            "name":"damage_on_area",
+            "base":10
+          }],
         "inputs":[{
             "type":"input",
             "name":"body",
@@ -23,29 +32,17 @@
             "output":"pos"
           },{
             "type":"operator",
+            "which":"ARC",
             "name":"get_attribute",
-            "output":"cor",
-            "which":"COR"
-          }],
-        "effects":[{
-            "type":"effect",
-            "target":"=body_self",
-            "name":"destroy_body"
-          },{
-            "attr":"=cor",
-            "center":"=pos",
-            "size":2,
-            "type":"effect",
-            "ignore_owner":false,
-            "name":"damage_on_area",
-            "base":10
+            "output":"arc"
           }]
-      }
+      },
+      "trigger":"on_done"
     },
     "trigger":"on_tick",
     "status-tags":[],
-    "charges":1,
     "trigger-condition":{
+      "effects":[],
       "inputs":[{
           "type":"input",
           "name":"pos",
@@ -53,15 +50,18 @@
         },{
           "ignore-owner":true,
           "body-type":false,
-          "pos":"=pos_self",
-          "output":"yup",
+          "range":1,
+          "name":"has_nearby_bodies",
           "type":"input",
           "count":1,
-          "name":"has_nearby_bodies",
-          "range":1
-        }],
-      "effects":[]
+          "output":"yup",
+          "pos":"=pos_self"
+        }]
     },
+    "charges":1,
     "placement":false
-  }
+  },
+  "pp":0,
+  "name":"Proximity Detector",
+  "set":false
 }

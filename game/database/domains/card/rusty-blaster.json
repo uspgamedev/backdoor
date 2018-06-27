@@ -1,25 +1,43 @@
 {
-  "attr":"ARC",
+  "attr":"COR",
   "icon":"card-blaster",
   "set":"gadgeteer",
   "desc":"An old but reliable arcane blaster.",
   "type-description":"",
-  "one_time":true,
-  "pp":0,
-  "name":"Rusty Blaster",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=arc",
+            "target":"=body",
+            "base":2,
+            "type":"effect",
+            "name":"damage_on_target",
+            "sfx":false
+          },{
+            "attr":"=arc",
+            "target":"=body",
+            "type":"effect",
+            "base":2,
+            "name":"damage_on_target",
+            "sfx":false
+          },{
+            "attr":"=arc",
+            "target":"=body",
+            "type":"effect",
+            "base":2,
+            "name":"damage_on_target",
+            "sfx":false
+          }],
         "inputs":[{
-            "body-only":{
-            },
+            "output":"target",
             "max-range":5,
             "type":"input",
             "name":"choose_target",
-            "output":"target"
+            "body-only":{
+            }
           },{
             "type":"operator",
             "pos":"=target",
@@ -27,34 +45,18 @@
             "output":"body"
           },{
             "type":"operator",
+            "which":"ARC",
             "output":"arc",
-            "name":"get_attribute",
-            "which":"ARC"
-          }],
-        "effects":[{
-            "attr":"=arc",
-            "target":"=body",
-            "type":"effect",
-            "base":4,
-            "name":"damage_on_target",
-            "sfx":false
-          },{
-            "attr":"=arc",
-            "target":"=body",
-            "type":"effect",
-            "name":"damage_on_target",
-            "base":4
-          },{
-            "attr":"=arc",
-            "target":"=body",
-            "type":"effect",
-            "name":"damage_on_target",
-            "base":4
+            "name":"get_attribute"
           }]
-      }
+      },
+      "cost":10
     },
     "status-tags":[],
     "charges":0,
     "placement":"weapon"
-  }
+  },
+  "pp":0,
+  "name":"Rusty Blaster",
+  "one_time":true
 }
