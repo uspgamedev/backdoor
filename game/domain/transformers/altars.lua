@@ -31,11 +31,11 @@ end
 function transformer.process(sectorinfo, params)
   local sectorgrid = sectorinfo.grid
   local altars_min, altars_max = params.min, params.max
-  
+
   local possible_altars = {}
 
   FLOOR_THRESHOLD = params.threshold or FLOOR_THRESHOLD
-  
+
   -- construct list of possible altars
   do
     for x, y, tile in sectorgrid.iterate() do
@@ -46,7 +46,7 @@ function transformer.process(sectorinfo, params)
   end
 
   local number_altars = RANDOM.generate(altars_min, altars_max)
-  
+
   for i = 1, number_altars do
     local size = #possible_altars
     if size <= 0 then break end

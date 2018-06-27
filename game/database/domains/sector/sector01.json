@@ -19,10 +19,10 @@
   "drops":{
     "drops":[{
         "droptype":"food",
-        "droprate":1
+        "droprate":4
       },{
         "droptype":"pack",
-        "droprate":1
+        "droprate":2
       }]
   },
   "rooms":{
@@ -30,18 +30,18 @@
     "minw":3,
     "rmar":1,
     "tries":256,
-    "count":24,
     "maxh":9,
+    "count":24,
     "maxw":9
   },
   "holes":false,
-  "maze":{
-    "double":false
-  },
   "altars":{
-    "max":10,
-    "min":10,
+    "max":6,
+    "min":2,
     "threshold":1
+  },
+  "deadends":{
+    "amount":128
   },
   "theme":false,
   "exits":{
@@ -62,7 +62,7 @@
     "h":48,
     "mw":9
   },
-  "deadends":{
-    "amount":128
+  "maze":{
+    "double":false
   }
 }
