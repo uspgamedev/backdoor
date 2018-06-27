@@ -34,7 +34,7 @@ local _font
 local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
-  _font = FONT.get("TextBold", 21)
+  _font = FONT.get("TextBold", 20)
   _CW = CARD.getWidth()
   _CH = CARD.getHeight()
 end

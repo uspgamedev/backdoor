@@ -15,7 +15,9 @@ local _rescache = {
 
 local _initResource = {
   font = function(path, size)
-    return love.graphics.newFont(path, size)
+    local font = love.graphics.newFont(path, size)
+    font:setFilter('linear', 'linear', 1)
+    return font
   end,
   texture = function(path)
     return love.graphics.newImage(path)

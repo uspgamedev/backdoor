@@ -38,7 +38,7 @@ local function _initGraphicValues()
   _FULL_WIDTH, _HEIGHT = g.getDimensions()
 
   _WIDTH = 3*_FULL_WIDTH/4
-  _font = FONT.get("TextBold", 21)
+  _font = FONT.get("TextBold", 20)
   _CW = CARD.getWidth() + 20
   _CH = CARD.getHeight() + 20
 end
