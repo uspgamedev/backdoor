@@ -24,7 +24,7 @@ local _PD = 40
 local _ARRSIZE = 20
 local _PI = math.pi
 local _CONSUME_TEXT = "consume (+%d EXP)"
-local _WIDTH, _HEIGHT
+local _FULLWIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
 
@@ -36,7 +36,6 @@ local _otherfont
 local function _initGraphicValues()
   local g = love.graphics
   _FULL_WIDTH, _HEIGHT = g.getDimensions()
-  _WID_TH = 3*_FULL_WIDTH/4
   _LIST_VALIGN = 0.5*_HEIGHT
   _font = FONT.get("TextBold", 21)
   _otherfont = FONT.get("Text", 21)
