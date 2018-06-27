@@ -26,7 +26,7 @@ local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _HOLDBAR_TEXT = "open pack"
-local _WIDTH, _HEIGHT
+local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _CW, _CH
 
 -- LOCAL VARS
