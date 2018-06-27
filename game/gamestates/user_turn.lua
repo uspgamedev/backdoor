@@ -18,7 +18,7 @@ local ReadyAbilityView = require 'view.readyability'
 local state = {}
 
 -- [[ Constant Variables ]]--
-local _OPEN_MENU = "OPEN_MENU"
+local _INSPECT_MENU = "INSPECT_MENU"
 local _SAVE_QUIT = "SAVE_QUIT"
 local _USE_READY_ABILITY = "USE_READY_ABILITY"
 local _READY_ABILITY_ACTION = "READY_ABILITY"
@@ -216,15 +216,8 @@ end
 function state:resume(from, args)
   _view.sector.setCooldownPreview(0)
   _resumeTask(args)
-  if from == GS.ACTION_MENU and args.action then
-    _was_on_menu = true
-    _startTask(args.action)
-  else
   if INPUT.wasAnyPressed() then
     _alert = true
-  end
-
-    _was_on_menu = false
   end
 end
 
@@ -254,7 +247,7 @@ function state:update(dt)
   local action_request
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if dir then
-    if INPUT.isActionDown('MODIFIER') and _canLongWalk() then
+    if INPUT.isActionDown('ACTION_4') and _canLongWalk() then
       _startLongWalk(dir)
     else
       action_request = {DEFS.ACTION.MOVE, dir}
@@ -274,7 +267,7 @@ function state:update(dt)
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
   elseif INPUT.wasActionPressed('EXTRA') then
-    action_request = _OPEN_MENU
+    action_request = _INSPECT_MENU
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = _SAVE_QUIT
   end
@@ -286,10 +279,8 @@ function state:update(dt)
     else
       _long_walk = false
     end
-  elseif action_request == _OPEN_MENU then
-    PLAYSFX 'open-menu'
-    SWITCHER.push(GS.ACTION_MENU, _route)
-    return
+  elseif action_request == _INSPECT_MENU then
+    --
   elseif action_request == _SAVE_QUIT then
     _save_and_quit = true
     return
@@ -407,9 +398,6 @@ _ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
   if has_widget then
     PLAYSFX 'ok-menu'
     _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
-  elseif _was_on_menu then
-    PLAYSFX 'denied'
-    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 
@@ -417,9 +405,8 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   if MANEUVERS['draw_new_hand'].validate(_route.getControlledActor(), {}) then
     PLAYSFX 'ok-menu'
     _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  elseif _was_on_menu then
+  else
     PLAYSFX 'denied'
-    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 
@@ -448,9 +435,8 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
     PLAYSFX 'ok-menu'
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
     local args = coroutine.yield(_task)
-  elseif _was_on_menu then
+  else
     PLAYSFX 'denied'
-    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 
@@ -464,9 +450,8 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
     _route.getControlledActor():removePrizePack(args.pack_index)
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
-  elseif _was_on_menu then
+  else
     PLAYSFX 'denied'
-    SWITCHER.push(GS.ACTION_MENU, _route)
   end
 end
 
