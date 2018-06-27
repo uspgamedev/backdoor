@@ -45,11 +45,10 @@ function HandView:init(route)
   self.gap_scale = _GAP_SCALE.MIN
 
   --Emergency effect
-  self.emer_fx_min = 0
-  self.emer_fx_max = 1
+  self.emer_fx_alpha = 0
+  self.emer_fx_max = math.pi
   self.emer_fx_speed = 3.5
-  self.emer_fx_v = self.emer_fx_min
-  self.emer_fx_status = "up"
+  self.emer_fx_v = math.sin(self.emer_fx_alpha)
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
@@ -117,18 +116,10 @@ function HandView:draw()
 
   --update emergency effect
   local dt = love.timer.getDelta()
-  if self.emer_fx_status == "up" then
-    self.emer_fx_v = self.emer_fx_v + self.emer_fx_speed*dt
-    if self.emer_fx_v >= self.emer_fx_max then
-      self.emer_fx_v = self.emer_fx_max
-      self.emer_fx_status = "down"
-    end
-  else
-    self.emer_fx_v = self.emer_fx_v - self.emer_fx_speed*dt
-    if self.emer_fx_v <= self.emer_fx_min then
-      self.emer_fx_v = self.emer_fx_min
-      self.emer_fx_status = "up"
-    end
+  self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
+  self.emer_fx_v = math.sin(self.emer_fx_alpha)
+  if self.emer_fx_alpha >= self.emer_fx_max then
+    self.emer_fx_alpha = self.emer_fx_alpha - self.emer_fx_max
   end
 
 
