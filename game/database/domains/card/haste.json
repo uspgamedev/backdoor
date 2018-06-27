@@ -4,22 +4,22 @@
   "one_time":false,
   "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
   "type-description":"",
-  "set":"arcanist",
-  "pp":4,
-  "name":"Haste",
   "widget":{
     "operators":[{
-        "op":"*",
+        "op":"+",
         "attr":"SPD",
         "val":2
       }],
     "trigger":"on_turn",
     "status-tags":[],
     "trigger-condition":{
-      "inputs":[],
-      "effects":[]
+      "effects":[],
+      "inputs":[]
     },
     "charges":10,
     "placement":false
-  }
+  },
+  "pp":4,
+  "name":"Haste",
+  "set":"arcanist"
 }

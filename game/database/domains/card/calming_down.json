@@ -4,43 +4,43 @@
   "set":"brawler",
   "desc":"",
   "type-description":"",
-  "one_time":false,
-  "pp":4,
-  "name":"Meditation",
   "widget":{
     "operators":[],
     "auto_activation":{
+      "trigger":"on_cycle",
       "ability":{
-        "inputs":[{
-            "type":"operator",
-            "name":"self",
-            "output":"self_actor"
-          },{
-            "type":"operator",
-            "name":"get_actor_body",
-            "output":"actor_body",
-            "actor":"=self_actor"
-          },{
-            "type":"operator",
-            "output":"ani",
-            "name":"get_attribute",
-            "which":"ANI"
-          }],
         "effects":[{
             "attr":"=ani",
             "target":"=actor_body",
             "type":"effect",
             "name":"heal",
             "base":2
+          }],
+        "inputs":[{
+            "type":"operator",
+            "name":"self",
+            "output":"self_actor"
+          },{
+            "type":"operator",
+            "output":"actor_body",
+            "name":"get_actor_body",
+            "actor":"=self_actor"
+          },{
+            "type":"operator",
+            "which":"ANI",
+            "output":"ani",
+            "name":"get_attribute"
           }]
-      },
-      "trigger":"on_cycle"
+      }
     },
     "status-tags":[{
         "tag":"stun"
       }],
     "trigger":"on_cycle",
-    "charges":4,
+    "charges":6,
     "placement":false
-  }
+  },
+  "pp":4,
+  "name":"Meditation",
+  "one_time":false
 }

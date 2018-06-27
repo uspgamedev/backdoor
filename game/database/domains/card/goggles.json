@@ -1,12 +1,9 @@
 {
-  "attr":"COR",
+  "attr":"NONE",
   "icon":"card-goggles",
   "one_time":false,
   "desc":"\"This over the top technological spectacles combine infra-red rays, image intensifier and obfuscation protection to improve the wearer's Field of View!\n\nSee more than ever with the Throttle Goggles, the latest visual wonder from Tark Tech!\"",
   "type-description":"",
-  "set":"gadgeteer",
-  "pp":4,
-  "name":"Throttle Goggles",
   "widget":{
     "operators":[{
         "op":"+",
@@ -17,11 +14,14 @@
     "activation":false,
     "trigger":"on_turn",
     "status-tags":[],
-    "charges":25,
     "trigger-condition":{
-      "inputs":[],
-      "effects":[]
+      "effects":[],
+      "inputs":[]
     },
-    "placement":"tool"
-  }
+    "charges":25,
+    "placement":"accessory"
+  },
+  "pp":4,
+  "name":"Throttle Goggles",
+  "set":"gadgeteer"
 }

@@ -5,9 +5,6 @@
   "art":false,
   "desc":"",
   "type-description":"",
-  "set":"arcanist",
-  "pp":0,
-  "name":"Focus Gem",
   "widget":{
     "operators":[{
         "op":"+",
@@ -17,6 +14,7 @@
     "trigger":"on_play",
     "status-tags":[],
     "trigger-condition":{
+      "effects":[],
       "inputs":[{
           "type":"input",
           "name":"card",
@@ -30,9 +28,9 @@
         },{
           "card":"=card",
           "type":"input",
-          "output":"ok2",
+          "cardtype":"ART",
           "name":"card_is_type",
-          "cardtype":"ART"
+          "output":"ok2"
         },{
           "type":"input",
           "name":"card",
@@ -40,13 +38,15 @@
         },{
           "lhs":"=card",
           "type":"input",
-          "output":"ok3",
+          "rhs":"=widget_self",
           "name":"different_card",
-          "rhs":"=widget_self"
-        }],
-      "effects":[]
+          "output":"ok3"
+        }]
     },
     "charges":2,
-    "placement":false
-  }
+    "placement":"accessory"
+  },
+  "pp":0,
+  "name":"Focus Gem",
+  "set":"arcanist"
 }
