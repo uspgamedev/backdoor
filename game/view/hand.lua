@@ -118,7 +118,7 @@ function HandView:draw()
   local dt = love.timer.getDelta()
   self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
   self.emer_fx_v = math.sin(self.emer_fx_alpha)
-  if self.emer_fx_alpha >= self.emer_fx_max then
+  while self.emer_fx_alpha >= self.emer_fx_max do
     self.emer_fx_alpha = self.emer_fx_alpha - self.emer_fx_max
   end
 
