@@ -26,7 +26,7 @@ DEFS.BODY_ATTRIBUTES = {
 DEFS.CARD_ATTRIBUTES = {
   "COR", "ARC", "ANI", "NONE"
 }
-DEFS.PACK_SIZE = 5
+
 DEFS.HAND_LIMIT = 5
 
 DEFS.ACTION       = require 'domain.definitions.action'

@@ -29,7 +29,6 @@ function Actor:init(spec_name)
   self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
-  self.hand_limit = 5
   self.hand_countdown = 0
   self.upgrades = {
     COR = DEFS.ATTR.INITIAL_UPGRADE,
@@ -65,7 +64,7 @@ function Actor:loadState(state)
   self.upgrades = state.upgrades or self.upgrades
   self.attr_lv = {}
   self.prizes = state.prizes or self.prizes
-  self.hand_limit = state.hand_limit or self.hand_limit
+  self.hand_countdown = state.hand_countdown or self.hand_countdown
   self.hand = state.hand and {} or self.hand
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
@@ -103,7 +102,7 @@ function Actor:saveState()
   state.playpoints = self.playpoints
   state.upgrades = self.upgrades
   state.prizes = self.prizes
-  state.hand_limit = self.hand_limit
+  state.hand_countdown = self.hand_countdown
   state.hand = {}
   for _,card in ipairs(self.hand) do
     local card_state = card:saveState()
@@ -263,7 +262,7 @@ function Actor:isHandEmpty()
 end
 
 function Actor:isHandFull()
-  return #self.hand >= self.hand_limit
+  return #self.hand >= DEFS.HAND_LIMIT
 end
 
 function Actor:getHandCountdown()
@@ -318,10 +317,6 @@ function Actor:isBufferEmpty()
   return #self.buffer == 1
 end
 
-function Actor:getHandLimit()
-  return self.hand_limit
-end
-
 function Actor:copyBuffer()
   local copy = {}
   for i = 1, #self.buffer do
@@ -334,7 +329,7 @@ end
 
 --- Draw a card from actor's buffer
 function Actor:drawCard()
-  if #self.hand >= self.hand_limit then return end
+  if #self.hand >= DEFS.HAND_LIMIT then return end
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
