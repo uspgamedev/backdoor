@@ -8,14 +8,18 @@ local _RATE_MAX = 256
 local transformer = {}
 
 transformer.schema = {
+  { id = 'drop-info', type = 'description',
+    info = ("Chance of drop in a given "
+            .. "tile is [Drop Rate] / %d"):format(_RATE_MAX)
+  },
   { id = 'drops', name = 'Drop Spec', type = 'array',
     schema = {
       { id = 'droptype', name = "Drop Type", type = 'enum',
         options = 'domains.drop' },
       { id = 'droprate', name = "Drop Rate", type = 'integer',
-        range = {0, _RATE_MAX} },
+        range = {0, _RATE_MAX}, },
     },
-  }
+  },
 }
 
 function transformer.process(sectorinfo, params)
