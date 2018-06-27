@@ -307,10 +307,14 @@ function View:drawCardDesc(g, card, enter)
     consume = ("Consume [%d/%d]"):format(self.consumed_count, self.maxconsume)
     extra = _CW/2 + 10
   end
-  g.print(consume, maxw + _PD, -1.5 * _otherfont:getHeight())
+  local cor, arc, ani = card:getOwner():trainingDitribution()
+  local dist = ("\n(COR %.1f%%, ARC %.1f%%, ANI %.1f%%)"):format(
+    cor*100, arc*100, ani*100
+  )
+  g.print(consume .. dist, maxw + _PD, -2.5 * _otherfont:getHeight())
 
   g.push()
-  g.translate(maxw + _PD + 1.5*_CW + extra, -0.6 * _otherfont:getHeight())
+  g.translate(maxw + _PD + 1.5*_CW + extra, -1.6 * _otherfont:getHeight())
   self:drawArrow(g, enter)
   g.pop()
 
