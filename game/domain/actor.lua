@@ -507,8 +507,8 @@ function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
 end
 
-function Actor:resetHandCountdown()
-  self.focus_countdown = DEFS.ACTION.HAND_DURATION
+function Actor:resetHandCountdown(extra)
+  self.focus_countdown = DEFS.ACTION.HAND_DURATION + (extra or 0)
 end
 
 function Actor:ready()
@@ -524,7 +524,7 @@ function Actor:playCard(card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
-  self:resetHandCountdown()
+  self:resetHandCountdown(1)
   return card
 end
 
