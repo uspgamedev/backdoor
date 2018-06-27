@@ -529,7 +529,8 @@ function Actor:playCard(card_index)
 end
 
 function Actor:turn()
-  self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_TURN)
+  local body = self:getBody()
+  body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
   if not self:isHandEmpty() then
     self.hand_countdown = math.max(0, self.hand_countdown - 1)
   else
@@ -540,7 +541,12 @@ function Actor:turn()
       local card = self:removeHandCard(1)
       self:addCardToBackbuffer(card)
     end
-    self:getBody():triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
+    body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
+    local weapon = body:getEquipmentAt("weapon")
+    local widget_index = weapon and body:findWidget(weapon)
+    if widget_index then
+      body:removeWidget(widget_index)
+    end
   end
 end
 
