@@ -35,8 +35,8 @@ local _otherfont
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
-  _WIDTH, _HEIGHT = g.getDimensions()
-  _WIDTH = 3*_WIDTH/4
+  _FULL_WIDTH, _HEIGHT = g.getDimensions()
+  _WID_TH = 3*_FULL_WIDTH/4
   _LIST_VALIGN = 0.5*_HEIGHT
   _font = FONT.get("TextBold", 21)
   _otherfont = FONT.get("Text", 21)
@@ -216,7 +216,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.5)
-  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+  g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
 end
 
 function View:drawCards(g, enter)
