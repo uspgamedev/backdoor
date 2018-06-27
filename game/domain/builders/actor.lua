@@ -33,6 +33,11 @@ function BUILDER.buildState(idgenerator, background, body_state)
       ARC = 100,
       ANI = 100,
     },
+    training = {
+      COR = 1,
+      ARC = 1,
+      ANI = 1
+    },
     buffer = BUFFER_BUILDER.build(idgenerator, background),
     hand_limit = 5,
     hand = {},

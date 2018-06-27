@@ -4,6 +4,7 @@ local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
+local DEFS = require 'domain.definitions'
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -334,8 +335,8 @@ function View:drawGainedEXP(g, enter)
   local offset_speed = 120
   if self.exp_gained > 0 then
     local font = FONT.get("Text", 20)
-    local str = ("+%d"):format(self.exp_gained)
-    local x, y = 3/4*g.getWidth()+120, g.getHeight()/2 + 2
+    local str = ("+%4d"):format(self.exp_gained * DEFS.CONSUME_EXP)
+    local x, y = 3/4*g.getWidth()+98, g.getHeight()/2 - font:getHeight()/2
 
     font:set()
     g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], enter)
