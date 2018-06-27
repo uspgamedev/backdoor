@@ -24,7 +24,7 @@ local _PD = 40
 local _ARRSIZE = 20
 local _PI = math.pi
 local _CONSUME_TEXT = "consume (+%d EXP)"
-local _FULLWIDTH, _HEIGHT
+local _FULL_WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
 
