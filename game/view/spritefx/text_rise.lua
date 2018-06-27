@@ -41,16 +41,15 @@ function SPRITEFX.apply(sectorview, args)
     function (self, x, y, ...)
       local g = love.graphics
       body_sprite:render(x, y, ...)
+      x = x + _TILE_W/2 - _font:getWidth(text)/2
       y = y - _TILE_H/2 - animation_info.y
       _font:set()
       local transparency = COLORS.NEUTRAL
                          * Color:new {1, 1, 1, animation_info.a}
       g.setColor(COLORS.DARK * transparency)
-      g.printf(text, x + 2, y + 2,
-               _TILE_W, 'center')
+      g.print(text, x + 2, y + 2)
       g.setColor(COLORS[_NUMBER_COLOR[text_type]] * transparency)
-      g.printf(text, x, y,
-               _TILE_W, 'center')
+      g.print(text, x, y)
     end
   )
   sectorview:addTimer(nil, MAIN_TIMER, "tween", 0.2,
@@ -65,4 +64,3 @@ function SPRITEFX.apply(sectorview, args)
 end
 
 return SPRITEFX
-
