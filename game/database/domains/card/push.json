@@ -1,38 +1,30 @@
 {
   "attr":"COR",
   "icon":"card-jump",
-  "set":false,
+  "one_time":false,
   "art":{
+    "cost":10,
     "art_ability":{
-      "effects":[{
-          "pos":"=push_pos",
-          "vfx":"SLIDE",
-          "vfx-spd":1,
-          "type":"effect",
-          "body":"=target_body",
-          "name":"move_to",
-          "sfx":false
-        }],
       "inputs":[{
           "dif-fact":true,
           "output":"target_pos",
           "aoe-hint":0,
+          "type":"input",
           "empty-tile":false,
-          "body-only":{
-            "body-type":false
-          },
           "max-range":1,
           "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "body-only":{
+            "body-type":false
+          }
         },{
           "type":"operator",
           "name":"self",
           "output":"self"
         },{
           "type":"operator",
-          "output":"self_body",
           "name":"get_actor_body",
+          "output":"self_body",
           "actor":"=self"
         },{
           "type":"operator",
@@ -49,20 +41,28 @@
           "pos":"=target_pos",
           "dir":"=dir",
           "type":"operator",
+          "maxrange":5,
           "output":"push_pos",
-          "name":"hitscan",
-          "maxrange":5
+          "name":"hitscan"
         },{
           "type":"operator",
           "pos":"=target_pos",
           "name":"get_body_at",
           "output":"target_body"
+        }],
+      "effects":[{
+          "pos":"=push_pos",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
+          "type":"effect",
+          "body":"=target_body",
+          "name":"move_to",
+          "sfx":false
         }]
-    },
-    "cost":10
+    }
   },
   "desc":"Outta my way!",
   "type-description":"",
   "name":"Push",
-  "one_time":false
+  "set":"gadgeteer"
 }

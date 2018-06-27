@@ -3,34 +3,34 @@
   "icon":"card-timer-bomb",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
+      "inputs":[{
+          "aoe-hint":3,
+          "name":"choose_target",
+          "non-wall":false,
+          "type":"input",
+          "empty-tile":true,
+          "output":"pos",
+          "max-range":1
+        }],
       "effects":[{
           "widgets":[{
               "spec":"self-destruct"
             }],
           "pos":"=pos",
-          "vit":0,
-          "name":"make_body",
+          "def":0,
+          "bodyspec":"machine",
           "type":"effect",
           "widgetspec":"self-destruct",
-          "bodyspec":"machine",
-          "def":0
-        }],
-      "inputs":[{
-          "aoe-hint":3,
-          "empty-tile":true,
-          "max-range":1,
-          "type":"input",
-          "non-wall":false,
-          "output":"pos",
-          "name":"choose_target"
+          "vit":0,
+          "name":"make_body"
         }]
-    },
-    "cost":20
+    }
   },
-  "desc":false,
+  "desc":"",
   "type-description":"",
   "pp":10,
   "name":"Timed Combustion Drone",
-  "set":false
+  "set":"gadgeteer"
 }

@@ -1,41 +1,37 @@
 {
   "attr":"COR",
   "icon":"card-wrench",
-  "set":false,
+  "set":"gadgeteer",
   "desc":"",
   "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Wrench",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
+      "cost":20,
       "ability":{
-        "effects":[{
-            "attr":"=base",
-            "target":"=target",
-            "type":"effect",
-            "base":12,
-            "name":"damage_on_target",
-            "sfx":false
-          }],
         "inputs":[{
-            "output":"pos",
+            "body-only":[],
             "max-range":1,
             "type":"input",
             "name":"choose_target",
-            "body-only":[]
+            "output":"pos"
           },{
             "type":"operator",
-            "which":"COR",
+            "output":"cor",
             "name":"get_attribute",
-            "output":"cor"
+            "which":"COR"
           },{
             "type":"operator",
             "name":"self",
             "output":"self"
           },{
             "type":"operator",
-            "output":"body",
             "name":"get_actor_body",
+            "output":"body",
             "actor":"=self"
           },{
             "type":"operator",
@@ -45,32 +41,36 @@
           },{
             "ignore-owner":true,
             "body-type":"machine",
-            "name":"count_nearby_bodies",
+            "pos":"=center",
             "type":"operator",
-            "output":"count",
             "range":5,
-            "pos":"=center"
+            "name":"count_nearby_bodies",
+            "output":"count"
           },{
             "op":"+",
-            "output":"base",
+            "lhs":"=count",
             "type":"operator",
-            "name":"integer_binop",
             "rhs":"=cor",
-            "lhs":"=count"
+            "name":"integer_binop",
+            "output":"base"
           },{
             "type":"operator",
             "pos":"=pos",
             "name":"get_body_at",
             "output":"target"
+          }],
+        "effects":[{
+            "attr":"=base",
+            "target":"=target",
+            "base":12,
+            "type":"effect",
+            "name":"damage_on_target",
+            "sfx":false
           }]
-      },
-      "cost":20
+      }
     },
     "status-tags":[],
     "charges":0,
     "placement":"weapon"
-  },
-  "pp":0,
-  "name":"Wrench",
-  "one_time":false
+  }
 }

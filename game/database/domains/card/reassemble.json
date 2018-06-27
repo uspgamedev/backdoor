@@ -3,35 +3,7 @@
   "icon":"card-reassemble",
   "one_time":false,
   "art":{
-    "cost":60,
     "art_ability":{
-      "inputs":[{
-          "dif-fact":false,
-          "output":"from",
-          "aoe-hint":0,
-          "body-only":{
-            "body-type":"machine"
-          },
-          "empty-tile":false,
-          "type":"input",
-          "non-wall":false,
-          "name":"choose_target",
-          "max-range":4
-        },{
-          "dif-fact":false,
-          "output":"to",
-          "aoe-hint":1,
-          "empty-tile":true,
-          "max-range":4,
-          "non-wall":true,
-          "name":"choose_target",
-          "type":"input"
-        },{
-          "type":"operator",
-          "pos":"=from",
-          "name":"get_body_at",
-          "output":"body"
-        }],
       "effects":[{
           "vfx-spd":0.5,
           "vfx":"SLIDE",
@@ -40,12 +12,40 @@
           "body":"=body",
           "name":"move_to",
           "sfx":false
+        }],
+      "inputs":[{
+          "empty-tile":false,
+          "output":"from",
+          "aoe-hint":0,
+          "max-range":4,
+          "body-only":{
+            "body-type":"machine"
+          },
+          "type":"input",
+          "non-wall":false,
+          "name":"choose_target",
+          "dif-fact":false
+        },{
+          "aoe-hint":1,
+          "type":"input",
+          "name":"choose_target",
+          "non-wall":true,
+          "max-range":4,
+          "dif-fact":false,
+          "output":"to",
+          "empty-tile":true
+        },{
+          "type":"operator",
+          "pos":"=from",
+          "name":"get_body_at",
+          "output":"body"
         }]
-    }
+    },
+    "cost":60
   },
   "desc":"Take your best friend with you!",
   "type-description":"",
   "pp":0,
   "name":"Reassemble",
-  "set":false
+  "set":"gadgeteer"
 }

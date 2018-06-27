@@ -3,12 +3,35 @@
   "icon":"card-dropkick",
   "one_time":false,
   "art":{
+    "cost":20,
     "art_ability":{
+      "inputs":[{
+          "aoe-hint":0,
+          "max-range":1,
+          "output":"pos",
+          "non-wall":false,
+          "type":"input",
+          "empty-tile":false,
+          "name":"choose_target",
+          "body-only":{
+            "body-type":false
+          }
+        },{
+          "type":"operator",
+          "output":"cor",
+          "name":"get_attribute",
+          "which":"COR"
+        },{
+          "type":"operator",
+          "pos":"=pos",
+          "name":"get_body_at",
+          "output":"target"
+        }],
       "effects":[{
           "attr":"=cor",
           "target":"=target",
-          "type":"effect",
           "base":10,
+          "type":"effect",
           "name":"damage_on_target",
           "sfx":false
         },{
@@ -18,38 +41,15 @@
         },{
           "target":"=self",
           "type":"effect",
+          "stay_alive":false,
           "percentage":25,
-          "name":"lose_life",
-          "stay_alive":false
-        }],
-      "inputs":[{
-          "aoe-hint":0,
-          "name":"choose_target",
-          "body-only":{
-            "body-type":false
-          },
-          "empty-tile":false,
-          "type":"input",
-          "non-wall":false,
-          "output":"pos",
-          "max-range":1
-        },{
-          "type":"operator",
-          "which":"COR",
-          "name":"get_attribute",
-          "output":"cor"
-        },{
-          "type":"operator",
-          "pos":"=pos",
-          "name":"get_body_at",
-          "output":"target"
+          "name":"lose_life"
         }]
-    },
-    "cost":20
+    }
   },
   "desc":"They say 'no pain, no gain'. I'll give them what they want.",
   "type-description":"",
   "pp":0,
   "name":"Unreserved Punch",
-  "set":false
+  "set":"brawler"
 }

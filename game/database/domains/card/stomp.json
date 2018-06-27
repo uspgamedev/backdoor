@@ -3,7 +3,30 @@
   "icon":"card-stomp",
   "one_time":false,
   "art":{
+    "cost":60,
     "art_ability":{
+      "inputs":[{
+          "aoe-hint":3,
+          "max-range":0,
+          "output":"self_pos",
+          "non-wall":false,
+          "type":"input",
+          "empty-tile":false,
+          "name":"choose_target",
+          "body-only":{
+            "body-type":false
+          }
+        },{
+          "type":"operator",
+          "output":"ani",
+          "name":"get_attribute",
+          "which":"ANI"
+        },{
+          "type":"operator",
+          "pos":"=self_pos",
+          "name":"get_body_at",
+          "output":"body"
+        }],
       "effects":[{
           "center":"=self_pos",
           "size":3,
@@ -19,35 +42,12 @@
           "ignore_owner":true,
           "name":"damage_on_area",
           "base":4
-        }],
-      "inputs":[{
-          "aoe-hint":3,
-          "name":"choose_target",
-          "body-only":{
-            "body-type":false
-          },
-          "empty-tile":false,
-          "type":"input",
-          "non-wall":false,
-          "output":"self_pos",
-          "max-range":0
-        },{
-          "type":"operator",
-          "which":"ANI",
-          "name":"get_attribute",
-          "output":"ani"
-        },{
-          "type":"operator",
-          "pos":"=self_pos",
-          "name":"get_body_at",
-          "output":"body"
         }]
-    },
-    "cost":60
+    }
   },
   "desc":"",
   "type-description":"",
   "pp":0,
   "name":"Stomp",
-  "set":false
+  "set":"brawler"
 }

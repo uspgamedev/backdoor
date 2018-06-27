@@ -1,7 +1,7 @@
 {
   "attr":"COR",
   "icon":"card-laser-spear",
-  "set":false,
+  "set":"brawler",
   "desc":"A mass-produced weapon.",
   "type-description":"",
   "widget":{
@@ -31,8 +31,8 @@
           },{
             "type":"operator",
             "which":"COR",
-            "output":"cor",
-            "name":"get_attribute"
+            "name":"get_attribute",
+            "output":"cor"
           }]
       },
       "cost":20
@@ -43,5 +43,5 @@
   },
   "pp":0,
   "name":"Laser Spear",
-  "one_time":true
+  "one_time":false
 }

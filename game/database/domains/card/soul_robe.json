@@ -4,9 +4,6 @@
   "one_time":false,
   "desc":"",
   "type-description":"",
-  "set":false,
-  "pp":3,
-  "name":"Soul Robe",
   "widget":{
     "operators":[{
         "op":"+",
@@ -16,10 +13,13 @@
     "trigger":false,
     "status-tags":[],
     "trigger-condition":{
-      "inputs":[],
-      "effects":[]
+      "effects":[],
+      "inputs":[]
     },
     "charges":0,
     "placement":"suit"
-  }
+  },
+  "pp":3,
+  "name":"Soul Robe",
+  "set":"arcanist"
 }

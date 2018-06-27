@@ -1,18 +1,21 @@
 {
-  "image":"card-rage",
   "cards":[{
-      "drop":50,
-      "set":"consumables"
+      "set":"arcanist",
+      "drop":50
+    },{
+      "set":"brawler",
+      "drop":50
+    },{
+      "set":"gadgeteer",
+      "drop":50
     },{
       "set":"consumables",
       "drop":50
     },{
-      "drop":50,
-      "set":"consumables"
-    },{
-      "drop":50,
-      "set":"consumables"
+      "set":"consumables",
+      "drop":50
     }],
   "name":"Anything",
+  "image":"card-upgrade",
   "description":""
 }
