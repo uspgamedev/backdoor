@@ -35,6 +35,11 @@ function Actor:init(spec_name)
     ARC = DEFS.ATTR.INITIAL_UPGRADE,
     ANI = DEFS.ATTR.INITIAL_UPGRADE,
   }
+  self.training = {
+    COR = 1,
+    ARC = 1,
+    ANI = 1
+  }
   self.attr_lv = {
     COR = 0,
     ARC = 0,
@@ -62,6 +67,7 @@ function Actor:loadState(state)
   self.exp = state.exp or self.exp
   self.playpoints = state.playpoints or self.playpoints
   self.upgrades = state.upgrades or self.upgrades
+  self.training = state.training or self.training
   self.attr_lv = {}
   self.prizes = state.prizes or self.prizes
   self.hand_countdown = state.hand_countdown or self.hand_countdown
@@ -101,6 +107,7 @@ function Actor:saveState()
   state.exp = self.exp
   state.playpoints = self.playpoints
   state.upgrades = self.upgrades
+  state.training = self.training
   state.prizes = self.prizes
   state.hand_countdown = self.hand_countdown
   state.hand = {}
@@ -174,6 +181,12 @@ end
 
 function Actor:updateAttr(which)
   self.attr_lv[which] = DEFS.APT.ATTR_LEVEL(self, which)
+end
+
+function Actor:trainingDitribution()
+  local cor, arc, ani = self.training.COR, self.training.ARC, self.training.ANI
+  local total = 1.0 * (cor + arc + ani)
+  return cor/total, arc/total, ani/total
 end
 
 function Actor:upgradeAttr(which, amount)
@@ -359,7 +372,17 @@ end
 
 function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
-  self.exp = self.exp + DEFS.CONSUME_EXP
+  local cor, arc, ani = self:trainingDitribution()
+  local xp = DEFS.CONSUME_EXP
+  local round = math.round
+  self:upgradeCOR(round(cor*xp))
+  self:upgradeARC(round(arc*xp))
+  self:upgradeANI(round(ani*xp))
+  self.exp = self.exp + xp
+  coroutine.yield('report', {
+    body = self:getBody(),
+    sfx = 'upgrade'
+  })
 end
 
 function Actor:addPrizePack(collection)
@@ -494,6 +517,10 @@ end
 
 function Actor:playCard(card_index)
   local card = table.remove(self.hand, card_index)
+  local attr = card:getRelatedAttr()
+  if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
+    self.training[attr] = self.training[attr] + 1
+  end
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end

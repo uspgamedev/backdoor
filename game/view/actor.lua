@@ -125,7 +125,7 @@ function ActorView:drawAttributes(g, actor)
   g.push()
   g.translate(0, -32)
   g.setColor(COLORS.NEUTRAL)
-  g.print(("EXP: %02d"):format(actor:getExp()), 0, 0)
+  g.print(("EXP: %04d"):format(actor:getExp()), 0, 0)
 
   -- packs
   local packcount = actor:getPrizePackCount()

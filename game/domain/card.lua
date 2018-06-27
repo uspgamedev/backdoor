@@ -64,15 +64,11 @@ function Card:setOwner(owner)
 end
 
 function Card:isOneTimeOnly()
-  return self:isUpgrade() or self:getSpec('one_time')
+  return self:getSpec('one_time')
 end
 
 function Card:isArt()
   return not not self:getSpec('art')
-end
-
-function Card:isUpgrade()
-  return not not self:getSpec('upgrade')
 end
 
 function Card:isWidget()
@@ -81,7 +77,6 @@ end
 
 function Card:getType()
   if self:isArt() then return 'art'
-  elseif self:isUpgrade() then return 'upgrade'
   elseif self:isWidget() then return 'widget'
   end
 end
@@ -92,14 +87,6 @@ end
 
 function Card:getArtCost()
   return self:getSpec('art').cost
-end
-
-function Card:getUpgradesList()
-  return self:getSpec('upgrade').attr_list
-end
-
-function Card:getUpgradeCost()
-  return self:getSpec('upgrade').cost
 end
 
 function Card:getWidgetTrigger()
@@ -190,13 +177,6 @@ function Card:getEffect()
   if self:isArt() then
     effect = ("Art [%d exhaustion]\n\n"):format(self:getArtCost())
           .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
-  elseif self:isUpgrade() then
-    local ups,n = {}, 0
-    for _,up in ipairs(self:getUpgradesList()) do
-      n = n + 1
-      ups[n] = "+" .. up.val .. " " .. up.attr
-    end
-    effect = ("Upgrade [%s]"):format(table.concat(ups, ', '))
   elseif self:isWidget() then
     effect = "Widget"
     local place = self:getWidgetPlacement() if place then

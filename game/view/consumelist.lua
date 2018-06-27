@@ -4,6 +4,7 @@ local HoldBar = require 'view.helpers.holdbar'
 local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
+local DEFS = require 'domain.definitions'
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -306,10 +307,14 @@ function View:drawCardDesc(g, card, enter)
     consume = ("Consume [%d/%d]"):format(self.consumed_count, self.maxconsume)
     extra = _CW/2 + 10
   end
-  g.print(consume, maxw + _PD, -1.5 * _otherfont:getHeight())
+  local cor, arc, ani = card:getOwner():trainingDitribution()
+  local dist = ("\n(COR %.1f%%, ARC %.1f%%, ANI %.1f%%)"):format(
+    cor*100, arc*100, ani*100
+  )
+  g.print(consume .. dist, maxw + _PD, -2.5 * _otherfont:getHeight())
 
   g.push()
-  g.translate(maxw + _PD + 1.5*_CW + extra, -0.6 * _otherfont:getHeight())
+  g.translate(maxw + _PD + 1.5*_CW + extra, -1.6 * _otherfont:getHeight())
   self:drawArrow(g, enter)
   g.pop()
 
@@ -334,8 +339,8 @@ function View:drawGainedEXP(g, enter)
   local offset_speed = 120
   if self.exp_gained > 0 then
     local font = FONT.get("Text", 20)
-    local str = ("+%d"):format(self.exp_gained)
-    local x, y = 3/4*g.getWidth()+120, g.getHeight()/2 + 2
+    local str = ("+%4d"):format(self.exp_gained * DEFS.CONSUME_EXP)
+    local x, y = 3/4*g.getWidth()+98, g.getHeight()/2 - font:getHeight()/2
 
     font:set()
     g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], enter)

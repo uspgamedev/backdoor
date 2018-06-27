@@ -2,13 +2,13 @@
   "image":"card-rage",
   "cards":[{
       "drop":50,
-      "set":"upgrades_ani"
+      "set":"consumables"
     },{
-      "set":"upgrades_cor",
+      "set":"consumables",
       "drop":50
     },{
       "drop":50,
-      "set":"upgrades_arc"
+      "set":"consumables"
     },{
       "drop":50,
       "set":"consumables"
