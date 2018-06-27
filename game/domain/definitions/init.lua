@@ -24,7 +24,11 @@ DEFS.BODY_ATTRIBUTES = {
   "RES", "FIN", "CON"
 }
 DEFS.CARD_ATTRIBUTES = {
-  "COR", "ARC", "ANI", "NONE"
+  "COR", "ARC", "ANI", "NONE",
+  COR = "COR",
+  ARC = "ARC",
+  ANI = "ANI",
+  NONE = "NONE",
 }
 
 DEFS.HAND_LIMIT = 5
