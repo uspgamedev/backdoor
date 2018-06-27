@@ -302,16 +302,21 @@ function View:drawCardDesc(g, card, enter)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
   _otherfont.set()
   g.print("Keep", maxw + _PD, 0.5 * _otherfont:getHeight())
-  local consume, extra = "Consume", 0
+  local consume, extra = "Consume\n", 0
   if self.maxconsume then
-    consume = ("Consume [%d/%d]"):format(self.consumed_count, self.maxconsume)
+    consume = ("Consume [%d/%d]\n"):format(self.consumed_count, self.maxconsume)
     extra = _CW/2 + 10
   end
   local cor, arc, ani = card:getOwner():trainingDitribution()
-  local dist = ("\n(COR %.1f%%, ARC %.1f%%, ANI %.1f%%)"):format(
-    cor*100, arc*100, ani*100
-  )
-  g.print(consume .. dist, maxw + _PD, -2.5 * _otherfont:getHeight())
+  local cor_t = ("COR %.1f%%  "):format(cor*100)
+  local arc_t = ("ARC %.1f%%  "):format(arc*100)
+  local ani_t = ("ANI %.1f%%"):format(ani*100)
+  local table = {COLORS.NEUTRAL,consume,
+           COLORS.COR, cor_t,
+           COLORS.ARC, arc_t,
+           COLORS.ANI, ani_t
+          }
+  g.print(table, maxw + _PD, -2.5 * _otherfont:getHeight())
 
   g.push()
   g.translate(maxw + _PD + 1.5*_CW + extra, -1.6 * _otherfont:getHeight())
