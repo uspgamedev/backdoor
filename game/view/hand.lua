@@ -43,6 +43,12 @@ function HandView:init(route)
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
+
+  --Emergency effect
+  self.emer_fx_alpha = 0
+  self.emer_fx_max = math.pi
+  self.emer_fx_speed = 3.5
+  self.emer_fx_v = math.sin(self.emer_fx_alpha)
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
@@ -108,6 +114,15 @@ function HandView:draw()
   local boxwidth = 128
   local g = love.graphics
 
+  --update emergency effect
+  local dt = love.timer.getDelta()
+  self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
+  self.emer_fx_v = math.sin(self.emer_fx_alpha)
+  while self.emer_fx_alpha >= self.emer_fx_max do
+    self.emer_fx_alpha = self.emer_fx_alpha - self.emer_fx_max
+  end
+
+
   -- draw action type
   _font.set()
   local colorname = (self:getActionType() or "BACKGROUND"):upper()
@@ -151,6 +166,7 @@ function HandView:drawHandCountDown(g, actor)
   end
   self.hand_count_down = current
   local handbar_percent = current / ACTIONDEFS.HAND_DURATION
+  local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12
   local font = FONT.get("Text", 18)
@@ -161,27 +177,34 @@ function HandView:drawHandCountDown(g, actor)
   g.push()
   g.origin()
   g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
+
+  --Drawing background
   g.setColor(_BG)
   g.polygon('fill', -mx, handbar_height+my,
                     -mx + slope, -my,
                     handbar_width + mx - slope, -my,
                     handbar_width + mx, handbar_height + my)
+  --Drawing focus bar
   g.setLineWidth(1)
   g.setColor(COLORS.EMPTY)
   g.rectangle('fill', 0, 0, handbar_width, handbar_height)
-  g.setColor(COLORS.NOTIFICATION)
+  local red, gre, blu, a = unpack(COLORS.NOTIFICATION)
+  if handbar_percent <= emergency_percent then
+    red, gre, blu = red + (1-red)*self.emer_fx_v, gre + (1-gre)*self.emer_fx_v, blu + (1-blu)*self.emer_fx_v
+  end
+  g.setColor(red, gre, blu, a)
   g.rectangle('fill', 0, 0, handbar_width * handbar_percent, handbar_height)
+
+  --Drawing contour lines
   g.setColor(COLORS.NEUTRAL)
   g.setLineWidth(2)
   g.line(-mx, handbar_height+my,
          -mx + slope, -my,
          handbar_width + mx - slope, -my,
          handbar_width + mx, handbar_height + my)
-  local c = 8
-  --g.line(-mx+c, handbar_height+my,
-    --     -mx + slope, -my+c,
-      --   handbar_width + mx - slope, -my+c,
-       --  handbar_width + mx-c, handbar_height + my)
+
+
+  --Draw text
   g.translate(0, -14)
   g.setColor(COLORS.BLACK)
   g.printf("Focus Duration", 0, 0, handbar_width, 'center')
