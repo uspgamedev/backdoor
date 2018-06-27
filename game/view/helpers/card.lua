@@ -58,9 +58,6 @@ end
 function _DRAW:isWidget()
 end
 
-function _DRAW:isUpgrade()
-end
-
 --Draw a card starting its upper left corner on given x,y values
 --Alpha is a float value between [0,1] applied to all graphics
 function CARD.draw(card, x, y, focused, alpha, scale)
@@ -121,11 +118,6 @@ function CARD.draw(card, x, y, focused, alpha, scale)
   if card:isWidget() then
     g.printf(("[%d]"):format(card:getWidgetCharges()-card:getUsages()),
              pd, h-pd-_card_font:getHeight(), w-pd*2, "left"
-    )
-  end
-  if card:isUpgrade() then
-    g.printf(("+%d"):format(card:getUpgradeCost()),
-             pd, h-pd-1.25*_card_font:getHeight(), w-pd*2, "left"
     )
   end
 

@@ -13,7 +13,7 @@ return {
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.CARD_ATTRIBUTES },
   { id = 'type-description', type = 'description',
-    info = "Cards can be either Arts, Upgrades, or Widgets" },
+    info = "Cards can be either Arts or Widgets" },
   {
     id = 'art', name = "Art",
     type = 'section',
@@ -21,21 +21,6 @@ return {
       { id = 'cost', name = "Cost", type = 'integer', range = {0} },
       { id = 'art_ability', name = "Art Ability", type = 'ability',
         hint = "Happens when card is played from hand" },
-    }
-  },
-  {
-    id = 'upgrade', name = "Upgrade",
-    type = 'section',
-    schema = {
-      { id = 'cost', name = "Exp Cost", type = 'integer', range = {1} },
-      {
-        id = 'attr_list', name = "Attribute", type = 'array',
-        schema = {
-          { id = 'attr', name = "Primary Attribute", type = 'enum',
-            options = DEFS.PRIMARY_ATTRIBUTES },
-          { id = 'val', name = "Value", type = 'integer' },
-        }
-      },
     }
   },
   {

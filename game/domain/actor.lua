@@ -379,10 +379,14 @@ function Actor:consumeCard(card)
   --FIXME: add card rarity modifier!
   local cor, arc, ani = self:trainingDitribution()
   local xp = DEFS.CONSUME_EXP
-  self:upgradeAttr('COR', cor*xp)
-  self:upgradeAttr('ARC', arc*xp)
-  self:upgradeAttr('ANI', ani*xp)
+  self:upgradeCOR(cor*xp)
+  self:upgradeARC(arc*xp)
+  self:upgradeANI(ani*xp)
   self.exp = self.exp + xp
+  coroutine.yield('report', {
+    body = self:getBody(),
+    sfx = 'upgrade'
+  })
 end
 
 function Actor:addPrizePack(collection)

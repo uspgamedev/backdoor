@@ -18,8 +18,6 @@ function INPUT.isValid(actor, fieldvalues, value)
     return card:isArt()
   elseif cardtype == 'WIDGET' then
     return card:isWidget()
-  elseif cardtype == 'UPGRADE' then
-    return card:isUpgrade()
   end
   return false
 end

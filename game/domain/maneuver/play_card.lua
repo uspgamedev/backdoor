@@ -28,8 +28,6 @@ function PLAYCARD.exhaustionCost(actor, inputvalues)
     return card:getArtCost()
   elseif card:isWidget() then
     return ACTIONDEFS.PLAY_WIDGET_COST
-  elseif card:isUpgrade() then
-    return ACTIONDEFS.PLAY_UPGRADE_COST
   end
   return 0
 end
@@ -41,8 +39,6 @@ function PLAYCARD.validate(actor, inputvalues)
     valid = ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
   elseif card:isWidget() then
     valid = true
-  elseif card:isUpgrade() then
-    valid = actor:getExp() >= card:getUpgradeCost()
   end
   return valid
 end
@@ -63,19 +59,6 @@ function PLAYCARD.perform(actor, inputvalues)
   elseif card:isWidget() then
     actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)
     body:placeWidget(card)
-  elseif card:isUpgrade() then
-    actor:exhaust(ACTIONDEFS.PLAY_UPGRADE_COST)
-    actor:modifyExpBy(-card:getUpgradeCost())
-    local upgrades = card:getUpgradesList()
-    coroutine.yield('report', {
-      body = actor:getBody(),
-      sfx = 'upgrade'
-    })
-    for _,upgrade in ipairs(upgrades) do
-      local attr = upgrade.attr
-      local val = upgrade.val
-      actor["upgrade"..attr](actor, val)
-    end
   end
 
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })

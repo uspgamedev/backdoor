@@ -1,7 +1,6 @@
 
 local FONT       = require 'view.helpers.font'
 local CARD       = require 'view.helpers.card'
-local EXP        = require 'view.helpers.exp'
 local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
 
@@ -133,9 +132,6 @@ function HandView:draw()
       local infox = _GAP
       CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter,
                     self.route:getPlayerActor())
-      if card ~= 'draw' then
-        EXP.drawNeededEXP(g, card)
-      end
     end
   end
 
