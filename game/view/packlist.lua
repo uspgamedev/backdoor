@@ -26,7 +26,7 @@ local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _HOLDBAR_TEXT = "open pack"
-local _WIDTH, _HEIGHT
+local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _CW, _CH
 
 -- LOCAL VARS
@@ -35,11 +35,27 @@ local _font
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
-  _WIDTH, _HEIGHT = g.getDimensions()
+  _FULL_WIDTH, _HEIGHT = g.getDimensions()
+
+  _WIDTH = 3*_FULL_WIDTH/4
   _font = FONT.get("TextBold", 21)
   _CW = CARD.getWidth() + 20
   _CH = CARD.getHeight() + 20
 end
+
+local function _stencilFunction(g)
+   g.polygon("fill",
+     {
+       0, 0,
+       _WIDTH - 24, 0,
+       _WIDTH - 24, _HEIGHT/2 + 24,
+       _WIDTH, _HEIGHT/2 + 48,
+       _WIDTH, _HEIGHT,
+       0, _HEIGHT,
+     }
+   )
+end
+
 
 local function _next_circular(i, len, n)
   if n == 0 then return i end
@@ -138,7 +154,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.5)
-  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+  g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
 end
 
 function View:drawPacks(g, enter)
@@ -147,6 +163,9 @@ function View:drawPacks(g, enter)
   local pack_list_size = #pack_list
 
   g.push()
+
+  g.stencil(function() _stencilFunction(g) end, "replace", 1)
+  g.setStencilTest("greater", 0)
 
   -- smooth enter!
   g.translate(math.round((_WIDTH/2)*(1-enter)+_WIDTH/2-_CW/2),
@@ -157,14 +176,14 @@ function View:drawPacks(g, enter)
   if (self.move-selection)^2 <= _EPSILON then self.move = selection end
   g.translate(math.round(-(_CW+_PD)*(self.move-1)), 0)
 
-  -- draw each card
+  -- draw each pack
   for i = 1, pack_list_size do
     g.push()
     local focus = selection == i
     local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
 
-    -- smooth offset when consuming cards
+    -- smooth offset when consuming pack
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), 0)
@@ -186,9 +205,9 @@ function View:drawPacks(g, enter)
 
     --draw icon
     local collection = DB.loadSpec("collection", pack_list[selection])
-    local text = RES.loadTexture(collection.image)
+    local icon = RES.loadTexture(collection.image)
     g.setColor(1, 1, 1)
-    g.draw(text,-3,45)
+    g.draw(icon,15,55, nil, .5)
     g.pop()
   end
   g.pop()
@@ -204,6 +223,7 @@ function View:drawPacks(g, enter)
       self:drawPackDesc(g, pack_list[selection], enter)
     end
   end
+  g.setStencilTest()
   g.pop()
 end
 

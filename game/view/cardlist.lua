@@ -181,4 +181,3 @@ function View:drawCardDesc(g, card, enter)
 end
 
 return View
-
