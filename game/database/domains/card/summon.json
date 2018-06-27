@@ -1,33 +1,33 @@
 {
-  "pp":0,
-  "desc":"",
+  "attr":"ARC",
+  "icon":false,
+  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "output":"pos",
-          "non-wall":false,
-          "aoe-hint":0,
-          "empty-tile":false,
-          "name":"choose_target",
-          "max-range":1
-        }],
       "effects":[{
-          "def":50,
-          "type":"effect",
-          "bodyspec":"machine",
           "widgets":[],
           "pos":"=pos",
+          "vit":0,
+          "type":"effect",
           "name":"make_body",
-          "vit":0
+          "def":50,
+          "bodyspec":"machine"
+        }],
+      "inputs":[{
+          "aoe-hint":0,
+          "max-range":1,
+          "name":"choose_target",
+          "type":"input",
+          "non-wall":false,
+          "output":"pos",
+          "empty-tile":false
         }]
-    }
+    },
+    "cost":20
   },
-  "one_time":false,
-  "icon":false,
-  "set":false,
+  "desc":"",
   "type-description":"",
-  "attr":"ARC",
-  "name":"Sample Bot"
+  "pp":0,
+  "name":"Sample Bot",
+  "set":"gadgeteer"
 }

@@ -3,7 +3,22 @@
   "icon":"card-fireball",
   "one_time":false,
   "art":{
+    "cost":40,
     "art_ability":{
+      "inputs":[{
+          "aoe-hint":3,
+          "empty-tile":false,
+          "output":"target",
+          "type":"input",
+          "non-wall":true,
+          "name":"choose_target",
+          "max-range":6
+        },{
+          "type":"operator",
+          "name":"get_attribute",
+          "output":"arc",
+          "which":"ARC"
+        }],
       "effects":[{
           "attr":"=arc",
           "center":"=target",
@@ -12,27 +27,12 @@
           "ignore_owner":false,
           "name":"damage_on_area",
           "base":8
-        }],
-      "inputs":[{
-          "aoe-hint":3,
-          "max-range":6,
-          "name":"choose_target",
-          "type":"input",
-          "non-wall":true,
-          "output":"target",
-          "empty-tile":false
-        },{
-          "type":"operator",
-          "which":"ARC",
-          "output":"arc",
-          "name":"get_attribute"
         }]
-    },
-    "cost":40
+    }
   },
   "desc":"Ages go by, and the fireball spell remains the\nbread and butter of arcane artists.",
   "type-description":"",
   "pp":0,
   "name":"Fireball",
-  "set":false
+  "set":"arcanist"
 }

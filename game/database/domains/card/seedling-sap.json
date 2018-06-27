@@ -1,14 +1,28 @@
 {
   "attr":"ANI",
   "icon":"card-seedling-sap",
-  "set":false,
+  "set":"brawler",
   "desc":"A bit too much slimy for our taste.",
   "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Seedling Sap",
   "widget":{
     "operators":[],
     "trigger":"on_use",
     "activation":{
+      "cost":10,
       "ability":{
+        "inputs":[{
+            "type":"operator",
+            "name":"self",
+            "output":"self"
+          },{
+            "type":"operator",
+            "name":"get_actor_body",
+            "output":"body_self",
+            "actor":"=self"
+          }],
         "effects":[{
             "amount":2,
             "name":"draw_card",
@@ -18,25 +32,11 @@
             "body":"=body_self",
             "name":"place_widget",
             "card":"tipsy"
-          }],
-        "inputs":[{
-            "type":"operator",
-            "name":"self",
-            "output":"self"
-          },{
-            "type":"operator",
-            "output":"body_self",
-            "name":"get_actor_body",
-            "actor":"=self"
           }]
-      },
-      "cost":10
+      }
     },
     "status-tags":[],
     "charges":3,
     "placement":false
-  },
-  "pp":0,
-  "name":"Seedling Sap",
-  "one_time":false
+  }
 }

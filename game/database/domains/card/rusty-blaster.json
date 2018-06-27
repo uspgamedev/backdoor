@@ -1,19 +1,41 @@
 {
   "attr":"ARC",
   "icon":"card-blaster",
-  "set":false,
+  "set":"gadgeteer",
   "desc":"An old but reliable arcane blaster.",
   "type-description":"",
+  "one_time":true,
+  "pp":0,
+  "name":"Rusty Blaster",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
+      "cost":20,
       "ability":{
+        "inputs":[{
+            "body-only":{
+            },
+            "max-range":5,
+            "type":"input",
+            "name":"choose_target",
+            "output":"target"
+          },{
+            "type":"operator",
+            "pos":"=target",
+            "name":"get_body_at",
+            "output":"body"
+          },{
+            "type":"operator",
+            "output":"arc",
+            "name":"get_attribute",
+            "which":"ARC"
+          }],
         "effects":[{
             "attr":"=arc",
             "target":"=body",
-            "base":4,
             "type":"effect",
+            "base":4,
             "name":"damage_on_target",
             "sfx":false
           },{
@@ -28,33 +50,11 @@
             "type":"effect",
             "name":"damage_on_target",
             "base":4
-          }],
-        "inputs":[{
-            "output":"target",
-            "max-range":5,
-            "type":"input",
-            "name":"choose_target",
-            "body-only":{
-            }
-          },{
-            "type":"operator",
-            "pos":"=target",
-            "name":"get_body_at",
-            "output":"body"
-          },{
-            "type":"operator",
-            "which":"ARC",
-            "name":"get_attribute",
-            "output":"arc"
           }]
-      },
-      "cost":20
+      }
     },
     "status-tags":[],
     "charges":0,
     "placement":"weapon"
-  },
-  "pp":0,
-  "name":"Rusty Blaster",
-  "one_time":true
+  }
 }

@@ -1,37 +1,40 @@
 {
   "attr":"ANI",
   "icon":"card-meditation",
-  "set":false,
+  "set":"brawler",
   "desc":"",
   "type-description":"",
+  "one_time":false,
+  "pp":4,
+  "name":"Meditation",
   "widget":{
     "operators":[],
     "auto_activation":{
-      "trigger":"on_cycle",
       "ability":{
-        "effects":[{
-            "target":"=actor_body",
-            "type":"effect",
-            "attr":"=ani",
-            "name":"heal",
-            "base":2
-          }],
         "inputs":[{
             "type":"operator",
             "name":"self",
             "output":"self_actor"
           },{
             "type":"operator",
-            "output":"actor_body",
             "name":"get_actor_body",
+            "output":"actor_body",
             "actor":"=self_actor"
           },{
             "type":"operator",
-            "which":"ANI",
+            "output":"ani",
             "name":"get_attribute",
-            "output":"ani"
+            "which":"ANI"
+          }],
+        "effects":[{
+            "attr":"=ani",
+            "target":"=actor_body",
+            "type":"effect",
+            "name":"heal",
+            "base":2
           }]
-      }
+      },
+      "trigger":"on_cycle"
     },
     "status-tags":[{
         "tag":"stun"
@@ -39,8 +42,5 @@
     "trigger":"on_cycle",
     "charges":4,
     "placement":false
-  },
-  "pp":4,
-  "name":"Meditation",
-  "one_time":false
+  }
 }

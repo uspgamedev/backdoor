@@ -4,16 +4,42 @@
   "one_time":true,
   "desc":"'Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children' - old and controversial commercial from Tark Tech.",
   "type-description":"",
+  "set":"brawler",
+  "pp":4,
+  "name":"Spark Rod 2000",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
+      "cost":20,
       "ability":{
+        "inputs":[{
+            "aoe-hint":3,
+            "body-only":{
+              "body-type":false
+            },
+            "output":"first_target",
+            "non-wall":false,
+            "type":"input",
+            "empty-tile":false,
+            "name":"choose_target",
+            "max-range":1
+          },{
+            "type":"operator",
+            "pos":"=first_target",
+            "name":"get_body_at",
+            "output":"target_body"
+          },{
+            "type":"operator",
+            "output":"cor",
+            "name":"get_attribute",
+            "which":"COR"
+          }],
         "effects":[{
             "attr":"=cor",
             "target":"=target_body",
-            "type":"effect",
             "base":6,
+            "type":"effect",
             "name":"damage_on_target",
             "sfx":false
           },{
@@ -24,41 +50,15 @@
             "ignore_owner":true,
             "name":"damage_on_area",
             "base":4
-          }],
-        "inputs":[{
-            "aoe-hint":3,
-            "type":"input",
-            "name":"choose_target",
-            "empty-tile":false,
-            "max-range":1,
-            "non-wall":false,
-            "output":"first_target",
-            "body-only":{
-              "body-type":false
-            }
-          },{
-            "type":"operator",
-            "pos":"=first_target",
-            "name":"get_body_at",
-            "output":"target_body"
-          },{
-            "type":"operator",
-            "which":"COR",
-            "name":"get_attribute",
-            "output":"cor"
           }]
-      },
-      "cost":20
+      }
     },
     "status-tags":[],
     "trigger-condition":{
-      "effects":[],
-      "inputs":[]
+      "inputs":[],
+      "effects":[]
     },
     "charges":0,
     "placement":"weapon"
-  },
-  "pp":4,
-  "name":"Spark Rod 2000",
-  "set":false
+  }
 }

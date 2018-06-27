@@ -25,14 +25,14 @@
           "max-range":4,
           "name":"choose_target",
           "type":"input",
-          "empty-tile":true,
+          "non-wall":true,
           "output":"pos",
-          "non-wall":true
+          "empty-tile":true
         },{
           "type":"operator",
           "which":"COR",
-          "name":"get_attribute",
-          "output":"cor"
+          "output":"cor",
+          "name":"get_attribute"
         },{
           "type":"operator",
           "name":"self",
@@ -50,5 +50,5 @@
   "type-description":"",
   "pp":3,
   "name":"Jump",
-  "set":false
+  "set":"brawler"
 }

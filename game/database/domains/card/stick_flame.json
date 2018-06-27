@@ -3,32 +3,32 @@
   "icon":"card-sticky-flame",
   "one_time":false,
   "art":{
+    "cost":40,
     "art_ability":{
-      "effects":[{
-          "type":"effect",
-          "body":"=target_body",
-          "name":"place_widget",
-          "card":"sticky_flame"
-        }],
       "inputs":[{
           "aoe-hint":1,
-          "max-range":4,
+          "output":"target_pos",
           "type":"input",
-          "name":"choose_target",
           "body-only":[],
-          "output":"target_pos"
+          "name":"choose_target",
+          "max-range":4
         },{
           "type":"operator",
           "pos":"=target_pos",
           "name":"get_body_at",
           "output":"target_body"
+        }],
+      "effects":[{
+          "type":"effect",
+          "body":"=target_body",
+          "name":"place_widget",
+          "card":"sticky_flame"
         }]
-    },
-    "cost":40
+    }
   },
   "desc":"'Hey Danny, hold this for me, will ya?'.\n\nRobert was surprised Danny didn't sent him an invite for his birthday the week after.",
   "type-description":"",
   "pp":4,
   "name":"Stick Flame",
-  "set":false
+  "set":"arcanist"
 }
