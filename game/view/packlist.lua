@@ -43,8 +43,17 @@ local function _initGraphicValues()
   _CH = CARD.getHeight() + 20
 end
 
-local function _stencilFunction()
-   love.graphics.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+local function _stencilFunction(g)
+   g.polygon("fill",
+     {
+       0, 0,
+       _WIDTH - 24, 0,
+       _WIDTH - 24, _HEIGHT/2 + 24,
+       _WIDTH, _HEIGHT/2 + 48,
+       _WIDTH, _HEIGHT,
+       0, _HEIGHT,
+     }
+   )
 end
 
 
@@ -155,8 +164,8 @@ function View:drawPacks(g, enter)
 
   g.push()
 
-  love.graphics.stencil(_stencilFunction, "replace", 1)
-  love.graphics.setStencilTest("greater", 0)
+  g.stencil(function() _stencilFunction(g) end, "replace", 1)
+  g.setStencilTest("greater", 0)
 
   -- smooth enter!
   g.translate(math.round((_WIDTH/2)*(1-enter)+_WIDTH/2-_CW/2),
