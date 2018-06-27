@@ -214,7 +214,7 @@ function View:drawPacks(g, enter)
       self:drawPackDesc(g, pack_list[selection], enter)
     end
   end
-  love.graphics.setStencilTest()
+  g.setStencilTest()
   g.pop()
 end
 
