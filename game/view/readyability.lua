@@ -37,7 +37,6 @@ local function _initGraphicValues()
   local g = love.graphics
   _WIDTH, _HEIGHT = g.getDimensions()
   _font = _font or FONT.get(_FONT_NAME, _FONT_SIZE)
-  _font:setFilter('linear', 'linear', 1)
 end
 
 local function _next(i, len, n)

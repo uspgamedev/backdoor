@@ -9,7 +9,7 @@ local PickWidgetView = Class{
 }
 
 local _FONT_NAME = "Text"
-local _FONT_SIZE = 24
+local _FONT_SIZE = 20
 local _BLOCK_HEIGHT = 48
 local _MARGIN = 16
 local _PADDING = 4
