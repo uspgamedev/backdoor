@@ -232,11 +232,6 @@ function Body:equip(place, card)
       end
     end
     local card = self:removeWidget(index)
-    local owner = card:getOwner()
-    if owner then
-      if not card:isOneTimeOnly() then card:resetUsages() end
-      owner:addCardToBackbuffer(card)
-    end
   end
   -- equip new thing on index
   self.equipped[place] = card
