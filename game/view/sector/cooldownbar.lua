@@ -3,7 +3,7 @@ local ACTIONDEFS = require 'domain.definitions.action'
 
 local COOLDOWNBAR = {}
 
-local _BARSCALE = 10
+local _BARSCALE = 5
 local _SMOOTH_FACTOR = 0.2
 
 local _barstates
@@ -29,7 +29,7 @@ function COOLDOWNBAR.draw(actor, x, y, is_controlled)
     value = 0
   end
   _barstates[actor:getId()] = value
-  local unit = ACTIONDEFS.EXHAUSTION_UNIT*_BARSCALE
+  local unit = actor:getSPD()*ACTIONDEFS.CYCLE_UNIT*_BARSCALE
   local percent = math.fmod(value, unit)/unit
   local pi = math.pi
   local start = pi/2 + 2*pi/36
@@ -48,16 +48,21 @@ function COOLDOWNBAR.draw(actor, x, y, is_controlled)
   local alpha = 0.5 + 0.3*math.sin(2 * glow * 2 * math.pi)
   _glow[actor:getId()] = glow
 
+  g.setColor(.8, .2, 0, alpha)
   if is_controlled then
-    g.setColor(1, 1, 0, alpha)
     g.arc('line', 'open', 0, 0, 36, start, start + (_preview/unit) * length, 32)
   elseif _preview > 0 then
     local controlled = actor:getSector():getRoute().getControlledActor()
     local turns = math.ceil(_preview / controlled:getSPD())
     local recovered = math.min(actor:getSPD() * turns, value)
-    g.setColor(.8, .2, 0, alpha)
     g.arc('line', 'open', 0, 0, 36, start + (value - recovered) / unit * length,
                                     start + percent * length, 32)
+  end
+  for i=1,4 do
+    g.setColor(0, 0, 0.4, 0.5)
+    local r = start + length * i/_BARSCALE
+    local w = length/100
+    g.arc('line', 'open', 0, 0, 36, r-w, r+w, 32)
   end
   g.pop()
 end
