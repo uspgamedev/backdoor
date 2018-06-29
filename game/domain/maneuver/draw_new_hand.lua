@@ -19,7 +19,7 @@ end
 
 function DRAWHAND.validate(actor, inputvalues)
   return not actor:isBufferEmpty()
-         and actor:getPP() >= DEFS.ACTION.NEW_HAND_COST
+         and actor:getPP() >= actor:getBody():getConsumption()
 end
 
 function DRAWHAND.perform(actor, inputvalues)
