@@ -102,6 +102,7 @@ function love.update(dt)
   if INPUT.wasActionReleased('QUIT') then love.event.quit() end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
+  Draw.update(dt)
 end
 
 function love.draw()
