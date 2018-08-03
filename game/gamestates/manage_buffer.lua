@@ -45,8 +45,6 @@ end
 function state:update(dt)
   if DEBUG then return end
 
-  MAIN_TIMER:update(dt)
-
   if _leave or _view:isCardListEmpty() then
     PLAYSFX 'back-menu'
     SWITCHER.pop()

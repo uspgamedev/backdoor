@@ -98,6 +98,7 @@ function love.load(arg)
 end
 
 function love.update(dt)
+  MAIN_TIMER:update(dt)
   if INPUT.wasActionReleased('QUIT') then love.event.quit() end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
@@ -111,3 +112,4 @@ function love.quit()
   imgui.ShutDown();
   PROFILE.quit()
 end
+

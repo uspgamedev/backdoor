@@ -31,8 +31,6 @@ end
 
 function state:update(dt)
 
-  MAIN_TIMER:update(dt)
-
   if INPUT.wasAnyPressed(0.5) then
     _alert = true
   end

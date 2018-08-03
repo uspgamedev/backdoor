@@ -227,8 +227,6 @@ function state:update(dt)
     return SWITCHER.push(GS.DEVMODE)
   end
 
-  MAIN_TIMER:update(dt)
-
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())

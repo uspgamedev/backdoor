@@ -180,7 +180,6 @@ function state:update(dt)
       _alert = true
     end
 
-    MAIN_TIMER:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end

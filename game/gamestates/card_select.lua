@@ -66,7 +66,6 @@ end
 function state:update(dt)
 
   if DEBUG then return end
-  MAIN_TIMER:update(dt)
 
   if DIRECTIONALS.wasDirectionTriggered('RIGHT') then
     _moveFocus("RIGHT")

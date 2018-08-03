@@ -84,7 +84,6 @@ function state:resume(from, player_info)
 end
 
 function state:update(dt)
-  MAIN_TIMER:update(dt)
 
   if not _locked then
     if INPUT.wasActionPressed('CONFIRM') then

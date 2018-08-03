@@ -50,7 +50,6 @@ end
 
 function state:update(dt)
   if not DEBUG then
-    MAIN_TIMER:update(dt)
     if _leave then
       (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
       SWITCHER.pop({})
