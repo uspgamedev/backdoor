@@ -11,7 +11,6 @@ local _popped = false
 local _switched = false
 
 function SWITCHER.init()
-  Gamestate.registerEvents()
 end
 
 function SWITCHER.start(to, ...)

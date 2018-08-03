@@ -97,6 +97,14 @@ function love.load(arg)
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 end
 
+function love.update(dt)
+  SWITCHER.update(dt)
+end
+
+function love.draw()
+  SWITCHER.draw()
+end
+
 function love.quit()
   imgui.ShutDown();
   PROFILE.quit()
