@@ -98,7 +98,9 @@ function love.load(arg)
 end
 
 function love.update(dt)
+  if INPUT.wasActionReleased('QUIT') then love.event.quit() end
   SWITCHER.update(dt)
+  INPUT.flush() -- must be called afterwards
 end
 
 function love.draw()
