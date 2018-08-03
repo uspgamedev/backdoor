@@ -50,7 +50,6 @@ function state:leave()
 end
 
 function state:update(dt)
-  MAIN_TIMER:update(dt)
 
   if _leave then return end
 

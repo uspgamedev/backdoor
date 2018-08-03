@@ -52,8 +52,6 @@ end
 function state:update(dt)
   if DEBUG then return end
 
-  MAIN_TIMER:update(dt)
-
   if _leave then
     PLAYSFX 'back-menu'
     SWITCHER.pop({})

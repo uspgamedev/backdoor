@@ -14,6 +14,17 @@ local draw = {}
 --BASIC DRAW FUNCTIONS
 ----------------------
 
+--Update every drawable object
+function draw.update(dt)
+  for _,layer in pairs(DRAW_TABLE) do
+    for o in pairs(layer) do
+      if not o.death and not o.invisible and o.update then
+        o:update(dt)
+      end
+    end
+  end
+end
+
 --Draws every drawable object from all tables
 function draw.allTables()
 

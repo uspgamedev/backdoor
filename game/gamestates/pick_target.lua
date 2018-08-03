@@ -76,7 +76,6 @@ end
 function state:update(dt)
   if DEBUG then return end
 
-  MAIN_TIMER:update(dt)
   _sector_view:lookAtCursor()
 
   if INPUT.wasActionPressed('CONFIRM') then

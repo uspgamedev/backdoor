@@ -54,13 +54,6 @@ local function _loadInput()
     local inputmap = DB.loadSetting('controls')
     INPUT.setup(inputmap)
   end
-  -- setup input flush
-  local update = love.update
-  love.update = function(dt)
-    update(dt)
-    if INPUT.wasActionReleased('QUIT') then love.event.quit() end
-    INPUT.flush() -- must be called afterwards
-  end
 end
 
 local function _saveInput()

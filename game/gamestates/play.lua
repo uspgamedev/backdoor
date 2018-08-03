@@ -167,13 +167,19 @@ function state:leave()
 end
 
 function state:update(dt)
-
   if not DEBUG then
+
+    --FIXME:this doesn't need to happen every update (I think)
+    if _route.getControlledActor() or _player then
+      _view.sector:updateFov(_route.getControlledActor() or _player)
+    else
+      print("oops")
+    end
+
     if INPUT.wasAnyPressed(0.5) then
       _alert = true
     end
 
-    MAIN_TIMER:update(dt)
     if _next_action then
       _playTurns(unpack(_next_action))
     end
@@ -197,16 +203,7 @@ function state:resume(state, args)
 end
 
 function state:draw()
-
-  --FIXME:this doesn't need to happen every update (I think)
-  if _route.getControlledActor() or _player then
-    _view.sector:updateFov(_route.getControlledActor() or _player)
-  else
-    print("oops")
-  end
-
   Draw.allTables()
-
 end
 
 function state:keypressed(key)

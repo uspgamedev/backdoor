@@ -38,8 +38,6 @@ function state:leave()
 end
 
 function state:update(dt)
-  MAIN_TIMER:update(dt)
-
   if INPUT.wasActionPressed('CONFIRM') then
     _sector_view:setRayDir()
     SWITCHER.pop(_current_dir)
