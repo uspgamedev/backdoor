@@ -3,8 +3,8 @@ local IMGUI = require 'imgui'
 local DB = require 'database'
 local DEFS = require 'domain.definitions'
 
-local function add(list, value)
-  table.insert(list, value)
+local function add(list, specname)
+  table.insert(list, specname)
   list.n = list.n + 1
 end
 
@@ -22,39 +22,34 @@ return function(category_name, group_name, title)
   sort(list)
 
   local function delete()
-    local item_name = list[selected]
-    group[item_name] = DEFS.DELETE
+    local specname = list[selected]
+    DB.deleteGroupItem(category_name, group_name, specname)
     table.remove(list, selected)
     list.n = list.n - 1
-    DB.refresh(group)
   end
 
-  local function newvalue(value, spec)
-    local new = spec or DB.initSpec({}, group, value)
+  local function newvalue(specname, spec)
+    local new = spec or DB.initSpec({}, group, specname)
     for _,key in DB.schemaFor(group_name) do
       if key.type == 'list' then
         new[key.id] = new[key.id] or {}
       end
     end
-    group[value] = new
-    add(list, value)
+    add(list, specname)
     sort(list)
     for i,name in DB.listItemsIn(category_name, group_name) do
-      if name == value then
+      if name == specname then
         selected = i
       end
     end
   end
 
-  local function rename(value)
-    local spec = group[list[selected]]
-    local meta = getmetatable(spec)
-    meta.relpath = meta.relpath:gsub(meta.group, value)
-    meta.group = value
+  local function rename(specname)
+    local oldspecname = list[selected]
+    local spec = DB.renameGroupItem(category_name, group_name, oldspecname, specname)
     if spec then
-      newvalue(value, spec)
-      DB.save(spec)
       delete()
+      newvalue(specname, spec)
     end
   end
 
