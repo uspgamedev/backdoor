@@ -5,12 +5,27 @@ local INPUT = require 'input'
 
 local SWITCHER = {}
 
+local _INPUT_HANDLES = {
+  "keypressed",
+  "keyreleased",
+  "textinput",
+  "mousemoved",
+  "mousepressed",
+  "mousereleased",
+  "wheelmoved",
+}
+
 local _stack_size = 0
 local _pushed = false
 local _popped = false
 local _switched = false
 
 function SWITCHER.init()
+  for _,handle in ipairs(_INPUT_HANDLES) do
+    love[handle] = function (...)
+      return Gamestate[handle](...)
+    end
+  end
 end
 
 function SWITCHER.start(to, ...)
@@ -52,8 +67,6 @@ function SWITCHER.handleChangedState()
   end
 end
 
-setmetatable(SWITCHER, {
-  __index = Gamestate
-})
+setmetatable(SWITCHER, { __index = Gamestate })
 
 return SWITCHER
