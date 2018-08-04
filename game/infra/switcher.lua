@@ -11,6 +11,33 @@ local _popped = false
 local _switched = false
 
 function SWITCHER.init()
+  function love.keypressed(key)
+    return Gamestate.keypressed(key)
+  end
+
+  function love.keyreleased(key)
+    return Gamestate.keyreleased(key)
+  end
+
+  function love.textinput(t)
+    return Gamestate.textinput(t)
+  end
+
+  function love.mousemoved(x, y)
+    return Gamestate.mousemoved(x, y)
+  end
+
+  function love.mousepressed(x, y, button)
+    return Gamestate.mousepressed(x, y, button)
+  end
+
+  function love.mousereleased(x, y, button)
+    return Gamestate.mousereleased(x, y, button)
+  end
+
+  function love.wheelmoved(x, y)
+    return Gamestate.wheelmoved(x, y)
+  end
 end
 
 function SWITCHER.start(to, ...)
@@ -52,8 +79,6 @@ function SWITCHER.handleChangedState()
   end
 end
 
-setmetatable(SWITCHER, {
-  __index = Gamestate
-})
+setmetatable(SWITCHER, { __index = Gamestate })
 
 return SWITCHER
