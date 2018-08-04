@@ -264,6 +264,23 @@ function DB.save(container)
   _save(container, basepath)
 end
 
+function DB.renameGroupItem(category, group_name, oldname, newname)
+  local group = _loadGroup(category, group_name)
+  local item = group[oldname]
+  local meta = getmetatable(item)
+  group[newname] = item
+  meta.relpath = meta.relpath:gsub(meta.group, oldname)
+  meta.group = newname
+  DB.save(item)
+  DB.deleteGroupItem(category, group_name, oldname)
+end
+
+function DB.deleteGroupItem(category, group_name, spec_name)
+  local group = _loadGroup(category, group_name)
+  group[spec_name] = DEFS.DELETE
+  DB.refresh(group)
+end
+
 function DB.init()
   local meta = {
     relpath = "database",
