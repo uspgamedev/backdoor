@@ -26,6 +26,7 @@ return function(category_name, group_name, title)
     group[item_name] = DEFS.DELETE
     table.remove(list, selected)
     list.n = list.n - 1
+    DB.refresh(group)
   end
 
   local function newvalue(value, spec)
@@ -51,8 +52,9 @@ return function(category_name, group_name, title)
     meta.relpath = meta.relpath:gsub(meta.group, value)
     meta.group = value
     if spec then
-      delete()
       newvalue(value, spec)
+      DB.save(spec)
+      delete()
     end
   end
 
