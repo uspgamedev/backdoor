@@ -46,7 +46,8 @@ return function(category_name, group_name, title)
 
   local function rename(specname)
     local oldspecname = list[selected]
-    local spec = DB.renameGroupItem(category_name, group_name, oldspecname, specname)
+    local spec = DB.renameGroupItem(category_name, group_name,
+                                    oldspecname, specname)
     if spec then
       delete()
       newvalue(specname, spec)
