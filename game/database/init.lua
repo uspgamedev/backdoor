@@ -150,7 +150,7 @@ function _listItemsIn(category, group_name)
   return pairs(found)
 end
 
-local function _metaSpec(spec, container, name)
+local function _metaSpec(container, name)
   local path = ("%s/%s"):format(getmetatable(container).relpath, name)
   return {
     is_leaf = true,
@@ -183,13 +183,14 @@ local function _get(self, key)
   if fs.getInfo(filepath, 'file') then
     obj = _loadFile(filepath)
     DB.initSpec(obj, self, meta.group)
-    self[key] = obj
     return obj
   end
 end
 
 function DB.initSpec(spec, container, name)
-  return setmetatable(spec, _metaSpec(spec, container, name))
+  -- inserts a leaf spec into the container
+  container[name] = spec
+  return setmetatable(spec, _metaSpec(container, name))
 end
 
 function DB.subschemaTypes(base)
@@ -262,6 +263,20 @@ function DB.save(container)
   local basepath = getmetatable(container).relpath
   _refresh(container, basepath)
   _save(container, basepath)
+end
+
+function DB.renameGroupItem(category, group_name, oldname, newname)
+  local group = _loadGroup(category, group_name)
+  local spec = DB.initSpec(group[oldname], group, newname)
+  DB.save(spec)
+  DB.deleteGroupItem(category, group_name, oldname)
+  return spec
+end
+
+function DB.deleteGroupItem(category, group_name, spec_name)
+  local group = _loadGroup(category, group_name)
+  group[spec_name] = DEFS.DELETE
+  return DB.refresh(group)
 end
 
 function DB.init()
