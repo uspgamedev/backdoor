@@ -24,6 +24,7 @@ function Body:init(specname)
 
   self.killer = false
   self.damage = 0
+  self.armor = 0
   self.widgets = {}
   self.equipped = {}
   for placement in ipairs(PLACEMENTS) do
@@ -36,6 +37,7 @@ function Body:loadState(state)
   self:setId(state.id or self.id)
   self:setSubtype(self.spectype)
   self.damage = state.damage or self.damage
+  self.armor = state.armor or self.armor
   self.killer = state.killer or false
   self.attr_lv = {}
   self.sector_id = state.sector_id or self.sector_id
@@ -62,6 +64,7 @@ function Body:saveState()
   state.id = self:getId()
   state.specname = self.specname
   state.damage = self.damage
+  state.armor = self.armor
   state.killer = self.killer
   state.sector_id = self.sector_id
   local equipped = {}
@@ -378,11 +381,19 @@ end
 
 --[[ Combat methods ]]--
 
+function Body:getArmor()
+  return self.armor
+end
+
+function Body:gainArmor(amount)
+  self.armor = self.armor + amount
+end
+
 function Body:takeDamageFrom(amount, source)
-  local defroll = self:getDR()
-  local dmg = math.max(math.min(1, amount), amount - defroll)
-  -- this calculus above makes values below the minimum stay below the minimum
-  -- this is so immunities and absorb resistances work with multipliers
+  local dr = math.min(self:getDR(), self.armor)
+  local blocked = math.min(amount, dr)
+  self.armor = self.armor - blocked -- should never go negative
+  local dmg = math.max(0, amount - blocked)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)

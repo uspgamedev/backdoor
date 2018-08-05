@@ -13,7 +13,7 @@ ATTR.INFLUENCE = {
 }
 
 function ATTR.EFFECTIVE_POWER(base, mod)
-  return base * mod / 2
+  return round(base * mod / 2)
 end
 
 return ATTR

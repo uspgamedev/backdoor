@@ -33,7 +33,7 @@ return function (actor)
     IMGUI.Text(("FIN: %d"):format(actor:getBody():getFIN()))
     IMGUI.Text(("CON: %d"):format(actor:getBody():getCON()))
     IMGUI.Separator()
-    IMGUI.Text(("DR: %d - %d"):format(actor:getBody():getDR()))
+    IMGUI.Text(("DR: %d"):format(actor:getBody():getDR()))
     IMGUI.Text(("Consumption: %d"):format(actor:getBody():getConsumption()))
   end
 

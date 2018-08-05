@@ -1,31 +1,29 @@
 {
   "attr":"COR",
   "icon":false,
+  "one_time":false,
+  "desc":"",
+  "type-description":"",
+  "set":false,
+  "name":"Punch",
   "widget":{
     "operators":[],
     "trigger":false,
     "activation":{
+      "cost":20,
       "ability":{
-        "effects":[{
-            "attr":"=cor",
-            "target":"=target",
-            "type":"effect",
-            "base":6,
-            "name":"damage_on_target",
-            "sfx":"example"
-          }],
         "inputs":[{
             "empty-tile":false,
             "output":"target_pos",
             "aoe-hint":0,
+            "type":"input",
             "body-only":{
               "body-type":false
             },
-            "dif-fact":true,
             "max-range":1,
             "non-wall":true,
             "name":"choose_target",
-            "type":"input"
+            "dif-fact":true
           },{
             "type":"operator",
             "pos":"=target_pos",
@@ -33,20 +31,38 @@
             "output":"target"
           },{
             "type":"operator",
-            "which":"COR",
+            "output":"cor",
             "name":"get_attribute",
-            "output":"cor"
+            "which":"COR"
+          },{
+            "type":"operator",
+            "name":"self",
+            "output":"self"
+          },{
+            "type":"operator",
+            "output":"self_body",
+            "name":"get_actor_body",
+            "actor":"=self"
+          }],
+        "effects":[{
+            "attr":"=cor",
+            "target":"=target",
+            "base":6,
+            "type":"effect",
+            "name":"damage_on_target",
+            "sfx":"example"
+          },{
+            "attr":"=cor",
+            "target":"=self_body",
+            "type":"effect",
+            "base":2,
+            "name":"armor_on_target",
+            "sfx":false
           }]
-      },
-      "cost":20
+      }
     },
     "charges":0,
     "status-tags":[],
     "placement":false
-  },
-  "desc":"",
-  "type-description":"",
-  "set":false,
-  "name":"Punch",
-  "one_time":false
+  }
 }

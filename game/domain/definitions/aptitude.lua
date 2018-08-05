@@ -40,7 +40,7 @@ function APT.STAMINA(efc, fin)
 end
 
 function APT.DR(def, res)
-  return def * (8 + res*2) / 2
+  return math.floor(def * (8 + res*2) / 2)
 end
 
 return APT
