@@ -545,6 +545,7 @@ function Actor:turn()
     if widget_index then
       body:removeWidget(widget_index)
     end
+    body:removeAllArmor()
   end
 end
 

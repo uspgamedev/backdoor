@@ -386,7 +386,11 @@ function Body:getArmor()
 end
 
 function Body:gainArmor(amount)
-  self.armor = self.armor + amount
+  self.armor = self.armor + math.max(0, amount)
+end
+
+function Body:removeAllArmor()
+  self.armor = 0
 end
 
 function Body:takeDamageFrom(amount, source)
