@@ -40,8 +40,7 @@ function APT.STAMINA(efc, fin)
 end
 
 function APT.DR(def, res)
-  local power = def * (8 + res*2)
-  return power/4, 3*power/4
+  return def * (8 + res*2) / 2
 end
 
 return APT

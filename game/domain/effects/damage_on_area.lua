@@ -16,9 +16,9 @@ FX.schema = {
 
 function FX.preview (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
-  local min, max = ATTR.POWER_RANGE(base, attr)
+  local amount = ATTR.EFFECTIVE_POWER(base, attr)
   local size = fieldvalues['size'] * 2 - 1
-  return ("Deal %s - %s damage on %sx%s area"):format(min, max, size, size)
+  return ("Deal %s damage on %sx%s area"):format(amount, size, size)
 end
 
 function FX.process (actor, fieldvalues)
@@ -28,7 +28,7 @@ function FX.process (actor, fieldvalues)
   local attr    = fieldvalues['attr']
   local base    = fieldvalues['base']
   local ignore_owner = fieldvalues['ignore_owner']
-  local amount = RANDOM.generate(ATTR.POWER_RANGE(base, attr))
+  local amount = ATTR.EFFECTIVE_POWER(base, attr)
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
