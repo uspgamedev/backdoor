@@ -478,7 +478,7 @@ function _turnLoop(self, ...)
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
 
     while not Util.tableEmpty(actors_queue) do
-      actor = table.remove(actors_queue)
+      local actor = table.remove(actors_queue)
 
       if actor:ready() then
         while actor:ready() do
