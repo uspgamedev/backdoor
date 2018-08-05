@@ -57,7 +57,7 @@
             "type":"effect",
             "ignore_owner":true,
             "name":"damage_on_area",
-            "base":5
+            "base":3
           }]
       }
     },

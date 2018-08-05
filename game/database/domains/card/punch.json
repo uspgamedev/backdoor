@@ -47,7 +47,7 @@
         "effects":[{
             "attr":"=cor",
             "target":"=target",
-            "base":6,
+            "base":3,
             "type":"effect",
             "name":"damage_on_target",
             "sfx":"example"
@@ -55,7 +55,7 @@
             "attr":"=cor",
             "target":"=self_body",
             "type":"effect",
-            "base":2,
+            "base":1,
             "name":"armor_on_target",
             "sfx":false
           }]
