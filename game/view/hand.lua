@@ -156,7 +156,7 @@ end
 function HandView:drawHandCountDown(g, actor)
   if not actor then return end
   -- draw hand countdown
-  local handcountdown = math.min(actor:getHandCountdown(),
+  local handcountdown = math.min(actor:getFocus(),
                                  ACTIONDEFS.HAND_DURATION)
   local current = self.hand_count_down or 0
   local y = 144

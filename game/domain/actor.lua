@@ -29,7 +29,7 @@ function Actor:init(spec_name)
   self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
-  self.focus_countdown = 0
+  self.focus = 0
   self.upgrades = {
     COR = DEFS.ATTR.INITIAL_UPGRADE,
     ARC = DEFS.ATTR.INITIAL_UPGRADE,
@@ -70,7 +70,7 @@ function Actor:loadState(state)
   self.training = state.training or self.training
   self.attr_lv = {}
   self.prizes = state.prizes or self.prizes
-  self.focus_countdown = state.focus_countdown or self.focus_countdown
+  self.focus = state.focus or self.focus
   self.hand = state.hand and {} or self.hand
   for _,card_state in ipairs(state.hand) do
     local card = Card(card_state.specname)
@@ -109,7 +109,7 @@ function Actor:saveState()
   state.upgrades = self.upgrades
   state.training = self.training
   state.prizes = self.prizes
-  state.focus_countdown = self.focus_countdown
+  state.focus = self.focus
   state.hand = {}
   for _,card in ipairs(self.hand) do
     local card_state = card:saveState()
@@ -278,8 +278,8 @@ function Actor:isHandFull()
   return #self.hand >= DEFS.HAND_LIMIT
 end
 
-function Actor:getHandCountdown()
-  return self.focus_countdown
+function Actor:getFocus()
+  return self.focus
 end
 
 function Actor:getBufferSize()
@@ -354,7 +354,7 @@ function Actor:drawCard()
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
-  self:resetHandCountdown()
+  self:resetFocus()
 end
 
 function Actor:getHandCard(index)
@@ -507,8 +507,8 @@ function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
 end
 
-function Actor:resetHandCountdown(extra)
-  self.focus_countdown = DEFS.ACTION.HAND_DURATION + (extra or 0)
+function Actor:resetFocus(extra)
+  self.focus = DEFS.ACTION.HAND_DURATION + (extra or 0)
 end
 
 function Actor:ready()
@@ -524,15 +524,15 @@ function Actor:playCard(card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
-  self:resetHandCountdown(1)
+  self:resetFocus(1)
   return card
 end
 
 function Actor:turn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
-  self.focus_countdown = math.max(0, self.focus_countdown - 1)
-  if self.focus_countdown == 0 then
+  self.focus = math.max(0, self.focus - 1)
+  if self.focus == 0 then
     while not self:isHandEmpty() do
       local card = self:removeHandCard(1)
       self:addCardToBackbuffer(card)
