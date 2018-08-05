@@ -22,6 +22,7 @@ function ACTIVATE.exhaustionCost(actor, inputvalues)
 end
 
 function ACTIVATE.validate(actor, inputvalues)
+  if not actor:isFocused() then return false end
   if not inputvalues.widget_slot then return false end
   local widget = actor:getBody():getWidget(inputvalues.widget_slot)
   if not widget then return false end
