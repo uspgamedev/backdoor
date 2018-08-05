@@ -282,6 +282,10 @@ function Actor:getFocus()
   return self.focus
 end
 
+function Actor:isFocused()
+  return self.focus > 0
+end
+
 function Actor:getBufferSize()
   for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
@@ -354,7 +358,6 @@ function Actor:drawCard()
   end
   table.insert(self.hand, card)
   Signal.emit("actor_draw", self, card)
-  self:resetFocus()
 end
 
 function Actor:getHandCard(index)
@@ -507,8 +510,8 @@ function Actor:tick()
   self.cooldown = math.max(0, self.cooldown - self:getSPD())
 end
 
-function Actor:resetFocus(extra)
-  self.focus = DEFS.ACTION.HAND_DURATION + (extra or 0)
+function Actor:resetFocus()
+  self.focus = DEFS.ACTION.FOCUS_DURATION
 end
 
 function Actor:ready()
@@ -524,7 +527,6 @@ function Actor:playCard(card_index)
   if not card:isOneTimeOnly() and not card:isWidget() then
     self:addCardToBackbuffer(card)
   end
-  self:resetFocus(1)
   return card
 end
 

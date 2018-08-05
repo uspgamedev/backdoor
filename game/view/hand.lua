@@ -150,14 +150,14 @@ function HandView:draw()
     end
   end
 
-  self:drawHandCountDown(g, self.route.getControlledActor())
+  self:drawFocusBar(g, self.route.getControlledActor())
 end
 
-function HandView:drawHandCountDown(g, actor)
+function HandView:drawFocusBar(g, actor)
   if not actor then return end
   -- draw hand countdown
   local handcountdown = math.min(actor:getFocus(),
-                                 ACTIONDEFS.HAND_DURATION)
+                                 ACTIONDEFS.FOCUS_DURATION)
   local current = self.hand_count_down or 0
   local y = 144
   current = current + (handcountdown - current) * 0.2
@@ -165,7 +165,7 @@ function HandView:drawHandCountDown(g, actor)
     current = handcountdown
   end
   self.hand_count_down = current
-  local handbar_percent = current / ACTIONDEFS.HAND_DURATION
+  local handbar_percent = current / ACTIONDEFS.FOCUS_DURATION
   local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12

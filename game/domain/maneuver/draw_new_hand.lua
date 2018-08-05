@@ -31,6 +31,7 @@ function DRAWHAND.perform(actor, inputvalues)
   for i = 1, DEFS.HAND_LIMIT do
     actor:drawCard()
   end
+  actor:resetFocus()
 end
 
 return DRAWHAND
