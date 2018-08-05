@@ -20,6 +20,9 @@ local _BG = {12/256, 12/256, 12/256, 1}
 local _ACTION_TYPES = {
   'play',
 }
+local _FOCUS_ICON = {
+  -6, 0, 0, -9, 6, 0, 0, 9
+}
 
 local _font
 
@@ -156,19 +159,20 @@ end
 function HandView:drawFocusBar(g, actor)
   if not actor then return end
   -- draw hand countdown
-  local handcountdown = math.min(actor:getFocus(),
-                                 ACTIONDEFS.FOCUS_DURATION)
+  local maxfocus = ACTIONDEFS.FOCUS_DURATION
+  local focuscountdown = math.min(actor:getFocus(), maxfocus)
   local current = self.hand_count_down or 0
   local y = 144
-  current = current + (handcountdown - current) * 0.2
-  if math.abs(current - handcountdown) < 1 then
-    current = handcountdown
+  current = current + (focuscountdown - current) * 0.2
+  if math.abs(current - focuscountdown) < 1 then
+    current = focuscountdown
   end
   self.hand_count_down = current
-  local handbar_percent = current / ACTIONDEFS.FOCUS_DURATION
+  local handbar_percent = current / maxfocus
   local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12
+  local handbar_gap = handbar_width / (maxfocus-1)
   local font = FONT.get("Text", 18)
   local fh = font:getHeight()*font:getLineHeight()
   local mx, my = 60, 20
@@ -186,14 +190,26 @@ function HandView:drawFocusBar(g, actor)
                     handbar_width + mx, handbar_height + my)
   --Drawing focus bar
   g.setLineWidth(1)
-  g.setColor(COLORS.EMPTY)
-  g.rectangle('fill', 0, 0, handbar_width, handbar_height)
   local red, gre, blu, a = unpack(COLORS.NOTIFICATION)
   if handbar_percent <= emergency_percent then
-    red, gre, blu = red + (1-red)*self.emer_fx_v, gre + (1-gre)*self.emer_fx_v, blu + (1-blu)*self.emer_fx_v
+    red, gre, blu = red + (1-red)*self.emer_fx_v,
+                    gre + (1-gre)*self.emer_fx_v,
+                    blu + (1-blu)*self.emer_fx_v
   end
-  g.setColor(red, gre, blu, a)
-  g.rectangle('fill', 0, 0, handbar_width * handbar_percent, handbar_height)
+  g.push()
+  g.translate(0, 0.3*(handbar_height + 2*my))
+  for i=0,maxfocus-1 do
+    g.push()
+    g.translate(i * handbar_gap, 0)
+    g.setColor(COLORS.EMPTY)
+    g.polygon('fill', _FOCUS_ICON)
+    if current >= i then
+      g.setColor(red, gre, blu, a * math.min(1, (current-i)))
+      g.polygon('fill', _FOCUS_ICON)
+    end
+    g.pop()
+  end
+  g.pop()
 
   --Drawing contour lines
   g.setColor(COLORS.NEUTRAL)
@@ -205,7 +221,7 @@ function HandView:drawFocusBar(g, actor)
 
 
   --Draw text
-  g.translate(0, -14)
+  g.translate(0, -20)
   g.setColor(COLORS.BLACK)
   g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.translate(-1, -1)
