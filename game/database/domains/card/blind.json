@@ -1,7 +1,7 @@
 {
   "attr":"ANI",
   "icon":false,
-  "one_time":true,
+  "set":false,
   "desc":"",
   "type-description":"",
   "widget":{
@@ -10,11 +10,11 @@
         "op":"-",
         "val":3
       }],
-    "trigger":"on_cycle",
-    "charges":8,
+    "trigger":"on_turn",
     "status-tags":[],
+    "charges":4,
     "placement":false
   },
   "name":"Blind",
-  "set":false
+  "one_time":true
 }
