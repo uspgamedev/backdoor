@@ -1,61 +1,61 @@
 {
   "attr":"COR",
   "icon":"card-dropkick",
-  "one_time":false,
+  "set":"brawler",
   "art":{
-    "cost":10,
     "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "target":"=target_body",
+          "type":"effect",
+          "base":3,
+          "name":"damage_on_target",
+          "sfx":"example"
+        },{
+          "attr":"=cor",
+          "target":"=self_body",
+          "type":"effect",
+          "base":2,
+          "name":"armor_on_target",
+          "sfx":false
+        }],
       "inputs":[{
           "dif-fact":true,
           "output":"target_pos",
           "aoe-hint":1,
-          "type":"input",
+          "empty-tile":false,
           "body-only":{
             "body-type":false
           },
           "max-range":1,
           "non-wall":false,
           "name":"choose_target",
-          "empty-tile":false
+          "type":"input"
         },{
           "type":"operator",
           "name":"self",
           "output":"self"
         },{
           "type":"operator",
-          "name":"get_actor_body",
           "output":"self_body",
+          "name":"get_actor_body",
           "actor":"=self"
         },{
           "type":"operator",
+          "which":"COR",
           "output":"cor",
-          "name":"get_attribute",
-          "which":"COR"
+          "name":"get_attribute"
         },{
           "type":"operator",
           "pos":"=target_pos",
           "name":"get_body_at",
           "output":"target_body"
-        }],
-      "effects":[{
-          "attr":"=cor",
-          "target":"=target_body",
-          "base":2,
-          "type":"effect",
-          "name":"damage_on_target",
-          "sfx":"example"
-        },{
-          "attr":"=cor",
-          "target":"=self_body",
-          "base":1,
-          "type":"effect",
-          "name":"armor_on_target",
-          "sfx":false
         }]
-    }
+    },
+    "cost":10
   },
   "desc":"",
   "type-description":"",
   "name":"Trained Strike",
-  "set":"brawler"
+  "one_time":false
 }
