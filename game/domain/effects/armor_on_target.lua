@@ -22,7 +22,7 @@ end
 function FX.process (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  fieldvalues.target:gainArmor(amount)
+  amount = fieldvalues.target:gainArmor(amount)
 
   coroutine.yield('report', {
     type = 'text_rise',

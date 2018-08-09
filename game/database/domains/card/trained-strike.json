@@ -15,7 +15,7 @@
           "attr":"=cor",
           "target":"=self_body",
           "type":"effect",
-          "base":2,
+          "base":1,
           "name":"armor_on_target",
           "sfx":false
         }],

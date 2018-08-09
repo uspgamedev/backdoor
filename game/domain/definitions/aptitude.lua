@@ -39,8 +39,8 @@ function APT.STAMINA(efc, fin)
   return math.floor(food)
 end
 
-function APT.DR(def, res)
-  return math.floor(def * (8 + res*2) / 2)
+function APT.ARMORBONUS(def, res)
+  return math.floor(0.5 * def * (6 + res) / 4)
 end
 
 return APT

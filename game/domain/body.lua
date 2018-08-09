@@ -166,16 +166,16 @@ function Body:getCON()
   return self:getAptitude('CON')
 end
 
-function Body:getDR()
-  return math.floor(APT.DR(self:getDEF(), self:getRES()))
+function Body:getArmorBonus()
+  return APT.ARMORBONUS(self:getDEF(), self:getRES())
 end
 
 function Body:getConsumption()
-  return math.floor(APT.STAMINA(self:getEFC(), self:getFIN()))
+  return APT.STAMINA(self:getEFC(), self:getFIN())
 end
 
 function Body:getMaxHP()
-  return math.floor(APT.HP(self:getVIT(), self:getCON()))
+  return APT.HP(self:getVIT(), self:getCON())
 end
 
 --[[ Appearance methods ]]--
@@ -386,7 +386,9 @@ function Body:getArmor()
 end
 
 function Body:gainArmor(amount)
-  self.armor = self.armor + math.max(0, amount)
+  amount = math.max(0, amount) + self:getArmorBonus()
+  self.armor = self.armor + amount
+  return amount
 end
 
 function Body:removeAllArmor()
@@ -394,8 +396,7 @@ function Body:removeAllArmor()
 end
 
 function Body:takeDamageFrom(amount, source)
-  local dr = math.min(self:getDR(), self.armor)
-  local blocked = math.min(amount, dr)
+  local blocked = math.min(amount, self.armor)
   self.armor = self.armor - blocked -- should never go negative
   local dmg = math.max(0, amount - blocked)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
