@@ -14,7 +14,7 @@ local PROFILE_FILENAME = "profile"
 local CONTROL_FILENAME = "controls"
 local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
 local CONTROL_PATH = SAVEDIR..CONTROL_FILENAME
-local METABASE = { next_id = 1, save_list = {} }
+local METABASE = { next_id = 1, save_list = {}, preferences = {} }
 
 -- HELPERS
 local filesystem = love.filesystem
@@ -86,6 +86,10 @@ local function _loadProfile()
   local filedata = assert(filesystem.newFileData(PROFILE_PATH))
   _metadata = _decode(filedata:getString())
   _id_generator = IDGenerator(_metadata.next_id)
+  for field, default in pairs(METABASE) do
+    -- protection against version update (SHALLOW COPY ONLY)
+    _metadata[field] = _metadata[field] or default
+  end
 end
 
 -- METHODS --
@@ -127,8 +131,20 @@ function PROFILE.newRoute(player_info)
   return route_data
 end
 
-function PROFILE.getSaveList ()
+function PROFILE.getSaveList()
   return _metadata.save_list
+end
+
+function PROFILE.getPreference(field)
+  return _metadata.preferences[field]
+end
+
+function PROFILE.setPreference(field, value)
+  _metadata.preferences[field] = value
+end
+
+function PROFILE.save()
+  _saveProfile(_metadata)
 end
 
 -- NOTE TO SELF:
