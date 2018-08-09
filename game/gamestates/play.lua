@@ -141,7 +141,7 @@ function state:enter(pre, route_data)
   _gui:addElement("GUI")
 
   -- Sound Track
-  _soundtrack = SoundTrack()
+  _soundtrack = Util.findId("BGM-PLAYER")
   _soundtrack.playTheme(sector:getTheme())
 
   -- start gamestate

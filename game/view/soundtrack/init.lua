@@ -1,5 +1,6 @@
 
-local RES         = require 'resources'
+local RES = require 'resources'
+local PROFILE = require 'infra.profile'
 
 local SoundTrack  = require 'lux.class' :new{}
 
@@ -18,9 +19,16 @@ function SoundTrack:instance(obj)
       bgm.stream = RES.loadBGM(theme.bgm)
       bgm.stream:play()
       bgm.id = theme.bgm
+      updateVolume()
     elseif not theme and bgm.stream then
       bgm.stream:stop()
       bgm.stream = nil
+    end
+  end
+
+  function updateVolume()
+    if bgm.stream then
+      bgm.stream:setVolume(PROFILE.getPreference("bgm-volume"))
     end
   end
 

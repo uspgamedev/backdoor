@@ -8,6 +8,7 @@ local PROFILE         = require 'infra.profile'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
+local SoundTrack      = require 'view.soundtrack'
 
 local state = {}
 
@@ -16,6 +17,7 @@ local state = {}
 local _menu_view
 local _menu_context
 local _locked
+local _soundtrack
 local _activity = Activity()
 
 -- LOCAL METHODS --
@@ -56,6 +58,11 @@ end
 
 
 --STATE FUNCTIONS--
+
+function state:init()
+  _soundtrack = SoundTrack()
+  _soundtrack:setId("BGM-PLAYER")
+end
 
 function state:enter()
   _menu_context = "START_MENU"
