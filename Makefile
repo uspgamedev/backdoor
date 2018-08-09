@@ -35,6 +35,8 @@ DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
 DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
 
+BUILD_TYPE=nightly
+
 ## MAIN TARGETS
 
 all: $(DEPENDENCIES)
@@ -57,7 +59,7 @@ windows: $(BIN_DIR_WIN32)/backdoor.exe
 .PHONY: deploy
 deploy: $(GAME) $(GAME_WIN32)
 	cd $(BIN_DIR_WIN32); zip -r backdoor-win32.zip *; mv backdoor-win32.zip ..
-	scp $(GAME) $(BIN_DIR)/backdoor-win32.zip kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/nightly/
+	scp $(GAME) $(BIN_DIR)/backdoor-win32.zip kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/$(BUILD_TYPE)/
 
 $(GAME): $(DEPENDENCIES) $(BIN_DIR)
 	cd game; zip -r backdoor.love *
