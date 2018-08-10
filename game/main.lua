@@ -33,30 +33,7 @@ Draw      = require "draw"
 Setup     = require "setup"
 
 -- GAMESTATES
-GS = {
-  -- MENU GAMESTATES
-  START_MENU = require "gamestates.start_menu",   --The game main menu
-  CHARACTER_BUILD = require 'gamestates.character_build',
-  -- DEV GAMESTATES
-  DEVMODE = require 'gamestates.devmode',         -- Development mode
-  -- PLAYING GAMESTATES
-  PLAY = require "gamestates.play",               -- Game Gamestate
-  USER_TURN = require "gamestates.user_turn",     -- User's turn
-  PICK_TARGET = require "gamestates.pick_target", -- Player is choosing targets
-  PICK_DIR = require "gamestates.pick_dir",       -- Player is choosing dir
-  PICK_WIDGET_SLOT = require "gamestates.pick_widget_slot",
-                                                  -- Player is choosing widget
-                                                  -- slot to equip widget
-  CONSUME_CARDS = require "gamestates.consume_cards",
-  CARD_SELECT = require "gamestates.card_select", -- Player is selecting a card
-                                                  -- to use
-  READY_ABILITY= require "gamestates.ready_ability",
-                                                  -- Player readies an ability
-  OPEN_PACK = require "gamestates.open_pack",     -- Player opens a pack
-  MANAGE_BUFFER = require "gamestates.manage_buffer",
-                                                  -- Player manages their buffer
-  ANIMATION = require "gamestates.animation",     -- Play animations
-}
+GS = require 'gamestates'
 
 -- GAMESTATE SWITCHER
 SWITCHER = require 'infra.switcher'
