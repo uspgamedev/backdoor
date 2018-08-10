@@ -8,7 +8,6 @@ local PROFILE         = require 'infra.profile'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
-local SoundTrack      = require 'view.soundtrack'
 
 local state = {}
 
@@ -17,7 +16,6 @@ local state = {}
 local _menu_view
 local _menu_context
 local _locked
-local _soundtrack
 local _activity = Activity()
 
 -- LOCAL METHODS --
@@ -54,17 +52,6 @@ end
 
 
 --STATE FUNCTIONS--
-
-function state:init()
-  _soundtrack = SoundTrack()
-  ID_TABLE["BGM-PLAYER"] = _soundtrack
-  -- OK, this works, but why is this table global, @rilifon
-  -- FIXME: Find a better solution than this. I did it because I could,
-  -- and because using the proper element manager from steaming would involve
-  -- changing the class type of SoundTrack. I could try making it a multiple
-  -- inheritance, but aaaaaahhhh let's just not do that.
-end
-
 function state:enter()
   _menu_context = "START_MENU"
 

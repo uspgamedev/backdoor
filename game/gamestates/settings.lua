@@ -20,7 +20,6 @@ local _fieldcount
 local _original
 local _view
 local _save
-local _soundtrack
 
 local function _changeField(field, offset)
   local low, high = unpack(_schema[field]["range"])
@@ -31,7 +30,6 @@ local function _changeField(field, offset)
 end
 
 function state:init()
-  _soundtrack = Util.findId("BGM-PLAYER")
   _schema = DB.loadSetting("user-preferences")
   _fields = {}
   for field in pairs(_schema) do
@@ -39,11 +37,11 @@ function state:init()
   end
   sort(_fields) -- show them in alphabetical order!
   _fieldcount = #_fields
-  _selection = 0
+  _selection = 1
 end
 
 function state:enter(from, ...)
-  _selection = 0
+  _selection = 1
   _original = {}
   for _,field in ipairs(_fields) do
     _original[field] = PROFILE.getPreference(field) or _schema[field].default
@@ -88,7 +86,6 @@ function state:leave()
       PROFILE.setPreference(field, value)
     end
   end
-  _soundtrack.updateVolume()
 end
 
 function state:draw()

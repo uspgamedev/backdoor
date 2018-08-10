@@ -28,7 +28,7 @@ function SoundTrack:instance(obj)
 
   function updateVolume()
     if bgm.stream then
-      bgm.stream:setVolume(PROFILE.getPreference("bgm-volume"))
+      bgm.stream:setVolume(PROFILE.getPreference("bgm-volume") / 100)
     end
   end
 
