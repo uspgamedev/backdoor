@@ -4,7 +4,7 @@ local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
-local SettingsInputView = require 'view.settings_input'
+local SettingsView = require 'view.settings'
 
 local state = {}
 
@@ -49,6 +49,8 @@ function state:enter(from, ...)
     PROFILE.setPreference(field, _original[field])
   end
   _changes = setmetatable({}, { __index = original })
+  _view = SettingsView(_fields)
+  _view:addElement("GUI")
 end
 
 function state:update(dt)
@@ -63,17 +65,17 @@ function state:update(dt)
   elseif DIRECTIONALS.wasDirectionTriggered("UP") then
     PLAYSFX 'select-menu'
     _selection = (_selection - 2 + _fieldcount) % _fieldcount + 1
+    _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("DOWN") then
     PLAYSFX 'select-menu'
     _selection = (_selection % _fieldcount) + 1
+    _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("LEFT") then
     PLAYSFX 'ok-menu'
-    local field = _fields[_selection]
-    _changeField(field, -1)
+    _changeField(_fields[_selection], -1)
   elseif DIRECTIONALS.wasDirectionTriggered("RIGHT") then
     PLAYSFX 'ok-menu'
-    local field = _fields[_selection]
-    _changeField(field, 1)
+    _changeField(_fields[_selection], 1)
   end
 end
 
@@ -87,6 +89,7 @@ function state:leave()
       PROFILE.setPreference(field, value)
     end
   end
+  _view:destroy()
 end
 
 function state:draw()

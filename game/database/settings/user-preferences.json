@@ -2,11 +2,11 @@
   "bgm-volume": {
     "default": 100,
     "range": [0, 100],
-    "step": 5
+    "step": 10
   },
   "sfx-volume": {
     "default": 100,
     "range": [0, 100],
-    "step": 5
+    "step": 10
   }
 }
