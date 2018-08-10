@@ -4,6 +4,7 @@ local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
+local SettingsInputView = require 'view.settings_input'
 
 local state = {}
 
