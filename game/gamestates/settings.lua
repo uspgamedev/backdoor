@@ -38,7 +38,7 @@ function state:init()
     insert(_fields, field)
   end
   sort(_fields) -- show them in alphabetical order!
-  _fieldcount = #fields
+  _fieldcount = #_fields
   _selection = 0
 end
 
@@ -47,6 +47,7 @@ function state:enter(from, ...)
   _original = {}
   for _,field in ipairs(_fields) do
     _original[field] = PROFILE.getPreference(field) or _schema[field].default
+    PROFILE.setPreference(field, _original[field])
   end
   _changes = setmetatable({}, { __index = original })
 end

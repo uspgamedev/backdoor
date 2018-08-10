@@ -144,7 +144,7 @@ function PROFILE.setPreference(field, value)
 end
 
 function PROFILE.save()
-  _saveProfile(_metadata)
+  _saveProfile()
 end
 
 -- NOTE TO SELF:
