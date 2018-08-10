@@ -58,8 +58,11 @@ end
 function state:init()
   _soundtrack = SoundTrack()
   ID_TABLE["BGM-PLAYER"] = _soundtrack
-  -- ok, but why is this table global, goddammit @rilifon
-  -- FIXME: find a better solution than this
+  -- OK, this works, but why is this table global, @rilifon
+  -- FIXME: Find a better solution than this. I did it because I could,
+  -- and because using the proper element manager from steaming would involve
+  -- changing the class type of SoundTrack. I could try making it a multiple
+  -- inheritance, but aaaaaahhhh let's just not do that.
 end
 
 function state:enter()
