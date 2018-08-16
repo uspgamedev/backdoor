@@ -27,6 +27,8 @@ IMGUI_DLL=imgui.dll
 LUAJIT_DLL=lua51.dll
 IMGUI_REPO=externals/love-imgui
 IMGUI_BUILD_DIR=externals/love-imgui/build
+IMGUI_BUILD_MAKEFILE=$(IMGUI_BUILD_DIR)/Makefile
+IMGUI_BINARY=$(IMGUI_BUILD_DIR)/imgui.so
 
 CPML_LIB=$(LIBS_DIR)/cpml
 CPML_REPO=externals/cpml
@@ -95,15 +97,20 @@ $(INPUT_REPO):
 $(IMGUI_DLL):
 	wget -O $(IMGUI_DLL) https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll
 
-$(IMGUI_LIB): $(IMGUI_BUILD_DIR)
-	cd $(IMGUI_BUILD_DIR); cmake .. && $(MAKE)
-	cp $(IMGUI_BUILD_DIR)/imgui.so $(IMGUI_LIB)
+$(IMGUI_LIB): $(IMGUI_BINARY)
+	cp -f $(IMGUI_BUILD_DIR)/imgui.so $(IMGUI_LIB)
+
+$(IMGUI_BINARY): $(IMGUI_BUILD_MAKEFILE)
+	$(MAKE) -C $(IMGUI_BUILD_DIR)
+
+$(IMGUI_BUILD_MAKEFILE): $(IMGUI_BUILD_DIR)
+	cd $(IMGUI_BUILD_DIR) && cmake ..
 
 $(IMGUI_BUILD_DIR): $(IMGUI_REPO)
-	mkdir $(IMGUI_BUILD_DIR)
+	mkdir -p $(IMGUI_BUILD_DIR)
 
 $(IMGUI_REPO):
-	git clone https://github.com/slages/love-imgui.git $(IMGUI_REPO)
+	git clone https://github.com/kazuo256/love-imgui.git $(IMGUI_REPO)
 
 ## CPML
 
