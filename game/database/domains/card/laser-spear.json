@@ -4,25 +4,21 @@
   "set":"brawler",
   "desc":"A mass-produced weapon.",
   "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Laser Spear",
   "widget":{
     "operators":[],
     "trigger":"on_focus_end",
     "activation":{
+      "cost":20,
       "ability":{
-        "effects":[{
-            "attr":"=cor",
-            "target":"=body",
-            "type":"effect",
-            "base":8,
-            "name":"damage_on_target",
-            "sfx":false
-          }],
         "inputs":[{
-            "output":"target",
+            "body-only":[],
             "max-range":1,
             "type":"input",
             "name":"choose_target",
-            "body-only":[]
+            "output":"target"
           },{
             "type":"operator",
             "pos":"=target",
@@ -30,18 +26,22 @@
             "output":"body"
           },{
             "type":"operator",
-            "which":"COR",
+            "output":"cor",
             "name":"get_attribute",
-            "output":"cor"
+            "which":"COR"
+          }],
+        "effects":[{
+            "attr":"=cor",
+            "target":"=body",
+            "base":5,
+            "type":"effect",
+            "name":"damage_on_target",
+            "sfx":false
           }]
-      },
-      "cost":20
+      }
     },
     "status-tags":[],
     "charges":1,
     "placement":"weapon"
-  },
-  "pp":0,
-  "name":"Laser Spear",
-  "one_time":false
+  }
 }

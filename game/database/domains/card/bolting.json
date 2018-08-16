@@ -38,7 +38,7 @@
         "effects":[{
             "attr":"=arc",
             "target":"=target",
-            "base":4,
+            "base":2,
             "type":"effect",
             "name":"damage_on_target",
             "sfx":"example"

@@ -14,14 +14,14 @@ FX.schema = {
 
 function FX.preview(actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
-  local min, max = ATTR.POWER_RANGE(base, attr)
-  return ("Heal %s - %s hit points"):format(min, max)
+  local amount = ATTR.EFFECTIVE_POWER(base, attr)
+  return ("Heal %s hit points"):format(amount)
 end
 
 function FX.process(actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local target = fieldvalues['target'] 
-  local amount = RANDOM.generate(ATTR.POWER_RANGE(base, attr))
+  local amount = ATTR.EFFECTIVE_POWER(base, attr)
   local effective_amount = target:heal(amount)
   coroutine.yield('report', {
     type = 'text_rise',

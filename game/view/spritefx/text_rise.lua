@@ -12,6 +12,7 @@ local _NUMBER_COLOR = {
   damage = 'NOTIFICATION',
   heal = 'SUCCESS',
   food = 'WARNING',
+  armor = 'HALF_VISIBLE',
   status = 'WARNING'
 }
 
@@ -19,6 +20,7 @@ local _SIGNALS = {
   damage = '-',
   heal = '+',
   food = '+',
+  armor = '+',
 }
 
 local _font

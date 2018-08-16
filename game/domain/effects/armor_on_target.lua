@@ -1,6 +1,5 @@
 
-local RANDOM  = require 'common.random'
-local ATTR    = require 'domain.definitions.attribute'
+local ATTR = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
@@ -17,20 +16,19 @@ FX.schema = {
 function FX.preview (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  return ("Deal %s damage to target"):format(amount)
+  return ("Give %s armor to target"):format(amount)
 end
 
 function FX.process (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  local dmg = fieldvalues.target:takeDamageFrom(amount, actor)
+  amount = fieldvalues.target:gainArmor(amount)
 
   coroutine.yield('report', {
     type = 'text_rise',
-    text_type = 'damage',
+    text_type = 'armor',
     body = fieldvalues['target'],
-    amount = dmg,
-    sfx = fieldvalues.sfx,
+    amount = amount,
   })
 end
 

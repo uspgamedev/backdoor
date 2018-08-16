@@ -8,18 +8,18 @@
           "attr":"=arc",
           "target":"=body",
           "type":"effect",
-          "base":8,
+          "base":2,
           "name":"damage_on_target",
           "sfx":"example"
         }],
       "inputs":[{
-          "max-range":7,
-          "name":"choose_target",
           "type":"input",
+          "name":"choose_target",
+          "max-range":7,
           "empty-tile":false,
-          "output":"tgt",
           "body-only":{
-          }
+          },
+          "output":"tgt"
         },{
           "type":"operator",
           "pos":"=tgt",
@@ -28,8 +28,8 @@
         },{
           "type":"operator",
           "which":"ARC",
-          "output":"arc",
-          "name":"get_attribute"
+          "name":"get_attribute",
+          "output":"arc"
         }]
     },
     "cost":10

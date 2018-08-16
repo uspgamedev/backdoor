@@ -39,9 +39,8 @@ function APT.STAMINA(efc, fin)
   return math.floor(food)
 end
 
-function APT.DR(def, res)
-  local power = def * (8 + res*2)
-  return power/4, 3*power/4
+function APT.ARMORBONUS(def, res)
+  return math.floor(0.5 * def * (6 + res) / 4)
 end
 
 return APT

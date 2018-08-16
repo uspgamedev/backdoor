@@ -99,6 +99,7 @@ function ActorView:drawHP(g, actor)
   local body = actor:getBody()
   local hp, pp = body:getHP(), actor:getPP()
   local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
+  local armor = body:getArmor()
   -- character name
   FONT.set("TextBold", 22)
   g.translate(_PANEL_MG, _PANEL_MG)
@@ -107,7 +108,8 @@ function ActorView:drawHP(g, actor)
            0, -8)
   -- character hp & pp
   g.translate(0, 48)
-  ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
+  ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION,
+                       armor)
   g.translate(0, 32)
   ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
 end

@@ -12,9 +12,8 @@ ATTR.INFLUENCE = {
   VIT = {'ANI', 'COR'}
 }
 
-function ATTR.POWER_RANGE(base, mod)
-  local power = base * mod
-  return round(power/4, 3*power/4)
+function ATTR.EFFECTIVE_POWER(base, mod)
+  return round(base * mod / 2)
 end
 
 return ATTR

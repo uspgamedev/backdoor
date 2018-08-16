@@ -1,7 +1,7 @@
 {
   "attr":"ARC",
   "icon":false,
-  "one_time":true,
+  "set":false,
   "desc":"Oh man, this is gonna blow...",
   "type-description":"",
   "widget":{
@@ -11,30 +11,30 @@
     "charges":8,
     "status-tags":[],
     "auto_activation":{
+      "trigger":"on_cycle",
       "ability":{
-        "effects":[{
-            "attr":"=ARC",
-            "target":"=body_self",
-            "base":6,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
-          }],
         "inputs":[{
             "type":"input",
             "name":"body",
             "output":"body_self"
           },{
             "which":"ARC",
+            "type":"operator",
             "name":"get_attribute",
-            "output":"ARC",
-            "type":"operator"
+            "output":"ARC"
+          }],
+        "effects":[{
+            "attr":"=ARC",
+            "target":"=body_self",
+            "type":"effect",
+            "base":1,
+            "name":"damage_on_target",
+            "sfx":false
           }]
-      },
-      "trigger":"on_cycle"
+      }
     },
     "placement":false
   },
   "name":"Sticky Flame",
-  "set":false
+  "one_time":true
 }
