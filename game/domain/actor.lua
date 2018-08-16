@@ -530,7 +530,7 @@ function Actor:playCard(card_index)
   return card
 end
 
-local function removeEquipment(body, slot)
+local function _removeEquipment(body, slot)
   local equipment = body:getEquipmentAt(slot)
   local widget_index = equipment and body:findWidget(equipment)
   if widget_index then
@@ -548,8 +548,8 @@ function Actor:turn()
       self:addCardToBackbuffer(card)
     end
     body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
-    removeEquipment(body, 'weapon')
-    removeEquipment(body, 'offhand')
+    _removeEquipment(body, 'weapon')
+    _removeEquipment(body, 'offhand')
     body:removeAllArmor()
   end
 end
