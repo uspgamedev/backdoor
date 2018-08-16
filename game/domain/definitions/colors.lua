@@ -16,7 +16,7 @@ COLORS.EXIT = Color.fromInt {0x77, 0xba, 0x99, 0xff}
 COLORS.FLOOR1 = Color.fromInt {25, 73, 95, 0xff}
 COLORS.FLOOR2 = Color.fromInt {25, 73, 95 + 20, 0xff}
 
-COLORS.EMPTY = Color:new {0.2, .15, 0.05}
+COLORS.EMPTY = Color:new {0.2, .15, 0.05, 1}
 COLORS.WARNING = Color:new {1, 0.8, 0.2, 1}
 COLORS.VALID = Color:new {0, 0.7, 1, 1}
 COLORS.NOTIFICATION = Color.fromInt {0xD9, 0x53, 0x4F, 0xff}

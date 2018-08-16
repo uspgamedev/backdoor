@@ -36,7 +36,7 @@ function _activity:enterMenu()
   fade_view:fadeInAndThen(self.resume)
   self.yield()
   _locked = false
-  fade_view:destroy()
+  return fade_view:destroy()
 end
 
 function _activity:changeState(mode, to, ...)
@@ -47,16 +47,11 @@ function _activity:changeState(mode, to, ...)
   self.yield()
   fade_view:destroy()
   _menu_view.invisible = true
-  if mode == 'push' then
-    SWITCHER.push(to, ...)
-  elseif mode == 'switch' then
-    SWITCHER.switch(to, ...)
-  end
+  return SWITCHER[mode](to, ...)
 end
 
 
 --STATE FUNCTIONS--
-
 function state:enter()
   _menu_context = "START_MENU"
 
@@ -102,6 +97,7 @@ function state:update(dt)
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
     _menu_view:setItem("Load route")
+    _menu_view:setItem("Settings")
     if DEV then
       _menu_view:setItem("Controls")
     end
@@ -126,6 +122,9 @@ function state:update(dt)
       end
       if MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
+      end
+      if MENU.item("Settings") then
+        _activity:changeState('push', GS.SETTINGS)
       end
       if DEV and MENU.item("Controls") then
         CONFIGURE_INPUT(INPUT, INPUT.getMap())
