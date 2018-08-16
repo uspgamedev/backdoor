@@ -202,10 +202,10 @@ export: $(GAME)
 windows: $(GAME_WIN32)
 
 .PHONY: linux
-windows: $(GAME_LINUX64)
+linux: $(GAME_LINUX64)
 
 .PHONY: osx
-windows: $(GAME_OSX)
+osx: $(GAME_OSX)
 
 .PHONY: deploy
 deploy: $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX)
@@ -220,4 +220,5 @@ clean:
 .PHONY: purge
 purge: clean
 	rm -rf externals/*
+	rm -rf bin/*
 
