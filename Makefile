@@ -4,9 +4,23 @@ BIN_DIR=bin
 LIBS_DIR=$(GAME_DIR)/libs
 GAME=$(BIN_DIR)/backdoor.love
 
+DEPLOY_SITE=https://uspgamedev.org
+DEPLOY_PATH=downloads/projects/backdoor
+DEPLOY_URL=$(DEPLOY_SITE)/$(DEPLOY_PATH)
+
 LOVE_WIN32=$(BIN_DIR)/love-11.1-win32.zip
 BIN_DIR_WIN32=$(BIN_DIR)/win32
 GAME_WIN32=$(BIN_DIR_WIN32)/backdoor.exe
+
+BIN_DIR_LINUX64=$(BIN_DIR)/linux64
+GAME_LINUX64=$(BIN_DIR_LINUX64)/backdoor-x86_64.AppImage
+BIN_DIR_LINUX64_IMG=$(BIN_DIR_LINUX64)/image
+GAME_LINUX64_TEMPLATE_NAME=backdoor-appimage-x86_64-template.tgz
+GAME_LINUX64_TEMPLATE_URL=$(DEPLOY_URL)/$(GAME_LINUX64_TEMPLATE_NAME)
+GAME_LINUX64_TEMPLATE=$(BIN_DIR_LINUX64_IMG)/$(GAME_LINUX64_TEMPLATE_NAME)
+APPIMG_TOOL_NAME=appimage-x86_64.AppImage
+APPIMG_TOOL=$(BIN_DIR_LINUX64_IMG)/$(APPIMG_TOOL_NAME)
+APPIMG_TOOL_URL=https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 
 LUX_LIB=$(LIBS_DIR)/lux
 LUX_REPO=externals/luxproject
@@ -49,9 +63,6 @@ update:
 	cd $(STEAMING_REPO); git pull
 	cd $(INPUT_REPO); git pull
 
-$(BIN_DIR):
-	mkdir $(BIN_DIR)
-
 .PHONY: export
 export: $(GAME)
 
@@ -63,7 +74,8 @@ deploy: $(GAME) $(GAME_WIN32)
 	cd $(BIN_DIR_WIN32); zip -r backdoor-win32.zip *; mv backdoor-win32.zip ..
 	scp $(GAME) $(BIN_DIR)/backdoor-win32.zip kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/$(BUILD_TYPE)/
 
-$(GAME): $(DEPENDENCIES) $(BIN_DIR)
+$(GAME): $(DEPENDENCIES)
+	mkdir -p $(BIN_DIR)
 	cd game; zip -r backdoor.love *
 	mv game/backdoor.love $(GAME)
 
@@ -127,12 +139,34 @@ $(CPML_REPO):
 $(DKJSON_LIB):
 	wget -O $(DKJSON_LIB) -- http://dkolf.de/src/dkjson-lua.fsl/raw/dkjson.lua?name=16cbc26080996d9da827df42cb0844a25518eeb3
 
-## Windows
+## Linux build
 
-$(BIN_DIR_WIN32): $(BIN_DIR)
+$(GAME_LINUX64_TEMPLATE): $(GAME)
+	mkdir -p $(BIN_DIR_LINUX64_IMG)
+	wget -O $(GAME_LINUX64_TEMPLATE) -- $(GAME_LINUX64_TEMPLATE_URL)
+
+$(APPIMG_TOOL): $(GAME)
+	mkdir -p $(BIN_DIR_LINUX64_IMG)
+	wget -O $(APPIMG_TOOL) -- $(APPIMG_TOOL_URL)
+	chmod +x $(APPIMG_TOOL)
+
+$(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
+	mkdir -p $(BIN_DIR_LINUX64)
+	cd $(BIN_DIR_LINUX64_IMG); tar -xf $(GAME_LINUX64_TEMPLATE_NAME)
+	cat $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/love $(GAME) > $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
+	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
+	cp $(IMGUI_LIB) $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin
+	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/AppRun
+	cd $(BIN_DIR_LINUX64_IMG); ./$(APPIMG_TOOL_NAME) squashfs-root
+	mv $(BIN_DIR_LINUX64_IMG)/backdoor-x86_64.AppImage $(BIN_DIR_LINUX64)
+	rm -rf $(BIN_DIR_LINUX64_IMG)
+
+## Windows build
+
+$(BIN_DIR_WIN32): $(GAME)
 	mkdir -p $(BIN_DIR_WIN32)
 
-$(GAME_WIN32): $(BIN_DIR) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32) $(GAME)
+$(GAME_WIN32): $(GAME) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32) $(GAME)
 	rm -rf $(BIN_DIR_WIN32)
 	unzip $(LOVE_WIN32) -d $(BIN_DIR)
 	mv $(BIN_DIR)/love-11.1.0-win32 $(BIN_DIR_WIN32)
@@ -140,7 +174,7 @@ $(GAME_WIN32): $(BIN_DIR) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32) $(GAME)
 	cat $(BIN_DIR_WIN32)/love.exe $(GAME) > $(GAME_WIN32)
 	rm $(BIN_DIR_WIN32)/love.exe $(BIN_DIR_WIN32)/lovec.exe
 
-$(LOVE_WIN32): $(BIN_DIR)
+$(LOVE_WIN32): $(GAME)
 	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip
 
 $(LUAJIT_DLL):
