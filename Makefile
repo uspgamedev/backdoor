@@ -24,6 +24,13 @@ APPIMG_TOOL_NAME=appimage-x86_64.AppImage
 APPIMG_TOOL=$(BIN_DIR_LINUX64_IMG)/$(APPIMG_TOOL_NAME)
 APPIMG_TOOL_URL=https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 
+BIN_DIR_OSX=$(BIN_DIR)/osx
+GAME_OSX_APP=$(BIN_DIR_OSX)/backdoor.app
+GAME_OSX_TEMPLATE_NAME=backdoor-osx-template.zip
+GAME_OSX_TEMPLATE_URL=$(DEPLOY_URL)/$(GAME_OSX_TEMPLATE_NAME)
+GAME_OSX_TEMPLATE=$(BIN_DIR_OSX)/$(GAME_OSX_TEMPLATE_NAME)
+GAME_OSX=$(BIN_DIR_OSX)/backdoor-osx.zip
+
 LUX_LIB=$(LIBS_DIR)/lux
 LUX_REPO=externals/luxproject
 
@@ -64,16 +71,6 @@ update:
 	cd $(LUX_REPO); git pull
 	cd $(STEAMING_REPO); git pull
 	cd $(INPUT_REPO); git pull
-
-.PHONY: export
-export: $(GAME)
-
-.PHONY: windows
-windows: $(BIN_DIR_WIN32)/backdoor.exe
-
-.PHONY: deploy
-deploy: $(GAME) $(GAME_WIN32) $(GAME_LINUX64)
-	scp $(GAME) $(GAME_WIN32) $(GAME_LINUX64) kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/$(BUILD_TYPE)/
 
 $(GAME): $(DEPENDENCIES)
 	mkdir -p $(BIN_DIR)
@@ -182,8 +179,35 @@ $(GAME_WIN32): $(GAME) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32)
 	zip -r $(GAME_WIN32) $(BIN_DIR_WIN32_PACKAGE)
 	rm -rf $(BIN_DIR_WIN32_PACKAGE)
 
+## OSX
+
+$(GAME_OSX_TEMPLATE):
+	mkdir -p $(BIN_DIR_OSX)
+	wget -O $(GAME_OSX_TEMPLATE) $(GAME_OSX_TEMPLATE_URL)
+
+$(GAME_OSX): $(GAME) $(GAME_OSX_TEMPLATE)
+	cd $(BIN_DIR_OSX); unzip $(GAME_OSX_TEMPLATE_NAME)
+	cp $(GAME) $(IMGUI_LIB) $(GAME_OSX_APP)/Contents/Resources
+	zip -yr $(GAME_OSX) $(GAME_OSX_APP)
+	rm -rf $(GAME_OSX_TEMPLATE)
+
 ## Deploy
 
+.PHONY: export
+export: $(GAME)
+
+.PHONY: windows
+windows: $(GAME_WIN32)
+
+.PHONY: linux
+linux: $(GAME_LINUX64)
+
+.PHONY: osx
+osx: $(GAME_OSX)
+
+.PHONY: deploy
+deploy: $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX)
+	scp $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX) kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/$(BUILD_TYPE)/
 
 ## CLEAN UP
 
@@ -194,4 +218,5 @@ clean:
 .PHONY: purge
 purge: clean
 	rm -rf externals/*
+	rm -rf bin/*
 
