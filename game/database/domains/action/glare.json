@@ -1,0 +1,37 @@
+{
+  "playpoints":0,
+  "ability":{
+    "effects":[{
+        "attr":"=arc",
+        "target":"=target",
+        "type":"effect",
+        "base":3,
+        "name":"damage_on_target",
+        "sfx":false
+      }],
+    "inputs":[{
+        "empty-tile":false,
+        "output":"pos",
+        "aoe-hint":0,
+        "max-range":2,
+        "dif-fact":false,
+        "type":"input",
+        "non-wall":false,
+        "name":"choose_target",
+        "body-only":{
+          "body-type":false
+        }
+      },{
+        "type":"operator",
+        "pos":"=pos",
+        "output":"target",
+        "name":"get_body_at"
+      },{
+        "type":"operator",
+        "name":"get_attribute",
+        "output":"arc",
+        "which":"ARC"
+      }]
+  },
+  "cost":20
+}

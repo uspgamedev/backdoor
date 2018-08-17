@@ -1,0 +1,12 @@
+{
+  "extends":false,
+  "signature":"tackle",
+  "behavior":"player",
+  "cor":0,
+  "arc":0,
+  "collection":false,
+  "description":"",
+  "initial_buffer":[],
+  "ani":0,
+  "name":"Sentient"
+}

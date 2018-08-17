@@ -2,3 +2,9 @@
 .*.swp
 .*
 !.git*
+/imgui*
+/lua51*
+savedir
+log*
+import
+/bin

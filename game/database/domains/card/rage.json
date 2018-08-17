@@ -1,0 +1,25 @@
+{
+  "attr":"ANI",
+  "icon":"card-rage",
+  "set":"brawler",
+  "desc":"They say Rage is all the rage with the kids.",
+  "type-description":"",
+  "one_time":false,
+  "pp":0,
+  "name":"Rage",
+  "widget":{
+    "operators":[{
+        "attr":"COR",
+        "op":"+",
+        "val":2
+      },{
+        "attr":"DEF",
+        "op":"-",
+        "val":8
+      }],
+    "trigger":"on_focus_end",
+    "charges":1,
+    "status-tags":[],
+    "placement":false
+  }
+}

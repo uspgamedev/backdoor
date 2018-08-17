@@ -1,0 +1,30 @@
+{
+  "digital":{
+    "ACTION_1":["r"],
+    "ACTION_2":["e"],
+    "ACTION_3":["w"],
+    "ACTION_4":["q"],
+    "CONFIRM":["f", true, "return"],
+    "CANCEL":["d"],
+    "SPECIAL":["s"],
+    "EXTRA":["a"],
+    "UP":["up","k"],
+    "RIGHT":["right","l"],
+    "DOWN":["down","j"],
+    "LEFT":["left","h"],
+    "UPLEFT":["home","y"],
+    "UPRIGHT":["pageup","u"],
+    "DOWNRIGHT":["pagedown","n"],
+    "DOWNLEFT":["end","b"],
+    "QUIT":["f8"],
+    "PAUSE":["escape"],
+    "MODIFIER":["lshift"]
+  },
+  "analog":{
+    "AXIS_X":1,
+    "AXIS_Y":2
+  },
+  "hat":{
+    "HAT_DIRECTIONALS":1
+  }
+}

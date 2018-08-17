@@ -1,0 +1,25 @@
+{
+  "animation":[{
+      "time":100,
+      "quad_idx":1
+    },{
+      "time":100,
+      "quad_idx":2
+    },{
+      "time":100,
+      "quad_idx":3
+    },{
+      "time":100,
+      "quad_idx":4
+    },{
+      "time":100,
+      "quad_idx":3
+    },{
+      "time":100,
+      "quad_idx":2
+    }],
+  "loop":true,
+  "texture":"cursor",
+  "offset":[0,0],
+  "quad_division":[4,1]
+}

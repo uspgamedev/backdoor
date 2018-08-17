@@ -1,0 +1,34 @@
+{
+  "attr":"ARC",
+  "icon":"card-reinforce",
+  "one_time":false,
+  "art":{
+    "cost":20,
+    "art_ability":{
+      "inputs":[{
+          "type":"input",
+          "name":"choose_target",
+          "output":"target",
+          "body-only":{
+            "body-type":"machine"
+          }
+        },{
+          "type":"operator",
+          "pos":"=target",
+          "name":"get_body_at",
+          "output":"machine"
+        }],
+      "effects":[{
+          "type":"effect",
+          "body":"=machine",
+          "name":"place_widget",
+          "card":"reinforced-surface"
+        }]
+    }
+  },
+  "desc":"",
+  "type-description":"",
+  "pp":0,
+  "name":"Reinforce",
+  "set":"gadgeteer"
+}

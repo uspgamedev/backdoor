@@ -1,0 +1,14 @@
+{
+  "attr":"COR",
+  "one_time":true,
+  "widget":{
+    "operators":[{
+        "attr":"COR",
+        "op":"+",
+        "val":1
+      }],
+    "trigger":"on_act",
+    "charges":1
+  },
+  "name":"Corporis Up"
+}

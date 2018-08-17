@@ -1,0 +1,10 @@
+{
+  "extends":false,
+  "faction":"allied",
+  "res":0,
+  "fin":0,
+  "appearance":"hearthborn",
+  "con":0,
+  "name":"Demihuman",
+  "description":"Humanoid people in general."
+}

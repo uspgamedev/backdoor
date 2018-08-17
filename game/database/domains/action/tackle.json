@@ -1,0 +1,36 @@
+{
+  "playpoints":0,
+  "ability":{
+    "effects":[{
+        "attr":"=cor",
+        "target":"=target",
+        "type":"effect",
+        "base":2,
+        "name":"damage_on_target",
+        "sfx":false
+      }],
+    "inputs":[{
+        "aoe-hint":0,
+        "output":"pos",
+        "body-only":{
+          "body-type":false
+        },
+        "non-wall":false,
+        "type":"input",
+        "empty-tile":false,
+        "name":"choose_target",
+        "max-range":1
+      },{
+        "type":"operator",
+        "name":"get_attribute",
+        "output":"cor",
+        "which":"COR"
+      },{
+        "type":"operator",
+        "pos":"=pos",
+        "output":"target",
+        "name":"get_body_at"
+      }]
+  },
+  "cost":20
+}

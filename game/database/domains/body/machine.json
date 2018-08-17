@@ -1,0 +1,10 @@
+{
+  "extends":false,
+  "name":"Machine",
+  "faction":"allied",
+  "res":2,
+  "appearance":"demobody",
+  "fin":0,
+  "con":0,
+  "description":"Heavy Metal."
+}

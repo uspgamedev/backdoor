@@ -1,0 +1,42 @@
+{
+  "attr":"ARC",
+  "icon":"card-firebolt",
+  "one_time":false,
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=arc",
+          "target":"=body",
+          "type":"effect",
+          "base":2,
+          "name":"damage_on_target",
+          "sfx":"example"
+        }],
+      "inputs":[{
+          "type":"input",
+          "name":"choose_target",
+          "max-range":7,
+          "empty-tile":false,
+          "body-only":{
+          },
+          "output":"tgt"
+        },{
+          "type":"operator",
+          "pos":"=tgt",
+          "name":"get_body_at",
+          "output":"body"
+        },{
+          "type":"operator",
+          "which":"ARC",
+          "name":"get_attribute",
+          "output":"arc"
+        }]
+    },
+    "cost":10
+  },
+  "desc":"'Ouch that hurts! - Imp with his face on fire.",
+  "type-description":"",
+  "pp":4,
+  "name":"Firebolt",
+  "set":"arcanist"
+}

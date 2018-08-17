@@ -1,0 +1,50 @@
+{
+  "attr":"NONE",
+  "icon":"card-potion",
+  "one_time":true,
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=vit",
+          "target":"=self_body",
+          "base":8,
+          "name":"heal",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "empty-tile":false,
+          "output":"self_pos",
+          "aoe-hint":0,
+          "max-range":0,
+          "dif-fact":false,
+          "type":"input",
+          "non-wall":false,
+          "body-only":{
+            "body-type":false
+          },
+          "name":"choose_target"
+        },{
+          "type":"operator",
+          "name":"self",
+          "output":"self"
+        },{
+          "type":"operator",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "actor":"=self"
+        },{
+          "which":"VIT",
+          "type":"operator",
+          "body":"=self_body",
+          "output":"vit",
+          "name":"get_body_attribite"
+        }]
+    },
+    "cost":20
+  },
+  "desc":"Gulp. Down the hatch, foxy.",
+  "type-description":"",
+  "pp":4,
+  "name":"Healing Potion",
+  "set":"consumables_potions"
+}

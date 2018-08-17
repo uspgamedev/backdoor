@@ -1,0 +1,23 @@
+{
+  "extends":"sentient",
+  "behavior":"player",
+  "cor":1,
+  "arc":-2,
+  "collection":false,
+  "ani":1,
+  "name":"Brawler",
+  "initial_buffer":[{
+      "amount":1,
+      "card":"calming_down"
+    },{
+      "amount":1,
+      "card":"laser-spear"
+    },{
+      "amount":4,
+      "card":"rage"
+    },{
+      "amount":4,
+      "card":"trained-strike"
+    }],
+  "description":"You find that close-quarter skirmishes and martial\narts in general suit your tastes and abilities\nrather well. Anything that does not involve\nbreaking things is a test to your patience."
+}

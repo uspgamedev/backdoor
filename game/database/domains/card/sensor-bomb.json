@@ -1,0 +1,35 @@
+{
+  "attr":"COR",
+  "icon":"card-sensor-bomb",
+  "one_time":false,
+  "art":{
+    "cost":40,
+    "art_ability":{
+      "inputs":[{
+          "aoe-hint":2,
+          "empty-tile":true,
+          "output":"pos",
+          "type":"input",
+          "non-wall":true,
+          "name":"choose_target",
+          "max-range":1
+        }],
+      "effects":[{
+          "widgets":[{
+              "spec":"proximity-detector"
+            }],
+          "pos":"=pos",
+          "bodyspec":"machine",
+          "type":"effect",
+          "def":50,
+          "vit":50,
+          "name":"make_body"
+        }]
+    }
+  },
+  "desc":"This is going to be a blast!",
+  "type-description":"",
+  "pp":0,
+  "name":"Sensor Bomb",
+  "set":"gadgeteer"
+}
