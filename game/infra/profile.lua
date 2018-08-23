@@ -136,7 +136,13 @@ function PROFILE.getSaveList()
 end
 
 function PROFILE.getPreference(field)
-  return _metadata.preferences[field]
+  local value = _metadata.preferences[field]
+  if not value then
+    local schema = DB.loadSetting("user-preferences")[field]
+    value = schema.default
+    PROFILE.setPreference(field, value)
+  end
+  return value
 end
 
 function PROFILE.setPreference(field, value)
