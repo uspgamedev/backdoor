@@ -9,6 +9,7 @@ local PLAYSFX     = require 'helpers.playsfx'
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
 local HandView    = require 'view.hand'
+local BufferView  = require 'view.buffer'
 local ActorView   = require 'view.actor'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
@@ -131,6 +132,12 @@ function state:enter(pre, route_data)
       _view.hand:removeCard(actor,card_index)
     end
   )
+
+  -- Buffer views
+  _view.frontbuffer = BufferView.newFrontBufferView(_route)
+  _view.frontbuffer:addElement("HUD_BG", nil, "frontbuffer_view")
+  _view.backbuffer = BufferView.newBackBufferView(_route)
+  _view.backbuffer:addElement("HUD_BG", nil, "backbuffer_view")
 
   -- Actor view
   _view.actor = ActorView(_route)
