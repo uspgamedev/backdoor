@@ -109,8 +109,6 @@ end
 function PROFILE.loadRoute(route_id)
   local filedata = assert(filesystem.newFileData(SAVEDIR..route_id))
   local route_data = _decode(filedata:getString())
-  -- delete save from profile list
-  _metadata.save_list[route_data.id] = nil
   return route_data
 end
 
@@ -118,7 +116,8 @@ function PROFILE.saveRoute(route_data)
   local file = assert(filesystem.newFile(SAVEDIR..route_data.id, "w"))
   -- add save to profile list
   _metadata.save_list[route_data.id] = {
-    player_name = route_data.player_name
+    player_name = route_data.player_name,
+    player_dead = route_data.player_dead,
   }
   file:write(_encode(route_data))
   return file:close()
@@ -162,14 +161,6 @@ end
 function PROFILE.quit()
   _saveInput()
   _saveProfile()
-  local save_list = _metadata.save_list
-  for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
-    if filename ~= PROFILE_FILENAME and filename ~= CONTROL_FILENAME
-                                    and not save_list[filename] then
-      print(("Removing unsaved file: %s"):format(filename))
-      filesystem.remove(SAVEDIR..filename)
-    end
-  end
 end
 
 

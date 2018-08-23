@@ -41,6 +41,7 @@ local function _playTurns(...)
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
+    PROFILE.saveRoute(_route.saveState())
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
@@ -163,6 +164,7 @@ end
 
 function state:leave()
 
+  PROFILE.saveRoute(_route.saveState())
   _route.destroyAll()
   for _,view in pairs(_view) do
     view:destroy()

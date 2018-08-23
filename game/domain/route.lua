@@ -19,6 +19,7 @@ function Route:instance(obj)
   local _id_generator = IDGenerator()
   local _player_name = "Unknown"
   local _player_id
+  local _player_dead = false
   local _sectors = {}
   local _behaviors = Behaviors()
   local _current_sector = nil
@@ -32,8 +33,9 @@ function Route:instance(obj)
     _id_generator = IDGenerator(state.next_id)
 
     -- player
-    _player_name = state.player_name
     _player_id = state.player_id
+    _player_name = state.player_name
+    _player_dead = state.player_dead
 
     -- rng
     -- setState is theoretically enough to reproduce seed as well
@@ -59,9 +61,10 @@ function Route:instance(obj)
     -- id
     state.id = _id
     state.next_id = _id_generator.getNextID()
-    -- id
+    -- player
+    state.player_id   = _player_id
     state.player_name = _player_name
-    state.player_id = _player_id
+    state.player_dead = _player_dead
     -- rng
     state.rng_state = RANDOM.getState()
     state.rng_seed = RANDOM.getSeed()
@@ -84,6 +87,10 @@ function Route:instance(obj)
 
   function obj.getBehaviors()
     return _behaviors
+  end
+
+  function obj.die()
+    _player_dead = true
   end
 
   function obj.setCurrentSector(id)
