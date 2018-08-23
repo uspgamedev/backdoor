@@ -56,7 +56,7 @@ function CardView:init(card)
   self.card = card == 'draw' and _DRAW or card
   self.scale = 1
   self.focused = false
-  self.alpha = 0
+  self.alpha = 1
   self.flash = false
   self.add = 0
 end
