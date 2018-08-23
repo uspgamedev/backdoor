@@ -4,6 +4,8 @@ local CARD       = require 'view.helpers.card'
 local CardView   = require 'view.card'
 local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
+local Transmission = require 'view.transmission'
+local vec2   = require 'cpml' .vec2
 
 local math = require 'common.math'
 
@@ -236,6 +238,7 @@ end
 function HandView:addCard(actor, card)
   if self.route.getControlledActor() == actor then
     table.insert(self.hand, CardView(card))
+    Transmission(vec2(10, 10), vec2(499, 123)):addElement("GUI")
   end
 end
 
