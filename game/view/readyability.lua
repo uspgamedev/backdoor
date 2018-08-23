@@ -136,7 +136,7 @@ function ReadyAbilityView:draw()
   g.push()
   g.translate(
     3/4*_WIDTH - width - 64,
-    _HEIGHT - _MARGIN - block_height)
+    _HEIGHT - _MARGIN - block_height - 80)
   g.stencil(function()
     _drawContainer(g, width)
   end, "replace", 1)

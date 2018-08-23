@@ -45,20 +45,21 @@ end
 function BufferView:draw()
   local g = love.graphics
   local W,H = DEFS.VIEWPORT_DIMENSIONS()
-  local margin = 48
+  local marginx = 48
+  local marginy = 32
   local scale = 0.3
   local text
   local textoffx
   local align
   local pos, offset
   if self.side == 'front' then
-    pos = vec2(margin, H - margin)
+    pos = vec2(marginx, H - marginy)
     offset = vec2(0, self.sprite:getHeight())
     text = string.format("x %d", self.amount)
     align = 'right'
     textoffx = 0
   elseif self.side == 'back' then
-    pos = vec2(W - margin, H - margin)
+    pos = vec2(W - marginx, H - marginy)
     offset = vec2(self.sprite:getDimensions())
     text = string.format("%d x", self.amount)
     align = 'left'
@@ -67,7 +68,7 @@ function BufferView:draw()
     return error("invalid buffer view side position")
   end
   local limit = self.sprite:getWidth() * scale + self.font:getWidth(text)
-              + margin/3
+              + marginx/3
   self.font:set()
   g.push()
   g.translate(pos.x, pos.y)
