@@ -10,6 +10,7 @@ local ACTOR_HEADER  = require 'view.actor.header'
 local ACTOR_MINIMAP = require 'view.actor.minimap'
 local ACTOR_ATTR    = require 'view.actor.attr'
 local ACTOR_WIDGETS = require 'view.actor.widgets'
+local VIEWDEFS      = require 'view.definitions'
 
 local math = require 'common.math'
 
@@ -17,7 +18,7 @@ local ActorView = Class{
   __includes = { ELEMENT }
 }
 
-local _PANEL_MG = 24
+local _PANEL_MG = VIEWDEFS.PANEL_MG
 local _PANEL_PD = 8
 local _PANEL_WIDTH
 local _PANEL_HEIGHT
