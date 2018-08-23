@@ -13,7 +13,7 @@ local _TITLE_TEXT = "backdoor"
 local _LH = 1.5
 local _TILE_W, _TILE_H = 80, 80
 
-local _SCROLL_THRESHOLD = 4
+local _SCROLL_THRESHOLD = 6
 local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
 local _FADE_TIME = .5
