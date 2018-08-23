@@ -5,6 +5,7 @@ local CARD = require 'view.helpers.card'
 local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
 local DEFS = require 'domain.definitions'
+local CardView = require 'view.card'
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -86,7 +87,11 @@ function View:isLocked()
 end
 
 function View:open(card_list, maxconsume)
-  self.card_list = card_list
+  self.card_list = {}
+  for i,card in ipairs(card_list) do
+    self.card_list[i] = CardView(card)
+    self.card_list[i]:setAlpha(0.9)
+  end
   self.consume_log = {}
   self.holdbar:unlock()
   self.selection = math.ceil(#card_list/2)
@@ -200,6 +205,12 @@ function View:removeConsume()
   self.consumed_count = self.consumed_count - 1
 end
 
+function View:update(dt)
+  for _,card in ipairs(self.card_list ) do
+    card:update(dt)
+  end
+end
+
 function View:draw()
   local g = love.graphics
   local enter = self.enter
@@ -248,9 +259,11 @@ function View:drawCards(g, enter)
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), _LIST_VALIGN - consumed)
     g.translate(0, self.buffered_offset[i] + -self.consumed_offset[i])
-    CARD.draw(card_list[i], 0, 0, focus and not self.is_leaving,
-              dist > 0 and enter/dist*self.card_alpha[i]
-                        or enter*self.card_alpha[i], 0.9)
+    local card = card_list[i]
+    card:setFocus(focus and not self.is_leaving)
+    card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
+                            or enter*self.card_alpha[i])
+    card:draw(0, 0)
     g.pop()
   end
   g.pop()
@@ -307,7 +320,7 @@ function View:drawCardDesc(g, card, enter)
     consume = ("Consume [%d/%d]\n"):format(self.consumed_count, self.maxconsume)
     extra = _CW/2 + 10
   end
-  local cor, arc, ani = card:getOwner():trainingDitribution()
+  local cor, arc, ani = card.card:getOwner():trainingDitribution()
   local cor_t = ("COR %.1f%%  "):format(cor*100)
   local arc_t = ("ARC %.1f%%  "):format(arc*100)
   local ani_t = ("ANI %.1f%%"):format(ani*100)
@@ -325,7 +338,7 @@ function View:drawCardDesc(g, card, enter)
 
   g.push()
   g.translate(-maxw, -CARD.getInfoHeight(3)/2)
-  CARD.drawInfo(card, 0, 0, 2*maxw, enter, nil, true)
+  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter, nil, true)
   g.pop()
 
   g.pop()

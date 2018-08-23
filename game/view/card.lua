@@ -54,8 +54,8 @@ function CardView:init(card)
   self.sprite = TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
   self.card = card == 'draw' and _DRAW or card
+  self.scale = 1
   self.focused = false
-  self.enter = false
   self.alpha = 0
   self.flash = false
   self.add = 0
@@ -77,20 +77,15 @@ function CardView:setFocus(flag)
   self.focused = flag
 end
 
+function CardView:setAlpha(alpha)
+  self.alpha = alpha
+end
+
+function CardView:setScale(scale)
+  self.scale = scale
+end
+
 function CardView:update(dt)
-  if self.enter then
-    if self.alpha < 0.95 then
-      self.alpha = self.alpha + (1 - self.alpha) * dt * _ENTER_SPD
-    else
-      self.alpha = 1
-    end
-  else
-    if self.alpha > 0.05 then
-      self.alpha = self.alpha - self.alpha * dt * _ENTER_SPD
-    else
-      self.alpha = 0
-    end
-  end
   if self.flash then
     if self.add < 0.95 then
       self.add = self.add + (1 - self.add) * dt * _FLASH_SPD
@@ -114,6 +109,7 @@ function CardView:draw(x, y)
   local typewidth = _info_font:getWidth(self.card:getType())
   local pd = 12
   g.push()
+  g.scale(self.scale, self.scale)
 
   if self.focused then
     -- shine!
@@ -134,17 +130,17 @@ function CardView:draw(x, y)
   _card_font.set()
 
   --shadow
-  g.setColor(0, 0, 0, alpha)
+  g.setColor(0, 0, 0, self.alpha)
   self.sprite:draw(x+2, y+2)
 
   --card
-  g.setColor(cr, cg, cb, alpha)
+  g.setColor(cr, cg, cb, self.alpha)
   self.sprite:draw(x, y)
 
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
-  g.setColor(br, bg, bb, alpha)
+  g.setColor(br, bg, bb, self.alpha)
   icon_texture:setFilter('linear', 'linear')
   icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
