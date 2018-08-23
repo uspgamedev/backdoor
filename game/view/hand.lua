@@ -105,6 +105,19 @@ function HandView:deactivate()
                 'out-back')
 end
 
+function HandView:positionForIndex(i)
+  local size = #self.hand + 1
+  local card = self.hand[i]
+  local gap = _GAP * self.gap_scale
+  local step = card:getWidth() + gap
+  local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2,
+               self.y
+  local enter = math.abs(y - self.initial_y) / (card:getHeight())
+  local dx = (size-i+1)*step
+  return x - dx + gap,
+         y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP
+end
+
 function HandView:update(dt)
   for _,card in ipairs(self.hand) do
     card:update(dt)
@@ -150,7 +163,9 @@ function HandView:draw()
     local card = hand[i]
     local dx = (size-i+1)*step
     card:setFocus(i == self.focus_index)
-    card:draw(x - dx + gap, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
+    card:setPosition(x - dx + gap,
+                     y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
+    card:draw()
     if self.focus_index == i then
       local infox = _GAP
       CARD.drawInfo(card.card, infox, infoy, _WIDTH/3 - infox, enter,
@@ -177,8 +192,7 @@ function HandView:drawFocusBar(g, actor)
   local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12
-  local handbar_gap = handbar_width / (maxfocus-1)
-  local font = FONT.get("Text", 18)
+  local handbar_gap = handbar_width / (maxfocus-1) local font = FONT.get("Text", 18)
   local fh = font:getHeight()*font:getLineHeight()
   local mx, my = 60, 20
   local slope = handbar_height + 2*my
@@ -237,8 +251,10 @@ end
 
 function HandView:addCard(actor, card)
   if self.route.getControlledActor() == actor then
-    table.insert(self.hand, CardView(card))
-    Transmission(vec2(10, 10), vec2(499, 123)):addElement("GUI")
+    local view = CardView(card)
+    table.insert(self.hand, view)
+    local frontbuffer = Util.findId('frontbuffer_view')
+    Transmission(frontbuffer:getPoint(), view):addElement("GUI")
   end
 end
 
@@ -250,12 +266,17 @@ function HandView:removeCard(actor, card_index)
 end
 
 function HandView:reset()
-  self.hand = {}
 
   local controlled_actor = self.route.getControlledActor()
+
+  local cache = {}
+  for _,view in ipairs(self.hand or {}) do
+    cache[view.card:getId()] = view
+  end
+  self.hand = {}
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
-      self.hand[i] = CardView(card)
+      self.hand[i] = cache[card:getId()] or CardView(card)
     end
   end
 

@@ -59,6 +59,7 @@ function CardView:init(card)
   self.alpha = 1
   self.flash = false
   self.add = 0
+  self.position = vec2()
 end
 
 function CardView:getWidth()
@@ -101,8 +102,21 @@ function CardView:update(dt)
   end
 end
 
-function CardView:draw(x, y)
+function CardView:setPosition(x, y)
+  self.position = vec2(x,y)
+end
+
+function CardView:getPosition()
+  return self.position:unpack()
+end
+
+function CardView:getPoint()
+  return self.position + vec2(self:getDimensions())/2
+end
+
+function CardView:draw()
   --Draw card background
+  local x,y = self.position:unpack()
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[self.card:getRelatedAttr()])
   local w, h = self.sprite:getDimensions()
