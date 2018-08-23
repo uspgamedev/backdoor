@@ -1,14 +1,11 @@
 
 local FONT       = require 'view.helpers.font'
 local CARD       = require 'view.helpers.card'
+local CardView   = require 'view.card'
 local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
 
 local math = require 'common.math'
-
---LOCAL FUNCTIONS DECLARATIONS--
-
-local _drawCard
 
 --CONSTS--
 local _WIDTH, _HEIGHT
@@ -106,14 +103,21 @@ function HandView:deactivate()
                 'out-back')
 end
 
+function HandView:update(dt)
+  for _,card in ipairs(self.hand) do
+    card:update(dt)
+  end
+end
+
 function HandView:draw()
   local hand = { unpack(self.hand) }
-  table.insert(hand, "draw")
+  local card = CardView('draw')
+  table.insert(hand, card)
   local size = #hand
   local gap = _GAP * self.gap_scale
-  local step = CARD.getWidth() + gap
-  local x, y = self.x + (size*CARD.getWidth() + (size-1)*gap)/2, self.y
-  local enter = math.abs(y - self.initial_y) / (CARD.getHeight())
+  local step = card:getWidth() + gap
+  local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2, self.y
+  local enter = math.abs(y - self.initial_y) / (card:getHeight())
   local boxwidth = 128
   local g = love.graphics
 
@@ -143,12 +147,11 @@ function HandView:draw()
   for i=size,1,-1 do
     local card = hand[i]
     local dx = (size-i+1)*step
-    CARD.draw(card, x - dx + gap,
-              y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP,
-              i == self.focus_index)
+    card:setFocus(i == self.focus_index)
+    card:draw(x - dx + gap, y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     if self.focus_index == i then
       local infox = _GAP
-      CARD.drawInfo(card, infox, infoy, _WIDTH/3 - infox, enter,
+      CARD.drawInfo(card.card, infox, infoy, _WIDTH/3 - infox, enter,
                     self.route:getPlayerActor())
     end
   end
@@ -232,7 +235,7 @@ end
 
 function HandView:addCard(actor, card)
   if self.route.getControlledActor() == actor then
-    table.insert(self.hand, card)
+    table.insert(self.hand, CardView(card))
   end
 end
 
@@ -249,7 +252,7 @@ function HandView:reset()
   local controlled_actor = self.route.getControlledActor()
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
-      self.hand[i] = card
+      self.hand[i] = CardView(card)
     end
   end
 
