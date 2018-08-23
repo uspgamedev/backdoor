@@ -13,23 +13,33 @@ function BufferView:init(route)
   self.sprite = TEXTURE.get('buffer')
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
-  self.side = 'left'
+  self.side = 'front'
   self.font = FONT.get("Text", 24)
   self.amount = 0
+  self.route = route
 end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {1, 1, 1, 1}
-  bufview.side = 'left'
+  bufview.side = 'front'
   return bufview
 end
 
 function BufferView.newBackBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {1, 0.5, 0.5, 1}
-  bufview.side = 'right'
+  bufview.side = 'back'
   return bufview
+end
+
+function BufferView:update(dt)
+  local actor = self.route.getControlledActor()
+  if self.side == 'front' then
+    self.amount = actor:getBufferSize()
+  elseif self.side == 'back' then
+    self.amount = actor:getBackBufferSize()
+  end
 end
 
 function BufferView:draw()
@@ -41,13 +51,13 @@ function BufferView:draw()
   local textoffx
   local align
   local pos, offset
-  if self.side == 'left' then
+  if self.side == 'front' then
     pos = vec2(margin, H - margin)
     offset = vec2(0, self.sprite:getHeight())
     text = string.format("x %d", self.amount)
     align = 'right'
     textoffx = 0
-  elseif self.side == 'right' then
+  elseif self.side == 'back' then
     pos = vec2(W - margin, H - margin)
     offset = vec2(self.sprite:getDimensions())
     text = string.format("%d x", self.amount)
