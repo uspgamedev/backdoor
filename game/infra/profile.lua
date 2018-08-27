@@ -48,16 +48,19 @@ local function _deleteInput()
 end
 
 local function _loadInput()
-  -- setup input
-  local loaded_input = INPUT.load(CONTROL_PATH, _decode)
-  if not loaded_input then
-    local inputmap = DB.loadSetting('controls')
-    INPUT.setup(inputmap)
+  local filedata = assert(filesystem.newFileData(CONTROL_PATH))
+  local inputmap = _decode(filedata:getString())
+  if not inputmap then
+    inputmap = DB.loadSetting('controls')
   end
+  return INPUT.setup(inputmap)
 end
 
 local function _saveInput()
-  return INPUT.save(CONTROL_PATH, _encode)
+  local inputmap = INPUT.getMap()
+  local file = assert(filesystem.newFile(CONTROL_PATH, "w"))
+  file:write(_encode(inputmap))
+  return file:close()
 end
 
 local function _cleanSlate ()
