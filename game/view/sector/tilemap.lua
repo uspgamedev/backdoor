@@ -25,6 +25,8 @@ local TILEMAP = {}
 
 local _sector
 local _tile_batch
+local _tile_offset
+local _tile_quads
 local _fovmask
 local _tilemask
 

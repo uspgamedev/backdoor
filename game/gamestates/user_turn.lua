@@ -98,7 +98,6 @@ local function _updateAdjacency(dir)
 end
 
 local function _unsetAdjacency()
-  _adjacency_changes = 0
   for i = 1, 3 do
     _adjacency[i] = -1
   end

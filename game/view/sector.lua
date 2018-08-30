@@ -115,7 +115,6 @@ function SectorView:initSector(sector)
     _sparkles:setEmissionArea("uniform", 16, 16, 0, false)
     _sparkles:setSizes(2, 4)
 
-    _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
 end
@@ -400,7 +399,7 @@ function SectorView:draw()
   for _, body in ipairs(all_bodies) do
     local i,j = body:getPos()
     --Draw only if player is seeing them
-    x, y = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
+    local x, y = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
     if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
       SECTOR_LIFEBAR.draw(body, x, y)
       local actor = body:getActor() if actor then

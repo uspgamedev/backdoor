@@ -12,6 +12,7 @@ local visibilityOfShadow
 local addProjection
 local transformOctant
 local projectTile
+local fullShadow
 
 local funcs = {}
 
