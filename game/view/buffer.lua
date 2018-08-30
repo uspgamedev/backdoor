@@ -66,7 +66,11 @@ function BufferView:calculatePosition()
 end
 
 function BufferView:getPoint()
-  return self.pos + vec2(self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  if self.side == 'front' then
+    return self.pos + vec2(self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  elseif self.side == 'back' then
+    return self.pos + vec2(-self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  end
 end
 
 function BufferView:update(dt)
