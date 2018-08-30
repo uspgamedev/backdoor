@@ -12,6 +12,7 @@ local ZIP          = love.math
 local SAVEDIR = "_savedata/"
 local PROFILE_FILENAME = "profile"
 local CONTROL_FILENAME = "controls"
+local IO_THREAD_FILE = "infra/writingthread.lua"
 local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
 local CONTROL_PATH = SAVEDIR..CONTROL_FILENAME
 local METABASE = { next_id = 1, save_list = {}, preferences = {} }
@@ -21,22 +22,15 @@ local filesystem = love.filesystem
 
 -- LOCALS --
 local PROFILE = {}
-local __COMPRESS__ = false
 local _id_generator
 local _metadata
-
-local function _compress(str) --> str
-  if not __COMPRESS__ then return str end
-  return assert(ZIP.compress(str:gsub(" ", ""), "lz4", 9))
-end
+local _savethread
+local _channel
+local _compress
 
 local function _decompress(str) --> str
-  if not __COMPRESS__ then return str end
+  if not _compress then return str end
   return assert(ZIP.decompress(str, "lz4"))
-end
-
-local function _encode(t) --> str
-  return _compress(JSON.encode(t, {indent = true}))
 end
 
 local function _decode(str) --> table
@@ -44,20 +38,27 @@ local function _decode(str) --> table
 end
 
 local function _deleteInput()
-  INPUT.delete(CONTROL_PATH)
+  return filesystem.remove(CONTROL_PATH)
 end
 
 local function _loadInput()
-  -- setup input
-  local loaded_input = INPUT.load(CONTROL_PATH, _decode)
-  if not loaded_input then
-    local inputmap = DB.loadSetting('controls')
-    INPUT.setup(inputmap)
+  local inputmap
+  if filesystem.getInfo(CONTROL_PATH, { type = 'file' }) then
+    local filedata = assert(filesystem.newFileData(CONTROL_PATH))
+    inputmap = _decode(filedata:getString())
+  else
+    inputmap = DB.loadSetting('controls')
   end
+  return INPUT.setup(inputmap)
 end
 
 local function _saveInput()
-  return INPUT.save(CONTROL_PATH, _encode)
+  local inputmap = INPUT.getMap()
+  return _channel:push({
+    filepath = CONTROL_PATH,
+    data = inputmap,
+    compress = _compress,
+  })
 end
 
 local function _cleanSlate ()
@@ -72,9 +73,11 @@ end
 
 local function _saveProfile(base)
   local profile_data = base or _metadata
-  local file = assert(filesystem.newFile(PROFILE_PATH, "w"))
-  file:write(_encode(profile_data))
-  return file:close()
+  return _channel:push({
+    filepath = PROFILE_PATH,
+    data = profile_data,
+    compress = _compress,
+  })
 end
 
 local function _newProfile()
@@ -96,8 +99,15 @@ end
 function PROFILE.init()
   -- set version
   METABASE.version = VERSION
-  -- clean all save history if CLEAR runflag is set
-  __COMPRESS__ = __COMPRESS__ or RUNFLAGS.COMPRESS
+
+  -- check whether we're compressing savedata
+  _compress = not not RUNFLAGS.COMPRESS
+
+  -- setup writing thread
+  _channel = love.thread.getChannel('write_data')
+  _savethread = love.thread.newThread(IO_THREAD_FILE)
+  _savethread:start()
+
   if RUNFLAGS.CLEAR then _cleanSlate() end
   -- check if profile exists and generate one if not
   if not filesystem.getInfo(PROFILE_PATH, 'file') then _newProfile() end
@@ -109,19 +119,21 @@ end
 function PROFILE.loadRoute(route_id)
   local filedata = assert(filesystem.newFileData(SAVEDIR..route_id))
   local route_data = _decode(filedata:getString())
-  -- delete save from profile list
-  _metadata.save_list[route_data.id] = nil
   return route_data
 end
 
 function PROFILE.saveRoute(route_data)
-  local file = assert(filesystem.newFile(SAVEDIR..route_data.id, "w"))
   -- add save to profile list
   _metadata.save_list[route_data.id] = {
-    player_name = route_data.player_name
+    player_name = route_data.player_name,
+    player_dead = route_data.player_dead,
   }
-  file:write(_encode(route_data))
-  return file:close()
+  _channel:push({
+    filepath = SAVEDIR .. route_data.id,
+    data = route_data,
+    compress = _compress,
+  })
+  return _saveProfile()
 end
 
 function PROFILE.newRoute(player_info)
@@ -153,23 +165,13 @@ function PROFILE.save()
   _saveProfile()
 end
 
--- NOTE TO SELF:
--- Add a quit method that deletes saves that are not on the profile's save_list.
--- This means that when you load a file, and you don't save it, it is lost
--- forever once the program quits. This would be an easy way to implement
--- permadeath. Also if you quit without saving, you lose your savefle.
--- BUT! If the game crashes, you keep your last save.
 function PROFILE.quit()
   _saveInput()
   _saveProfile()
-  local save_list = _metadata.save_list
-  for _,filename in ipairs(filesystem.getDirectoryItems(SAVEDIR)) do
-    if filename ~= PROFILE_FILENAME and filename ~= CONTROL_FILENAME
-                                    and not save_list[filename] then
-      print(("Removing unsaved file: %s"):format(filename))
-      filesystem.remove(SAVEDIR..filename)
-    end
-  end
+  -- politely ask for writing thread to die
+  _channel:push({die = true})
+  _savethread:wait()
+  _savethread:release()
 end
 
 

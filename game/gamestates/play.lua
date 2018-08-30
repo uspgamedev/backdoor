@@ -35,12 +35,17 @@ local _alert
 
 --LOCAL FUNCTION--
 
+local function _saveRoute()
+  PROFILE.saveRoute(_route.saveState())
+end
+
 local function _playTurns(...)
   local request,extra = _route.playTurns(...)
 
   if request == "playerDead" then
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
+    _saveRoute()
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
@@ -56,8 +61,7 @@ end
 
 function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
-  local route_data = _route.saveState()
-  PROFILE.saveRoute(route_data)
+  _saveRoute()
   fade_view:addElement("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
@@ -163,6 +167,7 @@ end
 
 function state:leave()
 
+  _saveRoute()
   _route.destroyAll()
   for _,view in pairs(_view) do
     view:destroy()

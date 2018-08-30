@@ -292,6 +292,7 @@ function Sector:removeBodyAt(i, j, body)
     if actor:getBody() ==  body then
 
       if actor:isPlayer() then
+        self.route.die()
         coroutine.yield("playerDead")
       end
 

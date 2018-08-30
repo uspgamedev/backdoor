@@ -5,6 +5,7 @@ local DIRECTIONALS    = require 'infra.dir'
 local INPUT           = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE         = require 'infra.profile'
+local PLAYSFX         = require 'helpers.playsfx'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
@@ -107,6 +108,9 @@ function state:update(dt)
     if next(savelist) then
       for route_id, route_header in pairs(savelist) do
         local savename = ("%s %s"):format(route_id, route_header.player_name)
+        if route_header.player_dead then
+          savename = savename .. " (DEAD)"
+        end
         _menu_view:setItem(savename)
       end
     else
@@ -138,8 +142,12 @@ function state:update(dt)
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
           if MENU.item(savename) then
-            local route_data = PROFILE.loadRoute(route_id)
-            _activity:changeState('switch', GS.PLAY, route_data)
+            if not route_header.player_dead then
+              local route_data = PROFILE.loadRoute(route_id)
+              _activity:changeState('switch', GS.PLAY, route_data)
+            else
+              PLAYSFX 'denied'
+            end
           end
         end
       else
