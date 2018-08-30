@@ -426,6 +426,8 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
         if _useAction(DEFS.ACTION.PLAY_CARD,
                       { card_index = args.card_index }) then
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
+          local card = _route.getControlledActor():getHandCard(args.card_index)
+          _view.announcement:announce(card:getName())
         end
       end
     end

@@ -12,6 +12,7 @@ local HandView    = require 'view.hand'
 local BufferView  = require 'view.buffer'
 local ActorView   = require 'view.actor'
 local FocusBar    = require 'view.focusbar'
+local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
 
@@ -151,6 +152,10 @@ function state:enter(pre, route_data)
   -- Focus bar
   _view.focusbar = FocusBar(_route)
   _view.focusbar:addElement("HUD")
+
+  -- Announcement box
+  _view.announcement = Announcement()
+  _view.announcement:addElement("HUD")
 
   -- GUI
   _gui = GUI(_view.sector)
