@@ -6,6 +6,7 @@ local FindTarget = {}
 function FindTarget.getTarget(actor)
   local target, dist
   local visible_bodies = actor:getVisibleBodies()
+  local i, j = actor:getPos()
   for body_id in pairs(visible_bodies) do
     local opponent = Util.findId(body_id)
     if opponent and opponent:getFaction() ~= actor:getBody():getFaction() then
