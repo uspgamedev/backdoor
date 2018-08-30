@@ -263,7 +263,7 @@ function View:drawCards(g, enter)
     card:setFocus(focus and not self.is_leaving)
     card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
                             or enter*self.card_alpha[i])
-    card:draw(0, 0)
+    card:draw()
     g.pop()
   end
   g.pop()

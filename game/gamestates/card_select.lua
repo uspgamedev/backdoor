@@ -94,6 +94,8 @@ function state:update(dt)
     _cancel()
   end
 
+  Util.destroyAll()
+
 end
 
 function state:draw()
