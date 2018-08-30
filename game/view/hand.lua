@@ -45,7 +45,6 @@ function HandView:init(route)
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
-  self.recent_activity = false
 
   self:reset()
 
@@ -55,14 +54,6 @@ end
 
 function HandView:getFocus()
   return self.focus_index
-end
-
-function HandView:hasRecentActivity()
-  return self.recent_activity
-end
-
-function HandView:flush()
-  self.recent_activity = false
 end
 
 function HandView:moveFocus(dir)
@@ -183,7 +174,6 @@ function HandView:addCard(actor, card)
     Transmission(frontbuffer:getPoint(), view):addElement("HUD_FX")
     view:flashFor(0.5)
     self:activate()
-    self.recent_activity = true
   end
 end
 

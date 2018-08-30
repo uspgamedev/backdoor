@@ -269,9 +269,8 @@ function state:update(dt)
     action_request = _SAVE_QUIT
   end
 
-  if _view.hand:hasRecentActivity() or _view.hand:isActive() then
+  if _view.hand:isActive() then
     action_request = {DEFS.ACTION.PLAY_CARD}
-    _view.hand:flush()
   end
 
   -- execute action
