@@ -39,7 +39,6 @@ local _adjacency = {}
 local _alert
 local _save_and_quit
 local _was_on_menu
-local _just_drew_hand
 
 local _ACTION = {}
 
@@ -270,9 +269,9 @@ function state:update(dt)
     action_request = _SAVE_QUIT
   end
 
-  if _just_drew_hand then
+  if _view.hand:hasRecentActivity() or _view.hand:isActive() then
     action_request = {DEFS.ACTION.PLAY_CARD}
-    _just_drew_hand = false
+    _view.hand:flush()
   end
 
   -- execute action
@@ -421,7 +420,6 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function()
     if args.action_type == 'play' then
       PLAYSFX 'ok-menu'
       if args.card_index == 'draw-hand' then
-        _just_drew_hand = true
         _useAction(DEFS.ACTION.DRAW_NEW_HAND)
       else
         if _useAction(DEFS.ACTION.PLAY_CARD,

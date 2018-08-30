@@ -45,6 +45,7 @@ function HandView:init(route)
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
+  self.recent_activity = false
 
   self:reset()
 
@@ -54,6 +55,14 @@ end
 
 function HandView:getFocus()
   return self.focus_index
+end
+
+function HandView:hasRecentActivity()
+  return self.recent_activity
+end
+
+function HandView:flush()
+  self.recent_activity = false
 end
 
 function HandView:moveFocus(dir)
@@ -76,6 +85,10 @@ function HandView:changeActionType(dir)
   else
     error(("Unknown dir %s"):format(dir))
   end
+end
+
+function HandView:isActive()
+  return self.focus_index > 0
 end
 
 function HandView:activate()
@@ -114,6 +127,7 @@ function HandView:positionForIndex(i)
 end
 
 function HandView:update(dt)
+  self:reset()
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
@@ -168,6 +182,8 @@ function HandView:addCard(actor, card)
     local frontbuffer = Util.findId('frontbuffer_view')
     Transmission(frontbuffer:getPoint(), view):addElement("HUD_FX")
     view:flashFor(0.5)
+    self:activate()
+    self.recent_activity = true
   end
 end
 
