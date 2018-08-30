@@ -255,6 +255,7 @@ function HandView:addCard(actor, card)
     table.insert(self.hand, view)
     local frontbuffer = Util.findId('frontbuffer_view')
     Transmission(frontbuffer:getPoint(), view):addElement("GUI")
+    view:flashFor(0.5)
   end
 end
 

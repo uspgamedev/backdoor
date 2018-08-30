@@ -57,7 +57,7 @@ function CardView:init(card)
   self.scale = 1
   self.focused = false
   self.alpha = 1
-  self.flash = false
+  self.flash = 0
   self.add = 0
   self.position = vec2()
 end
@@ -86,8 +86,13 @@ function CardView:setScale(scale)
   self.scale = scale
 end
 
+function CardView:flashFor(duration)
+  self.flash = duration
+end
+
 function CardView:update(dt)
-  if self.flash then
+  if self.flash > 0 then
+    self.flash = math.max(0, self.flash - dt)
     if self.add < 0.95 then
       self.add = self.add + (1 - self.add) * dt * _FLASH_SPD
     else
