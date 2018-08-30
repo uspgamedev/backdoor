@@ -132,12 +132,6 @@ function state:enter(pre, route_data)
       _view.hand:addCard(actor,card)
     end
   )
-  Signal.register(
-    "actor_used_card",
-    function(actor, card_index)
-      _view.hand:removeCard(actor,card_index)
-    end
-  )
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)

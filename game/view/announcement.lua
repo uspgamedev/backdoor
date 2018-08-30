@@ -3,6 +3,8 @@ local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
 
+local Transmission = require 'view.transmission'
+
 local vec2        = require 'cpml' .vec2
 
 local _MW = 16
@@ -24,23 +26,38 @@ function Announcement:init()
   self.flash = 0
   self.add = 0
   self.visible = false
+  self.cooldown = 0
 end
 
 function Announcement:announce(text, origin, target)
-  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.text = text
-  self.origin = origin
-  self.target = target
-  self.size.x = self.font:getWidth(self.text) + 2*_MW
-  self.size.y = self.font:getHeight()
-  self.pos.x = w/2 - self.size.x/2
-  self.pos.y = 40
-  self.visible = true
-  self.flash = 0.5
-  self.add = 1.0
+  if self.text then
+    self:close()
+  end
+  self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
+    local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+    self.text = text
+    self.origin = origin
+    self.target = target
+    self.size.x = self.font:getWidth(self.text) + 2*_MW
+    self.size.y = self.font:getHeight()
+    self.pos.x = w/2 - self.size.x/2
+    self.pos.y = 40
+    self.visible = true
+    self.flash = 0.5
+    self.add = 1.0
+    self.cooldown = 3.0
+    Transmission(origin, self):addElement("HUD_FX")
+  end)
+end
+
+function Announcement:getPoint()
+  return self.pos + self.size/2
 end
 
 function Announcement:close()
+  if not self.text then return end
+  self.visible = false
+  self.text = false
 end
 
 function Announcement:update(dt)
@@ -52,6 +69,11 @@ function Announcement:update(dt)
     else
       self.add = 0
     end
+  end
+  if self.cooldown > 0 then
+    self.cooldown = self.cooldown - dt
+  else
+    self:close()
   end
 end
 

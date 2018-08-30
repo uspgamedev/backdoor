@@ -13,6 +13,8 @@ local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 
+local vec2          = require 'cpml' .vec2
+
 local ReadyAbilityView = require 'view.readyability'
 
 local state = {}
@@ -427,7 +429,8 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
                       { card_index = args.card_index }) then
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
           local card = _route.getControlledActor():getHandCard(args.card_index)
-          _view.announcement:announce(card:getName())
+          local view = _view.hand.hand[args.card_index]
+          _view.announcement:announce(card:getName(), view)
         end
       end
     end

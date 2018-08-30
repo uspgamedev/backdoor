@@ -171,7 +171,7 @@ function HandView:addCard(actor, card)
     local view = CardView(card)
     table.insert(self.hand, view)
     local frontbuffer = Util.findId('frontbuffer_view')
-    Transmission(frontbuffer:getPoint(), view):addElement("HUD_FX")
+    Transmission(frontbuffer, view):addElement("HUD_FX")
     view:flashFor(0.5)
     self:activate()
   end
@@ -196,7 +196,22 @@ function HandView:reset()
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
       self.hand[i] = cache[card:getId()] or CardView(card)
+      cache[card:getId()] = nil
     end
+  end
+
+  for _,view in pairs(cache) do
+    view:setFocus(false)
+    view:addElement("HUD_BG")
+    view:addTimer(
+      nil, MAIN_TIMER, 'tween', 0.5, view,
+      { position = view.position + vec2(0,-200) }, 'out-cubic',
+      function() 
+        view:flashFor(0.5)
+        view:addTimer(nil, MAIN_TIMER, 'after', 0.5,
+                      function() view:kill() end)
+      end
+    )
   end
 
 end
