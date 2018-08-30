@@ -202,16 +202,6 @@ function HandView:reset()
 
   for _,view in pairs(cache) do
     view:setFocus(false)
-    view:addElement("HUD_BG")
-    view:addTimer(
-      nil, MAIN_TIMER, 'tween', 0.5, view,
-      { position = view.position + vec2(0,-200) }, 'out-cubic',
-      function() 
-        view:flashFor(0.5)
-        view:addTimer(nil, MAIN_TIMER, 'after', 0.5,
-                      function() view:kill() end)
-      end
-    )
   end
 
 end

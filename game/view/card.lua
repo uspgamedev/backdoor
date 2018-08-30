@@ -119,6 +119,26 @@ function CardView:getPoint()
   return self.position + vec2(self:getDimensions())/2
 end
 
+function CardView:playAsArt()
+  MAIN_TIMER:script(function(wait)
+    self:addElement("HUD_FX")
+    self:addTimer(
+      nil, MAIN_TIMER, 'tween', 0.5, self,
+      { position = self.position + vec2(0,-200) }, 'out-cubic'
+    )
+    wait(0.5)
+    local ann = Util.findId('announcement')
+    ann:interrupt()
+    print("waiting ann")
+    while ann:isBusy() do wait(1) end
+    print("ann available")
+    ann:announce(self.card:getName(), self, Util.findId('backbuffer_view'))
+    self:flashFor(0.5)
+    wait(0.5)
+    self:kill()
+  end)
+end
+
 function CardView:draw()
   --Draw card background
   local x,y = self.position:unpack()

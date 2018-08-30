@@ -149,7 +149,7 @@ function state:enter(pre, route_data)
 
   -- Announcement box
   _view.announcement = Announcement()
-  _view.announcement:addElement("HUD")
+  _view.announcement:addElement("HUD", nil, "announcement")
 
   -- GUI
   _gui = GUI(_view.sector)

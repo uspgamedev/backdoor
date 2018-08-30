@@ -25,47 +25,60 @@ function Announcement:init()
   self.font = FONT.get('Text', 32)
   self.flash = 0
   self.add = 0
+  self.hardadd = 0
   self.visible = false
   self.cooldown = 0
+  self.closing = false
 end
 
 function Announcement:announce(text, origin, target)
-  if self.text then
-    self:close()
-  end
-  self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
-    local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-    self.text = text
-    self.origin = origin
-    self.target = target
-    self.size.x = self.font:getWidth(self.text) + 2*_MW
-    self.size.y = self.font:getHeight()
-    self.pos.x = w/2 - self.size.x/2
-    self.pos.y = 40
-    self.visible = true
-    self.flash = 0.5
-    self.add = 1.0
-    self.cooldown = 3.0
-    Transmission(origin, self):addElement("HUD_FX")
-  end)
+  assert(not self:isBusy())
+  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  self.text = text
+  self.origin = origin
+  self.target = target
+  self.size.x = self.font:getWidth(self.text) + 2*_MW
+  self.size.y = self.font:getHeight()
+  self.pos.x = w/2 - self.size.x/2
+  self.pos.y = 40
+  self.visible = true
+  self.flash = 0.5
+  self.add = 1.0
+  self.cooldown = 3.0
+  Transmission(origin, self):addElement("HUD_FX")
 end
 
 function Announcement:getPoint()
   return self.pos + self.size/2
 end
 
+function Announcement:isBusy()
+  return not not self.text
+end
+
+function Announcement:interrupt()
+  self.cooldown = 0
+end
+
 function Announcement:close()
-  if not self.text then return end
+  if not self.text or self.closing then return end
   if self.target then
-    self.add = 1
+    print("sending to backbuffer")
+    self.closing = true
+    self.hardadd = 1
     Transmission(self, self.target):addElement("HUD_FX")
     self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
+      print("done")
       self.text = false
       self.visible = false
+      self.hardadd = 0
+      self.closing = false
     end)
   else
+    print("ops")
     self.text = false
     self.visible = false
+    self.hardadd = 0
   end
 end
 
@@ -97,7 +110,7 @@ function Announcement:draw()
   self.font:set()
   g.printf(self.text, self.pos.x + _MW, self.pos.y, self.size.x - 2*_MW,
            'center')
-  g.setColor(1, 1, 1, self.add)
+  g.setColor(1, 1, 1, self.add + self.hardadd)
   g.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
 end
 
