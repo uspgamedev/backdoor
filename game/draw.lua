@@ -40,6 +40,8 @@ function draw.allTables()
 
   DrawTable(DRAW_TABLE.HUD_BG)
 
+  DrawTable(DRAW_TABLE.HUD_FX)
+
   DrawTable(DRAW_TABLE.HUD)
 
   if DEBUG and first_time then
