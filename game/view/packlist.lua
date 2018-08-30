@@ -188,7 +188,7 @@ function View:drawPacks(g, enter)
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), 0)
     g.translate(0, self.y_offset[i])
-    packbg = RES.loadTexture("pack")
+    local packbg = RES.loadTexture("pack")
 
     local shiny = 1/255
     if focus then
