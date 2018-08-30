@@ -11,6 +11,7 @@ local state = {}
 local _route
 local _actor_view
 local _hand_view
+local _just_drew_hand
 
 --LOCAL FUNCTIONS--
 
@@ -28,6 +29,10 @@ local function _confirmCard()
     action_type = _hand_view:getActionType(),
     card_index = _hand_view:getFocus(),
   }
+  if args.card_index > _route.getControlledActor():getHandSize() then
+    args.card_index = 'draw-hand'
+    _just_drew_hand = true
+  end
   SWITCHER.pop(args)
 end
 
@@ -48,7 +53,11 @@ function state:enter(_, route, _view)
 
   _route = route
   _hand_view = _view.hand
-  _hand_view:activate()
+  if not _just_drew_hand then
+    _hand_view:activate()
+  else
+    _just_drew_hand = false
+  end
   _actor_view = _view.actor
   _actor_view.onhandview = true
 
@@ -58,7 +67,9 @@ end
 
 function state:leave()
 
-  _hand_view:deactivate()
+  if not _just_drew_hand then
+    _hand_view:deactivate()
+  end
   _actor_view.onhandview = false
 
 end
