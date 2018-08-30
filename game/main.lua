@@ -45,6 +45,13 @@ local DB = require 'database'
 
 local JSON = require 'dkjson'
 
+local _globalvar_err = [=[
+
+HOW DARE YOU CREATE THE GLOBAL VARIABLE `%s`
+HERE IS WHERE YOU DID IT, MORTAL:
+%s
+
+]=]
 ------------------
 --LÖVE FUNCTIONS--
 ------------------
@@ -72,6 +79,12 @@ function love.load(arg)
   require 'tests'
 
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
+
+  setmetatable(_G, {
+    __newindex = function(self, k, v)
+      return error(_globalvar_err:format(k, debug.traceback()))
+    end
+  })
 end
 
 function love.update(dt)
