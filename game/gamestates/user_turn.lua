@@ -430,7 +430,7 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
           Signal.emit("actor_used_card", _route.getControlledActor(), index)
           local card = _route.getControlledActor():getHandCard(args.card_index)
           local view = _view.hand.hand[args.card_index]
-          _view.announcement:announce(card:getName(), view)
+          _view.announcement:announce(card:getName(), view, _view.backbuffer)
         end
       end
     end

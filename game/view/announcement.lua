@@ -56,8 +56,17 @@ end
 
 function Announcement:close()
   if not self.text then return end
-  self.visible = false
-  self.text = false
+  if self.target then
+    self.add = 1
+    Transmission(self, self.target):addElement("HUD_FX")
+    self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
+      self.text = false
+      self.visible = false
+    end)
+  else
+    self.text = false
+    self.visible = false
+  end
 end
 
 function Announcement:update(dt)
