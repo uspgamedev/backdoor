@@ -63,19 +63,16 @@ end
 function Announcement:close()
   if not self.text or self.closing then return end
   if self.target then
-    print("sending to backbuffer")
     self.closing = true
     self.hardadd = 1
     Transmission(self, self.target):addElement("HUD_FX")
     self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
-      print("done")
       self.text = false
       self.visible = false
       self.hardadd = 0
       self.closing = false
     end)
   else
-    print("ops")
     self.text = false
     self.visible = false
     self.hardadd = 0
