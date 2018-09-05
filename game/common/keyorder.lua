@@ -7,6 +7,10 @@ local function isstring(v)
   return type(v) == "string"
 end
 
+local function isarraytable(v)
+  return istable(v) and istable(v[1])
+end
+
 local function orderedKeys(t, seen)
   -- make sure we don't have a nested loop, or we'll be stuck forever here
   assert(not seen[t], "Nested table loop found when ordering keys")
@@ -19,6 +23,12 @@ local function orderedKeys(t, seen)
       table.insert(keys, k)
       if istable(v) then
         for _,kk in ipairs(orderedKeys(v, seen)) do
+          table.insert(keys, kk)
+        end
+      end
+    elseif isarraytable(v) then
+      for _,vv in ipairs(v) do
+        for _,kk in ipairs(orderedKeys(vv, seen)) do
           table.insert(keys, kk)
         end
       end
