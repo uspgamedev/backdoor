@@ -1,4 +1,5 @@
 
+-- helper type verifiers
 local function istable(v)
   return type(v) == "table"
 end
@@ -7,40 +8,78 @@ local function isstring(v)
   return type(v) == "string"
 end
 
-local function isarraytable(v)
-  return istable(v) and istable(v[1])
-end
+local sortedTableKeys
+local sortedArrayTableKeys
 
-local function orderedKeys(t, seen)
+function sortedTableKeys(t, seen)
   -- make sure we don't have a nested loop, or we'll be stuck forever here
   assert(not seen[t], "Nested table loop found when ordering keys")
   seen[t] = true
 
+  -- result array
+  local result = {}
+
   -- iterate keys and add them
   local keys = {}
-  for k, v in pairs(t) do
+  for k in pairs(t) do
     if isstring(k) then -- let's only bother with strings
       table.insert(keys, k)
-      if istable(v) then
-        for _,kk in ipairs(orderedKeys(v, seen)) do
-          table.insert(keys, kk)
+    end
+  end
+  table.sort(keys) -- lua's quicksort: should order keys alphabetically
+
+  for _,key in ipairs(keys) do
+    local v = t[key]
+    if istable(v) then
+      if istable(v[1]) then -- arraytable!
+        for _,subkey in ipairs(sortedArrayTableKeys(v, seen)) do
+          print(">"..subkey)
+          table.insert(result, subkey)
+        end
+      else
+        for _,subkey in ipairs(sortedTableKeys(v, seen)) do
+          print(">"..subkey)
+          table.insert(result, subkey)
         end
       end
-    elseif isarraytable(v) then
-      for _,vv in ipairs(v) do
-        for _,kk in ipairs(orderedKeys(vv, seen)) do
-          table.insert(keys, kk)
+    else
+      print(">"..key)
+      table.insert(result, key)
+    end
+  end
+
+  return result
+end
+
+function sortedArrayTableKeys(a, seen)
+  -- make sure we don't have a nested loop, or we'll be stuck forever here
+  assert(not seen[a], "Nested table loop found when ordering keys")
+  seen[a] = true
+
+  -- result array
+  local result = {}
+  for i,v in ipairs(a) do
+    if istable(v) then
+      if istable(v[1]) then -- arraytable!
+        for _,subkey in ipairs(sortedTableKeys(v, seen)) do
+          print(">"..subkey)
+          table.insert(result, subkey)
+        end
+      else
+        for _,subkey in ipairs(sortedArrayTableKeys(v, seen)) do
+          print(">"..subkey)
+          table.insert(result, subkey)
         end
       end
     end
   end
-  table.sort(keys) -- lua's quicksort: should order keys alphabetically
-  return keys
+  return result
 end
 
 return {
   getOrderedKeys = function(t)
-    return orderedKeys(t, {})
+    print("new table:")
+    return sortedTableKeys(t, {})
   end
 }
 

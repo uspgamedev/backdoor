@@ -89,6 +89,7 @@ local function _writeFile(relpath, rawdata)
   -- We need io.open and fullpath to write to files
   -- This only works in development mode
   local keyorder = KEYORDER.getOrderedKeys(rawdata)
+  for k,v in ipairs(keyorder) do print(k, v) end
   local file = assert(io.open(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true, keyorder = keyorder})
   assert(file:write(data))
