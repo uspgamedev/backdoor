@@ -1,5 +1,6 @@
 
 local json = require 'dkjson'
+local KEYORDER = require 'common.keyorder'
 local SCHEMA = require 'lux.pack' 'database.schema'
 local DEFS = require 'domain.definitions'
 local FS = love.filesystem
@@ -87,8 +88,9 @@ end
 local function _writeFile(relpath, rawdata)
   -- We need io.open and fullpath to write to files
   -- This only works in development mode
+  local keyorder = KEYORDER.getOrderedKeys(rawdata)
   local file = assert(io.open(_fullpath(relpath), 'w'))
-  local data = json.encode(rawdata, {indent = true})
+  local data = json.encode(rawdata, {indent = true, keyorder = keyorder})
   assert(file:write(data))
   return file:close()
 end
@@ -96,6 +98,7 @@ end
 local function _save(cache, basepath)
   -- check whether we are saving a group of files or a file
   if not getmetatable(cache).is_leaf then
+    printf("Saving section `%s`...", basepath)
     -- save group
     for group, subcache in pairs(cache) do
       local meta = getmetatable(subcache) or {}
@@ -106,6 +109,7 @@ local function _save(cache, basepath)
   else
     -- save file
     local filepath = basepath..".json"
+    printf("Saving spec    `%s`...", filepath)
     return assert(_writeFile(filepath, cache))
   end
 end
@@ -170,6 +174,8 @@ local function _get(self, key)
   local path = ("%s/%s"):format(getmetatable(self).relpath, key)
   local meta = {relpath = path, group = key}
   local obj = setmetatable({}, meta)
+
+  printf("Cacheing: %s[%s]", getmetatable(self).relpath, key)
 
   -- if directory
   if fs.getInfo(path, 'directory') then
@@ -261,8 +267,8 @@ end
 function DB.save(container)
   container = container or _dbcache
   local basepath = getmetatable(container).relpath
-  _refresh(container, basepath)
   _save(container, basepath)
+  _refresh(container, basepath)
 end
 
 function DB.renameGroupItem(category, group_name, oldname, newname)
