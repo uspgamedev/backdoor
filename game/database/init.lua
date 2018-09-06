@@ -176,8 +176,6 @@ local function _get(self, key)
   local meta = {relpath = path, group = key}
   local obj = setmetatable({}, meta)
 
-  printf("Cacheing: %s[%s]", getmetatable(self).relpath, key)
-
   -- if directory
   if fs.getInfo(path, 'directory') then
     meta.__index = _get

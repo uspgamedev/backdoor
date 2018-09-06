@@ -1,11 +1,33 @@
 
 -- helper type verifiers
+local function isstring(v)
+  return type(v) == "string"
+end
+
 local function istable(v)
   return type(v) == "table"
 end
 
-local function isstring(v)
-  return type(v) == "string"
+local function arrayconcat(a1, a2)
+  -- in place!
+  local n = #a1 + 1
+  for _,v in ipairs(a2) do
+    a1[n] = v
+    n = n + 1
+  end
+  return a1
+end
+
+local function tablekeys(t)
+  local keys = {}
+  local n = 1
+  for k in pairs(t) do
+    if isstring(k) then
+      keys[n] = k
+      n = n + 1
+    end
+  end
+  return keys
 end
 
 local sortedTableKeys
@@ -15,61 +37,37 @@ function sortedTableKeys(t, seen)
   -- make sure we don't have a nested loop, or we'll be stuck forever here
   assert(not seen[t], "Nested table loop found when ordering keys")
   seen[t] = true
-
   -- result array
   local result = {}
-
   -- iterate keys and add them
-  local keys = {}
-  for k in pairs(t) do
-    if isstring(k) then -- let's only bother with strings
-      table.insert(keys, k)
-    end
-  end
+  local keys = tablekeys(t)
   table.sort(keys) -- lua's quicksort: should order keys alphabetically
-
   for _,key in ipairs(keys) do
     local v = t[key]
+    table.insert(result, key)
     if istable(v) then
-      if istable(v[1]) then -- arraytable!
-        for _,subkey in ipairs(sortedArrayTableKeys(v, seen)) do
-          print(">"..subkey)
-          table.insert(result, subkey)
-        end
+      if v[1] then
+        result = arrayconcat(result, sortedArrayTableKeys(v, seen))
       else
-        for _,subkey in ipairs(sortedTableKeys(v, seen)) do
-          print(">"..subkey)
-          table.insert(result, subkey)
-        end
+        result = arrayconcat(result, sortedTableKeys(v, seen))
       end
-    else
-      print(">"..key)
-      table.insert(result, key)
     end
   end
-
   return result
 end
 
-function sortedArrayTableKeys(a, seen)
+function sortedArrayTableKeys(t, seen)
   -- make sure we don't have a nested loop, or we'll be stuck forever here
-  assert(not seen[a], "Nested table loop found when ordering keys")
-  seen[a] = true
-
+  assert(not seen[t], "Nested table loop found when ordering keys")
+  seen[t] = true
   -- result array
   local result = {}
-  for i,v in ipairs(a) do
+  for i,v in ipairs(t) do
     if istable(v) then
-      if istable(v[1]) then -- arraytable!
-        for _,subkey in ipairs(sortedTableKeys(v, seen)) do
-          print(">"..subkey)
-          table.insert(result, subkey)
-        end
+      if v[1] and istable(v[1]) then
+        result = arrayconcat(result, sortedArrayTableKeys(v, seen))
       else
-        for _,subkey in ipairs(sortedArrayTableKeys(v, seen)) do
-          print(">"..subkey)
-          table.insert(result, subkey)
-        end
+        result = arrayconcat(result, sortedTableKeys(v, seen))
       end
     end
   end
@@ -79,7 +77,7 @@ end
 return {
   getOrderedKeys = function(t)
     print("new table:")
-    return sortedTableKeys(t, {})
+    return sortedTableKeys(t, {used = {}}, 0)
   end
 }
 
