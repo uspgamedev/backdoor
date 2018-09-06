@@ -214,6 +214,8 @@ function state:resume(state, args)
   elseif state == GS.ANIMATION then
     _alert = _alert or args
     _playTurns()
+  elseif state == GS.GAMEOVER then
+    SWITCHER.switch(GS.START_MENU)
   end
 
 end
