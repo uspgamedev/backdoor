@@ -138,22 +138,34 @@ function SectorView:setDropOffset(i, j, k, offset)
   self.drop_offsets[_dropId(i, j, k)] = offset
 end
 
-function SectorView:startVFX(extra)
-  --Play SFX if any
-  if extra.sfx then
-    local target = self.target
-    if not target or not target.fov or not extra.body then
+local function _playSFX(target, extra)
+  if not target or not target.fov or not extra.body then
+    PLAYSFX(extra.sfx)
+  else
+    if target:canSee(extra.body) then
       PLAYSFX(extra.sfx)
-    else
-      if target:canSee(extra.body) then
-        PLAYSFX(extra.sfx)
-      end
     end
   end
+end
+
+function SectorView:startVFX(extra)
   if extra.type then
     local spritefx = SPRITEFX[extra.type]
     self.vfx = spritefx
-    spritefx.apply(self, extra)
+    MAIN_TIMER:script(function(wait)
+      local ann = Util.findId('announcement')
+      if ann:isLocked() then
+        while ann:isLocked() do wait(1) end
+        wait(0.5)
+      end
+      spritefx.apply(self, extra)
+      --Play SFX if any
+      if extra.sfx then
+        _playSFX(self.target, extra)
+      end
+    end)
+  elseif extra.sfx then
+    _playSFX(self.target, extra)
   end
 end
 

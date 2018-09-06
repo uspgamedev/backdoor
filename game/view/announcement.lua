@@ -46,11 +46,24 @@ function Announcement:announce(text, origin, target)
   self.add = 1.0
   self.cooldown = 3.0
   self.flashcolor = COLORS.FLASH_ANNOUNCE
+  self.locked = false
   Transmission(origin, self, COLORS.FLASH_ANNOUNCE):addElement("HUD_FX")
 end
 
 function Announcement:getPoint()
   return self.pos + self.size/2
+end
+
+function Announcement:lock()
+  self.locked = true
+end
+
+function Announcement:unlock()
+  self.locked = false
+end
+
+function Announcement:isLocked()
+  return self.locked
 end
 
 function Announcement:isBusy()
