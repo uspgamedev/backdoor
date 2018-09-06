@@ -12,7 +12,9 @@ return function()
     local filedata = assert(fs.newFileData(filepath))
     local input = JSON.decode(filedata:getString())
     KEYORDER.setOrderedKeys(input)
-    print(JSON.encode(input, { indent = true }))
+    local file = assert(io.open(("%s/%s"):format(fs.getSource(), filepath)))
+    file:write(JSON.encode(input, { indent = true }))
+    file:close()
   end
 end
 
