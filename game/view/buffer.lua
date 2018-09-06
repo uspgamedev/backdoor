@@ -3,10 +3,12 @@ local vec2    = require 'cpml' .vec2
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
+local COLORS  = require 'domain.definitions.colors'
 
 local _SCALE = 0.3
 local _MX = 48
 local _MY = 32
+local _FLASH_SPD = 20
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -15,6 +17,7 @@ local BufferView = Class{
 function BufferView:init(route)
   ELEMENT.init(self)
   self.sprite = TEXTURE.get('buffer')
+  self.flashsprite = TEXTURE.get('buffer-flat')
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
@@ -28,6 +31,11 @@ function BufferView:init(route)
   self.align = nil
   self.format = nil
   self.textoffx = nil
+
+  -- Flash FX
+  self.flash = 0
+  self.add = 0
+  self.flashcolor = COLORS.NEUTRAL
 end
 
 function BufferView.newFrontBufferView(route)
@@ -66,7 +74,16 @@ function BufferView:calculatePosition()
 end
 
 function BufferView:getPoint()
-  return self.pos + vec2(self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  if self.side == 'front' then
+    return self.pos + vec2(self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  elseif self.side == 'back' then
+    return self.pos + vec2(-self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+  end
+end
+
+function BufferView:flashFor(duration, color)
+  self.flash = duration
+  self.flashcolor = color or COLORS.NEUTRAL
 end
 
 function BufferView:update(dt)
@@ -75,6 +92,21 @@ function BufferView:update(dt)
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then
     self.amount = actor:getBackBufferSize()
+  end
+
+  if self.flash > 0 then
+    self.flash = math.max(0, self.flash - dt)
+    if self.add < 0.95 then
+      self.add = self.add + (1 - self.add) * dt * _FLASH_SPD
+    else
+      self.add = 1
+    end
+  else
+    if self.add > 0.05 then
+      self.add = self.add - self.add * dt * _FLASH_SPD
+    else
+      self.add = 0
+    end
   end
 end
 
@@ -91,6 +123,12 @@ function BufferView:draw()
   self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
   g.printf(text, 0, 0, limit, self.align, 0, 1/_SCALE, 1/_SCALE,
            self.textoffx * limit, self.font:getHeight())
+
+  if self.add > 0 then
+    local cr, cg, cb = self.flashcolor:unpack()
+    g.setColor(cr, cg, cb, self.add)
+    self.flashsprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
+  end
   g.pop()
 end
 

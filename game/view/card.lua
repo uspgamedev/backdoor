@@ -59,6 +59,7 @@ function CardView:init(card)
   self.alpha = 1
   self.flash = 0
   self.add = 0
+  self.flashcolor = nil
   self.position = vec2()
 end
 
@@ -86,8 +87,9 @@ function CardView:setScale(scale)
   self.scale = scale
 end
 
-function CardView:flashFor(duration)
+function CardView:flashFor(duration, color)
   self.flash = duration
+  self.flashcolor = color or COLORS.NEUTRAL
 end
 
 function CardView:update(dt)
@@ -117,6 +119,24 @@ end
 
 function CardView:getPoint()
   return self.position + vec2(self:getDimensions())/2
+end
+
+function CardView:playAsArt()
+  MAIN_TIMER:script(function(wait)
+    self:addElement("HUD_FX")
+    self:addTimer(
+      nil, MAIN_TIMER, 'tween', 0.5, self,
+      { position = self.position + vec2(0,-200) }, 'out-cubic'
+    )
+    wait(0.5)
+    local ann = Util.findId('announcement')
+    ann:interrupt()
+    while ann:isBusy() do wait(1) end
+    ann:announce(self.card:getName(), self, Util.findId('backbuffer_view'))
+    self:flashFor(0.5)
+    wait(0.5)
+    self:kill()
+  end)
 end
 
 function CardView:draw()
@@ -179,10 +199,9 @@ function CardView:draw()
   g.pop()
 
   if self.add > 0 then
-    g.setBlendMode("add")
-    g.setColor(1, 1, 1, self.add)
+    g.setColor(self.flashcolor[1], self.flashcolor[2], self.flashcolor[3],
+               self.add)
     self.sprite:draw(x, y)
-    g.setBlendMode("alpha")
   end
 
   g.pop()

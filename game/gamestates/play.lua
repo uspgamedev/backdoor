@@ -12,6 +12,7 @@ local HandView    = require 'view.hand'
 local BufferView  = require 'view.buffer'
 local ActorView   = require 'view.actor'
 local FocusBar    = require 'view.focusbar'
+local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
 
@@ -131,12 +132,6 @@ function state:enter(pre, route_data)
       _view.hand:addCard(actor,card)
     end
   )
-  Signal.register(
-    "actor_used_card",
-    function(actor, card_index)
-      _view.hand:removeCard(actor,card_index)
-    end
-  )
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)
@@ -151,6 +146,10 @@ function state:enter(pre, route_data)
   -- Focus bar
   _view.focusbar = FocusBar(_route)
   _view.focusbar:addElement("HUD")
+
+  -- Announcement box
+  _view.announcement = Announcement()
+  _view.announcement:addElement("HUD", nil, "announcement")
 
   -- GUI
   _gui = GUI(_view.sector)

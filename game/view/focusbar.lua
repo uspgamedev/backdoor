@@ -10,7 +10,7 @@ local math        = require 'common.math'
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
-local _BG = {12/256, 12/256, 12/256, 1}
+local _BG = COLORS.HUD_BG
 local _FOCUS_ICON = {
   -6, 0, 0, -9, 6, 0, 0, 9
 }
