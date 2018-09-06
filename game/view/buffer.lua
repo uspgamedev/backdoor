@@ -7,6 +7,7 @@ local DEFS    = require 'view.definitions'
 local _SCALE = 0.3
 local _MX = 48
 local _MY = 32
+local _FLASH_SPD = 20
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -28,6 +29,10 @@ function BufferView:init(route)
   self.align = nil
   self.format = nil
   self.textoffx = nil
+
+  -- Flash FX
+  self.flash = 0
+  self.add = 0
 end
 
 function BufferView.newFrontBufferView(route)
@@ -73,12 +78,31 @@ function BufferView:getPoint()
   end
 end
 
+function BufferView:flashFor(duration)
+  self.flash = duration
+end
+
 function BufferView:update(dt)
   local actor = self.route.getControlledActor()
   if self.side == 'front' then
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then
     self.amount = actor:getBackBufferSize()
+  end
+
+  if self.flash > 0 then
+    self.flash = math.max(0, self.flash - dt)
+    if self.add < 0.95 then
+      self.add = self.add + (1 - self.add) * dt * _FLASH_SPD
+    else
+      self.add = 1
+    end
+  else
+    if self.add > 0.05 then
+      self.add = self.add - self.add * dt * _FLASH_SPD
+    else
+      self.add = 0
+    end
   end
 end
 
@@ -95,6 +119,15 @@ function BufferView:draw()
   self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
   g.printf(text, 0, 0, limit, self.align, 0, 1/_SCALE, 1/_SCALE,
            self.textoffx * limit, self.font:getHeight())
+
+  if self.add > 0 then
+    g.setBlendMode("add")
+    g.setColor(1, 1, 1, self.add)
+    for i=1,5 do
+      self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
+    end
+    g.setBlendMode("alpha")
+  end
   g.pop()
 end
 

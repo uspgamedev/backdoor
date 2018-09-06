@@ -66,6 +66,7 @@ function Announcement:close()
     self.closing = true
     self.hardadd = 1
     Transmission(self, self.target):addElement("HUD_FX")
+    self.target:flashFor(0.5)
     self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
       self.text = false
       self.visible = false
