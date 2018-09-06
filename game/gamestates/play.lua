@@ -45,7 +45,7 @@ local function _playTurns(...)
   local request,extra = _route.playTurns(...)
 
   if request == "playerDead" then
-    SWITCHER.switch(GS.START_MENU)
+    SWITCHER.push(GS.GAMEOVER, _player, _view)
   elseif request == "userTurn" then
     _saveRoute()
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
