@@ -34,12 +34,17 @@ local input = {
 local fs = love.filesystem
 
 return function()
-  local filedata = assert(fs.newFileData("database/domains/card/spark_rod.json"))
-  local input = JSON.decode(filedata:getString())
-  local keyorder = KEYORDER.getOrderedKeys(input)
-  for i, key in ipairs(keyorder) do
-    print(i, key)
+  local basepath = "database/domains/card"
+  local files = fs.getDirectoryItems(basepath, {type = "file"})
+  for _,filename in ipairs(files) do
+    local filepath = basepath.."/"..filename
+    local filedata = assert(fs.newFileData(filepath))
+    local input = JSON.decode(filedata:getString())
+    local keyorder = KEYORDER.getOrderedKeys(input)
+    for i, key in ipairs(keyorder) do
+      print(i, key)
+    end
+    print(JSON.encode(input, { indent = true, keyorder = keyorder }))
   end
-  print(JSON.encode(input, { indent = true, keyorder = keyorder }))
 end
 
