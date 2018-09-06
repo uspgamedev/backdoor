@@ -3,7 +3,6 @@ local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DIR = require 'domain.definitions.dir'
 local PLAYSFX = require 'helpers.playsfx'
-local CardInfo = require 'view.cardinfo'
 local vec2 = require 'cpml' .vec2
 
 --STATE--
@@ -14,7 +13,6 @@ local state = {}
 local _is_valid_position
 
 local _sector_view
-local _card_info_view
 local _cursor
 
 --LOCAL FUNCTIONS' FORWARD DECLARATION--
@@ -30,12 +28,6 @@ function state:enter(_, sector_view, target_opt)
   local i, j = unpack(target_opt.pos)
   _sector_view:newCursor(i, j, target_opt.aoe_hint, target_opt.validator,
                          target_opt.range_checker)
-
-  if target_opt.card then
-    _card_info_view = CardInfo()
-    _card_info_view:addElement('HUD')
-    _card_info_view:set(target_opt.card)
-  end
 
   _moveCursor = function (dir)
     _sector_view:moveCursor(unpack(DIR[dir]))
@@ -65,10 +57,6 @@ function state:leave()
   _moveCursor = nil
   _confirm = nil
   _cancel = nil
-  if _card_info_view then
-    _card_info_view:destroy()
-    _card_info_view = nil
-  end
 
   _sector_view:removeCursor()
 end

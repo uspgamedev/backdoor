@@ -2,6 +2,7 @@
 local FONT       = require 'view.helpers.font'
 local CARD       = require 'view.helpers.card'
 local CardView   = require 'view.card'
+local CardInfo   = require 'view.cardinfo'
 local COLORS     = require 'domain.definitions.colors'
 local ACTIONDEFS = require 'domain.definitions.action'
 local Transmission = require 'view.transmission'
@@ -45,6 +46,7 @@ function HandView:init(route)
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
+  self.cardinfo = CardInfo(route)
 
   self:reset()
 
@@ -122,6 +124,7 @@ function HandView:update(dt)
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
+  self.cardinfo:update(dt)
 end
 
 function HandView:draw()
@@ -150,7 +153,7 @@ function HandView:draw()
   local offset = self.x+boxwidth
 
   -- draw each card
-  local infoy = 40
+  local infoy = 320
   for i=size,1,-1 do
     local card = hand[i]
     local dx = (size-i+1)*step
@@ -160,8 +163,9 @@ function HandView:draw()
     card:draw()
     if self.focus_index == i then
       local infox = _GAP
-      CARD.drawInfo(card.card, infox, infoy, _WIDTH/3 - infox, enter,
-                    self.route:getPlayerActor())
+      self.cardinfo:setPosition(vec2(infox, infoy))
+      self.cardinfo:setCard(card.card)
+      self.cardinfo:draw()
     end
   end
 end
