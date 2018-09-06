@@ -156,7 +156,7 @@ function SectorView:startVFX(extra)
       local ann = Util.findId('announcement')
       if ann:isLocked() then
         while ann:isLocked() do wait(1) end
-        wait(0.5)
+        wait(0.2)
       end
       spritefx.apply(self, extra)
       --Play SFX if any
