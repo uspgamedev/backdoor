@@ -127,10 +127,10 @@ function CardView:playAsArt()
     ann:lock()
     self:addElement("HUD_FX")
     self:addTimer(
-      nil, MAIN_TIMER, 'tween', 0.5, self,
+      nil, MAIN_TIMER, 'tween', 0.2, self,
       { position = self.position + vec2(0,-200) }, 'out-cubic'
     )
-    wait(0.5)
+    wait(0.2)
     ann:interrupt()
     while ann:isBusy() do wait(1) end
     ann:announce(self.card:getName(), self, Util.findId('backbuffer_view'))
