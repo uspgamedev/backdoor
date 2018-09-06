@@ -270,7 +270,7 @@ function state:update(dt)
   end
 
   if _view.hand:isActive() then
-    action_request = {DEFS.ACTION.PLAY_CARD}
+    action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 
   -- execute action
@@ -411,8 +411,10 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   end
 end
 
-_ACTION[DEFS.ACTION.PLAY_CARD] = function()
-  PLAYSFX 'ok-menu'
+_ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
+  if not was_active then
+    PLAYSFX 'ok-menu'
+  end
   SWITCHER.push(GS.CARD_SELECT, _route, _view)
   local args = coroutine.yield(_task)
   if args.chose_a_card then
