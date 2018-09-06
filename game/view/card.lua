@@ -59,6 +59,7 @@ function CardView:init(card)
   self.alpha = 1
   self.flash = 0
   self.add = 0
+  self.flashcolor = nil
   self.position = vec2()
 end
 
@@ -86,8 +87,9 @@ function CardView:setScale(scale)
   self.scale = scale
 end
 
-function CardView:flashFor(duration)
+function CardView:flashFor(duration, color)
   self.flash = duration
+  self.flashcolor = color or COLORS.NEUTRAL
 end
 
 function CardView:update(dt)
@@ -197,10 +199,9 @@ function CardView:draw()
   g.pop()
 
   if self.add > 0 then
-    g.setBlendMode("add")
-    g.setColor(1, 1, 1, self.add)
+    g.setColor(self.flashcolor[1], self.flashcolor[2], self.flashcolor[3],
+               self.add)
     self.sprite:draw(x, y)
-    g.setBlendMode("alpha")
   end
 
   g.pop()

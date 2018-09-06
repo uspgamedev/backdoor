@@ -33,5 +33,10 @@ COLORS.ANI = Color.fromInt {0x77, 0xb9, 0x55, 0xff}
 COLORS.NONE = Color.fromInt {0x77, 0x77, 0x77, 0xff}
 COLORS.PP = Color.fromInt {153, 51, 153, 255}
 
+COLORS.FLASH_DRAW = Color.fromInt { 99, 252, 255, 255 }
+COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
+COLORS.FLASH_DISCARD = Color.fromInt { 255, 135, 43, 255 }
+COLORS.FLASH_EQUIP = Color:new{ .1, .8, .1, 1 }
+
 return COLORS
 

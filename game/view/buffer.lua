@@ -3,6 +3,7 @@ local vec2    = require 'cpml' .vec2
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
+local COLORS  = require 'domain.definitions.colors'
 
 local _SCALE = 0.3
 local _MX = 48
@@ -33,6 +34,7 @@ function BufferView:init(route)
   -- Flash FX
   self.flash = 0
   self.add = 0
+  self.flashcolor = COLORS.NEUTRAL
 end
 
 function BufferView.newFrontBufferView(route)
@@ -78,8 +80,9 @@ function BufferView:getPoint()
   end
 end
 
-function BufferView:flashFor(duration)
+function BufferView:flashFor(duration, color)
   self.flash = duration
+  self.flashcolor = color or COLORS.NEUTRAL
 end
 
 function BufferView:update(dt)
@@ -121,12 +124,11 @@ function BufferView:draw()
            self.textoffx * limit, self.font:getHeight())
 
   if self.add > 0 then
-    g.setBlendMode("add")
-    g.setColor(1, 1, 1, self.add)
+    local cr, cg, cb = self.flashcolor:unpack()
+    g.setColor(cr, cg, cb, self.add)
     for i=1,5 do
       self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
     end
-    g.setBlendMode("alpha")
   end
   g.pop()
 end

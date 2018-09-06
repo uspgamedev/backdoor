@@ -45,7 +45,8 @@ function Announcement:announce(text, origin, target)
   self.flash = 0.5
   self.add = 1.0
   self.cooldown = 3.0
-  Transmission(origin, self):addElement("HUD_FX")
+  self.flashcolor = COLORS.FLASH_ANNOUNCE
+  Transmission(origin, self, COLORS.FLASH_ANNOUNCE):addElement("HUD_FX")
 end
 
 function Announcement:getPoint()
@@ -65,8 +66,9 @@ function Announcement:close()
   if self.target then
     self.closing = true
     self.hardadd = 1
-    Transmission(self, self.target):addElement("HUD_FX")
-    self.target:flashFor(0.5)
+    self.flashcolor = COLORS.FLASH_DISCARD
+    Transmission(self, self.target, COLORS.FLASH_DISCARD):addElement("HUD_FX")
+    self.target:flashFor(0.5, COLORS.FLASH_DISCARD)
     self:addTimer(nil, MAIN_TIMER, 'after', 0.5, function()
       self.text = false
       self.visible = false
@@ -104,11 +106,12 @@ function Announcement:draw()
   g.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
   g.setColor(COLORS.NEUTRAL)
   g.setLineWidth(2)
-  g.rectangle('line', self.pos.x, self.pos.y, self.size.x, self.size.y)
+  g.rectangle('line', self.pos.x+2, self.pos.y+2, self.size.x-4, self.size.y-4)
   self.font:set()
   g.printf(self.text, self.pos.x + _MW, self.pos.y, self.size.x - 2*_MW,
            'center')
-  g.setColor(1, 1, 1, self.add + self.hardadd)
+  local cr, cg, cb = self.flashcolor:unpack()
+  g.setColor(cr, cg, cb, self.add + self.hardadd)
   g.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
 end
 
