@@ -1,18 +1,18 @@
 {
   "attr":"COR",
-  "icon":false,
-  "one_time":true,
   "desc":"",
+  "name":"Stunned",
+  "one_time":true,
   "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":"on_cycle",
     "charges":8,
+    "operators":[],
     "status-tags":[{
         "tag":"stun"
       }],
+    "trigger":"on_cycle",
     "placement":false
   },
-  "name":"Stunned",
+  "icon":false,
   "set":false
 }

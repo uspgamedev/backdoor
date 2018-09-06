@@ -1,53 +1,53 @@
 {
   "attr":"ARC",
-  "icon":false,
+  "desc":"",
+  "name":"Self Destruction",
+  "one_time":true,
+  "type-description":"",
   "widget":{
-    "operators":[],
     "auto_activation":{
       "ability":{
-        "inputs":[{
-            "type":"input",
-            "name":"body",
-            "output":"body_self"
-          },{
-            "type":"operator",
-            "name":"self",
-            "output":"actor"
-          },{
-            "which":"ARC",
-            "type":"operator",
-            "output":"arc",
-            "name":"get_attribute"
-          },{
-            "type":"operator",
-            "body":"=body_self",
-            "name":"get_body_pos",
-            "output":"pos"
-          }],
         "effects":[{
             "attr":"=arc",
+            "base":8,
             "center":"=pos",
+            "name":"damage_on_area",
             "size":3,
             "type":"effect",
-            "ignore_owner":false,
-            "name":"damage_on_area",
-            "base":8
+            "ignore_owner":false
           },{
-            "type":"effect",
+            "name":"destroy_body",
             "target":"=body_self",
-            "name":"destroy_body"
+            "type":"effect"
+          }],
+        "inputs":[{
+            "name":"body",
+            "output":"body_self",
+            "type":"input"
+          },{
+            "name":"self",
+            "output":"actor",
+            "type":"operator"
+          },{
+            "name":"get_attribute",
+            "output":"arc",
+            "type":"operator",
+            "which":"ARC"
+          },{
+            "body":"=body_self",
+            "name":"get_body_pos",
+            "output":"pos",
+            "type":"operator"
           }]
       },
       "trigger":"on_done"
     },
+    "charges":8,
+    "operators":[],
     "status-tags":[],
     "trigger":"on_cycle",
-    "charges":8,
     "placement":false
   },
-  "desc":"",
-  "type-description":"",
-  "set":false,
-  "name":"Self Destruction",
-  "one_time":true
+  "icon":false,
+  "set":false
 }

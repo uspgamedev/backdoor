@@ -1,12 +1,12 @@
 {
-  "extends":"strong",
-  "signature":"punch",
-  "behavior":"aggro",
-  "cor":2,
-  "arc":1,
-  "collection":"anything",
-  "description":"The newbie's nightmares...",
-  "name":"Newbie Killer",
   "ani":1,
-  "initial_buffer":[]
+  "arc":1,
+  "behavior":"aggro",
+  "collection":"anything",
+  "cor":2,
+  "description":"The newbie's nightmares...",
+  "extends":"strong",
+  "initial_buffer":[],
+  "name":"Newbie Killer",
+  "signature":"punch"
 }

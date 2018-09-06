@@ -1,5 +1,6 @@
 
 local json = require 'dkjson'
+local KEYORDER = require 'common.keyorder'
 local SCHEMA = require 'lux.pack' 'database.schema'
 local DEFS = require 'domain.definitions'
 local FS = love.filesystem
@@ -13,6 +14,21 @@ local _subschemas = {}
 local function _fullpath(relpath)
   local srcpath = love.filesystem.getSource()
   return ("%s/%s"):format(srcpath, relpath)
+end
+
+local function _clone(t, seen)
+  seen = seen or {}
+  if seen[t] then return end
+  seen[t] = true
+  local clone = {}
+  for k,v in pairs(t) do
+    if type(v) ~= "table" then
+      clone[k] = v
+    else
+      clone[k] = _clone(v)
+    end
+  end
+  return clone
 end
 
 function _loadSubschema(base)
@@ -87,6 +103,8 @@ end
 local function _writeFile(relpath, rawdata)
   -- We need io.open and fullpath to write to files
   -- This only works in development mode
+  rawdata = _clone(rawdata)
+  KEYORDER.setOrderedKeys(rawdata)
   local file = assert(io.open(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true})
   assert(file:write(data))
@@ -106,6 +124,8 @@ local function _save(cache, basepath)
   else
     -- save file
     local filepath = basepath..".json"
+    -- im leaving this print because it's useful for adding content
+    printf("Saving spec `%s`", filepath)
     return assert(_writeFile(filepath, cache))
   end
 end
@@ -261,8 +281,8 @@ end
 function DB.save(container)
   container = container or _dbcache
   local basepath = getmetatable(container).relpath
-  _refresh(container, basepath)
   _save(container, basepath)
+  _refresh(container, basepath)
 end
 
 function DB.renameGroupItem(category, group_name, oldname, newname)

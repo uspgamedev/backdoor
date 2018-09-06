@@ -1,28 +1,28 @@
 {
   "animation":[{
-      "time":100,
-      "quad_idx":1
+      "quad_idx":1,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":2
+      "quad_idx":2,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":3
+      "quad_idx":3,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":4
+      "quad_idx":4,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":5
+      "quad_idx":5,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":4
+      "quad_idx":4,
+      "time":100
     },{
-      "time":100,
-      "quad_idx":3
+      "quad_idx":3,
+      "time":100
     }],
-  "texture":"slime",
   "loop":true,
   "offset":[0,56],
-  "quad_division":[5,1]
+  "quad_division":[5,1],
+  "texture":"slime"
 }

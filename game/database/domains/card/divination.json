@@ -1,21 +1,21 @@
 {
-  "attr":"ARC",
-  "icon":"card-divination",
-  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[],
       "effects":[{
           "amount":2,
           "name":"draw_card",
           "type":"effect"
-        }]
-    }
+        }],
+      "inputs":[]
+    },
+    "cost":20
   },
+  "attr":"ARC",
   "desc":"Close your eyes and see beyond.",
-  "type-description":"",
-  "pp":2,
+  "icon":"card-divination",
   "name":"Divination",
-  "set":"arcanist"
+  "pp":2,
+  "set":"arcanist",
+  "type-description":"",
+  "one_time":false
 }

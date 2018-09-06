@@ -1,52 +1,52 @@
 {
   "attr":"ARC",
-  "icon":"card-focus-gem",
-  "one_time":false,
-  "art":false,
   "desc":"",
+  "icon":"card-focus-gem",
+  "name":"Focus Gem",
+  "pp":0,
+  "set":"arcanist",
   "type-description":"",
   "widget":{
+    "charges":2,
     "operators":[{
-        "op":"+",
         "attr":"ARC",
+        "op":"+",
         "val":2
       }],
-    "trigger":"on_play",
+    "placement":"offhand",
     "status-tags":[],
+    "trigger":"on_play",
     "trigger-condition":{
       "effects":[],
       "inputs":[{
-          "type":"input",
           "name":"card",
-          "output":"card"
+          "output":"card",
+          "type":"input"
         },{
           "attribute":"ARC",
           "card":"=card",
-          "type":"input",
           "name":"card_has_attribute",
-          "output":"ok1"
+          "output":"ok1",
+          "type":"input"
         },{
           "card":"=card",
-          "type":"input",
           "cardtype":"ART",
           "name":"card_is_type",
-          "output":"ok2"
+          "output":"ok2",
+          "type":"input"
         },{
-          "type":"input",
           "name":"card",
-          "output":"widget_self"
+          "output":"widget_self",
+          "type":"input"
         },{
           "lhs":"=card",
-          "type":"input",
-          "rhs":"=widget_self",
           "name":"different_card",
-          "output":"ok3"
+          "output":"ok3",
+          "rhs":"=widget_self",
+          "type":"input"
         }]
-    },
-    "charges":2,
-    "placement":"offhand"
+    }
   },
-  "pp":0,
-  "name":"Focus Gem",
-  "set":"arcanist"
+  "art":false,
+  "one_time":false
 }

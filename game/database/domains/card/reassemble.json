@@ -1,51 +1,51 @@
 {
-  "attr":"COR",
-  "icon":"card-reassemble",
-  "one_time":false,
   "art":{
     "art_ability":{
       "effects":[{
-          "vfx-spd":0.5,
-          "vfx":"SLIDE",
-          "pos":"=to",
-          "type":"effect",
           "body":"=body",
           "name":"move_to",
+          "pos":"=to",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":0.5,
           "sfx":false
         }],
       "inputs":[{
-          "empty-tile":false,
-          "output":"from",
           "aoe-hint":0,
-          "max-range":4,
           "body-only":{
             "body-type":"machine"
           },
-          "type":"input",
-          "non-wall":false,
+          "max-range":4,
           "name":"choose_target",
-          "dif-fact":false
+          "output":"from",
+          "type":"input",
+          "empty-tile":false,
+          "dif-fact":false,
+          "non-wall":false
         },{
           "aoe-hint":1,
-          "type":"input",
+          "empty-tile":true,
+          "max-range":4,
           "name":"choose_target",
           "non-wall":true,
-          "max-range":4,
-          "dif-fact":false,
           "output":"to",
-          "empty-tile":true
+          "type":"input",
+          "dif-fact":false
         },{
-          "type":"operator",
-          "pos":"=from",
           "name":"get_body_at",
-          "output":"body"
+          "output":"body",
+          "pos":"=from",
+          "type":"operator"
         }]
     },
     "cost":60
   },
+  "attr":"COR",
   "desc":"Take your best friend with you!",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-reassemble",
   "name":"Reassemble",
-  "set":"gadgeteer"
+  "pp":0,
+  "set":"gadgeteer",
+  "type-description":"",
+  "one_time":false
 }

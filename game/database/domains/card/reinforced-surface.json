@@ -1,20 +1,20 @@
 {
   "attr":"ARC",
-  "icon":false,
-  "set":false,
   "desc":"",
+  "name":"Reinforced Surface",
+  "one_time":true,
   "type-description":"",
   "widget":{
+    "charges":10,
     "operators":[{
         "attr":"DEF",
         "op":"+",
         "val":4
       }],
-    "trigger":"on_hit",
     "status-tags":[],
-    "charges":10,
+    "trigger":"on_hit",
     "placement":false
   },
-  "name":"Reinforced Surface",
-  "one_time":true
+  "icon":false,
+  "set":false
 }

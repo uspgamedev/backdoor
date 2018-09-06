@@ -1,47 +1,47 @@
 {
   "attr":"COR",
-  "icon":"card-laser-spear",
-  "set":"brawler",
   "desc":"A mass-produced weapon.",
-  "type-description":"",
-  "one_time":false,
-  "pp":0,
+  "icon":"card-laser-spear",
   "name":"Laser Spear",
+  "pp":0,
+  "set":"brawler",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":"on_focus_end",
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "base":5,
+            "name":"damage_on_target",
+            "target":"=body",
+            "type":"effect",
+            "sfx":false
+          }],
         "inputs":[{
             "body-only":[],
             "max-range":1,
-            "type":"input",
             "name":"choose_target",
-            "output":"target"
+            "output":"target",
+            "type":"input"
           },{
-            "type":"operator",
-            "pos":"=target",
             "name":"get_body_at",
-            "output":"body"
+            "output":"body",
+            "pos":"=target",
+            "type":"operator"
           },{
-            "type":"operator",
-            "output":"cor",
             "name":"get_attribute",
+            "output":"cor",
+            "type":"operator",
             "which":"COR"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=body",
-            "base":5,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
           }]
-      }
+      },
+      "cost":20
     },
-    "status-tags":[],
     "charges":1,
-    "placement":"weapon"
-  }
+    "operators":[],
+    "placement":"weapon",
+    "status-tags":[],
+    "trigger":"on_focus_end"
+  },
+  "one_time":false
 }

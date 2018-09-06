@@ -1,50 +1,50 @@
 {
-  "attr":"NONE",
-  "icon":"card-potion",
-  "one_time":true,
   "art":{
     "art_ability":{
       "effects":[{
           "attr":"=vit",
-          "target":"=self_body",
           "base":8,
           "name":"heal",
+          "target":"=self_body",
           "type":"effect"
         }],
       "inputs":[{
-          "empty-tile":false,
-          "output":"self_pos",
           "aoe-hint":0,
-          "max-range":0,
-          "dif-fact":false,
-          "type":"input",
-          "non-wall":false,
           "body-only":{
             "body-type":false
           },
-          "name":"choose_target"
+          "max-range":0,
+          "name":"choose_target",
+          "output":"self_pos",
+          "type":"input",
+          "empty-tile":false,
+          "dif-fact":false,
+          "non-wall":false
         },{
-          "type":"operator",
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
-          "type":"operator",
+          "actor":"=self",
           "name":"get_actor_body",
           "output":"self_body",
-          "actor":"=self"
+          "type":"operator"
         },{
-          "which":"VIT",
-          "type":"operator",
           "body":"=self_body",
+          "name":"get_body_attribite",
           "output":"vit",
-          "name":"get_body_attribite"
+          "type":"operator",
+          "which":"VIT"
         }]
     },
     "cost":20
   },
+  "attr":"NONE",
   "desc":"Gulp. Down the hatch, foxy.",
-  "type-description":"",
-  "pp":4,
+  "icon":"card-potion",
   "name":"Healing Potion",
-  "set":"consumables_potions"
+  "one_time":true,
+  "pp":4,
+  "set":"consumables_potions",
+  "type-description":""
 }

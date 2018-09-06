@@ -1,43 +1,43 @@
 {
-  "attr":"ARC",
-  "icon":"card-teleport",
-  "one_time":false,
   "art":{
     "art_ability":{
       "effects":[{
-          "vfx-spd":1,
-          "vfx":false,
-          "pos":"=target_pos",
-          "type":"effect",
           "body":"=Body",
           "name":"move_to",
-          "sfx":"teleport"
+          "pos":"=target_pos",
+          "sfx":"teleport",
+          "type":"effect",
+          "vfx-spd":1,
+          "vfx":false
         }],
       "inputs":[{
           "aoe-hint":0,
-          "dif-fact":false,
-          "output":"target_pos",
           "empty-tile":true,
           "max-range":7,
-          "non-wall":true,
           "name":"choose_target",
-          "type":"input"
+          "non-wall":true,
+          "output":"target_pos",
+          "type":"input",
+          "dif-fact":false
         },{
-          "type":"operator",
           "name":"self",
-          "output":"Actor"
+          "output":"Actor",
+          "type":"operator"
         },{
-          "type":"operator",
-          "output":"Body",
+          "actor":"=Actor",
           "name":"get_actor_body",
-          "actor":"=Actor"
+          "output":"Body",
+          "type":"operator"
         }]
     },
     "cost":20
   },
+  "attr":"ARC",
   "desc":"",
-  "type-description":"",
-  "pp":4,
+  "icon":"card-teleport",
   "name":"Teleport",
-  "set":"arcanist"
+  "pp":4,
+  "set":"arcanist",
+  "type-description":"",
+  "one_time":false
 }

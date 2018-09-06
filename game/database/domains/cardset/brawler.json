@@ -1,4 +1,4 @@
 {
-  "parent":"all",
-  "name":"brawler"
+  "name":"brawler",
+  "parent":"all"
 }

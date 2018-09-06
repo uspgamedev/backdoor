@@ -1,4 +1,4 @@
 {
-  "parent":"consumables",
-  "name":"Consumable Potions"
+  "name":"Consumable Potions",
+  "parent":"consumables"
 }

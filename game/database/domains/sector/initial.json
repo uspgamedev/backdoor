@@ -1,9 +1,9 @@
 {
   "bootstrap":{
-    "w":0,
-    "mh":0,
-    "tileset":"demo",
     "h":0,
-    "mw":0
+    "mh":0,
+    "mw":0,
+    "tileset":"demo",
+    "w":0
   }
 }

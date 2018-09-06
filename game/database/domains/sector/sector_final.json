@@ -1,10 +1,34 @@
 {
-  "fillings":[],
+  "altars":{
+    "max":6,
+    "min":2,
+    "threshold":1
+  },
+  "bootstrap":{
+    "h":48,
+    "mh":7,
+    "mw":9,
+    "tileset":"otherdemo",
+    "w":48
+  },
   "connections":{
     "loops":24
   },
+  "deadends":{
+    "amount":24
+  },
+  "drops":{
+    "drops":[{
+        "droprate":4,
+        "droptype":"food"
+      },{
+        "droprate":3,
+        "droptype":"pack"
+      }]
+  },
   "encounters":{
     "max":14,
+    "min":6,
     "recipes":[{
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat",
@@ -17,26 +41,7 @@
         "actorspec":"grinful",
         "bodyspec":"imp",
         "upgrade_power":200
-      }],
-    "min":6
-  },
-  "drops":{
-    "drops":[{
-        "droptype":"food",
-        "droprate":4
-      },{
-        "droptype":"pack",
-        "droprate":3
       }]
-  },
-  "rooms":{
-    "minh":3,
-    "rmar":1,
-    "minw":3,
-    "tries":256,
-    "maxh":9,
-    "count":32,
-    "maxw":9
   },
   "exits":{
     "distance":5,
@@ -45,23 +50,18 @@
       }],
     "threshold":2
   },
-  "altars":{
-    "max":6,
-    "min":2,
-    "threshold":1
-  },
-  "theme":false,
+  "fillings":[],
   "maze":{
     "double":false
   },
-  "bootstrap":{
-    "w":48,
-    "mh":7,
-    "tileset":"otherdemo",
-    "h":48,
-    "mw":9
+  "rooms":{
+    "count":32,
+    "maxh":9,
+    "maxw":9,
+    "minh":3,
+    "minw":3,
+    "rmar":1,
+    "tries":256
   },
-  "deadends":{
-    "amount":24
-  }
+  "theme":false
 }

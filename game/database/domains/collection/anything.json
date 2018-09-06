@@ -1,21 +1,21 @@
 {
   "cards":[{
-      "set":"arcanist",
-      "drop":50
+      "drop":50,
+      "set":"arcanist"
     },{
-      "set":"brawler",
-      "drop":50
+      "drop":50,
+      "set":"brawler"
     },{
-      "set":"gadgeteer",
-      "drop":50
+      "drop":50,
+      "set":"gadgeteer"
     },{
-      "set":"consumables",
-      "drop":50
+      "drop":50,
+      "set":"consumables"
     },{
-      "set":"consumables",
-      "drop":50
+      "drop":50,
+      "set":"consumables"
     }],
-  "name":"Anything",
+  "description":"",
   "image":"card-upgrade",
-  "description":""
+  "name":"Anything"
 }

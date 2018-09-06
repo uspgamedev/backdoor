@@ -1,55 +1,55 @@
 {
-  "attr":"COR",
-  "icon":"card-dropkick",
-  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "aoe-hint":0,
-          "max-range":1,
-          "output":"pos",
-          "non-wall":false,
-          "type":"input",
-          "empty-tile":false,
-          "name":"choose_target",
-          "body-only":{
-            "body-type":false
-          }
-        },{
-          "type":"operator",
-          "output":"cor",
-          "name":"get_attribute",
-          "which":"COR"
-        },{
-          "type":"operator",
-          "pos":"=pos",
-          "name":"get_body_at",
-          "output":"target"
-        }],
       "effects":[{
           "attr":"=cor",
-          "target":"=target",
           "base":10,
-          "type":"effect",
           "name":"damage_on_target",
+          "target":"=target",
+          "type":"effect",
           "sfx":false
         },{
-          "type":"operator",
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
+          "name":"lose_life",
+          "percentage":25,
           "target":"=self",
           "type":"effect",
-          "stay_alive":false,
-          "percentage":25,
-          "name":"lose_life"
+          "stay_alive":false
+        }],
+      "inputs":[{
+          "aoe-hint":0,
+          "body-only":{
+            "body-type":false
+          },
+          "max-range":1,
+          "name":"choose_target",
+          "output":"pos",
+          "type":"input",
+          "non-wall":false,
+          "empty-tile":false
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        },{
+          "name":"get_body_at",
+          "output":"target",
+          "pos":"=pos",
+          "type":"operator"
         }]
-    }
+    },
+    "cost":20
   },
+  "attr":"COR",
   "desc":"They say 'no pain, no gain'. I'll give them what they want.",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-dropkick",
   "name":"Unreserved Punch",
-  "set":"brawler"
+  "pp":0,
+  "set":"brawler",
+  "type-description":"",
+  "one_time":false
 }

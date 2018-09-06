@@ -1,13 +1,10 @@
 {
-  "extends":"sentient",
-  "signature":"bolting",
-  "behavior":"player",
-  "traits":[],
-  "cor":-2,
-  "arc":1,
-  "collection":false,
   "ani":1,
-  "name":"Arcanist",
+  "arc":1,
+  "behavior":"player",
+  "cor":-2,
+  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
+  "extends":"sentient",
   "initial_buffer":[{
       "amount":1,
       "card":"heal"
@@ -21,5 +18,8 @@
       "amount":4,
       "card":"catalyst"
     }],
-  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare."
+  "name":"Arcanist",
+  "signature":"bolting",
+  "traits":[],
+  "collection":false
 }

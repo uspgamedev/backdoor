@@ -1,68 +1,68 @@
 {
-  "attr":"COR",
-  "icon":"card-jump",
-  "set":"gadgeteer",
   "art":{
     "art_ability":{
       "effects":[{
-          "pos":"=push_pos",
-          "vfx":"SLIDE",
-          "vfx-spd":1,
-          "type":"effect",
           "body":"=target_body",
           "name":"move_to",
+          "pos":"=push_pos",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
           "sfx":false
         }],
       "inputs":[{
-          "dif-fact":false,
-          "output":"target_pos",
           "aoe-hint":0,
           "body-only":{
             "body-type":false
           },
-          "empty-tile":false,
           "max-range":1,
-          "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "output":"target_pos",
+          "type":"input",
+          "empty-tile":false,
+          "dif-fact":false,
+          "non-wall":false
         },{
-          "type":"operator",
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
-          "type":"operator",
-          "output":"self_body",
+          "actor":"=self",
           "name":"get_actor_body",
-          "actor":"=self"
+          "output":"self_body",
+          "type":"operator"
         },{
-          "type":"operator",
           "body":"=self_body",
           "name":"get_body_pos",
-          "output":"self_pos"
+          "output":"self_pos",
+          "type":"operator"
         },{
-          "to":"=target_pos",
-          "type":"operator",
           "from":"=self_pos",
           "name":"pos_difference",
-          "output":"dir"
+          "output":"dir",
+          "to":"=target_pos",
+          "type":"operator"
         },{
-          "pos":"=target_pos",
           "dir":"=dir",
-          "type":"operator",
+          "maxrange":5,
           "name":"hitscan",
           "output":"push_pos",
-          "maxrange":5
-        },{
-          "type":"operator",
           "pos":"=target_pos",
+          "type":"operator"
+        },{
           "name":"get_body_at",
-          "output":"target_body"
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
         }]
     },
     "cost":10
   },
+  "attr":"COR",
   "desc":"Outta my way!",
-  "type-description":"",
+  "icon":"card-jump",
   "name":"Push",
+  "set":"gadgeteer",
+  "type-description":"",
   "one_time":false
 }

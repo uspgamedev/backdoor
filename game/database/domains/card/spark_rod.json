@@ -1,64 +1,64 @@
 {
   "attr":"COR",
-  "icon":"card-spark-rod",
-  "one_time":true,
   "desc":"'Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children' - old and controversial commercial from Tark Tech.",
-  "type-description":"",
-  "set":"brawler",
-  "pp":4,
+  "icon":"card-spark-rod",
   "name":"Spark Rod 2000",
+  "one_time":true,
+  "pp":4,
+  "set":"brawler",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "base":6,
+            "name":"damage_on_target",
+            "target":"=target_body",
+            "type":"effect",
+            "sfx":false
+          },{
+            "attr":"=cor",
+            "base":4,
+            "center":"=first_target",
+            "ignore_owner":true,
+            "name":"damage_on_area",
+            "size":3,
+            "type":"effect"
+          }],
         "inputs":[{
             "aoe-hint":3,
             "body-only":{
               "body-type":false
             },
-            "output":"first_target",
-            "non-wall":false,
-            "type":"input",
-            "empty-tile":false,
+            "max-range":1,
             "name":"choose_target",
-            "max-range":1
+            "output":"first_target",
+            "type":"input",
+            "non-wall":false,
+            "empty-tile":false
           },{
-            "type":"operator",
-            "pos":"=first_target",
             "name":"get_body_at",
-            "output":"target_body"
+            "output":"target_body",
+            "pos":"=first_target",
+            "type":"operator"
           },{
-            "type":"operator",
-            "output":"cor",
             "name":"get_attribute",
+            "output":"cor",
+            "type":"operator",
             "which":"COR"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=target_body",
-            "base":6,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
-          },{
-            "attr":"=cor",
-            "center":"=first_target",
-            "size":3,
-            "type":"effect",
-            "ignore_owner":true,
-            "name":"damage_on_area",
-            "base":4
           }]
-      }
-    },
-    "status-tags":[],
-    "trigger-condition":{
-      "inputs":[],
-      "effects":[]
+      },
+      "cost":20
     },
     "charges":0,
-    "placement":"weapon"
+    "operators":[],
+    "placement":"weapon",
+    "status-tags":[],
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false
   }
 }

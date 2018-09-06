@@ -1,45 +1,45 @@
 {
-  "attr":"ANI",
-  "icon":"card-heal",
-  "one_time":false,
   "art":{
     "art_ability":{
       "effects":[{
           "attr":"=ANI",
-          "target":"=self",
-          "type":"effect",
+          "base":5,
           "name":"heal",
-          "base":5
+          "target":"=self",
+          "type":"effect"
         }],
       "inputs":[{
-          "empty-tile":false,
-          "output":"body-pos",
           "aoe-hint":1,
-          "dif-fact":false,
           "body-only":{
             "body-type":false
           },
           "max-range":0,
-          "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "output":"body-pos",
+          "type":"input",
+          "empty-tile":false,
+          "dif-fact":false,
+          "non-wall":false
         },{
-          "type":"operator",
-          "which":"ANI",
           "name":"get_attribute",
-          "output":"ANI"
-        },{
+          "output":"ANI",
           "type":"operator",
-          "pos":"=body-pos",
+          "which":"ANI"
+        },{
           "name":"get_body_at",
-          "output":"self"
+          "output":"self",
+          "pos":"=body-pos",
+          "type":"operator"
         }]
     },
     "cost":20
   },
+  "attr":"ANI",
   "desc":"",
-  "type-description":"",
-  "pp":3,
+  "icon":"card-heal",
   "name":"Heal",
-  "set":"arcanist"
+  "pp":3,
+  "set":"arcanist",
+  "type-description":"",
+  "one_time":false
 }

@@ -1,25 +1,25 @@
 {
   "attr":"ANI",
-  "icon":"card-haste",
-  "one_time":false,
   "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
+  "icon":"card-haste",
+  "name":"Haste",
+  "pp":4,
+  "set":"arcanist",
   "type-description":"",
   "widget":{
+    "charges":10,
     "operators":[{
-        "op":"+",
         "attr":"SPD",
+        "op":"+",
         "val":2
       }],
-    "trigger":"on_turn",
     "status-tags":[],
+    "trigger":"on_turn",
     "trigger-condition":{
       "effects":[],
       "inputs":[]
     },
-    "charges":10,
     "placement":false
   },
-  "pp":4,
-  "name":"Haste",
-  "set":"arcanist"
+  "one_time":false
 }
