@@ -1,0 +1,111 @@
+make -C externals/love-imgui/build
+make[1]: Entering directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+make[2]: Entering directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+make[3]: Entering directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+make[3]: Leaving directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+[100%] Built target imgui
+make[2]: Leaving directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+make[1]: Leaving directory '/Users/Akira/Projects/Love2D/backdoor/externals/love-imgui/build'
+love game --test=keyordering
+Running test: keyordering
+1	attr
+2	desc
+3	icon
+4	name
+5	one_time
+6	pp
+7	set
+8	type-description
+9	widget
+10	activation
+11	ability
+12	effects
+13	base
+14	sfx
+15	target
+16	type
+17	center
+18	ignore_owner
+19	size
+20	inputs
+21	aoe-hint
+22	body-only
+23	body-type
+24	empty-tile
+25	max-range
+26	non-wall
+27	output
+28	pos
+29	which
+30	cost
+31	charges
+32	operators
+33	placement
+34	status-tags
+35	trigger
+36	trigger-condition
+{
+  "attr":"COR",
+  "desc":"'Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children' - old and controversial commercial from Tark Tech.",
+  "icon":"card-spark-rod",
+  "name":"Spark Rod 2000",
+  "one_time":true,
+  "pp":4,
+  "set":"brawler",
+  "type-description":"",
+  "widget":{
+    "activation":{
+      "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "name":"damage_on_target",
+            "base":6,
+            "target":"=target_body",
+            "type":"effect",
+            "sfx":false
+          },{
+            "attr":"=cor",
+            "name":"damage_on_area",
+            "base":4,
+            "type":"effect",
+            "center":"=first_target",
+            "ignore_owner":true,
+            "size":3
+          }],
+        "inputs":[{
+            "name":"choose_target",
+            "type":"input",
+            "aoe-hint":3,
+            "body-only":{
+              "body-type":false
+            },
+            "max-range":1,
+            "output":"first_target",
+            "empty-tile":false,
+            "non-wall":false
+          },{
+            "name":"get_body_at",
+            "type":"operator",
+            "output":"target_body",
+            "pos":"=first_target"
+          },{
+            "name":"get_attribute",
+            "type":"operator",
+            "output":"cor",
+            "which":"COR"
+          }]
+      },
+      "cost":20
+    },
+    "charges":0,
+    "operators":[],
+    "placement":"weapon",
+    "status-tags":[],
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false
+  }
+}
+Test Successful!
