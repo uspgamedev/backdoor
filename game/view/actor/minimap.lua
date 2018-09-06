@@ -33,6 +33,7 @@ local _TILE_COLORS = {
 }
 
 local _map
+local _font
 
 local MINIMAP = {}
 

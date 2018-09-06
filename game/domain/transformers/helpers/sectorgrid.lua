@@ -57,7 +57,7 @@ function SectorGrid:instance(obj, w, h, mw, mh)
       local m = s.tbl
 
       s[2] = s[2] + 1
-      i, j = s[1], s[2]
+      local i, j = s[1], s[2]
       value = m[i] and m[i][j]
 
       if not value then
