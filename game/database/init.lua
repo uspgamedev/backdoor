@@ -107,7 +107,6 @@ local function _writeFile(relpath, rawdata)
   KEYORDER.setOrderedKeys(rawdata)
   local file = assert(io.open(_fullpath(relpath), 'w'))
   local data = json.encode(rawdata, {indent = true})
-  print(data)
   assert(file:write(data))
   return file:close()
 end
@@ -115,7 +114,6 @@ end
 local function _save(cache, basepath)
   -- check whether we are saving a group of files or a file
   if not getmetatable(cache).is_leaf then
-    printf("Saving section `%s`...", basepath)
     -- save group
     for group, subcache in pairs(cache) do
       local meta = getmetatable(subcache) or {}
@@ -126,7 +124,8 @@ local function _save(cache, basepath)
   else
     -- save file
     local filepath = basepath..".json"
-    printf("Saving spec    `%s`...", filepath)
+    -- im leaving this print because it's useful for adding content
+    printf("Saving spec `%s`", filepath)
     return assert(_writeFile(filepath, cache))
   end
 end
