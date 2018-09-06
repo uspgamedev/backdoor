@@ -27,6 +27,10 @@ function CardInfo:init(route)
   self.invisible = true
   self.side = 'right'
 
+  --Oscilating effect
+  self.oscilate = 0
+  self.oscilate_magnitude = 10
+
   _W = love.graphics.getDimensions()/4.5
 
 end
@@ -67,6 +71,7 @@ end
 
 function CardInfo:update(dt)
   if not self.invisible then
+    self.oscilate = self.oscilate + dt
     self.alpha = self.alpha + (1 - self.alpha) * dt * 20
   end
 end
@@ -95,7 +100,7 @@ function CardInfo:draw()
                         * self.text_font:getLineHeight()
 
   g.push()
-
+  g.translate(0,math.sin(self.oscilate)*self.oscilate_magnitude) 
   g.translate(self.position:unpack())
   local mask = Color:new{1,1,1,alpha}
 
@@ -111,7 +116,7 @@ function CardInfo:draw()
     boxw, boxh,
     0, boxh
   }
-  
+
   g.push()
   if self.side == 'right' then
     g.translate(boxw, 0)
@@ -141,4 +146,3 @@ function CardInfo:draw()
 end
 
 return CardInfo
-
