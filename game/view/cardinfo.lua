@@ -25,6 +25,7 @@ function CardInfo:init(route)
   self.text_font = FONT.get("Text", 18)
   self.alpha = 1
   self.invisible = true
+  self.side = 'right'
 
   _W = love.graphics.getDimensions()/4.5
 
@@ -40,8 +41,9 @@ end
 
 function CardInfo:anchorTo(cardview, side)
   local gap = 20
-  local rise = 120
+  local rise = 80
   local offset
+  self.side = side
   if side == 'right' then
     offset = vec2(cardview:getWidth() * cardview.scale + gap, -rise)
   elseif side == 'left' then
@@ -87,7 +89,7 @@ function CardInfo:draw()
   desc = desc:gsub("\n\n", "\n")
 
   self.text_font:setLineHeight(1)
-  local width, lines = self.text_font:getWrap(desc, _W)
+  local lines = select(2, self.text_font:getWrap(desc, _W))
   local height = self.title_font:getHeight()
                + #lines * self.text_font:getHeight()
                         * self.text_font:getLineHeight()
@@ -96,12 +98,31 @@ function CardInfo:draw()
 
   g.translate(self.position:unpack())
   local mask = Color:new{1,1,1,alpha}
+
+  local boxw = _W + 2*_MW
+  local boxh = height + 2*_MH
+  local trih = 20
+  local box = {
+    0, 0,
+    boxw, 0,
+    boxw, 0.8*boxh - trih/2,
+    boxw + trih*0.5, 0.8*boxh,
+    boxw, 0.8*boxh + trih/2,
+    boxw, boxh,
+    0, boxh
+  }
   
+  g.push()
+  if self.side == 'right' then
+    g.translate(boxw, 0)
+    g.scale(-1, 1)
+  end
   g.setColor(COLORS.DARKER * mask)
-  g.rectangle('fill', 0, 0, _W + 2*_MW, height + 2*_MH)
+  g.polygon('fill', box)
   g.setColor(COLORS.NEUTRAL * mask)
   g.setLineWidth(2)
-  g.rectangle('line', 0, 0, _W + 2*_MW, height + 2*_MH)
+  g.polygon('line', box)
+  g.pop()
 
   g.translate(_MW, _MH)
 
