@@ -24,7 +24,7 @@ function CardInfo:init(route)
   self.title_font = FONT.get("TextBold", 16)
   self.text_font = FONT.get("Text", 16)
 
-  _W = love.graphics.getDimensions()/4
+  _W = love.graphics.getDimensions()/6
 
 end
 
@@ -34,6 +34,18 @@ end
 
 function CardInfo:setPosition(pos)
   self.position = pos
+end
+
+function CardInfo:anchorTo(cardview, side)
+  local gap = 20
+  local rise = 60
+  local offset
+  if side == 'right' then
+    offset = vec2(cardview:getWidth() * cardview.scale + gap, -rise)
+  elseif side == 'left' then
+    offset = vec2(-_W - gap - 2*_MW, -rise)
+  end
+  self.position = cardview.position + offset
 end
 
 function CardInfo:show()

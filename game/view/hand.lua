@@ -153,7 +153,6 @@ function HandView:draw()
   local offset = self.x+boxwidth
 
   -- draw each card
-  local infoy = 320
   for i=size,1,-1 do
     local card = hand[i]
     local dx = (size-i+1)*step
@@ -161,12 +160,14 @@ function HandView:draw()
     card:setPosition(x - dx + gap,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()
-    if self.focus_index == i and self.cardinfo:isVisible() then
-      local infox = _GAP
-      self.cardinfo:setPosition(vec2(infox, infoy))
-      self.cardinfo:setCard(card.card)
-      self.cardinfo:draw()
-    end
+  end
+  if self.cardinfo:isVisible() then
+    local i = self.focus_index
+    local card = hand[i]
+    if not card then return end
+    self.cardinfo:anchorTo(card, i <= #hand/2 and 'right' or 'left')
+    self.cardinfo:setCard(card.card)
+    self.cardinfo:draw()
   end
 end
 
