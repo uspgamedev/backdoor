@@ -7,7 +7,7 @@ local vec2  = require 'cpml' .vec2
 
 local _W
 local _MW = 16
-local _MH = 8
+local _MH = 12
 
 local CardInfo = Class{
   __includes = { ELEMENT }
@@ -21,10 +21,12 @@ function CardInfo:init(route)
   self.card = nil
   self.position = vec2()
   self.hide_desc = true
-  self.title_font = FONT.get("TextBold", 16)
-  self.text_font = FONT.get("Text", 16)
+  self.title_font = FONT.get("TextBold", 18)
+  self.text_font = FONT.get("Text", 18)
+  self.alpha = 1
+  self.invisible = true
 
-  _W = love.graphics.getDimensions()/6
+  _W = love.graphics.getDimensions()/4.5
 
 end
 
@@ -38,7 +40,7 @@ end
 
 function CardInfo:anchorTo(cardview, side)
   local gap = 20
-  local rise = 60
+  local rise = 120
   local offset
   if side == 'right' then
     offset = vec2(cardview:getWidth() * cardview.scale + gap, -rise)
@@ -50,6 +52,7 @@ end
 
 function CardInfo:show()
   self.invisible = false
+  self.alpha = 0
 end
 
 function CardInfo:hide()
@@ -61,11 +64,13 @@ function CardInfo:isVisible()
 end
 
 function CardInfo:update(dt)
-
+  if not self.invisible then
+    self.alpha = self.alpha + (1 - self.alpha) * dt * 20
+  end
 end
 
 function CardInfo:draw()
-  local alpha = 1
+  local alpha = self.alpha
   if self.card == 'draw' then
     self.card = require 'view.helpers.newhand_card'
   end
@@ -90,10 +95,11 @@ function CardInfo:draw()
   g.push()
 
   g.translate(self.position:unpack())
+  local mask = Color:new{1,1,1,alpha}
   
-  g.setColor(COLORS.DARKER)
+  g.setColor(COLORS.DARKER * mask)
   g.rectangle('fill', 0, 0, _W + 2*_MW, height + 2*_MH)
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL * mask)
   g.setLineWidth(2)
   g.rectangle('line', 0, 0, _W + 2*_MW, height + 2*_MH)
 

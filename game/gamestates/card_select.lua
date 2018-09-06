@@ -5,12 +5,14 @@ local PLAYSFX        = require 'helpers.playsfx'
 
 local state = {}
 
+local _LAG = 1.0 -- seconds
 
 --LOCAL VARIABLES--
 
 local _route
 local _actor_view
 local _hand_view
+local _info_lag
 
 --LOCAL FUNCTIONS--
 
@@ -55,9 +57,9 @@ function state:enter(_, route, _view)
   if not _hand_view:isActive() then
     _hand_view:activate()
   end
-  _hand_view.cardinfo:show()
   _actor_view = _view.actor
   _actor_view.onhandview = true
+  _info_lag = 0
 
   --Make cool animation for cards showing up
 
@@ -74,10 +76,20 @@ function state:update(dt)
 
   if DEBUG then return end
 
+  _info_lag = math.min(_LAG, _info_lag + dt)
+
+  if _info_lag >= _LAG and not _hand_view.cardinfo:isVisible() then
+    _hand_view.cardinfo:show()
+  end
+
   if DIRECTIONALS.wasDirectionTriggered('RIGHT') then
     _moveFocus("RIGHT")
+    _info_lag = 0
+    _hand_view.cardinfo:hide()
   elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
     _moveFocus("LEFT")
+    _info_lag = 0
+    _hand_view.cardinfo:hide()
   elseif DIRECTIONALS.wasDirectionTriggered('UP') then
     _changeActionType("UP")
   elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
