@@ -161,7 +161,7 @@ function HandView:draw()
     card:setPosition(x - dx + gap,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()
-    if self.focus_index == i then
+    if self.focus_index == i and self.cardinfo:isVisible() then
       local infox = _GAP
       self.cardinfo:setPosition(vec2(infox, infoy))
       self.cardinfo:setCard(card.card)

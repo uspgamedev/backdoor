@@ -55,6 +55,7 @@ function state:enter(_, route, _view)
   if not _hand_view:isActive() then
     _hand_view:activate()
   end
+  _hand_view.cardinfo:show()
   _actor_view = _view.actor
   _actor_view.onhandview = true
 
@@ -65,6 +66,7 @@ end
 function state:leave()
 
   _actor_view.onhandview = false
+  _hand_view.cardinfo:hide()
 
 end
 
