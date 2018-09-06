@@ -78,6 +78,10 @@ function HandView:changeActionType(dir)
   end
 end
 
+function HandView:isActive()
+  return self.focus_index > 0
+end
+
 function HandView:activate()
   self.focus_index = 1
   self.action_type = 1
@@ -114,6 +118,7 @@ function HandView:positionForIndex(i)
 end
 
 function HandView:update(dt)
+  self:reset()
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
@@ -168,6 +173,7 @@ function HandView:addCard(actor, card)
     local frontbuffer = Util.findId('frontbuffer_view')
     Transmission(frontbuffer:getPoint(), view):addElement("HUD_FX")
     view:flashFor(0.5)
+    self:activate()
   end
 end
 
