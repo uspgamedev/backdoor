@@ -1,27 +1,27 @@
 {
-  "widget":{
-    "operators":[],
-    "trigger":"on_cycle",
-    "auto_activation":{
-      "trigger":"on_cycle",
-      "ability":{
-        "inputs":[{
-            "type":"input",
-            "name":"body",
-            "output":"body_self"
-          }],
-        "effects":[{
-            "target":"=body_self",
-            "name":"damage_on_target",
-            "base":1,
-            "type":"effect",
-            "attr":1
-          }]
-      }
-    },
-    "charges":6
-  },
+  "attr":"COR",
   "name":"Poison",
   "one_time":true,
-  "attr":"COR"
+  "widget":{
+    "auto_activation":{
+      "ability":{
+        "effects":[{
+            "attr":1,
+            "base":1,
+            "name":"damage_on_target",
+            "target":"=body_self",
+            "type":"effect"
+          }],
+        "inputs":[{
+            "name":"body",
+            "output":"body_self",
+            "type":"input"
+          }]
+      },
+      "trigger":"on_cycle"
+    },
+    "charges":6,
+    "operators":[],
+    "trigger":"on_cycle"
+  }
 }

@@ -1,76 +1,76 @@
 {
   "attr":"COR",
-  "icon":"card-wrench",
-  "set":"gadgeteer",
   "desc":"",
-  "type-description":"",
-  "one_time":false,
-  "pp":0,
+  "icon":"card-wrench",
   "name":"Wrench",
+  "pp":0,
+  "set":"gadgeteer",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=base",
+            "base":12,
+            "name":"damage_on_target",
+            "target":"=target",
+            "type":"effect",
+            "sfx":false
+          }],
         "inputs":[{
             "body-only":[],
             "max-range":1,
-            "type":"input",
             "name":"choose_target",
-            "output":"pos"
+            "output":"pos",
+            "type":"input"
           },{
-            "type":"operator",
-            "output":"cor",
             "name":"get_attribute",
+            "output":"cor",
+            "type":"operator",
             "which":"COR"
           },{
-            "type":"operator",
             "name":"self",
-            "output":"self"
+            "output":"self",
+            "type":"operator"
           },{
-            "type":"operator",
+            "actor":"=self",
             "name":"get_actor_body",
             "output":"body",
-            "actor":"=self"
+            "type":"operator"
           },{
-            "type":"operator",
             "body":"=body",
             "name":"get_body_pos",
-            "output":"center"
+            "output":"center",
+            "type":"operator"
           },{
-            "ignore-owner":true,
             "body-type":"machine",
-            "pos":"=center",
-            "type":"operator",
-            "range":5,
+            "ignore-owner":true,
             "name":"count_nearby_bodies",
-            "output":"count"
+            "output":"count",
+            "pos":"=center",
+            "range":5,
+            "type":"operator"
           },{
-            "op":"+",
             "lhs":"=count",
-            "type":"operator",
-            "rhs":"=cor",
             "name":"integer_binop",
-            "output":"base"
+            "op":"+",
+            "output":"base",
+            "rhs":"=cor",
+            "type":"operator"
           },{
-            "type":"operator",
-            "pos":"=pos",
             "name":"get_body_at",
-            "output":"target"
-          }],
-        "effects":[{
-            "attr":"=base",
-            "target":"=target",
-            "base":12,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
+            "output":"target",
+            "pos":"=pos",
+            "type":"operator"
           }]
-      }
+      },
+      "cost":20
     },
-    "status-tags":[],
     "charges":0,
-    "placement":"weapon"
-  }
+    "operators":[],
+    "placement":"weapon",
+    "status-tags":[],
+    "trigger":false
+  },
+  "one_time":false
 }

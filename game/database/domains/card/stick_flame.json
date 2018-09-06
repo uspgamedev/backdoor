@@ -1,34 +1,34 @@
 {
-  "attr":"ARC",
-  "icon":"card-sticky-flame",
-  "one_time":false,
   "art":{
-    "cost":40,
     "art_ability":{
+      "effects":[{
+          "body":"=target_body",
+          "card":"sticky_flame",
+          "name":"place_widget",
+          "type":"effect"
+        }],
       "inputs":[{
           "aoe-hint":1,
-          "output":"target_pos",
-          "type":"input",
           "body-only":[],
+          "max-range":4,
           "name":"choose_target",
-          "max-range":4
+          "output":"target_pos",
+          "type":"input"
         },{
-          "type":"operator",
-          "pos":"=target_pos",
           "name":"get_body_at",
-          "output":"target_body"
-        }],
-      "effects":[{
-          "type":"effect",
-          "body":"=target_body",
-          "name":"place_widget",
-          "card":"sticky_flame"
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
         }]
-    }
+    },
+    "cost":40
   },
+  "attr":"ARC",
   "desc":"'Hey Danny, hold this for me, will ya?'.\n\nRobert was surprised Danny didn't sent him an invite for his birthday the week after.",
-  "type-description":"",
-  "pp":4,
+  "icon":"card-sticky-flame",
   "name":"Stick Flame",
-  "set":"arcanist"
+  "pp":4,
+  "set":"arcanist",
+  "type-description":"",
+  "one_time":false
 }

@@ -1,5 +1,5 @@
 {
-  "theme":"zones",
   "difficulty":8,
-  "name":"Zone 1"
+  "name":"Zone 1",
+  "theme":"zones"
 }

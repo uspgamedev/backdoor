@@ -1,35 +1,35 @@
 {
-  "attr":"ARC",
-  "icon":"card-turret",
-  "one_time":false,
   "art":{
-    "cost":100,
     "art_ability":{
+      "effects":[{
+          "bodyspec":"machine",
+          "def":50,
+          "name":"make_body",
+          "pos":"=pos",
+          "type":"effect",
+          "vit":50,
+          "widgets":[{
+              "spec":"auto-fire"
+            }]
+        }],
       "inputs":[{
           "aoe-hint":4,
           "empty-tile":true,
-          "output":"pos",
-          "type":"input",
-          "non-wall":true,
+          "max-range":1,
           "name":"choose_target",
-          "max-range":1
-        }],
-      "effects":[{
-          "widgets":[{
-              "spec":"auto-fire"
-            }],
-          "pos":"=pos",
-          "bodyspec":"machine",
-          "type":"effect",
-          "def":50,
-          "vit":50,
-          "name":"make_body"
+          "non-wall":true,
+          "output":"pos",
+          "type":"input"
         }]
-    }
+    },
+    "cost":100
   },
+  "attr":"ARC",
   "desc":"A true friend never let's you down.\n\nAnd also shoots your enemies in the face.",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-turret",
   "name":"Turret",
+  "pp":0,
+  "type-description":"",
+  "one_time":false,
   "set":false
 }

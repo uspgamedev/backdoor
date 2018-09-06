@@ -1,68 +1,68 @@
 {
   "attr":"COR",
-  "icon":false,
-  "set":false,
   "desc":"",
-  "type-description":"",
-  "one_time":false,
   "name":"Bullet",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
-        "inputs":[{
-            "type":"input",
-            "output":"dir",
-            "body-block":true,
-            "name":"choose_dir"
-          },{
-            "type":"operator",
-            "name":"self",
-            "output":"self"
-          },{
-            "type":"operator",
-            "name":"get_actor_body",
-            "output":"self_body",
-            "actor":"=self"
-          },{
-            "type":"operator",
-            "body":"=self_body",
-            "name":"get_body_pos",
-            "output":"self_pos"
-          },{
-            "pos":"=self_pos",
-            "dir":"=dir",
-            "type":"operator",
-            "output":"hitscan",
-            "name":"hitscan",
-            "maxrange":4
-          },{
-            "pos":"=hitscan",
-            "dir":"=dir",
-            "type":"operator",
-            "name":"translated",
-            "output":"target_pos"
-          },{
-            "type":"operator",
-            "output":"cor",
-            "name":"get_attribute",
-            "which":"COR"
-          }],
         "effects":[{
             "attr":"=cor",
+            "base":3,
             "center":"=target_pos",
-            "size":1,
-            "type":"effect",
             "ignore_owner":true,
             "name":"damage_on_area",
-            "base":3
+            "size":1,
+            "type":"effect"
+          }],
+        "inputs":[{
+            "body-block":true,
+            "name":"choose_dir",
+            "output":"dir",
+            "type":"input"
+          },{
+            "name":"self",
+            "output":"self",
+            "type":"operator"
+          },{
+            "actor":"=self",
+            "name":"get_actor_body",
+            "output":"self_body",
+            "type":"operator"
+          },{
+            "body":"=self_body",
+            "name":"get_body_pos",
+            "output":"self_pos",
+            "type":"operator"
+          },{
+            "dir":"=dir",
+            "maxrange":4,
+            "name":"hitscan",
+            "output":"hitscan",
+            "pos":"=self_pos",
+            "type":"operator"
+          },{
+            "dir":"=dir",
+            "name":"translated",
+            "output":"target_pos",
+            "pos":"=hitscan",
+            "type":"operator"
+          },{
+            "name":"get_attribute",
+            "output":"cor",
+            "type":"operator",
+            "which":"COR"
           }]
-      }
+      },
+      "cost":20
     },
     "charges":0,
+    "operators":[],
     "status-tags":[],
+    "trigger":false,
     "placement":false
-  }
+  },
+  "icon":false,
+  "set":false,
+  "one_time":false
 }

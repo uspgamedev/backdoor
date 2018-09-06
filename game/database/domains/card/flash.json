@@ -1,40 +1,40 @@
 {
-  "attr":"ARC",
-  "icon":"card-flash",
-  "one_time":false,
   "art":{
-    "cost":40,
     "art_ability":{
+      "effects":[{
+          "card":"stunned",
+          "center":"=self_pos",
+          "ignore_owner":true,
+          "name":"place_widget_on_area",
+          "size":5,
+          "type":"effect"
+        }],
       "inputs":[{
           "aoe-hint":5,
-          "non-wall":false,
-          "output":"self_pos",
-          "type":"input",
-          "max-range":0,
-          "empty-tile":false,
           "body-only":{
             "body-type":false
           },
-          "name":"choose_target"
+          "max-range":0,
+          "name":"choose_target",
+          "output":"self_pos",
+          "type":"input",
+          "non-wall":false,
+          "empty-tile":false
         },{
-          "type":"operator",
-          "pos":"=self_pos",
           "name":"get_body_at",
-          "output":"self"
-        }],
-      "effects":[{
-          "center":"=self_pos",
-          "size":5,
-          "card":"stunned",
-          "type":"effect",
-          "ignore_owner":true,
-          "name":"place_widget_on_area"
+          "output":"self",
+          "pos":"=self_pos",
+          "type":"operator"
         }]
-    }
+    },
+    "cost":40
   },
+  "attr":"ARC",
   "desc":"Aaaaaaahhh... Savior of the Universe!",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-flash",
   "name":"Flash",
-  "set":"gadgeteer"
+  "pp":0,
+  "set":"gadgeteer",
+  "type-description":"",
+  "one_time":false
 }

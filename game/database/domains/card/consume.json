@@ -1,25 +1,25 @@
 {
-  "attr":"COR",
-  "icon":false,
-  "one_time":false,
   "art":{
-    "cost":10,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "output":"label",
-          "name":"choose_consume_list",
-          "max":3
-        }],
       "effects":[{
-          "type":"effect",
+          "card_list":"=label",
           "name":"consume_cards",
-          "card_list":"=label"
+          "type":"effect"
+        }],
+      "inputs":[{
+          "max":3,
+          "name":"choose_consume_list",
+          "output":"label",
+          "type":"input"
         }]
-    }
+    },
+    "cost":10
   },
+  "attr":"COR",
   "desc":"",
-  "type-description":"",
   "name":"Consume",
-  "set":false
+  "type-description":"",
+  "set":false,
+  "icon":false,
+  "one_time":false
 }

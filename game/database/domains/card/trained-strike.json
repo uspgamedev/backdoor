@@ -1,61 +1,61 @@
 {
-  "attr":"COR",
-  "icon":"card-dropkick",
-  "set":"brawler",
   "art":{
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "target":"=target_body",
-          "type":"effect",
           "base":3,
           "name":"damage_on_target",
-          "sfx":"example"
+          "sfx":"example",
+          "target":"=target_body",
+          "type":"effect"
         },{
           "attr":"=cor",
-          "target":"=self_body",
-          "type":"effect",
           "base":1,
           "name":"armor_on_target",
+          "target":"=self_body",
+          "type":"effect",
           "sfx":false
         }],
       "inputs":[{
-          "dif-fact":true,
-          "output":"target_pos",
           "aoe-hint":1,
-          "empty-tile":false,
           "body-only":{
             "body-type":false
           },
+          "dif-fact":true,
           "max-range":1,
-          "non-wall":false,
           "name":"choose_target",
-          "type":"input"
+          "output":"target_pos",
+          "type":"input",
+          "empty-tile":false,
+          "non-wall":false
         },{
-          "type":"operator",
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
-          "type":"operator",
-          "output":"self_body",
+          "actor":"=self",
           "name":"get_actor_body",
-          "actor":"=self"
+          "output":"self_body",
+          "type":"operator"
         },{
-          "type":"operator",
-          "which":"COR",
+          "name":"get_attribute",
           "output":"cor",
-          "name":"get_attribute"
-        },{
           "type":"operator",
-          "pos":"=target_pos",
+          "which":"COR"
+        },{
           "name":"get_body_at",
-          "output":"target_body"
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
         }]
     },
     "cost":10
   },
+  "attr":"COR",
   "desc":"",
-  "type-description":"",
+  "icon":"card-dropkick",
   "name":"Trained Strike",
+  "set":"brawler",
+  "type-description":"",
   "one_time":false
 }

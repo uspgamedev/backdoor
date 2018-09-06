@@ -1,14 +1,14 @@
 {
+  "appearance":"eyedemon",
+  "con":-2,
+  "description":"Floating demon, a hellish eye which stares\nits victims into shivers. A stink eye is not\nall it does, however: this fiend can cast powerful\narcane spells to strike down its foe.",
+  "drops":[{
+      "droprate":50,
+      "droptype":"pack"
+    }],
   "extends":"imp",
   "faction":"agressive",
-  "drops":[{
-      "droptype":"pack",
-      "droprate":50
-    }],
-  "res":-2,
-  "con":-2,
-  "appearance":"eyedemon",
   "fin":0,
   "name":"Eye",
-  "description":"Floating demon, a hellish eye which stares\nits victims into shivers. A stink eye is not\nall it does, however: this fiend can cast powerful\narcane spells to strike down its foe."
+  "res":-2
 }

@@ -1,68 +1,68 @@
 {
   "attr":"COR",
-  "icon":false,
-  "one_time":false,
   "desc":"",
-  "type-description":"",
-  "set":false,
   "name":"Punch",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
     "activation":{
-      "cost":20,
       "ability":{
+        "effects":[{
+            "attr":"=cor",
+            "base":3,
+            "name":"damage_on_target",
+            "sfx":"example",
+            "target":"=target",
+            "type":"effect"
+          },{
+            "attr":"=cor",
+            "base":1,
+            "name":"armor_on_target",
+            "target":"=self_body",
+            "type":"effect",
+            "sfx":false
+          }],
         "inputs":[{
-            "empty-tile":false,
-            "output":"target_pos",
             "aoe-hint":0,
-            "type":"input",
             "body-only":{
               "body-type":false
             },
+            "dif-fact":true,
             "max-range":1,
-            "non-wall":true,
             "name":"choose_target",
-            "dif-fact":true
+            "non-wall":true,
+            "output":"target_pos",
+            "type":"input",
+            "empty-tile":false
           },{
-            "type":"operator",
-            "pos":"=target_pos",
             "name":"get_body_at",
-            "output":"target"
+            "output":"target",
+            "pos":"=target_pos",
+            "type":"operator"
           },{
-            "type":"operator",
-            "output":"cor",
             "name":"get_attribute",
+            "output":"cor",
+            "type":"operator",
             "which":"COR"
           },{
-            "type":"operator",
             "name":"self",
-            "output":"self"
+            "output":"self",
+            "type":"operator"
           },{
-            "type":"operator",
-            "output":"self_body",
+            "actor":"=self",
             "name":"get_actor_body",
-            "actor":"=self"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=target",
-            "base":3,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":"example"
-          },{
-            "attr":"=cor",
-            "target":"=self_body",
-            "type":"effect",
-            "base":1,
-            "name":"armor_on_target",
-            "sfx":false
+            "output":"self_body",
+            "type":"operator"
           }]
-      }
+      },
+      "cost":20
     },
     "charges":0,
+    "operators":[],
     "status-tags":[],
+    "trigger":false,
     "placement":false
-  }
+  },
+  "icon":false,
+  "one_time":false,
+  "set":false
 }

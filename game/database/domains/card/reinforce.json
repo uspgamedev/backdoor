@@ -1,34 +1,34 @@
 {
-  "attr":"ARC",
-  "icon":"card-reinforce",
-  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
+      "effects":[{
+          "body":"=machine",
+          "card":"reinforced-surface",
+          "name":"place_widget",
+          "type":"effect"
+        }],
       "inputs":[{
-          "type":"input",
-          "name":"choose_target",
-          "output":"target",
           "body-only":{
             "body-type":"machine"
-          }
+          },
+          "name":"choose_target",
+          "output":"target",
+          "type":"input"
         },{
-          "type":"operator",
-          "pos":"=target",
           "name":"get_body_at",
-          "output":"machine"
-        }],
-      "effects":[{
-          "type":"effect",
-          "body":"=machine",
-          "name":"place_widget",
-          "card":"reinforced-surface"
+          "output":"machine",
+          "pos":"=target",
+          "type":"operator"
         }]
-    }
+    },
+    "cost":20
   },
+  "attr":"ARC",
   "desc":"",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-reinforce",
   "name":"Reinforce",
-  "set":"gadgeteer"
+  "pp":0,
+  "set":"gadgeteer",
+  "type-description":"",
+  "one_time":false
 }

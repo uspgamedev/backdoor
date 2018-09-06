@@ -1,51 +1,51 @@
 {
   "ability":{
-    "inputs":[{
-        "type":"input",
-        "output":"dir",
-        "name":"choose_dir",
-        "body-block":true
-      },{
-        "type":"operator",
-        "name":"self",
-        "output":"self"
-      },{
-        "type":"operator",
-        "output":"body_self",
-        "name":"get_actor_body",
-        "actor":"=self"
-      },{
-        "type":"operator",
-        "body":"=body_self",
-        "name":"get_body_pos",
-        "output":"origin"
-      },{
-        "maxrange":5,
-        "dir":"=dir",
-        "type":"operator",
-        "pos":"=origin",
-        "name":"hitscan",
-        "output":"hit_pos"
-      },{
-        "pos":"=hit_pos",
-        "dir":"=dir",
-        "type":"operator",
-        "name":"translated",
-        "output":"target_pos"
-      },{
-        "which":"COR",
-        "output":"cor",
-        "name":"get_attribute",
-        "type":"operator"
-      }],
     "effects":[{
         "attr":"=cor",
-        "center":"=target_pos",
-        "size":1,
         "base":5,
-        "ignore_owner":false,
+        "center":"=target_pos",
         "name":"damage_on_area",
-        "type":"effect"
+        "size":1,
+        "type":"effect",
+        "ignore_owner":false
+      }],
+    "inputs":[{
+        "body-block":true,
+        "name":"choose_dir",
+        "output":"dir",
+        "type":"input"
+      },{
+        "name":"self",
+        "output":"self",
+        "type":"operator"
+      },{
+        "actor":"=self",
+        "name":"get_actor_body",
+        "output":"body_self",
+        "type":"operator"
+      },{
+        "body":"=body_self",
+        "name":"get_body_pos",
+        "output":"origin",
+        "type":"operator"
+      },{
+        "dir":"=dir",
+        "maxrange":5,
+        "name":"hitscan",
+        "output":"hit_pos",
+        "pos":"=origin",
+        "type":"operator"
+      },{
+        "dir":"=dir",
+        "name":"translated",
+        "output":"target_pos",
+        "pos":"=hit_pos",
+        "type":"operator"
+      },{
+        "name":"get_attribute",
+        "output":"cor",
+        "type":"operator",
+        "which":"COR"
       }]
   },
   "cost":20,

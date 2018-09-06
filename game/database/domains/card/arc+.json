@@ -1,14 +1,14 @@
 {
   "attr":"ARC",
+  "name":"Arcana Up",
   "one_time":true,
   "widget":{
+    "charges":1,
     "operators":[{
         "attr":"ARC",
         "op":"+",
         "val":1
       }],
-    "trigger":"on_act",
-    "charges":1
-  },
-  "name":"Arcana Up"
+    "trigger":"on_act"
+  }
 }
