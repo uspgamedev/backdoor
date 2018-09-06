@@ -17,6 +17,7 @@ local BufferView = Class{
 function BufferView:init(route)
   ELEMENT.init(self)
   self.sprite = TEXTURE.get('buffer')
+  self.flashsprite = TEXTURE.get('buffer-flat')
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
@@ -126,9 +127,7 @@ function BufferView:draw()
   if self.add > 0 then
     local cr, cg, cb = self.flashcolor:unpack()
     g.setColor(cr, cg, cb, self.add)
-    for i=1,5 do
-      self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
-    end
+    self.flashsprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
   end
   g.pop()
 end
