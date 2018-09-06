@@ -53,6 +53,20 @@ function sortedTableKeys(t, seen)
       end
     end
   end
+
+  local n = 1
+  local used = {}
+  for _,key in ipairs(result) do
+    if not used[key] then
+      used[key] = true
+      result[n] = key
+      n = n + 1
+    end
+  end
+  for i = n, #result do
+    result[i] = nil
+  end
+
   return result
 end
 
