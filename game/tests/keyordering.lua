@@ -1,4 +1,5 @@
 
+local JSON = require 'dkjson'
 local KEYORDER = require 'common.keyorder'
 
 local input = {
@@ -30,9 +31,15 @@ local input = {
   }
 }
 
+local fs = love.filesystem
+
 return function()
-  for i, key in ipairs(KEYORDER.getOrderedKeys(input)) do
+  local filedata = assert(fs.newFileData("database/domains/card/spark_rod.json"))
+  local input = JSON.decode(filedata:getString())
+  local keyorder = KEYORDER.getOrderedKeys(input)
+  for i, key in ipairs(keyorder) do
     print(i, key)
   end
+  print(JSON.encode(input, { indent = true, keyorder = keyorder }))
 end
 

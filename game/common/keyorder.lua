@@ -90,7 +90,6 @@ end
 
 return {
   getOrderedKeys = function(t)
-    print("new table:")
     return sortedTableKeys(t, {used = {}}, 0)
   end
 }
