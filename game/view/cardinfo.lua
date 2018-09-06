@@ -29,7 +29,8 @@ function CardInfo:init(route)
 
   --Oscilating effect
   self.oscilate = 0
-  self.oscilate_magnitude = 10
+  self.oscilate_magnitude = 4
+  self.oscilate_speed = 6
 
   _W = love.graphics.getDimensions()/4.5
 
@@ -71,7 +72,7 @@ end
 
 function CardInfo:update(dt)
   if not self.invisible then
-    self.oscilate = self.oscilate + dt
+    self.oscilate = self.oscilate + self.oscilate_speed * dt
     self.alpha = self.alpha + (1 - self.alpha) * dt * 20
   end
 end
