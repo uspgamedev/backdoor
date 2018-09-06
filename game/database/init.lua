@@ -16,6 +16,21 @@ local function _fullpath(relpath)
   return ("%s/%s"):format(srcpath, relpath)
 end
 
+local function _clone(t, seen)
+  seen = seen or {}
+  if seen[t] then return end
+  seen[t] = true
+  local clone = {}
+  for k,v in pairs(t) do
+    if type(v) ~= "table" then
+      clone[k] = v
+    else
+      clone[k] = _clone(v)
+    end
+  end
+  return clone
+end
+
 function _loadSubschema(base)
   local fs = love.filesystem
   local sub = _subschemas[base]
@@ -88,10 +103,11 @@ end
 local function _writeFile(relpath, rawdata)
   -- We need io.open and fullpath to write to files
   -- This only works in development mode
-  local keyorder = KEYORDER.getOrderedKeys(rawdata)
-  for k,v in ipairs(keyorder) do print(k, v) end
+  rawdata = _clone(rawdata)
+  KEYORDER.setOrderedKeys(rawdata)
   local file = assert(io.open(_fullpath(relpath), 'w'))
-  local data = json.encode(rawdata, {indent = true, keyorder = keyorder})
+  local data = json.encode(rawdata, {indent = true})
+  print(data)
   assert(file:write(data))
   return file:close()
 end

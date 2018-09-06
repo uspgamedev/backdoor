@@ -8,16 +8,6 @@ local function istable(v)
   return type(v) == "table"
 end
 
-local function arrayconcat(a1, a2)
-  -- in place!
-  local n = #a1 + 1
-  for _,v in ipairs(a2) do
-    a1[n] = v
-    n = n + 1
-  end
-  return a1
-end
-
 local function tablekeys(t)
   local keys = {}
   local n = 1
@@ -30,67 +20,26 @@ local function tablekeys(t)
   return keys
 end
 
-local sortedTableKeys
-local sortedArrayTableKeys
+local addSortedKeys
 
-function sortedTableKeys(t, seen)
+function addSortedKeys(t, seen)
   -- make sure we don't have a nested loop, or we'll be stuck forever here
-  assert(not seen[t], "Nested table loop found when ordering keys")
+  if seen[t] then return end
   seen[t] = true
-  -- result array
-  local result = {}
-  -- iterate keys and add them
   local keys = tablekeys(t)
   table.sort(keys) -- lua's quicksort: should order keys alphabetically
-  for _,key in ipairs(keys) do
-    local v = t[key]
-    table.insert(result, key)
+  for k,v in pairs(t) do
     if istable(v) then
-      if v[1] then
-        result = arrayconcat(result, sortedArrayTableKeys(v, seen))
-      else
-        result = arrayconcat(result, sortedTableKeys(v, seen))
-      end
+      addSortedKeys(v, seen)
     end
   end
 
-  local n = 1
-  local used = {}
-  for _,key in ipairs(result) do
-    if not used[key] then
-      used[key] = true
-      result[n] = key
-      n = n + 1
-    end
-  end
-  for i = n, #result do
-    result[i] = nil
-  end
-
-  return result
-end
-
-function sortedArrayTableKeys(t, seen)
-  -- make sure we don't have a nested loop, or we'll be stuck forever here
-  assert(not seen[t], "Nested table loop found when ordering keys")
-  seen[t] = true
-  -- result array
-  local result = {}
-  for i,v in ipairs(t) do
-    if istable(v) then
-      if v[1] and istable(v[1]) then
-        result = arrayconcat(result, sortedArrayTableKeys(v, seen))
-      else
-        result = arrayconcat(result, sortedTableKeys(v, seen))
-      end
-    end
-  end
-  return result
+  return setmetatable(t, { __jsonorder = keys })
 end
 
 return {
-  getOrderedKeys = function(t)
-    return sortedTableKeys(t, {used = {}}, 0)
+  setOrderedKeys = function(t)
+    return addSortedKeys(t, {})
   end
 }
 
