@@ -17,43 +17,11 @@ local CardView = Class{
 local _ENTER_SPD = 5
 local _FLASH_SPD = 20
 
-local _DRAW = {}
-
-function _DRAW:getRelatedAttr()
-  return 'NONE'
-end
-
-function _DRAW:getType()
-  return ''
-end
-
-function _DRAW:getName()
-  return "New Hand"
-end
-
-function _DRAW:getEffect(player_actor)
-  local pp
-  if player_actor then
-    pp = player_actor:getBody():getConsumption()
-  end
-  return ("Action [-%s PP]\n\nDiscard your hand, draw five cards."):format(pp)
-end
-
-function _DRAW:getDescription()
-  return ""
-end
-
-function _DRAW:getIconTexture()
-end
-
-function _DRAW:isWidget()
-end
-
 function CardView:init(card)
   ELEMENT.init(self)
   self.sprite = TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
-  self.card = card == 'draw' and _DRAW or card
+  self.card = card == 'draw' and require 'view.helpers.newhand_card' or card
   self.scale = 1
   self.focused = false
   self.alpha = 1
