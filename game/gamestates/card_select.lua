@@ -5,7 +5,7 @@ local PLAYSFX        = require 'helpers.playsfx'
 
 local state = {}
 
-local _LAG = 1.0 -- seconds
+local _LAG = 2.0 -- seconds
 
 --LOCAL VARIABLES--
 

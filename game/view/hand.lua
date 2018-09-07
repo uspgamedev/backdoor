@@ -47,6 +47,8 @@ function HandView:init(route)
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
   self.cardinfo = CardInfo(route)
+  self.alpha = 1
+  self.hiding = false
 
   self:reset()
 
@@ -119,12 +121,33 @@ function HandView:positionForIndex(i)
          y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP
 end
 
+function HandView:hide()
+  self.hiding = true
+end
+
+function HandView:show()
+  self.hiding = false
+  self.invisible = false
+end
+
 function HandView:update(dt)
+  local _FADE_SPD = 2
   self:reset()
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
   self.cardinfo:update(dt)
+  if self.hiding then
+    if self.alpha > 0.10 then
+      self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
+    else
+      self.alpha = 0
+      self.invisible = true
+      self.hiding = false
+    end
+  elseif not self.invisible then
+    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD
+  end
 end
 
 function HandView:draw()
@@ -157,6 +180,7 @@ function HandView:draw()
     local card = hand[i]
     local dx = (size-i+1)*step
     card:setFocus(i == self.focus_index)
+    card:setAlpha(self.alpha)
     card:setPosition(x - dx + gap,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()
