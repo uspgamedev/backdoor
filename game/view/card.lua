@@ -3,6 +3,7 @@ local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
 local COLORS  = require 'domain.definitions.colors'
+local Color   = require 'common.color'
 local round   = require 'common.math' .round
 local vec2    = require 'cpml' .vec2
 
@@ -162,7 +163,7 @@ function CardView:draw()
     cg = cg + shine
     cb = cb + shine
     _title_font:set()
-    g.setColor(COLORS.NEUTRAL)
+    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
              namewidth, "center")

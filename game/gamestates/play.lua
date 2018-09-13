@@ -47,7 +47,6 @@ local function _playTurns(...)
     SWITCHER.switch(GS.START_MENU)
   elseif request == "userTurn" then
     _saveRoute()
-    _view.animator:showLowerHUD()
     SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
     _alert = false
   elseif request == "changeSector" then
@@ -199,7 +198,7 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
-    _view.animator:hideLowerHUD()
+    _view.animator:deactivateState()
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _alert = _alert or args

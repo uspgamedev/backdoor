@@ -1,6 +1,7 @@
 
 local HandView    = require 'view.hand'
 local FocusBar    = require 'view.focusbar'
+local vec2        = require 'cpml' .vec2
 
 local _INFO_LAG = 2.0 -- seconds
 
@@ -31,6 +32,46 @@ function HUDAnimator:init(route)
   self.focusbar = FocusBar(route)
   self.focusbar:addElement("HUD")
 
+  -- View mode
+  self.mode = 'exploration'
+
+end
+
+function HUDAnimator:setExplorationMode()
+  self.mode = 'exploration'
+end
+
+function HUDAnimator:setFocusMode()
+  self.mode = 'focus'
+end
+
+function HUDAnimator:activateHand()
+  self.handview:show()
+  self.handview:activate()
+end
+
+function HUDAnimator:activateAbility()
+  self.handview:keepFocusedCard(true)
+  self.handview:hide()
+end
+
+function HUDAnimator:activateTurn()
+  if self.mode == 'focus' then
+    self.focusbar:show()
+    if self.handview:isActive() then
+      self.handview:show()
+    end
+  elseif self.mode == 'exploration' then
+    self.focusbar:hide()
+    if not self.handview:isActive() then
+      self.handview:hide()
+    end
+  end
+end
+
+function HUDAnimator:deactivateState()
+  self.handview:hide()
+  self.focusbar:hide()
 end
 
 function HUDAnimator:getHandView()
@@ -60,13 +101,28 @@ function HUDAnimator:isHandActive()
   return self.handview:isActive()
 end
 
-function HUDAnimator:activateHand()
-  self.handview:activate()
-end
-
 function HUDAnimator:playCardAsArt(index)
-  local view = self.handview.hand[index]
-  view:playAsArt()
+  local cardview = self.handview.hand[index]
+  MAIN_TIMER:script(function(wait)
+    self.handview:keepFocusedCard(false)
+    self:disableCardInfo()
+    cardview:setAlpha(1)
+    local ann = Util.findId('announcement')
+    ann:lock()
+    cardview:addElement("HUD_FX")
+    cardview:addTimer(
+      nil, MAIN_TIMER, 'tween', 0.2, cardview,
+      { position = cardview.position + vec2(0,-200) }, 'out-cubic'
+    )
+    wait(0.2)
+    ann:interrupt()
+    while ann:isBusy() do wait(1) end
+    ann:announce(cardview.card:getName(), cardview, Util.findId('backbuffer_view'))
+    cardview:flashFor(0.5)
+    wait(0.5)
+    ann:unlock()
+    cardview:kill()
+  end)
 end
 
 function HUDAnimator:moveHandFocus(dir)

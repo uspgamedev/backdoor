@@ -56,7 +56,6 @@ end
 
 function state:leave()
 
-  _hud_animator:disableCardInfo()
 
 end
 

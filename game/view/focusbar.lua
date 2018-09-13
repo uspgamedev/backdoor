@@ -71,7 +71,7 @@ function FocusBar:update(dt)
     self.v_offset = self.v_offset + (1 - self.v_offset) * dt * _OFF_SPD
     if self.v_offset > 0.99 then self.v_offset = 1 end
   else
-    self.v_offset = self.v_offset + (0 - self.v_offset) * dt * _OFF_SPD
+    self.v_offset = self.v_offset + (0 - self.v_offset) * dt * _OFF_SPD * 4
     if self.v_offset < 0.01 then self.v_offset = 0 end
   end
 end
@@ -101,7 +101,7 @@ function FocusBar:draw()
   font:set()
   g.push()
   g.origin()
-  g.translate(0, self.v_offset * 40)
+  g.translate(0, self.v_offset * 60)
   g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
 
   --Drawing background

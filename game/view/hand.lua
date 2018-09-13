@@ -45,6 +45,7 @@ function HandView:init(route)
   self.cardinfo = CardInfo(route)
   self.alpha = 1
   self.hiding = false
+  self.keep_focused_card = false
 
   self:reset()
 
@@ -88,6 +89,10 @@ function HandView:deactivate()
                 'out-back')
 end
 
+function HandView:keepFocusedCard(flag)
+  self.keep_focused_card = flag
+end
+
 function HandView:positionForIndex(i)
   local size = #self.hand + 1
   local card = self.hand[i]
@@ -107,7 +112,6 @@ end
 
 function HandView:show()
   self.hiding = false
-  self.invisible = false
 end
 
 function HandView:update(dt)
@@ -122,11 +126,9 @@ function HandView:update(dt)
       self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
     else
       self.alpha = 0
-      self.invisible = true
-      self.hiding = false
     end
-  elseif not self.invisible then
-    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD
+  else
+    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
   end
 end
 
@@ -160,7 +162,12 @@ function HandView:draw()
     local card = hand[i]
     local dx = (size-i+1)*step
     card:setFocus(i == self.focus_index)
-    card:setAlpha(self.alpha)
+    if DRAW_TABLE['HUD_FX'][card]
+       or (self.keep_focused_card and i == self.focus_index) then
+      card:setAlpha(1)
+    else
+      card:setAlpha(self.alpha)
+    end
     card:setPosition(x - dx + gap,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()
