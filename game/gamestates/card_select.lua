@@ -48,7 +48,6 @@ function state:enter(_, route, _view)
     _hud_animator:activateHand()
   end
   _actor_view = _view.actor
-  _actor_view.onhandview = true
   _hud_animator:enableCardInfo()
 
   --Make cool animation for cards showing up
@@ -57,8 +56,6 @@ end
 
 function state:leave()
 
-  _actor_view.onhandview = false
-  
   _hud_animator:disableCardInfo()
 
 end
