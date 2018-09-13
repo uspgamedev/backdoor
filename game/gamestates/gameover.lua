@@ -1,17 +1,21 @@
 
+local PlayerDeathView = require 'view.playerdeath'
+
 local state = {}
 
-function state:enter(from, player, views)
-  self.player = player
-  self.views = views
+function state:enter(from, player)
+  self.view = PlayerDeathView(player)
+  self.view:addElement("HUD")
   print("YOU DIED YOU NOOB")
 end
 
 function state:leave()
+  self.view:kill()
+  self.view = nil
 end
 
 function state:update(dt)
-  return SWITCHER.pop()
+  return self.view:isDone() and SWITCHER.pop()
 end
 
 function state:draw()
