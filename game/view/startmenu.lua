@@ -18,6 +18,9 @@ local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
 local _FADE_TIME = .5
 
+local _LOGO_BG_PARTS = 11
+local _LOGO_BG = {}
+local _LOGO_TEXT
 
 local _menu_font, _title_font
 local _width, _height
@@ -29,21 +32,28 @@ local function _initFontValues()
   _width, _height = g.getDimensions()
 end
 
+local function _initLogo()
+  for i = 1, _LOGO_BG_PARTS do
+    _LOGO_BG[i] = RES.loadTexture('logo-bg'..i)
+  end
+  _LOGO_TEXT = RES.loadTexture('logo-text')
+end
 
 local function _renderTitle(g)
   g.push()
-  g.translate(0, _height/4)
-  _title_font:set()
-  _title_font:setLineHeight(_LH)
+  g.translate(-_width/8, -_height/8)
   g.setColor(COLORS.NEUTRAL)
-  g.print(_TITLE_TEXT, 0, 0)
+  for i = 1, _LOGO_BG_PARTS do
+    g.draw(_LOGO_BG[i],0,0)
+  end
+  g.draw(_LOGO_TEXT,-50,120)
   g.pop()
 end
 
 
 local function _renderOptions(g, q, selection, scrolltop)
   g.push()
-  g.translate(0, _height/2)
+  g.translate(320, 450)
   _menu_font:set()
   _menu_font:setLineHeight(_LH)
   local count = 0
@@ -56,7 +66,7 @@ local function _renderOptions(g, q, selection, scrolltop)
         text_color = COLORS.NEUTRAL
       end
       g.setColor(text_color)
-      g.print(item_text, 0, 0)
+      g.print(item_text, -_menu_font:getWidth(item_text)/2, 0)
       g.translate(0, _menu_font:getHeight())
     end
   end
@@ -74,6 +84,8 @@ function StartMenuView:init()
   self.scrolltop = 1
 
   _initFontValues()
+
+  _initLogo()
 
 end
 
