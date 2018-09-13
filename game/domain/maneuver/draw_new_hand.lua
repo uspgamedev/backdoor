@@ -25,7 +25,7 @@ end
 function DRAWHAND.perform(actor, inputvalues)
   actor:spendPP(actor:getBody():getConsumption())
   while not actor:isHandEmpty() do
-    local card = actor:removeHandCard(1)
+    local card = actor:removeHandCard(1, true)
     actor:addCardToBackbuffer(card)
   end
   for i = 1, DEFS.HAND_LIMIT do

@@ -10,7 +10,7 @@ local _SPD = 40
 local _COOLDOWN = 0.1
 local _WIDTH = 8
 
-function Transmission:init(origin, target, color)
+function Transmission:init(origin, target, color, duration)
   ELEMENT.init(self)
   self.target = target
   self.origin = origin
@@ -19,7 +19,7 @@ function Transmission:init(origin, target, color)
   self.width_scale = 1
   self.warmup = 0.05
   self.color = color or COLORS.NEUTRAL
-  self:addTimer("start", MAIN_TIMER, "tween", 0.5, self,
+  self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
                 { width_scale = 0 }, 'in-back',
                 function () self:kill() end)
 end

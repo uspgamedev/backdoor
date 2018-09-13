@@ -47,10 +47,16 @@ function HandView:init(route)
   self.hiding = false
   self.keep_focused_card = false
 
+  self.fxqueue = {}
+
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
+end
+
+function HandView:isAnimating()
+  return #self.fxqueue > 0 or not not self.fx
 end
 
 function HandView:getFocus()
@@ -120,14 +126,18 @@ function HandView:update(dt)
     card:update(dt)
   end
   self.cardinfo:update(dt)
-  if self.hiding then
+  if not self.hiding or #self.fxqueue > 0 then
+    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
+  else
     if self.alpha > 0.10 then
       self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
     else
       self.alpha = 0
     end
-  else
-    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
+  end
+  if #self.fxqueue > 0 and not self.fx then
+    self.fx = table.remove(self.fxqueue, 1)
+    self:fx()
   end
 end
 
@@ -181,28 +191,48 @@ function HandView:draw()
   end
 end
 
+function HandView:doAddCard(actor, card)
+  MAIN_TIMER:script(function(wait)
+    if self.route.getControlledActor() == actor then
+      local view = CardView(card)
+      table.insert(self.hand, view)
+      local frontbuffer = Util.findId('frontbuffer_view')
+      Transmission(frontbuffer, view, COLORS.FLASH_DRAW):addElement("HUD_FX")
+      frontbuffer:flashFor(0.5, COLORS.FLASH_DRAW)
+      view:flashFor(0.5, COLORS.FLASH_DRAW)
+      wait(0.1)
+      self.fx = false
+    end
+  end)
+end
+
+function HandView:doRemoveCard(actor, card_index, discarded)
+  MAIN_TIMER:script(function(wait)
+    if self.route.getControlledActor() == actor then
+      local view = self.hand[card_index]
+      if discarded then
+        local backbuffer = Util.findId('backbuffer_view')
+        Transmission(view, backbuffer, COLORS.FLASH_DISCARD, 0.2)
+          :addElement("HUD_FX")
+        backbuffer:flashFor(0.2, COLORS.FLASH_DISCARD)
+        view:flashFor(0.2, COLORS.FLASH_DISCARD)
+        wait(0.2)
+      end
+      table.remove(self.hand, card_index)
+      self.fx = false
+    end
+  end)
+end
+
 function HandView:addCard(actor, card)
-  if self.route.getControlledActor() == actor then
-    local view = CardView(card)
-    table.insert(self.hand, view)
-    local frontbuffer = Util.findId('frontbuffer_view')
-    Transmission(frontbuffer, view, COLORS.FLASH_DRAW):addElement("HUD_FX")
-    frontbuffer:flashFor(0.5, COLORS.FLASH_DRAW)
-    view:flashFor(0.5, COLORS.FLASH_DRAW)
-    self:activate()
-  end
+  table.insert(self.fxqueue, function () self:doAddCard(actor, card) end)
 end
 
 --Remove card given by index (must be valid)
-function HandView:removeCard(actor, card_index)
-  if self.route.getControlledActor() == actor then
-    local view = self.hand[card_index]
-    table.remove(self.hand, card_index)
-    local backbuffer = Util.findId('backbuffer_view')
-    Transmission(view, backbuffer, COLORS.FLASH_DISCARD):addElement("HUD_FX")
-    backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
-    view:flashFor(0.5, COLORS.FLASH_DISCARD)
-  end
+function HandView:removeCard(actor, card_index, discarded)
+  table.insert(self.fxqueue, function ()
+    self:doRemoveCard(actor, card_index, discarded)
+  end)
 end
 
 function HandView:reset()
