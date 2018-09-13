@@ -366,6 +366,7 @@ end
 
 function Actor:removeHandCard(index)
   assert(index >= 1 and index <= #self.hand)
+  Signal.emit("actor_discard", self, index)
   return table.remove(self.hand, index)
 end
 

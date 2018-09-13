@@ -24,6 +24,12 @@ function HUDAnimator:init(route)
       self.handview:addCard(actor,card)
     end
   )
+  Signal.register(
+    "actor_discard",
+    function(actor, index)
+      self.handview:removeCard(actor,index)
+    end
+  )
 
   -- Card info
   self.info_lag = false

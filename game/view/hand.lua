@@ -116,7 +116,6 @@ end
 
 function HandView:update(dt)
   local _FADE_SPD = 2
-  self:reset()
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
@@ -197,7 +196,12 @@ end
 --Remove card given by index (must be valid)
 function HandView:removeCard(actor, card_index)
   if self.route.getControlledActor() == actor then
+    local view = self.hand[card_index]
     table.remove(self.hand, card_index)
+    local backbuffer = Util.findId('backbuffer_view')
+    Transmission(view, backbuffer, COLORS.FLASH_DISCARD):addElement("HUD_FX")
+    backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
+    view:flashFor(0.5, COLORS.FLASH_DISCARD)
   end
 end
 
