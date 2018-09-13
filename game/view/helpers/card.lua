@@ -25,43 +25,11 @@ local function _init()
   _is_init = true
 end
 
-local _DRAW = {}
-
-function _DRAW:getRelatedAttr()
-  return 'NONE'
-end
-
-function _DRAW:getType()
-  return ''
-end
-
-function _DRAW:getName()
-  return "New Hand"
-end
-
-function _DRAW:getEffect(player_actor)
-  local pp
-  if player_actor then
-    pp = player_actor:getBody():getConsumption()
-  end
-  return ("Action [-%s PP]\n\nDiscard your hand, draw five cards."):format(pp)
-end
-
-function _DRAW:getDescription()
-  return ""
-end
-
-function _DRAW:getIconTexture()
-end
-
-function _DRAW:isWidget()
-end
-
 --Draw the description of a card.
 function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
   alpha = alpha or 1
   if card == 'draw' then
-    card = _DRAW
+    card = require 'view.helpers.newhand_card'
   end
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
