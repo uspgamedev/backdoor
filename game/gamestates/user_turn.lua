@@ -189,7 +189,6 @@ function state:enter(_, route, view, alert)
   _updateAbilityList()
 
   _view = view
-  _view.hand:reset()
   local ability_idx = 1
   for i, widget in ipairs(_widget_abilities.list) do
     if widget:getId() == _widget_abilities.ready then
@@ -270,7 +269,7 @@ function state:update(dt)
     action_request = _SAVE_QUIT
   end
 
-  if _view.hand:isActive() then
+  if _view.animator:isHandActive() then
     action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 
@@ -419,18 +418,15 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
   SWITCHER.push(GS.CARD_SELECT, _route, _view)
   local args = coroutine.yield(_task)
   if args.chose_a_card then
-    if args.action_type == 'play' then
-      PLAYSFX 'ok-menu'
-      if args.card_index == 'draw-hand' then
-        _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-      else
-        if _useAction(DEFS.ACTION.PLAY_CARD,
-                      { card_index = args.card_index }) then
-          Signal.emit("actor_used_card", _route.getControlledActor(), index)
-          local card = _route.getControlledActor():getHandCard(args.card_index)
-          local view = _view.hand.hand[args.card_index]
-          view:playAsArt()
-        end
+    PLAYSFX 'ok-menu'
+    if args.card_index == 'draw-hand' then
+      _useAction(DEFS.ACTION.DRAW_NEW_HAND)
+    else
+      if _useAction(DEFS.ACTION.PLAY_CARD,
+                    { card_index = args.card_index }) then
+        Signal.emit("actor_used_card", _route.getControlledActor(), index)
+        local card = _route.getControlledActor():getHandCard(args.card_index)
+        _view.animator:playCardAsArt(args.card_index)
       end
     end
   end

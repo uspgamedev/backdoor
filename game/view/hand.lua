@@ -17,9 +17,6 @@ local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
 local _BG = {12/256, 12/256, 12/256, 1}
-local _ACTION_TYPES = {
-  'play',
-}
 local _FOCUS_ICON = {
   -6, 0, 0, -9, 6, 0, 0, 9
 }
@@ -41,7 +38,6 @@ function HandView:init(route)
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.focus_index = -1 --What card is focused. -1 if none
-  self.action_type = -1
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
@@ -68,27 +64,12 @@ function HandView:moveFocus(dir)
   end
 end
 
-function HandView:getActionType()
-  return _ACTION_TYPES[self.action_type]
-end
-
-function HandView:changeActionType(dir)
-  if dir == 'UP' then
-    self.action_type = (self.action_type - 2) % #_ACTION_TYPES + 1
-  elseif dir == 'DOWN' then
-    self.action_type = self.action_type % #_ACTION_TYPES + 1
-  else
-    error(("Unknown dir %s"):format(dir))
-  end
-end
-
 function HandView:isActive()
   return self.focus_index > 0
 end
 
 function HandView:activate()
   self.focus_index = 1
-  self.action_type = 1
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
@@ -98,7 +79,6 @@ end
 
 function HandView:deactivate()
   self.focus_index = -1
-  self.action_type = -1
 
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
@@ -165,7 +145,7 @@ function HandView:draw()
 
   -- draw action type
   _font.set()
-  local colorname = (self:getActionType() or "BACKGROUND"):upper()
+  local colorname = "BACKGROUND"
   local poly = {
     -20, _HEIGHT/2,
     self.x + boxwidth, _HEIGHT/2,

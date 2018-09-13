@@ -10,25 +10,15 @@ local _LAG = 2.0 -- seconds
 --LOCAL VARIABLES--
 
 local _route
+local _hud_animator
 local _actor_view
-local _hand_view
-local _info_lag
 
 --LOCAL FUNCTIONS--
-
-local function _moveFocus(dir)
-  _hand_view:moveFocus(dir)
-end
-
-local function _changeActionType(dir)
-  _hand_view:changeActionType(dir)
-end
 
 local function _confirmCard()
   local args = {
     chose_a_card = true,
-    action_type = _hand_view:getActionType(),
-    card_index = _hand_view:getFocus(),
+    card_index = _hud_animator:getHandView():getFocus(),
   }
   if args.card_index > _route.getControlledActor():getHandSize() then
     args.card_index = 'draw-hand'
@@ -41,7 +31,7 @@ local function _cancel()
     chose_a_card = false,
   }
   PLAYSFX 'back-menu'
-  _hand_view:deactivate()
+  _hud_animator:getHandView():deactivate()
   SWITCHER.pop(args)
 end
 
@@ -53,13 +43,13 @@ end
 function state:enter(_, route, _view)
 
   _route = route
-  _hand_view = _view.hand
-  if not _hand_view:isActive() then
-    _hand_view:activate()
+  _hud_animator = _view.animator
+  if not _hud_animator:isHandActive() then
+    _hud_animator:activateHand()
   end
   _actor_view = _view.actor
   _actor_view.onhandview = true
-  _info_lag = 0
+  _hud_animator:enableCardInfo()
 
   --Make cool animation for cards showing up
 
@@ -68,7 +58,8 @@ end
 function state:leave()
 
   _actor_view.onhandview = false
-  _hand_view.cardinfo:hide()
+  
+  _hud_animator:disableCardInfo()
 
 end
 
@@ -76,24 +67,10 @@ function state:update(dt)
 
   if DEBUG then return end
 
-  _info_lag = math.min(_LAG, _info_lag + dt)
-
-  if _info_lag >= _LAG and not _hand_view.cardinfo:isVisible() then
-    _hand_view.cardinfo:show()
-  end
-
   if DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-    _moveFocus("RIGHT")
-    _info_lag = 0
-    _hand_view.cardinfo:hide()
+    _hud_animator:moveHandFocus("RIGHT")
   elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
-    _moveFocus("LEFT")
-    _info_lag = 0
-    _hand_view.cardinfo:hide()
-  elseif DIRECTIONALS.wasDirectionTriggered('UP') then
-    _changeActionType("UP")
-  elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-    _changeActionType("DOWN")
+    _hud_animator:moveHandFocus("LEFT")
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()
   elseif INPUT.wasActionPressed('CANCEL') or
