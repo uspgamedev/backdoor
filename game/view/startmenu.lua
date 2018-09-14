@@ -18,9 +18,14 @@ local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
 local _FADE_TIME = .5
 
+--Logo consts and variables
 local _LOGO_BG_PARTS = 11
 local _LOGO_BG = {}
+local _LOGO_BG_OX = 478 --X value for image center
+local _LOGO_BG_OY = 324 --y value for image center
 local _LOGO_TEXT
+local _LOGO_ROTATION_SPEED = .15
+local _logo_rotation = 0
 
 local _menu_font, _title_font
 local _width, _height
@@ -37,6 +42,8 @@ local function _initLogo()
     _LOGO_BG[i] = RES.loadTexture('logo-bg'..i)
   end
   _LOGO_TEXT = RES.loadTexture('logo-text')
+  _LOGO_BG_WIDTH = _LOGO_BG[1]:getWidth()
+  _LOGO_BG_HEIGHT = _LOGO_BG[1]:getHeight()
 end
 
 local function _renderTitle(g)
@@ -44,9 +51,10 @@ local function _renderTitle(g)
   g.translate(-_width/8, -_height/8)
   g.setColor(COLORS.NEUTRAL)
   for i = 1, _LOGO_BG_PARTS do
-    g.draw(_LOGO_BG[i],0,0)
+    g.draw(_LOGO_BG[i],480,360,_logo_rotation, nil, nil,
+          _LOGO_BG_OX, _LOGO_BG_OY)
   end
-  g.draw(_LOGO_TEXT,-50,120)
+  g.draw(_LOGO_TEXT,-20,120)
   g.pop()
 end
 
@@ -120,6 +128,13 @@ function StartMenuView:draw()
   g.pop()
 
 end
+
+function StartMenuView:update(dt)
+
+  _logo_rotation = (_logo_rotation + _LOGO_ROTATION_SPEED*dt)
+
+end
+
 
 
 return StartMenuView

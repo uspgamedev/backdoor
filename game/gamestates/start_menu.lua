@@ -165,6 +165,7 @@ function state:update(dt)
   end
   MENU.finish()
   _menu_view:setSelection(MENU.getSelection())
+  _menu_view:update(dt)
 end
 
 function state:draw()
@@ -173,4 +174,3 @@ end
 
 --Return state functions
 return state
-
