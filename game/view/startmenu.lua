@@ -1,8 +1,8 @@
 --DEPENDENCIES--
-local RES = require 'resources'
-local FONT = require 'view.helpers.font'
+local RES    = require 'resources'
+local FONT   = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
-local Queue = require 'lux.common.Queue'
+local Queue  = require 'lux.common.Queue'
 
 --CLASS VIEW--
 local StartMenuView = Class{
@@ -23,6 +23,8 @@ local _LOGO_BG_PARTS = 11
 local _LOGO_BG = {}
 local _LOGO_BG_OX = 478 --X value for image center
 local _LOGO_BG_OY = 324 --y value for image center
+local _LOGO_BG_OFFSET = {} --Offset for each part
+local _LOGO_BG_MAGNITUDE = {} --Magnitude of offset for each part
 local _LOGO_TEXT
 local _LOGO_ROTATION_SPEED = .15
 local _logo_rotation = 0
@@ -40,6 +42,8 @@ end
 local function _initLogo()
   for i = 1, _LOGO_BG_PARTS do
     _LOGO_BG[i] = RES.loadTexture('logo-bg'..i)
+    _LOGO_BG_OFFSET[i] = love.math.random(0,2*math.pi)
+    _LOGO_BG_MAGNITUDE[i] = love.math.random()*2 + 2 --Random float [2,4]
   end
   _LOGO_TEXT = RES.loadTexture('logo-text')
   _LOGO_BG_WIDTH = _LOGO_BG[1]:getWidth()
@@ -50,8 +54,15 @@ local function _renderTitle(g)
   g.push()
   g.translate(-_width/8, -_height/8)
   g.setColor(COLORS.NEUTRAL)
-  for i = 1, _LOGO_BG_PARTS do
-    g.draw(_LOGO_BG[i],480,360,_logo_rotation, nil, nil,
+  local x, y = 480,360
+  --Draw center without offset
+  g.draw(_LOGO_BG[1], x, y, _logo_rotation, nil, nil,
+        _LOGO_BG_OX, _LOGO_BG_OY)
+  --Draw all other parts with offset
+  for i = 2, _LOGO_BG_PARTS do
+    local offx = math.cos(_LOGO_BG_OFFSET[i])*_LOGO_BG_MAGNITUDE[i]
+    local offy = math.sin(_LOGO_BG_OFFSET[i])*_LOGO_BG_MAGNITUDE[i]
+    g.draw(_LOGO_BG[i],x+offx, y+offy, _logo_rotation, nil, nil,
           _LOGO_BG_OX, _LOGO_BG_OY)
   end
   g.draw(_LOGO_TEXT,-20,120)
@@ -132,6 +143,9 @@ end
 function StartMenuView:update(dt)
 
   _logo_rotation = (_logo_rotation + _LOGO_ROTATION_SPEED*dt)
+  for i = 2, _LOGO_BG_PARTS do
+    _LOGO_BG_OFFSET[i] = _LOGO_BG_OFFSET[i] + dt
+  end
 
 end
 
