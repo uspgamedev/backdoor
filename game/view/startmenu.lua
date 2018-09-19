@@ -26,7 +26,7 @@ local _LOGO_BG_OY = 324 --y value for image center
 local _LOGO_BG_OFFSET = {} --Offset for each part
 local _LOGO_BG_MAGNITUDE = {} --Magnitude of offset for each part
 local _LOGO_TEXT
-local _LOGO_ROTATION_SPEED = .15
+local _LOGO_ROTATION_SPEED = .05
 local _logo_rotation = 0
 
 local _menu_font, _title_font
@@ -42,8 +42,9 @@ end
 local function _initLogo()
   for i = 1, _LOGO_BG_PARTS do
     _LOGO_BG[i] = RES.loadTexture('logo-bg'..i)
+    _LOGO_BG[i]:setFilter("linear","linear")
     _LOGO_BG_OFFSET[i] = love.math.random(0,2*math.pi)
-    _LOGO_BG_MAGNITUDE[i] = love.math.random()*2 + 2 --Random float [2,4]
+    _LOGO_BG_MAGNITUDE[i] = love.math.random()*1 + 1 --Random float [1,2]
   end
   _LOGO_TEXT = RES.loadTexture('logo-text')
   _LOGO_BG_WIDTH = _LOGO_BG[1]:getWidth()
