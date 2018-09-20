@@ -1,13 +1,32 @@
 
-local HandView    = require 'view.hand'
-local FocusBar    = require 'view.focusbar'
-local vec2        = require 'cpml' .vec2
+local DIRECTIONALS  = require 'infra.dir'
+local DIR           = require 'domain.definitions.dir'
+local INPUT         = require 'input'
+local DEFS          = require 'domain.definitions'
+local HandView      = require 'view.hand'
+local FocusBar      = require 'view.focusbar'
+local vec2          = require 'cpml' .vec2
 
 local _INFO_LAG = 2.0 -- seconds
 
 local ActionHUD = Class{
   __includes = { ELEMENT }
 }
+
+--[[ Forward declarations ]]--
+
+local _unsetAdjacency
+
+-- [[ Constant Variables ]]--
+
+ActionHUD.INTERFACE_COMMANDS = {
+  INSPECT_MENU = "INSPECT_MENU",
+  SAVE_QUIT = "SAVE_QUIT",
+  USE_READY_ABILITY = "USE_READY_ABILITY",
+  READY_ABILITY_ACTION = "READY_ABILITY"
+}
+
+--[[ Basic methods ]]--
 
 function ActionHUD:init(route)
 
@@ -38,21 +57,15 @@ function ActionHUD:init(route)
   self.focusbar = FocusBar(route)
   self.focusbar:addElement("HUD")
 
-  -- View mode
-  self.mode = 'exploration'
-
+  -- Long walk variables
+  self.alert = false
+  self.long_walk = false
+  self.adjacency = {}
+  _unsetAdjacency(self.adjacency)
 end
 
 function ActionHUD:isAnimating()
   return self.handview:isAnimating()
-end
-
-function ActionHUD:setExplorationMode()
-  self.mode = 'exploration'
-end
-
-function ActionHUD:setFocusMode()
-  self.mode = 'focus'
 end
 
 function ActionHUD:activateHand()
@@ -148,7 +161,146 @@ function ActionHUD:moveHandFocus(dir)
   end
 end
 
+--[[ Adjacency function ]]--
+
+local function _updateAdjacency(adjacency, route, dir)
+  local i, j = route.getControlledActor():getPos()
+  local sector = route.getCurrentSector()
+  local changed = false
+  local side1, side2
+  if dir[1] ~= 0 and dir[2] ~= 0 then
+    side1 = {0, dir[2]}
+    side2 = {dir[1], 0}
+  elseif dir[1] == 0 then
+    side1 = {-1, dir[2]}
+    side2 = { 1, dir[2]}
+  elseif dir[2] == 0 then
+    side1 = {dir[1], -1}
+    side2 = {dir[1],  1}
+  end
+  local range = {dir, side1, side2}
+
+  for idx, adj_move in ipairs(range) do
+    local ti = adj_move[1] + i
+    local tj = adj_move[2] + j
+    local tile = sector:isInside(ti, tj) and sector:getTile(ti, tj)
+    local tile_type = tile and tile.type
+    local current = adjacency[idx]
+    adjacency[idx] = tile_type
+    if current ~= -1 then
+      if tile_type ~= current then
+        changed = true
+      end
+    end
+  end
+
+  return changed
+end
+
+function _unsetAdjacency(adjacency)
+  for i = 1, 3 do
+    adjacency[i] = -1
+  end
+end
+
+--[[ Longwalk methods ]]--
+
+local function _canLongWalk(self)
+  local hostile_bodies = self.route.getControlledActor():getHostileBodies()
+  return (not self.long_walk) and #hostile_bodies == 0
+end
+
+local function _continueLongWalk(self)
+  local dir = self.long_walk
+  dir = DIR[dir]
+  local i, j = self.route.getControlledActor():getPos()
+  i, j = i+dir[1], j+dir[2]
+  if not self.route.getCurrentSector():isValid(i,j) then
+    return false
+  end
+  if self.alert then
+    self.alert = false
+    return false
+  end
+
+  local hostile_bodies = self.route.getControlledActor():getHostileBodies()
+
+  return not (#hostile_bodies > 0 or
+              _updateAdjacency(self.adjacency, self.route, dir))
+end
+
+local function _startLongWalk(self, dir)
+  _unsetAdjacency(self.adjacency)
+  self.long_walk = dir
+  self.alert = false
+end
+
+function ActionHUD:sendAlert(flag)
+  self.alert = self.alert or flag
+end
+
+--[[ INPUT methods ]]--
+
+function ActionHUD:wasAnyPressed()
+  return INPUT.wasAnyPressed()
+end
+
+function ActionHUD:actionRequested()
+  local action_request
+  local dir = DIRECTIONALS.hasDirectionTriggered()
+  if dir then
+    if INPUT.isActionDown('ACTION_4') and _canLongWalk(self) then
+      _startLongWalk(self, dir)
+    else
+      action_request = {DEFS.ACTION.MOVE, dir}
+    end
+  end
+
+  if INPUT.wasActionPressed('CONFIRM') then
+    action_request = {DEFS.ACTION.INTERACT}
+  elseif INPUT.wasActionPressed('CANCEL') then
+    action_request = {DEFS.ACTION.IDLE}
+  elseif INPUT.wasActionPressed('SPECIAL') then
+    action_request = {ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY}
+  elseif INPUT.wasActionPressed('ACTION_1') then
+    action_request = {DEFS.ACTION.PLAY_CARD}
+  elseif INPUT.wasActionPressed('ACTION_2') then
+    action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
+  elseif INPUT.wasActionPressed('ACTION_3') then
+    action_request = {DEFS.ACTION.RECEIVE_PACK}
+  elseif INPUT.wasActionPressed('EXTRA') then
+    action_request = {ActionHUD.INTERFACE_COMMANDS.INSPECT_MENU}
+  elseif INPUT.wasActionPressed('PAUSE') then
+    action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
+  end
+
+  if self.handview:isActive() then
+    action_request = {DEFS.ACTION.PLAY_CARD, true}
+  end
+
+  -- choose action
+  if self.long_walk then
+    if not action_request and _continueLongWalk(self) then
+      action_request = {DEFS.ACTION.MOVE, self.long_walk}
+    else
+      self.long_walk = false
+    end
+  end
+
+  if action_request then
+    return unpack(action_request)
+  end
+
+  return false
+end
+
+--[[ Update ]]--
+
 function ActionHUD:update(dt)
+
+  if INPUT.wasAnyPressed(0.5) then
+    self.alert = true
+  end
 
   -- If card info is enabled
   if self.info_lag then

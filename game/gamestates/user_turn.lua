@@ -12,18 +12,13 @@ local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
+local ActionHUD     = require 'view.action_hud'
 
 local vec2          = require 'cpml' .vec2
 
 local ReadyAbilityView = require 'view.readyability'
 
 local state = {}
-
--- [[ Constant Variables ]]--
-local _INSPECT_MENU = "INSPECT_MENU"
-local _SAVE_QUIT = "SAVE_QUIT"
-local _USE_READY_ABILITY = "USE_READY_ABILITY"
-local _READY_ABILITY_ACTION = "READY_ABILITY"
 
 --[[ Local Variables ]]--
 
@@ -36,9 +31,6 @@ local _widget_abilities = {
   ready = false,
   list = {},
 }
-local _long_walk
-local _adjacency = {}
-local _alert
 local _save_and_quit
 local _was_on_menu
 
@@ -60,82 +52,6 @@ local function _startTask(action, ...)
     _task = coroutine.create(callback)
     return _resumeTask(...)
   end
-end
-
---[[ Adjacency function ]]--
-
-local function _updateAdjacency(dir)
-  local i, j = _route.getControlledActor():getPos()
-  local sector = _route.getCurrentSector()
-  local changed = false
-  local side1, side2
-  if dir[1] ~= 0 and dir[2] ~= 0 then
-    side1 = {0, dir[2]}
-    side2 = {dir[1], 0}
-  elseif dir[1] == 0 then
-    side1 = {-1, dir[2]}
-    side2 = { 1, dir[2]}
-  elseif dir[2] == 0 then
-    side1 = {dir[1], -1}
-    side2 = {dir[1],  1}
-  end
-  local range = {dir, side1, side2}
-
-  for idx, adj_move in ipairs(range) do
-    local ti = adj_move[1] + i
-    local tj = adj_move[2] + j
-    local tile = sector:isInside(ti, tj) and sector:getTile(ti, tj)
-    local tile_type = tile and tile.type
-    local current = _adjacency[idx]
-    _adjacency[idx] = tile_type
-    if current ~= -1 then
-      if tile_type ~= current then
-        changed = true
-      end
-    end
-  end
-
-  return changed
-end
-
-local function _unsetAdjacency()
-  for i = 1, 3 do
-    _adjacency[i] = -1
-  end
-end
-
---[[ Long walk functionf ]]--
-
-local function _canLongWalk()
-  local hostile_bodies = _route.getControlledActor():getHostileBodies()
-  return (not _long_walk) and #hostile_bodies == 0
-end
-
-local function _startLongWalk(dir)
-  _unsetAdjacency()
-  _long_walk = dir
-  _alert = false
-end
-
-local function _continueLongWalk()
-  local dir = _long_walk
-  dir = DIR[dir]
-  local i, j = _route.getControlledActor():getPos()
-  i, j = i+dir[1], j+dir[2]
-  if not _route.getCurrentSector():isValid(i,j) then
-    return false
-  end
-  if _alert then
-    _alert = false
-    return false
-  end
-
-  local hostile_bodies = _route.getControlledActor():getHostileBodies()
-  if #hostile_bodies > 0 or _updateAdjacency(dir) then
-    return false
-  end
-
-  return true
 end
 
 --[[ Abilities ]]--
@@ -175,16 +91,10 @@ end
 
 --[[ State Methods ]]--
 
-function state:init()
-  _long_walk = false
-  return _unsetAdjacency()
-end
-
-function state:enter(_, route, view, alert)
+function state:enter(_, route, view)
 
   _route = route
   _save_and_quit = false
-  _alert = alert
 
   _updateAbilityList()
 
@@ -219,9 +129,6 @@ function state:resume(from, args)
   _view.action_hud:activateTurn()
   _view.sector.setCooldownPreview(0)
   _resumeTask(args)
-  if INPUT.wasAnyPressed() then
-    _alert = true
-  end
 end
 
 function state:update(dt)
@@ -234,66 +141,23 @@ function state:update(dt)
 
   _view.sector:lookAt(_route.getControlledActor())
 
-  if INPUT.wasAnyPressed() then
-    _alert = true
-  end
-
   if _next_action then
     SWITCHER.pop({next_action = _next_action})
     _next_action = nil
     return
   end
 
-  local action_request
-  local dir = DIRECTIONALS.hasDirectionTriggered()
-  if dir then
-    if INPUT.isActionDown('ACTION_4') and _canLongWalk() then
-      _startLongWalk(dir)
-    else
-      action_request = {DEFS.ACTION.MOVE, dir}
-    end
-  end
-
-  if INPUT.wasActionPressed('CONFIRM') then
-    action_request = {DEFS.ACTION.INTERACT}
-  elseif INPUT.wasActionPressed('CANCEL') then
-    action_request = {DEFS.ACTION.IDLE}
-  elseif INPUT.wasActionPressed('SPECIAL') then
-    action_request = {_USE_READY_ABILITY}
-  elseif INPUT.wasActionPressed('ACTION_1') then
-    action_request = {DEFS.ACTION.PLAY_CARD}
-  elseif INPUT.wasActionPressed('ACTION_2') then
-    action_request = {_READY_ABILITY_ACTION}
-  elseif INPUT.wasActionPressed('ACTION_3') then
-    action_request = {DEFS.ACTION.RECEIVE_PACK}
-  elseif INPUT.wasActionPressed('EXTRA') then
-    action_request = _INSPECT_MENU
-  elseif INPUT.wasActionPressed('PAUSE') then
-    action_request = _SAVE_QUIT
-  end
-
   if _view.action_hud:isAnimating() then
     return SWITCHER.push(GS.HUD_ANIMATION, _view.hud_animation)
-  elseif _view.action_hud:isHandActive() then
-    action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 
-  -- execute action
-  if _long_walk then
-    if not action_request and _continueLongWalk() then
-      _startTask(DEFS.ACTION.MOVE, _long_walk)
-    else
-      _long_walk = false
-    end
-  elseif action_request == _INSPECT_MENU then
-    --
-  elseif action_request == _SAVE_QUIT then
+  local action_request, param = _view.action_hud:actionRequested()
+
+  if action_request == ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT then
     _save_and_quit = true
-    return
   elseif action_request then
-    _startTask(unpack(action_request))
+    _startTask(action_request, param)
   end
-
 
   Util.destroyAll()
 
@@ -468,7 +332,7 @@ _ACTION[DEFS.ACTION.IDLE] = function()
   _useAction(DEFS.ACTION.IDLE)
 end
 
-_ACTION[_READY_ABILITY_ACTION] = function()
+_ACTION[ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[2] then
     PLAYSFX 'open-menu'
     SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
@@ -477,7 +341,7 @@ _ACTION[_READY_ABILITY_ACTION] = function()
   end
 end
 
-_ACTION[_USE_READY_ABILITY] = function()
+_ACTION[ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY] = function()
   local slot = _selectedAbilitySlot()
   if slot then
     PLAYSFX 'ok-menu'
