@@ -50,23 +50,27 @@ function HUDAnimator:activateHand()
   self.handview:activate()
 end
 
+function HUDAnimator:deactivateHand()
+  self.handview:deactivate()
+end
+
 function HUDAnimator:activateAbility()
   self.handview:keepFocusedCard(true)
   self.handview:hide()
 end
 
 function HUDAnimator:activateTurn()
-  if self.mode == 'focus' then
+  if self.route.getControlledActor():isFocused() then
     self.focusbar:show()
-    if self.handview:isActive() then
-      self.handview:show()
-    end
-  elseif self.mode == 'exploration' then
+  else
     self.focusbar:hide()
-    if not self.handview:isActive() then
-      self.handview:hide()
-    end
   end
+  if self.handview:isActive() then
+    self.handview:show()
+  else
+    self.handview:hide()
+  end
+  self:disableCardInfo()
 end
 
 function HUDAnimator:deactivateState()
@@ -117,7 +121,8 @@ function HUDAnimator:playCardAsArt(index)
     wait(0.2)
     ann:interrupt()
     while ann:isBusy() do wait(1) end
-    ann:announce(cardview.card:getName(), cardview, Util.findId('backbuffer_view'))
+    ann:announce(cardview.card:getName(), cardview,
+                 Util.findId('backbuffer_view'))
     cardview:flashFor(0.5)
     wait(0.5)
     ann:unlock()
@@ -139,7 +144,8 @@ function HUDAnimator:update(dt)
   if self.info_lag then
     self.info_lag = math.min(_INFO_LAG, self.info_lag + dt)
 
-    if self.info_lag >= _INFO_LAG and not self.handview.cardinfo:isVisible() then
+    if self.info_lag >= _INFO_LAG
+       and not self.handview.cardinfo:isVisible() then
       self.handview.cardinfo:show()
     end
   end

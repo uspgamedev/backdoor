@@ -31,7 +31,7 @@ local function _cancel()
     chose_a_card = false,
   }
   PLAYSFX 'back-menu'
-  _hud_animator:getHandView():deactivate()
+  _hud_animator:deactivateHand()
   SWITCHER.pop(args)
 end
 

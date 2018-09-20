@@ -203,13 +203,7 @@ function state:enter(_, route, view, alert)
 
   _was_on_menu = false
 
-  if route.getControlledActor():isFocused() then
-    _view.animator:setFocusMode()
-  else
-    _view.animator:setExplorationMode()
-  end
   _view.animator:activateTurn()
-  _view.animator:disableCardInfo()
 
 end
 
@@ -222,13 +216,7 @@ function state:leave()
 end
 
 function state:resume(from, args)
-  if _route.getControlledActor():isFocused() then
-    _view.animator:setFocusMode()
-  else
-    _view.animator:setExplorationMode()
-  end
   _view.animator:activateTurn()
-  _view.animator:disableCardInfo()
   _view.sector.setCooldownPreview(0)
   _resumeTask(args)
   if INPUT.wasAnyPressed() then
