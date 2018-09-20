@@ -10,7 +10,7 @@ local _LAG = 2.0 -- seconds
 --LOCAL VARIABLES--
 
 local _route
-local _hud_animator
+local _action_hud
 local _actor_view
 
 --LOCAL FUNCTIONS--
@@ -18,7 +18,7 @@ local _actor_view
 local function _confirmCard()
   local args = {
     chose_a_card = true,
-    card_index = _hud_animator:getHandView():getFocus(),
+    card_index = _action_hud:getHandView():getFocus(),
   }
   if args.card_index > _route.getControlledActor():getHandSize() then
     args.card_index = 'draw-hand'
@@ -31,7 +31,7 @@ local function _cancel()
     chose_a_card = false,
   }
   PLAYSFX 'back-menu'
-  _hud_animator:deactivateHand()
+  _action_hud:deactivateHand()
   SWITCHER.pop(args)
 end
 
@@ -43,12 +43,12 @@ end
 function state:enter(_, route, _view)
 
   _route = route
-  _hud_animator = _view.animator
-  if not _hud_animator:isHandActive() then
-    _hud_animator:activateHand()
+  _action_hud = _view.action_hud
+  if not _action_hud:isHandActive() then
+    _action_hud:activateHand()
   end
   _actor_view = _view.actor
-  _hud_animator:enableCardInfo()
+  _action_hud:enableCardInfo()
 
   --Make cool animation for cards showing up
 
@@ -64,9 +64,9 @@ function state:update(dt)
   if DEBUG then return end
 
   if DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-    _hud_animator:moveHandFocus("RIGHT")
+    _action_hud:moveHandFocus("RIGHT")
   elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
-    _hud_animator:moveHandFocus("LEFT")
+    _action_hud:moveHandFocus("LEFT")
   elseif INPUT.wasActionPressed('CONFIRM') then
     _confirmCard()
   elseif INPUT.wasActionPressed('CANCEL') or

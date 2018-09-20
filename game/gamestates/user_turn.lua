@@ -203,7 +203,7 @@ function state:enter(_, route, view, alert)
 
   _was_on_menu = false
 
-  _view.animator:activateTurn()
+  _view.action_hud:activateTurn()
 
 end
 
@@ -216,7 +216,7 @@ function state:leave()
 end
 
 function state:resume(from, args)
-  _view.animator:activateTurn()
+  _view.action_hud:activateTurn()
   _view.sector.setCooldownPreview(0)
   _resumeTask(args)
   if INPUT.wasAnyPressed() then
@@ -272,9 +272,9 @@ function state:update(dt)
     action_request = _SAVE_QUIT
   end
 
-  if _view.animator:isAnimating() then
-    return SWITCHER.push(GS.HUD_ANIMATION, _view.animator)
-  elseif _view.animator:isHandActive() then
+  if _view.action_hud:isAnimating() then
+    return SWITCHER.push(GS.HUD_ANIMATION, _view.hud_animation)
+  elseif _view.action_hud:isHandActive() then
     action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 
@@ -316,7 +316,7 @@ local function _useAction(action_slot, params)
   params = params or {}
   local param = ACTION.pendingInput(action_slot, controlled_actor, params)
   while param do
-    _view.animator:activateAbility()
+    _view.action_hud:activateAbility()
     _view.sector:setCooldownPreview(
       ACTION.exhaustionCost(action_slot, controlled_actor, params)
     )
@@ -432,7 +432,7 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
                     { card_index = args.card_index }) then
         Signal.emit("actor_used_card", _route.getControlledActor(), index)
         local card = _route.getControlledActor():getHandCard(args.card_index)
-        _view.animator:playCardAsArt(args.card_index)
+        _view.action_hud:playCardAsArt(args.card_index)
       end
     end
   end

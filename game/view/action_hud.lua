@@ -5,11 +5,11 @@ local vec2        = require 'cpml' .vec2
 
 local _INFO_LAG = 2.0 -- seconds
 
-local HUDAnimator = Class{
+local ActionHUD = Class{
   __includes = { ELEMENT }
 }
 
-function HUDAnimator:init(route)
+function ActionHUD:init(route)
 
   ELEMENT.init(self)
 
@@ -43,33 +43,33 @@ function HUDAnimator:init(route)
 
 end
 
-function HUDAnimator:isAnimating()
+function ActionHUD:isAnimating()
   return self.handview:isAnimating()
 end
 
-function HUDAnimator:setExplorationMode()
+function ActionHUD:setExplorationMode()
   self.mode = 'exploration'
 end
 
-function HUDAnimator:setFocusMode()
+function ActionHUD:setFocusMode()
   self.mode = 'focus'
 end
 
-function HUDAnimator:activateHand()
+function ActionHUD:activateHand()
   self.handview:show()
   self.handview:activate()
 end
 
-function HUDAnimator:deactivateHand()
+function ActionHUD:deactivateHand()
   self.handview:deactivate()
 end
 
-function HUDAnimator:activateAbility()
+function ActionHUD:activateAbility()
   self.handview:keepFocusedCard(true)
   self.handview:hide()
 end
 
-function HUDAnimator:activateTurn()
+function ActionHUD:activateTurn()
   if self.route.getControlledActor():isFocused() then
     self.focusbar:show()
   else
@@ -83,39 +83,39 @@ function HUDAnimator:activateTurn()
   self:disableCardInfo()
 end
 
-function HUDAnimator:deactivateState()
+function ActionHUD:deactivateState()
   self.handview:hide()
   self.focusbar:hide()
 end
 
-function HUDAnimator:getHandView()
+function ActionHUD:getHandView()
   return self.handview
 end
 
-function HUDAnimator:hideLowerHUD()
+function ActionHUD:hideLowerHUD()
   self.handview:hide()
   self.focusbar:hide()
 end
 
-function HUDAnimator:showLowerHUD()
+function ActionHUD:showLowerHUD()
   self.handview:show()
   self.focusbar:show()
 end
 
-function HUDAnimator:disableCardInfo()
+function ActionHUD:disableCardInfo()
   self.handview.cardinfo:hide()
   self.info_lag = false
 end
 
-function HUDAnimator:enableCardInfo()
+function ActionHUD:enableCardInfo()
   self.info_lag = 0
 end
 
-function HUDAnimator:isHandActive()
+function ActionHUD:isHandActive()
   return self.handview:isActive()
 end
 
-function HUDAnimator:playCardAsArt(index)
+function ActionHUD:playCardAsArt(index)
   local cardview = self.handview.hand[index]
   MAIN_TIMER:script(function(wait)
     self.handview:keepFocusedCard(false)
@@ -140,7 +140,7 @@ function HUDAnimator:playCardAsArt(index)
   end)
 end
 
-function HUDAnimator:moveHandFocus(dir)
+function ActionHUD:moveHandFocus(dir)
   self.handview:moveFocus(dir)
   if self.info_lag then
     self.info_lag = 0
@@ -148,7 +148,7 @@ function HUDAnimator:moveHandFocus(dir)
   end
 end
 
-function HUDAnimator:update(dt)
+function ActionHUD:update(dt)
 
   -- If card info is enabled
   if self.info_lag then
@@ -162,5 +162,5 @@ function HUDAnimator:update(dt)
 
 end
 
-return HUDAnimator
+return ActionHUD
 

@@ -13,7 +13,7 @@ local ActorView   = require 'view.actor'
 local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
-local HUDAnimator = require 'view.hud_animator'
+local ActionHUD   = require 'view.action_hud'
 
 local Activity    = require 'common.activity'
 
@@ -122,8 +122,8 @@ function state:enter(pre, route_data)
   _view.sector:addElement("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
 
-  _view.animator = HUDAnimator(_route)
-  _view.animator:setSubtype('frontend-animator')
+  _view.action_hud = ActionHUD(_route)
+  _view.action_hud:setSubtype('frontend-hud')
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)
@@ -198,7 +198,7 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
-    _view.animator:deactivateState()
+    _view.action_hud:deactivateState()
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _alert = _alert or args
