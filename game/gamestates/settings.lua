@@ -21,6 +21,7 @@ local _fieldcount
 local _original
 local _view
 local _save
+local _changes
 
 local function _changeField(field, offset)
   local low, high = unpack(_schema[field]["range"])
