@@ -25,7 +25,11 @@ local _LOGO_BG_OX = 478 --X value for image center
 local _LOGO_BG_OY = 324 --y value for image center
 local _LOGO_BG_OFFSET = {} --Offset for each part
 local _LOGO_BG_MAGNITUDE = {} --Magnitude of offset for each part
+local _LOGO_BG_MAG_MAX = 2
+local _LOGO_BG_MAG_MIN = 1
+local _LOGO_BG_X, _LOGO_BG_Y = 480,360
 local _LOGO_TEXT
+local _LOGO_TEXT_X, _LOGO_TEXT_Y = -20,120
 local _LOGO_ROTATION_SPEED = .05
 local _logo_rotation = 0
 
@@ -40,33 +44,41 @@ local function _initFontValues()
 end
 
 local function _initLogo()
+  local ran = love.math.random
   for i = 1, _LOGO_BG_PARTS do
     _LOGO_BG[i] = RES.loadTexture('logo-bg'..i)
     _LOGO_BG[i]:setFilter("linear","linear")
-    _LOGO_BG_OFFSET[i] = love.math.random(0,2*math.pi)
-    _LOGO_BG_MAGNITUDE[i] = love.math.random()*1 + 1 --Random float [1,2]
+    _LOGO_BG_OFFSET[i] = ran()*math.pi
+    _LOGO_BG_MAGNITUDE[i] =ran()*( _LOGO_BG_MAG_MAX - _LOGO_BG_MAG_MIN) +
+                                _LOGO_BG_MAG_MIN
   end
   _LOGO_TEXT = RES.loadTexture('logo-text')
   _LOGO_BG_WIDTH = _LOGO_BG[1]:getWidth()
   _LOGO_BG_HEIGHT = _LOGO_BG[1]:getHeight()
 end
 
-local function _renderTitle(g)
+local function _renderTitleLogo(g)
   g.push()
   g.translate(-_width/8, -_height/8)
   g.setColor(COLORS.NEUTRAL)
-  local x, y = 480,360
   --Draw center without offset
-  g.draw(_LOGO_BG[1], x, y, _logo_rotation, nil, nil,
+  g.draw(_LOGO_BG[1], _LOGO_BG_X, _LOGO_BG_Y, _logo_rotation, nil, nil,
         _LOGO_BG_OX, _LOGO_BG_OY)
   --Draw all other parts with offset
   for i = 2, _LOGO_BG_PARTS do
     local offx = math.cos(_LOGO_BG_OFFSET[i])*_LOGO_BG_MAGNITUDE[i]
     local offy = math.sin(_LOGO_BG_OFFSET[i])*_LOGO_BG_MAGNITUDE[i]
-    g.draw(_LOGO_BG[i],x+offx, y+offy, _logo_rotation, nil, nil,
-          _LOGO_BG_OX, _LOGO_BG_OY)
+    g.draw(_LOGO_BG[i],_LOGO_BG_X+offx, _LOGO_BG_Y+offy, _logo_rotation, nil,
+          nil, _LOGO_BG_OX, _LOGO_BG_OY)
   end
-  g.draw(_LOGO_TEXT,-20,120)
+  g.pop()
+end
+
+local function _renderTitleText(g)
+  g.push()
+  g.translate(-_width/8, -_height/8)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(_LOGO_TEXT,_LOGO_TEXT_X,_LOGO_TEXT_Y)
   g.pop()
 end
 
@@ -134,7 +146,8 @@ function StartMenuView:draw()
   g.setBackgroundColor(0, 0, 0)
   g.translate(4*_TILE_W, 0)
 
-  _renderTitle(g)
+  _renderTitleLogo(g)
+  _renderTitleText(g)
   _renderOptions(g, q, self.selection, self.scrolltop)
 
   g.pop()
