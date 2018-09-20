@@ -191,7 +191,6 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
-    _view.action_hud:deactivateState()
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _playTurns()

@@ -50,6 +50,9 @@ function ActionHUD:init(route)
     end
   )
 
+  -- HUD state (player turn or not)
+  self.player_turn = false
+
   -- Card info
   self.info_lag = false
 
@@ -82,23 +85,12 @@ function ActionHUD:activateAbility()
   self.handview:hide()
 end
 
-function ActionHUD:activateTurn()
-  if self.route.getControlledActor():isFocused() then
-    self.focusbar:show()
-  else
-    self.focusbar:hide()
-  end
-  if self.handview:isActive() then
-    self.handview:show()
-  else
-    self.handview:hide()
-  end
-  self:disableCardInfo()
+function ActionHUD:enableTurn()
+  self.player_turn = true
 end
 
-function ActionHUD:deactivateState()
-  self.handview:hide()
-  self.focusbar:hide()
+function ActionHUD:disableTurn()
+  self.player_turn = false
 end
 
 function ActionHUD:getHandView()
@@ -121,7 +113,7 @@ function ActionHUD:disableCardInfo()
 end
 
 function ActionHUD:enableCardInfo()
-  self.info_lag = 0
+  self.info_lag = self.info_lag or 0
 end
 
 function ActionHUD:isHandActive()
@@ -298,8 +290,24 @@ end
 
 function ActionHUD:update(dt)
 
+  -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
     self.alert = true
+  end
+
+  if self.player_turn then
+    if self.route.getControlledActor():isFocused() then
+      self.focusbar:show()
+    else
+      self.focusbar:hide()
+    end
+    if self.handview:isActive() then
+      self.handview:show()
+      self:enableCardInfo()
+    else
+      self.handview:hide()
+      self:disableCardInfo()
+    end
   end
 
   -- If card info is enabled

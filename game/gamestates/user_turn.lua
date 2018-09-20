@@ -113,7 +113,7 @@ function state:enter(_, route, view)
 
   _was_on_menu = false
 
-  _view.action_hud:activateTurn()
+  _view.action_hud:enableTurn()
 
 end
 
@@ -123,10 +123,11 @@ function state:leave()
   end
   _view.ability:exit()
   _view.ability = nil
+  _view.action_hud:disableTurn()
 end
 
 function state:resume(from, args)
-  _view.action_hud:activateTurn()
+  _view.action_hud:enableTurn()
   _view.sector.setCooldownPreview(0)
   _resumeTask(args)
 end
