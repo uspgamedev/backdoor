@@ -1,5 +1,5 @@
 
-local Node = Class({ __includes = ELEMENT })
+local Node = Class({ __includes = { ELEMENT } })
 local Vec2 = require 'cpml' .vec2
 
 function Node:init()
@@ -32,7 +32,7 @@ end
 function Node:findChild(child)
   for idx, ch in ipairs(self.children) do
     if ch == child then
-      return idx, child
+      return idx
     end
   end
 end
