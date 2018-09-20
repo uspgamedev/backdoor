@@ -157,7 +157,7 @@ function state:enter(pre, route_data)
 
   -- Sound Track
   _soundtrack = SoundTrack()
-  _soundtrack.playTheme(sector:getTheme())
+  _soundtrack.playTheme(sector:getTheme()['bgm'])
 
   -- start gamestate
   _playTurns()

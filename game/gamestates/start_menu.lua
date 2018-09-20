@@ -9,6 +9,7 @@ local PLAYSFX         = require 'helpers.playsfx'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
+local SoundTrack  = require 'view.soundtrack'
 
 local state = {}
 
@@ -18,6 +19,7 @@ local _menu_view
 local _menu_context
 local _locked
 local _activity = Activity()
+local _soundtrack
 
 -- LOCAL METHODS --
 
@@ -33,6 +35,7 @@ end
 function _activity:enterMenu()
   _locked = true
   local fade_view = FadeView(FadeView.STATE_FADED)
+  _soundtrack.playTheme('title-menu')
   fade_view:addElement("GUI")
   fade_view:fadeInAndThen(self.resume)
   self.yield()
@@ -46,7 +49,11 @@ function _activity:changeState(mode, to, ...)
   fade_view:addElement("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
+  fade_view:addElement("GUI")
   fade_view:destroy()
+  if to == GS.PLAY then
+    _soundtrack.playTheme()
+  end
   _menu_view.invisible = true
   return SWITCHER[mode](to, ...)
 end
@@ -58,6 +65,8 @@ function state:enter()
 
   _menu_view = StartMenuView()
   _menu_view:addElement("HUD")
+
+  _soundtrack = SoundTrack()
 
   _activity:enterMenu()
 end
@@ -71,6 +80,7 @@ function state:resume(from, player_info)
   if player_info then
     _locked = true
     print(("%s %s"):format(player_info.species, player_info.background))
+    _soundtrack.playTheme()
     SWITCHER.switch(GS.PLAY, PROFILE.newRoute(player_info))
   else
     _menu_context = "START_MENU"
