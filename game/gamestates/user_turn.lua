@@ -135,6 +135,7 @@ end
 function state:update(dt)
 
   if DEBUG then
+    _view.action_hud:disableTurn()
     return SWITCHER.push(GS.DEVMODE)
   end
 
@@ -186,6 +187,7 @@ local function _useAction(action_slot, params)
       ACTION.exhaustionCost(action_slot, controlled_actor, params)
     )
     if param.name == 'choose_dir' then
+      _view.action_hud:disableTurn()
       SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'],
                     ACTION.card(action_slot, controlled_actor, params))
       local dir = coroutine.yield(_task)
@@ -195,6 +197,7 @@ local function _useAction(action_slot, params)
         return false
       end
     elseif param.name == 'choose_target' then
+      _view.action_hud:disableTurn()
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
@@ -218,6 +221,7 @@ local function _useAction(action_slot, params)
         return false
       end
     elseif param.name == "choose_widget_slot" then
+      _view.action_hud:disableTurn()
       SWITCHER.push(
         GS.PICK_WIDGET_SLOT, controlled_actor,
         function (which_slot)
@@ -232,6 +236,7 @@ local function _useAction(action_slot, params)
         return false
       end
     elseif param.name == "choose_consume_list" then
+      _view.action_hud:disableTurn()
       SWITCHER.push(GS.CONSUME_CARDS, controlled_actor, param.max)
       local args = coroutine.yield(_task)
       if args.consumed then
@@ -282,20 +287,13 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   end
 end
 
-_ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
-  if not was_active then
-    PLAYSFX 'ok-menu'
-  end
-  SWITCHER.push(GS.CARD_SELECT, _route, _view)
-  local args = coroutine.yield(_task)
-  if args.chose_a_card then
-    PLAYSFX 'ok-menu'
-    if _useAction(DEFS.ACTION.PLAY_CARD,
-                  { card_index = args.card_index }) then
-      Signal.emit("actor_used_card", _route.getControlledActor(), index)
-      local card = _route.getControlledActor():getHandCard(args.card_index)
-      _view.action_hud:playCardAsArt(args.card_index)
-    end
+_ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
+  PLAYSFX 'ok-menu'
+  if _useAction(DEFS.ACTION.PLAY_CARD,
+                { card_index = card_index }) then
+    Signal.emit("actor_used_card", _route.getControlledActor(), index)
+    local card = _route.getControlledActor():getHandCard(card_index)
+    _view.action_hud:playCardAsArt(card_index)
   end
 end
 
@@ -303,6 +301,7 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   local actor = _route.getControlledActor()
   if actor:getBackBufferSize() > 0 then
     PLAYSFX 'ok-menu'
+    _view.action_hud:disableTurn()
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
     local args = coroutine.yield(_task)
   else
@@ -314,6 +313,7 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   local actor = _route.getControlledActor()
   if actor:getPrizePackCount() > 0 then
     PLAYSFX 'ok-menu'
+    _view.action_hud:disableTurn()
     SWITCHER.push(GS.OPEN_PACK, _route, actor:getPrizePacks())
     local args = coroutine.yield(_task)
     if args.pack == nil then return end
@@ -332,6 +332,7 @@ end
 _ACTION[ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[2] then
     PLAYSFX 'open-menu'
+    _view.action_hud:disableTurn()
     SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
   else
     PLAYSFX 'denied'

@@ -147,6 +147,10 @@ end
 
 function ActionHUD:moveHandFocus(dir)
   self.handview:moveFocus(dir)
+  self:resetCardInfoLag()
+end
+
+function ActionHUD:resetCardInfoLag()
   if self.info_lag then
     self.info_lag = 0
     self.handview.cardinfo:hide()
@@ -248,26 +252,36 @@ function ActionHUD:actionRequested()
     end
   end
 
+  local player_focused = self.route.getControlledActor():isFocused()
   if INPUT.wasActionPressed('CONFIRM') then
-    action_request = {DEFS.ACTION.INTERACT}
+    if player_focused then
+      local card_index = self.handview:getFocus()
+      if card_index > 0 then
+        action_request = {DEFS.ACTION.PLAY_CARD, card_index}
+      end
+    else
+      action_request = {DEFS.ACTION.INTERACT}
+    end
   elseif INPUT.wasActionPressed('CANCEL') then
     action_request = {DEFS.ACTION.IDLE}
   elseif INPUT.wasActionPressed('SPECIAL') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY}
-  elseif INPUT.wasActionPressed('ACTION_1') then
-    action_request = {DEFS.ACTION.PLAY_CARD}
-  elseif INPUT.wasActionPressed('ACTION_2') then
-    action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_3') then
-    action_request = {DEFS.ACTION.RECEIVE_PACK}
+    action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
+  elseif INPUT.wasActionPressed('ACTION_2') then
+    if player_focused then
+      self:moveHandFocus('LEFT')
+    else
+      action_request = {DEFS.ACTION.RECEIVE_PACK}
+    end
+  elseif INPUT.wasActionPressed('ACTION_1') then
+    if player_focused then
+      self:moveHandFocus('RIGHT')
+    end
   elseif INPUT.wasActionPressed('EXTRA') then
     action_request = {DEFS.ACTION.DRAW_NEW_HAND}
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
-  end
-
-  if self.handview:isActive() then
-    action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 
   -- choose action
@@ -280,6 +294,7 @@ function ActionHUD:actionRequested()
   end
 
   if action_request then
+    self:resetCardInfoLag()
     return unpack(action_request)
   end
 
@@ -287,6 +302,14 @@ function ActionHUD:actionRequested()
 end
 
 --[[ Update ]]--
+
+local function _disableHUDElements(self)
+  self.handview:hide()
+  self:disableCardInfo()
+  if self.handview:isActive() then
+    self.handview:deactivate()
+  end
+end
 
 function ActionHUD:update(dt)
 
@@ -298,16 +321,25 @@ function ActionHUD:update(dt)
   if self.player_turn then
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
+      if INPUT.isActionDown('ACTION_4') then
+        self.handview:hide()
+        self:disableCardInfo()
+        if self.handview:isActive() then
+          self.handview:deactivate()
+        end
+      else
+        self.handview:show()
+        self:enableCardInfo()
+        if not self.handview:isActive() then
+          self.handview:activate()
+        end
+      end
     else
       self.focusbar:hide()
+      _disableHUDElements(self)
     end
-    if self.handview:isActive() then
-      self.handview:show()
-      self:enableCardInfo()
-    else
-      self.handview:hide()
-      self:disableCardInfo()
-    end
+  else
+    _disableHUDElements(self)
   end
 
   -- If card info is enabled

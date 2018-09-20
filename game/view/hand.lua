@@ -66,9 +66,9 @@ end
 
 function HandView:moveFocus(dir)
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index + #self.hand - 1) % (#self.hand+1) + 1
+    self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % (#self.hand+1) + 1
+    self.focus_index = self.focus_index % (#self.hand) + 1
   end
 end
 
