@@ -41,11 +41,24 @@ function FocusBar:init(route)
   self.emer_fx_speed = 3.5
   self.emer_fx_v = math.sin(self.emer_fx_alpha)
 
+  -- Hide
+  self.hidden = false
+  self.v_offset = 0
+
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
 end
 
+function FocusBar:show()
+  self.hidden = false
+end
+
+function FocusBar:hide()
+  self.hidden = true
+end
+
 function FocusBar:update(dt)
+  local _OFF_SPD = 2
   self.actor = self.route.getControlledActor()
   --update emergency effect
   self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
@@ -54,6 +67,13 @@ function FocusBar:update(dt)
     self.emer_fx_alpha = self.emer_fx_alpha - self.emer_fx_max
   end
 
+  if self.hidden then
+    self.v_offset = self.v_offset + (1 - self.v_offset) * dt * _OFF_SPD
+    if self.v_offset > 0.99 then self.v_offset = 1 end
+  else
+    self.v_offset = self.v_offset + (0 - self.v_offset) * dt * _OFF_SPD * 4
+    if self.v_offset < 0.01 then self.v_offset = 0 end
+  end
 end
 
 function FocusBar:draw()
@@ -81,6 +101,7 @@ function FocusBar:draw()
   font:set()
   g.push()
   g.origin()
+  g.translate(0, self.v_offset * 60)
   g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
 
   --Drawing background

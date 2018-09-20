@@ -17,9 +17,6 @@ local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
 local _BG = {12/256, 12/256, 12/256, 1}
-local _ACTION_TYPES = {
-  'play',
-}
 local _FOCUS_ICON = {
   -6, 0, 0, -9, 6, 0, 0, 9
 }
@@ -41,12 +38,14 @@ function HandView:init(route)
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.focus_index = -1 --What card is focused. -1 if none
-  self.action_type = -1
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
   self.cardinfo = CardInfo(route)
+  self.alpha = 1
+  self.hiding = false
+  self.keep_focused_card = false
 
   self:reset()
 
@@ -66,27 +65,12 @@ function HandView:moveFocus(dir)
   end
 end
 
-function HandView:getActionType()
-  return _ACTION_TYPES[self.action_type]
-end
-
-function HandView:changeActionType(dir)
-  if dir == 'UP' then
-    self.action_type = (self.action_type - 2) % #_ACTION_TYPES + 1
-  elseif dir == 'DOWN' then
-    self.action_type = self.action_type % #_ACTION_TYPES + 1
-  else
-    error(("Unknown dir %s"):format(dir))
-  end
-end
-
 function HandView:isActive()
   return self.focus_index > 0
 end
 
 function HandView:activate()
   self.focus_index = 1
-  self.action_type = 1
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
@@ -96,7 +80,6 @@ end
 
 function HandView:deactivate()
   self.focus_index = -1
-  self.action_type = -1
 
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
@@ -104,6 +87,10 @@ function HandView:deactivate()
   self:addTimer("end", MAIN_TIMER, "tween", 0.2, self,
                 { y = self.initial_y, gap_scale = _GAP_SCALE.MIN },
                 'out-back')
+end
+
+function HandView:keepFocusedCard(flag)
+  self.keep_focused_card = flag
 end
 
 function HandView:positionForIndex(i)
@@ -119,12 +106,30 @@ function HandView:positionForIndex(i)
          y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP
 end
 
+function HandView:hide()
+  self.hiding = true
+end
+
+function HandView:show()
+  self.hiding = false
+end
+
 function HandView:update(dt)
+  local _FADE_SPD = 2
   self:reset()
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
   self.cardinfo:update(dt)
+  if self.hiding then
+    if self.alpha > 0.10 then
+      self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
+    else
+      self.alpha = 0
+    end
+  else
+    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
+  end
 end
 
 function HandView:draw()
@@ -142,7 +147,7 @@ function HandView:draw()
 
   -- draw action type
   _font.set()
-  local colorname = (self:getActionType() or "BACKGROUND"):upper()
+  local colorname = "BACKGROUND"
   local poly = {
     -20, _HEIGHT/2,
     self.x + boxwidth, _HEIGHT/2,
@@ -157,6 +162,12 @@ function HandView:draw()
     local card = hand[i]
     local dx = (size-i+1)*step
     card:setFocus(i == self.focus_index)
+    if DRAW_TABLE['HUD_FX'][card]
+       or (self.keep_focused_card and i == self.focus_index) then
+      card:setAlpha(1)
+    else
+      card:setAlpha(self.alpha)
+    end
     card:setPosition(x - dx + gap,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()

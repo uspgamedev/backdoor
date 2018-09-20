@@ -8,13 +8,12 @@ local PLAYSFX     = require 'helpers.playsfx'
 
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
-local HandView    = require 'view.hand'
 local BufferView  = require 'view.buffer'
 local ActorView   = require 'view.actor'
-local FocusBar    = require 'view.focusbar'
 local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
+local HUDAnimator = require 'view.hud_animator'
 
 local Activity    = require 'common.activity'
 
@@ -123,15 +122,8 @@ function state:enter(pre, route_data)
   _view.sector:addElement("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
 
-  -- hand view
-  _view.hand = HandView(_route)
-  _view.hand:addElement("HUD_BG", nil, "hand_view")
-  Signal.register(
-    "actor_draw",
-    function(actor, card)
-      _view.hand:addCard(actor,card)
-    end
-  )
+  _view.animator = HUDAnimator(_route)
+  _view.animator:setSubtype('frontend-animator')
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)
@@ -142,10 +134,6 @@ function state:enter(pre, route_data)
   -- Actor view
   _view.actor = ActorView(_route)
   _view.actor:addElement("HUD_BG")
-
-  -- Focus bar
-  _view.focusbar = FocusBar(_route)
-  _view.focusbar:addElement("HUD")
 
   -- Announcement box
   _view.announcement = Announcement()
@@ -210,6 +198,7 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
+    _view.animator:deactivateState()
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _alert = _alert or args
