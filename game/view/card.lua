@@ -22,7 +22,7 @@ function CardView:init(card)
   ELEMENT.init(self)
   self.sprite = TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
-  self.card = card == 'draw' and require 'view.helpers.newhand_card' or card
+  self.card = card
   self.scale = 1
   self.focused = false
   self.alpha = 1

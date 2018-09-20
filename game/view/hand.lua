@@ -142,10 +142,10 @@ function HandView:update(dt)
 end
 
 function HandView:draw()
-  local hand = { unpack(self.hand) }
-  local card = CardView('draw')
-  table.insert(hand, card)
+  local hand = self.hand
   local size = #hand
+  if size <= 0 then return end
+  local card = hand[1]
   local gap = _GAP * self.gap_scale
   local step = card:getWidth() + gap
   local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2, self.y

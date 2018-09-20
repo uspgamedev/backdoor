@@ -20,9 +20,6 @@ local function _confirmCard()
     chose_a_card = true,
     card_index = _action_hud:getHandView():getFocus(),
   }
-  if args.card_index > _route.getControlledActor():getHandSize() then
-    args.card_index = 'draw-hand'
-  end
   SWITCHER.pop(args)
 end
 

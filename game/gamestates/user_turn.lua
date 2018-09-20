@@ -290,15 +290,11 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(was_active)
   local args = coroutine.yield(_task)
   if args.chose_a_card then
     PLAYSFX 'ok-menu'
-    if args.card_index == 'draw-hand' then
-      _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-    else
-      if _useAction(DEFS.ACTION.PLAY_CARD,
-                    { card_index = args.card_index }) then
-        Signal.emit("actor_used_card", _route.getControlledActor(), index)
-        local card = _route.getControlledActor():getHandCard(args.card_index)
-        _view.action_hud:playCardAsArt(args.card_index)
-      end
+    if _useAction(DEFS.ACTION.PLAY_CARD,
+                  { card_index = args.card_index }) then
+      Signal.emit("actor_used_card", _route.getControlledActor(), index)
+      local card = _route.getControlledActor():getHandCard(args.card_index)
+      _view.action_hud:playCardAsArt(args.card_index)
     end
   end
 end

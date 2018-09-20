@@ -261,7 +261,7 @@ function ActionHUD:actionRequested()
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {DEFS.ACTION.RECEIVE_PACK}
   elseif INPUT.wasActionPressed('EXTRA') then
-    action_request = {ActionHUD.INTERFACE_COMMANDS.INSPECT_MENU}
+    action_request = {DEFS.ACTION.DRAW_NEW_HAND}
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
   end
