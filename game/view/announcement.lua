@@ -40,7 +40,7 @@ function Announcement:announce(text, origin, target)
   self.size.x = self.font:getWidth(self.text) + 2*_MW
   self.size.y = self.font:getHeight()
   self.pos.x = w/2 - self.size.x/2
-  self.pos.y = 40
+  self.pos.y = 160
   self.visible = true
   self.flash = 0.5
   self.add = 1.0
@@ -129,4 +129,3 @@ function Announcement:draw()
 end
 
 return Announcement
-
