@@ -58,6 +58,43 @@ local function _playTurns(...)
   _next_action = nil
 end
 
+local function _initFrontend()
+
+  -- sector view
+  local sector = _route.getCurrentSector()
+
+  _view.sector = SectorView(_route)
+  _view.sector:addElement("L1", nil, "sector_view")
+  _view.sector:lookAt(_player)
+
+  _view.action_hud = ActionHUD(_route)
+  _view.action_hud:setSubtype('frontend-hud')
+
+  -- Buffer views
+  _view.frontbuffer = BufferView.newFrontBufferView(_route)
+  _view.frontbuffer:addElement("HUD_BG", nil, "frontbuffer_view")
+  _view.backbuffer = BufferView.newBackBufferView(_route)
+  _view.backbuffer:addElement("HUD_BG", nil, "backbuffer_view")
+
+  -- Actor view
+  _view.actor = ActorView(_route)
+  _view.actor:addElement("HUD_BG")
+
+  -- Announcement box
+  _view.announcement = Announcement()
+  _view.announcement:addElement("HUD", nil, "announcement")
+
+  -- GUI
+  _gui = GUI(_view.sector)
+  _gui:addElement("GUI")
+
+  -- Sound Track
+  _soundtrack = SoundTrack()
+  _soundtrack.playTheme(sector:getTheme()['bgm'])
+
+
+end
+
 function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   _saveRoute()
@@ -112,43 +149,13 @@ function state:enter(pre, route_data)
   -- View table
   _view = {}
 
-  -- sector view
-  local sector = _route.getCurrentSector()
-
-  _view.sector = SectorView(_route)
-  _view.sector:addElement("L1", nil, "sector_view")
-  _view.sector:lookAt(_player)
-
-  _view.action_hud = ActionHUD(_route)
-  _view.action_hud:setSubtype('frontend-hud')
-
-  -- Buffer views
-  _view.frontbuffer = BufferView.newFrontBufferView(_route)
-  _view.frontbuffer:addElement("HUD_BG", nil, "frontbuffer_view")
-  _view.backbuffer = BufferView.newBackBufferView(_route)
-  _view.backbuffer:addElement("HUD_BG", nil, "backbuffer_view")
-
-  -- Actor view
-  _view.actor = ActorView(_route)
-  _view.actor:addElement("HUD_BG")
-
-  -- Announcement box
-  _view.announcement = Announcement()
-  _view.announcement:addElement("HUD", nil, "announcement")
-
-  -- GUI
-  _gui = GUI(_view.sector)
-  _gui:addElement("GUI")
-
-  -- Sound Track
-  _soundtrack = SoundTrack()
-  _soundtrack.playTheme(sector:getTheme()['bgm'])
-
   -- start gamestate
   _playTurns()
 
   -- set player
   _player = _route.getControlledActor()
+
+  _initFrontend()
 
   _activity:fadeInGUI()
 
