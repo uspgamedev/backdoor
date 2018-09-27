@@ -364,8 +364,9 @@ function Actor:getHandCard(index)
   return index and self.hand[index]
 end
 
-function Actor:removeHandCard(index)
+function Actor:removeHandCard(index, discarded)
   assert(index >= 1 and index <= #self.hand)
+  Signal.emit("actor_remove_card", self, index, discarded)
   return table.remove(self.hand, index)
 end
 
@@ -519,7 +520,7 @@ function Actor:ready()
 end
 
 function Actor:playCard(card_index)
-  local card = table.remove(self.hand, card_index)
+  local card = self:removeHandCard(card_index, false)
   local attr = card:getRelatedAttr()
   if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
     self.training[attr] = self.training[attr] + 1
@@ -544,7 +545,7 @@ function Actor:turn()
   self.focus = math.max(0, self.focus - 1)
   if self.focus == 0 then
     while not self:isHandEmpty() do
-      local card = self:removeHandCard(1)
+      local card = self:removeHandCard(1, true)
       self:addCardToBackbuffer(card)
     end
     body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)

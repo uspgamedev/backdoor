@@ -272,7 +272,9 @@ function state:update(dt)
     action_request = _SAVE_QUIT
   end
 
-  if _view.animator:isHandActive() then
+  if _view.animator:isAnimating() then
+    return SWITCHER.push(GS.HUD_ANIMATION, _view.animator)
+  elseif _view.animator:isHandActive() then
     action_request = {DEFS.ACTION.PLAY_CARD, true}
   end
 

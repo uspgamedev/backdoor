@@ -24,6 +24,12 @@ function HUDAnimator:init(route)
       self.handview:addCard(actor,card)
     end
   )
+  Signal.register(
+    "actor_remove_card",
+    function(actor, index, discarded)
+      self.handview:removeCard(actor, index, discarded)
+    end
+  )
 
   -- Card info
   self.info_lag = false
@@ -35,6 +41,10 @@ function HUDAnimator:init(route)
   -- View mode
   self.mode = 'exploration'
 
+end
+
+function HUDAnimator:isAnimating()
+  return self.handview:isAnimating()
 end
 
 function HUDAnimator:setExplorationMode()
