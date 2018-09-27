@@ -67,6 +67,12 @@ function ActionHUD:init(route)
   _unsetAdjacency(self.adjacency)
 end
 
+function ActionHUD:destroy()
+  self.handview:destroy()
+  self.focusbar:destroy()
+  ELEMENT.destroy(self)
+end
+
 function ActionHUD:isAnimating()
   return self.handview:isAnimating()
 end
