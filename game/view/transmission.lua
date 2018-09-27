@@ -1,7 +1,7 @@
-
 local vec2    = require 'cpml' .vec2
 local COLORS  = require 'domain.definitions.colors'
 local PLAYSFX = require 'helpers.playsfx'
+local RANDOM = require 'common.random'
 
 local Transmission = Class{
   __includes = { ELEMENT }
@@ -10,9 +10,9 @@ local Transmission = Class{
 local _SPD = 40
 local _COOLDOWN = 0.1
 local _WIDTH = 8
-local _MAX_OFFSET = 9
+local _MAX_OFFSET = 8
 local _RADIUS = 12
-local _COLOR_DISTORTION = 1.8
+local _COLOR_DISTORTION = 1.5
 
 function Transmission:init(origin, target, color, duration)
   ELEMENT.init(self)
@@ -24,10 +24,10 @@ function Transmission:init(origin, target, color, duration)
   self.warmup = 0.05
 
   --Slight offset for transmisison
-  self.ori_ox = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
-  self.ori_oy = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
-  self.tar_ox = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
-  self.tar_oy = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
+  self.ori_ox = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
+  self.ori_oy = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
+  self.tar_ox = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
+  self.tar_oy = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
 
 
   self.color = color or COLORS.NEUTRAL
