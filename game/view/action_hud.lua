@@ -338,7 +338,7 @@ end
 
 local function _endInspect(self)
   self.inspecting = false
-  if self.holdbar:isLocked() then
+  if not self.justheld and self.holdbar:isLocked() then
     self.holdbar:unlock()
   end
 end
