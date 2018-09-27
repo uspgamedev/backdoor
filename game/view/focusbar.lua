@@ -42,8 +42,8 @@ function FocusBar:init(route)
   self.emer_fx_v = math.sin(self.emer_fx_alpha)
 
   -- Hide
-  self.hidden = false
-  self.v_offset = 0
+  self.hidden = true
+  self.v_offset = 1
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
