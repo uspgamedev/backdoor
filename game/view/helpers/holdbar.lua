@@ -3,6 +3,7 @@ local INPUT = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DIR = require 'domain.definitions.dir'
 local COLORS = require 'domain.definitions.colors'
+local vec2 = require 'cpml' .vec2
 
 local _TOTAL = 1
 local _TIME = .8
@@ -51,7 +52,11 @@ function HoldBar:init(hold_actions)
   self.enter = 0
   self.progress = 0
   self.hold_actions = hold_actions
-  self.timers = {}
+  self.pos = vec2()
+end
+
+function HoldBar:setPosition(pos)
+  self.pos = pos
 end
 
 function HoldBar:lock()
@@ -114,15 +119,20 @@ function HoldBar:update()
     end
   end
 
+end
+
+function HoldBar:confirmed()
   -- check progress
   if not self.locked and self.progress >= _TOTAL then
-    self:removeTimer("advance")
     return true
   end
   return false
 end
 
 function HoldBar:draw(x, y)
+  if not x and not y then
+    x, y = self.pos:unpack()
+  end
   -- render bar
   if self.enter > 0 and self.progress > 0 then
     _render(self.enter, self.progress, x, y)

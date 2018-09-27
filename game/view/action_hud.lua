@@ -3,8 +3,10 @@ local DIRECTIONALS  = require 'infra.dir'
 local DIR           = require 'domain.definitions.dir'
 local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
+local VIEWDEFS      = require 'view.definitions'
 local HandView      = require 'view.hand'
 local FocusBar      = require 'view.focusbar'
+local HoldBar       = require 'view.helpers.holdbar'
 local vec2          = require 'cpml' .vec2
 
 local _INFO_LAG = 2.0 -- seconds
@@ -60,6 +62,14 @@ function ActionHUD:init(route)
   self.focusbar = FocusBar(route)
   self.focusbar:addElement("HUD")
 
+  -- Hold bar
+  local w,h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  self.holdbar = HoldBar{'EXTRA'}
+  self.holdbar:setPosition(vec2(w,h)/2)
+  self.holdbar:lock()
+  self.holdbar:addElement("HUD")
+  self.justheld = false
+
   -- Long walk variables
   self.alert = false
   self.long_walk = false
@@ -77,15 +87,6 @@ function ActionHUD:isAnimating()
   return self.handview:isAnimating()
 end
 
-function ActionHUD:activateHand()
-  self.handview:show()
-  self.handview:activate()
-end
-
-function ActionHUD:deactivateHand()
-  self.handview:deactivate()
-end
-
 function ActionHUD:activateAbility()
   self.handview:keepFocusedCard(true)
   self.handview:hide()
@@ -93,24 +94,18 @@ end
 
 function ActionHUD:enableTurn()
   self.player_turn = true
+  if not self.justheld then
+    self.holdbar:unlock()
+  end
 end
 
 function ActionHUD:disableTurn()
   self.player_turn = false
+  self.holdbar:lock()
 end
 
 function ActionHUD:getHandView()
   return self.handview
-end
-
-function ActionHUD:hideLowerHUD()
-  self.handview:hide()
-  self.focusbar:hide()
-end
-
-function ActionHUD:showLowerHUD()
-  self.handview:show()
-  self.focusbar:show()
 end
 
 function ActionHUD:disableCardInfo()
@@ -284,10 +279,21 @@ function ActionHUD:actionRequested()
     if player_focused then
       self:moveHandFocus('RIGHT')
     end
-  elseif INPUT.wasActionPressed('EXTRA') then
-    action_request = {DEFS.ACTION.DRAW_NEW_HAND}
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
+  end
+
+  if self.justheld and self.player_turn
+                   and not INPUT.isActionDown('EXTRA') then
+    self.holdbar:unlock()
+    self.justheld = false
+  end
+
+  if self.holdbar:confirmed() then
+    self.holdbar:reset()
+    self.holdbar:lock()
+    self.justheld = true
+    action_request = {DEFS.ACTION.DRAW_NEW_HAND}
   end
 
   -- choose action

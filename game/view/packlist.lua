@@ -269,7 +269,8 @@ function View:usedHoldbar()
 end
 
 function View:drawHoldBar(g)
-  if self.holdbar:update() then
+  self.holdbar:update()
+  if self.holdbar:confirmed() then
     self.holdbar_activated = true
   end
   self.holdbar:draw(0, 0)

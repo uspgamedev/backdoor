@@ -346,7 +346,8 @@ end
 
 
 function View:drawHoldBar(g)
-  if self.holdbar:update() then
+  self.holdbar:update()
+  if self.holdbar:confirmed() then
     self:startLeaving()
   end
   self.holdbar:draw(0, 0)
