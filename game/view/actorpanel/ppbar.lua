@@ -21,7 +21,7 @@ function PPBar:init(actor, x, y)
   self.absolute_max = DEFS.MAX_PP
 end
 
-function PPBar:update(dt)
+function PPBar:process(dt)
   local actor = self.actor
   local difference = actor:getPP() / self.absolute_max - self.progress
   self.progress = self.progress + difference / 2
@@ -29,16 +29,17 @@ end
 
 function PPBar:render(g)
   local progress = self.progress
+  g.push()
   g.setColor(COLORS.EMPTY)
   g.rectangle("fill", 0, 0, _WIDTH, 12)
+  g.translate(-1, -1)
   g.setColor(self.fullcolor * progress + (1 - progress) * self.emptycolor)
   g.rectangle("fill", 0, 0, _WIDTH * self.progress, 12)
   -- text
   FONT.set("Text", 20)
   local text = _FMT:format(self.label,
-                           math.round(self.progress) * self.absolute_max,
+                           math.round(self.progress * self.absolute_max),
                            self.absolute_max)
-  g.push()
   g.translate(8, -16)
   g.setColor(COLORS.BLACK)
   g.printf(text, 0, 0, _WIDTH, "left")

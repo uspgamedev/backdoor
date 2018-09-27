@@ -13,7 +13,7 @@ function LifeBar:init(actor, x, y)
   self.absolute_max = actor:getBody():getMaxHP()
 end
 
-function LifeBar:update(dt)
+function LifeBar:process(dt)
   local body = self.actor:getBody()
   local max = body:getMaxHP()
   local difference = body:getHP() / max - self.progress

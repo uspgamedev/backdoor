@@ -45,6 +45,16 @@ function Node:removeChild(child)
   return table.remove(self.children, self:findChild(child))
 end
 
+function Node:process(dt) -- abstract
+end
+
+function Node:update(dt)
+  self:process(dt)
+  for _,child in ipairs(self.children) do
+    child:update(dt)
+  end
+end
+
 function Node:render(g) -- abstract
 end
 
