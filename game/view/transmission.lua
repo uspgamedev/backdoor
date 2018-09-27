@@ -10,6 +10,8 @@ local Transmission = Class{
 local _SPD = 40
 local _COOLDOWN = 0.1
 local _WIDTH = 8
+local _MAX_OFFSET = 9
+local _RADIUS = 10
 
 function Transmission:init(origin, target, color, duration)
   ELEMENT.init(self)
@@ -19,6 +21,14 @@ function Transmission:init(origin, target, color, duration)
   self.finish = target:getPoint()
   self.width_scale = 1
   self.warmup = 0.05
+
+  --Slight offset for transmisison
+  self.ori_ox = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
+  self.ori_oy = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
+  self.tar_ox = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
+  self.tar_oy = love.math.random(-_MAX_OFFSET, _MAX_OFFSET)
+
+
   self.color = color or COLORS.NEUTRAL
   self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
                 { width_scale = 0 }, 'in-back',
@@ -35,10 +45,20 @@ end
 function Transmission:draw()
   if self.warmup > 0 then return end
   local g = love.graphics
+  local ori_x = self.start.x + self.ori_ox
+  local ori_y = self.start.y + self.ori_oy
+  local tar_x = self.finish.x + self.tar_ox
+  local tar_y = self.finish.y + self.tar_oy
+
+  --Draw origin and target circle
+  g.setColor(self.color[1]/1.5,self.color[2]/1.5,self.color[3]/1.5,self.color[4])
+  g.circle("fill", ori_x, ori_y, _RADIUS * self.width_scale)
+  g.circle("fill", tar_x, tar_y, _RADIUS * self.width_scale)
+
+  --Draw line
   g.setLineWidth(_WIDTH * self.width_scale)
   g.setColor(self.color)
-  g.line(self.start.x, self.start.y, self.finish.x, self.finish.y)
+  g.line(ori_x, ori_y, tar_x, tar_y)
 end
 
 return Transmission
-
