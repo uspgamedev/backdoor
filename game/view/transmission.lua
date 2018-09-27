@@ -1,6 +1,7 @@
 
-local vec2   = require 'cpml' .vec2
-local COLORS = require 'domain.definitions.colors'
+local vec2    = require 'cpml' .vec2
+local COLORS  = require 'domain.definitions.colors'
+local PLAYSFX = require 'helpers.playsfx'
 
 local Transmission = Class{
   __includes = { ELEMENT }
@@ -22,6 +23,7 @@ function Transmission:init(origin, target, color, duration)
   self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
                 { width_scale = 0 }, 'in-back',
                 function () self:kill() end)
+  PLAYSFX 'transmission'
 end
 
 function Transmission:update(dt)
