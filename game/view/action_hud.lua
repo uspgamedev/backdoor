@@ -331,6 +331,18 @@ local function _disableHUDElements(self)
   end
 end
 
+local function _startInspect(self)
+  self.inspecting = true
+  self.holdbar:lock()
+end
+
+local function _endInspect(self)
+  self.inspecting = false
+  if self.holdbar:isLocked() then
+    self.holdbar:unlock()
+  end
+end
+
 function ActionHUD:update(dt)
 
   -- Input alerts long walk
@@ -347,22 +359,22 @@ function ActionHUD:update(dt)
         if self.handview:isActive() then
           self.handview:deactivate()
         end
-        self.inspecting = true
+        _startInspect(self)
       else
         self.handview:show()
         self:enableCardInfo()
         if not self.handview:isActive() then
           self.handview:activate()
         end
-        self.inspecting = false
+        _endInspect(self)
       end
     else
-      self.inspecting = false
+      _endInspect(self)
       self.focusbar:hide()
       _disableHUDElements(self)
     end
   else
-    self.inspecting = false
+    _endInspect(self)
     _disableHUDElements(self)
   end
 
