@@ -4,7 +4,7 @@ local Vec2 = require 'cpml' .vec2
 
 function Node:init()
   ELEMENT.init(self)
-  self.position = Transform()
+  self.position = Vec2()
   self.parent = nil
   self.children = {}
   self.dirty = false
@@ -43,6 +43,9 @@ end
 
 function Node:removeChild(child)
   return table.remove(self.children, self:findChild(child))
+end
+
+function Node:render(g) -- abstract
 end
 
 function Node:draw()

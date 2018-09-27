@@ -8,7 +8,7 @@ local PLAYSFX     = require 'helpers.playsfx'
 local Route       = require 'domain.route'
 local SectorView  = require 'view.sector'
 local BufferView  = require 'view.buffer'
-local ActorView   = require 'view.actor'
+local ActorView   = require 'view.actorpanel'
 local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
@@ -79,8 +79,7 @@ local function _initFrontend()
   _view.backbuffer:register("HUD_BG", nil, "backbuffer_view")
 
   -- Actor view
-  _view.actor = ActorView(_route)
-  _view.actor:register("HUD_BG")
+  _view.actor = ActorView(_player)
 
   -- Announcement box
   _view.announcement = Announcement()
