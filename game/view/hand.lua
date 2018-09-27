@@ -20,6 +20,7 @@ local _BG = {12/256, 12/256, 12/256, 1}
 local _FOCUS_ICON = {
   -6, 0, 0, -9, 6, 0, 0, 9
 }
+local _FADE_SPD = 2
 
 local _font
 
@@ -121,7 +122,6 @@ function HandView:show()
 end
 
 function HandView:update(dt)
-  local _FADE_SPD = 2
   for _,card in ipairs(self.hand) do
     card:update(dt)
   end
