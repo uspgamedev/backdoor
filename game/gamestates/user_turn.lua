@@ -332,7 +332,6 @@ end
 _ACTION[ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION] = function()
   if _widget_abilities.list[2] then
     PLAYSFX 'open-menu'
-    _view.action_hud:disableTurn()
     SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
   else
     PLAYSFX 'denied'
