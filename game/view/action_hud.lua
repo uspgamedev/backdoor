@@ -4,9 +4,11 @@ local DIR           = require 'domain.definitions.dir'
 local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
+local COLORS        = require 'domain.definitions.colors'
 local HandView      = require 'view.hand'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
+local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
 
 local _INFO_LAG = 2.0 -- seconds
@@ -137,9 +139,12 @@ function ActionHUD:playCardAsArt(index)
     wait(0.2)
     ann:interrupt()
     while ann:isBusy() do wait(1) end
-    ann:announce(cardview.card:getName(), cardview,
-                 Util.findId('backbuffer_view'))
-    cardview:flashFor(0.5)
+    ann:announce(cardview.card:getName())
+    local backbuffer = Util.findId('backbuffer_view')
+    Transmission(cardview, backbuffer,
+                 COLORS.FLASH_DISCARD):addElement("HUD_FX")
+    cardview:flashFor(0.5, COLORS.FLASH_DISCARD)
+    backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
     wait(0.5)
     ann:unlock()
     cardview:kill()
