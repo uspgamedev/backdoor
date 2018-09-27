@@ -350,4 +350,3 @@ _ACTION[ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY] = function()
 end
 
 return state
-

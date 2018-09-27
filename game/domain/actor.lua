@@ -306,6 +306,10 @@ function Actor:getBackBufferCard(i)
   return self.buffer[self:getBufferSize()+1+i]
 end
 
+function Actor:getBufferCard(i)
+  return self.buffer[i]
+end
+
 function Actor:removeBufferCard(i)
   assert(self.buffer[i] and self.buffer[i] ~= DEFS.DONE,
          "Invalid card index to remove")
