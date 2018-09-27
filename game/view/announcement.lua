@@ -9,6 +9,7 @@ local vec2        = require 'cpml' .vec2
 
 local _MW = 16
 local _SPD = 20
+local _FLASH_TIME = 0.2
 
 local Announcement = Class{
   __includes = { ELEMENT }
@@ -23,7 +24,6 @@ function Announcement:init()
   self.font = FONT.get('Text', 32)
   self.flash = 0
   self.add = 0
-  self.hardadd = 0
   self.visible = false
   self.cooldown = 0
   self.closing = false
@@ -35,10 +35,10 @@ function Announcement:announce(text)
   self.text = text
   self.size.x = self.font:getWidth(self.text) + 2*_MW
   self.size.y = self.font:getHeight()
-  self.pos.x = w/2 - self.size.x/2
+  self.pos.x = w/2
   self.pos.y = 160
   self.visible = true
-  self.flash = 0.5
+  self.flash = _FLASH_TIME
   self.add = 1.0
   self.cooldown = 3.0
   self.flashcolor = COLORS.FLASH_ANNOUNCE
@@ -73,7 +73,6 @@ function Announcement:close()
   if not self.text or self.closing then return end
   self.text = false
   self.visible = false
-  self.hardadd = 0
 end
 
 function Announcement:update(dt)
@@ -96,17 +95,23 @@ end
 function Announcement:draw()
   if not self.visible then return end
   local g = love.graphics
+  local scale = 1 - self.flash/_FLASH_TIME
+  local w, h = self.size.x*scale, self.size.y
+  g.push()
+  g.translate(self.pos:unpack())
   g.setColor(COLORS.HUD_BG)
-  g.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
+  g.rectangle('fill', -w/2, -h/2, w, h)
   g.setColor(COLORS.NEUTRAL)
   g.setLineWidth(2)
-  g.rectangle('line', self.pos.x+2, self.pos.y+2, self.size.x-4, self.size.y-4)
+  g.rectangle('line', -w/2+2, -h/2+2, w-4, h-4)
   self.font:set()
-  g.printf(self.text, self.pos.x + _MW, self.pos.y, self.size.x - 2*_MW,
-           'center')
+  if scale >= 1 then
+    g.printf(self.text, -w/2 + _MW, -h/2, w - 2*_MW, 'center')
+  end
   local cr, cg, cb = self.flashcolor:unpack()
-  g.setColor(cr, cg, cb, self.add + self.hardadd)
-  g.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
+  g.setColor(cr, cg, cb, self.add)
+  g.rectangle('fill', -w/2, -h/2, w, h)
+  g.pop()
 end
 
 return Announcement
