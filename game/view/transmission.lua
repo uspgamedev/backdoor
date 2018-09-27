@@ -11,7 +11,8 @@ local _SPD = 40
 local _COOLDOWN = 0.1
 local _WIDTH = 8
 local _MAX_OFFSET = 9
-local _RADIUS = 10
+local _RADIUS = 12
+local _COLOR_DISTORTION = 1.8
 
 function Transmission:init(origin, target, color, duration)
   ELEMENT.init(self)
@@ -51,7 +52,10 @@ function Transmission:draw()
   local tar_y = self.finish.y + self.tar_oy
 
   --Draw origin and target circle
-  g.setColor(self.color[1]/1.5,self.color[2]/1.5,self.color[3]/1.5,self.color[4])
+  g.setColor(self.color[1]*_COLOR_DISTORTION,
+             self.color[2]*_COLOR_DISTORTION,
+             self.color[3]*_COLOR_DISTORTION,
+             self.color[4])
   g.circle("fill", ori_x, ori_y, _RADIUS * self.width_scale)
   g.circle("fill", tar_x, tar_y, _RADIUS * self.width_scale)
 
