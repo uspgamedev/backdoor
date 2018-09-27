@@ -150,7 +150,7 @@ function state:update(dt)
   end
 
   if _view.action_hud:isAnimating() then
-    return SWITCHER.push(GS.HUD_ANIMATION, _view.hud_animation)
+    return SWITCHER.push(GS.HUD_ANIMATION, _view.action_hud)
   end
 
   local action_request, param = _view.action_hud:actionRequested()
