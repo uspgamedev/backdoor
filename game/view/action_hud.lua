@@ -77,6 +77,9 @@ function ActionHUD:init(route)
   self.long_walk = false
   self.adjacency = {}
   _unsetAdjacency(self.adjacency)
+
+  -- Inspector mode
+  self.inspecting = false
 end
 
 function ActionHUD:destroy()
@@ -310,7 +313,7 @@ function ActionHUD:actionRequested()
     end
   end
 
-  if action_request then
+  if not self.inspecting and action_request then
     self:resetCardInfoLag()
     return unpack(action_request)
   end
@@ -325,6 +328,18 @@ local function _disableHUDElements(self)
   self:disableCardInfo()
   if self.handview:isActive() then
     self.handview:deactivate()
+  end
+end
+
+local function _startInspect(self)
+  self.inspecting = true
+  self.holdbar:lock()
+end
+
+local function _endInspect(self)
+  self.inspecting = false
+  if self.holdbar:isLocked() then
+    self.holdbar:unlock()
   end
 end
 
@@ -344,18 +359,22 @@ function ActionHUD:update(dt)
         if self.handview:isActive() then
           self.handview:deactivate()
         end
+        _startInspect(self)
       else
         self.handview:show()
         self:enableCardInfo()
         if not self.handview:isActive() then
           self.handview:activate()
         end
+        _endInspect(self)
       end
     else
+      _endInspect(self)
       self.focusbar:hide()
       _disableHUDElements(self)
     end
   else
+    _endInspect(self)
     _disableHUDElements(self)
   end
 
