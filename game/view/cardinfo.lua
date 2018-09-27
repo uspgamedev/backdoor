@@ -79,9 +79,6 @@ end
 
 function CardInfo:draw()
   local alpha = self.alpha
-  if self.card == 'draw' then
-    self.card = require 'view.helpers.newhand_card'
-  end
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
   local player_actor = self.route.getPlayerActor()

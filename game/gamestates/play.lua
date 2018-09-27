@@ -13,7 +13,7 @@ local ActorView   = require 'view.actor'
 local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
-local HUDAnimator = require 'view.hud_animator'
+local ActionHUD   = require 'view.action_hud'
 
 local Activity    = require 'common.activity'
 
@@ -32,7 +32,6 @@ local _gui
 local _soundtrack
 
 local _switch_to
-local _alert
 
 --LOCAL FUNCTION--
 
@@ -47,14 +46,13 @@ local function _playTurns(...)
     SWITCHER.push(GS.GAMEOVER, _player, _view)
   elseif request == "userTurn" then
     _saveRoute()
-    SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
-    _alert = false
+    SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
     _activity:changeSector(...)
   elseif request == "report" then
     _view.sector:startVFX(extra)
-    _alert = _alert or (extra.type == 'text_rise')
-                    and (extra.body == _player:getBody())
+    _view.action_hud:sendAlert(extra.type == 'text_rise'
+                               and (extra.body == _player:getBody()))
     SWITCHER.push(GS.ANIMATION, _view.sector)
   end
   _next_action = nil
@@ -103,7 +101,6 @@ end
 --STATE FUNCTIONS--
 
 function state:init()
-  _alert = false
 end
 
 function state:enter(pre, route_data)
@@ -122,8 +119,8 @@ function state:enter(pre, route_data)
   _view.sector:addElement("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
 
-  _view.animator = HUDAnimator(_route)
-  _view.animator:setSubtype('frontend-animator')
+  _view.action_hud = ActionHUD(_route)
+  _view.action_hud:setSubtype('frontend-hud')
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)
@@ -180,10 +177,6 @@ function state:update(dt)
       print("oops")
     end
 
-    if INPUT.wasAnyPressed(0.5) then
-      _alert = true
-    end
-
     if _next_action then
       _playTurns(unpack(_next_action))
     end
@@ -198,10 +191,8 @@ function state:resume(state, args)
 
   if state == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
-    _view.animator:deactivateState()
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
-    _alert = _alert or args
     _playTurns()
   elseif state == GS.GAMEOVER then
     SWITCHER.switch(GS.START_MENU)

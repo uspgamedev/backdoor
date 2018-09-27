@@ -66,9 +66,9 @@ end
 
 function HandView:moveFocus(dir)
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index + #self.hand - 1) % (#self.hand+1) + 1
+    self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % (#self.hand+1) + 1
+    self.focus_index = self.focus_index % (#self.hand) + 1
   end
 end
 
@@ -142,10 +142,10 @@ function HandView:update(dt)
 end
 
 function HandView:draw()
-  local hand = { unpack(self.hand) }
-  local card = CardView('draw')
-  table.insert(hand, card)
+  local hand = self.hand
   local size = #hand
+  if size <= 0 then return end
+  local card = hand[1]
   local gap = _GAP * self.gap_scale
   local step = card:getWidth() + gap
   local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2, self.y

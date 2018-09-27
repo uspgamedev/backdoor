@@ -3,21 +3,21 @@ local state = {}
 
 --[[ LOCAL VARIABLES ]]--
 
-local _hud_animator
+local _action_hud
 local _already_activated
 
 --[[ LOCAL FUNCTIONS ]]--
 
 --[[ STATE FUNCTIONS ]]--
 
-function state:enter(_, hud_animator)
+function state:enter(_, action_hud)
 
-  _hud_animator = hud_animator
-  if _hud_animator:getHandView():isActive() then
+  _action_hud = action_hud
+  if _action_hud:getHandView():isActive() then
     _already_activated = true
   else
     _already_activated = false
-    _hud_animator:getHandView():activate()
+    _action_hud:getHandView():activate()
   end
 
 end
@@ -25,16 +25,16 @@ end
 function state:leave()
 
   if not _already_activated then
-    _hud_animator:getHandView():deactivate()
+    _action_hud:getHandView():deactivate()
   end
-  _hud_animator = false
+  _action_hud = false
   Util.destroyAll()
 
 end
 
 function state:update(dt)
 
-  if not _hud_animator or not _hud_animator:isAnimating() then
+  if not _action_hud or not _action_hud:isAnimating() then
     SWITCHER.pop()
   end
   Util.destroyAll()

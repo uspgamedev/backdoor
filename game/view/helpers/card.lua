@@ -28,9 +28,6 @@ end
 --Draw the description of a card.
 function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
   alpha = alpha or 1
-  if card == 'draw' then
-    card = require 'view.helpers.newhand_card'
-  end
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
 
