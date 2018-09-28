@@ -22,7 +22,7 @@ function CONSUME.validate(actor, inputvalues)
 end
 
 function CONSUME.perform(actor, inputvalues)
-  for _,idx in ipairs(inputvalues.consumed) do
+  for i,idx in ipairs(inputvalues.consumed) do
     local index = idx + actor:getBufferSize()+1
     local card = actor:getBackBufferCard(index)
     actor:removeBufferCard(index)
@@ -31,4 +31,3 @@ function CONSUME.perform(actor, inputvalues)
 end
 
 return CONSUME
-

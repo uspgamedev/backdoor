@@ -55,6 +55,23 @@ local function _prev_circular(i, len, n)
   return _prev_circular((i - 2) % len + 1, len, n - 1)
 end
 
+--Sort cardlist alphabetically and returns a mapping function to this order
+local function _sort_card_list(cardlist)
+  local map = {}
+  --Insertion sort
+  for i, card in ipairs(cardlist) do
+    local name = card:getName()
+    local j = 1
+    while j <= #map do
+      if cardlist[map[j]]:getName() >= name then break end
+      j = j + 1
+    end
+    table.insert(map, j, i)
+  end
+
+  return map
+end
+
 -- PUBLIC METHODS ---------------------------
 function View:init(hold_actions)
   ELEMENT.init(self)
@@ -69,6 +86,7 @@ function View:init(hold_actions)
   self.move = self.selection
   self.offsets = {}
   self.card_list = _EMPTY
+  self.card_map = _EMPTY
   self.consumed = {}
   self.consumed_count = 0
   self.consume_log = false
@@ -87,8 +105,10 @@ function View:isLocked()
 end
 
 function View:open(card_list, maxconsume)
+  self.card_map = _sort_card_list(card_list)
   self.card_list = {}
-  for i,card in ipairs(card_list) do
+  for i, v in ipairs(self.card_map) do
+    local card = card_list[v]
     self.card_list[i] = CardView(card)
     self.card_list[i]:setAlpha(0.9)
   end
@@ -187,9 +207,10 @@ function View:getConsumeLog()
   local t = {}
   for i, consumed in ipairs(self.consumed) do
     if consumed then
-      table.insert(t,i)
+      table.insert(t,self.card_map[i])
     end
   end
+  table.sort(t)
   return t
 end
 
