@@ -210,19 +210,8 @@ function View:getConsumeLog()
       table.insert(t,self.card_map[i])
     end
   end
-
-  --Sort table so it doesn't remove cards in a bad order
-  local f_t = {}
-  for i, v in ipairs(t) do
-    local j = 1
-    while j <= #f_t do
-      if f_t[j] >= v then break end
-      j = j + 1
-    end
-    table.insert(f_t, j, v)
-  end
-
-  return f_t
+  table.sort(t)
+  return t
 end
 
 function View:addConsume()
