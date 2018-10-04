@@ -31,6 +31,22 @@ local function _newParticleSource()
   return particles
 end
 
+local function _newExplosionSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.5)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(8)
+  particles:setSpeed(512)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(4)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
+  return particles
+end
+
+
 local _dt = love.timer.getDelta
 
 local function _tween(from, to, smooth)
@@ -61,6 +77,14 @@ local function _render(enter, progress, x, y, particles)
   g.pop()
 end
 
+local function _renderExplosion(explosion, x, y)
+  local g = love.graphics
+  g.push()
+  g.translate(x - _WIDTH/2, y)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(explosion, _WIDTH, _HEIGHT/2)
+  g.pop()
+end
 
 local HoldBar = Class({
   __includes = ELEMENT
@@ -77,6 +101,8 @@ function HoldBar:init(hold_actions)
   self.pos = vec2()
 
   self.particles = _newParticleSource()
+
+  self.explosion = _newExplosionSource()
 
   self.is_playing = nil --If charge bar is playing sfx
 end
@@ -130,6 +156,7 @@ function HoldBar:update()
 
   --update particles
   self.particles:update(_dt())
+  self.explosion:update(_dt())
 
   -- enter fade in
   if self.locked or not is_down then
@@ -168,6 +195,8 @@ function HoldBar:confirmed()
     end
     PLAYSFX "holdbar-confirm"
 
+    self.explosion:emit(48)
+
     return true
   end
   return false
@@ -177,10 +206,14 @@ function HoldBar:draw(x, y)
   if not x and not y then
     x, y = self.pos:unpack()
   end
+
   -- render bar
   if self.enter > 0 and self.progress > 0 then
     _render(self.enter, self.progress, x, y, self.particles)
   end
+
+  -- render explosion
+  _renderExplosion(self.explosion, x, y)
 
 end
 
