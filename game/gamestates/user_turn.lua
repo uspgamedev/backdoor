@@ -292,7 +292,6 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   if _useAction(DEFS.ACTION.PLAY_CARD,
                 { card_index = card_index }) then
     Signal.emit("actor_used_card", _route.getControlledActor(), index)
-    local card = _route.getControlledActor():getHandCard(card_index)
     _view.action_hud:playCardAsArt(card_index)
   end
 end
