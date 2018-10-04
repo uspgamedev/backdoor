@@ -3,13 +3,16 @@ local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
 
-local Transmission = require 'view.transmission'
+local Activity      = require 'common.activity'
+local TweenValue    = require 'view.helpers.tweenvalue'
 
 local vec2        = require 'cpml' .vec2
 
 local _MW = 16
 local _SPD = 20
 local _FLASH_TIME = 0.2
+
+local _activity = Activity()
 
 local Announcement = Class{
   __includes = { ELEMENT }
@@ -22,11 +25,32 @@ function Announcement:init()
   self.size = vec2()
   self.text = nil
   self.font = FONT.get('Text', 32)
-  self.flash = 0
-  self.add = 0
-  self.visible = false
-  self.cooldown = 0
-  self.closing = false
+  self.flash = TweenValue(0, 'linear')
+  self.add = TweenValue(0, 'smooth', 20)
+  self.cooldown = TweenValue(0, 'linear')
+  self.invisible = true
+  self.flashcolor = COLORS.FLASH_ANNOUNCE
+end
+
+function _activity:announce(ann)
+  ann.add:snap(1)
+  ann.flash:snap(0)
+  ann.flash:set(_FLASH_TIME)
+  self.yield(ann.flash:defer(self.resume, true))
+
+  ann.add:set(0)
+  self.yield(ann.add:defer(self.resume, true))
+  
+  ann.cooldown:snap(2)
+  ann.cooldown:set(0)
+  self.yield(ann.cooldown:defer(self.resume, true))
+
+  ann.add:set(1)
+  ann.flash:set(0)
+  self.yield(ann.flash:defer(self.resume, true))
+
+  ann.text = false
+  ann.invisible = true
 end
 
 function Announcement:announce(text)
@@ -37,12 +61,9 @@ function Announcement:announce(text)
   self.size.y = self.font:getHeight()
   self.pos.x = w/2
   self.pos.y = 160
-  self.visible = true
-  self.flash = _FLASH_TIME
-  self.add = 1.0
-  self.cooldown = 3.0
-  self.flashcolor = COLORS.FLASH_ANNOUNCE
+  self.invisible = false
   self.locked = false
+  _activity:announce(self)
 end
 
 function Announcement:getPoint()
@@ -66,36 +87,12 @@ function Announcement:isBusy()
 end
 
 function Announcement:interrupt()
-  self.cooldown = 0
-end
-
-function Announcement:close()
-  if not self.text or self.closing then return end
-  self.text = false
-  self.visible = false
-end
-
-function Announcement:update(dt)
-  if self.flash > 0 then
-    self.flash = math.max(0, self.flash - dt)
-  else
-    if self.add > 0.05 then
-      self.add = self.add - self.add * dt * _SPD
-    else
-      self.add = 0
-    end
-  end
-  if self.cooldown > 0 then
-    self.cooldown = self.cooldown - dt
-  else
-    self:close()
-  end
+  self.cooldown:snap(0)
 end
 
 function Announcement:draw()
-  if not self.visible then return end
   local g = love.graphics
-  local scale = 1 - self.flash/_FLASH_TIME
+  local scale = self.flash:get()/_FLASH_TIME
   local w, h = self.size.x*scale, self.size.y
   g.push()
   g.translate(self.pos:unpack())
@@ -109,9 +106,10 @@ function Announcement:draw()
     g.printf(self.text, -w/2 + _MW, -h/2, w - 2*_MW, 'center')
   end
   local cr, cg, cb = self.flashcolor:unpack()
-  g.setColor(cr, cg, cb, self.add)
+  g.setColor(cr, cg, cb, self.add:get())
   g.rectangle('fill', -w/2, -h/2, w, h)
   g.pop()
 end
 
 return Announcement
+
