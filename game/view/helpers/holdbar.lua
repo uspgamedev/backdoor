@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DIR = require 'domain.definitions.dir'
-local COLORS = require 'domain.definitions.colors'
-local vec2 = require 'cpml' .vec2
+local DIR          = require 'domain.definitions.dir'
+local COLORS       = require 'domain.definitions.colors'
+local PLAYSFX      = require 'helpers.playsfx'
+local vec2         = require 'cpml' .vec2
 
 local _TOTAL = 1
 local _TIME = .8
@@ -140,4 +141,3 @@ function HoldBar:draw(x, y)
 end
 
 return HoldBar
-
