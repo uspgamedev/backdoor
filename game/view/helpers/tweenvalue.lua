@@ -1,4 +1,6 @@
 
+local Deferred = require 'common.deferred'
+
 local TweenValue = Class {
   __includes = { ELEMENT }
 }
@@ -27,8 +29,7 @@ function TweenValue:init(value, interpolator_name, ...)
   self.value = value
   self.target = value
   self.interpolator = _interpolators[interpolator_name or 'linear'](...)
-  self.callback = false
-  self.callback_once = false
+  self.deferred = false
   self:setSubtype('frontend-hud')
 end
 
@@ -40,18 +41,17 @@ end
 function TweenValue:checkCallback()
   if math.abs(self.value - self.target) <= 0.01 then
     self.value = self.target
-    if self.callback then
-      self.callback()
-      if self.callback_once then
-        self.callback = false
-        self.callback_once = false
-      end
+    if self.deferred then
+      self.deferred:trigger()
+      self.deferred = false
     end
   end
 end
 
 function TweenValue:set(target)
   self.target = target
+  self.deferred = Deferred:new{}
+  return self.deferred
 end
 
 function TweenValue:snap(value)
