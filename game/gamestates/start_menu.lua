@@ -9,7 +9,7 @@ local PLAYSFX         = require 'helpers.playsfx'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
-local SoundTrack  = require 'view.soundtrack'
+local SoundTrack      = require 'view.soundtrack'
 
 local state = {}
 
@@ -76,12 +76,12 @@ function state:leave()
   _menu_view = nil
 end
 
-function state:resume(from, player_info)
-  if player_info then
+function state:resume(from, info)
+  if from == GS.CHARACTER_BUILD and info then
     _locked = true
-    print(("%s %s"):format(player_info.species, player_info.background))
+    print(("%s %s"):format(info.species, info.background))
     _soundtrack.playTheme()
-    SWITCHER.switch(GS.PLAY, PROFILE.newRoute(player_info))
+    SWITCHER.switch(GS.PLAY, PROFILE.newRoute(info))
   else
     _menu_context = "START_MENU"
     _menu_view.invisible = false
@@ -93,14 +93,18 @@ function state:update(dt)
 
   if not _locked then
     if INPUT.wasActionPressed('CONFIRM') then
+      PLAYSFX 'ok-menu'
       MENU.confirm()
     elseif INPUT.wasActionPressed('SPECIAL') or
            INPUT.wasActionPressed('CANCEL') or
            INPUT.wasActionPressed('QUIT') then
+      PLAYSFX 'back-menu'
       MENU.cancel()
     elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+      PLAYSFX 'select-menu'
       MENU.prev()
     elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      PLAYSFX 'select-menu'
       MENU.next()
     end
   end
@@ -138,7 +142,7 @@ function state:update(dt)
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Settings") then
-        _activity:changeState('push', GS.SETTINGS)
+        _activity:changeState('push', GS.SETTINGS, _soundtrack)
       end
       if DEV and MENU.item("Controls") then
         CONFIGURE_INPUT(INPUT, INPUT.getMap())

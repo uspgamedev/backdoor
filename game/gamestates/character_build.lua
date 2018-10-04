@@ -1,6 +1,7 @@
 --MODULE FOR THE GAMESTATE: CHARACTER BUILDER--
 local DB             = require 'database'
 local INPUT          = require 'input'
+local PLAYSFX        = require 'helpers.playsfx'
 local DIRECTIONALS   = require 'infra.dir'
 local CharaBuildView = require 'view.charabuild'
 
@@ -55,12 +56,16 @@ function state:update(dt)
 
   -- if you confirm or cancel, all it does is change the current menu context
   if INPUT.wasActionPressed(_CONFIRM) then
+    PLAYSFX 'ok-menu'
     _view:confirm()
   elseif INPUT.wasActionPressed(_CANCEL) then
+    PLAYSFX 'back-menu'
     _view:cancel()
   elseif DIRECTIONALS.wasDirectionTriggered(_NEXT) then
+    PLAYSFX 'select-menu'
     _view:selectPrev()
   elseif DIRECTIONALS.wasDirectionTriggered(_PREV) then
+    PLAYSFX 'select-menu'
     _view:selectNext()
   end
 
@@ -90,4 +95,3 @@ function state:draw()
 end
 
 return state
-
