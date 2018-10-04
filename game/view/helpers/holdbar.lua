@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DIR = require 'domain.definitions.dir'
-local COLORS = require 'domain.definitions.colors'
-local vec2 = require 'cpml' .vec2
+local DIR          = require 'domain.definitions.dir'
+local COLORS       = require 'domain.definitions.colors'
+local PLAYSFX      = require 'helpers.playsfx'
+local vec2         = require 'cpml' .vec2
 
 local _TOTAL = 1
 local _TIME = .8
@@ -53,6 +54,8 @@ function HoldBar:init(hold_actions)
   self.progress = 0
   self.hold_actions = hold_actions
   self.pos = vec2()
+
+  self.is_playing = nil --If charge bar is playing sfx
 end
 
 function HoldBar:setPosition(pos)
@@ -113,8 +116,16 @@ function HoldBar:update()
   if self.enter <= 0 then self.progress = 0 end
   if not self.locked then
     if is_down then
+      if not self.is_playing then
+        self.is_playing = PLAYSFX "holdbar-charge"
+        self.is_playing:seek(self.progress/(_TOTAL/_TIME))
+      end
       self:advance()
     else
+      if self.is_playing then
+        self.is_playing:stop()
+        self.is_playing = nil
+      end
       self:rewind()
     end
   end
@@ -124,6 +135,11 @@ end
 function HoldBar:confirmed()
   -- check progress
   if not self.locked and self.progress >= _TOTAL then
+    if self.is_playing then
+      self.is_playing:stop()
+      self.is_playing = nil
+    end
+    PLAYSFX "holdbar-confirm"
     return true
   end
   return false
@@ -140,4 +156,3 @@ function HoldBar:draw(x, y)
 end
 
 return HoldBar
-
