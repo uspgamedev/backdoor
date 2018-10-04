@@ -93,14 +93,18 @@ function state:update(dt)
 
   if not _locked then
     if INPUT.wasActionPressed('CONFIRM') then
+      PLAYSFX 'ok-menu'
       MENU.confirm()
     elseif INPUT.wasActionPressed('SPECIAL') or
            INPUT.wasActionPressed('CANCEL') or
            INPUT.wasActionPressed('QUIT') then
+      PLAYSFX 'back-menu'
       MENU.cancel()
     elseif DIRECTIONALS.wasDirectionTriggered('UP') then
+      PLAYSFX 'select-menu'
       MENU.prev()
     elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      PLAYSFX 'select-menu'
       MENU.next()
     end
   end
