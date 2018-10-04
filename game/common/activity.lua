@@ -48,8 +48,11 @@ function Task:instance (obj, func, ...)
     return result
   end
 
-  function yield()
-    return coroutine.yield(task)
+  function yield(deferred, ...)
+    if deferred and deferred.andThen then
+      deferred:andThen(resume)
+    end
+    return coroutine.yield(deferred, ...)
   end
 
   function __operator:newindex()
@@ -72,7 +75,7 @@ function Activity:instance(obj)
 
   function __operator:index(name)
     local newtask = Task(_funcs[name])
-    return function (_, ...) newtask.resume(...) end
+    return function (_, ...) return newtask.resume(...) end
   end
 
 end

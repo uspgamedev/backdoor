@@ -35,19 +35,15 @@ end
 function _activity:announce(ann)
   ann.add:snap(1)
   ann.flash:snap(0)
-  ann.flash:set(_FLASH_TIME)
-  self.yield(ann.flash:defer(self.resume, true))
+  self.yield(ann.flash:set(_FLASH_TIME))
 
-  ann.add:set(0)
-  self.yield(ann.add:defer(self.resume, true))
+  self.yield(ann.add:set(0))
   
   ann.cooldown:snap(2)
-  ann.cooldown:set(0)
-  self.yield(ann.cooldown:defer(self.resume, true))
+  self.yield(ann.cooldown:set(0))
 
   ann.add:set(1)
-  ann.flash:set(0)
-  self.yield(ann.flash:defer(self.resume, true))
+  self.yield(ann.flash:set(0))
 
   ann.text = false
   ann.invisible = true
@@ -63,7 +59,7 @@ function Announcement:announce(text)
   self.pos.y = 160
   self.invisible = false
   self.locked = false
-  _activity:announce(self)
+  return _activity:announce(self)
 end
 
 function Announcement:getPoint()
