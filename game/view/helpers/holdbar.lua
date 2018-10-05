@@ -1,5 +1,6 @@
 
 local INPUT        = require 'input'
+local RES          = require 'resources'
 local DIRECTIONALS = require 'infra.dir'
 local DIR          = require 'domain.definitions.dir'
 local COLORS       = require 'domain.definitions.colors'
@@ -12,6 +13,39 @@ local _ENTER_SPEED = 8
 local _EPSILON = 0.01 -- 1%
 local _WIDTH = 64
 local _HEIGHT = 16
+local _PI = math.pi
+
+local function _newParticleSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.75)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(6)
+  particles:setSpeed(100)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(4)
+  particles:setEmissionRate(30)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
+  return particles
+end
+
+local function _newExplosionSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.5)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(8)
+  particles:setSpeed(512)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(4)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
+  return particles
+end
+
 
 local _dt = love.timer.getDelta
 
@@ -27,7 +61,7 @@ local function _linear(from, to, time)
   return from + step
 end
 
-local function _render(enter, progress, x, y)
+local function _render(enter, progress, x, y, particles)
   local g = love.graphics
   local alpha = enter
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
@@ -37,9 +71,20 @@ local function _render(enter, progress, x, y)
   g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
   g.setColor(cr, cg, cb, alpha)
   g.rectangle("fill", 0, 0, _WIDTH*(progress/_TOTAL), _HEIGHT)
+  g.setColor(1,1,1,alpha)
+  local offset = 10
+  g.draw(particles, _WIDTH*(progress/_TOTAL) - offset, _HEIGHT/2)
   g.pop()
 end
 
+local function _renderExplosion(explosion, x, y)
+  local g = love.graphics
+  g.push()
+  g.translate(x - _WIDTH/2, y)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(explosion, _WIDTH, _HEIGHT/2)
+  g.pop()
+end
 
 local HoldBar = Class({
   __includes = ELEMENT
@@ -54,6 +99,10 @@ function HoldBar:init(hold_actions)
   self.progress = 0
   self.hold_actions = hold_actions
   self.pos = vec2()
+
+  self.particles = _newParticleSource()
+
+  self.explosion = _newExplosionSource()
 
   self.is_playing = nil --If charge bar is playing sfx
 end
@@ -105,6 +154,10 @@ function HoldBar:update()
               or INPUT.isActionDown(action)
   end
 
+  --update particles
+  self.particles:update(_dt())
+  self.explosion:update(_dt())
+
   -- enter fade in
   if self.locked or not is_down then
     self:fadeOut()
@@ -135,11 +188,15 @@ end
 function HoldBar:confirmed()
   -- check progress
   if not self.locked and self.progress >= _TOTAL then
+    --play sfx
     if self.is_playing then
       self.is_playing:stop()
       self.is_playing = nil
     end
     PLAYSFX "holdbar-confirm"
+
+    self.explosion:emit(48)
+
     return true
   end
   return false
@@ -149,10 +206,15 @@ function HoldBar:draw(x, y)
   if not x and not y then
     x, y = self.pos:unpack()
   end
+
   -- render bar
   if self.enter > 0 and self.progress > 0 then
-    _render(self.enter, self.progress, x, y)
+    _render(self.enter, self.progress, x, y, self.particles)
   end
+
+  -- render explosion
+  _renderExplosion(self.explosion, x, y)
+
 end
 
 return HoldBar
