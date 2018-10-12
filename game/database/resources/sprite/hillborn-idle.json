@@ -1,10 +1,43 @@
 {
   "animation":[{
       "quad_idx":1,
-      "time":100
+      "time":150
+    },{
+      "quad_idx":2,
+      "time":200
+    },{
+      "quad_idx":3,
+      "time":150
+    },{
+      "quad_idx":4,
+      "time":150
+    },{
+      "quad_idx":5,
+      "time":150
+    },{
+      "quad_idx":6,
+      "time":150
+    },{
+      "quad_idx":7,
+      "time":150
+    },{
+      "quad_idx":8,
+      "time":200
+    },{
+      "quad_idx":9,
+      "time":150
+    },{
+      "quad_idx":10,
+      "time":150
+    },{
+      "quad_idx":11,
+      "time":150
+    },{
+      "quad_idx":12,
+      "time":150
     }],
   "loop":true,
   "offset":[0,80],
-  "quad_division":[1,1],
+  "quad_division":[6,2],
   "texture":"hillborn"
 }
