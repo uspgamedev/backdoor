@@ -4,7 +4,7 @@
       "time":150
     },{
       "quad_idx":2,
-      "time":200
+      "time":150
     },{
       "quad_idx":3,
       "time":150
@@ -22,18 +22,12 @@
       "time":150
     },{
       "quad_idx":8,
-      "time":200
+      "time":150
     },{
       "quad_idx":9,
       "time":150
     },{
       "quad_idx":10,
-      "time":150
-    },{
-      "quad_idx":11,
-      "time":150
-    },{
-      "quad_idx":12,
       "time":150
     }],
   "loop":true,
