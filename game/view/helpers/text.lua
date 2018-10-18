@@ -32,6 +32,10 @@ function Text:setDropShadow(enable)
   self.dropshadow = not not enable
 end
 
+function Text:getHeight()
+  return self.font:getHeight()
+end
+
 function Text:setWidth(w)
   -- set nil or false to disable box!
   self.width = w
