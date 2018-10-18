@@ -126,12 +126,12 @@ function BufferView:draw()
   --Draw button ontop of front buffer
   if self.side == "front" then
      local scale = .4
-     local b_y = -110
-     local b_x = -20
+     local b_y = -115
+     local b_x = -5
      g.setColor(1,1,1)
      g.draw(self.button, b_x, b_y, nil, scale)
      --Draw "draw hand" text
-     local text = "draw a new hand"
+     local text = "draw hand"
      local gap = 10
      local text_y = b_y - 5
      local text_x = b_x + self.button:getWidth()*scale + gap

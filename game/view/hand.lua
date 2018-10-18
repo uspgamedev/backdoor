@@ -173,15 +173,16 @@ function HandView:draw()
   local offset = self.x+boxwidth
 
   -- draw buttons
-  local button_scale = .75
+  local button_sx = .5
+  local button_sy = .7
   local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
   g.setColor(1, 1, 1)
   g.draw(self.prev_cursor,
-         x - size * step - self.prev_cursor:getWidth() * button_scale, button_y,
-         nil, button_scale)
+         x - size * step - self.prev_cursor:getWidth() * button_sx, button_y,
+         nil, button_sx, button_sy)
   g.draw(self.next_cursor,
          x + gap, button_y,
-         nil, button_scale)
+         nil, button_sx, button_sy)
 
   -- draw each card
   for i=size,1,-1 do
