@@ -135,15 +135,19 @@ function BufferView:draw()
      local gap = 10
      local text_y = b_y - 5
      local text_x = b_x + self.button:getWidth()*scale + gap
-     g.setColor(self.clr)
      self.text_font:set()
+     g.setColor(COLORS.BLACK)
+     g.print(text, text_x + 2, text_y + 2)
+     g.setColor(COLORS.NEUTRAL)
      g.print(text, text_x, text_y)
      --Draw cost of consumption
      text_y = text_y + 22
-     g.setColor(self.clr)
      self.text_font2:set()
      local cost = self.route:getControlledActor():getBody():getConsumption()
      local text = "-"..cost.." PP"
+     g.setColor(COLORS.BLACK)
+     g.print(text, text_x + 1, text_y + 1)
+     g.setColor(COLORS.PP)
      g.print(text, text_x, text_y)
   end
 
