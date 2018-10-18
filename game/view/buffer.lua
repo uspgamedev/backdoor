@@ -4,6 +4,7 @@ local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
 local COLORS  = require 'domain.definitions.colors'
+local RES     = require 'resources'
 
 local _SCALE = 0.3
 local _MX = 48
@@ -21,7 +22,11 @@ function BufferView:init(route)
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
+  self.button = RES.loadTexture("button-draw_hand")
+  self.button:setFilter("linear")
   self.font = FONT.get("Text", 24)
+  self.text_font = FONT.get("Text", 20)
+  self.text_font2 = FONT.get("Text", 16)
   self.amount = 0
   self.route = route
 
@@ -115,9 +120,35 @@ function BufferView:draw()
   local text = self.format:format(self.amount)
   local limit = self.sprite:getWidth() * _SCALE + self.font:getWidth(text)
               + _MX/3
-  self.font:set()
   g.push()
   g.translate(self.pos.x, self.pos.y)
+
+  --Draw button ontop of front buffer
+  if self.side == "front" then
+     local scale = .4
+     local b_y = -110
+     local b_x = -20
+     g.setColor(1,1,1)
+     g.draw(self.button, b_x, b_y, nil, scale)
+     --Draw "draw hand" text
+     local text = "draw a new hand"
+     local gap = 10
+     local text_y = b_y - 5
+     local text_x = b_x + self.button:getWidth()*scale + gap
+     g.setColor(self.clr)
+     self.text_font:set()
+     g.print(text, text_x, text_y)
+     --Draw cost of consumption
+     text_y = text_y + 22
+     g.setColor(self.clr)
+     self.text_font2:set()
+     local cost = self.route:getControlledActor():getBody():getConsumption()
+     local text = "-"..cost.." PP"
+     g.print(text, text_x, text_y)
+  end
+
+  --Draw buffer
+  self.font:set()
   g.scale(_SCALE, _SCALE)
   g.setColor(self.clr)
   self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
@@ -133,4 +164,3 @@ function BufferView:draw()
 end
 
 return BufferView
-
