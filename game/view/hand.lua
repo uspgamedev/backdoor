@@ -1,12 +1,13 @@
 
-local FONT       = require 'view.helpers.font'
-local CARD       = require 'view.helpers.card'
-local CardView   = require 'view.card'
-local CardInfo   = require 'view.cardinfo'
-local COLORS     = require 'domain.definitions.colors'
-local ACTIONDEFS = require 'domain.definitions.action'
+local FONT         = require 'view.helpers.font'
+local CARD         = require 'view.helpers.card'
+local CardView     = require 'view.card'
+local CardInfo     = require 'view.cardinfo'
+local COLORS       = require 'domain.definitions.colors'
+local ACTIONDEFS   = require 'domain.definitions.action'
+local RES          = require 'resources'
 local Transmission = require 'view.transmission'
-local vec2   = require 'cpml' .vec2
+local vec2         = require 'cpml' .vec2
 
 local math = require 'common.math'
 
@@ -37,6 +38,11 @@ function HandView:init(route)
   ELEMENT.init(self)
 
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
+
+  self.prev_cursor = RES.loadTexture("button-prev_hand_cursor")
+  self.prev_cursor:setFilter("linear")
+  self.next_cursor = RES.loadTexture("button-next_hand_cursor")
+  self.next_cursor:setFilter("linear")
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
@@ -165,6 +171,14 @@ function HandView:draw()
     -20, _HEIGHT/2 + 60,
   }
   local offset = self.x+boxwidth
+
+  -- draw buttons
+  local button_scale = .75
+  local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
+  g.setColor(1, 1, 1)
+  g.draw(self.prev_cursor, x - size * step - self.prev_cursor:getWidth() * button_scale,
+    button_y, nil, button_scale)
+  g.draw(self.next_cursor, x + gap, button_y, nil, button_scale)
 
   -- draw each card
   for i=size,1,-1 do
