@@ -10,6 +10,7 @@ local Button = Class{
 function Button:init(x, y)
     ELEMENT.init(self)
     self:setSubtype("control_hints")
+
     self.pos = vec2(x, y)
 
     self.image = RES.loadTexture("button-draw_hand")
