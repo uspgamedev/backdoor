@@ -351,6 +351,12 @@ function ActionHUD:update(dt)
   end
 
   if self.player_turn then
+    local control_hints = Util.findSubtype("control_hints")
+    if control_hints then
+      for button in pairs(control_hints) do
+          button:setShow(INPUT.isActionDown('HELP'))
+      end
+    end
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
       if INPUT.isActionDown('ACTION_4') then

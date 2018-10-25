@@ -10,9 +10,9 @@ function ControlHint:init(x, y)
 
     self.pos = vec2(x, y)
 
-    self.show = true
+    self.show = false
     self.alpha = 0
-    self.show_speed = 1
+    self.show_speed = 5
 end
 
 function ControlHint:update(dt)
@@ -23,8 +23,8 @@ function ControlHint:update(dt)
   end
 end
 
-function ControlHint:toggleShow()
-  self.show = not self.show
+function ControlHint:setShow(v)
+  self.show = v
 end
 
 return ControlHint
