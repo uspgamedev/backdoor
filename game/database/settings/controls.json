@@ -18,7 +18,7 @@
     "DOWNLEFT":["end","b"],
     "QUIT":["f8"],
     "PAUSE":["escape"],
-    "MODIFIER":["lshift"]
+    "HELP":["lshift"]
   },
   "analog":{
     "AXIS_X":1,

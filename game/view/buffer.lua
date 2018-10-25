@@ -1,10 +1,9 @@
-
 local vec2    = require 'cpml' .vec2
+local Button  = require 'view.control_hints.newhand'
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
 local COLORS  = require 'domain.definitions.colors'
-local RES     = require 'resources'
 
 local _SCALE = 0.3
 local _MX = 48
@@ -22,11 +21,7 @@ function BufferView:init(route)
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
-  self.button = RES.loadTexture("button-draw_hand")
-  self.button:setFilter("linear")
   self.font = FONT.get("Text", 24)
-  self.text_font = FONT.get("Text", 20)
-  self.text_font2 = FONT.get("Text", 16)
   self.amount = 0
   self.route = route
 
@@ -36,6 +31,8 @@ function BufferView:init(route)
   self.align = nil
   self.format = nil
   self.textoffx = nil
+
+  self.button = Button(-5, -115)
 
   -- Flash FX
   self.flash = 0
@@ -94,6 +91,7 @@ end
 function BufferView:update(dt)
   local actor = self.route.getControlledActor()
   if self.side == 'front' then
+    self.button:setCost(actor:getBody():getConsumption())
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then
     self.amount = actor:getBackBufferSize()
@@ -125,30 +123,7 @@ function BufferView:draw()
 
   --Draw button ontop of front buffer
   if self.side == "front" then
-     local scale = .4
-     local b_y = -115
-     local b_x = -5
-     g.setColor(1,1,1)
-     g.draw(self.button, b_x, b_y, nil, scale)
-     --Draw "draw hand" text
-     local text = "draw hand"
-     local gap = 10
-     local text_y = b_y - 5
-     local text_x = b_x + self.button:getWidth()*scale + gap
-     self.text_font:set()
-     g.setColor(COLORS.BLACK)
-     g.print(text, text_x + 2, text_y + 2)
-     g.setColor(COLORS.NEUTRAL)
-     g.print(text, text_x, text_y)
-     --Draw cost of consumption
-     text_y = text_y + 22
-     self.text_font2:set()
-     local cost = self.route:getControlledActor():getBody():getConsumption()
-     local text = "-"..cost.." PP"
-     g.setColor(COLORS.BLACK)
-     g.print(text, text_x + 1, text_y + 1)
-     g.setColor(COLORS.PP)
-     g.print(text, text_x, text_y)
+      self.button:draw()
   end
 
   --Draw buffer
