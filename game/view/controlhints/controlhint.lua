@@ -11,6 +11,16 @@ function ControlHint:init(x, y)
     self.pos = vec2(x, y)
 
     self.show = true
+    self.alpha = 0
+    self.show_speed = 1
+end
+
+function ControlHint:update(dt)
+  if self.show then
+    self.alpha = math.min(self.alpha + self.show_speed*dt, 1)
+  else
+    self.alpha = math.max(self.alpha - self.show_speed*dt, 0)
+  end
 end
 
 function ControlHint:toggleShow()

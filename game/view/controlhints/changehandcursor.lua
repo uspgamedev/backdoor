@@ -41,7 +41,7 @@ end
 function Button:draw()
   local g = love.graphics
   local x, y = self.pos.x, self.pos.y
-  g.setColor(1,1,1)
+  g.setColor(1,1,1,self.alpha)
   g.draw(self.image, x, y, nil, self.image_sx, self.image_sy)
 end
 

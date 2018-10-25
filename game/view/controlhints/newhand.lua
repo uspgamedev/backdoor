@@ -26,7 +26,7 @@ end
 function Button:draw()
     local g = love.graphics
     local x, y, scale = self.pos.x, self.pos.y, .4
-    g.setColor(1,1,1)
+    g.setColor(1,1,1,self.alpha)
     g.draw(self.image, x, y, nil, scale)
 
     --Draw "draw hand" text
@@ -35,18 +35,22 @@ function Button:draw()
     local text_y = y - 5
     local text_x = x + self.image:getWidth()*scale + gap
     self.text_font:set()
-    g.setColor(COLORS.BLACK)
+    local c = COLORS.BLACK
+    g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x + 2, text_y + 2)
-    g.setColor(COLORS.NEUTRAL)
+    c = COLORS.NEUTRAL
+    g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x, text_y)
 
     --Draw cost of consumption
     text_y = text_y + 22
     text = "-"..self.cost.." PP"
     self.text_font2:set()
-    g.setColor(COLORS.BLACK)
+    c = COLORS.BLACK
+    g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x + 1, text_y + 1)
-    g.setColor(COLORS.PP)
+    c = COLORS.PP
+    g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x, text_y)
 end
 

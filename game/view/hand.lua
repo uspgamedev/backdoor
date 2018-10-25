@@ -144,6 +144,8 @@ function HandView:update(dt)
     self.fx = table.remove(self.fxqueue, 1)
     self:fx()
   end
+  self.prev_cursor:update(dt)
+  self.next_cursor:update(dt)
 end
 
 function HandView:draw()
