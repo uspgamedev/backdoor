@@ -125,17 +125,7 @@ function GUI:draw()
   IMGUI.PushStyleVar('FramePadding', 8, 4)
 
   if IMGUI.BeginMainMenuBar() then
-    if IMGUI.BeginMenu("Game") then
-      IMGUI.Text("WIP")
-      if IMGUI.MenuItem("New Game") then
-      end
-      if IMGUI.MenuItem("Save & Quit") then
-      end
-      if IMGUI.MenuItem("Load") then
-      end
-      IMGUI.EndMenu()
-    end
-    if IMGUI.BeginMenu("Current Route") then
+    if IMGUI.BeginMenu("Route") then
       if IMGUI.MenuItem("Actors") then
         self:push('actors_menu')
       end
