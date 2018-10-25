@@ -41,8 +41,10 @@ Should be enough to download, setup, and run the game.
 
 Download:
 
-+ [imgui.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the game folder
-+ [libs.zip](https://uspgamedev.org/downloads/projects/backdoor/libs.zip) and extract it on `game/libs/`
++ [love 11.1 for windows 32bits](https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip), and extract it somewhere easy to remember (this will be a copy specifically for Backdoor)
++ [imgui.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the love folder
++ [lua51.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the love folder (substitute if necessary)
++ [libs.zip](https://uspgamedev.org/downloads/projects/backdoor/libs.zip) and extract it on `game/libs/` on this repository
 
-Then use your preferred method of running LÖVE on windows.
+Then drag and drop the game folder over the LÖVE executable to run the game!
 
