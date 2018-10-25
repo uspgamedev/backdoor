@@ -15,6 +15,7 @@ local _RADIUS = 12
 local _COLOR_DISTORTION = 1.5
 local _MIN_BEND_OFFSET = 5
 local _MAX_BEND_OFFSET = 20
+local _BEND_ANGLE = math.pi/5
 
 function Transmission:init(origin, target, color, duration, bending_number)
   ELEMENT.init(self)
@@ -36,6 +37,10 @@ function Transmission:init(origin, target, color, duration, bending_number)
   self.bending_offsets = {}
   for i = 1, self.bending_number do
     self.bending_offsets[i] = RANDOM.safeGenerate(_MIN_BEND_OFFSET, _MAX_BEND_OFFSET)
+  end
+  self.bending_angles = {}
+  for i = 1, self.bending_number do
+    self.bending_angles[i] = RANDOM.safeGenerate(_BEND_ANGLE, _BEND_ANGLE)
   end
 
   self.color = color or COLORS.NEUTRAL
@@ -76,8 +81,9 @@ function Transmission:draw()
   local sign = 1
   for i = 1, self.bending_number do
     local off = self.bending_offsets[i]
+    local angle = self.bending_angles[i]
     local pos = ori+norm*dist*i
-    pos = pos + norm:perpendicular()*off*sign
+    pos = pos + norm:perpendicular():rotate(angle)*off*sign
     table.insert(points,pos.x)
     table.insert(points,pos.y)
     sign = sign*-1
