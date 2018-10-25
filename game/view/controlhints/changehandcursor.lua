@@ -1,17 +1,14 @@
-local vec2    = require 'cpml' .vec2
-local COLORS  = require 'domain.definitions.colors'
-local FONT    = require 'view.helpers.font'
-local RES     = require 'resources'
+local COLORS      = require 'domain.definitions.colors'
+local FONT        = require 'view.helpers.font'
+local RES         = require 'resources'
+local CONTROLHINT = require 'view.controlhints.controlhint'
 
 local Button = Class{
-  __includes = { ELEMENT }
+  __includes = { CONTROLHINT }
 }
 
 function Button:init(x, y, side)
-    ELEMENT.init(self)
-    self:setSubtype("control_hints")
-
-    self.pos = vec2(x, y)
+    CONTROLHINT.init(self, x, y)
 
     if side == "left" then
       self.image = RES.loadTexture("button-prev_hand_cursor")

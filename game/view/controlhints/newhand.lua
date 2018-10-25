@@ -1,17 +1,14 @@
-local vec2    = require 'cpml' .vec2
-local COLORS  = require 'domain.definitions.colors'
-local FONT    = require 'view.helpers.font'
-local RES     = require 'resources'
+local COLORS      = require 'domain.definitions.colors'
+local FONT        = require 'view.helpers.font'
+local RES         = require 'resources'
+local CONTROLHINT = require 'view.controlhints.controlhint'
 
 local Button = Class{
-  __includes = { ELEMENT }
+  __includes = { CONTROLHINT }
 }
 
 function Button:init(x, y)
-    ELEMENT.init(self)
-    self:setSubtype("control_hints")
-
-    self.pos = vec2(x, y)
+    CONTROLHINT.init(self, x, y)
 
     self.image = RES.loadTexture("button-draw_hand")
     self.image:setFilter("linear")
