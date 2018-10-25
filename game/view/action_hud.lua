@@ -144,8 +144,9 @@ function ActionHUD:playCardAsArt(index)
     while ann:isBusy() do wait(1) end
     ann:announce(cardview.card:getName())
     local backbuffer = Util.findId('backbuffer_view')
+    local bends = RANDOM.safeGenerate(3, 10)
     Transmission(cardview, backbuffer,
-                 COLORS.FLASH_DISCARD):addElement("HUD_FX")
+                 COLORS.FLASH_DISCARD, nil, bends):addElement("HUD_FX")
     cardview:flashFor(0.5, COLORS.FLASH_DISCARD)
     backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
     wait(0.5)

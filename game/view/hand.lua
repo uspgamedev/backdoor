@@ -5,6 +5,7 @@ local CardView     = require 'view.card'
 local CardInfo     = require 'view.cardinfo'
 local COLORS       = require 'domain.definitions.colors'
 local ACTIONDEFS   = require 'domain.definitions.action'
+local RANDOM       = require 'common.random'
 local RES          = require 'resources'
 local Transmission = require 'view.transmission'
 local vec2         = require 'cpml' .vec2
@@ -215,7 +216,8 @@ function HandView:doAddCard(actor, card)
       local view = CardView(card)
       table.insert(self.hand, view)
       local frontbuffer = Util.findId('frontbuffer_view')
-      Transmission(frontbuffer, view, COLORS.FLASH_DRAW):addElement("HUD_FX")
+      local bends = RANDOM.safeGenerate(3, 10)
+      Transmission(frontbuffer, view, COLORS.FLASH_DRAW, nil, bends):addElement("HUD_FX")
       frontbuffer:flashFor(0.5, COLORS.FLASH_DRAW)
       view:flashFor(0.5, COLORS.FLASH_DRAW)
       wait(0.1)
@@ -230,7 +232,8 @@ function HandView:doRemoveCard(actor, card_index, discarded)
       local view = self.hand[card_index]
       if discarded then
         local backbuffer = Util.findId('backbuffer_view')
-        Transmission(view, backbuffer, COLORS.FLASH_DISCARD, 0.2)
+        local bends = RANDOM.safeGenerate(3, 10)
+        Transmission(view, backbuffer, COLORS.FLASH_DISCARD, 0.2, bends)
           :addElement("HUD_FX")
         backbuffer:flashFor(0.2, COLORS.FLASH_DISCARD)
         view:flashFor(0.2, COLORS.FLASH_DISCARD)

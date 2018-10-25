@@ -13,8 +13,10 @@ local _WIDTH = 8
 local _MAX_OFFSET = 8
 local _RADIUS = 12
 local _COLOR_DISTORTION = 1.5
+local _MIN_BEND_OFFSET = 5
+local _MAX_BEND_OFFSET = 20
 
-function Transmission:init(origin, target, color, duration)
+function Transmission:init(origin, target, color, duration, bending_number)
   ELEMENT.init(self)
   self.target = target
   self.origin = origin
@@ -29,6 +31,12 @@ function Transmission:init(origin, target, color, duration)
   self.tar_ox = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
   self.tar_oy = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
 
+  --Create bendings
+  self.bending_number = bending_number or 6
+  self.bending_offsets = {}
+  for i = 1, self.bending_number do
+    self.bending_offsets[i] = RANDOM.safeGenerate(_MIN_BEND_OFFSET, _MAX_BEND_OFFSET)
+  end
 
   self.color = color or COLORS.NEUTRAL
   self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
@@ -46,23 +54,38 @@ end
 function Transmission:draw()
   if self.warmup > 0 then return end
   local g = love.graphics
-  local ori_x = self.start.x + self.ori_ox
-  local ori_y = self.start.y + self.ori_oy
-  local tar_x = self.finish.x + self.tar_ox
-  local tar_y = self.finish.y + self.tar_oy
+  local ori = vec2(self.start.x + self.ori_ox, self.start.y + self.ori_oy)
+  local tar = vec2(self.finish.x + self.tar_ox, self.finish.y + self.tar_oy)
 
-  --Draw origin and target circle
+  --Draw origin and target circle--
   g.setColor(self.color[1]*_COLOR_DISTORTION,
              self.color[2]*_COLOR_DISTORTION,
              self.color[3]*_COLOR_DISTORTION,
              self.color[4])
-  g.circle("fill", ori_x, ori_y, _RADIUS * self.width_scale)
-  g.circle("fill", tar_x, tar_y, _RADIUS * self.width_scale)
+  g.circle("fill", ori.x, ori.y, _RADIUS * self.width_scale)
+  g.circle("fill", tar.x, tar.y, _RADIUS * self.width_scale)
 
-  --Draw line
+  --Draw line--
   g.setLineWidth(_WIDTH * self.width_scale)
   g.setColor(self.color)
-  g.line(ori_x, ori_y, tar_x, tar_y)
+  --Insert origin position
+  local points = {ori.x, ori.y}
+  --Insert bendings
+  local norm = (tar-ori):normalize()
+  local dist = ori:dist(tar)/(self.bending_number+1)
+  local sign = 1
+  for i = 1, self.bending_number do
+    local off = self.bending_offsets[i]
+    local pos = ori+norm*dist*i
+    pos = pos + norm:perpendicular()*off*sign
+    table.insert(points,pos.x)
+    table.insert(points,pos.y)
+    sign = sign*-1
+  end
+  --Insert target position
+  table.insert(points, tar.x)
+  table.insert(points, tar.y)
+  g.line(unpack(points))
 end
 
 return Transmission
