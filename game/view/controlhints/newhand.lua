@@ -8,7 +8,7 @@ local Button = Class{
 }
 
 function Button:init(x, y)
-    ELEMENT.init()
+    ELEMENT.init(self)
     self:setSubtype("control_hints")
     self.pos = vec2(x, y)
 
