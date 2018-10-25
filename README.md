@@ -18,7 +18,9 @@ behind.
 
 ## Running the project
 
-Works only in Unix systems (Linux and MacOS) for now. Dependencies:
+### On Unix systems (Linux and MacOS)
+
+Dependencies:
 
 + git
 + CMake
@@ -34,3 +36,13 @@ $ make
 ```
 
 Should be enough to download, setup, and run the game.
+
+### On Windows (experimental)
+
+Download:
+
++ [imgui.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the game folder
++ [libs.zip](https://uspgamedev.org/downloads/projects/backdoor/libs.zip) and extract it on `game/libs/`
+
+Then use your preferred method of running LÖVE on windows.
+
