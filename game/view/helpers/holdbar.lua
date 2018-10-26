@@ -115,9 +115,9 @@ function HoldBar:lock()
   self.locked = true
 end
 
-function HoldBar:unlock()
+function HoldBar:unlock(dont_reset_progress)
   self.locked = false
-  self.progress = 0
+  self.progress = dont_reset_progress and self.progress or 0
 end
 
 function HoldBar:isLocked()
@@ -147,16 +147,15 @@ end
 function HoldBar:update()
   local is_down = false
   local actions = self.hold_actions
-
+  
   for _,action in ipairs(actions) do
     if is_down then break end
     is_down = (DIR[action] and DIRECTIONALS.isDirectionDown(action))
               or INPUT.isActionDown(action)
   end
 
-  --update particles
-  self.particles:update(_dt())
   self.explosion:update(_dt())
+  self.particles:update(_dt())
 
   -- enter fade in
   if self.locked or not is_down then
