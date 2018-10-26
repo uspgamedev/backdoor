@@ -71,7 +71,7 @@ function ActionHUD:init(route)
   self.holdbar:lock()
   self.holdbar:addElement("HUD")
   self.justheld = false
-  self.unlock_holdbar = true
+  self.holdbar_is_unlockable = true
 
   -- Long walk variables
   self.alert = false
@@ -339,7 +339,8 @@ end
 
 local function _endInspect(self)
   self.inspecting = false
-  if not self.justheld and self.holdbar:isLocked() and self.unlock_holdbar then
+  if not self.justheld and self.holdbar:isLocked()
+                       and self.holdbar_is_unlockable then
     self.holdbar:unlock()
   end
 end
@@ -350,9 +351,9 @@ function ActionHUD:update(dt)
   if player:getPP() < player:getBody():getConsumption() and
      not self.holdbar:isLocked() then
     self.holdbar:lock()
-    self.unlock_holdbar = false
+    self.holdbar_is_unlockable = false
   elseif player:getPP() >= player:getBody():getConsumption() then
-    self.unlock_holdbar = true
+    self.holdbar_is_unlockable = true
   end
 
   -- Input alerts long walk
