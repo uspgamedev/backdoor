@@ -30,7 +30,7 @@ end
 function Stats:setExpPreview(value)
   if value and value > 0 then
     self.exp_preview = true
-    self.exp_preview_text:setText(("+%2d"):format(value))
+    self.exp_preview_text:setText(("+%4d"):format(value))
     self.exp_preview_offset = -10
   else
     self.exp_preview = false
@@ -56,8 +56,9 @@ function Stats:render(g)
   g.push()
   g.setColor(COLORS.NEUTRAL)
   g.print(("EXP: %04d"):format(self.actor:getExp()), 0, 0)
-  local w = g.getFont():getWidth("EXP: XXXX")
-  self.exp_preview_text:draw(w, self.exp_preview_offset)
+  local w = g.getFont():getWidth("EXP: ") + 6
+  self.exp_preview_text:draw(w, self.exp_preview_offset -
+                                g.getFont():getHeight()/2 - 2)
 
   -- packs
   local packcount = self.actor:getPrizePackCount()
