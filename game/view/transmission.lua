@@ -40,7 +40,7 @@ function Transmission:init(origin, target, color, duration, bending_number)
   end
   self.bending_angles = {}
   for i = 1, self.bending_number do
-    self.bending_angles[i] = RANDOM.safeGenerate(_BEND_ANGLE, _BEND_ANGLE)
+    self.bending_angles[i] = RANDOM.safeGenerate(-_BEND_ANGLE, _BEND_ANGLE)
   end
 
   self.color = color or COLORS.NEUTRAL
@@ -91,7 +91,7 @@ function Transmission:draw()
   --Insert target position
   table.insert(points, tar.x)
   table.insert(points, tar.y)
-  g.line(unpack(points))
+  g.line(points)
 end
 
 return Transmission
