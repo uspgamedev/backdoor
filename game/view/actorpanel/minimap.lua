@@ -48,6 +48,10 @@ end
 
 local _renderTiles
 
+function MiniMap:process(dt)
+  self.sector = self.actor:getSector()
+end
+
 function MiniMap:render(g)
   _renderTiles(g, self.map_canvas, self.sector, self.actor)
   g.setColor(COLORS.NEUTRAL)
@@ -75,7 +79,6 @@ function _renderTiles(g, map_canvas, sector, actor)
     translation_x,
     translation_y
   )
-  --]]--
   g.scale(_TILE_W, _TILE_H)
   for i = 0, h-1 do
     for j = 0, w-1 do
