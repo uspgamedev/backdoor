@@ -1,4 +1,4 @@
-
+local RANDOM       = require 'common.random'
 local DIRECTIONALS  = require 'infra.dir'
 local DIR           = require 'domain.definitions.dir'
 local INPUT         = require 'input'
@@ -71,6 +71,7 @@ function ActionHUD:init(route)
   self.holdbar:lock()
   self.holdbar:addElement("HUD")
   self.justheld = false
+  self.holdbar_is_unlockable = true
 
   -- Long walk variables
   self.alert = false
@@ -339,12 +340,22 @@ end
 
 local function _endInspect(self)
   self.inspecting = false
-  if not self.justheld and self.holdbar:isLocked() then
+  if not self.justheld and self.holdbar:isLocked()
+                       and self.holdbar_is_unlockable then
     self.holdbar:unlock()
   end
 end
 
 function ActionHUD:update(dt)
+  --Checks if player can draw a new hand
+  local player = self.route.getControlledActor()
+  if player:getPP() < player:getBody():getConsumption() and
+     not self.holdbar:isLocked() then
+    self.holdbar:lock()
+    self.holdbar_is_unlockable = false
+  elseif player:getPP() >= player:getBody():getConsumption() then
+    self.holdbar_is_unlockable = true
+  end
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
@@ -352,6 +363,12 @@ function ActionHUD:update(dt)
   end
 
   if self.player_turn then
+    local control_hints = Util.findSubtype("control_hints")
+    if control_hints then
+      for button in pairs(control_hints) do
+          button:setShow(INPUT.isActionDown('HELP'))
+      end
+    end
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
       if INPUT.isActionDown('ACTION_4') then

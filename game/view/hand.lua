@@ -6,6 +6,7 @@ local CardInfo     = require 'view.cardinfo'
 local COLORS       = require 'domain.definitions.colors'
 local ACTIONDEFS   = require 'domain.definitions.action'
 local RANDOM       = require 'common.random'
+local Button       = require 'view.controlhints.changehandcursor'
 local RES          = require 'resources'
 local Transmission = require 'view.transmission'
 local vec2         = require 'cpml' .vec2
@@ -40,10 +41,8 @@ function HandView:init(route)
 
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
-  self.prev_cursor = RES.loadTexture("button-prev_hand_cursor")
-  self.prev_cursor:setFilter("linear")
-  self.next_cursor = RES.loadTexture("button-next_hand_cursor")
-  self.next_cursor:setFilter("linear")
+  self.prev_cursor = Button(x, y, "left")
+  self.next_cursor = Button(x, y, "left")
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
@@ -146,6 +145,8 @@ function HandView:update(dt)
     self.fx = table.remove(self.fxqueue, 1)
     self:fx()
   end
+  self.prev_cursor:update(dt)
+  self.next_cursor:update(dt)
 end
 
 function HandView:draw()
@@ -174,16 +175,13 @@ function HandView:draw()
   local offset = self.x+boxwidth
 
   -- draw buttons
-  local button_sx = .5
-  local button_sy = .7
   local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
-  g.setColor(1, 1, 1)
-  g.draw(self.prev_cursor,
-         x - size * step - self.prev_cursor:getWidth() * button_sx, button_y,
-         nil, button_sx, button_sy)
-  g.draw(self.next_cursor,
-         x + gap, button_y,
-         nil, button_sx, button_sy)
+  local button_x = x - size * step - self.prev_cursor:getWidth()
+  self.prev_cursor:setPos(button_x, button_y)
+  self.prev_cursor:draw()
+  button_x = x + gap
+  self.next_cursor:setPos(button_x, button_y)
+  self.next_cursor:draw()
 
   -- draw each card
   for i=size,1,-1 do
