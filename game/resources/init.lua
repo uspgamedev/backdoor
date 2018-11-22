@@ -43,7 +43,6 @@ function _loadResource(rtype, name, ...)
     local path = DB.loadResourcePath(rtype, name)
     res = _initResource[rtype](path, ...)
     _updateResource(rtype, name..sufix, res)
-    _rescache[rtype][name..sufix] = res --REMOVE (is equal to function call above)
   end
   return res
 end
