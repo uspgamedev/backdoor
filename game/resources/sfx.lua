@@ -14,10 +14,10 @@ function Source:init(path, polyphony)
     end
 
     self.next_index = 1
-    self.last_index = self.buffer_size
 end
 
 function Source:play()
+<<<<<<< HEAD
 <<<<<<< HEAD
     local source = self.buffer[self.next_index]
     source:play()
@@ -35,6 +35,12 @@ function Source:setVolume(vol)
     self.next_index = (self.next_index % self.buffer_size) + 1
     return self.last_index
 >>>>>>> Some improvements to code
+=======
+    local source = self.buffer[self.next_index]
+    source:play()
+    self.next_index = (self.next_index % self.buffer_size) + 1
+    return source
+>>>>>>> Removed unnecessary last_index variable
 end
 
 function Source:seek(vol)
