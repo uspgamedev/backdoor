@@ -35,6 +35,12 @@ function Source:seek(vol)
   end
 end
 
+function Source:seek(vol)
+  for i = 1, self.buffer_size do
+    self.buffer[i]:setVolume(vol)
+  end
+end
+
 function Source:getVolume()
     return self.buffer[1]:getVolume()
 end
