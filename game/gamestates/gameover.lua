@@ -5,7 +5,7 @@ local state = {}
 
 function state:enter(from, player)
   self.view = PlayerDeathView(player)
-  self.view:addElement("HUD")
+  self.view:register("HUD")
   print("YOU DIED YOU NOOB")
 end
 

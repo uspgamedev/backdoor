@@ -11,6 +11,7 @@ local Body = require 'domain.body'
 local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
 local Behaviors = require 'domain.behaviors'
+local Util  = require "steaming.util"
 
 function Route:instance(obj)
 

@@ -1,5 +1,5 @@
-
 local state = {}
+local Util  = require "steaming.util"
 
 --[[ LOCAL VARIABLES ]]--
 
@@ -48,4 +48,3 @@ function state:draw()
 end
 
 return state
-

@@ -43,7 +43,7 @@ function state:enter(from, actor, validator)
 
   if not _leave then
     _view = PickWidgetView(actor)
-    _view:addElement("HUD")
+    _view:register("HUD")
     _view:fadeIn()
   end
 end

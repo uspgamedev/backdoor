@@ -3,8 +3,10 @@ local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
 
-local Activity      = require 'common.activity'
-local TweenValue    = require 'view.helpers.tweenvalue'
+local Activity    = require 'common.activity'
+local TweenValue  = require 'view.helpers.tweenvalue'
+local Class       = require "steaming.extra_libs.hump.class"
+local ELEMENT     = require "steaming.classes.primitives.element"
 
 local vec2        = require 'cpml' .vec2
 
@@ -38,7 +40,7 @@ function _activity:announce(ann)
   self.yield(ann.flash:set(_FLASH_TIME))
 
   self.yield(ann.add:set(0))
-  
+
   ann.cooldown:snap(2)
   self.yield(ann.cooldown:set(0))
 
@@ -108,4 +110,3 @@ function Announcement:draw()
 end
 
 return Announcement
-

@@ -5,6 +5,8 @@ local ACTIONDEFS  = require 'domain.definitions.action'
 
 local vec2        = require 'cpml' .vec2
 local math        = require 'common.math'
+local Class       = require "steaming.extra_libs.hump.class"
+local ELEMENT     = require "steaming.classes.primitives.element"
 
 --CONSTS--
 local _WIDTH, _HEIGHT
@@ -153,4 +155,3 @@ function FocusBar:draw()
 end
 
 return FocusBar
-

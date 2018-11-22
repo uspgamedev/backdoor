@@ -1,5 +1,6 @@
 
 local Behaviors = require 'lux.class' :new{}
+local Util      = require "steaming.util"
 
 function Behaviors:instance(obj)
 
@@ -52,4 +53,3 @@ function Behaviors:instance(obj)
 end
 
 return Behaviors
-

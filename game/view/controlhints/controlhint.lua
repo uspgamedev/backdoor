@@ -1,4 +1,6 @@
 local vec2    = require 'cpml' .vec2
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local ControlHint = Class{
   __includes = { ELEMENT }

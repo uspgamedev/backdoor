@@ -10,6 +10,10 @@ local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
 local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
+local Util          = require "steaming.util"
+local Class         = require "steaming.extra_libs.hump.class"
+local Signal        = require "steaming.extra_libs.hump.signal"
+local ELEMENT       = require "steaming.classes.primitives.element"
 
 local _INFO_LAG = 2.0 -- seconds
 
@@ -40,7 +44,7 @@ function ActionHUD:init(route)
 
   -- Hand view
   self.handview = HandView(route)
-  self.handview:addElement("HUD_BG", nil, "hand_view")
+  self.handview:register("HUD_BG", nil, "hand_view")
   Signal.register(
     "actor_draw",
     function(actor, card)
@@ -62,14 +66,14 @@ function ActionHUD:init(route)
 
   -- Focus bar
   self.focusbar = FocusBar(route)
-  self.focusbar:addElement("HUD")
+  self.focusbar:register("HUD")
 
   -- Hold bar
   local w,h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.holdbar = HoldBar{'EXTRA'}
   self.holdbar:setPosition(vec2(w,h)/2)
   self.holdbar:lock()
-  self.holdbar:addElement("HUD")
+  self.holdbar:register("HUD")
   self.justheld = false
   self.holdbar_is_unlockable = true
 
@@ -135,7 +139,7 @@ function ActionHUD:playCardAsArt(index)
     cardview:setAlpha(1)
     local ann = Util.findId('announcement')
     ann:lock()
-    cardview:addElement("HUD_FX")
+    cardview:register("HUD_FX")
     cardview:addTimer(
       nil, MAIN_TIMER, 'tween', 0.2, cardview,
       { position = cardview.position + vec2(0,-200) }, 'out-cubic'
@@ -147,7 +151,7 @@ function ActionHUD:playCardAsArt(index)
     local backbuffer = Util.findId('backbuffer_view')
     local bends = RANDOM.safeGenerate(3, 10)
     Transmission(cardview, backbuffer,
-                 COLORS.FLASH_DISCARD, nil, bends):addElement("HUD_FX")
+                 COLORS.FLASH_DISCARD, nil, bends):register("HUD_FX")
     cardview:flashFor(0.5, COLORS.FLASH_DISCARD)
     backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
     wait(0.5)

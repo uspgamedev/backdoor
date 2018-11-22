@@ -1,4 +1,3 @@
-
 --- MODULE FOR THE GAMESTATE: PLAYER TURN
 --  This gamestate rolls out when the player's turn arrives. It pops the action
 --  the player chose to do.
@@ -13,6 +12,8 @@ local DIRECTIONALS  = require 'infra.dir'
 local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.action_hud'
+local Util          = require "steaming.util"
+local Signal        = require "steaming.extra_libs.hump.signal"
 
 local vec2          = require 'cpml' .vec2
 
@@ -107,7 +108,7 @@ function state:enter(_, route, view)
     end
   end
   local ability_view = ReadyAbilityView(_widget_abilities.list, ability_idx)
-  ability_view:addElement("HUD")
+  ability_view:register("HUD")
   ability_view:enter()
   _view.ability = ability_view
 

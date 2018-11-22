@@ -13,24 +13,8 @@ identityp = common.identityp
 -- CPML
 cpml      = require 'cpml'
 
--- HUMP
-Timer     = require "steaming.extra_libs.hump.timer"
-Class     = require "steaming.extra_libs.hump.class"
-Camera    = require "steaming.extra_libs.hump.camera"
-Vector    = require "steaming.extra_libs.hump.vector"
-Signal    = require "steaming.extra_libs.hump.signal"
-
-
--- CLASSES
-require "steaming.classes.primitive"
-
--- STEAMING MODULES
-Util      = require "steaming.util"
-Font      = require "steaming.font"
-Res       = require "steaming.res_manager"
-
-Draw      = require "draw"
-Setup     = require "setup"
+local Res     = require "steaming.res_manager"
+local Setup   = require "setup"
 
 -- GAMESTATES
 GS = require 'gamestates'
@@ -103,4 +87,3 @@ function love.quit()
   imgui.ShutDown();
   PROFILE.quit()
 end
-

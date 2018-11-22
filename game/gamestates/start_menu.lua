@@ -26,7 +26,7 @@ local _soundtrack
 function _activity:quit()
   _locked = true
   local fade_view = FadeView(FadeView.STATE_UNFADED)
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
   love.event.quit()
@@ -36,7 +36,7 @@ function _activity:enterMenu()
   _locked = true
   local fade_view = FadeView(FadeView.STATE_FADED)
   _soundtrack.playTheme('title-menu')
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeInAndThen(self.resume)
   self.yield()
   _locked = false
@@ -46,10 +46,10 @@ end
 function _activity:changeState(mode, to, ...)
   _locked = true
   local fade_view = FadeView(FadeView.STATE_UNFADED)
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:destroy()
   if to == GS.PLAY then
     _soundtrack.playTheme()
@@ -64,7 +64,7 @@ function state:enter()
   _menu_context = "START_MENU"
 
   _menu_view = StartMenuView()
-  _menu_view:addElement("HUD")
+  _menu_view:register("HUD")
 
   _soundtrack = SoundTrack()
 

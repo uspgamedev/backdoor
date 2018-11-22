@@ -3,6 +3,8 @@ local COLORS = require 'domain.definitions.colors'
 local PROFILE = require 'infra.profile'
 local FONT = require 'view.helpers.font'
 local Text = require 'view.helpers.text'
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local fmod = math.fmod
 local sin = math.sin
@@ -72,4 +74,3 @@ function SettingsView:draw()
 end
 
 return SettingsView
-

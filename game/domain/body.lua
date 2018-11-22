@@ -7,7 +7,8 @@ local APT         = require 'domain.definitions.aptitude'
 local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
-
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
 local Card        = require 'domain.card'
 
 local _EMPTY = {}
@@ -435,4 +436,3 @@ function Body:getKiller()
 end
 
 return Body
-

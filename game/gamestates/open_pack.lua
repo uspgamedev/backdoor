@@ -39,7 +39,7 @@ local function _confirm()
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
   end
 end
 
@@ -63,7 +63,7 @@ function state:enter(from, route, packlist)
   _pack = nil
   _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
   else
     _leave = true
   end

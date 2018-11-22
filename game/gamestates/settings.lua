@@ -57,7 +57,7 @@ function state:enter(from, soundtrack)
   end
   _changes = setmetatable({}, { __index = original })
   _view = SettingsView(_fields)
-  _view:addElement("GUI")
+  _view:register("GUI")
 end
 
 function state:update(dt)

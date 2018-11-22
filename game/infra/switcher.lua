@@ -1,7 +1,7 @@
 
 local Gamestate = require "steaming.extra_libs.hump.gamestate"
-local Queue = require 'lux.common.Queue'
-local INPUT = require 'input'
+local Queue     = require 'lux.common.Queue'
+local INPUT     = require 'input'
 
 local SWITCHER = {}
 

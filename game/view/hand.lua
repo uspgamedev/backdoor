@@ -1,4 +1,3 @@
-
 local FONT         = require 'view.helpers.font'
 local CARD         = require 'view.helpers.card'
 local CardView     = require 'view.card'
@@ -10,6 +9,9 @@ local Button       = require 'view.controlhints.changehandcursor'
 local RES          = require 'resources'
 local Transmission = require 'view.transmission'
 local vec2         = require 'cpml' .vec2
+local Util         = require "steaming.util"
+local Class        = require "steaming.extra_libs.hump.class"
+local ELEMENT      = require "steaming.classes.primitives.element"
 
 local math = require 'common.math'
 
@@ -215,7 +217,7 @@ function HandView:doAddCard(actor, card)
       table.insert(self.hand, view)
       local frontbuffer = Util.findId('frontbuffer_view')
       local bends = RANDOM.safeGenerate(3, 10)
-      Transmission(frontbuffer, view, COLORS.FLASH_DRAW, nil, bends):addElement("HUD_FX")
+      Transmission(frontbuffer, view, COLORS.FLASH_DRAW, nil, bends):register("HUD_FX")
       frontbuffer:flashFor(0.5, COLORS.FLASH_DRAW)
       view:flashFor(0.5, COLORS.FLASH_DRAW)
       wait(0.1)
@@ -232,7 +234,7 @@ function HandView:doRemoveCard(actor, card_index, discarded)
         local backbuffer = Util.findId('backbuffer_view')
         local bends = RANDOM.safeGenerate(3, 10)
         Transmission(view, backbuffer, COLORS.FLASH_DISCARD, 0.2, bends)
-          :addElement("HUD_FX")
+          :register("HUD_FX")
         backbuffer:flashFor(0.2, COLORS.FLASH_DISCARD)
         view:flashFor(0.2, COLORS.FLASH_DISCARD)
         wait(0.2)

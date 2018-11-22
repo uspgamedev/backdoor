@@ -11,6 +11,8 @@ local ACTOR_MINIMAP = require 'view.actor.minimap'
 local ACTOR_ATTR    = require 'view.actor.attr'
 local ACTOR_WIDGETS = require 'view.actor.widgets'
 local VIEWDEFS      = require 'view.definitions'
+local Class         = require "steaming.extra_libs.hump.class"
+local ELEMENT       = require "steaming.classes.primitives.element"
 
 local math = require 'common.math'
 
@@ -162,4 +164,3 @@ function ActorView:drawWidgets(g, actor)
 end
 
 return ActorView
-

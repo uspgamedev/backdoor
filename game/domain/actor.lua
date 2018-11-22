@@ -10,6 +10,9 @@ local DEFS        = require 'domain.definitions'
 local PLACEMENTS  = require 'domain.definitions.placements'
 local PACK        = require 'domain.pack'
 local Visibility  = require 'common.visibility'
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
+local Signal      = require "steaming.extra_libs.hump.signal"
 
 local math = require 'common.math'
 

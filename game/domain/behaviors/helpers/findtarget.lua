@@ -1,5 +1,6 @@
 
 local TILE = require 'common.tile'
+local Util = require "steaming.util"
 
 local FindTarget = {}
 
@@ -22,4 +23,3 @@ function FindTarget.getTarget(actor)
 end
 
 return FindTarget
-

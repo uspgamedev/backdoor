@@ -1,7 +1,9 @@
 
-local IMGUI = require 'imgui'
-local DB = require 'database'
-local tween = require 'helpers.tween'
+local IMGUI   = require 'imgui'
+local DB      = require 'database'
+local tween   = require 'helpers.tween'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local MENU_WIDTH = 240
 local MENU_MAX_HEIGHT = 600

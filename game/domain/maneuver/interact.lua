@@ -1,7 +1,7 @@
-
 local ABILITY    = require 'domain.ability'
 local ACTIONDEFS = require 'domain.definitions.action'
 local SCHEMATICS = require 'domain.definitions.schematics'
+local Util       = require "steaming.util"
 local INTERACT = {}
 
 local CONSUME_ABILITY = {
@@ -76,4 +76,3 @@ function INTERACT.perform(actor, inputvalues)
 end
 
 return INTERACT
-

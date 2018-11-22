@@ -6,6 +6,8 @@ local DEFS    = require 'view.definitions'
 local PROFILE = require 'infra.profile'
 local Color   = require 'common.color'
 local Timer   = require 'steaming.extra_libs.hump.timer'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local PlayerDeathView = Class({ __includes = ELEMENT })
 
@@ -75,4 +77,3 @@ function PlayerDeathView:draw()
 end
 
 return PlayerDeathView
-

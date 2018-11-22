@@ -42,7 +42,7 @@ end
 function state:enter()
   _resetState()
   _view = CharaBuildView()
-  _view:addElement("GUI", nil, "character_builder_view")
+  _view:register("GUI", nil, "character_builder_view")
   _view:open(_playerinfo)
   _leave = false
 end
