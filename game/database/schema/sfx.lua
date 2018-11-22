@@ -8,5 +8,6 @@ for _,file in ipairs(filelist) do
 end
 
 return {
-  { id = 'filename', name = "Filename", type = 'enum', options = files }
+  { id = 'filename', name = "Filename", type = 'enum', options = files },
+  { id = 'polyphony', name = "Polyphony", type = 'integer', range = {1} }
 }
