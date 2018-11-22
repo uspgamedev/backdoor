@@ -45,6 +45,7 @@ local function _playTurns(...)
 
   if request == "playerDead" then
     _view.action_hud:destroy()
+    _view.actor:destroy()
     SWITCHER.push(GS.GAMEOVER, _player, _view)
   elseif request == "userTurn" then
     _saveRoute()
