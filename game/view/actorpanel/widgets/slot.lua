@@ -3,6 +3,7 @@ local vec2    = require 'cpml' .vec2
 local Node    = require 'view.node'
 local FONT    = require 'view.helpers.font'
 local COLORS  = require 'domain.definitions.colors'
+local RES     = require 'resources'
 
 local _MG = 24
 local _PD = 4

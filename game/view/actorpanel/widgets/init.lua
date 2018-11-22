@@ -5,6 +5,9 @@ local COLORS      = require 'domain.definitions.colors'
 local Node        = require 'view.node'
 local Slot        = require 'view.actorpanel.widgets.slot'
 
+local _PLACEMENTS = 1
+local _TRAITS = 2
+local _CONDITIONS = 3
 local _PD = 4
 local _MG = 24
 
@@ -20,6 +23,7 @@ function Widgets:init(actor, x, y)
   Node.init(self)
   self:setPosition(x, y)
   self.font = FONT.get("Text", 20)
+  self.actor = actor
   self.slots = {}
   local sqsize = Slot.SQRSIZE
   for i=1,3 do
@@ -27,11 +31,23 @@ function Widgets:init(actor, x, y)
     for j=1,5 do
       local slot = Slot((j - 1) * (sqsize + _PD),
                         i*(_MG*2 + self.font:getHeight()),
-                        i == 1 and PLACEMENTS[PLACEMENTS[j]])
+                        i == _PLACEMENTS and PLACEMENTS[PLACEMENTS[j]])
       self.slots[i][j] = slot
       self:addChild(slot)
     end
   end
+end
+
+
+function Widgets:updatePlacements()
+  for n,slot in ipairs(PLACEMENTS) do
+    local widget = self.actor:getBody():getEquipmentAt(slot)
+    self.slots[_PLACEMENTS][n]:setWidget(widget)
+  end
+end
+
+function Widgets:process(dt)
+  self:updatePlacements()
 end
 
 function Widgets:render(g)
