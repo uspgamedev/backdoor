@@ -40,14 +40,45 @@ end
 
 
 function Widgets:updatePlacements()
+  local equipment = self.slots[_PLACEMENTS]
   for n,slot in ipairs(PLACEMENTS) do
     local widget = self.actor:getBody():getEquipmentAt(slot)
-    self.slots[_PLACEMENTS][n]:setWidget(widget)
+    equipment[n]:setWidget(widget)
+  end
+end
+
+function Widgets:updateTraits()
+  local traits = self.slots[_TRAITS]
+  local n = 0
+  for i,widget in self.actor:getBody():eachWidget() do
+    if not widget:getWidgetPlacement() and widget:isWidgetPermanent() then
+      n = n + 1
+      traits[n]:setWidget(widget)
+    end
+  end
+  for i=n+1,5 do
+    traits[i]:setWidget()
+  end
+end
+
+function Widgets:updateConditions()
+  local conditions = self.slots[_CONDITIONS]
+  local n = 0
+  for i,widget in self.actor:getBody():eachWidget() do
+    if not widget:getWidgetPlacement() and not widget:isWidgetPermanent() then
+      n = n + 1
+      conditions[n]:setWidget(widget)
+    end
+  end
+  for i=n+1,5 do
+    conditions[i]:setWidget()
   end
 end
 
 function Widgets:process(dt)
   self:updatePlacements()
+  self:updateTraits()
+  self:updateConditions()
 end
 
 function Widgets:render(g)
