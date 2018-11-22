@@ -10,6 +10,7 @@ local Stats = Class({ __includes = { Node } })
 
 function Stats:init(actor, x, y, width)
   Node.init(self)
+  self:setId('actorpanel-stats')
   local margin = VIEWDEFS.PANEL_MG
   self.actor = actor
   self.width = width
@@ -19,8 +20,35 @@ function Stats:init(actor, x, y, width)
                                       (i-1) * (width/4 + margin/2), 32, width/4)
     self:addChild(self.attrs[attr_name])
   end
-  --self.exp_text = Text("", )
+  self.exp_preview = false
+  self.exp_preview_text = Text("", "Text", 20, { color = COLORS.VALID,
+                                                 dropshadow = true })
+  self.exp_preview_offset = 0
   self:setPosition(x, y)
+end
+
+function Stats:setExpPreview(value)
+  if value and value > 0 then
+    self.exp_preview = true
+    self.exp_preview_text:setText(("+%2d"):format(value))
+    self.exp_preview_offset = -10
+  else
+    self.exp_preview = false
+  end
+end
+
+function Stats:process(dt)
+  local offset_speed = 120
+  if self.exp_preview_offset < 0 then
+    self.exp_preview_offset = math.min(0, self.exp_preview_offset +
+                                          offset_speed*dt)
+  end
+  if self.exp_preview then
+    self.exp_preview_text:setAlpha(1)
+  else
+    local alpha = self.exp_preview_text:getAlpha()
+    self.exp_preview_text:setAlpha(alpha > 0.05 and alpha * 0.5 or 0)
+  end
 end
 
 function Stats:render(g)
@@ -28,6 +56,8 @@ function Stats:render(g)
   g.push()
   g.setColor(COLORS.NEUTRAL)
   g.print(("EXP: %04d"):format(self.actor:getExp()), 0, 0)
+  local w = g.getFont():getWidth("EXP: XXXX")
+  self.exp_preview_text:draw(w, self.exp_preview_offset)
 
   -- packs
   local packcount = self.actor:getPrizePackCount()
