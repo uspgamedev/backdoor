@@ -1,13 +1,14 @@
 
-local math = require 'common.math'
-local HoldBar = require 'view.helpers.holdbar'
-local CARD = require 'view.helpers.card'
-local FONT = require 'view.helpers.font'
-local COLORS = require 'domain.definitions.colors'
-local DEFS = require 'domain.definitions'
+local math     = require 'common.math'
+local HoldBar  = require 'view.helpers.holdbar'
+local CARD     = require 'view.helpers.card'
+local FONT     = require 'view.helpers.font'
+local COLORS   = require 'domain.definitions.colors'
+local DEFS     = require 'domain.definitions'
 local CardView = require 'view.card'
-local Class = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+local Class    = require "steaming.extra_libs.hump.class"
+local Util     = require "steaming.util"
+local ELEMENT  = require "steaming.classes.primitives.element"
 
 -- MODULE -----------------------------------
 local View = Class({
