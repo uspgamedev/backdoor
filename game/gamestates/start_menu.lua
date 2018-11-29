@@ -10,6 +10,7 @@ local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
 local SoundTrack      = require 'view.soundtrack'
+local Draw            = require "draw"
 
 local state = {}
 

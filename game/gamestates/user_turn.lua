@@ -13,6 +13,7 @@ local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.action_hud'
 local Util          = require "steaming.util"
+local Draw          = require "draw"
 local Signal        = require "steaming.extra_libs.hump.signal"
 
 local vec2          = require 'cpml' .vec2

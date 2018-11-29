@@ -15,6 +15,7 @@ cpml      = require 'cpml'
 
 local Res     = require "steaming.res_manager"
 local Setup   = require "setup"
+local Draw    = require "draw"
 
 -- GAMESTATES
 GS = require 'gamestates'

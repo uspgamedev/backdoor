@@ -1,5 +1,6 @@
 
 local PlayerDeathView = require 'view.playerdeath'
+local Draw            = require "draw"
 
 local state = {}
 
@@ -23,4 +24,3 @@ function state:draw()
 end
 
 return state
-

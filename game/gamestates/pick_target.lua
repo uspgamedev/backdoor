@@ -1,9 +1,10 @@
 --MODULE FOR THE GAMESTATE: PICKING A TARGET--
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DIR = require 'domain.definitions.dir'
-local PLAYSFX = require 'helpers.playsfx'
-local vec2 = require 'cpml' .vec2
+local DIR          = require 'domain.definitions.dir'
+local PLAYSFX      = require 'helpers.playsfx'
+local vec2         = require 'cpml' .vec2
+local Draw         = require "draw"
 
 --STATE--
 local state = {}
@@ -88,4 +89,3 @@ end
 
 --Return state functions
 return state
-

@@ -1,5 +1,6 @@
 local state = {}
 local Util  = require "steaming.util"
+local Draw  = require "draw"
 
 --[[ LOCAL VARIABLES ]]--
 

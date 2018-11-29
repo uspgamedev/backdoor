@@ -4,6 +4,7 @@ local DIRECTIONALS = require 'infra.dir'
 local DIR          = require 'domain.definitions.dir'
 local PLAYSFX      = require 'helpers.playsfx'
 local vec2         = require 'cpml' .vec2
+local Draw         = require "draw"
 
 local state = {}
 
@@ -48,4 +49,3 @@ function state:draw()
 end
 
 return state
-

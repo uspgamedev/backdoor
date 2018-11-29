@@ -14,6 +14,7 @@ local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
 local ActionHUD   = require 'view.action_hud'
 local Util        = require "steaming.util"
+local Draw        = require "draw"
 
 local Activity    = require 'common.activity'
 

@@ -5,6 +5,7 @@ local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
+local Draw         = require "draw"
 
 local state = {}
 

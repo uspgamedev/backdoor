@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
-local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
+local INPUT          = require 'input'
+local DIRECTIONALS   = require 'infra.dir'
+local DEFS           = require 'domain.definitions'
+local PLAYSFX        = require 'helpers.playsfx'
 local PickWidgetView = require 'view.pickwidget'
+local Draw           = require "draw"
 
 local state = {}
 
@@ -73,4 +74,3 @@ function state:draw()
 end
 
 return state
-

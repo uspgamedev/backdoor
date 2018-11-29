@@ -4,6 +4,7 @@ local INPUT          = require 'input'
 local PLAYSFX        = require 'helpers.playsfx'
 local DIRECTIONALS   = require 'infra.dir'
 local CharaBuildView = require 'view.charabuild'
+local Draw           = require "draw"
 
 
 local state = {}
