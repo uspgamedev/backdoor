@@ -5,7 +5,7 @@
           "attr":"=cor",
           "base":3,
           "name":"damage_on_target",
-          "sfx":"example",
+          "sfx":"attack-hit",
           "target":"=target_body",
           "type":"effect"
         },{
