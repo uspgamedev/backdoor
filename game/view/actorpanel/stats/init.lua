@@ -5,6 +5,7 @@ local VIEWDEFS  = require 'view.definitions'
 local COLORS    = require 'domain.definitions.colors'
 local DEFS      = require 'domain.definitions'
 local Text      = require 'view.helpers.text'
+local Class     = require "steaming.extra_libs.hump.class"
 
 local Stats = Class({ __includes = { Node } })
 

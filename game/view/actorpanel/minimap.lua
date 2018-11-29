@@ -4,6 +4,7 @@ local Text        = require 'view.helpers.text'
 local Color       = require 'common.color'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
+local Class       = require "steaming.extra_libs.hump.class"
 
 local min = math.min
 local max = math.max

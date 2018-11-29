@@ -1,9 +1,10 @@
 
 local COLORS = require 'domain.definitions.colors'
 
-local Node = require 'view.node'
-local Text = require 'view.helpers.text'
-local VIEWDEFS = require 'view.definitions'
+local Node      = require 'view.node'
+local Text      = require 'view.helpers.text'
+local VIEWDEFS  = require 'view.definitions'
+local Class     = require "steaming.extra_libs.hump.class"
 
 local LifeBar = require 'view.actorpanel.lifebar'
 local PPBar   = require 'view.actorpanel.ppbar'
@@ -36,7 +37,7 @@ function ActorHudTree:init(actor)
   self:addChild(self.stats)
   self:addChild(self.widgets)
   self:setPosition(960 + _MG, _MG)
-  return self:addElement("HUD", "ActorHud")
+  return self:register("HUD", "ActorHud")
 end
 
 function ActorHudTree:render(g)

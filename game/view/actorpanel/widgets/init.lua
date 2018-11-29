@@ -4,6 +4,7 @@ local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local Node        = require 'view.node'
 local Slot        = require 'view.actorpanel.widgets.slot'
+local Class       = require "steaming.extra_libs.hump.class"
 
 local _PLACEMENTS = 1
 local _TRAITS = 2

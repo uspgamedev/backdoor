@@ -1,9 +1,10 @@
 
 local COLORS = require 'domain.definitions.colors'
-local FONT = require 'view.helpers.font'
-local DEFS = require 'domain.definitions'
-local Node = require 'view.node'
-local math = require 'common.math'
+local FONT   = require 'view.helpers.font'
+local DEFS   = require 'domain.definitions'
+local Node   = require 'view.node'
+local math   = require 'common.math'
+local Class  = require "steaming.extra_libs.hump.class"
 
 local PPBar = Class({ __includes = { Node } })
 

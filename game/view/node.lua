@@ -1,6 +1,9 @@
 
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
+local Vec2    = require 'cpml' .vec2
+
 local Node = Class({ __includes = { ELEMENT } })
-local Vec2 = require 'cpml' .vec2
 
 function Node:init()
   ELEMENT.init(self)

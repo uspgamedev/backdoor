@@ -1,7 +1,8 @@
 
-local COLORS = require 'domain.definitions.colors'
-local FONT = require 'view.helpers.font'
-local PPBar = require 'view.actorpanel.ppbar'
+local COLORS  = require 'domain.definitions.colors'
+local FONT    = require 'view.helpers.font'
+local PPBar   = require 'view.actorpanel.ppbar'
+local Class   = require "steaming.extra_libs.hump.class"
 
 local LifeBar = Class({ __includes = { PPBar } })
 

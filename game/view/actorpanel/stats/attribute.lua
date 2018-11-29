@@ -6,6 +6,7 @@ local PLAYSFX = require 'helpers.playsfx'
 local RANDOM  = require 'common.random'
 local Node    = require 'view.node'
 local Text    = require 'view.helpers.text'
+local Class   = require "steaming.extra_libs.hump.class"
 
 local abs  = math.abs
 local min  = math.min

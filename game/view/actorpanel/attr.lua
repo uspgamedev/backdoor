@@ -1,5 +1,6 @@
 
-local Node = require 'view.node'
+local Node  = require 'view.node'
+local Class = require "steaming.extra_libs.hump.class"
 
 local Attr = Class({ __includes = { Node } })
 

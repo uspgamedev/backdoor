@@ -4,6 +4,7 @@ local Node    = require 'view.node'
 local FONT    = require 'view.helpers.font'
 local COLORS  = require 'domain.definitions.colors'
 local RES     = require 'resources'
+local Class   = require "steaming.extra_libs.hump.class"
 
 local _MG = 24
 local _PD = 4
