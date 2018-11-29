@@ -16,6 +16,7 @@ cpml      = require 'cpml'
 local Res     = require "steaming.res_manager"
 local Setup   = require "setup"
 local Draw    = require "draw"
+local Util    = require "steaming.util"
 
 -- GAMESTATES
 GS = require 'gamestates'
@@ -78,6 +79,7 @@ function love.update(dt)
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
   Draw.update(dt)
+  Util.destroyAll()
 end
 
 function love.draw()
