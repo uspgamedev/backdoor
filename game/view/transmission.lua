@@ -44,6 +44,7 @@ function Transmission:init(origin, target, color, duration, bending_number)
   for i = 1, self.bending_number do
     self.bending_angles[i] = RANDOM.safeGenerate(-_BEND_ANGLE, _BEND_ANGLE)
   end
+  self.bending_invert = RANDOM.safeGenerate() > 0.5
 
   self.color = color or COLORS.NEUTRAL
   self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
@@ -80,7 +81,7 @@ function Transmission:draw()
   --Insert bendings
   local norm = (tar-ori):normalize()
   local dist = ori:dist(tar)/(self.bending_number+1)
-  local sign = 1
+  local sign = self.bending_invert and -1 or 1
   for i = 1, self.bending_number do
     local off = self.bending_offsets[i]
     local angle = self.bending_angles[i]
