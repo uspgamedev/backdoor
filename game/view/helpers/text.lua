@@ -56,6 +56,10 @@ function Text:setWidth(w)
   self.width = w
 end
 
+function Text:getTextWidth()
+  return self.font:getWidth(self.text)
+end
+
 function Text:setAlign(align)
   self.align = align
 end

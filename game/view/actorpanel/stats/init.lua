@@ -56,9 +56,10 @@ function Stats:render(g)
   -- exp
   g.push()
   g.setColor(COLORS.NEUTRAL)
-  g.print(("EXP: %04d"):format(self.actor:getExp()), 0, 0)
-  local w = g.getFont():getWidth("EXP: ") + 6
-  self.exp_preview_text:draw(w, self.exp_preview_offset -
+  local text = ("EXP: %04d"):format(self.actor:getExp())
+  g.print(text, 0, 0)
+  local x = g.getFont():getWidth(text) - self.exp_preview_text:getTextWidth()
+  self.exp_preview_text:draw(x, self.exp_preview_offset -
                                 g.getFont():getHeight()/2 - 2)
 
   -- packs
@@ -75,4 +76,3 @@ function Stats:render(g)
 end
 
 return Stats
-
