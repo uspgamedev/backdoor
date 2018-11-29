@@ -94,8 +94,6 @@ function View:init(hold_actions)
   self.consume_log = false
   self.holdbar = HoldBar(hold_actions)
   self.exp_gained = 0
-  self.exp_gained_offset = 0
-  self.exp_gained_alpha = 1
   self.ready_to_leave = false
   self.is_leaving = false
 
@@ -133,8 +131,9 @@ function View:close()
   self.holdbar:lock()
   self.consume_log = _EMPTY
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
+  Util.findId('actorpanel-stats'):setExpPreview()
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
-                _ENTER_SPEED, self, { enter=0, text=0, exp_gained_alpha = 0}, "out-quad",
+                _ENTER_SPEED, self, { enter=0, text=0}, "out-quad",
                 function ()
                   self.card_list = _EMPTY
                   self:destroy()
@@ -218,14 +217,16 @@ end
 
 function View:addConsume()
   self.exp_gained = self.exp_gained + 1
-  self.exp_gained_offset = -10
   self.consumed_count = self.consumed_count + 1
+  Util.findId('actorpanel-stats'):setExpPreview(self.exp_gained *
+                                                DEFS.CONSUME_EXP)
 end
 
 function View:removeConsume()
   self.exp_gained = self.exp_gained - 1
-  self.exp_gained_offset = -10
   self.consumed_count = self.consumed_count - 1
+  Util.findId('actorpanel-stats'):setExpPreview(self.exp_gained *
+                                                DEFS.CONSUME_EXP)
 end
 
 function View:update(dt)
@@ -242,7 +243,6 @@ function View:draw()
   if enter > 0 then
     self:drawBG(g, enter)
     self:drawCards(g, enter)
-    self:drawGainedEXP(g, enter)
   end
 
   g.pop()
@@ -374,26 +374,6 @@ function View:drawHoldBar(g)
     self:startLeaving()
   end
   self.holdbar:draw(0, 0)
-end
-
-
-function View:drawGainedEXP(g, enter)
-  local offset_speed = 120
-  if self.exp_gained > 0 then
-    local str = ("+%4d"):format(self.exp_gained * DEFS.CONSUME_EXP)
-    local x, y = 3/4*g.getWidth()+98, g.getHeight()/2 - _otherfont:getHeight()/2
-
-    _otherfont:set()
-    g.setColor(COLORS.DARK[1], COLORS.DARK[2], COLORS.DARK[3], enter)
-    g.print(str, x, y - 1 + self.exp_gained_offset)
-    g.setColor(COLORS.VALID[1], COLORS.VALID[2], COLORS.VALID[3], enter)
-    g.print(str, x, y - 3 + self.exp_gained_offset)
-
-    if self.exp_gained_offset < 0 then
-      self.exp_gained_offset = math.min(0, self.exp_gained_offset +
-                                           offset_speed*love.timer.getDelta())
-    end
-  end
 end
 
 
