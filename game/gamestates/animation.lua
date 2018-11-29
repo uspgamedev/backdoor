@@ -42,8 +42,6 @@ function state:update(dt)
     _sector_view:updateVFX(dt)
   end
 
-  Util.destroyAll()
-
 end
 
 function state:draw()

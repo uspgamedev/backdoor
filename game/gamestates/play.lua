@@ -192,8 +192,6 @@ function state:update(dt)
     _view.sector:lookAt(_route.getControlledActor() or _player)
   end
 
-  Util.destroyAll()
-
 end
 
 function state:resume(state, args)

@@ -163,8 +163,6 @@ function state:update(dt)
     _startTask(action_request, param)
   end
 
-  Util.destroyAll()
-
 end
 
 function state:draw()

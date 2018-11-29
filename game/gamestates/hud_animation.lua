@@ -38,7 +38,6 @@ function state:update(dt)
   if not _action_hud or not _action_hud:isAnimating() then
     SWITCHER.pop()
   end
-  Util.destroyAll()
 
 end
 
