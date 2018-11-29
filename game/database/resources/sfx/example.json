@@ -1,3 +1,4 @@
 {
-  "filename":"example.wav"
+  "filename":"example.wav",
+  "polyphony":5
 }
