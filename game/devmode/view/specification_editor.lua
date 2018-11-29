@@ -1,7 +1,7 @@
 
 local IMGUI = require 'imgui'
 local DB    = require 'database'
-local INPUT = require 'debug.view.input'
+local INPUT = require 'devmode.view.input'
 
 return function(spec, group_name, title, delete, rename, parent)
 

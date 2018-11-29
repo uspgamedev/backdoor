@@ -43,11 +43,11 @@ local RESOURCES = {
 
 local view = {}
 
--- This automatically loads all debug menus in debug/view
-for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view") do
+-- This automatically loads all devmode menus in debug/view
+for _,file in ipairs(love.filesystem.getDirectoryItems "devmode/view") do
   if file:match "^.+%.lua$" then
     file = file:gsub("%.lua", "")
-    view[file] = require('debug.view.' .. file)
+    view[file] = require('devmode.view.' .. file)
   end
 end
 
@@ -72,8 +72,8 @@ function GUI:length()
   return length
 end
 
---- Pushes a menu. Menus in debug mode appear from left to right and behave like
---  a stack. It's easier to understand if you play and check it out.
+--- Pushes a menu. Menus in devmode mode appear from left to right and behave
+--  like a stack. It's easier to understand if you play and check it out.
 function GUI:push(viewname, ...)
   local level = self.current_level+1
   self:pop(level)

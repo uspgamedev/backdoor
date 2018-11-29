@@ -1,6 +1,6 @@
 
 local IMGUI = require 'imgui'
-local INPUT = require 'debug.view.input'
+local INPUT = require 'devmode.view.input'
 local DB    = require 'database'
 
 local inputs = {}

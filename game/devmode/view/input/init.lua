@@ -1,13 +1,13 @@
 
 local IMGUI = require 'imgui'
 local INPUT = {}
-package.loaded['debug.view.input'] = INPUT
+package.loaded['devmode.view.input'] = INPUT
 
-for _,file in ipairs(love.filesystem.getDirectoryItems "debug/view/input") do
+for _,file in ipairs(love.filesystem.getDirectoryItems "devmode/view/input") do
   if file:match "^.+%.lua$" then
     file = file:gsub("%.lua", "")
     if file ~= 'init' then
-      for k,input in pairs(require('debug.view.input.' .. file)) do
+      for k,input in pairs(require('devmode.view.input.' .. file)) do
         INPUT[k] = input
       end
     end

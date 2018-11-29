@@ -42,8 +42,8 @@ end
 
 inputs['value'] = function(spec, field, parent)
 
-  local inputInt = require 'debug.view.helpers.integer'
-  local inputStr = require 'debug.view.helpers.string'
+  local inputInt = require 'devmode.view.helpers.integer'
+  local inputStr = require 'devmode.view.helpers.string'
 
 
   local value = 0
