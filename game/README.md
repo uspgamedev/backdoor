@@ -7,7 +7,7 @@ follows:
 + `database/`
   Source and data files regarding the game contents, such as creature types and
   card descriptions.
-+ `debug/`
++ `devmode/`
   Source files for debug and development support in-game.
 + `domain/`
   Source files implementing the rules of gameplay.

@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
 local INPUT       = require 'input'
-local GUI         = require 'debug.gui'
+local GUI         = require 'devmode.gui'
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
 
