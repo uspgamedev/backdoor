@@ -1,4 +1,4 @@
-local RANDOM       = require 'common.random'
+local RANDOM        = require 'common.random'
 local DIRECTIONALS  = require 'infra.dir'
 local DIR           = require 'domain.definitions.dir'
 local INPUT         = require 'input'
@@ -8,6 +8,8 @@ local COLORS        = require 'domain.definitions.colors'
 local HandView      = require 'view.hand'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
+local LongWalk      = require 'view.helpers.long_walk'
+local Adjacency     = require 'view.helpers.adjacency'
 local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
@@ -20,10 +22,6 @@ local _INFO_LAG = 2.0 -- seconds
 local ActionHUD = Class{
   __includes = { ELEMENT }
 }
-
---[[ Forward declarations ]]--
-
-local _unsetAdjacency
 
 -- [[ Constant Variables ]]--
 
@@ -81,7 +79,7 @@ function ActionHUD:init(route)
   self.alert = false
   self.long_walk = false
   self.adjacency = {}
-  _unsetAdjacency(self.adjacency)
+  Adjacency.unset(self.adjacency)
 
   -- Inspector mode
   self.inspecting = false
@@ -208,18 +206,7 @@ local function _updateAdjacency(adjacency, route, dir)
   return changed
 end
 
-function _unsetAdjacency(adjacency)
-  for i = 1, 3 do
-    adjacency[i] = -1
-  end
-end
-
 --[[ Longwalk methods ]]--
-
-local function _canLongWalk(self)
-  local hostile_bodies = self.route.getControlledActor():getHostileBodies()
-  return (not self.long_walk) and #hostile_bodies == 0
-end
 
 local function _continueLongWalk(self)
   local dir = self.long_walk
@@ -240,12 +227,6 @@ local function _continueLongWalk(self)
               _updateAdjacency(self.adjacency, self.route, dir))
 end
 
-local function _startLongWalk(self, dir)
-  _unsetAdjacency(self.adjacency)
-  self.long_walk = dir
-  self.alert = false
-end
-
 function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
 end
@@ -260,8 +241,8 @@ function ActionHUD:actionRequested()
   local action_request
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if dir then
-    if INPUT.isActionDown('ACTION_4') and _canLongWalk(self) then
-      _startLongWalk(self, dir)
+    if INPUT.isActionDown('ACTION_4') and LongWalk.isAllowed(self) then
+      LongWalk.start(self, dir)
     else
       action_request = {DEFS.ACTION.MOVE, dir}
     end
