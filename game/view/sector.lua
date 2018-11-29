@@ -1,4 +1,3 @@
-
 local DB          = require 'database'
 local RES         = require 'resources'
 local Color       = require 'common.color'
@@ -14,6 +13,9 @@ local VIEWDEFS    = require 'view.definitions'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
+local ELEMENT     = require "steaming.classes.primitives.element"
 
 local SECTOR_TILEMAP      = require 'view.sector.tilemap'
 local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'

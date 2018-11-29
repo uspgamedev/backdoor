@@ -5,6 +5,7 @@ local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
+local Draw         = require "draw"
 
 local state = {}
 
@@ -57,7 +58,7 @@ function state:enter(from, soundtrack)
   end
   _changes = setmetatable({}, { __index = original })
   _view = SettingsView(_fields)
-  _view:addElement("GUI")
+  _view:register("GUI")
 end
 
 function state:update(dt)

@@ -1,3 +1,5 @@
+local Draw  = require "draw"
+
 
 local state = {}
 
@@ -43,4 +45,3 @@ function state:wheelmoved(x, y)
 end
 
 return state
-

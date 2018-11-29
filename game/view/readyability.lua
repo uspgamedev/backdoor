@@ -4,6 +4,8 @@ local Color = require 'common.color'
 local DEFS = require 'domain.definitions'
 local COLORS = require 'domain.definitions.colors'
 local FONT = require 'view.helpers.font'
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local min = math.min
 local abs = math.abs
@@ -228,4 +230,3 @@ function ReadyAbilityView:exitList()
 end
 
 return ReadyAbilityView
-

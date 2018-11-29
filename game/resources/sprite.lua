@@ -1,7 +1,7 @@
-
 --DEPENDENCIES--
 local DB = require 'database'
-
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 --?????--
 local floor = math.floor
@@ -111,4 +111,3 @@ function SpriteLoader.load(name, info, texture)
 end
 
 return SpriteLoader
-

@@ -1,10 +1,12 @@
 
-local math = require 'common.math'
+local math    = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
-local CARD = require 'view.helpers.card'
-local FONT = require 'view.helpers.font'
-local RES  = require 'resources'
-local DB   = require 'database'
+local CARD    = require 'view.helpers.card'
+local FONT    = require 'view.helpers.font'
+local RES     = require 'resources'
+local DB      = require 'database'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 
 -- MODULE -----------------------------------

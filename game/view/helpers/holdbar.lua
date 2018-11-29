@@ -1,4 +1,3 @@
-
 local INPUT        = require 'input'
 local RES          = require 'resources'
 local DIRECTIONALS = require 'infra.dir'
@@ -6,6 +5,8 @@ local DIR          = require 'domain.definitions.dir'
 local COLORS       = require 'domain.definitions.colors'
 local PLAYSFX      = require 'helpers.playsfx'
 local vec2         = require 'cpml' .vec2
+local Class        = require "steaming.extra_libs.hump.class"
+local ELEMENT      = require "steaming.classes.primitives.element"
 
 local _TOTAL = 1
 local _TIME = .8
@@ -147,7 +148,7 @@ end
 function HoldBar:update()
   local is_down = false
   local actions = self.hold_actions
-  
+
   for _,action in ipairs(actions) do
     if is_down then break end
     is_down = (DIR[action] and DIRECTIONALS.isDirectionDown(action))

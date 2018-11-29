@@ -1,6 +1,6 @@
-
-
-local DB = require 'database'
+local Class   = require "steaming.extra_libs.hump.class"
+local DB      = require 'database'
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local GameElement = Class{
   __includes = { ELEMENT }
@@ -43,4 +43,3 @@ function GameElement:getSpec(key)
 end
 
 return GameElement
-

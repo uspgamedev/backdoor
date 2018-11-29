@@ -1,6 +1,7 @@
 
 local COLORS = require 'domain.definitions.colors'
-local FONT = require 'view.helpers.font'
+local FONT   = require 'view.helpers.font'
+local Class  = require "steaming.extra_libs.hump.class"
 
 local Text = Class()
 
@@ -67,4 +68,3 @@ function Text:draw(x, y)
 end
 
 return Text
-

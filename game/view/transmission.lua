@@ -1,7 +1,9 @@
 local vec2    = require 'cpml' .vec2
 local COLORS  = require 'domain.definitions.colors'
 local PLAYSFX = require 'helpers.playsfx'
-local RANDOM = require 'common.random'
+local RANDOM  = require 'common.random'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local Transmission = Class{
   __includes = { ELEMENT }

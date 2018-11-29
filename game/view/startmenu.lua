@@ -1,8 +1,10 @@
 --DEPENDENCIES--
-local RES    = require 'resources'
-local FONT   = require 'view.helpers.font'
-local COLORS = require 'domain.definitions.colors'
-local Queue  = require 'lux.common.Queue'
+local RES     = require 'resources'
+local FONT    = require 'view.helpers.font'
+local COLORS  = require 'domain.definitions.colors'
+local Queue   = require 'lux.common.Queue'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 --CLASS VIEW--
 local StartMenuView = Class{

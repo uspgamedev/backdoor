@@ -1,4 +1,3 @@
-
 --MODULE FOR THE GAMESTATE: GAME--
 
 local INPUT       = require 'input'
@@ -14,6 +13,8 @@ local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
 local ActionHUD   = require 'view.action_hud'
+local Util        = require "steaming.util"
+local Draw        = require "draw"
 
 local Activity    = require 'common.activity'
 
@@ -65,7 +66,7 @@ local function _initFrontend()
   local sector = _route.getCurrentSector()
 
   _view.sector = SectorView(_route)
-  _view.sector:addElement("L1", nil, "sector_view")
+  _view.sector:register("L1", nil, "sector_view")
   _view.sector:lookAt(_player)
 
   _view.action_hud = ActionHUD(_route)
@@ -73,21 +74,21 @@ local function _initFrontend()
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)
-  _view.frontbuffer:addElement("HUD_BG", nil, "frontbuffer_view")
+  _view.frontbuffer:register("HUD_BG", nil, "frontbuffer_view")
   _view.backbuffer = BufferView.newBackBufferView(_route)
-  _view.backbuffer:addElement("HUD_BG", nil, "backbuffer_view")
+  _view.backbuffer:register("HUD_BG", nil, "backbuffer_view")
 
   -- Actor view
   _view.actor = ActorView(_route)
-  _view.actor:addElement("HUD_BG")
+  _view.actor:register("HUD_BG")
 
   -- Announcement box
   _view.announcement = Announcement()
-  _view.announcement:addElement("HUD", nil, "announcement")
+  _view.announcement:register("HUD", nil, "announcement")
 
   -- GUI
   _gui = GUI(_view.sector)
-  _gui:addElement("GUI")
+  _gui:register("GUI")
 
   -- Sound Track
   _soundtrack = SoundTrack()
@@ -99,7 +100,7 @@ end
 function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   _saveRoute()
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
   SWITCHER.switch(GS.START_MENU)
@@ -111,7 +112,7 @@ end
 function _activity:changeSector()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   PLAYSFX 'change-sector'
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.yield()
   local change_sector_ok = _route.checkSector()
@@ -128,7 +129,7 @@ end
 
 function _activity:fadeInGUI()
   local fade_view = FadeView(FadeView.STATE_FADED)
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
   self.yield()
   fade_view:fadeInAndThen(self.resume)

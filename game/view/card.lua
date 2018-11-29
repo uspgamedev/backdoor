@@ -1,4 +1,3 @@
-
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
@@ -6,6 +5,9 @@ local COLORS  = require 'domain.definitions.colors'
 local Color   = require 'common.color'
 local round   = require 'common.math' .round
 local vec2    = require 'cpml' .vec2
+local Util    = require "steaming.util"
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
@@ -94,7 +96,7 @@ function CardView:playAsArt()
   MAIN_TIMER:script(function(wait)
     local ann = Util.findId('announcement')
     ann:lock()
-    self:addElement("HUD_FX")
+    self:register("HUD_FX")
     self:addTimer(
       nil, MAIN_TIMER, 'tween', 0.2, self,
       { position = self.position + vec2(0,-200) }, 'out-cubic'
@@ -179,4 +181,3 @@ function CardView:draw()
 end
 
 return CardView
-

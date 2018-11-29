@@ -1,5 +1,7 @@
 
 local Deferred = require 'common.deferred'
+local Class    = require "steaming.extra_libs.hump.class"
+local ELEMENT  = require "steaming.classes.primitives.element"
 
 local TweenValue = Class {
   __includes = { ELEMENT }
@@ -70,4 +72,3 @@ function TweenValue:defer(callback, once)
 end
 
 return TweenValue
-

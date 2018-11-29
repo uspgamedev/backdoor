@@ -4,6 +4,8 @@ local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
 local COLORS  = require 'domain.definitions.colors'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local _SCALE = 0.3
 local _MX = 48

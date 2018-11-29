@@ -2,6 +2,7 @@ local COLORS      = require 'domain.definitions.colors'
 local FONT        = require 'view.helpers.font'
 local RES         = require 'resources'
 local CONTROLHINT = require 'view.controlhints.controlhint'
+local Class       = require "steaming.extra_libs.hump.class"
 
 local Button = Class{
   __includes = { CONTROLHINT }

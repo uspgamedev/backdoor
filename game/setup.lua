@@ -1,3 +1,5 @@
+local Timer = require "steaming.extra_libs.hump.timer"
+
 --MODULE FOR SETUP STUFF--
 
 local setup = {}

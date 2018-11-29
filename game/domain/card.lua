@@ -2,6 +2,8 @@
 local ABILITY     = require 'domain.ability'
 local ACTIONSDEFS = require 'domain.definitions.action'
 local GameElement = require 'domain.gameelement'
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
 
 local Card = Class{
   __includes = { GameElement }
@@ -209,4 +211,3 @@ function Card:getEffect()
 end
 
 return Card
-

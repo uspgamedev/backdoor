@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
-local CardView = require 'view.consumelist'
+local DEFS         = require 'domain.definitions'
+local PLAYSFX      = require 'helpers.playsfx'
+local CardView     = require 'view.consumelist'
+local Draw         = require "draw"
 
 local state = {}
 
@@ -36,7 +37,7 @@ function state:enter(from, actor, maxconsume)
   local buffer = actor:copyBuffer()
   _actor = actor
   _card_list_view:open(buffer, maxconsume)
-  _card_list_view:addElement("HUD")
+  _card_list_view:register("HUD")
   if #buffer == 0 then
     _leave = true
   end

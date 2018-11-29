@@ -1,9 +1,11 @@
 
-local CARD  = require 'view.helpers.card'
-local COLORS = require 'domain.definitions.colors'
-local FONT = require 'view.helpers.font'
-local Color = require 'common.color'
-local vec2  = require 'cpml' .vec2
+local CARD    = require 'view.helpers.card'
+local COLORS  = require 'domain.definitions.colors'
+local FONT    = require 'view.helpers.font'
+local Color   = require 'common.color'
+local vec2    = require 'cpml' .vec2
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local _W
 local _MW = 16
@@ -98,7 +100,7 @@ function CardInfo:draw()
                         * self.text_font:getLineHeight()
 
   g.push()
-  g.translate(0,math.sin(self.oscilate)*self.oscilate_magnitude) 
+  g.translate(0,math.sin(self.oscilate)*self.oscilate_magnitude)
   g.translate(self.position:unpack())
   local mask = Color:new{1,1,1,alpha}
 

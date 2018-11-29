@@ -1,4 +1,3 @@
-
 local DB = require 'database'
 local DEFS = require 'domain.definitions'
 local SCHEMATICS = require 'domain.definitions.schematics'
@@ -7,7 +6,9 @@ local COLORS = require 'domain.definitions.colors'
 local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
-local Body = require 'domain.body'
+local Body  = require 'domain.body'
+local Util  = require "steaming.util"
+local Class = require "steaming.extra_libs.hump.class"
 
 local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'

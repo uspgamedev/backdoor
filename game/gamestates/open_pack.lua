@@ -1,10 +1,11 @@
 
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
-local PackView = require 'view.packlist'
-local CardView = require 'view.consumelist'
+local DEFS         = require 'domain.definitions'
+local PLAYSFX      = require 'helpers.playsfx'
+local PackView     = require 'view.packlist'
+local CardView     = require 'view.consumelist'
+local Draw         = require "draw"
 
 local state = {}
 
@@ -39,7 +40,7 @@ local function _confirm()
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
   end
 end
 
@@ -63,7 +64,7 @@ function state:enter(from, route, packlist)
   _pack = nil
   _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
   else
     _leave = true
   end
