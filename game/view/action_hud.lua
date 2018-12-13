@@ -1,6 +1,7 @@
 local RANDOM        = require 'common.random'
 local DIRECTIONALS  = require 'infra.dir'
-local DIR           = require 'domain.definitions.dir'
+local LONG_WALK     = require 'view.helpers.long_walk'
+local ADJACENCY     = require 'view.helpers.adjacency'
 local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
@@ -8,8 +9,6 @@ local COLORS        = require 'domain.definitions.colors'
 local HandView      = require 'view.hand'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
-local LongWalk      = require 'view.helpers.long_walk'
-local Adjacency     = require 'view.helpers.adjacency'
 local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
@@ -79,7 +78,7 @@ function ActionHUD:init(route)
   self.alert = false
   self.long_walk = false
   self.adjacency = {}
-  Adjacency.unset(self.adjacency)
+  ADJACENCY.unset(self.adjacency)
 
   -- Inspector mode
   self.inspecting = false
@@ -170,63 +169,6 @@ function ActionHUD:resetCardInfoLag()
   end
 end
 
---[[ Adjacency function ]]--
-
-local function _updateAdjacency(adjacency, route, dir)
-  local i, j = route.getControlledActor():getPos()
-  local sector = route.getCurrentSector()
-  local changed = false
-  local side1, side2
-  if dir[1] ~= 0 and dir[2] ~= 0 then
-    side1 = {0, dir[2]}
-    side2 = {dir[1], 0}
-  elseif dir[1] == 0 then
-    side1 = {-1, dir[2]}
-    side2 = { 1, dir[2]}
-  elseif dir[2] == 0 then
-    side1 = {dir[1], -1}
-    side2 = {dir[1],  1}
-  end
-  local range = {dir, side1, side2}
-
-  for idx, adj_move in ipairs(range) do
-    local ti = adj_move[1] + i
-    local tj = adj_move[2] + j
-    local tile = sector:isInside(ti, tj) and sector:getTile(ti, tj)
-    local tile_type = tile and tile.type
-    local current = adjacency[idx]
-    adjacency[idx] = tile_type
-    if current ~= -1 then
-      if tile_type ~= current then
-        changed = true
-      end
-    end
-  end
-
-  return changed
-end
-
---[[ Longwalk methods ]]--
-
-local function _continueLongWalk(self)
-  local dir = self.long_walk
-  dir = DIR[dir]
-  local i, j = self.route.getControlledActor():getPos()
-  i, j = i+dir[1], j+dir[2]
-  if not self.route.getCurrentSector():isValid(i,j) then
-    return false
-  end
-  if self.alert then
-    self.alert = false
-    return false
-  end
-
-  local hostile_bodies = self.route.getControlledActor():getHostileBodies()
-
-  return not (#hostile_bodies > 0 or
-              _updateAdjacency(self.adjacency, self.route, dir))
-end
-
 function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
 end
@@ -241,8 +183,8 @@ function ActionHUD:actionRequested()
   local action_request
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if dir then
-    if INPUT.isActionDown('ACTION_4') and LongWalk.isAllowed(self) then
-      LongWalk.start(self, dir)
+    if INPUT.isActionDown('ACTION_4') and LONG_WALK.isAllowed(self) then
+      LONG_WALK.start(self, dir)
     else
       action_request = {DEFS.ACTION.MOVE, dir}
     end
@@ -293,7 +235,7 @@ function ActionHUD:actionRequested()
 
   -- choose action
   if self.long_walk then
-    if not action_request and _continueLongWalk(self) then
+    if not action_request and LONG_WALK.continue(self) then
       action_request = {DEFS.ACTION.MOVE, self.long_walk}
     else
       self.long_walk = false
