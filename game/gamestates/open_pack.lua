@@ -5,7 +5,6 @@ local PLAYSFX      = require 'helpers.playsfx'
 local PackView     = require 'view.packlist'
 local CardView     = require 'view.consumelist'
 local Draw         = require "draw"
-local Util         = require "steaming.util"
 
 local state = {}
 
