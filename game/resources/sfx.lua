@@ -5,6 +5,7 @@ local Sfx = {}
 local Source = Class({})
 
 function Source:init(path, polyphony)
+    print(path, polyphony, "here")
     assert(polyphony > 0, "Not a valid polyphony value")
     self.buffer_size = polyphony
 
