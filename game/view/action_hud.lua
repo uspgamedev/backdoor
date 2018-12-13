@@ -73,7 +73,6 @@ function ActionHUD:init(route)
   self.holdbar:lock()
   self.holdbar:register("HUD")
   self.justheld = false
-  self.holdbar_is_unlockable = true
 
   -- Long walk variables
   self.alert = false
@@ -183,6 +182,14 @@ function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
 end
 
+function ActionHUD:lockHoldbar()
+  self.holdbar:lock()
+end
+
+function ActionHUD:unlockHoldbar()
+  self.holdbar:unlock()
+end
+
 --[[ INPUT methods ]]--
 
 function ActionHUD:wasAnyPressed()
@@ -277,8 +284,7 @@ end
 
 local function _endInspect(self)
   self.inspecting = false
-  if not self.justheld and self.holdbar:isLocked()
-                       and self.holdbar_is_unlockable then
+  if not self.justheld and self.holdbar:isLocked() then
     self.holdbar:unlock()
   end
 end
@@ -287,11 +293,9 @@ function ActionHUD:update(dt)
   --Checks if player can draw a new hand
   local player = self.route.getControlledActor()
   if player:getPP() < player:getBody():getConsumption() and
-     not self.holdbar:isLocked() then
+     not self.holdbar:isLocked()
+  then
     self.holdbar:lock()
-    self.holdbar_is_unlockable = false
-  elseif player:getPP() >= player:getBody():getConsumption() then
-    self.holdbar_is_unlockable = true
   end
 
   -- Input alerts long walk
@@ -321,15 +325,21 @@ function ActionHUD:update(dt)
         if not self.handview:isActive() then
           self.handview:activate()
         end
-        _endInspect(self)
+        if self.inspecting then
+          _endInspect(self)
+        end
       end
     else
-      _endInspect(self)
+      if self.inspecting then
+        _endInspect(self)
+      end
       self.focusbar:hide()
       _disableHUDElements(self)
     end
   else
-    _endInspect(self)
+    if self.inspecting then
+      _endInspect(self)
+    end
     _disableHUDElements(self)
   end
 

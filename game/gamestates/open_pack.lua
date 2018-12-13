@@ -1,4 +1,3 @@
-
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS         = require 'domain.definitions'

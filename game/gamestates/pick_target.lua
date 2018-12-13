@@ -22,9 +22,7 @@ local _confirm
 local _cancel
 
 --STATE FUNCTIONS--
-
 function state:enter(_, sector_view, target_opt)
-
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
   _sector_view:newCursor(i, j, target_opt.aoe_hint, target_opt.validator,
