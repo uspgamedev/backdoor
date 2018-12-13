@@ -3,6 +3,7 @@ local math    = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD    = require 'view.helpers.card'
 local FONT    = require 'view.helpers.font'
+local COLORS  = require 'domain.definitions.colors'
 local RES     = require 'resources'
 local DB      = require 'database'
 local Class   = require "steaming.extra_libs.hump.class"
@@ -208,7 +209,8 @@ function View:drawPacks(g, enter)
     --draw icon
     local collection = DB.loadSpec("collection", pack_list[selection])
     local icon = RES.loadTexture(collection.image)
-    g.setColor(1, 1, 1)
+    local br, bg, bb = unpack(COLORS.DARK)
+    g.setColor(br, bg, bb)
     g.draw(icon,15,55, nil, .5)
     g.pop()
   end
