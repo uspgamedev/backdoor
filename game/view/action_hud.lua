@@ -132,9 +132,10 @@ end
 
 local function _findPlayedCardViewDestination(cardview)
   if cardview.card:isArt() then
-    return Util.findId('backbuffer_view')
+    return Util.findId('backbuffer_view'), COLORS.FLASH_DISCARD
   elseif cardview.card:isWidget() then
-    return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card)
+    return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card),
+           COLORS.NEUTRAL
   end
 end
 
@@ -155,12 +156,11 @@ function ActionHUD:playCard(index)
     ann:interrupt()
     while ann:isBusy() do wait(1) end
     ann:announce(cardview.card:getName())
-    local destination = _findPlayedCardViewDestination(cardview)
+    local destination,color = _findPlayedCardViewDestination(cardview)
     local bends = RANDOM.safeGenerate(3, 10)
-    Transmission(cardview, destination,
-                 COLORS.FLASH_DISCARD, nil, bends):register("HUD_FX")
-    cardview:flashFor(0.5, COLORS.FLASH_DISCARD)
-    destination:flashFor(0.5, COLORS.FLASH_DISCARD)
+    Transmission(cardview, destination, color, nil, bends):register("HUD_FX")
+    cardview:flashFor(0.5, color)
+    destination:flashFor(0.5, color)
     wait(0.5)
     ann:unlock()
     cardview:kill()
