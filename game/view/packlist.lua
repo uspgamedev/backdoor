@@ -122,7 +122,7 @@ function View:selectPrev(n)
   self.holdbar:reset()
 end
 
-function View:selectNext()
+function View:selectNext(n)
   if self:isLocked() then return end
   n = n or 1
   self.selection = _next_circular(self.selection, #self.pack_list, n)

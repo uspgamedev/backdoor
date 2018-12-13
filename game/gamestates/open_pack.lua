@@ -59,8 +59,6 @@ local function _consumeCards(consumed)
 end
 
 function state:enter(from, route, packlist)
-  local hud = Util.findId("action-hud")
-  if hud then hud:lockHoldbar() end
   _status = "choosing_pack"
   _route = route
   _pack = nil
@@ -73,8 +71,6 @@ function state:enter(from, route, packlist)
 end
 
 function state:leave()
-  local hud = Util.findId("action-hud")
-  if hud then hud:lockHoldbar() end
   _leave = false
   _card_list_view:close()
   _card_list_view = nil
