@@ -1,3 +1,4 @@
 {
-  "filename":"player_attack.wav"
+  "filename":"player_attack.wav",
+  "polyphony":3
 }
