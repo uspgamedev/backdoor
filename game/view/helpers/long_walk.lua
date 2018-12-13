@@ -1,16 +1,16 @@
-local Adjacency = require 'view.helpers.adjacency'
+local ADJACENCY = require 'view.helpers.adjacency'
 
-local funcs = {}
+local LONG_WALK = {}
 
-function funcs.isAllowed(hud)
+function LONG_WALK.isAllowed(hud)
   local hostile_bodies = hud.route.getControlledActor():getHostileBodies()
   return (not hud.long_walk) and #hostile_bodies == 0
 end
 
-function funcs.start(hud, dir)
-  Adjacency.unset(hud.adjacency)
+function LONGWALK.start(hud, dir)
+  ADJACENCY.unset(hud.adjacency)
   hud.long_walk = dir
   hud.alert = false
 end
 
-return funcs
+return LONGWALK
