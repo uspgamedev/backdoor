@@ -5,7 +5,6 @@ local DIR          = require 'domain.definitions.dir'
 local PLAYSFX      = require 'helpers.playsfx'
 local vec2         = require 'cpml' .vec2
 local Draw         = require "draw"
-local Util         = require "steaming.util"
 
 --STATE--
 local state = {}
@@ -23,7 +22,6 @@ local _confirm
 local _cancel
 
 --STATE FUNCTIONS--
-
 function state:enter(_, sector_view, target_opt)
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
