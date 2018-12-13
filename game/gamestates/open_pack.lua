@@ -1,4 +1,3 @@
-
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DEFS         = require 'domain.definitions'
@@ -6,6 +5,7 @@ local PLAYSFX      = require 'helpers.playsfx'
 local PackView     = require 'view.packlist'
 local CardView     = require 'view.consumelist'
 local Draw         = require "draw"
+local Util         = require "steaming.util"
 
 local state = {}
 
@@ -59,6 +59,8 @@ local function _consumeCards(consumed)
 end
 
 function state:enter(from, route, packlist)
+  local hud = Util.findId("action-hud")
+  if hud then hud:lockHoldbar() end
   _status = "choosing_pack"
   _route = route
   _pack = nil
@@ -71,6 +73,8 @@ function state:enter(from, route, packlist)
 end
 
 function state:leave()
+  local hud = Util.findId("action-hud")
+  if hud then hud:lockHoldbar() end
   _leave = false
   _card_list_view:close()
   _card_list_view = nil

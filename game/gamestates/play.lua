@@ -72,6 +72,7 @@ local function _initFrontend()
 
   _view.action_hud = ActionHUD(_route)
   _view.action_hud:setSubtype('frontend-hud')
+  _view.action_hud:setId('action-hud')
 
   -- Buffer views
   _view.frontbuffer = BufferView.newFrontBufferView(_route)

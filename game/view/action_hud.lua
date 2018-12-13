@@ -231,6 +231,14 @@ function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
 end
 
+function ActionHUD:lockHoldbar()
+  self.holdbar:lock()
+end
+
+function ActionHUD:unlockHoldbar()
+  self.holdbar:unlock()
+end
+
 --[[ INPUT methods ]]--
 
 function ActionHUD:wasAnyPressed()
@@ -369,15 +377,21 @@ function ActionHUD:update(dt)
         if not self.handview:isActive() then
           self.handview:activate()
         end
-        _endInspect(self)
+        if self.inspecting then
+          _endInspect(self)
+        end
       end
     else
-      _endInspect(self)
+      if self.inspecting then
+        _endInspect(self)
+      end
       self.focusbar:hide()
       _disableHUDElements(self)
     end
   else
-    _endInspect(self)
+    if self.inspecting then
+      _endInspect(self)
+    end
     _disableHUDElements(self)
   end
 
