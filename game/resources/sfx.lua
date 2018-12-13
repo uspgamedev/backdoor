@@ -23,9 +23,21 @@ function Source:play()
     return source
 end
 
+function Source:stopAll()
+  for i = 1, self.buffer_size do
+    self.buffer[i]:stop()
+  end
+end
+
 function Source:setVolume(vol)
   for i = 1, self.buffer_size do
     self.buffer[i]:setVolume(vol)
+  end
+end
+
+function Source:setLooping(value)
+  for i = 1, self.buffer_size do
+    self.buffer[i]:setLooping(value)
   end
 end
 
