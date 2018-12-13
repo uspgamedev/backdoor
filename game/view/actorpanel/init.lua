@@ -37,7 +37,11 @@ function ActorHudTree:init(actor)
   self:addChild(self.stats)
   self:addChild(self.widgets)
   self:setPosition(960 + _MG, _MG)
-  return self:register("HUD", "ActorHud")
+  return self:register("HUD_BG", nil, "actor_panel")
+end
+
+function ActorHudTree:getWidgets()
+  return self.widgets
 end
 
 function ActorHudTree:render(g)

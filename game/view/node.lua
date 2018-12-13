@@ -41,7 +41,9 @@ function Node:findChild(child)
 end
 
 function Node:addChild(child)
-  return self:findChild(child) or table.insert(self.children, child)
+  local index = self:findChild(child) or table.insert(self.children, child)
+  child.parent = self
+  return index
 end
 
 function Node:removeChild(child)

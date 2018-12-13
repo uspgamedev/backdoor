@@ -39,6 +39,16 @@ function Widgets:init(actor, x, y)
   end
 end
 
+function Widgets:findCardSlot(widget_card)
+  for i=1,3 do
+    for j=1,5 do
+      local slot = self.slots[i][j]
+      if slot.widget == widget_card then
+        return slot
+      end
+    end
+  end
+end
 
 function Widgets:updatePlacements()
   local equipment = self.slots[_PLACEMENTS]
