@@ -5,6 +5,7 @@ local DIR          = require 'domain.definitions.dir'
 local PLAYSFX      = require 'helpers.playsfx'
 local vec2         = require 'cpml' .vec2
 local Draw         = require "draw"
+local Util         = require "steaming.util"
 
 --STATE--
 local state = {}
@@ -24,7 +25,8 @@ local _cancel
 --STATE FUNCTIONS--
 
 function state:enter(_, sector_view, target_opt)
-
+  local hud = Util.findId("action-hud")
+  if hud then hud:lockHoldbar() end
   _sector_view = sector_view
   local i, j = unpack(target_opt.pos)
   _sector_view:newCursor(i, j, target_opt.aoe_hint, target_opt.validator,
@@ -55,6 +57,8 @@ function state:enter(_, sector_view, target_opt)
 end
 
 function state:leave()
+  local hud = Util.findId("action-hud")
+  if hud then hud:unlockHoldbar() end
   _moveCursor = nil
   _confirm = nil
   _cancel = nil
