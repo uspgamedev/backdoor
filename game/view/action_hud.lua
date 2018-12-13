@@ -137,6 +137,7 @@ local function _findPlayedCardViewDestination(cardview)
     return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card),
            COLORS.NEUTRAL
   end
+  return error("Non card type encountered")
 end
 
 function ActionHUD:playCard(index)
