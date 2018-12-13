@@ -7,10 +7,10 @@ function LONG_WALK.isAllowed(hud)
   return (not hud.long_walk) and #hostile_bodies == 0
 end
 
-function LONGWALK.start(hud, dir)
+function LONG_WALK.start(hud, dir)
   ADJACENCY.unset(hud.adjacency)
   hud.long_walk = dir
   hud.alert = false
 end
 
-return LONGWALK
+return LONG_WALK
