@@ -5,6 +5,7 @@ local FONT    = require 'view.helpers.font'
 local COLORS  = require 'domain.definitions.colors'
 local RES     = require 'resources'
 local Class   = require "steaming.extra_libs.hump.class"
+local common  = require 'lux.common'
 
 local _MG = 24
 local _PD = 4
@@ -28,7 +29,10 @@ function Slot:swap(other)
 end
 
 function Slot:getPoint()
-  return vec2(self.position:unpack())
+  return self:getGlobalPosition() + vec2(.5,.5) * Slot.SQRSIZE
+end
+
+function Slot:flashFor(seconds, color)
 end
 
 function Slot:render(g)

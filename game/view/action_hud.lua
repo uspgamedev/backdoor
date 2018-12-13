@@ -1,3 +1,4 @@
+
 local RANDOM        = require 'common.random'
 local DIRECTIONALS  = require 'infra.dir'
 local LONG_WALK     = require 'view.helpers.long_walk'
@@ -128,7 +129,15 @@ function ActionHUD:isHandActive()
   return self.handview:isActive()
 end
 
-function ActionHUD:playCardAsArt(index)
+local function _findPlayedCardViewDestination(cardview)
+  if cardview.card:isArt() then
+    return Util.findId('backbuffer_view')
+  elseif cardview.card:isWidget() then
+    return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card)
+  end
+end
+
+function ActionHUD:playCard(index)
   local cardview = self.handview.hand[index]
   MAIN_TIMER:script(function(wait)
     self.handview:keepFocusedCard(false)
@@ -145,12 +154,12 @@ function ActionHUD:playCardAsArt(index)
     ann:interrupt()
     while ann:isBusy() do wait(1) end
     ann:announce(cardview.card:getName())
-    local backbuffer = Util.findId('backbuffer_view')
+    local destination = _findPlayedCardViewDestination(cardview)
     local bends = RANDOM.safeGenerate(3, 10)
-    Transmission(cardview, backbuffer,
+    Transmission(cardview, destination,
                  COLORS.FLASH_DISCARD, nil, bends):register("HUD_FX")
     cardview:flashFor(0.5, COLORS.FLASH_DISCARD)
-    backbuffer:flashFor(0.5, COLORS.FLASH_DISCARD)
+    destination:flashFor(0.5, COLORS.FLASH_DISCARD)
     wait(0.5)
     ann:unlock()
     cardview:kill()
