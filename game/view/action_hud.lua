@@ -73,7 +73,6 @@ function ActionHUD:init(route)
   self.holdbar:lock()
   self.holdbar:register("HUD")
   self.justheld = false
-  self.holdbar_is_unlockable = true
 
   -- Long walk variables
   self.alert = false
@@ -333,8 +332,7 @@ end
 
 local function _endInspect(self)
   self.inspecting = false
-  if not self.justheld and self.holdbar:isLocked()
-                       and self.holdbar_is_unlockable then
+  if not self.justheld and self.holdbar:isLocked() then
     self.holdbar:unlock()
   end
 end
@@ -343,11 +341,9 @@ function ActionHUD:update(dt)
   --Checks if player can draw a new hand
   local player = self.route.getControlledActor()
   if player:getPP() < player:getBody():getConsumption() and
-     not self.holdbar:isLocked() then
+     not self.holdbar:isLocked()
+  then
     self.holdbar:lock()
-    self.holdbar_is_unlockable = false
-  elseif player:getPP() >= player:getBody():getConsumption() then
-    self.holdbar_is_unlockable = true
   end
 
   -- Input alerts long walk
