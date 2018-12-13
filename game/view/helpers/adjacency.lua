@@ -1,4 +1,4 @@
-local ADJACENCY
+local ADJACENCY = {}
 
 function ADJACENCY.unset(adjacency)
   for i = 1, 3 do
