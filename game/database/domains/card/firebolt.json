@@ -8,6 +8,10 @@
           "sfx":"example",
           "target":"=body",
           "type":"effect"
+        },{
+          "amount":1,
+          "name":"draw_card",
+          "type":"effect"
         }],
       "inputs":[{
           "body-only":[],
