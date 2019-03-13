@@ -18,6 +18,7 @@ function BUILDER.buildState(idgenerator, species, i, j)
       accessory = false,
     },
     widgets = {},
+    dialogue = nil
   }
 end
 
@@ -29,4 +30,3 @@ function BUILDER.buildElement(idgenerator, species, i, j)
 end
 
 return BUILDER
-

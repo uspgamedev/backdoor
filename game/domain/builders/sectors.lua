@@ -31,6 +31,14 @@ function BUILDER.build(idgenerator, player_data)
   local pbody = BODY_BUILDER.buildState(idgenerator, species, 16, 12)
   local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
 
+  -- generate npcs
+
+  local npcs = {
+    BODY_BUILDER.buildState(idgenerator, "corgi", 12, 12),
+  }
+  npcs[1].dialogue = "Helo"
+
+
   -- generate first sector
   local tiledata = DB.loadSetting('init_tiledata')
   local first_sector
@@ -47,6 +55,9 @@ function BUILDER.build(idgenerator, player_data)
   first_sector.h = #tiledata.tiles
   first_sector.w = #tiledata.tiles[1]
   first_sector.bodies = { pbody }
+  for _, body in ipairs(npcs) do
+    table.insert(first_sector.bodies, body)
+  end
   first_sector.actors = { pactor }
   first_sector.generated = true
   local _,exit = next(first_sector.exits)
@@ -56,4 +67,3 @@ function BUILDER.build(idgenerator, player_data)
 end
 
 return BUILDER
-
