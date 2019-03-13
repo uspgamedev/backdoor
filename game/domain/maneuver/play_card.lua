@@ -49,10 +49,6 @@ function PLAYCARD.perform(actor, inputvalues)
   actor:playCard(inputvalues.card_index)
 
   if card:isArt() then
-    coroutine.yield('report', {
-      type = 'body_acted',
-      body = body,
-    })
     actor:exhaust(card:getArtCost())
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
@@ -61,7 +57,13 @@ function PLAYCARD.perform(actor, inputvalues)
     body:placeWidget(card)
   end
 
+  coroutine.yield('report', {
+    type = 'body_acted',
+    body = body,
+  })
+
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
+  print("## Played card: " .. card.id .. ':' .. card.specname)
 end
 
 return PLAYCARD
