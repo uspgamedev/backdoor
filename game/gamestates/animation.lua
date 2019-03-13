@@ -6,7 +6,7 @@ local state = {}
 
 --[[ LOCAL VARIABLES ]]--
 
-local _sector_view
+local _view
 local _alert
 
 --[[ LOCAL FUNCTIONS ]]--
@@ -17,9 +17,9 @@ function state:init()
   -- dunno
 end
 
-function state:enter(_, sector_view, animation)
+function state:enter(_, view, animation)
 
-  _sector_view = sector_view
+  _view = view
   _alert = false
 
 end
@@ -36,10 +36,10 @@ function state:update(dt)
     _alert = true
   end
 
-  if not _sector_view:hasPendingVFX() then
+  if not _view.sector:hasPendingVFX() then
     SWITCHER.pop(_alert)
   else
-    _sector_view:updateVFX(dt)
+    _view.sector:updateVFX(dt)
   end
 
 end
@@ -51,3 +51,4 @@ function state:draw()
 end
 
 return state
+
