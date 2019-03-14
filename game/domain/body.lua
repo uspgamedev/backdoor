@@ -441,7 +441,7 @@ end
 --Dialogue methods
 
 function Body:getDialogue()
-  return self.killer
+  return self.dialogue
 end
 
 function Body:setDialogue(dialogue)

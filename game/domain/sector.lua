@@ -62,7 +62,6 @@ function Sector:loadState(state)
     self.bodies = _initBodies(self.w, self.h)
     local bodies = {}
     for _,body_state in ipairs(state.bodies) do
-      print(body_state)
       local body = Body(body_state.specname)
       body:loadState(body_state)
       bodies[body.id] = body_state

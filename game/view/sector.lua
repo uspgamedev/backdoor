@@ -3,6 +3,7 @@ local RES         = require 'resources'
 local Color       = require 'common.color'
 local math        = require 'common.math'
 local CAM         = require 'common.camera'
+local TILE        = require 'common.tile'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
@@ -10,6 +11,7 @@ local ACTION      = require 'domain.definitions.action'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
+local DIALOGUEBOX = require 'view.dialoguebox'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
@@ -74,6 +76,7 @@ function SectorView:init(route)
 
   self.route = route
   self.body_sprites = {}
+  self.body_dialogues = {}
   self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
@@ -200,6 +203,21 @@ function SectorView:setBodySprite(body, draw)
   self.body_sprites[body:getId()] = draw
 end
 
+function SectorView:getBodyDialogue(body, i, j)
+  local id = body:getId()
+  local dialogue_box = self.body_dialogues[id]
+  if not dialogue_box then
+    dialogue_box = DIALOGUEBOX(body, i, j)
+    self.body_dialogues[id] = dialogue_box
+  end
+  return dialogue_box
+end
+
+function SectorView:resetBodyDialogue(body)
+  local id = body:getId()
+  self.body_dialogues[id] = nil
+end
+
 function SectorView:sectorChanged()
   self.sector_changed = true
 end
@@ -259,6 +277,7 @@ function SectorView:draw()
   -- draw tall things
   g.push()
   local all_bodies = {}
+  local dialogue_boxes = {}
   local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
@@ -299,7 +318,16 @@ function SectorView:draw()
         if body then
           table.insert(draw_bodies, {body, x, 0})
           table.insert(all_bodies, body)
+          local player = self.route.getControlledActor():getBody()
+          local player_i, player_j = player:getPos()
+          local body_i, body_j = body:getPos()
+          if body ~= player and TILE.dist(player_i, player_j, body_i, body_j) <= 1 then
+            table.insert(dialogue_boxes, self:getBodyDialogue(body, i, j))
+          else
+            self:resetBodyDialogue(body)
+          end
         end
+
         local dropcount = #tile.drops
         local angle = math.pi*2/dropcount
         local phase = 3*math.pi/4
@@ -404,7 +432,6 @@ function SectorView:draw()
       g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
     end
 
-
     g.translate(0, _TILE_H)
   end
   g.pop()
@@ -421,6 +448,11 @@ function SectorView:draw()
         SECTOR_COOLDOWNBAR.draw(actor, x, y, is_controlled)
       end
     end
+  end
+
+  --Draw dialogue_boxes
+  for _,box in ipairs(dialogue_boxes) do
+    box:draw()
   end
 
   -- name, above everything
