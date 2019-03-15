@@ -9,7 +9,7 @@
       "amount":1,
       "card":"calming_down"
     },{
-      "amount":6,
+      "amount":1,
       "card":"laser-spear"
     },{
       "amount":4,
@@ -17,9 +17,6 @@
     },{
       "amount":4,
       "card":"trained-strike"
-    },{
-      "amount":5,
-      "card":"seedling-sap"
     }],
   "name":"Brawler",
   "signature":"tackle",
