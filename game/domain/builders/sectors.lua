@@ -36,7 +36,7 @@ function BUILDER.build(idgenerator, player_data)
   local npcs = {
     BODY_BUILDER.buildState(idgenerator, "corgi", 12, 12),
   }
-  npcs[1].dialogue = "Helo"
+  npcs[1].dialogue = "Helo mi frend dis is very very vry long txt ok BYE"
 
 
   -- generate first sector
