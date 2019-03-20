@@ -216,10 +216,7 @@ function HandView:doAddCard(actor, card)
       local view = CardView(card)
       table.insert(self.hand, view)
       local frontbuffer = Util.findId('frontbuffer_view')
-      local bends = RANDOM.safeGenerate(3, 10)
-      Transmission(frontbuffer, view, COLORS.FLASH_DRAW, nil, bends):register("HUD_FX")
-      frontbuffer:flashFor(0.5, COLORS.FLASH_DRAW)
-      view:flashFor(0.5, COLORS.FLASH_DRAW)
+      Transmission(frontbuffer, view, 0.5, COLORS.FLASH_DRAW)
       wait(0.1)
       self.fx = false
     end
@@ -232,11 +229,7 @@ function HandView:doRemoveCard(actor, card_index, discarded)
       local view = self.hand[card_index]
       if discarded then
         local backbuffer = Util.findId('backbuffer_view')
-        local bends = RANDOM.safeGenerate(3, 10)
-        Transmission(view, backbuffer, COLORS.FLASH_DISCARD, 0.2, bends)
-          :register("HUD_FX")
-        backbuffer:flashFor(0.2, COLORS.FLASH_DISCARD)
-        view:flashFor(0.2, COLORS.FLASH_DISCARD)
+        Transmission(view, backbuffer, 0.2, COLORS.FLASH_DISCARD)
         wait(0.2)
       end
       table.remove(self.hand, card_index)
