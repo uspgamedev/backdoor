@@ -15,7 +15,7 @@ function GameplayView:setup(route)
 
   -- sector view
   self.sector = SectorView(route)
-  self.sector:register("L1", nil, "sectorself")
+  self.sector:register("L1", nil, "sector_view")
   self.sector:lookAt(route:getControlledActor())
 
   -- actor HUD
@@ -24,9 +24,9 @@ function GameplayView:setup(route)
 
   -- buffer views
   self.frontbuffer = BufferView.newFrontBufferView(route)
-  self.frontbuffer:register("HUD_BG", nil, "frontbufferself")
+  self.frontbuffer:register("HUD_BG", nil, "frontbuffer_view")
   self.backbuffer = BufferView.newBackBufferView(route)
-  self.backbuffer:register("HUD_BG", nil, "backbufferself")
+  self.backbuffer:register("HUD_BG", nil, "backbuffer_view")
 
   -- actor view
   self.actor = ActorView(route:getControlledActor())
