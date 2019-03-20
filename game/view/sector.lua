@@ -203,12 +203,23 @@ function SectorView:setBodySprite(body, draw)
   self.body_sprites[body:getId()] = draw
 end
 
-function SectorView:getBodyDialogue(body, i, j)
+function SectorView:getBodyDialogue(body, i, j, pi, pj)
   local id = body:getId()
+
+  --Get appropriate position for dialogue box
+  local side
+  if pj <= j then
+    side = "right"
+  else
+    side = "left"
+  end
+
   local dialogue_box = self.body_dialogues[id]
   if not dialogue_box then
-    dialogue_box = DIALOGUEBOX(body, i, j)
+    dialogue_box = DIALOGUEBOX(body, i - 1, j - 1, side)
     self.body_dialogues[id] = dialogue_box
+  else
+    dialogue_box:setSide(side)
   end
   return dialogue_box
 end
@@ -322,7 +333,7 @@ function SectorView:draw()
           local player_i, player_j = player:getPos()
           local body_i, body_j = body:getPos()
           if body ~= player and TILE.dist(player_i, player_j, body_i, body_j) <= 1 then
-            table.insert(dialogue_boxes, self:getBodyDialogue(body, i, j))
+            table.insert(dialogue_boxes, self:getBodyDialogue(body, body_i, body_j, player_i, player_j))
           else
             self:resetBodyDialogue(body)
           end
