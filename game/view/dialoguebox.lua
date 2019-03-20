@@ -30,6 +30,10 @@ function DialogueBox:init(body, i, j, side)
 
   --Text attributes
   self.text_margin = 5
+  self.regular_char_time = .1 --Time to appear a regular char
+  self.slow_char_time = .2 --Time to appear a slow char
+  self.text_start_up_time = .1
+  self.char_timer = 0
   self.text = self:parseText(body:getDialogue())
 
   --Dialogue box position attributes
@@ -57,8 +61,12 @@ function DialogueBox:draw()
   --Draw text
   g.setColor(COLORS.NEUTRAL)
   _font:set()
+  self:updateText(love.timer.getDelta())
+  local t = self.text_start_up_time
   for i, c in ipairs(self.text) do
     g.print(c.char, c.x, c.y)
+    t = t + c.time
+    if t > self.char_timer then break end
   end
 
   g.pop()
@@ -98,6 +106,10 @@ function DialogueBox:getSize()
   return w, h
 end
 
+function DialogueBox:updateText(dt)
+  self.char_timer = self.char_timer + dt
+end
+
 function DialogueBox:parseText(text)
   local parsed = {}
   local x = self.text_margin
@@ -109,6 +121,7 @@ function DialogueBox:parseText(text)
       char = char,
       x = x,
       y = y,
+      time = self.regular_char_time
     }
     x = x + w
 
