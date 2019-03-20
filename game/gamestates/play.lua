@@ -50,10 +50,7 @@ local function _playTurns(...)
     _activity:changeSector(...)
   elseif request == "report" then
     
-    _view.sector:startVFX(extra)
-    _view.action_hud:sendAlert(extra.type == 'text_rise'
-                               and (extra.body == _player:getBody()))
-    SWITCHER.push(GS.ANIMATION, _view)
+    SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
 end
