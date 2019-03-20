@@ -30,9 +30,9 @@ function DialogueBox:init(body, i, j, side)
 
   --Text attributes
   self.text_margin = 5
-  self.regular_char_time = .1 --Time to appear a regular char
+  self.regular_char_time = .08 --Time to appear a regular char
   self.slow_char_time = .2 --Time to appear a slow char
-  self.text_start_up_time = .1
+  self.text_start_up_time = .2
   self.char_timer = 0
   self.text = self:parseText(body:getDialogue())
 
@@ -63,10 +63,12 @@ function DialogueBox:draw()
   _font:set()
   self:updateText(love.timer.getDelta())
   local t = self.text_start_up_time
-  for i, c in ipairs(self.text) do
-    g.print(c.char, c.x, c.y)
-    t = t + c.time
-    if t > self.char_timer then break end
+  if t < self.char_timer then
+    for i, c in ipairs(self.text) do
+      g.print(c.char, c.x, c.y)
+      t = t + c.time
+      if t > self.char_timer then break end
+    end
   end
 
   g.pop()
