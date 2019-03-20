@@ -34,9 +34,11 @@ function BUILDER.build(idgenerator, player_data)
   -- generate npcs
 
   local npcs = {
-    BODY_BUILDER.buildState(idgenerator, "corgi", 12, 12),
+    BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
+    BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
   }
   npcs[1].dialogue = "Helo mi frend dis is very very vry long txt ok BYE"
+  npcs[2].dialogue = "howdy"
 
 
   -- generate first sector
