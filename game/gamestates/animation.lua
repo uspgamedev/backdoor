@@ -31,8 +31,7 @@ function state:enter(_, route, view, report)
 
   local ok, animation = pcall(function () return ANIMATIONS[report.type] end)
   if ok then
-    report.pending = true
-    animation:script(route, view, report)
+    _animation_task = animation:script(route, view, report)
   else 
     _view.sector:startVFX(report)
     _view.action_hud:sendAlert(
@@ -56,8 +55,10 @@ function state:update(dt)
     _alert = true
   end
 
-  if not _view.sector:hasPendingVFX() and not _report.pending then
-    SWITCHER.pop(_alert)
+  if not _view.sector:hasPendingVFX() then
+    if not _animation_task or _animation_task:done() then
+      SWITCHER.pop(_alert)
+    end
   else
     _view.sector:updateVFX(dt)
   end

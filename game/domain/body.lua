@@ -255,7 +255,7 @@ function Body:removeWidget(index)
   local owner = card:getOwner()
   self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
   coroutine.yield('report', {
-    type = 'widget_to_backbuffer',
+    type = 'widget_removed',
     body = self,
     widget_card = card
   })
