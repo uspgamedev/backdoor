@@ -11,7 +11,6 @@ function ANIM:script(route, view, report)
     local color = COLORS.FLASH_DISCARD
     self.yield(Transmission(widget_slot, backbuffer, 0.5, color))
   end
-  report.pending = false
 end
 
 return ANIM

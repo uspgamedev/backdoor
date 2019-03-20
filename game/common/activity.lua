@@ -48,11 +48,15 @@ function Task:instance (obj, func, ...)
     return result
   end
 
-  function yield(deferred, ...)
+  function done()
+    return coroutine.status(task) == 'dead'
+  end
+
+  function yield(deferred)
     if deferred and deferred.andThen then
       deferred:andThen(resume)
     end
-    return coroutine.yield(deferred, ...)
+    return coroutine.yield(obj)
   end
 
   function __operator:newindex()
