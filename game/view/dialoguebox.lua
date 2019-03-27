@@ -9,7 +9,6 @@ local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 local _FX_MAGNITUDE = 6
 local _FX_SPEED = 2.5
-local _font = FONT.get('Text', 20)
 
 --Box attributes
 local _X_MARGIN = _TILE_W/6
@@ -19,6 +18,13 @@ local _MAX_WIDTH = 2*_TILE_W
 --Text attributes
 local _TEXT_MARGIN = 5
 local _TEXT_START_UP_TIME = .15
+
+--Different fonts a char can have
+local _CHAR_FONT = {
+  small = FONT.get('Text', 10),
+  regular = FONT.get('Text', 20),
+  big = FONT.get('Text', 25),
+}
 
 --Time a character must stay active before next one appears
 local _CHAR_SPEED = {
@@ -41,6 +47,9 @@ local _CHAR_COLOR = {
 local _WAVE_MAGNITUDE = 2
 local _WAVE_SPEED = 5
 local _WAVE_REGULATOR = 10
+
+--Shake style consts
+local _SHAKE_MAGNITUDE = 1
 
 --Forward declaration for local functions
 local getTag
@@ -75,6 +84,11 @@ color - Set current color to draw text
   blue    - blue color
   green   - green color
 
+font - Size of font to draw text
+  small   - smol-sized font
+  regular - default font size
+  big     - big font for big bois
+
 ]]
 
 -- Class
@@ -91,6 +105,8 @@ function DialogueBox:init(body, i, j, side)
   --Timer to display characters gradually
   self.char_timer = 0
 
+  self.text_line_h = _CHAR_FONT.regular:getHeight()
+
   self.text = self:parseText(body:getDialogue())
 
   --Dialogue box position attributes
@@ -104,6 +120,7 @@ function DialogueBox:draw()
   local g = love.graphics
   local x, y = self:getPosition()
   local w, h = self:getSize()
+  local dt = love.timer.getDelta()
 
   g.push()
   g.translate(x, y)
@@ -116,16 +133,19 @@ function DialogueBox:draw()
   g.rectangle("line", 0, 0, w, h)
 
   --Draw text
-  _font:set()
-  self:updateText(love.timer.getDelta())
+  self:updateText(dt)
   local t = _TEXT_START_UP_TIME
   if t < self.char_timer then
     for i, c in ipairs(self.text) do
       local ox, oy = 0, 0
-      if c.style == "wave" then
+      if     c.style == "wave" then
         oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
+      elseif c.style == "shake" then
+        ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+        oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
       end
       g.setColor(COLORS[c.color])
+      c.font:set()
       g.print(c.char, c.x + ox, c.y + oy)
       t = t + c.time
       if t > self.char_timer then break end
@@ -158,14 +178,17 @@ function DialogueBox:getPosition()
 end
 
 function DialogueBox:getSize()
-  local max_x = 0
+  local max_x, max_y = 0, 0
   for _, c in ipairs(self.text) do
-    if max_x < c.x + _font:getWidth(c.char) then
-      max_x = c.x + _font:getWidth(c.char)
+    if max_x < c.x + c.font:getWidth(c.char) then
+      max_x = c.x + c.font:getWidth(c.char)
+    end
+    if max_y < c.y + c.font:getHeight(c.char) then
+      max_y = c.y + c.font:getHeight(c.char)
     end
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
-  local h = self.text[#self.text].y + _font:getHeight()
+  local h = max_y
   return w, h
 end
 
@@ -183,6 +206,7 @@ function DialogueBox:parseText(text)
   local time = _CHAR_SPEED.regular
   local color = _CHAR_COLOR.regular
   local style = "none"
+  local font = _CHAR_FONT.regular
 
   while i <= text:len() do
     local char = text:sub(i,i)
@@ -229,21 +253,23 @@ function DialogueBox:parseText(text)
 
     --Common character
     else
-
-      local w = _font:getWidth(char)
+      local w = font:getWidth(char)
+      local h = font:getHeight(char)
+      local ty = y + self.text_line_h/2 - h/2
       parsed[i] = {
         char = char,
         x = x,
         y = y,
         time = time,
         color = color,
-        style = style
+        style = style,
+        font = font
       }
       x = x + w
 
       --Wrap words
       if x > _MAX_WIDTH - 2*_TEXT_MARGIN then
-        y = y + _font:getHeight()
+        y = y + self.text_line_h
         x = _TEXT_MARGIN
         --Find start of current word
         local j = i
@@ -254,7 +280,7 @@ function DialogueBox:parseText(text)
         if j == 0 then error("Word is too damn big") end
         --Fix position of every character
         for k = j+1, i do
-          local w = _font:getWidth(parsed[k].char)
+          local w = parsed[k].font:getWidth(parsed[k].char)
           parsed[k].x = x
           parsed[k].y = y
           x = x + w
