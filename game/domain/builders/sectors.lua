@@ -37,7 +37,7 @@ function BUILDER.build(idgenerator, player_data)
     BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
     BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
   }
-  npcs[1].dialogue = "Helo, mi frend[speed=fastest]... How are you? I, for once, [speed=regular]am totally fine. bye!!"
+  npcs[1].dialogue = "[speed=fastest]Helo, mi frend[color=red]... How are you?[color=regular] I, for once, [color=blue]am totally fine. [color=green]bye!!"
   npcs[2].dialogue = "howdy"
 
 

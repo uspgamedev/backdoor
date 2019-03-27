@@ -42,6 +42,7 @@ color - Set current color to draw text
   regular - default color (white)
   red     - red color
   blue    - blue color
+  green   - green color
 
 ]]
 
@@ -63,6 +64,7 @@ function DialogueBox:init(body, i, j, side)
 
   --Text attributes
   self.text_margin = 5
+  --time
   self.regular_char_time = .08 --Time to appear a regular char
   self.medium_char_time = .15 --Time to appear a slow char
   self.slow_char_time = .5 --Time to appear a slow char
@@ -70,6 +72,12 @@ function DialogueBox:init(body, i, j, side)
   self.fastest_char_time = .02 --Time to appear a fast char
   self.text_start_up_time = .15
   self.char_timer = 0
+  --color
+  self.regular_char_color = "NEUTRAL"
+  self.red_char_color = "NOTIFICATION"
+  self.blue_char_color = "VALID"
+  self.green_char_color = "SUCCESS"
+
   self.text = self:parseText(body:getDialogue())
 
   --Dialogue box position attributes
@@ -95,12 +103,12 @@ function DialogueBox:draw()
   g.rectangle("line", 0, 0, w, h)
 
   --Draw text
-  g.setColor(COLORS.NEUTRAL)
   _font:set()
   self:updateText(love.timer.getDelta())
   local t = self.text_start_up_time
   if t < self.char_timer then
     for i, c in ipairs(self.text) do
+      g.setColor(COLORS[c.color])
       g.print(c.char, c.x, c.y)
       t = t + c.time
       if t > self.char_timer then break end
@@ -156,6 +164,7 @@ function DialogueBox:parseText(text)
 
   --Default value
   local time = self.regular_char_time
+  local color = self.regular_char_color
 
   while i <= text:len() do
     local char = text:sub(i,i)
@@ -163,11 +172,21 @@ function DialogueBox:parseText(text)
     --Special tag
     if char == "[" then
       local effect_type, effect_value
+
+      --Get effect
       text, effect_type, effect_value = getTag(text, i)
+
+      --Apply effect
       local err = false
       if effect_type == "speed" then
-        if     self[effect_value.."_char_time"] then
+        if self[effect_value.."_char_time"] then
           time = self[effect_value.."_char_time"]
+        else
+          err = true
+        end
+      elseif effect_type == "color" then
+        if self[effect_value.."_char_color"] then
+          color = self[effect_value.."_char_color"]
         else
           err = true
         end
@@ -175,6 +194,7 @@ function DialogueBox:parseText(text)
         err = true
       end
 
+      --Check for errors
       if err then
         error([[Effect invalid!
              Type = "]]..effect_type..[["
@@ -189,7 +209,8 @@ function DialogueBox:parseText(text)
         char = char,
         x = x,
         y = y,
-        time = time
+        time = time,
+        color = color
       }
       x = x + w
 
