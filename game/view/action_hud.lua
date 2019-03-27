@@ -133,7 +133,7 @@ local function _findPlayedCardViewDestination(cardview)
     return Util.findId('backbuffer_view'), COLORS.FLASH_DISCARD
   elseif cardview.card:isWidget() then
     return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card),
-           COLORS.NEUTRAL
+           COLORS.EQUIP
   end
   return error("Non card type encountered")
 end
