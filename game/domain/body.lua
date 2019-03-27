@@ -170,16 +170,16 @@ function Body:getCON()
   return self:getAptitude('CON')
 end
 
-function Body:getArmorBonus()
-  return APT.ARMORBONUS(self:getDEF(), self:getRES())
+function Body:getBlockChance()
+  return APT.BLOCKCHANCE(self:getDEF(), self:getFIN())
 end
 
 function Body:getConsumption()
-  return APT.STAMINA(self:getEFC(), self:getFIN())
+  return APT.STAMINA(self:getEFC(), self:getCON())
 end
 
 function Body:getMaxHP()
-  return APT.HP(self:getVIT(), self:getCON())
+  return APT.HP(self:getVIT(), self:getRES())
 end
 
 --[[ Appearance methods ]]--
@@ -395,7 +395,7 @@ function Body:getArmor()
 end
 
 function Body:gainArmor(amount)
-  amount = math.max(0, amount) + self:getArmorBonus()
+  amount = math.max(0, amount)
   self.armor = self.armor + amount
   return amount
 end
@@ -405,22 +405,18 @@ function Body:removeAllArmor()
 end
 
 function Body:takeDamageFrom(amount, source)
-  local blocked = math.min(amount, self.armor)
-  self.armor = self.armor - blocked -- should never go negative
-  local dmg = math.max(0, amount - blocked)
+  local blocked = false
+  if RANDOM.generate(100) <= self:getBlockChance() then
+    amount = math.floor(amount/2)
+    blocked = true
+  end
+  local absorbed = math.min(amount, self.armor)
+  self.armor = self.armor - absorbed -- should never go negative
+  local dmg = math.max(0, amount - absorbed)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
-  return dmg
-  -- print damage formula info (uncomment for debugging)
-  --[[
-  local str = "%s is being attacked with %d damage!\n"
-              .. "> %s rolls %dd%d for %d defense points!\n"
-              .. "> %s takes %d in damage!\n"
-  local name = self:getSpec('name')
-  print(str:format(name, amount, name, self:getDEF(), self:getBaseDEF(),
-                   defroll, name, dmg))
-  --]]--
+  return dmg, blocked
 end
 
 function Body:loseLifeFrom(amount, source)

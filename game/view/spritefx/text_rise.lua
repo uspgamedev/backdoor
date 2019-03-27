@@ -9,6 +9,7 @@ local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 
 local _NUMBER_COLOR = {
+  ['blocked-damage'] = 'NOTIFICATION',
   damage = 'NOTIFICATION',
   heal = 'SUCCESS',
   food = 'WARNING',
@@ -17,6 +18,7 @@ local _NUMBER_COLOR = {
 }
 
 local _SIGNALS = {
+  ['blocked-damage'] = '↓-',
   damage = '-',
   heal = '+',
   food = '+',

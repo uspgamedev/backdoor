@@ -29,18 +29,18 @@ function APT.ATTR_LEVEL(owner, which)
   return lv-1
 end
 
-function APT.HP(vit, con)
-  return math.floor(20 + (4+con)*vit*vit - (7+con)*vit)
+function APT.HP(vit, res)
+  return math.floor(20 + (4+res)*vit*vit - (7+res)*vit)
 end
 
-function APT.STAMINA(efc, fin)
-  local min, max = 7 - 2.5*fin, 25 - fin
+function APT.STAMINA(efc, con)
+  local min, max = 7 - 2.5*con, 25 - con
   local food = max - (max-min)*efc/12
   return math.floor(food)
 end
 
-function APT.ARMORBONUS(def, res)
-  return math.floor(0.5 * def * (6 + res) / 4)
+function APT.BLOCKCHANCE(def, fin)
+  return math.floor(5 * def * (4 + fin) / 4)
 end
 
 return APT

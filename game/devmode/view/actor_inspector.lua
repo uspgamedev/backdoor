@@ -29,11 +29,11 @@ return function (actor)
     IMGUI.Text(("EFC: %.2f"):format(actor:getBody():getEFC()))
     IMGUI.Text(("VIT: %.2f"):format(actor:getBody():getVIT()))
     IMGUI.Separator()
-    IMGUI.Text(("RES: %d"):format(actor:getBody():getRES()))
     IMGUI.Text(("FIN: %d"):format(actor:getBody():getFIN()))
     IMGUI.Text(("CON: %d"):format(actor:getBody():getCON()))
+    IMGUI.Text(("RES: %d"):format(actor:getBody():getRES()))
     IMGUI.Separator()
-    IMGUI.Text(("Armor bonus: %d"):format(actor:getBody():getArmorBonus()))
+    IMGUI.Text(("Block chance: %d%%"):format(actor:getBody():getBlockChance()))
     IMGUI.Text(("Consumption: %d"):format(actor:getBody():getConsumption()))
   end
 
