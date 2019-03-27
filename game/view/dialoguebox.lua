@@ -21,7 +21,7 @@ local _TEXT_START_UP_TIME = .15
 
 --Different fonts a char can have
 local _CHAR_FONT = {
-  small = FONT.get('Text', 10),
+  small = FONT.get('Text', 12),
   regular = FONT.get('Text', 20),
   big = FONT.get('Text', 25),
 }
@@ -42,6 +42,13 @@ local _CHAR_COLOR = {
   blue    = "VALID",
   green   = "SUCCESS",
 }
+
+--Opacity for a character color
+local _CHAR_OPACITY = {
+  regular = 1,
+  semi    = .5
+}
+
 
 --Wave style consts
 local _WAVE_MAGNITUDE = 2
@@ -89,6 +96,10 @@ font - Size of font to draw text
   regular - default font size
   big     - big font for big bois
 
+opacity - How opaque is the character
+  regular - totally opaque
+  semi    - semi-transparent
+
 ]]
 
 -- Class
@@ -105,7 +116,7 @@ function DialogueBox:init(body, i, j, side)
   --Timer to display characters gradually
   self.char_timer = 0
 
-  self.text_line_h = _CHAR_FONT.regular:getHeight()
+  self.text_line_h = 4*_CHAR_FONT.regular:getHeight()/5
 
   self.text = self:parseText(body:getDialogue())
 
@@ -144,7 +155,9 @@ function DialogueBox:draw()
         ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
         oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
       end
-      g.setColor(COLORS[c.color])
+      local color = COLORS[c.color]
+      color[4] = c.opacity
+      g.setColor(color)
       c.font:set()
       g.print(c.char, c.x + ox, c.y + oy)
       t = t + c.time
@@ -188,7 +201,7 @@ function DialogueBox:getSize()
     end
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
-  local h = max_y
+  local h = max_y + _TEXT_MARGIN
   return w, h
 end
 
@@ -199,12 +212,13 @@ end
 function DialogueBox:parseText(text)
   local parsed = {}
   local x = _TEXT_MARGIN
-  local y = 0
+  local y = _TEXT_MARGIN
   local i = 1
 
   --Default value
   local time = _CHAR_SPEED.regular
   local color = _CHAR_COLOR.regular
+  local opacity = _CHAR_OPACITY.regular
   local style = "none"
   local font = _CHAR_FONT.regular
 
@@ -240,6 +254,21 @@ function DialogueBox:parseText(text)
         else
           err = true
         end
+      elseif effect_type == "font" then
+        if effect_value == "small" or
+           effect_value == "regular" or
+           effect_value == "big" then
+             font = _CHAR_FONT[effect_value]
+        else
+          err = true
+        end
+      elseif effect_type == "opacity" then
+        if effect_value == "regular" or
+           effect_value == "semi" then
+             opacity = _CHAR_OPACITY[effect_value]
+        else
+          err = true
+        end
       else
         err = true
       end
@@ -259,9 +288,10 @@ function DialogueBox:parseText(text)
       parsed[i] = {
         char = char,
         x = x,
-        y = y,
+        y = ty,
         time = time,
         color = color,
+        opacity = opacity,
         style = style,
         font = font
       }
@@ -281,8 +311,9 @@ function DialogueBox:parseText(text)
         --Fix position of every character
         for k = j+1, i do
           local w = parsed[k].font:getWidth(parsed[k].char)
+          local h = parsed[k].font:getHeight(parsed[k].char)
           parsed[k].x = x
-          parsed[k].y = y
+          parsed[k].y = y + self.text_line_h/2 - h/2
           x = x + w
         end
       end
