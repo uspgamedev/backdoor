@@ -18,6 +18,7 @@
     "amount":128
   },
   "drops":{
+    "drop-info":"",
     "drops":[{
         "droprate":4,
         "droptype":"food"
@@ -34,9 +35,9 @@
         "bodyspec":"slime",
         "upgrade_power":60
       },{
-        "actorspec":"grinful",
-        "bodyspec":"imp",
-        "upgrade_power":80
+        "actorspec":"dumb",
+        "bodyspec":"stove",
+        "upgrade_power":70
       }]
   },
   "exits":{
