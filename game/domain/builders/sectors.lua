@@ -37,8 +37,10 @@ function BUILDER.build(idgenerator, player_data)
     BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
     BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
   }
-  npcs[1].dialogue = "[pause=1][speed=ultrafast][style=shake][font=big]HELO[pause=1][font=regular][style=none] mi frend... How are you?[color=red] I, for once, [color=blue]am [style=wave]totally[style=none] fine. [font=small][color=red][speed=medium][opacity=semi]        bye"
-  npcs[2].dialogue = "howdy"
+  npcs[1].dialogue = [[
+  [speed=fast][size=big][style=shake]HELLO[pause=1.5][endl=1][style=none][speed=regular][size=regular]How are you today, [color=red]my friend?[color=regular][pause=1.5][endl=1][speed=slow]...[speed=regular]well I'm feeling totally [style=wave][color=blue][speed=medium]groooooovy[style=none]!
+  ]]
+  npcs[2].dialogue = "howdy, i like pears.[pause=1][endl=1][size=small][speed=fast]dont tell anyone my  [opacity=semi][color=red][speed=medium][style=shake]dark secret"
 
 
   -- generate first sector

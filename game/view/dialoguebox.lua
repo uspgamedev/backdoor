@@ -28,8 +28,8 @@ local _CHAR_FONT = {
 --Time a character must stay active before next one appears
 local _CHAR_SPEED = {
   slow      = .5,
-  medium    = .15,
-  regular   = .08,
+  medium    = .12,
+  regular   = .07,
   fast      = .04,
   ultrafast = .02
 }
@@ -45,7 +45,7 @@ local _CHAR_COLOR = {
 --Opacity for a character color
 local _CHAR_OPACITY = {
   regular = 1,
-  semi    = .5
+  semi    = .7
 }
 
 
@@ -90,7 +90,7 @@ color - Set current color to draw text
   blue    - blue color
   green   - green color
 
-font - Size of font to draw text
+size - Size of font to draw text
   small   - smol-sized font
   regular - default font size
   big     - big font for big bois
@@ -255,7 +255,7 @@ function DialogueBox:parseText(text)
         else
           err = true
         end
-      elseif effect_type == "font" then
+      elseif effect_type == "size" then
         if effect_value == "small" or
            effect_value == "regular" or
            effect_value == "big" then
@@ -279,6 +279,14 @@ function DialogueBox:parseText(text)
           else
             parsed[i-1].time = parsed[i-1].time + pause_amount
           end
+        else
+          err = true
+        end
+      elseif effect_type == "endl" then
+        local lines_amount = tonumber(effect_value)
+        if lines_amount then
+          y = y + lines_amount * self.text_line_h
+          x = _TEXT_MARGIN
         else
           err = true
         end
