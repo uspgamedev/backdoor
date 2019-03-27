@@ -11,6 +11,15 @@ local _FX_MAGNITUDE = 6
 local _FX_SPEED = 2.5
 local _font = FONT.get('Text', 20)
 
+--Box attributes
+local _X_MARGIN = _TILE_W/6
+local _Y_OFFSET = -_TILE_H/3
+local _MAX_WIDTH = 2*_TILE_W
+
+--Text attributes
+local _TEXT_MARGIN = 5
+local _TEXT_START_UP_TIME = .15
+
 --Time a character must stay active before next one appears
 local _CHAR_SPEED = {
   slow      = .5,
@@ -29,9 +38,9 @@ local _CHAR_COLOR = {
 }
 
 --Wave style consts
-_WAVE_MAGNITUDE = 2
-_WAVE_SPEED = 5
-_WAVE_REGULATOR = 10
+local _WAVE_MAGNITUDE = 2
+local _WAVE_SPEED = 5
+local _WAVE_REGULATOR = 10
 
 --Forward declaration for local functions
 local getTag
@@ -79,16 +88,7 @@ local DialogueBox = Class{
 function DialogueBox:init(body, i, j, side)
   ELEMENT.init(self)
 
-  --Box attributes
-  self.x_margin = _TILE_W/6
-  self.y_offset = -_TILE_H/3
-  self.max_width = 2*_TILE_W
-
-  --Text attributes
-  self.text_margin = 5
-
-  --time
-  self.text_start_up_time = .15
+  --Timer to display characters gradually
   self.char_timer = 0
 
   self.text = self:parseText(body:getDialogue())
@@ -118,7 +118,7 @@ function DialogueBox:draw()
   --Draw text
   _font:set()
   self:updateText(love.timer.getDelta())
-  local t = self.text_start_up_time
+  local t = _TEXT_START_UP_TIME
   if t < self.char_timer then
     for i, c in ipairs(self.text) do
       local ox, oy = 0, 0
@@ -144,15 +144,15 @@ function DialogueBox:getPosition()
   local w, h = self:getSize()
 
   if self.side == "right" then
-    x = (self.j+1)*_TILE_W + self.x_margin
+    x = (self.j+1)*_TILE_W + _X_MARGIN
   elseif self.side == "left" then
-    x = self.j*_TILE_W -self.x_margin - w
+    x = self.j*_TILE_W -_X_MARGIN - w
   else
     error("not a valid side for dialogue box")
   end
 
   local fx_offset = math.sin(love.timer.getTime() * _FX_SPEED) * _FX_MAGNITUDE
-  y = (self.i+.5)*_TILE_H - h/2 + self.y_offset + fx_offset
+  y = (self.i+.5)*_TILE_H - h/2 + _Y_OFFSET + fx_offset
 
   return math.floor(x + .5), math.floor(y + .5)
 end
@@ -164,7 +164,7 @@ function DialogueBox:getSize()
       max_x = c.x + _font:getWidth(c.char)
     end
   end
-  local w = math.min(max_x + self.text_margin, self.max_width)
+  local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
   local h = self.text[#self.text].y + _font:getHeight()
   return w, h
 end
@@ -175,7 +175,7 @@ end
 
 function DialogueBox:parseText(text)
   local parsed = {}
-  local x = self.text_margin
+  local x = _TEXT_MARGIN
   local y = 0
   local i = 1
 
@@ -242,9 +242,9 @@ function DialogueBox:parseText(text)
       x = x + w
 
       --Wrap words
-      if x > self.max_width - 2*self.text_margin then
+      if x > _MAX_WIDTH - 2*_TEXT_MARGIN then
         y = y + _font:getHeight()
-        x = self.text_margin
+        x = _TEXT_MARGIN
         --Find start of current word
         local j = i
         while j >= 1 do
