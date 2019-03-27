@@ -60,6 +60,20 @@ local function _dropId(i, j, k)
   return ("%d:%d:%d"):format(i, j, k)
 end
 
+local function _loadDropSprite(sprite_data, id, specname)
+  local data = sprite_data[id]
+  
+  if not data or data.specname ~= specname then
+    data = {
+      specname = specname,
+      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)
+    }
+    sprite_data[id] = data
+  end
+
+  return data.sprite
+end
+
 function SectorView:init(route)
 
   ELEMENT.init(self)
@@ -74,6 +88,7 @@ function SectorView:init(route)
 
   self.route = route
   self.body_sprites = {}
+  self.drop_sprite_data = {}
   self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
@@ -313,7 +328,8 @@ function SectorView:draw()
             if dropcount > 1 then
               offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
             end
-            local spread_off = self.drop_offsets[_dropId(i+1, j+1, k)]
+            local drop_id = _dropId(i+1, j+1, k)
+            local spread_off = self.drop_offsets[drop_id]
             local dx, dy, t = 0, 0, 0
             if spread_off then
               dx = (spread_off.j - (j+1))*_TILE_W
@@ -322,7 +338,7 @@ function SectorView:draw()
             end
             table.insert(draw_drops, {
               drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
-              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation
+              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation, drop_id
             })
           end
         end
@@ -389,14 +405,14 @@ function SectorView:draw()
 
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, oscilation = unpack(drop)
+      local specname, x, y, z, oscilation, id = unpack(drop)
       local offset = vec2(0,0)
-      local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
+      local sprite = _loadDropSprite(self.drop_sprite_data, id, specname)
       local rx = x + _TILE_W/2 + offset.x
       local ry = y - _TILE_H*.25 + offset.y - z + oscilation
       local iw, ih = sprite:getDimensions()
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, rx, ry, 0, 1, 1, 32, 24)
+      sprite:draw(rx, ry)
       g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
     end
 

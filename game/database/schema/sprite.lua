@@ -11,7 +11,7 @@ return {
       { id = 'quad_idx', name = "Quad Index", type = 'integer',
         range = {1, 999} },
       { id = 'time', name = "Miliseconds", type = 'integer',
-        range = {1, 999} },
+        range = {1, 10000} },
     }
   }
 }
