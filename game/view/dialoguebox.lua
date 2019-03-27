@@ -11,6 +11,28 @@ local _FX_MAGNITUDE = 6
 local _FX_SPEED = 2.5
 local _font = FONT.get('Text', 20)
 
+--Time a character must stay active before next one appears
+local _CHAR_SPEED = {
+  slow      = .5,
+  medium    = .15,
+  regular   = .08,
+  fast      = .04,
+  ultrafast = .02
+}
+
+--Color a character can have
+local _CHAR_COLOR = {
+  regular = "NEUTRAL",
+  red     = "NOTIFICATION",
+  blue    = "VALID",
+  green   = "SUCCESS",
+}
+
+--Wave style consts
+_WAVE_MAGNITUDE = 2
+_WAVE_SPEED = 5
+_WAVE_REGULATOR = 10
+
 --Forward declaration for local functions
 local getTag
 
@@ -21,17 +43,17 @@ You can create a stylized text using tags. Tags follow the pattern
 [type_of_effect=value]
 
 Valid values for type and value are as follows:
-Type of effect - what it does
+type of effect - what it does
   value1 - what it does
   value2 - what it does
   valueN - what it does
 
 speed - Set current speed the text should appear
-  fastest - fastest speed
-  fast    - fast speed
-  regular - regular speed
-  medium  - slower than regular speed
-  slow    - slowest speed
+  slow      - slowest speed
+  medium    - slower than regular speed
+  regular   - regular speed
+  fast      - fast speed
+  ultrafast - fastest speed
 
 style - Set current style for the text
   none  - remove any style
@@ -64,19 +86,10 @@ function DialogueBox:init(body, i, j, side)
 
   --Text attributes
   self.text_margin = 5
+
   --time
-  self.regular_char_time = .08 --Time to appear a regular char
-  self.medium_char_time = .15 --Time to appear a slow char
-  self.slow_char_time = .5 --Time to appear a slow char
-  self.fast_char_time = .04 --Time to appear a fast char
-  self.fastest_char_time = .02 --Time to appear a fast char
   self.text_start_up_time = .15
   self.char_timer = 0
-  --color
-  self.regular_char_color = "NEUTRAL"
-  self.red_char_color = "NOTIFICATION"
-  self.blue_char_color = "VALID"
-  self.green_char_color = "SUCCESS"
 
   self.text = self:parseText(body:getDialogue())
 
@@ -108,8 +121,12 @@ function DialogueBox:draw()
   local t = self.text_start_up_time
   if t < self.char_timer then
     for i, c in ipairs(self.text) do
+      local ox, oy = 0, 0
+      if c.style == "wave" then
+        oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
+      end
       g.setColor(COLORS[c.color])
-      g.print(c.char, c.x, c.y)
+      g.print(c.char, c.x + ox, c.y + oy)
       t = t + c.time
       if t > self.char_timer then break end
     end
@@ -163,8 +180,9 @@ function DialogueBox:parseText(text)
   local i = 1
 
   --Default value
-  local time = self.regular_char_time
-  local color = self.regular_char_color
+  local time = _CHAR_SPEED.regular
+  local color = _CHAR_COLOR.regular
+  local style = "none"
 
   while i <= text:len() do
     local char = text:sub(i,i)
@@ -179,14 +197,22 @@ function DialogueBox:parseText(text)
       --Apply effect
       local err = false
       if effect_type == "speed" then
-        if self[effect_value.."_char_time"] then
-          time = self[effect_value.."_char_time"]
+        if _CHAR_SPEED[effect_value] then
+          time = _CHAR_SPEED[effect_value]
         else
           err = true
         end
       elseif effect_type == "color" then
-        if self[effect_value.."_char_color"] then
-          color = self[effect_value.."_char_color"]
+        if _CHAR_COLOR[effect_value] then
+          color = _CHAR_COLOR[effect_value]
+        else
+          err = true
+        end
+      elseif effect_type == "style" then
+        if effect_value == "none" or
+           effect_value == "wave" or
+           effect_value == "shake" then
+             style = effect_value
         else
           err = true
         end
@@ -210,7 +236,8 @@ function DialogueBox:parseText(text)
         x = x,
         y = y,
         time = time,
-        color = color
+        color = color,
+        style = style
       }
       x = x + w
 
