@@ -17,7 +17,6 @@ local _MAX_WIDTH = 2*_TILE_W
 
 --Text attributes
 local _TEXT_MARGIN = 5
-local _TEXT_START_UP_TIME = .15
 
 --Different fonts a char can have
 local _CHAR_FONT = {
@@ -96,10 +95,12 @@ font - Size of font to draw text
   regular - default font size
   big     - big font for big bois
 
-opacity - How opaque is the character
+opacity - Set opacity to draw text
   regular - totally opaque
   semi    - semi-transparent
 
+pause - Wait an amount of time before continuing text
+  any number value - will wait this much time
 ]]
 
 -- Class
@@ -117,6 +118,7 @@ function DialogueBox:init(body, i, j, side)
   self.char_timer = 0
 
   self.text_line_h = 4*_CHAR_FONT.regular:getHeight()/5
+  self.text_start_up_time = .15
 
   self.text = self:parseText(body:getDialogue())
 
@@ -145,7 +147,7 @@ function DialogueBox:draw()
 
   --Draw text
   self:updateText(dt)
-  local t = _TEXT_START_UP_TIME
+  local t = self.text_start_up_time
   if t < self.char_timer then
     for i, c in ipairs(self.text) do
       local ox, oy = 0, 0
@@ -156,8 +158,7 @@ function DialogueBox:draw()
         oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
       end
       local color = COLORS[c.color]
-      color[4] = c.opacity
-      g.setColor(color)
+      g.setColor(color[1], color[2], color[3], c.opacity)
       c.font:set()
       g.print(c.char, c.x + ox, c.y + oy)
       t = t + c.time
@@ -266,6 +267,18 @@ function DialogueBox:parseText(text)
         if effect_value == "regular" or
            effect_value == "semi" then
              opacity = _CHAR_OPACITY[effect_value]
+        else
+          err = true
+        end
+      elseif effect_type == "pause" then
+        local pause_amount = tonumber(effect_value)
+        if pause_amount then
+          --Increase start-up time in case pause is in the beginning
+          if i == 1 then
+            self.text_start_up_time = self.text_start_up_time + pause_amount
+          else
+            parsed[i-1].time = parsed[i-1].time + pause_amount
+          end
         else
           err = true
         end
