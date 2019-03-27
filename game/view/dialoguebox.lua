@@ -101,6 +101,9 @@ opacity - Set opacity to draw text
 
 pause - Wait an amount of time before continuing text
   any number value - will wait this much time
+
+endl - Create a given amount of linebreaks
+    any number value - will break this much lines
 ]]
 
 -- Class
