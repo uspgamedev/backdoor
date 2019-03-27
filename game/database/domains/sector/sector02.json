@@ -18,6 +18,7 @@
     "amount":12
   },
   "drops":{
+    "drop-info":"",
     "drops":[{
         "droprate":4,
         "droptype":"food"
@@ -30,17 +31,13 @@
     "max":10,
     "min":5,
     "recipes":[{
-        "actorspec":"dumb",
-        "bodyspec":"slime",
-        "upgrade_power":100
-      },{
         "actorspec":"grinful",
         "bodyspec":"imp",
         "upgrade_power":120
       },{
-        "actorspec":"fiendish",
-        "bodyspec":"eye",
-        "upgrade_power":150
+        "actorspec":"dumb",
+        "bodyspec":"stove",
+        "upgrade_power":100
       }]
   },
   "exits":{

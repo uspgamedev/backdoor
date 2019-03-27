@@ -1,0 +1,37 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":100
+    },{
+      "quad_idx":2,
+      "time":100
+    },{
+      "quad_idx":3,
+      "time":100
+    },{
+      "quad_idx":4,
+      "time":100
+    },{
+      "quad_idx":5,
+      "time":100
+    },{
+      "quad_idx":6,
+      "time":100
+    },{
+      "quad_idx":7,
+      "time":100
+    },{
+      "quad_idx":8,
+      "time":100
+    },{
+      "quad_idx":9,
+      "time":100
+    },{
+      "quad_idx":10,
+      "time":100
+    }],
+  "loop":true,
+  "offset":[40,80],
+  "quad_division":[5,2],
+  "texture":"stove-sheet"
+}

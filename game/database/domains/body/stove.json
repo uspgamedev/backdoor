@@ -1,0 +1,11 @@
+{
+  "appearance":"stove",
+  "con":0,
+  "description":"",
+  "drops":[],
+  "faction":"agressive",
+  "fin":-2,
+  "name":"Stove Construct",
+  "res":-2,
+  "extends":false
+}
