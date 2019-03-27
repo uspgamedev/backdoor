@@ -21,7 +21,7 @@ DEFS.ALL_ATTRIBUTES = {
 }
 DEFS.BODY_ATTRIBUTES = {
   "DEF", "EFC", "VIT",
-  "RES", "FIN", "CON"
+  "FIN", "CON", "RES"
 }
 DEFS.CARD_ATTRIBUTES = {
   "COR", "ARC", "ANI", "NONE",
