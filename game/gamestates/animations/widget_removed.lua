@@ -9,7 +9,7 @@ function ANIM:script(route, view, report)
     local widget_slot = view.actor:getWidgets():findCardSlot(report.widget_card)
     local backbuffer = view.backbuffer
     local color = COLORS.FLASH_DISCARD
-    self.yield(Transmission(widget_slot, backbuffer, 0.5, color))
+    self.wait(Transmission(widget_slot, backbuffer, 0.5, color))
   end
 end
 

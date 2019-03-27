@@ -29,7 +29,7 @@ function _activity:quit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   love.event.quit()
 end
 
@@ -39,7 +39,7 @@ function _activity:enterMenu()
   _soundtrack.playTheme('title-menu')
   fade_view:register("GUI")
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   _locked = false
   return fade_view:destroy()
 end
@@ -49,7 +49,7 @@ function _activity:changeState(mode, to, ...)
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:register("GUI")
   fade_view:destroy()
   if to == GS.PLAY then
