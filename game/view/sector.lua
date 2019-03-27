@@ -196,10 +196,6 @@ function SectorView:getBodySprite(body)
   return body_sprite
 end
 
-function SectorView:setBodySprite(body, draw)
-  self.body_sprites[body:getId()] = draw
-end
-
 function SectorView:sectorChanged()
   self.sector_changed = true
 end
