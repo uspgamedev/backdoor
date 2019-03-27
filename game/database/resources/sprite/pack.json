@@ -1,0 +1,25 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":1000
+    },{
+      "quad_idx":2,
+      "time":100
+    },{
+      "quad_idx":3,
+      "time":100
+    },{
+      "quad_idx":4,
+      "time":100
+    },{
+      "quad_idx":5,
+      "time":100
+    },{
+      "quad_idx":6,
+      "time":100
+    }],
+  "loop":true,
+  "offset":[36,32],
+  "quad_division":[6,1],
+  "texture":"pack-drop"
+}
