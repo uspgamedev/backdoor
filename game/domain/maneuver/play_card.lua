@@ -63,7 +63,6 @@ function PLAYCARD.perform(actor, inputvalues)
   })
 
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
-  print("## Played card: " .. card.id .. ':' .. card.specname)
 end
 
 return PLAYCARD
