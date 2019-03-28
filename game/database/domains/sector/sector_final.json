@@ -18,6 +18,7 @@
     "amount":24
   },
   "drops":{
+    "drop-info":"",
     "drops":[{
         "droprate":4,
         "droptype":"food"
@@ -33,14 +34,6 @@
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat",
         "upgrade_power":300
-      },{
-        "actorspec":"fiendish",
-        "bodyspec":"eye",
-        "upgrade_power":200
-      },{
-        "actorspec":"grinful",
-        "bodyspec":"imp",
-        "upgrade_power":200
       }]
   },
   "exits":{

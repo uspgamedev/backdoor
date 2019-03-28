@@ -37,6 +37,7 @@ local function _newAnimationMeta(name, info, texture)
   end
 
   local anim = {
+    frame_size = {qw, qh},
     frames = frames,
     framecount = #frames,
     loop = info.loop,
@@ -52,8 +53,8 @@ local function _updateAndGetCurrentQuadOfSprite(sprite)
   local animation = sprite.animation
   local dt = floor(delta()*1000)
   sprite.timecount = sprite.timecount + dt
-  if sprite.timecount >= animation.frames[sprite.frame].time then
-    sprite.timecount = 0
+  while sprite.timecount >= animation.frames[sprite.frame].time do
+    sprite.timecount = sprite.timecount - animation.frames[sprite.frame].time
     if animation.loop then
       sprite.frame = sprite.frame % animation.framecount + 1
     else
@@ -76,6 +77,10 @@ function Sprite:init(texture, animation)
   self.frame = 1
   self.decor = false
   self.timecount = 0
+end
+
+function Sprite:getDimensions()
+  return unpack(self.animation.frame_size)
 end
 
 function Sprite:setDecorator(f)

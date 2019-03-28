@@ -2,7 +2,7 @@
 -- local _activity = Activity()
 -- function _activity:doSomething(x, y)
 --   x = x + 1
---   self.yield(tweenAndThen(self.resume))
+--   self.wait(tween(...))
 --   y = y + 1
 -- end
 --
@@ -48,11 +48,15 @@ function Task:instance (obj, func, ...)
     return result
   end
 
-  function yield(deferred, ...)
+  function done()
+    return coroutine.status(task) == 'dead'
+  end
+
+  function wait(deferred)
     if deferred and deferred.andThen then
       deferred:andThen(resume)
     end
-    return coroutine.yield(deferred, ...)
+    return coroutine.yield(obj)
   end
 
   function __operator:newindex()

@@ -1,6 +1,6 @@
 {
   "appearance":"slime",
-  "con":-2,
+  "con":-1,
   "description":"Delicious when fried.",
   "drops":[{
       "droprate":10,
@@ -15,6 +15,6 @@
   "faction":"agressive",
   "fin":-2,
   "name":"Slime",
-  "res":-1,
+  "res":-2,
   "extends":false
 }

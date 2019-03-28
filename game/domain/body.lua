@@ -257,6 +257,11 @@ function Body:removeWidget(index)
   local placement = card:getWidgetPlacement()
   local owner = card:getOwner()
   self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
+  coroutine.yield('report', {
+    type = 'widget_removed',
+    body = self,
+    widget_card = card
+  })
   self:unequip(placement)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then

@@ -8,5 +8,6 @@
   "extends":"strong",
   "initial_buffer":[],
   "name":"Grinning",
-  "signature":"glare"
+  "signature":"scratch",
+  "traits":[]
 }

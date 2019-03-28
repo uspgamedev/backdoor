@@ -65,7 +65,7 @@ function Slot:render(g)
     icon:setFilter('linear', 'linear')
     g.setColor(COLORS[widget:getRelatedAttr()] + flashfx)
     g.rectangle("fill", 0, 0, sqsize, sqsize)
-    g.setColor(COLORS.BLACK + flashfx)
+    g.setColor(COLORS.BLACK + flashfx * 2)
     g.draw(icon, 0, 0, 0, sqsize/iw, sqsize/ih)
   elseif self.label then
     g.setColor(COLORS.BLACK)

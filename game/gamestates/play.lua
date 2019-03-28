@@ -5,14 +5,10 @@ local GUI         = require 'devmode.gui'
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
 
+local GameplayView = require 'view.gameplay'
 local Route       = require 'domain.route'
-local SectorView  = require 'view.sector'
-local BufferView  = require 'view.buffer'
-local ActorView   = require 'view.actorpanel'
-local Announcement = require 'view.announcement'
 local FadeView    = require 'view.fade'
 local SoundTrack  = require 'view.soundtrack'
-local ActionHUD   = require 'view.action_hud'
 local Util        = require "steaming.util"
 local Draw        = require "draw"
 
@@ -41,7 +37,7 @@ local function _saveRoute()
 end
 
 local function _playTurns(...)
-  local request,extra = _route.playTurns(...)
+  local request, extra = _route.playTurns(...)
 
   if request == "playerDead" then
     _view.action_hud:destroy()
@@ -53,38 +49,15 @@ local function _playTurns(...)
   elseif request == "changeSector" then
     _activity:changeSector(...)
   elseif request == "report" then
-    _view.sector:startVFX(extra)
-    _view.action_hud:sendAlert(extra.type == 'text_rise'
-                               and (extra.body == _player:getBody()))
-    SWITCHER.push(GS.ANIMATION, _view.sector)
+    
+    SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
 end
 
 local function _initFrontend()
 
-  -- sector view
-  local sector = _route.getCurrentSector()
-
-  _view.sector = SectorView(_route)
-  _view.sector:register("L1", nil, "sector_view")
-  _view.sector:lookAt(_player)
-
-  _view.action_hud = ActionHUD(_route)
-  _view.action_hud:setSubtype('frontend-hud')
-
-  -- Buffer views
-  _view.frontbuffer = BufferView.newFrontBufferView(_route)
-  _view.frontbuffer:register("HUD_BG", nil, "frontbuffer_view")
-  _view.backbuffer = BufferView.newBackBufferView(_route)
-  _view.backbuffer:register("HUD_BG", nil, "backbuffer_view")
-
-  -- Actor view
-  _view.actor = ActorView(_player)
-
-  -- Announcement box
-  _view.announcement = Announcement()
-  _view.announcement:register("HUD", nil, "announcement")
+  _view:setup(_route)
 
   -- GUI
   _gui = GUI(_view.sector)
@@ -92,8 +65,7 @@ local function _initFrontend()
 
   -- Sound Track
   _soundtrack = SoundTrack()
-  _soundtrack.playTheme(sector:getTheme()['bgm'])
-
+  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
 
 end
 
@@ -102,10 +74,10 @@ function _activity:saveAndQuit()
   _saveRoute()
   fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   SWITCHER.switch(GS.START_MENU)
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
 end
 
@@ -114,15 +86,15 @@ function _activity:changeSector()
   PLAYSFX 'change-sector'
   fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   local change_sector_ok = _route.checkSector()
   assert(change_sector_ok, "Sector Change fuck up")
   _view.sector:sectorChanged()
   _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
-  self.yield()
+  self.wait()
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
   return _playTurns()
 end
@@ -131,9 +103,9 @@ function _activity:fadeInGUI()
   local fade_view = FadeView(FadeView.STATE_FADED)
   fade_view:register("GUI")
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
-  self.yield()
+  self.wait()
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
 end
 
@@ -148,8 +120,8 @@ function state:enter(pre, route_data)
   _route = Route()
   _route.loadState(route_data)
 
-  -- View table
-  _view = {}
+  -- create general gameplay view
+  _view = GameplayView()
 
   -- start gamestate
   _playTurns()
@@ -167,9 +139,7 @@ function state:leave()
 
   _saveRoute()
   _route.destroyAll()
-  for _,view in pairs(_view) do
-    view:destroy()
-  end
+  _view:destroy()
   _gui:destroy()
   _soundtrack.playTheme(nil)
   Util.destroyAll()

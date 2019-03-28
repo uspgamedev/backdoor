@@ -1,8 +1,8 @@
 {
   "ability":{
     "effects":[{
-        "attr":"=cor",
-        "base":6,
+        "attr":"=arc",
+        "base":3,
         "name":"damage_on_target",
         "sfx":"example",
         "target":"=target",
@@ -22,9 +22,9 @@
         "dif-fact":false
       },{
         "name":"get_attribute",
-        "output":"cor",
+        "output":"arc",
         "type":"operator",
-        "which":"COR"
+        "which":"ARC"
       },{
         "name":"get_body_at",
         "output":"target",

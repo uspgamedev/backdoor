@@ -1,0 +1,10 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":999
+    }],
+  "loop":true,
+  "offset":[32,24],
+  "quad_division":[1,1],
+  "texture":"box"
+}

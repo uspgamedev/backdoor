@@ -133,7 +133,7 @@ local function _findPlayedCardViewDestination(cardview)
     return Util.findId('backbuffer_view'), COLORS.FLASH_DISCARD
   elseif cardview.card:isWidget() then
     return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card),
-           COLORS.NEUTRAL
+           COLORS.EQUIP
   end
   return error("Non card type encountered")
 end
@@ -156,10 +156,7 @@ function ActionHUD:playCard(index)
     while ann:isBusy() do wait(1) end
     ann:announce(cardview.card:getName())
     local destination,color = _findPlayedCardViewDestination(cardview)
-    local bends = RANDOM.safeGenerate(3, 10)
-    Transmission(cardview, destination, color, nil, bends):register("HUD_FX")
-    cardview:flashFor(0.5, color)
-    destination:flashFor(0.5, color)
+    Transmission(cardview, destination, 0.5, color)
     wait(0.5)
     ann:unlock()
     cardview:kill()

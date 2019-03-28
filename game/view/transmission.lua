@@ -1,7 +1,9 @@
+
 local vec2    = require 'cpml' .vec2
 local COLORS  = require 'domain.definitions.colors'
 local PLAYSFX = require 'helpers.playsfx'
 local RANDOM  = require 'common.random'
+local Deferred = require 'common.deferred'
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
@@ -19,7 +21,7 @@ local _MIN_BEND_OFFSET = 5
 local _MAX_BEND_OFFSET = 20
 local _BEND_ANGLE = math.pi/5
 
-function Transmission:init(origin, target, color, duration, bending_number)
+function Transmission:init(origin, target, duration, color)
   ELEMENT.init(self)
   self.target = target
   self.origin = origin
@@ -35,10 +37,12 @@ function Transmission:init(origin, target, color, duration, bending_number)
   self.tar_oy = RANDOM.safeGenerate(-_MAX_OFFSET, _MAX_OFFSET)
 
   --Create bendings
-  self.bending_number = bending_number or 6
+  local bending_number = RANDOM.safeGenerate(3, 10)
+  self.bending_number = bending_number
   self.bending_offsets = {}
   for i = 1, self.bending_number do
-    self.bending_offsets[i] = RANDOM.safeGenerate(_MIN_BEND_OFFSET, _MAX_BEND_OFFSET)
+    self.bending_offsets[i] = RANDOM.safeGenerate(_MIN_BEND_OFFSET,
+                                                  _MAX_BEND_OFFSET)
   end
   self.bending_angles = {}
   for i = 1, self.bending_number do
@@ -47,10 +51,23 @@ function Transmission:init(origin, target, color, duration, bending_number)
   self.bending_invert = RANDOM.safeGenerate() > 0.5
 
   self.color = color or COLORS.NEUTRAL
-  self:addTimer("start", MAIN_TIMER, "tween", duration or 0.5, self,
-                { width_scale = 0 }, 'in-back',
-                function () self:kill() end)
+
+  self.deferred = function () end
+
+  assert(duration)
+
   PLAYSFX 'transmission'
+  self:register('HUD_FX')
+
+  self.origin:flashFor(duration, self.color)
+  self.target:flashFor(duration, self.color)
+  self:addTimer("start", MAIN_TIMER, "tween", duration, self,
+                { width_scale = 0 }, 'in-back',
+                function () self:kill(); return self.deferred() end)
+end
+
+function Transmission:andThen(deferred)
+  self.deferred = deferred
 end
 
 function Transmission:update(dt)

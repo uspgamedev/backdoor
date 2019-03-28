@@ -37,15 +37,15 @@ end
 function _activity:announce(ann)
   ann.add:snap(1)
   ann.flash:snap(0)
-  self.yield(ann.flash:set(_FLASH_TIME))
+  self.wait(ann.flash:set(_FLASH_TIME))
 
-  self.yield(ann.add:set(0))
+  self.wait(ann.add:set(0))
 
   ann.cooldown:snap(2)
-  self.yield(ann.cooldown:set(0))
+  self.wait(ann.cooldown:set(0))
 
   ann.add:set(1)
-  self.yield(ann.flash:set(0))
+  self.wait(ann.flash:set(0))
 
   ann.text = false
   ann.invisible = true

@@ -10,7 +10,6 @@ function Node:init()
   self.position = Vec2()
   self.parent = nil
   self.children = {}
-  self.dirty = false
 end
 
 function Node:setPosition(x, y)
