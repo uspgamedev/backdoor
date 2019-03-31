@@ -23,13 +23,13 @@ end
 function FX.process (actor, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  local dmg, blocked = fieldvalues.target:takeDamageFrom(amount, actor)
+  local result = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
     type = 'text_rise',
-    text_type = blocked and 'blocked-damage' or 'damage',
+    text_type = result.blocked and 'blocked-damage' or 'damage',
     body = fieldvalues['target'],
-    amount = dmg,
+    amount = result.dmg,
     sfx = fieldvalues.sfx,
   })
 end

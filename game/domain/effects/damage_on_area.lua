@@ -33,12 +33,12 @@ function FX.process (actor, fieldvalues)
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
         if not ignore_owner or body ~= actor:getBody() then
-          local dmg, blocked = body:takeDamageFrom(amount, actor)
+          local result = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
             type = 'text_rise',
-            text_type = blocked and 'blocked-damage' or 'damage',
             body = body,
-            amount = dmg,
+            text_type = result.blocked and 'blocked-damage' or 'damage',
+            amount = result.dmg,
           })
         end
       end

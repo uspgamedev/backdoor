@@ -416,7 +416,7 @@ function Body:takeDamageFrom(amount, source)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
-  return dmg, blocked
+  return { dmg = dmg, blocked = blocked }
 end
 
 function Body:loseLifeFrom(amount, source)
