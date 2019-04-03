@@ -37,10 +37,9 @@ function BUILDER.build(idgenerator, player_data)
     BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
     BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
   }
-  npcs[1].dialogue = [[
-  [speed=fast][size=big][style=shake]HELLO[pause=1.5][endl=1][style=none][speed=regular][size=regular]How are you today, [color=red]my friend?[color=regular][pause=1.5][endl=1][speed=slow]...[speed=regular]well I'm feeling totally [style=wave][color=blue][speed=medium]groooooovy[style=none]!
-  ]]
-  npcs[2].dialogue = "howdy, i like pears.[pause=1][endl=1][size=small][speed=fast]dont tell anyone my  [opacity=semi][color=red][speed=medium][style=shake]dark secret"
+  npcs[1].dialogue = "Welcome to pre-alpha backdoor!"
+
+  npcs[2].dialogue = "Find [color=red]Vanth's fruit[color=regular] to win the game."
 
 
   -- generate first sector

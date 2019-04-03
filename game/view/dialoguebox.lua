@@ -234,8 +234,9 @@ function DialogueBox:parseText(text)
       local effect_type, effect_value
 
       --Get effect
-      text, effect_type, effect_value = getTag(text, i)
-
+      local data = getTag(text, i)
+      text, effect_type, effect_value = data.text, data.type, data.value
+      
       --Apply effect
       local err = false
       if effect_type == "speed" then
@@ -382,7 +383,7 @@ function getTag(text, tag_start_pos)
   text = text:sub(0, tag_start_pos - 1) .. text:sub(tag_end_pos + 1, -1)
 
 
-  return text, type, value
+  return {text = text, type = type, value = value}
 end
 
 return DialogueBox
