@@ -163,7 +163,7 @@ function DialogueBox:draw()
       local color = COLORS[c.color]
       g.setColor(color[1], color[2], color[3], c.opacity)
       c.font:set()
-      g.print(c.char, c.x + ox, c.y + oy)
+      g.print(c.object, c.x + ox, c.y + oy)
       t = t + c.time
       if t > self.char_timer then break end
     end
@@ -197,11 +197,11 @@ end
 function DialogueBox:getSize()
   local max_x, max_y = 0, 0
   for _, c in ipairs(self.text) do
-    if max_x < c.x + c.font:getWidth(c.char) then
-      max_x = c.x + c.font:getWidth(c.char)
+    if max_x < c.x + c.width then
+      max_x = c.x + c.width
     end
-    if max_y < c.y + c.font:getHeight(c.char) then
-      max_y = c.y + c.font:getHeight(c.char)
+    if max_y < c.y + c.height then
+      max_y = c.y + c.height
     end
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
@@ -227,16 +227,16 @@ function DialogueBox:parseText(text)
   local font = _CHAR_FONT.regular
 
   while i <= text:len() do
-    local char = text:sub(i,i)
+    local object = text:sub(i,i)
 
     --Special tag
-    if char == "[" then
+    if object == "[" then
       local effect_type, effect_value
 
       --Get effect
       local data = getTag(text, i)
       text, effect_type, effect_value = data.text, data.type, data.value
-      
+
       --Apply effect
       local err = false
       if effect_type == "speed" then
@@ -307,19 +307,23 @@ function DialogueBox:parseText(text)
 
     --Common character
     else
-      local w = font:getWidth(char)
-      local h = font:getHeight(char)
+      local w = font:getWidth(object)
+      local h = font:getHeight(object)
       local ty = y + self.text_line_h/2 - h/2
-      parsed[i] = {
-        char = char,
-        x = x,
-        y = ty,
-        time = time,
-        color = color,
-        opacity = opacity,
-        style = style,
-        font = font
-      }
+      table.insert(parsed,
+        {
+          object = object,
+          x = x,
+          y = ty,
+          width = w,
+          height = h,
+          time = time,
+          color = color,
+          opacity = opacity,
+          style = style,
+          font = font
+        }
+      )
       x = x + w
 
       --Wrap words
@@ -329,14 +333,14 @@ function DialogueBox:parseText(text)
         --Find start of current word
         local j = i
         while j >= 1 do
-          if parsed[j].char == " " then break end
+          if parsed[j].object == " " then break end
           j = j - 1
         end
         if j == 0 then error("Word is too damn big") end
-        --Fix position of every character
+        --Fix position of every objectacter
         for k = j+1, i do
-          local w = parsed[k].font:getWidth(parsed[k].char)
-          local h = parsed[k].font:getHeight(parsed[k].char)
+          local w = parsed[k].width
+          local h = parsed[k].height
           parsed[k].x = x
           parsed[k].y = y + self.text_line_h/2 - h/2
           x = x + w
