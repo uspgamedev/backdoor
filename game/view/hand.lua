@@ -44,7 +44,7 @@ function HandView:init(route)
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
   self.prev_cursor = Button(x, y, "left")
-  self.next_cursor = Button(x, y, "left")
+  self.next_cursor = Button(x, y, "right")
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
