@@ -31,6 +31,17 @@ function BUILDER.build(idgenerator, player_data)
   local pbody = BODY_BUILDER.buildState(idgenerator, species, 16, 12)
   local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
 
+  -- generate npcs
+
+  local npcs = {
+    BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
+    BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
+  }
+  npcs[1].dialogue = "Welcome to pre-alpha backdoor!"
+
+  npcs[2].dialogue = "Find [color=red]Vanth's fruit[color=regular] to win the game."
+
+
   -- generate first sector
   local tiledata = DB.loadSetting('init_tiledata')
   local first_sector
@@ -47,6 +58,9 @@ function BUILDER.build(idgenerator, player_data)
   first_sector.h = #tiledata.tiles
   first_sector.w = #tiledata.tiles[1]
   first_sector.bodies = { pbody }
+  for _, body in ipairs(npcs) do
+    table.insert(first_sector.bodies, body)
+  end
   first_sector.actors = { pactor }
   first_sector.generated = true
   local _,exit = next(first_sector.exits)
@@ -56,4 +70,3 @@ function BUILDER.build(idgenerator, player_data)
 end
 
 return BUILDER
-

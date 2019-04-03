@@ -3,6 +3,7 @@ local RES         = require 'resources'
 local Color       = require 'common.color'
 local math        = require 'common.math'
 local CAM         = require 'common.camera'
+local TILE        = require 'common.tile'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
@@ -10,6 +11,7 @@ local ACTION      = require 'domain.definitions.action'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
+local DIALOGUEBOX = require 'view.dialoguebox'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
@@ -60,20 +62,6 @@ local function _dropId(i, j, k)
   return ("%d:%d:%d"):format(i, j, k)
 end
 
-local function _loadDropSprite(sprite_data, id, specname)
-  local data = sprite_data[id]
-  
-  if not data or data.specname ~= specname then
-    data = {
-      specname = specname,
-      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)
-    }
-    sprite_data[id] = data
-  end
-
-  return data.sprite
-end
-
 function SectorView:init(route)
 
   ELEMENT.init(self)
@@ -88,7 +76,7 @@ function SectorView:init(route)
 
   self.route = route
   self.body_sprites = {}
-  self.drop_sprite_data = {}
+  self.body_dialogues = {}
   self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
@@ -211,6 +199,32 @@ function SectorView:getBodySprite(body)
   return body_sprite
 end
 
+function SectorView:getBodyDialogue(body, i, j, player_i, player_j)
+  local id = body:getId()
+
+  --Get appropriate position for dialogue box
+  local side
+  if player_j <= j then
+    side = "right"
+  else
+    side = "left"
+  end
+
+  local dialogue_box = self.body_dialogues[id]
+  if not dialogue_box then
+    dialogue_box = DIALOGUEBOX(body, i - 1, j - 1, side)
+    self.body_dialogues[id] = dialogue_box
+  else
+    dialogue_box:setSide(side)
+  end
+  return dialogue_box
+end
+
+function SectorView:resetBodyDialogue(body)
+  local id = body:getId()
+  self.body_dialogues[id] = nil
+end
+
 function SectorView:sectorChanged()
   self.sector_changed = true
 end
@@ -270,6 +284,7 @@ function SectorView:draw()
   -- draw tall things
   g.push()
   local all_bodies = {}
+  local dialogue_boxes = {}
   local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
@@ -310,7 +325,16 @@ function SectorView:draw()
         if body then
           table.insert(draw_bodies, {body, x, 0})
           table.insert(all_bodies, body)
+          local player = self.route.getControlledActor():getBody()
+          local player_i, player_j = player:getPos()
+          local body_i, body_j = body:getPos()
+          if body ~= player and TILE.dist(player_i, player_j, body_i, body_j) <= 1 then
+            table.insert(dialogue_boxes, self:getBodyDialogue(body, body_i, body_j, player_i, player_j))
+          else
+            self:resetBodyDialogue(body)
+          end
         end
+
         local dropcount = #tile.drops
         local angle = math.pi*2/dropcount
         local phase = 3*math.pi/4
@@ -328,8 +352,7 @@ function SectorView:draw()
             if dropcount > 1 then
               offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
             end
-            local drop_id = _dropId(i+1, j+1, k)
-            local spread_off = self.drop_offsets[drop_id]
+            local spread_off = self.drop_offsets[_dropId(i+1, j+1, k)]
             local dx, dy, t = 0, 0, 0
             if spread_off then
               dx = (spread_off.j - (j+1))*_TILE_W
@@ -338,7 +361,7 @@ function SectorView:draw()
             end
             table.insert(draw_drops, {
               drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
-              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation, drop_id
+              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation
             })
           end
         end
@@ -405,17 +428,16 @@ function SectorView:draw()
 
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, oscilation, id = unpack(drop)
+      local specname, x, y, z, oscilation = unpack(drop)
       local offset = vec2(0,0)
-      local sprite = _loadDropSprite(self.drop_sprite_data, id, specname)
+      local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
       local rx = x + _TILE_W/2 + offset.x
       local ry = y - _TILE_H*.25 + offset.y - z + oscilation
       local iw, ih = sprite:getDimensions()
       g.setColor(COLORS.NEUTRAL)
-      sprite:draw(rx, ry)
+      g.draw(sprite, rx, ry, 0, 1, 1, 32, 24)
       g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
     end
-
 
     g.translate(0, _TILE_H)
   end
@@ -433,6 +455,11 @@ function SectorView:draw()
         SECTOR_COOLDOWNBAR.draw(actor, x, y, is_controlled)
       end
     end
+  end
+
+  --Draw dialogue_boxes
+  for _,box in ipairs(dialogue_boxes) do
+    box:draw()
   end
 
   -- name, above everything
