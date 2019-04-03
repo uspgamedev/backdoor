@@ -1,0 +1,11 @@
+{
+  "ability":{
+    "effects":[{
+        "name":"win",
+        "type":"effect"
+      }],
+    "inputs":[]
+  },
+  "name":"Vanth Fruit of Concord",
+  "sprite":"vanth-fruit-concord"
+}

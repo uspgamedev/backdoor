@@ -25,6 +25,9 @@
       },{
         "droprate":2,
         "droptype":"pack"
+      },{
+        "droprate":8,
+        "droptype":"vanth-fruit-concord"
       }]
   },
   "encounters":{
