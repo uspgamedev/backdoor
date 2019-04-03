@@ -43,8 +43,6 @@ local function _playTurns(...)
     _view.action_hud:destroy()
     _view.actor:destroy()
     SWITCHER.push(GS.GAMEOVER, _player, _view)
-  elseif request == "victory" then
-    SWITCHER.push(GS.VICTORY, _player, _view)
   elseif request == "userTurn" then
     _saveRoute()
     SWITCHER.push(GS.USER_TURN, _route, _view)
@@ -173,7 +171,7 @@ function state:resume(state, args)
     _next_action = args.next_action
   elseif state == GS.ANIMATION then
     _playTurns()
-  elseif state == GS.GAMEOVER or state == GS.VICTORY then
+  elseif state == GS.GAMEOVER then
     SWITCHER.switch(GS.START_MENU)
   end
 

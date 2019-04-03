@@ -7,8 +7,8 @@ function FX.preview()
   return "win the game"
 end
 
-function FX.process (actor,fieldvalues)
-  coroutine.yield('victory')
+function FX.process(actor,fieldvalues)
+  coroutine.yield('playerDead')
 end
 
 return FX
