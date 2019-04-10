@@ -130,7 +130,8 @@ opacity - Set opacity to draw text
 image - Will draw an image on your text
   id - identifier for image (just as it is used in the database)
     <any string> -- will search for an image in the db with this name to draw
-
+  scale - (optional) defines a scale to apply when drawing this image
+    <any number value> - set scale for this value
 pause - Wait an amount of time before continuing text
   value - how long to pause
     <any number value> - will wait this much time
@@ -204,7 +205,7 @@ function DialogueBox:draw()
         g.print(c.object, c.x + ox, c.y + oy)
       elseif c.type == "image" then
         g.setColor(1.0, 1.0, 1.0, c.opacity)
-        g.draw(c.object, c.x + ox, c.y + oy)
+        g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
       else
         error("Not a valid type for object: " .. c.type)
       end
@@ -325,10 +326,10 @@ function parseTag(text, tag_start_pos)
   local type --Main attribute
   local aux_att = {} --Auxiliary attributes
   --Iterate through all attributes the tag have
-  for att in effect:gmatch("[^/%[%]]+") do
+  for att in effect:gmatch("[^/]+") do
 
     --Parse attribute and extract identifier/value from effect
-    local identifier, value = att:match("(%w+):([%w_-]+)")
+    local identifier, value = att:match("(%w+):([%w_%-%.]+)")
 
     if not identifier or not value then
       error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
@@ -404,7 +405,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
   elseif type == "image" then
     if aux_att["id"] then
       local image = RES.loadTexture(aux_att["id"])
-      addImage(image, parsed_text, attributes, dialogue_box)
+      addImage(image, aux_att["scale"], parsed_text, attributes, dialogue_box)
     else
       err = true
     end
@@ -480,10 +481,13 @@ function addCharacter(char, parsed_text, attributes, dialogue_box)
 end
 
 --Add an image to our parsed table
-function addImage(image, parsed_text, attributes, dialogue_box)
+function addImage(image, scale, parsed_text, attributes, dialogue_box)
+
+  scale = scale and tonumber(scale) or 1
+
   --Get dimensions for our image
-  local w = image:getWidth()
-  local h = image:getHeight()
+  local w = image:getWidth() * scale
+  local h = image:getHeight() * scale
 
   --Vertically centralize text
   local ty = attributes.y + dialogue_box.text_line_h/2 - h/2
@@ -492,6 +496,7 @@ function addImage(image, parsed_text, attributes, dialogue_box)
     {
       type = "image",
       object = image,
+      scale = scale,
       x = attributes.x,
       y = ty,
       width = w,
