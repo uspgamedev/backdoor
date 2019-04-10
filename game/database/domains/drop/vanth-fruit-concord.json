@@ -1,10 +1,26 @@
 {
   "ability":{
     "effects":[{
-        "name":"win",
-        "type":"effect"
+        "attr":999,
+        "base":999,
+        "name":"damage_on_target",
+        "target":"=self_body",
+        "type":"effect",
+        "sfx":false
       }],
-    "inputs":[]
+    "inputs":[{
+        "name":"self",
+        "output":"self_actor",
+        "type":"operator"
+      },{
+        "actor":"=self_actor",
+        "name":"get_actor_body",
+        "output":"self_body",
+        "type":"operator"
+      },{
+        "name":"is_controlled_actor",
+        "type":"input"
+      }]
   },
   "name":"Vanth Fruit of Concord",
   "sprite":"vanth-fruit-concord"
