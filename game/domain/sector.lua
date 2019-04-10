@@ -473,6 +473,7 @@ function _turnLoop(self, ...)
     --Initialize actor queue
     for _,actor in ipairs(self.actors) do
       actor:tick()
+      actor:grabDrops(self:getTile(actor:getPos()))
       actor:updateFov(self)
       table.insert(actors_queue,actor)
     end
@@ -484,7 +485,6 @@ function _turnLoop(self, ...)
 
       if actor:ready() then
         while actor:ready() do
-          actor:grabDrops(self:getTile(actor:getPos()))
           actor:makeAction()
           manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
         end
