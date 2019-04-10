@@ -4,6 +4,7 @@ local VIEWDEFS = require 'view.definitions'
 local ELEMENT  = require "steaming.classes.primitives.element"
 local COLORS   = require 'domain.definitions.colors'
 local FONT     = require 'view.helpers.font'
+local RES      = require 'resources'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -60,52 +61,86 @@ local _SHAKE_MAGNITUDE = 1
 local parseTag
 local interpretateTag
 local addCharacter
+local addImage
 local wrapIfNeeded
 
 --[[
 HOW TEXT AND TAGS WORK
 
-You can create a stylized text using tags. Tags follow the pattern
-[type_of_effect=value]
+You can create a stylized text using tags.
+Tags are made of one or more attributes, following the pattern:
 
-Valid values for type and value are as follows:
-type of effect - what it does
-  value1 - what it does
-  value2 - what it does
-  valueN - what it does
+[attribute1/attribute2/.../attributeX]
 
-speed - Set current speed the text should appear
-  slow      - slowest speed
-  medium    - slower than regular speed
-  regular   - regular speed
-  fast      - fast speed
-  ultrafast - fastest speed
+Each attribute defines a characteristic for the effect you want to apply.
+An attribute follows the pattern:
 
-style - Set current style for the text
-  none  - remove any style
-  wave  - wave-like text
-  shake - characters will shake frenetically
+identifier:value
 
-color - Set current color to draw text
-  regular - default color (white)
-  red     - red color
-  blue    - blue color
-  green   - green color
+(IMPORTANT: All tags must have the main attribute 'type')
 
-size - Size of font to draw text
-  small   - smol-sized font
-  regular - default font size
-  big     - big font for big bois
+Example of a stylized "hello world", where the 'hello' is red:
+
+"[type:color/value:red]Hello[type:color/value:regular] world!"
+-----------------------------------------------------------
+
+Below is a list of possible effects, detailed as followed:
+
+type_of_effect - what it does
+  identifier1 - what it does
+    possible_value1 - what it does
+    possible_value2 - what it does
+    ...
+    possible_valueN - what it does
+
+===================LIST OF EFFECTS=========================
+
+speed - set current speed the text should appear
+  value - what speed to set
+    slow      - slowest speed
+    medium    - slower than regular speed
+    regular   - regular speed
+    fast      - fast speed
+    ultrafast - fastest speed
+
+style - set current style for the text
+  value - what style to apply
+    none  - remove any style
+    wave  - wave-like text
+    shake - characters will shake frenetically
+
+color - set current color to draw text
+  value - what color to use
+    regular - default color (white)
+    red     - red color
+    blue    - blue color
+    green   - green color
+
+size - size of font to draw text
+  value - what size to use
+    small   - smol-sized font
+    regular - default font size
+    big     - big font for big bois
 
 opacity - Set opacity to draw text
-  regular - totally opaque
-  semi    - semi-transparent
+  value - what style to use
+    regular - totally opaque
+    semi    - semi-transparent
+
+image - Will draw an image on your text
+  id - identifier for image (just as it is used in the database)
+    <any string> -- will search for an image in the db with this name to draw
 
 pause - Wait an amount of time before continuing text
-  any number value - will wait this much time
+  value - how long to pause
+    <any number value> - will wait this much time
 
 endl - Create a given amount of linebreaks
-    any number value - will break this much lines
+  value - number of lines to break
+    <any number value> - will break this much lines
+
+============================================================
+
 ]]
 
 -- Class
@@ -162,10 +197,17 @@ function DialogueBox:draw()
         ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
         oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
       end
-      local color = COLORS[c.color]
-      g.setColor(color[1], color[2], color[3], c.opacity)
-      c.font:set()
-      g.print(c.object, c.x + ox, c.y + oy)
+      if c.type == "character" then
+        local color = COLORS[c.color]
+        g.setColor(color[1], color[2], color[3], c.opacity)
+        c.font:set()
+        g.print(c.object, c.x + ox, c.y + oy)
+      elseif c.type == "image" then
+        g.setColor(1.0, 1.0, 1.0, c.opacity)
+        g.draw(c.object, c.x + ox, c.y + oy)
+      else
+        error("Not a valid type for object: " .. c.type)
+      end
       t = t + c.time
       if t > self.char_timer then break end
     end
@@ -280,68 +322,96 @@ function parseTag(text, tag_start_pos)
   local tag_end_pos = i
   local effect = text:sub(tag_start_pos + 1, tag_end_pos - 1)
 
-  --Extract type and value from effect
-  local type, value = effect:match("(%w+)=(%w+)")
-  if not type or not value then
-    error("tag didn't match [type=value] pattern")
+  local type --Main attribute
+  local aux_att = {} --Auxiliary attributes
+  --Iterate through all attributes the tag have
+  for att in effect:gmatch("[^/%[%]]+") do
+
+    --Parse attribute and extract identifier/value from effect
+    local identifier, value = att:match("(%w+):([%w_-]+)")
+
+    if not identifier or not value then
+      error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
+    end
+    if identifier == "type" then
+      type = value
+    else
+      aux_att[identifier] = value
+    end
+
+  end
+
+  if not type then
+    error("tag didn't have the main attribute 'type': \n"..text:sub(tag_start_pos, tag_end_pos))
   end
 
   --Remove tag from text
   text = text:sub(0, tag_start_pos - 1) .. text:sub(tag_end_pos + 1, -1)
 
 
-  return {text = text, type = type, value = value}
+  return {text = text, type = type, aux_att = aux_att}
 end
 
 --Apply correspondent effect from data and change correspondent attributes
 function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
   local err = false
   local type = effect_data.type
-  local value = effect_data.value
+  local aux_att = effect_data.aux_att --Auxiliary attributes
 
   if type == "speed" then
-    if _CHAR_SPEED[value] then
-      attributes.time = _CHAR_SPEED[value]
+    if aux_att["value"] and _CHAR_SPEED[aux_att["value"]] then
+      attributes.time = _CHAR_SPEED[aux_att["value"]]
     else
       err = true
     end
 
   elseif type == "color" then
-    if _CHAR_COLOR[value] then
-      attributes.color = _CHAR_COLOR[value]
+    if aux_att["value"] and _CHAR_COLOR[aux_att["value"]] then
+      attributes.color = _CHAR_COLOR[aux_att["value"]]
     else
       err = true
     end
 
   elseif type == "style" then
-    if value == "none" or
-       value == "wave" or
-       value == "shake" then
-         attributes.style = value
+    if aux_att["value"] and
+      (aux_att["value"] == "none" or
+       aux_att["value"] == "wave" or
+       aux_att["value"] == "shake") then
+         attributes.style = aux_att["value"]
     else
       err = true
     end
 
   elseif type == "size" then
-    if value == "small" or
-       value == "regular" or
-       value == "big" then
-         attributes.font = _CHAR_FONT[value]
+    if aux_att["value"] and
+      (aux_att["value"] == "small" or
+       aux_att["value"] == "regular" or
+       aux_att["value"] == "big") then
+         attributes.font = _CHAR_FONT[aux_att["value"]]
     else
       err = true
     end
 
   elseif type == "opacity" then
-    if value == "regular" or
-       value == "semi" then
-         attributes.opacity = _CHAR_OPACITY[value]
+    if aux_att["value"] and
+      (aux_att["value"] == "regular" or
+       aux_att["value"] == "semi") then
+         attributes.opacity = _CHAR_OPACITY[aux_att["value"]]
+    else
+      err = true
+    end
+
+  elseif type == "image" then
+    if aux_att["id"] then
+      local image = RES.loadTexture(aux_att["id"])
+      addImage(image, parsed_text, attributes, dialogue_box)
     else
       err = true
     end
 
   elseif type == "pause" then
-    local pause_amount = tonumber(value)
-    if pause_amount then
+    if aux_att["value"] and tonumber(aux_att["value"]) then
+      local pause_amount = tonumber(aux_att["value"])
       --Increase start-up time in case pause is in the beginning
       if #parsed_text == 0 then
         dialogue_box.text_start_up_time = dialogue_box.text_start_up_time + pause_amount
@@ -354,8 +424,8 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
     end
 
   elseif type == "endl" then
-    local lines_amount = tonumber(value)
-    if lines_amount then
+    if aux_att["value"] and tonumber(aux_att["value"]) then
+      local lines_amount = tonumber(aux_att["value"])
       attributes.y = attributes.y + lines_amount * dialogue_box.text_line_h
       attributes.x = _TEXT_MARGIN
     else
@@ -368,9 +438,14 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
 
   --Check for errors
   if err then
+    local err_string = ""
+    for id, value in pairs(aux_att) do
+      err_string = err_string .. id .. " : " .. value .. "\n"
+    end
     error([[Effect invalid!
-         Type = "]]..type..[["
-         Value = "]]..value..[["]])
+         type : ]]..type..[[
+         ]]..err_string
+         )
   end
 
 end
@@ -404,6 +479,35 @@ function addCharacter(char, parsed_text, attributes, dialogue_box)
   wrapIfNeeded(parsed_text, attributes, dialogue_box)
 end
 
+--Add an image to our parsed table
+function addImage(image, parsed_text, attributes, dialogue_box)
+  --Get dimensions for our image
+  local w = image:getWidth()
+  local h = image:getHeight()
+
+  --Vertically centralize text
+  local ty = attributes.y + dialogue_box.text_line_h/2 - h/2
+
+  table.insert(parsed_text,
+    {
+      type = "image",
+      object = image,
+      x = attributes.x,
+      y = ty,
+      width = w,
+      height = h,
+      time = attributes.time,
+      color = {1.0,1.0,1.0,1.0},
+      opacity = attributes.opacity,
+      style = attributes.style,
+      font = attributes.font
+    }
+  )
+  attributes.x = attributes.x + w
+
+  wrapIfNeeded(parsed_text, attributes, dialogue_box)
+end
+
 function wrapIfNeeded(parsed_text, attributes, dialogue_box)
   --Checks if need wraps
   if attributes.x > _MAX_WIDTH - 2*_TEXT_MARGIN then
@@ -412,7 +516,7 @@ function wrapIfNeeded(parsed_text, attributes, dialogue_box)
     --Find start of current word
     local j = #parsed_text
     while j >= 1 do
-      if parsed_text[j].object == " " then break end
+      if parsed_text[j].type == "image" or parsed_text[j].object == " " then break end
       j = j - 1
     end
     if j == 0 then error("Word is too damn big") end
