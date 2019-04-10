@@ -48,7 +48,6 @@ local _CHAR_OPACITY = {
   semi    = .7
 }
 
-
 --Wave style consts
 local _WAVE_MAGNITUDE = 2
 local _WAVE_SPEED = 5
@@ -60,6 +59,8 @@ local _SHAKE_MAGNITUDE = 1
 --Forward declaration for local functions
 local parseTag
 local interpretateTag
+local addCharacter
+local wrapIfNeeded
 
 --[[
 HOW TEXT AND TAGS WORK
@@ -230,10 +231,10 @@ function DialogueBox:stylizeText(text)
 
   local i = 1
   while i <= text:len() do
-    local object = text:sub(i,i)
+    local char = text:sub(i,i)
 
     --Special tag
-    if object == "[" then
+    if char == "[" then
 
       --Get effect
       local data = parseTag(text, i)
@@ -246,47 +247,8 @@ function DialogueBox:stylizeText(text)
 
     --Common character
     else
-      local w = attributes.font:getWidth(object)
-      local h = attributes.font:getHeight(object)
-      --Vertically centralize text
-      local ty = attributes.y + self.text_line_h/2 - h/2
 
-      table.insert(parsed,
-        {
-          object = object,
-          x = attributes.x,
-          y = ty,
-          width = w,
-          height = h,
-          time = attributes.time,
-          color = attributes.color,
-          opacity = attributes.opacity,
-          style = attributes.style,
-          font = attributes.font
-        }
-      )
-      attributes.x = attributes.x + w
-
-      --Wrap words
-      if attributes.x > _MAX_WIDTH - 2*_TEXT_MARGIN then
-        attributes.y = attributes.y + self.text_line_h
-        attributes.x = _TEXT_MARGIN
-        --Find start of current word
-        local j = i
-        while j >= 1 do
-          if parsed[j].object == " " then break end
-          j = j - 1
-        end
-        if j == 0 then error("Word is too damn big") end
-        --Fix position of every objectacter
-        for k = j+1, i do
-          local w = parsed[k].width
-          local h = parsed[k].height
-          parsed[k].x = attributes.x
-          parsed[k].y = attributes.y + self.text_line_h/2 - h/2
-          attributes.x = attributes.x + w
-        end
-      end
+      addCharacter(char, parsed, attributes, self)
 
       --Update iterator
       i = i + 1
@@ -296,7 +258,7 @@ function DialogueBox:stylizeText(text)
   return parsed
 end
 
---Local functions
+--LOCAL FUNCTIONS--
 
 --Gets a tag effect that starts from given position, and removes that tag from the text
 --A tag must follow the pattern [type_of_effect=value]
@@ -411,6 +373,58 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
          Value = "]]..value..[["]])
   end
 
+end
+
+--Add a character to our parsed table
+function addCharacter(char, parsed_text, attributes, dialogue_box)
+  --Get dimensions for our character
+  local w = attributes.font:getWidth(char)
+  local h = attributes.font:getHeight(char)
+
+  --Vertically centralize text
+  local ty = attributes.y + dialogue_box.text_line_h/2 - h/2
+
+  table.insert(parsed_text,
+    {
+      type = "character",
+      object = char,
+      x = attributes.x,
+      y = ty,
+      width = w,
+      height = h,
+      time = attributes.time,
+      color = attributes.color,
+      opacity = attributes.opacity,
+      style = attributes.style,
+      font = attributes.font
+    }
+  )
+  attributes.x = attributes.x + w
+
+  wrapIfNeeded(parsed_text, attributes, dialogue_box)
+end
+
+function wrapIfNeeded(parsed_text, attributes, dialogue_box)
+  --Checks if need wraps
+  if attributes.x > _MAX_WIDTH - 2*_TEXT_MARGIN then
+    attributes.y = attributes.y + dialogue_box.text_line_h
+    attributes.x = _TEXT_MARGIN
+    --Find start of current word
+    local j = #parsed_text
+    while j >= 1 do
+      if parsed_text[j].object == " " then break end
+      j = j - 1
+    end
+    if j == 0 then error("Word is too damn big") end
+    --Fix position of every objectacter
+    for k = j+1, #parsed_text do
+      local w = parsed_text[k].width
+      local h = parsed_text[k].height
+      parsed_text[k].x = attributes.x
+      parsed_text[k].y = attributes.y + dialogue_box.text_line_h/2 - h/2
+      attributes.x = attributes.x + w
+    end
+  end
 end
 
 return DialogueBox
