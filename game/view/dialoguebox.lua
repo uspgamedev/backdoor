@@ -58,7 +58,8 @@ local _WAVE_REGULATOR = 10
 local _SHAKE_MAGNITUDE = 1
 
 --Forward declaration for local functions
-local getTag
+local parseTag
+local interpretateTag
 
 --[[
 HOW TEXT AND TAGS WORK
@@ -123,7 +124,7 @@ function DialogueBox:init(body, i, j, side)
   self.text_line_h = 4*_CHAR_FONT.regular:getHeight()/5
   self.text_start_up_time = .15
 
-  self.text = self:parseText(body:getDialogue())
+  self.text = self:stylizeText(body:getDialogue())
 
   --Dialogue box position attributes
   self.i = i
@@ -213,123 +214,62 @@ function DialogueBox:updateText(dt)
   self.char_timer = self.char_timer + dt
 end
 
-function DialogueBox:parseText(text)
+function DialogueBox:stylizeText(text)
   local parsed = {}
-  local x = _TEXT_MARGIN
-  local y = _TEXT_MARGIN
+
+  --Default values
+  local attributes = {
+    x = _TEXT_MARGIN,
+    y = _TEXT_MARGIN,
+    time = _CHAR_SPEED.regular,
+    color = _CHAR_COLOR.regular,
+    opacity = _CHAR_OPACITY.regular,
+    style = "none",
+    font = _CHAR_FONT.regular,
+  }
+
   local i = 1
-
-  --Default value
-  local time = _CHAR_SPEED.regular
-  local color = _CHAR_COLOR.regular
-  local opacity = _CHAR_OPACITY.regular
-  local style = "none"
-  local font = _CHAR_FONT.regular
-
   while i <= text:len() do
     local object = text:sub(i,i)
 
     --Special tag
     if object == "[" then
-      local effect_type, effect_value
 
       --Get effect
-      local data = getTag(text, i)
-      text, effect_type, effect_value = data.text, data.type, data.value
+      local data = parseTag(text, i)
 
       --Apply effect
-      local err = false
-      if effect_type == "speed" then
-        if _CHAR_SPEED[effect_value] then
-          time = _CHAR_SPEED[effect_value]
-        else
-          err = true
-        end
-      elseif effect_type == "color" then
-        if _CHAR_COLOR[effect_value] then
-          color = _CHAR_COLOR[effect_value]
-        else
-          err = true
-        end
-      elseif effect_type == "style" then
-        if effect_value == "none" or
-           effect_value == "wave" or
-           effect_value == "shake" then
-             style = effect_value
-        else
-          err = true
-        end
-      elseif effect_type == "size" then
-        if effect_value == "small" or
-           effect_value == "regular" or
-           effect_value == "big" then
-             font = _CHAR_FONT[effect_value]
-        else
-          err = true
-        end
-      elseif effect_type == "opacity" then
-        if effect_value == "regular" or
-           effect_value == "semi" then
-             opacity = _CHAR_OPACITY[effect_value]
-        else
-          err = true
-        end
-      elseif effect_type == "pause" then
-        local pause_amount = tonumber(effect_value)
-        if pause_amount then
-          --Increase start-up time in case pause is in the beginning
-          if i == 1 then
-            self.text_start_up_time = self.text_start_up_time + pause_amount
-          else
-            parsed[i-1].time = parsed[i-1].time + pause_amount
-          end
-        else
-          err = true
-        end
-      elseif effect_type == "endl" then
-        local lines_amount = tonumber(effect_value)
-        if lines_amount then
-          y = y + lines_amount * self.text_line_h
-          x = _TEXT_MARGIN
-        else
-          err = true
-        end
-      else
-        err = true
-      end
+      interpretateTag(data, attributes, self, parsed)
 
-      --Check for errors
-      if err then
-        error([[Effect invalid!
-             Type = "]]..effect_type..[["
-             Value = "]]..effect_value..[["]])
-      end
+      --Update text
+      text = data.text
 
     --Common character
     else
-      local w = font:getWidth(object)
-      local h = font:getHeight(object)
-      local ty = y + self.text_line_h/2 - h/2
+      local w = attributes.font:getWidth(object)
+      local h = attributes.font:getHeight(object)
+      --Vertically centralize text
+      local ty = attributes.y + self.text_line_h/2 - h/2
       table.insert(parsed,
         {
           object = object,
-          x = x,
+          x = attributes.x,
           y = ty,
           width = w,
           height = h,
-          time = time,
-          color = color,
-          opacity = opacity,
-          style = style,
-          font = font
+          time = attributes.time,
+          color = attributes.color,
+          opacity = attributes.opacity,
+          style = attributes.style,
+          font = attributes.font
         }
       )
-      x = x + w
+      attributes.x = attributes.x + w
 
       --Wrap words
-      if x > _MAX_WIDTH - 2*_TEXT_MARGIN then
-        y = y + self.text_line_h
-        x = _TEXT_MARGIN
+      if attributes.x > _MAX_WIDTH - 2*_TEXT_MARGIN then
+        attributes.y = attributes.y + self.text_line_h
+        attributes.x = _TEXT_MARGIN
         --Find start of current word
         local j = i
         while j >= 1 do
@@ -341,9 +281,9 @@ function DialogueBox:parseText(text)
         for k = j+1, i do
           local w = parsed[k].width
           local h = parsed[k].height
-          parsed[k].x = x
-          parsed[k].y = y + self.text_line_h/2 - h/2
-          x = x + w
+          parsed[k].x = attributes.x
+          parsed[k].y = attributes.y + self.text_line_h/2 - h/2
+          attributes.x = attributes.x + w
         end
       end
 
@@ -359,7 +299,7 @@ end
 
 --Gets a tag effect that starts from given position, and removes that tag from the text
 --A tag must follow the pattern [type_of_effect=value]
-function getTag(text, tag_start_pos)
+function parseTag(text, tag_start_pos)
   if text:sub(tag_start_pos,tag_start_pos) ~= "[" then
     error("isn't a valid tag position")
   end
@@ -388,6 +328,87 @@ function getTag(text, tag_start_pos)
 
 
   return {text = text, type = type, value = value}
+end
+
+--Apply correspondent effect from data and change correspondent attributes
+function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
+  local err = false
+  local type = effect_data.type
+  local value = effect_data.value
+
+  if type == "speed" then
+    if _CHAR_SPEED[value] then
+      attributes.time = _CHAR_SPEED[value]
+    else
+      err = true
+    end
+
+  elseif type == "color" then
+    if _CHAR_COLOR[value] then
+      attributes.color = _CHAR_COLOR[value]
+    else
+      err = true
+    end
+
+  elseif type == "style" then
+    if value == "none" or
+       value == "wave" or
+       value == "shake" then
+         attributes.style = value
+    else
+      err = true
+    end
+
+  elseif type == "size" then
+    if value == "small" or
+       value == "regular" or
+       value == "big" then
+         attributes.font = _CHAR_FONT[value]
+    else
+      err = true
+    end
+
+  elseif type == "opacity" then
+    if value == "regular" or
+       value == "semi" then
+         attributes.opacity = _CHAR_OPACITY[value]
+    else
+      err = true
+    end
+
+  elseif type == "pause" then
+    local pause_amount = tonumber(value)
+    if pause_amount then
+      --Increase start-up time in case pause is in the beginning
+      if i == 1 then
+        dialogue_box.text_start_up_time = dialogue_box.text_start_up_time + pause_amount
+      else
+        parsed_text[i-1].time = parsed_text[i-1].time + pause_amount
+      end
+    else
+      err = true
+    end
+
+  elseif type == "endl" then
+    local lines_amount = tonumber(value)
+    if lines_amount then
+      attributes.y = attributes.y + lines_amount * dialogue_box.text_line_h
+      attributes.x = _TEXT_MARGIN
+    else
+      err = true
+    end
+
+  else
+    err = true
+  end
+
+  --Check for errors
+  if err then
+    error([[Effect invalid!
+         Type = "]]..type..[["
+         Value = "]]..value..[["]])
+  end
+
 end
 
 return DialogueBox
