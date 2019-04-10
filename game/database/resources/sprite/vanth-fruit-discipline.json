@@ -1,0 +1,31 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":100
+    },{
+      "quad_idx":2,
+      "time":100
+    },{
+      "quad_idx":3,
+      "time":100
+    },{
+      "quad_idx":4,
+      "time":100
+    },{
+      "quad_idx":5,
+      "time":100
+    },{
+      "quad_idx":6,
+      "time":100
+    },{
+      "quad_idx":7,
+      "time":100
+    },{
+      "quad_idx":8,
+      "time":100
+    }],
+  "loop":true,
+  "offset":[32,16],
+  "quad_division":[8,1],
+  "texture":"vanth-fruit-discipline"
+}

@@ -20,11 +20,14 @@
   "drops":{
     "drop-info":"",
     "drops":[{
-        "droprate":4,
-        "droptype":"food"
+        "droprate":1,
+        "droptype":"vanth-fruit-concord"
       },{
-        "droprate":3,
-        "droptype":"pack"
+        "droprate":1,
+        "droptype":"vanth-fruit-culture"
+      },{
+        "droprate":1,
+        "droptype":"vanth-fruit-discipline"
       }]
   },
   "encounters":{
