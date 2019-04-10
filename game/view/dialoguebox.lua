@@ -250,6 +250,7 @@ function DialogueBox:stylizeText(text)
       local h = attributes.font:getHeight(object)
       --Vertically centralize text
       local ty = attributes.y + self.text_line_h/2 - h/2
+
       table.insert(parsed,
         {
           object = object,
@@ -380,10 +381,11 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
     local pause_amount = tonumber(value)
     if pause_amount then
       --Increase start-up time in case pause is in the beginning
-      if i == 1 then
+      if #parsed_text == 0 then
         dialogue_box.text_start_up_time = dialogue_box.text_start_up_time + pause_amount
+      --Increase time in latest object of our text
       else
-        parsed_text[i-1].time = parsed_text[i-1].time + pause_amount
+        parsed_text[#parsed_text].time = parsed_text[#parsed_text].time + pause_amount
       end
     else
       err = true
