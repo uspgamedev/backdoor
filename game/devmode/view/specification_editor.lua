@@ -3,22 +3,22 @@ local IMGUI = require 'imgui'
 local DB    = require 'database'
 local INPUT = require 'devmode.view.input'
 
-return function(element_spec, group_name, title, delete, rename, parent)
+return function(elementspec, group_name, title, delete, rename, parent)
 
   local inputs = {}
-  local field_specs = {}
-  for _,field_spec in DB.schemaFor(group_name) do
-    table.insert(field_specs, field_spec)
-    table.insert(inputs, INPUT(field_spec.type, element_spec, field_spec,
+  local fieldschemata = {}
+  for _,fieldschema in DB.schemaFor(group_name) do
+    table.insert(fieldschemata, fieldschema)
+    table.insert(inputs, INPUT(fieldschema.type, elementspec, fieldschema,
                                parent))
   end
 
   return title .. " Editor", 2, function(gui)
 
     -- meta actions
-    local spec_meta = getmetatable(element_spec)
+    local spec_meta = getmetatable(elementspec)
     if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##1") then
-      DB.save(element_spec)
+      DB.save(elementspec)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##1") then
@@ -36,9 +36,9 @@ return function(element_spec, group_name, title, delete, rename, parent)
     -- editor inputs
     for i,input in ipairs(inputs) do
       local pop = 0
-      local fieldspec_id = field_specs[i].id
-      local extended = rawget(element_spec, 'extends')
-      if extended and not rawget(element_spec, fieldspec_id) then
+      local fieldschema_id = fieldschemata[i].id
+      local extended = rawget(elementspec, 'extends')
+      if extended and not rawget(elementspec, fieldschema_id) then
         IMGUI.PushStyleColor("FrameBg", 0.8, 1, 0.9, 0.1)
         pop = 1
       end
@@ -46,10 +46,10 @@ return function(element_spec, group_name, title, delete, rename, parent)
       input(gui)
       if pop > 0 then
         IMGUI.PopStyleColor(pop)
-      elseif extended and fieldspec_id ~= 'extends' then
+      elseif extended and fieldschema_id ~= 'extends' then
         IMGUI.SameLine()
-        if IMGUI.Button("Reset##"..fieldspec_id) then
-          rawset(element_spec, fieldspec_id, nil)
+        if IMGUI.Button("Reset##"..fieldschema_id) then
+          rawset(elementspec, fieldschema_id, nil)
         end
       end
     end
@@ -57,7 +57,7 @@ return function(element_spec, group_name, title, delete, rename, parent)
     IMGUI.Separator()
     IMGUI.Spacing()
     if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##2") then
-      DB.save(element_spec)
+      DB.save(elementspec)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##2") then
