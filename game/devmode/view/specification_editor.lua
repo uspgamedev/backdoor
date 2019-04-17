@@ -6,10 +6,11 @@ local INPUT = require 'devmode.view.input'
 return function(element_spec, group_name, title, delete, rename, parent)
 
   local inputs = {}
-  local keys = {}
-  for _,key in DB.schemaFor(group_name) do
-    table.insert(keys, key)
-    table.insert(inputs, INPUT(key.type, element_spec, key, parent))
+  local field_specs = {}
+  for _,field_spec in DB.schemaFor(group_name) do
+    table.insert(field_specs, field_spec)
+    table.insert(inputs, INPUT(field_spec.type, element_spec, field_spec,
+                               parent))
   end
 
   return title .. " Editor", 2, function(gui)
@@ -35,9 +36,9 @@ return function(element_spec, group_name, title, delete, rename, parent)
     -- editor inputs
     for i,input in ipairs(inputs) do
       local pop = 0
-      local keyid = keys[i].id
+      local fieldspec_id = field_specs[i].id
       local extended = rawget(element_spec, 'extends')
-      if extended and not rawget(element_spec, keyid) then
+      if extended and not rawget(element_spec, fieldspec_id) then
         IMGUI.PushStyleColor("FrameBg", 0.8, 1, 0.9, 0.1)
         pop = 1
       end
@@ -45,10 +46,10 @@ return function(element_spec, group_name, title, delete, rename, parent)
       input(gui)
       if pop > 0 then
         IMGUI.PopStyleColor(pop)
-      elseif extended and keyid ~= 'extends' then
+      elseif extended and fieldspec_id ~= 'extends' then
         IMGUI.SameLine()
-        if IMGUI.Button("Reset##"..keyid) then
-          rawset(element_spec, keyid, nil)
+        if IMGUI.Button("Reset##"..fieldspec_id) then
+          rawset(element_spec, fieldspec_id, nil)
         end
       end
     end
