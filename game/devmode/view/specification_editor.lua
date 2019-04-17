@@ -3,21 +3,21 @@ local IMGUI = require 'imgui'
 local DB    = require 'database'
 local INPUT = require 'devmode.view.input'
 
-return function(spec, group_name, title, delete, rename, parent)
+return function(element_spec, group_name, title, delete, rename, parent)
 
   local inputs = {}
   local keys = {}
   for _,key in DB.schemaFor(group_name) do
     table.insert(keys, key)
-    table.insert(inputs, INPUT(key.type, spec, key, parent))
+    table.insert(inputs, INPUT(key.type, element_spec, key, parent))
   end
 
   return title .. " Editor", 2, function(gui)
 
     -- meta actions
-    local spec_meta = getmetatable(spec)
+    local spec_meta = getmetatable(element_spec)
     if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##1") then
-      DB.save(spec)
+      DB.save(element_spec)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##1") then
@@ -36,8 +36,8 @@ return function(spec, group_name, title, delete, rename, parent)
     for i,input in ipairs(inputs) do
       local pop = 0
       local keyid = keys[i].id
-      local extended = rawget(spec, 'extends')
-      if extended and not rawget(spec, keyid) then
+      local extended = rawget(element_spec, 'extends')
+      if extended and not rawget(element_spec, keyid) then
         IMGUI.PushStyleColor("FrameBg", 0.8, 1, 0.9, 0.1)
         pop = 1
       end
@@ -48,7 +48,7 @@ return function(spec, group_name, title, delete, rename, parent)
       elseif extended and keyid ~= 'extends' then
         IMGUI.SameLine()
         if IMGUI.Button("Reset##"..keyid) then
-          rawset(spec, keyid, nil)
+          rawset(element_spec, keyid, nil)
         end
       end
     end
@@ -56,7 +56,7 @@ return function(spec, group_name, title, delete, rename, parent)
     IMGUI.Separator()
     IMGUI.Spacing()
     if spec_meta and spec_meta.is_leaf and IMGUI.Button("Save##2") then
-      DB.save(spec)
+      DB.save(element_spec)
     end
     IMGUI.SameLine()
     if rename and IMGUI.Button("Rename##2") then
