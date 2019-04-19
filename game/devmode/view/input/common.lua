@@ -1,27 +1,35 @@
 
 local IMGUI = require 'imgui'
+local class = require 'lux.class'
 
 local max = math.max
 local min = math.min
+local setfenv = setfenv
 
 local inputs = {}
 
 local function _makeCommon(default, call)
-  return function(spec, field)
-    return function(gui)
-      if field.name then
-        IMGUI.Text(field.name)
+  local InputEditor = class:new()
+  function InputEditor:instance(obj, _elementspec, _fieldschema)
+    setfenv(1, obj)
+    function input(gui)
+      if _fieldschema.name then
+        IMGUI.Text(_fieldschema.name)
       end
-      local value = spec[field.id] or default
-      spec[field.id] = value
-      IMGUI.PushID(field.id)
-      local newvalue, changed = call(value, field)
+      local value = _elementspec[_fieldschema.id] or default
+      _elementspec[_fieldschema.id] = value
+      IMGUI.PushID(_fieldschema.id)
+      local newvalue, changed = call(value, _fieldschema)
       IMGUI.PopID()
       if changed then
-        spec[field.id] = newvalue
+        _elementspec[_fieldschema.id] = newvalue
       end
     end
+    function __operator:call(gui)
+      return obj.input(gui)
+    end
   end
+  return InputEditor
 end
 
 inputs.boolean = _makeCommon(
