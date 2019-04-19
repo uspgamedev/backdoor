@@ -2,24 +2,31 @@
 local IMGUI = require 'imgui'
 local INPUT = require 'devmode.view.input'
 local DB    = require 'database'
+local class = require 'lux.class'
 
-local inputs = {}
+local setfenv = setfenv
+local table = table
+local ipairs = ipairs
 
-function inputs.array(spec, field)
+local ArrayEditor = class:new()
 
-  local array = spec[field.id] or {}
-  local selected = nil
+function ArrayEditor:instance(obj, _elementspec, _fieldschema)
 
-  spec[field.id] = array
+  setfenv(1, obj)
 
-  return function(gui)
+  local _array = _elementspec[_fieldschema.id] or {}
+  local _selected = nil
+
+  _elementspec[_fieldschema.id] = _array
+
+  function input(gui)
     local removed
-    for i,element in ipairs(array) do
-      IMGUI.Text(("%s #%d"):format(field.name, i))
+    for i,item in ipairs(_array) do
+      IMGUI.Text(("%s #%d"):format(_fieldschema.name, i))
       IMGUI.Indent(20)
-      for j,subfield in ipairs(field.schema) do
+      for j,subfield_schema in ipairs(_fieldschema.schema) do
         IMGUI.PushID(i)
-        INPUT(subfield.type, element, subfield)(gui)
+        INPUT(subfield_schema.type, item, subfield_schema)(gui)
         IMGUI.PopID()
       end
       if IMGUI.Button("Delete##array-button-"..i) then
@@ -28,13 +35,17 @@ function inputs.array(spec, field)
       IMGUI.Unindent(20)
     end
     if removed then
-      table.remove(array,removed)
+      table.remove(_array, removed)
     end
-    if IMGUI.Button("New " .. field.name) then
-      table.insert(array, {})
+    if IMGUI.Button("New " .. _fieldschema.name) then
+      table.insert(_array, {})
     end
+  end
+
+  function __operator:call(gui)
+    return obj.input(gui)
   end
 end
 
-return inputs
+return { array = ArrayEditor }
 
