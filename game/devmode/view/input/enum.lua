@@ -1,15 +1,23 @@
 
 local IMGUI = require 'imgui'
 local DB = require 'database'
+local class = require 'lux.class'
+
+local setfenv = setfenv
+local table = table
+local ipairs = ipairs
+local type = type
 
 local _NONE = "<none>"
 
-local inputs = {}
+local EnumEditor = class:new()
 
-function inputs.enum(spec, field)
+function EnumEditor:instance(obj, _elementspec, _fieldschema)
+
+  setfenv(1, obj)
 
   -- Build option list from given array or from a database domain
-  local _options = field.options
+  local _options = _fieldschema.options
   if type(_options) == 'string' then
     local group_name = _options
     local category, group = group_name:match("(.-)[%./](.+)")
@@ -20,7 +28,7 @@ function inputs.enum(spec, field)
     table.sort(_options)
   else
     _options = { _NONE }
-    for k,v in ipairs(field.options) do
+    for k,v in ipairs(_fieldschema.options) do
       table.insert(_options, v)
     end
   end
@@ -28,43 +36,47 @@ function inputs.enum(spec, field)
   -- Find the index of the currently assigned option
   local _current = 1
   for i,option in ipairs(_options) do
-    if option == spec[field.id] then
+    if option == _elementspec[_fieldschema.id] then
       _current = i
       break
     end
   end
 
-  local _active = not (not spec[field.id] and field.optional)
+  local _active = not (not _elementspec[_fieldschema.id] and _fieldschema.optional)
 
   if _active and _options[_current] ~= _NONE then
-    spec[field.id] = spec[field.id] or _options[_current]
+    _elementspec[_fieldschema.id] = _elementspec[_fieldschema.id] or _options[_current]
   else
-    spec[field.id] = false
+    _elementspec[_fieldschema.id] = false
   end
 
-  return function(gui)
-    if field.optional then
-      IMGUI.PushID(field.id .. ".check")
+  function input(gui)
+    if _fieldschema.optional then
+      IMGUI.PushID(_fieldschema.id .. ".check")
       _active = IMGUI.Checkbox("", _active)
       IMGUI.PopID()
       IMGUI.SameLine()
     end
-    IMGUI.Text(field.name)
+    IMGUI.Text(_fieldschema.name)
     if _active then
-      IMGUI.PushID(field.id)
+      IMGUI.PushID(_fieldschema.id)
       local value, changed = IMGUI.Combo("", _current, _options, #_options, 15)
       IMGUI.PopID()
       if changed then
         _current = value
         if _options[value] == _NONE then
-          spec[field.id] = false
+          _elementspec[_fieldschema.id] = false
         else
-          spec[field.id] = _options[value]
+          _elementspec[_fieldschema.id] = _options[value]
         end
       end
     end
   end
+
+  function __operator:call(gui)
+    return obj.input(gui)
+  end
 end
 
-return inputs
+return { enum = EnumEditor }
 
