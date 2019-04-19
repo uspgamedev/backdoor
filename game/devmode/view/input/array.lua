@@ -21,12 +21,12 @@ function ArrayEditor:instance(obj, _elementspec, _fieldschema)
 
   function input(gui)
     local removed
-    for i,item in ipairs(_array) do
+    for i,itemspec in ipairs(_array) do
       IMGUI.Text(("%s #%d"):format(_fieldschema.name, i))
       IMGUI.Indent(20)
       for j,subfield_schema in ipairs(_fieldschema.schema) do
         IMGUI.PushID(i)
-        INPUT(subfield_schema.type, item, subfield_schema)(gui)
+        INPUT(itemspec, subfield_schema)(gui)
         IMGUI.PopID()
       end
       if IMGUI.Button("Delete##array-button-"..i) then

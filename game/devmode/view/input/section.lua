@@ -20,8 +20,7 @@ function _inputs.section(spec, field, parent)
     inside_schema[i] = {
       id = ("%s:%s"):format(field.id, subfield.id),
       input = function(section_spec)
-        input_lambda = input_lambda or INPUT(subfield.type, section_spec,
-                                             subfield, parent)
+        input_lambda = input_lambda or INPUT(section_spec, subfield, parent)
         return input_lambda
       end
     }
