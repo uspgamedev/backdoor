@@ -9,8 +9,7 @@ return function(elementspec, group_name, title, delete, rename, parent)
   local fieldschemata = {}
   for _,fieldschema in DB.schemaFor(group_name) do
     table.insert(fieldschemata, fieldschema)
-    table.insert(inputs, INPUT(fieldschema.type, elementspec, fieldschema,
-                               parent))
+    table.insert(inputs, INPUT(elementspec, fieldschema, parent))
   end
 
   return title .. " Editor", 2, function(gui)

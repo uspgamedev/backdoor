@@ -24,8 +24,9 @@ end
 
 local meta = {}
 
-function meta:__call(input_typename, ...)
-  return (INPUT[input_typename] or _invalid)(...) or _invalid()
+function meta:__call(elementspec, fieldschema, ...)
+  return (INPUT[fieldschema.type] or _invalid)(elementspec, fieldschema, ...)
+      or _invalid()
 end
 
 return setmetatable(INPUT, meta)
