@@ -445,8 +445,5 @@ function Body:getDialogue()
   return self.dialogue
 end
 
-function Body:setDialogue(dialogue)
-  self.dialogue = dialogue
-end
-
 return Body
+
