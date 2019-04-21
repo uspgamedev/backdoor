@@ -2,53 +2,62 @@
 local IMGUI = require 'imgui'
 local INPUT = require 'devmode.view.input'
 local DB    = require 'database'
+local class = require 'lux.class'
 
-local inputs = {}
-local signature_mt = {
+local setfenv = setfenv
+local table = table
+local ipairs = ipairs
+local setmetatable = setmetatable
+
+local VectorEditor = class:new()
+
+local _signature_mt = {
   __index = function(gui, k)
     return tonumber(k)
   end
 }
 
-function inputs.vector(spec, field)
+function VectorEditor:instance(obj, _elementspec, _fieldschema)
 
-  local vector = spec[field.id] or {}
-  spec[field.id] = vector
-  local selected = nil
-  local size = field.size
-  local range = field.range
-  local default = field.default or 0
-  local signature = setmetatable(field.signature or
-                                 {'x','y','z','w'},
-                                 signature_mt)
-  local subschemas = {}
-  for i=1, size do
-    vector[i] = vector[i] or default
-    local subfield = {
+  setfenv(1, obj)
+
+  local _vector = _elementspec[_fieldschema.id] or {}
+  _elementspec[_fieldschema.id] = _vector
+  local _selected = nil
+  local _size = _fieldschema.size
+  local _range = _fieldschema.range
+  local _default = _fieldschema.default or 0
+  local _signature = setmetatable(_fieldschema.signature or
+                                  {'x','y','z','w'},
+                                  _signature_mt)
+  local _component_inputs = {}
+  for i = 1, _size do
+    _vector[i] = _vector[i] or _default
+    local input = {
       id = i,
-      name = signature[i],
+      name = _signature[i],
     }
-    subschemas[i] = subfield
+    _component_inputs[i] = input
   end
 
   local function check_range(new)
-    if range then
-      new = math.max(range[1],
-                     range[2] and math.min(range[2], new) or new)
+    if _range then
+      new = math.max(_range[1],
+                     _range[2] and math.min(_range[2], new) or new)
     end
     return new
   end
 
-  return function(gui)
-    IMGUI.Text(("%s"):format(field.name))
-    IMGUI.Columns(2, field.id, false)
-    for i, subfield in ipairs(subschemas) do
-      IMGUI.PushID(("%s#%d"):format(field.name, subfield.id))
-      IMGUI.Text(("%s"):format(subfield.name))
+  function input(gui)
+    IMGUI.Text(("%s"):format(_fieldschema.name))
+    IMGUI.Columns(2, _fieldschema.id, false)
+    for i, component_input in ipairs(_component_inputs) do
+      IMGUI.PushID(("%s#%d"):format(_fieldschema.name, component_input.id))
+      IMGUI.Text(("%s"):format(component_input.name))
       IMGUI.SameLine()
-      local new, changed = IMGUI.InputInt("", vector[i])
+      local new, changed = IMGUI.InputInt("", _vector[i])
       IMGUI.PopID()
-      if changed then vector[i] = check_range(new) end
+      if changed then _vector[i] = check_range(new) end
       if i % 2 == 0 then IMGUI.NextColumn() end
       if i % 4 == 0 then IMGUI.Spacing() end
     end
@@ -56,7 +65,11 @@ function inputs.vector(spec, field)
     IMGUI.Spacing()
     IMGUI.Spacing()
   end
+
+  function __operator:call(gui)
+    return obj.input(gui)
+  end
 end
 
-return inputs
+return { vector = VectorEditor }
 
