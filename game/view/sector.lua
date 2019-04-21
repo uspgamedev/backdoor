@@ -347,10 +347,15 @@ function SectorView:draw()
           local player = self.route.getControlledActor():getBody()
           local player_i, player_j = player:getPos()
           local body_i, body_j = body:getPos()
-          if body ~= player and TILE.dist(player_i, player_j, body_i, body_j) <= 1 then
-            table.insert(dialogue_boxes, self:getBodyDialogue(body, body_i, body_j, player_i, player_j))
-          else
-            self:resetBodyDialogue(body)
+          if body:getDialogue() then
+            if body ~= player and TILE.dist(player_i, player_j,
+                                            body_i, body_j) <= 1 then
+              table.insert(dialogue_boxes,
+                           self:getBodyDialogue(body, body_i, body_j,
+                                                      player_i, player_j))
+            else
+              self:resetBodyDialogue(body)
+            end
           end
         end
 
