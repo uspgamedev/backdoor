@@ -1,6 +1,8 @@
 
 return  {
   { id = 'theme', name = "Theme", type = 'enum', options = 'domains.theme' },
+  { id = 'tilemap', name = "Seed", type = 'tilemap',
+    minwidth = 3, minheight = 3},
   { id = 'bootstrap', name = "Base Settings", type = 'section',
     schema = 'transformers.bootstrap', required = true },
   { id = 'holes', name = "Holes Settings", type = 'section',
