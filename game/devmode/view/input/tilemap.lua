@@ -3,7 +3,7 @@ local IMGUI = require 'imgui'
 local class = require 'lux.class'
 
 local setfenv = setfenv
-local print = print
+local ipairs = ipairs
 local max, min = math.max, math.min
 
 --- Input editor for tilemap fields.
@@ -26,6 +26,7 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
   local _maxwidth, _maxheight = _fieldschema.maxwidth or _minwidth,
                                 _fieldschema.maxheight or _minheight
   local _palette = _fieldschema.palette
+  local _current_tile = 1
 
   local _tilemap = _elementspec[_fieldschema.id] or {
     width = _minwidth,
@@ -64,21 +65,22 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
   function input(_)
     IMGUI.PushID(_fieldschema.id)
     IMGUI.Text(_fieldschema.name)
+    IMGUI.Indent(20)
     do -- dimensions editor
       local newwidth, newheight, changed =
         IMGUI.InputInt2('Dimensions', _tilemap.width, _tilemap.height)
       if changed then _resize(newwidth, newheight) end
     end
     do -- tiles editor
+      IMGUI.PushStyleVar_2('ItemSpacing', 0, 0)
       for i = 1, _tilemap.height do
         for j = 1, _tilemap.width do
           local idx = (i-1) * _tilemap.width + j
           local tile = _tilemap.data[idx]
           local glyph = _palette[tile]
           IMGUI.PushID(("-%d:%d"):format(i, j))
-          if IMGUI.SmallButton(glyph) then
-            tile = (tile % #_palette) + 1
-            _tilemap.data[idx] = tile
+          if IMGUI.Button(glyph) then
+            _tilemap.data[idx] = _current_tile
           end
           IMGUI.PopID()
           if j < _tilemap.width then
@@ -86,7 +88,34 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
           end
         end
       end
+      IMGUI.PopStyleVar(1)
     end
+    IMGUI.Spacing()
+    do -- current tile changer
+      for tile, glyph in ipairs(_palette) do
+        if tile == _current_tile then
+          IMGUI.PushStyleColor('Button', 0xff008800)
+        else
+          IMGUI.PushStyleColor('Button', 0xff223322)
+        end
+        if IMGUI.Button(glyph) then
+          _current_tile = tile
+        end
+        IMGUI.PopStyleColor(1)
+        if tile < #_palette then
+          IMGUI.SameLine()
+        end
+      end
+      if IMGUI.Button("Clear") then
+        for i = 1, _tilemap.height do
+          for j = 1, _tilemap.width do
+            local idx = (i-1) * _tilemap.width + j
+            _tilemap.data[idx] = _current_tile
+          end
+        end
+      end
+    end
+    IMGUI.Unindent(20)
     IMGUI.PopID()
   end
 
