@@ -333,11 +333,13 @@ function SectorView:draw()
           local player_i, player_j = player:getPos()
           local body_i, body_j = body:getPos()
           if body:getDialogue() then
-            if body ~= player and TILE.dist(player_i, player_j,
-                                            body_i, body_j) <= 1 then
-              table.insert(dialogue_boxes,
-                           self:getBodyDialogue(body, body_i, body_j,
-                                                      player_i, player_j))
+            local distance_to_player = TILE.dist(player_i, player_j,
+                                                 body_i, body_j)
+
+            if body ~= player and distance_to_player <= 1 then
+              local body_dialogue = self:getBodyDialogue(body, body_i, body_j,
+                                                         player_i, player_j)
+              table.insert(dialogue_boxes, body_dialogue)
             else
               self:resetBodyDialogue(body)
             end
