@@ -3,13 +3,12 @@ local IMGUI = require 'imgui'
 local class = require 'lux.class'
 
 local setfenv = setfenv
-local ipairs = ipairs
 local print = print
 local max, min = math.max, math.min
 
 local TileMapEditor = class:new()
 
-function TileMapEditor:instance(obj, _elementspec, _fieldschema)
+function TileMapEditor.instance(_, obj, _elementspec, _fieldschema)
 
   setfenv(1, obj)
 
@@ -24,7 +23,15 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
     data = ""
   }
 
+  local function _clampDimensions()
+    _tilemap.width = max(min(_tilemap.width, _maxwidth), _minwidth)
+    _tilemap.height = max(min(_tilemap.height, _maxheight), _minheight)
+  end
+
   local function _resize(newwidth, newheight)
+    _tilemap.width = newwidth
+    _tilemap.height = newheight
+    _clampDimensions()
     local newdata = ""
     for i = 1, newheight do
       for j = 1, newwidth do
@@ -72,11 +79,6 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
   end
 
   _resize(_tilemap.width, _tilemap.height)
-
-  local function _clampDimensions()
-    _tilemap.width = max(min(_tilemap.width, _maxwidth), _minwidth)
-    _tilemap.height = max(min(_tilemap.height, _maxheight), _minheight)
-  end
 
   _elementspec[_fieldschema.id] = _tilemap
 
