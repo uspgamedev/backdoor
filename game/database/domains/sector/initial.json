@@ -5,5 +5,11 @@
     "mw":0,
     "tileset":"demo",
     "w":0
-  }
+  },
+  "tilemap":{
+    "data":[1,1,1,1,1,1,1,1,1],
+    "height":3,
+    "width":3
+  },
+  "theme":false
 }
