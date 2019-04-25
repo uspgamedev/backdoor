@@ -237,7 +237,7 @@ function Body:equip(place, card)
         break
       end
     end
-    local card = self:removeWidget(index)
+    self:removeWidget(index)
   end
   -- equip new thing on index
   self.equipped[place] = card
