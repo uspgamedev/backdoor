@@ -59,8 +59,6 @@ function state:update(dt)
     if not _animation_task or _animation_task:done() then
       SWITCHER.pop(_alert)
     end
-  else
-    _view.sector:updateVFX(dt)
   end
 
 end

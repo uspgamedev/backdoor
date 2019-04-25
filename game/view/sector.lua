@@ -7,7 +7,6 @@ local TILE        = require 'common.tile'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
-local ACTION      = require 'domain.definitions.action'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
@@ -26,15 +25,7 @@ local SECTOR_WALL         = require 'view.sector.wall'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
-local _HALF_W = VIEWDEFS.HALF_W
-local _HALF_H = VIEWDEFS.HALF_H
 
-local _HEALTHBAR_WIDTH = 56
-local _HEALTHBAR_HEIGHT = 4
-
-local _texture
-local _tile_offset
-local _tile_quads
 local _tileset
 local _cursor_sprite
 local _font
@@ -62,18 +53,18 @@ local function _dropId(i, j, k)
   return ("%d:%d:%d"):format(i, j, k)
 end
 
-local function _loadDropSprite(sprite_data, id, specname) 
-  local data = sprite_data[id]  
+local function _loadDropSprite(sprite_data, id, specname)
+  local data = sprite_data[id]
 
-  if not data or data.specname ~= specname then  
-    data = { 
-      specname = specname, 
-      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)  
-    }  
-    sprite_data[id] = data 
-  end  
+  if not data or data.specname ~= specname then
+    data = {
+      specname = specname,
+      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)
+    }
+    sprite_data[id] = data
+  end
 
-  return data.sprite  
+  return data.sprite
 end
 
 function SectorView:init(route)
@@ -114,10 +105,7 @@ function SectorView:initSector(sector)
     self.sector = sector
 
     _tileset = RES.loadTileSet(sector:getTileSet())
-    _texture = RES.loadTexture(_tileset.texture)
 
-    _tile_offset = _tileset.offsets
-    _tile_quads = _tileset.quads
 
     SECTOR_TILEMAP.init(sector, _tileset)
     SECTOR_COOLDOWNBAR.init()
@@ -150,9 +138,6 @@ function SectorView:lookAt(target)
   end
 end
 
-function SectorView:updateVFX(dt)
-
-end
 
 function SectorView:setDropOffset(i, j, k, offset)
   self.drop_offsets[_dropId(i, j, k)] = offset
@@ -214,8 +199,8 @@ function SectorView:getBodySprite(body)
   return body_sprite
 end
 
-function SectorView:setBodySprite(body, draw) 
-  self.body_sprites[body:getId()] = draw  
+function SectorView:setBodySprite(body, draw)
+  self.body_sprites[body:getId()] = draw
 end
 
 function SectorView:getBodyDialogue(body, i, j, player_i, player_j)
@@ -444,7 +429,7 @@ function SectorView:draw()
 
     -- Draw drop shadows
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, oscilation = unpack(drop)
+      local _, x, y, _, oscilation = unpack(drop)
       local decrease = 1 + math.abs(oscilation)/18
       g.setColor(0, 0, 0, 0.4)
       g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease,
@@ -629,7 +614,6 @@ function SectorView:moveCursor(di, dj)
         queue.push(target_pos)
       end
     end
-    pos = nil
   end
 
   if chosen then
