@@ -33,27 +33,28 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
     data = {}
   }
 
-  local function _clampDimensions()
-    _tilemap.width = max(min(_tilemap.width, _maxwidth), _minwidth)
-    _tilemap.height = max(min(_tilemap.height, _maxheight), _minheight)
+  local function _clampDimensions(width, height)
+    return max(min(width, _maxwidth), _minwidth),
+           max(min(height, _maxheight), _minheight)
   end
 
   local function _resize(newwidth, newheight)
-    _tilemap.width = newwidth
-    _tilemap.height = newheight
-    _clampDimensions()
+    newwidth, newheight = _clampDimensions(newwidth, newheight)
     local newdata = {}
     for i = 1, newheight do
       for j = 1, newwidth do
         local tile = 1
-        if i <= _tilemap.height or j <= _tilemap.width then
+        if i <= _tilemap.height and j <= _tilemap.width then
           local idx = (i-1) * _tilemap.width + j
           tile = _tilemap.data[idx] or tile
         end
-        newdata[(i-1) * newwidth + j] = tile
+        local idx = (i-1) * newwidth + j
+        newdata[idx] = tile
       end
     end
     _tilemap.data = newdata
+    _tilemap.width = newwidth
+    _tilemap.height = newheight
   end
 
   _resize(_tilemap.width, _tilemap.height)
@@ -74,11 +75,12 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
           local idx = (i-1) * _tilemap.width + j
           local tile = _tilemap.data[idx]
           local glyph = _palette[tile]
+          IMGUI.PushID(("-%d:%d"):format(i, j))
           if IMGUI.SmallButton(glyph) then
             tile = (tile % #_palette) + 1
             _tilemap.data[idx] = tile
-            print(tile)
           end
+          IMGUI.PopID()
           if j < _tilemap.width then
             IMGUI.SameLine()
           end
