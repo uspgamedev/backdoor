@@ -1,5 +1,4 @@
 
-local DB = require 'database'
 local RANDOM = require 'common.random'
 local SCHEMATICS = require 'domain.definitions.schematics'
 
