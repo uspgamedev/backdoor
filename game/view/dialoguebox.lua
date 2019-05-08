@@ -70,23 +70,24 @@ HOW TEXT AND TAGS WORK
 You can create a stylized text using tags.
 Tags are made of one or more attributes, following the pattern:
 
-[attribute1/attribute2/.../attributeX]
+[header attribute1/attribute2/.../attributeX]
 
+A header defines the what effect you are trying to apply.
 Each attribute defines a characteristic for the effect you want to apply.
 An attribute follows the pattern:
 
 identifier:value
 
-(IMPORTANT: All tags must have the main attribute 'type')
+(IMPORTANT: All tags must have a header)
 
 Example of a stylized "hello world", where the 'hello' is red:
 
-"[type:color/value:red]Hello[type:color/value:regular] world!"
+"[color value:red]Hello[color value:regular] world!"
 -----------------------------------------------------------
 
 Below is a list of possible effects, detailed as followed:
 
-type_of_effect - what it does
+type_of_effect (header) - what it does
   identifier1 - what it does
     possible_value1 - what it does
     possible_value2 - what it does
@@ -323,57 +324,54 @@ function parseTag(text, tag_start_pos)
   local tag_end_pos = i
   local effect = text:sub(tag_start_pos + 1, tag_end_pos - 1)
 
-  local type --Main attribute
-  local aux_att = {} --Auxiliary attributes
-  --Iterate through all attributes the tag have
-  for att in effect:gmatch("[^/]+") do
+  --Separate header from other attributes
+  local header, attributes = effect:match("(%w+) ([%w:_%-%.%/]+)")
 
+  if not header then
+    error("tag didn't have a proper header.\nrelated tag:\n["..effect.."]")
+  end
+
+
+  --Iterate through all attributes the tag have
+  local aux_att = {} --Table containing extracter auxiliary attributes
+  for att in attributes:gmatch("[^/]+") do
     --Parse attribute and extract identifier/value from effect
     local identifier, value = att:match("(%w+):([%w_%-%.]+)")
 
     if not identifier or not value then
       error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
     end
-    if identifier == "type" then
-      type = value
-    else
-      aux_att[identifier] = value
-    end
 
-  end
-
-  if not type then
-    error("tag didn't have the main attribute 'type': \n"..text:sub(tag_start_pos, tag_end_pos))
+    aux_att[identifier] = value
   end
 
   --Remove tag from text
   text = text:sub(0, tag_start_pos - 1) .. text:sub(tag_end_pos + 1, -1)
 
-
-  return {text = text, type = type, aux_att = aux_att}
+  return {text = text, header = header, aux_att = aux_att}
 end
 
 --Apply correspondent effect from data and change correspondent attributes
 function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
   local err = false
-  local type = effect_data.type
+  local header = effect_data.header
   local aux_att = effect_data.aux_att --Auxiliary attributes
 
-  if type == "speed" then
+  if header == "speed" then
     if aux_att["value"] and _CHAR_SPEED[aux_att["value"]] then
       attributes.time = _CHAR_SPEED[aux_att["value"]]
     else
       err = true
     end
 
-  elseif type == "color" then
+  elseif header == "color" then
     if aux_att["value"] and _CHAR_COLOR[aux_att["value"]] then
       attributes.color = _CHAR_COLOR[aux_att["value"]]
     else
       err = true
     end
 
-  elseif type == "style" then
+  elseif header == "style" then
     if aux_att["value"] and
       (aux_att["value"] == "none" or
        aux_att["value"] == "wave" or
@@ -383,7 +381,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err = true
     end
 
-  elseif type == "size" then
+  elseif header == "size" then
     if aux_att["value"] and
       (aux_att["value"] == "small" or
        aux_att["value"] == "regular" or
@@ -393,7 +391,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err = true
     end
 
-  elseif type == "opacity" then
+  elseif header == "opacity" then
     if aux_att["value"] and
       (aux_att["value"] == "regular" or
        aux_att["value"] == "semi") then
@@ -402,7 +400,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err = true
     end
 
-  elseif type == "image" then
+  elseif header == "image" then
     if aux_att["id"] then
       local image = RES.loadTexture(aux_att["id"])
       addImage(image, aux_att["scale"], parsed_text, attributes, dialogue_box)
@@ -410,7 +408,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err = true
     end
 
-  elseif type == "pause" then
+  elseif header == "pause" then
     if aux_att["value"] and tonumber(aux_att["value"]) then
       local pause_amount = tonumber(aux_att["value"])
       --Increase start-up time in case pause is in the beginning
@@ -424,7 +422,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err = true
     end
 
-  elseif type == "endl" then
+  elseif header == "endl" then
     if aux_att["value"] and tonumber(aux_att["value"]) then
       local lines_amount = tonumber(aux_att["value"])
       attributes.y = attributes.y + lines_amount * dialogue_box.text_line_h
