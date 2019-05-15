@@ -8,6 +8,11 @@ local RES      = require 'resources'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
+
+--Speed when box is changing sides
+local _MOVE_SPEED = .15
+
+--Oscillating fx on dialogue box
 local _FX_MAGNITUDE = 6
 local _FX_SPEED = 2.5
 
@@ -180,10 +185,10 @@ function DialogueBox:draw()
 
   --Move box to target position
   local tx, ty = self:getTargetPosition()
-  local speed, eps = .15, 1
-  self.pos.x = self.pos.x + (tx - self.pos.x)*speed
+  local eps = 1
+  self.pos.x = self.pos.x + (tx - self.pos.x)*_MOVE_SPEED
   if math.abs(self.pos.x - tx) <= eps then self.pos.x = tx end
-  self.pos.y = self.pos.y + (ty - self.pos.y)*speed
+  self.pos.y = self.pos.y + (ty - self.pos.y)*_MOVE_SPEED
   if math.abs(self.pos.y - ty) <= eps then self.pos.y = ty end
 
   g.translate(self.pos.x, self.pos.y)
