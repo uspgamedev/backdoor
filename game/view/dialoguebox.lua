@@ -205,7 +205,7 @@ function DialogueBox:draw()
 
   --Draw bg
   local w, h = self:getSize()
-  local mask = Color:new {1, 1, 1, self.scale}
+  local mask = Color:new {1, 1, 1, self.scale * .8}
   g.setColor(COLORS.HUD_BG * mask)
   g.rectangle("fill", 0, 0, w, h)
   g.setColor(COLORS.NEUTRAL * mask)
