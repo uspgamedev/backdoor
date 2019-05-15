@@ -167,19 +167,29 @@ function DialogueBox:init(body, i, j, side)
   self.i = i
   self.j = j
   self.side = side
+  local x, y = self:getTargetPosition()
+  self.pos = {x = x, y = y}
 
 end
 
 function DialogueBox:draw()
   local g = love.graphics
-  local x, y = self:getPosition()
-  local w, h = self:getSize()
   local dt = love.timer.getDelta()
 
   g.push()
-  g.translate(x, y)
+
+  --Move box to target position
+  local tx, ty = self:getTargetPosition()
+  local speed, eps = .15, 1
+  self.pos.x = self.pos.x + (tx - self.pos.x)*speed
+  if math.abs(self.pos.x - tx) <= eps then self.pos.x = tx end
+  self.pos.y = self.pos.y + (ty - self.pos.y)*speed
+  if math.abs(self.pos.y - ty) <= eps then self.pos.y = ty end
+
+  g.translate(self.pos.x, self.pos.y)
 
   --Draw bg
+  local w, h = self:getSize()
   g.setColor(COLORS.HUD_BG)
   g.rectangle("fill", 0, 0, w, h)
   g.setColor(COLORS.NEUTRAL)
@@ -221,7 +231,7 @@ function DialogueBox:setSide(side)
   self.side = side
 end
 
-function DialogueBox:getPosition()
+function DialogueBox:getTargetPosition()
   local x, y
   local w, h = self:getSize()
 
