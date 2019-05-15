@@ -226,7 +226,12 @@ end
 
 function SectorView:resetBodyDialogue(body)
   local id = body:getId()
-  self.body_dialogues[id] = nil
+
+  if self.body_dialogues[id] then
+    self.body_dialogues[id]:kill(self.body_dialogues, id)
+  end
+
+  return self.body_dialogues[id]
 end
 
 function SectorView:sectorChanged()
@@ -341,7 +346,11 @@ function SectorView:draw()
                                                          player_i, player_j)
               table.insert(dialogue_boxes, body_dialogue)
             else
-              self:resetBodyDialogue(body)
+              local body_dialogue = self:resetBodyDialogue(body)
+              --Keeps drawing the dialogue while it exists
+              if body_dialogue then
+                table.insert(dialogue_boxes, body_dialogue)
+              end
             end
           end
         end

@@ -1,5 +1,6 @@
 
 local Class    = require "steaming.extra_libs.hump.class"
+local Color    = require 'common.color'
 local VIEWDEFS = require 'view.definitions'
 local ELEMENT  = require "steaming.classes.primitives.element"
 local COLORS   = require 'domain.definitions.colors'
@@ -172,8 +173,12 @@ function DialogueBox:init(body, i, j, side)
   self.i = i
   self.j = j
   self.side = side
+  self.scale = 1
   local x, y = self:getTargetPosition()
   self.pos = {x = x, y = y}
+
+  self.activating = false
+  self.deactivating = false
 
 end
 
@@ -195,37 +200,47 @@ function DialogueBox:draw()
 
   --Draw bg
   local w, h = self:getSize()
-  g.setColor(COLORS.HUD_BG)
+  local mask = Color:new {1, 1, 1, self.scale}
+  g.setColor(COLORS.HUD_BG * mask)
   g.rectangle("fill", 0, 0, w, h)
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL * mask)
   g.setLineWidth(3)
   g.rectangle("line", 0, 0, w, h)
 
   --Draw text
-  self:updateText(dt)
-  local t = self.text_start_up_time
-  if t < self.char_timer then
-    for i, c in ipairs(self.text) do
-      local ox, oy = 0, 0
-      if     c.style == "wave" then
-        oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
-      elseif c.style == "shake" then
-        ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
-        oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+  if not self.activating and not self.deactivating then
+
+    self:updateText(dt)
+    local t = self.text_start_up_time
+
+    if t < self.char_timer then
+
+      for i, c in ipairs(self.text) do
+        local ox, oy = 0, 0
+
+        if     c.style == "wave" then
+          oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
+        elseif c.style == "shake" then
+          ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+          oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+        end
+
+        if c.type == "character" then
+          local color = COLORS[c.color]
+          g.setColor(color[1], color[2], color[3], c.opacity)
+          c.font:set()
+          g.print(c.object, c.x + ox, c.y + oy)
+        elseif c.type == "image" then
+          g.setColor(1.0, 1.0, 1.0, c.opacity)
+          g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
+        else
+          error("Not a valid type for object: " .. c.type)
+        end
+
+        t = t + c.time
+        if t > self.char_timer then break end
       end
-      if c.type == "character" then
-        local color = COLORS[c.color]
-        g.setColor(color[1], color[2], color[3], c.opacity)
-        c.font:set()
-        g.print(c.object, c.x + ox, c.y + oy)
-      elseif c.type == "image" then
-        g.setColor(1.0, 1.0, 1.0, c.opacity)
-        g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
-      else
-        error("Not a valid type for object: " .. c.type)
-      end
-      t = t + c.time
-      if t > self.char_timer then break end
+
     end
   end
 
@@ -266,7 +281,7 @@ function DialogueBox:getSize()
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
   local h = max_y + _TEXT_MARGIN
-  return w, h
+  return w * self.scale, h*self.scale
 end
 
 function DialogueBox:updateText(dt)
@@ -314,6 +329,20 @@ function DialogueBox:stylizeText(text)
   end
 
   return parsed
+end
+
+function DialogueBox:kill(dialogue_boxes, id)
+  if self.deactivating then return end
+  self.deactivating = true
+
+  self:addTimer("deactivating", MAIN_TIMER, "tween",
+                .3, self, {scale = 0}, "out-quad",
+                function()
+                  --Remove this body from the dialogue boxes in sector view
+                  dialogue_boxes[id] = nil
+                  self:destroy()
+                end
+              )
 end
 
 --LOCAL FUNCTIONS--
