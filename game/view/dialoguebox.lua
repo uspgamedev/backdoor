@@ -173,13 +173,18 @@ function DialogueBox:init(body, i, j, side)
   self.i = i
   self.j = j
   self.side = side
-  self.scale = 1
+  self.scale = 0
   local x, y = self:getTargetPosition()
   self.pos = {x = x, y = y}
 
-  self.activating = false
   self.deactivating = false
-
+  self.activating = true
+  self:addTimer("activating", MAIN_TIMER, "tween",
+                .3, self, {scale = 1}, "out-quad",
+                function()
+                  self.activating = false
+                end
+              )
 end
 
 function DialogueBox:draw()
@@ -335,6 +340,7 @@ function DialogueBox:kill(dialogue_boxes, id)
   if self.deactivating then return end
   self.deactivating = true
 
+  self:removeTimer("activating", MAIN_TIMER)
   self:addTimer("deactivating", MAIN_TIMER, "tween",
                 .3, self, {scale = 0}, "out-quad",
                 function()
