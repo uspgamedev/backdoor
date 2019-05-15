@@ -25,6 +25,10 @@ local _MAX_WIDTH = 2*_TILE_W
 --Text attributes
 local _TEXT_MARGIN = 5
 
+--Text objects entrance fx
+local _ENTER_SPEED = 10
+local _ENTER_OFFSET = 3
+
 --Different fonts a char can have
 local _CHAR_FONT = {
   small = FONT.get('Text', 12),
@@ -36,7 +40,7 @@ local _CHAR_FONT = {
 local _CHAR_SPEED = {
   slow      = .5,
   medium    = .12,
-  regular   = .07,
+  regular   = .06,
   fast      = .04,
   ultrafast = .02
 }
@@ -223,6 +227,10 @@ function DialogueBox:draw()
       for i, c in ipairs(self.text) do
         local ox, oy = 0, 0
 
+        --Update entrance fx for text objects
+        c.enter = math.min(c.enter + _ENTER_SPEED * dt, 1)
+
+        --Apply style
         if     c.style == "wave" then
           oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
         elseif c.style == "shake" then
@@ -230,13 +238,16 @@ function DialogueBox:draw()
           oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
         end
 
+        --Apply entrance offset fx
+        oy = oy - _ENTER_OFFSET * (1 - c.enter)
+
         if c.type == "character" then
           local color = COLORS[c.color]
-          g.setColor(color[1], color[2], color[3], c.opacity)
+          g.setColor(color[1], color[2], color[3], c.opacity * c.enter)
           c.font:set()
           g.print(c.object, c.x + ox, c.y + oy)
         elseif c.type == "image" then
-          g.setColor(1.0, 1.0, 1.0, c.opacity)
+          g.setColor(1.0, 1.0, 1.0, c.opacity * c.enter)
           g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
         else
           error("Not a valid type for object: " .. c.type)
@@ -514,6 +525,7 @@ function addCharacter(char, parsed_text, attributes, dialogue_box)
     {
       type = "character",
       object = char,
+      enter = 0,
       x = attributes.x,
       y = ty,
       width = w,
@@ -546,6 +558,7 @@ function addImage(image, scale, parsed_text, attributes, dialogue_box)
     {
       type = "image",
       object = image,
+      enter = 0,
       scale = scale,
       x = attributes.x,
       y = ty,
