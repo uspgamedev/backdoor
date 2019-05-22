@@ -18,13 +18,16 @@ TRANSFORMER.schema = {
     minwidth = 5, minheight = 5, maxwidth = 50, maxheight = 50,
     palette = PALETTE
   },
-  { id = 'offset', name = "Offset", type = 'vector', size = 2, range = {0,50},
-    signature = { 'x', 'y' } }
+  { id = 'offset', name = "Tilemap offset", type = 'vector', size = 2,
+    range = { 0, 50 } },
+  { id = 'player-pos', name = "Player position", type = 'vector', size = 2,
+    range = { 0, 50 }, optional = true },
 }
 
 function TRANSFORMER.process(sectorinfo, params)
   local map = params['map']
   local ox, oy = unpack(params['offset'])
+  local player_x, player_y = unpack(params['player-pos'])
   local mw, mh = sectorinfo.grid.getMargins()
 
   for y = 0, map.height - 1 do
@@ -43,10 +46,9 @@ function TRANSFORMER.process(sectorinfo, params)
   end
 
   sectorinfo.drops = drops
-
   sectorinfo.encounters = {}
+  sectorinfo.player_pos = { mw + ox + player_x, mh + oy + player_y }
 
-  print("Applied fixed layout")
   return sectorinfo
 end
 
