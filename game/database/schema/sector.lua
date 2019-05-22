@@ -3,6 +3,8 @@ return  {
   { id = 'theme', name = "Theme", type = 'enum', options = 'domains.theme' },
   { id = 'bootstrap', name = "Base Settings", type = 'section',
     schema = 'transformers.bootstrap', required = true },
+  { id = 'fixed_layout', name = "Fixed Layout Settings", type = 'section',
+    schema = 'transformers.fixed_layout', required = true },
   { id = 'holes', name = "Holes Settings", type = 'section',
     schema = 'transformers.holes' },
   { id = 'rooms', name = "Room Settings", type = 'section',
