@@ -36,6 +36,15 @@ end
 local function _playTurns(...)
   local request, extra = _route.playTurns(...)
 
+  if _soundtrack then
+    local hostile_bodies = _route.getControlledActor():getHostileBodies()
+    if #hostile_bodies > 0 then
+      _soundtrack:enableTrack("danger")
+    else
+      _soundtrack:disableTrack("danger")
+    end
+  end
+
   if request == "playerDead" then
     _view.action_hud:destroy()
     _view.actor:destroy()
