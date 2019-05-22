@@ -1,18 +1,18 @@
 
+-- luacheck: no self
+
 local IMGUI = require 'imgui'
-local INPUT = require 'devmode.view.input'
-local DB    = require 'database'
 local class = require 'lux.class'
 
 local setfenv = setfenv
-local table = table
 local ipairs = ipairs
 local setmetatable = setmetatable
+local math = math
 
 local VectorEditor = class:new()
 
 local _signature_mt = {
-  __index = function(gui, k)
+  __index = function(_, k)
     return tonumber(k)
   end
 }
@@ -23,7 +23,6 @@ function VectorEditor:instance(obj, _elementspec, _fieldschema)
 
   local _vector = _elementspec[_fieldschema.id] or {}
   _elementspec[_fieldschema.id] = _vector
-  local _selected = nil
   local _size = _fieldschema.size
   local _range = _fieldschema.range
   local _default = _fieldschema.default or 0
@@ -48,7 +47,7 @@ function VectorEditor:instance(obj, _elementspec, _fieldschema)
     return new
   end
 
-  function input(gui)
+  function input(gui) -- luacheck: no unused, no global
     IMGUI.Text(("%s"):format(_fieldschema.name))
     IMGUI.Columns(2, _fieldschema.id, false)
     for i, component_input in ipairs(_component_inputs) do
@@ -66,7 +65,7 @@ function VectorEditor:instance(obj, _elementspec, _fieldschema)
     IMGUI.Spacing()
   end
 
-  function __operator:call(gui)
+  function __operator:call(gui) -- luacheck: no global
     return obj.input(gui)
   end
 end
