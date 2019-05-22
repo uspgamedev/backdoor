@@ -27,6 +27,9 @@ local _next_action
 local _view
 local _soundtrack
 
+--Forward functions declaration
+local _updateSoundtrack
+
 --LOCAL FUNCTION--
 
 local function _saveRoute()
@@ -36,14 +39,7 @@ end
 local function _playTurns(...)
   local request, extra = _route.playTurns(...)
 
-  if _soundtrack then
-    local hostile_bodies = _route.getControlledActor():getHostileBodies()
-    if #hostile_bodies > 0 then
-      _soundtrack:enableTrack("danger")
-    else
-      _soundtrack:disableTrack("danger")
-    end
-  end
+  _updateSoundtrack()
 
   if request == "playerDead" then
     _view.action_hud:destroy()
@@ -180,6 +176,29 @@ end
 
 function state:draw()
   Draw.allTables()
+end
+
+--Local functions
+
+function _updateSoundtrack()
+  if _soundtrack then
+
+    --Check for danger
+    local hostile_bodies = _route.getControlledActor():getHostileBodies()
+    if #hostile_bodies > 0 then
+      _soundtrack:enableTrack("danger")
+    else
+      _soundtrack:disableTrack("danger")
+    end
+
+    --Check for focus
+    if _route.getControlledActor():isFocused() then
+      _soundtrack:enableTrack("focused")
+    else
+      _soundtrack:disableTrack("focused")
+    end
+
+  end
 end
 
 --Return state functions
