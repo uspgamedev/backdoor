@@ -9,8 +9,8 @@ local PLAYSFX         = require 'helpers.playsfx'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
-local SoundTrack      = require 'view.soundtrack'
 local Draw            = require "draw"
+local Util            = require "steaming.util"
 
 local state = {}
 
@@ -54,7 +54,7 @@ function _activity:changeState(mode, to, ...)
   fade_view:register("GUI")
   fade_view:destroy()
   if to == GS.PLAY then
-    _soundtrack:stopTheme()
+    _soundtrack:clearTheme()
   end
   _menu_view.invisible = true
   return SWITCHER[mode](to, ...)
@@ -68,7 +68,7 @@ function state:enter()
   _menu_view = StartMenuView()
   _menu_view:register("HUD")
 
-  _soundtrack = SoundTrack()
+  _soundtrack = Util.findId("soundtrack")
 
   _activity:enterMenu()
 end
@@ -81,8 +81,7 @@ end
 function state:resume(from, info)
   if from == GS.CHARACTER_BUILD and info then
     _locked = true
-    print(("%s %s"):format(info.species, info.background))
-    _soundtrack:stopTheme()
+    _soundtrack:clearTheme()
     SWITCHER.switch(GS.PLAY, PROFILE.newRoute(info))
   else
     _menu_context = "START_MENU"

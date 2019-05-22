@@ -1,14 +1,26 @@
 
-local Class = require "steaming.extra_libs.hump.class"
-local RES = require 'resources'
+local Class   = require "steaming.extra_libs.hump.class"
+local Util    = require "steaming.util"
+local RES     = require 'resources'
 local PROFILE = require 'infra.profile'
+local ELEMENT = require "steaming.classes.primitives.element"
 
-local SoundTrack  = Class({})
+local SoundTrack  = Class {
+  __includes = { ELEMENT }
+}
+
+--Consts
+local _FADE_RATIO = .05
+
+--Forward functions declarations
+local fadeToVolume
 
 function SoundTrack:init()
-
   self.theme = nil
   self.streams = {}
+
+  ELEMENT.setId(self, "soundtrack")
+  self.exception = true
 end
 
 function SoundTrack:playTheme(theme)
@@ -52,7 +64,6 @@ end
 function SoundTrack:enableTrack(track)
   if self.streams[track] then
     self.streams[track].active = true
-    self:updateVolume()
   else
     error("not a valid track for current theme: ".. track)
   end
@@ -61,7 +72,6 @@ end
 function SoundTrack:disableTrack(track)
   if self.streams[track] then
     self.streams[track].active = false
-    self:updateVolume()
   else
     error("not a valid track for current theme: ".. track)
   end
@@ -70,9 +80,9 @@ end
 
 function SoundTrack:resumeTheme()
   for _, stream in pairs(self.streams) do
+    stream.source:setVolume(0)
     stream.source:play()
   end
-  self:updateVolume()
 end
 
 function SoundTrack:stopTheme()
@@ -86,14 +96,22 @@ function SoundTrack:clearTheme()
   self.streams = {}
 end
 
-function SoundTrack:updateVolume()
+function SoundTrack:update()
   for _, stream in pairs(self.streams) do
     if stream.active then
-      stream.source:setVolume(PROFILE.getPreference("bgm-volume") / 100)
+      fadeToVolume(stream.source, PROFILE.getPreference("bgm-volume") / 100)
     else
-      stream.source:setVolume(0)
+      fadeToVolume(stream.source, 0)
     end
   end
+end
+
+--Local functions
+
+function fadeToVolume(source, target_vol)
+  local cur_vol = source:getVolume()
+
+  source:setVolume(cur_vol + _FADE_RATIO*(target_vol - cur_vol))
 end
 
 return SoundTrack

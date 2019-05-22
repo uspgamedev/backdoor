@@ -8,7 +8,6 @@ local PLAYSFX     = require 'helpers.playsfx'
 local GameplayView = require 'view.gameplay'
 local Route       = require 'domain.route'
 local FadeView    = require 'view.fade'
-local SoundTrack  = require 'view.soundtrack'
 local Util        = require "steaming.util"
 local Draw        = require "draw"
 
@@ -64,10 +63,6 @@ local function _initFrontend()
   local gui = Util.findId('devmode-gui')
   gui.sector_vew = _view.sector
 
-  -- Sound Track
-  _soundtrack = SoundTrack()
-  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
-
 end
 
 function _activity:saveAndQuit()
@@ -121,6 +116,10 @@ function state:enter(_, route_data)
   _route = Route()
   _route.loadState(route_data)
 
+  -- setup soundtrack
+  _soundtrack = Util.findId("soundtrack")
+  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
+
   -- create general gameplay view
   _view = GameplayView()
 
@@ -142,7 +141,7 @@ function state:leave()
   _route.destroyAll()
   _view:destroy()
   Util.findId('devmode-gui').sector_view = nil
-  _soundtrack:stopTheme()
+  _soundtrack:clearTheme()
   Util.destroyAll()
 
 end
