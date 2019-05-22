@@ -7,6 +7,11 @@
     "w":21
   },
   "fixed_layout":{
+    "encounters":[{
+        "body-specname":"corgi",
+        "pos":[3,1],
+        "actor-specname":false
+      }],
     "layout-info":"",
     "map":{
       "data":[3,2,2,2,3,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,3,2,2,2,3],

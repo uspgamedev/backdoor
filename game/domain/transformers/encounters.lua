@@ -31,13 +31,13 @@ function transformer.process(sectorinfo, params)
   local total = RANDOM.generate(params.min, params.max)
   local used = {}
 
-  for i=1,total do
+  for _=1,total do
     local encounter = {}
     local recipe = recipes[RANDOM.generate(1,#recipes)]
     local upgrade_power = math.floor(0.8 + 0.4*RANDOM.generate()
                                      * recipe.upgrade_power)
     encounter.upgrade_power = upgrade_power
-    encounter.monster = { recipe.actorspec, recipe.bodyspec }
+    encounter.creature = { recipe.actorspec, recipe.bodyspec }
     local minj, maxj, mini, maxi = grid.getRange()
     local i, j
     repeat

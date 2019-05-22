@@ -57,38 +57,44 @@ function _placeTiles(state, grid, drops)
 end
 
 function _placeBodiesAndActors(idgenerator, state, encounters)
+
   state.bodies = {}
   state.actors = {}
+
+  local zone_spec = DB.loadSpec('zone', state.zone)
+  local difficulty_multiplier = 1 + zone_spec['difficulty']
+
   for _,encounter in ipairs(encounters) do
-    local actor_specname, body_specname = unpack(encounter.monster)
+    local actor_specname, body_specname = unpack(encounter.creature)
     local i, j = unpack(encounter.pos)
     local body_state =
       BODY_BUILDER.buildState(idgenerator, body_specname, i, j)
-    local actor_state =
-      ACTOR_BUILDER.buildState(idgenerator, actor_specname, body_state)
     table.insert(state.bodies, body_state)
-    table.insert(state.actors, actor_state)
 
-    local zone_spec = DB.loadSpec('zone', state.zone)
-    local difficulty_multiplier = 1 + zone_spec['difficulty']
-    local upgradexp = encounter.upgrade_power
+    if actor_specname then
+      local actor_state =
+      ACTOR_BUILDER.buildState(idgenerator, actor_specname, body_state)
+      table.insert(state.actors, actor_state)
 
-    upgradexp = math.floor(upgradexp * difficulty_multiplier)
-
-    -- allocating exp
-    if upgradexp > 0 then
-      local total = 0
-      local aptitudes = {}
-      local actor_spec = DB.loadSpec('actor', actor_specname)
-      for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
-        aptitudes[attr] = actor_spec[attr:lower()] + 3 -- min of 1
-        total = total + aptitudes[attr]
-      end
-      local unit = upgradexp / total
-      for attr,priority in pairs(aptitudes) do
-        local award = math.floor(unit * priority)
-        if DEFS.PRIMARY_ATTRIBUTES[attr] then
-          actor_state.upgrades[attr] = DEFS.ATTR.INITIAL_UPGRADE + award
+      local upgradexp = encounter.upgrade_power
+      if upgradexp then
+        upgradexp = math.floor(upgradexp * difficulty_multiplier)
+        -- allocating exp
+        if upgradexp > 0 then
+          local total = 0
+          local aptitudes = {}
+          local actor_spec = DB.loadSpec('actor', actor_specname)
+          for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
+            aptitudes[attr] = actor_spec[attr:lower()] + 3 -- min of 1
+            total = total + aptitudes[attr]
+          end
+          local unit = upgradexp / total
+          for attr,priority in pairs(aptitudes) do
+            local award = math.floor(unit * priority)
+            if DEFS.PRIMARY_ATTRIBUTES[attr] then
+              actor_state.upgrades[attr] = DEFS.ATTR.INITIAL_UPGRADE + award
+            end
+          end
         end
       end
     end

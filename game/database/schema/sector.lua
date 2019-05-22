@@ -4,7 +4,7 @@ return  {
   { id = 'bootstrap', name = "Base Settings", type = 'section',
     schema = 'transformers.bootstrap', required = true },
   { id = 'fixed_layout', name = "Fixed Layout Settings", type = 'section',
-    schema = 'transformers.fixed_layout', required = true },
+    schema = 'transformers.fixed_layout' },
   { id = 'holes', name = "Holes Settings", type = 'section',
     schema = 'transformers.holes' },
   { id = 'rooms', name = "Room Settings", type = 'section',

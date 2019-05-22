@@ -22,6 +22,17 @@ TRANSFORMER.schema = {
     range = { 0, 50 } },
   { id = 'player-pos', name = "Player position", type = 'vector', size = 2,
     range = { 0, 50 } },
+  {
+    id = 'encounters', name = "Encounters", type = 'array',
+    schema = {
+      { id = 'pos', name = "Position", type = 'vector', size = 2,
+        range = { 0, 50, } },
+      { id = 'body-specname', name = "Body Specification", type = 'enum',
+        options = 'domains.body' },
+      { id = 'actor-specname', name = "Actor Specification", type = 'enum',
+        options = 'domains.actor', optional = true },
+    }
+  }
 }
 
 function TRANSFORMER.process(sectorinfo, params)
@@ -53,9 +64,21 @@ function TRANSFORMER.process(sectorinfo, params)
       drops[i] = drops[i] or {}
       drops[i][j] = {}
   end
-
   sectorinfo.drops = drops
-  sectorinfo.encounters = {}
+
+  local encounters = {}
+  for i,encounter_spec in ipairs(params['encounters']) do
+    local pos = encounter_spec['pos']
+    local x, y = mw + ox + pos[1], mh + oy + pos[2]
+    local encounter = {
+      creature = { encounter_spec['actor-specname'],
+                   encounter_spec['body-specname'] },
+      pos = { y, x } -- EXPECTS [i,j], see sector builder
+    }
+    encounters[i] = encounter
+  end
+  sectorinfo.encounters = encounters
+
   sectorinfo.player_pos = { mw + ox + player_x, mh + oy + player_y }
 
   return sectorinfo
