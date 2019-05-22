@@ -37,7 +37,7 @@ function _activity:enterMenu()
   _locked = true
   local fade_view = FadeView(FadeView.STATE_FADED)
   local menu_theme = DB.loadSpec('theme', 'main-menu')
-  _soundtrack.playTheme(menu_theme['singletrack']['bgm'])
+  _soundtrack:playTheme(menu_theme)
   fade_view:register("GUI")
   fade_view:fadeInAndThen(self.resume)
   self.wait()
@@ -54,7 +54,7 @@ function _activity:changeState(mode, to, ...)
   fade_view:register("GUI")
   fade_view:destroy()
   if to == GS.PLAY then
-    _soundtrack.stopTheme()
+    _soundtrack:stopTheme()
   end
   _menu_view.invisible = true
   return SWITCHER[mode](to, ...)
@@ -82,7 +82,7 @@ function state:resume(from, info)
   if from == GS.CHARACTER_BUILD and info then
     _locked = true
     print(("%s %s"):format(info.species, info.background))
-    _soundtrack.stopTheme()
+    _soundtrack:stopTheme()
     SWITCHER.switch(GS.PLAY, PROFILE.newRoute(info))
   else
     _menu_context = "START_MENU"

@@ -33,7 +33,7 @@ local function _changeField(field, offset)
   PROFILE.setPreference(field, _changes[field])
   --Update on the spot menu bgm sound
   if field == "bgm-volume" then
-      _soundtrack.updateVolume()
+      _soundtrack:updateVolume()
   end
 end
 
