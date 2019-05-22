@@ -22,41 +22,62 @@ function SoundTrack:playTheme(theme)
     self.theme = theme
 
     if theme.singletrack then
-      self.streams['default'] = RES.loadBGM(theme.singletrack.bgm)
+      self.streams['default'] = {
+        source = RES.loadBGM(theme.singletrack.bgm),
+        active = true
+      }
     elseif theme.multitrack then
-      self.streams['default'] = RES.loadBGM(theme.multitrack.default)
-      self.streams['danger'] = RES.loadBGM(theme.multitrack.danger)
-      self.streams['focused'] = RES.loadBGM(theme.multitrack.focused)
+      self.streams['default'] = {
+        source = RES.loadBGM(theme.multitrack.default),
+        active = true,
+      }
+      self.streams['danger'] = {
+        source = RES.loadBGM(theme.multitrack.danger),
+        active = false,
+      }
+      self.streams['focused'] = {
+        source = RES.loadBGM(theme.multitrack.focused),
+        active = true,
+      }
     else
       error("theme isn't singletrack nor multitrack")
     end
 
-    self:playTrack("default")
 
+    self:resumeTheme()
+  end
+
+end
+
+function SoundTrack:enableTrack(track)
+  if self.streams[track] then
+    self.streams[track].active = true
     self:updateVolume()
-  end
-
-end
-
-function SoundTrack:playTrack(track)
-  if self.streams[track] then
-    self.streams[track]:play()
   else
     error("not a valid track for current theme: ".. track)
   end
 end
 
-function SoundTrack:stopTrack(track)
+function SoundTrack:disableTrack(track)
   if self.streams[track] then
-    self.streams[track]:stop()
+    self.streams[track].active = false
+    self:updateVolume()
   else
     error("not a valid track for current theme: ".. track)
   end
+
+end
+
+function SoundTrack:resumeTheme()
+  for _, stream in pairs(self.streams) do
+    stream.source:play()
+  end
+  self:updateVolume()
 end
 
 function SoundTrack:stopTheme()
   for _, stream in pairs(self.streams) do
-    stream:stop()
+    stream.source:stop()
   end
 end
 
@@ -67,7 +88,11 @@ end
 
 function SoundTrack:updateVolume()
   for _, stream in pairs(self.streams) do
-    stream:setVolume(PROFILE.getPreference("bgm-volume") / 100)
+    if stream.active then
+      stream.source:setVolume(PROFILE.getPreference("bgm-volume") / 100)
+    else
+      stream.source:setVolume(0)
+    end
   end
 end
 
