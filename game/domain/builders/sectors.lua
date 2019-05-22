@@ -25,23 +25,6 @@ function BUILDER.build(idgenerator, player_data)
     route_map:connect(id1, id2)
   end
 
-  -- generate player
-  local species = player_data.species
-  local background = player_data.background
-  local pbody = BODY_BUILDER.buildState(idgenerator, species, 11, 11)
-  local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
-
-  -- generate npcs
-
-  --local npcs = {
-  --  BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
-  --  BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
-  --}
-  --npcs[1].dialogue = "Welcome to pre-alpha backdoor!"
-
-  --npcs[2].dialogue = "Find [color value:red]Vanth's fruit[color value:regular] to win the game."
-
-
   -- generate first sector
   local first_sector
   for _,sector in ipairs(sectors) do
@@ -53,11 +36,29 @@ function BUILDER.build(idgenerator, player_data)
 
   assert(first_sector, "No first sector???")
 
-  SECTOR_BUILDER.generateState(idgenerator, first_sector)
+  local info = SECTOR_BUILDER.generateState(idgenerator, first_sector)
+
+  -- generate player
+  local species = player_data.species
+  local background = player_data.background
+  local pbody = BODY_BUILDER.buildState(idgenerator, species,
+                                        unpack(info.player_pos))
+  local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
 
   -- Place player
   table.insert(first_sector.bodies, pbody)
   table.insert(first_sector.actors, pactor)
+
+  -- generate npcs
+
+  --local npcs = {
+  --  BODY_BUILDER.buildState(idgenerator, "corgi", 11, 11),
+  --  BODY_BUILDER.buildState(idgenerator, "slime", 9, 13),
+  --}
+  --npcs[1].dialogue = "Welcome to pre-alpha backdoor!"
+
+  --npcs[2].dialogue = "Find [type:color/value:red]Vanth's fruit[type:color/value:regular] to win the game."
+
 
   return sectors, first_sector
 end

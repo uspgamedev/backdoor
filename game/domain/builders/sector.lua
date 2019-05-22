@@ -16,7 +16,7 @@ function BUILDER.generateState(idgenerator, state)
   assert(not state.generated, "cannot build already generated sector state")
 
   -- initial generation information
-  local base = {
+  local info = {
     exits = state.exits
   }
 
@@ -24,16 +24,16 @@ function BUILDER.generateState(idgenerator, state)
   for _,transformer in DB.schemaFor('sector') do
     local spec = DB.loadSpec('sector', state.specname)[transformer.id]
     if spec and transformer.id ~= 'theme' then
-      base = TRANSFORMERS[transformer.id].process(base, spec)
+      info = TRANSFORMERS[transformer.id].process(info, spec)
     end
   end
 
-  _placeTiles(state, base.grid, base.drops)
-  _placeBodiesAndActors(idgenerator, state, base.encounters)
+  _placeTiles(state, info.grid, info.drops)
+  _placeBodiesAndActors(idgenerator, state, info.encounters)
 
   state.generated = true
 
-  return state
+  return { state = state, player_pos = info.player_pos }
 end
 
 function _placeTiles(state, grid, drops)
