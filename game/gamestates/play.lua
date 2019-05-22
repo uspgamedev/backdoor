@@ -136,8 +136,8 @@ function state:leave()
   _saveRoute()
   _route.destroyAll()
   _view:destroy()
-  _soundtrack.playTheme(nil)
   Util.findId('devmode-gui').sector_view = nil
+  _soundtrack.stopTheme()
   Util.destroyAll()
 
 end

@@ -53,7 +53,7 @@ function _activity:changeState(mode, to, ...)
   fade_view:register("GUI")
   fade_view:destroy()
   if to == GS.PLAY then
-    _soundtrack.playTheme()
+    _soundtrack.stopTheme()
   end
   _menu_view.invisible = true
   return SWITCHER[mode](to, ...)
@@ -81,7 +81,7 @@ function state:resume(from, info)
   if from == GS.CHARACTER_BUILD and info then
     _locked = true
     print(("%s %s"):format(info.species, info.background))
-    _soundtrack.playTheme()
+    _soundtrack.stopTheme()
     SWITCHER.switch(GS.PLAY, PROFILE.newRoute(info))
   else
     _menu_context = "START_MENU"

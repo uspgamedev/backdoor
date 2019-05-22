@@ -14,13 +14,20 @@ function SoundTrack:instance(obj)
   local bgm = {}
 
   function playTheme(theme)
-    if theme and bgm.id ~= theme then
+    if not theme then
+      error("theme not provided to play")
+    end
+    if bgm.id ~= theme then
       if bgm.stream then bgm.stream:stop() end
       bgm.stream = RES.loadBGM(theme)
       bgm.stream:play()
       bgm.id = theme
       updateVolume()
-    elseif not theme and bgm.stream then
+    end
+  end
+
+  function stopTheme()
+    if bgm.stream then
       bgm.stream:stop()
       bgm.stream = nil
     end
@@ -35,4 +42,3 @@ function SoundTrack:instance(obj)
 end
 
 return SoundTrack
-
