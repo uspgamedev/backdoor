@@ -1,4 +1,7 @@
 {
-  "bgm":"ruins",
-  "tileset":"demo"
+  "singletrack":{
+    "bgm":"ruins"
+  },
+  "tileset":"demo",
+  "multitrack":false
 }

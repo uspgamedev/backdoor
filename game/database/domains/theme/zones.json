@@ -1,4 +1,6 @@
 {
-  "bgm":"ruins",
+  "singletrack":{
+    "bgm":"ruins"
+  },
   "tileset":"ruins"
 }

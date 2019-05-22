@@ -61,7 +61,7 @@ local function _initFrontend()
 
   -- Sound Track
   _soundtrack = SoundTrack()
-  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
+  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['singletrack']['bgm'])
 
 end
 
@@ -86,7 +86,7 @@ function _activity:changeSector()
   local change_sector_ok = _route.checkSector()
   assert(change_sector_ok, "Sector Change fuck up")
   _view.sector:sectorChanged()
-  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
+  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['singletrack']['bgm'])
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
   self.wait()
   fade_view:fadeInAndThen(self.resume)
