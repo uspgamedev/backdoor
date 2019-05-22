@@ -1,8 +1,5 @@
 local DB = require 'database'
-local DEFS = require 'domain.definitions'
 local SCHEMATICS = require 'domain.definitions.schematics'
-local TRANSFORMERS = require 'lux.pack' 'domain.transformers'
-local COLORS = require 'domain.definitions.colors'
 local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
@@ -10,7 +7,6 @@ local Body  = require 'domain.body'
 local Util  = require "steaming.util"
 local Class = require "steaming.extra_libs.hump.class"
 
-local SectorGrid = require 'domain.transformers.helpers.sectorgrid'
 local GameElement = require 'domain.gameelement'
 
 local Sector = Class {
@@ -143,78 +139,8 @@ function Sector:isGenerated()
   return self.generated
 end
 
-function Sector:generate()
-
-  -- load sector's specs
-  local base = {
-    exits = self.exits
-  }
-
-  -- sector grid generation
-  for _,transformer in DB.schemaFor('sector') do
-    local spec = self:getSpec(transformer.id)
-    if spec then
-      base = TRANSFORMERS[transformer.id].process(base, spec)
-    end
-  end
-
-  self:makeTiles(base.grid, base.drops)
-  self:makeEncounters(base.encounters)
-
-  self.generated = true
-end
-
 function Sector:getTile(i, j)
   return self.tiles[i][j]
-end
-
-function Sector:makeTiles(grid, drops)
-  self.w, self.h = grid.getDim()
-  for i = 1, self.h do
-    self.tiles[i] = {}
-    self.bodies[i] = {}
-    for j = 1, self.w do
-      local tile = false
-      local tile_type = grid.get(j, i)
-      if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
-        tile = { type = tile_type, drops = {} }
-        for _,drop in ipairs(drops[i][j]) do
-          table.insert(tile.drops, drop)
-        end
-      end
-      self.tiles[i][j] = tile
-      self.bodies[i][j] = false
-    end
-  end
-end
-
-function Sector:makeEncounters(encounters)
-  for _,encounter in ipairs(encounters) do
-    local actorspec, bodyspec = unpack(encounter.monster)
-    local i, j = unpack(encounter.pos)
-    local actor, body = self.route.makeActor(self, actorspec, bodyspec, i, j)
-    local difficulty_multiplier = 1 + self:getDifficulty()
-    local upgradexp = encounter.upgrade_power
-
-    upgradexp = math.floor(upgradexp * difficulty_multiplier)
-
-    -- allocating exp
-    if upgradexp > 0 then
-      local unit, total = 0, 0
-      local aptitudes = {}
-      for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
-        aptitudes[attr] = actor:getSpec(attr:lower()) + 3 -- min of 1
-        total = total + aptitudes[attr]
-      end
-      unit = upgradexp / total
-      for attr,priority in pairs(aptitudes) do
-        local award = math.floor(unit * priority)
-        if DEFS.PRIMARY_ATTRIBUTES[attr] then
-          actor:upgradeAttr(attr, award)
-        end
-      end
-    end
-  end
 end
 
 --- Returns the exit with the given index
@@ -289,7 +215,7 @@ function Sector:removeBodyAt(i, j, body)
   local removed_actor
 
   --Checks if this body has an actor
-  for i, actor in ipairs(self.actors) do
+  for k, actor in ipairs(self.actors) do
     if actor:getBody() ==  body then
 
       if actor:isPlayer() then
@@ -297,7 +223,7 @@ function Sector:removeBodyAt(i, j, body)
         coroutine.yield("playerDead")
       end
 
-      removed_actor = table.remove(self.actors, i)
+      removed_actor = table.remove(self.actors, k)
 
       break
     end
@@ -460,7 +386,7 @@ function Sector:spreadDrops(i, j, drops)
 
 end
 
-function _turnLoop(self, ...)
+function _turnLoop(self)
   local actors_queue = self.actors_queue
   while true do
 

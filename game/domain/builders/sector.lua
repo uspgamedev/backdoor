@@ -32,6 +32,7 @@ function BUILDER.generateState(idgenerator, state)
   _placeBodiesAndActors(idgenerator, state, info.encounters)
 
   state.generated = true
+  state.exits = info.exits
 
   return { state = state, player_pos = info.player_pos }
 end

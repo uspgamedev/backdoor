@@ -92,10 +92,16 @@ function Route:instance(obj) -- luacheck: no self
     _player_dead = true
   end
 
+  local function _generateSector(sector)
+      local state = sector:saveState()
+      BUILDERS.sector.generateState(_id_generator, state)
+      sector:loadState(state)
+  end
+
   function obj.setCurrentSector(id)
     _current_sector = Util.findId(id)
     if not _current_sector:isGenerated() then
-      _current_sector:generate()
+      _generateSector(_current_sector)
     end
   end
 
@@ -115,7 +121,7 @@ function Route:instance(obj) -- luacheck: no self
     if not exit.target_pos then
       local to_sector = Util.findId(target_sector_id)
       if not to_sector:isGenerated() then
-        to_sector:generate()
+        _generateSector(to_sector)
       end
       local entry = to_sector:getExit(from_sector.id)
       to_sector:link(from_sector.id, unpack(exit.pos))
