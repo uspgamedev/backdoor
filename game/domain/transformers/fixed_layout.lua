@@ -18,13 +18,13 @@ TRANSFORMER.schema = {
     minwidth = 5, minheight = 5, maxwidth = 50, maxheight = 50,
     palette = PALETTE
   },
-  { id = 'x-offset', name = "X-Offset", type = 'integer', range = {0,50} },
-  { id = 'y-offset', name = "Y-Offset", type = 'integer', range = {0,50} },
+  { id = 'offset', name = "Offset", type = 'vector', size = 2, range = {0,50},
+    signature = { 'x', 'y' } }
 }
 
 function TRANSFORMER.process(sectorinfo, params)
   local map = params['map']
-  local ox, oy = params['x-offset'], params['y-offset']
+  local ox, oy = unpack(params['offset'])
   local mw, mh = sectorinfo.grid.getMargins()
 
   for y = 0, map.height - 1 do
