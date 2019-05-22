@@ -1,10 +1,20 @@
 {
   "bootstrap":{
-    "h":0,
-    "mh":0,
-    "mw":0,
+    "h":21,
+    "mh":8,
+    "mw":8,
     "tileset":"demo",
-    "w":0
+    "w":21
+  },
+  "fixed_layout":{
+    "layout-info":"",
+    "map":{
+      "data":[3,2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,3],
+      "height":5,
+      "width":5
+    },
+    "x-offset":0,
+    "y-offset":0
   },
   "theme":false
 }

@@ -1,4 +1,6 @@
 
+-- luacheck: no self
+
 local SCHEMATICS = require 'domain.definitions.schematics'
 
 local SectorGrid = require 'lux.class' :new{}
@@ -53,12 +55,12 @@ function SectorGrid:instance(obj, w, h, mw, mh)
 
   function obj.iterate ()
     local init_s = { 1, 0, tbl = _grid }
-    return function(s, value)
+    return function(s, _)
       local m = s.tbl
 
       s[2] = s[2] + 1
       local i, j = s[1], s[2]
-      value = m[i] and m[i][j]
+      local value = m[i] and m[i][j]
 
       if not value then
         s[1] = s[1] + 1
