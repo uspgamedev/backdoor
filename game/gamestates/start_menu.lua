@@ -36,7 +36,8 @@ end
 function _activity:enterMenu()
   _locked = true
   local fade_view = FadeView(FadeView.STATE_FADED)
-  _soundtrack.playTheme('title-menu')
+  local menu_theme = DB.loadSpec('theme', 'main-menu')
+  _soundtrack.playTheme(menu_theme['singletrack']['bgm'])
   fade_view:register("GUI")
   fade_view:fadeInAndThen(self.resume)
   self.wait()

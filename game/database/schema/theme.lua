@@ -16,5 +16,5 @@ return {
       { id = "focused", name = "Focused BGM", type = 'enum', options = 'resources.bgm' },
     }
   },
-  { id = "tileset", name = "TileSet", type = 'enum', options = 'resources.tileset' },
+  { id = "tileset", name = "TileSet", type = 'enum', options = 'resources.tileset', optional = true },
 }
