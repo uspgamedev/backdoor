@@ -96,7 +96,7 @@ function love.update(dt)
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
   Draw.update(dt)
-  SOUNDTRACK:update()
+  SOUNDTRACK:update(dt)
   Util.destroyAll()
 end
 

@@ -10,7 +10,7 @@ local SoundTrack  = Class {
 }
 
 --Consts
-local _FADE_RATIO = .05
+local _FADE_RATIO = 1
 
 --Forward functions declarations
 local fadeToVolume
@@ -96,22 +96,22 @@ function SoundTrack:clearTheme()
   self.streams = {}
 end
 
-function SoundTrack:update()
+function SoundTrack:update(dt)
   for _, stream in pairs(self.streams) do
     if stream.active then
-      fadeToVolume(stream.source, PROFILE.getPreference("bgm-volume") / 100)
+      fadeToVolume(stream.source, PROFILE.getPreference("bgm-volume") / 100, dt)
     else
-      fadeToVolume(stream.source, 0)
+      fadeToVolume(stream.source, 0, dt)
     end
   end
 end
 
 --Local functions
 
-function fadeToVolume(source, target_vol)
+function fadeToVolume(source, target_vol, dt)
   local cur_vol = source:getVolume()
 
-  source:setVolume(cur_vol + _FADE_RATIO*(target_vol - cur_vol))
+  source:setVolume(cur_vol + _FADE_RATIO*(target_vol - cur_vol)*dt)
 end
 
 return SoundTrack
