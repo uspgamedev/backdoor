@@ -8,24 +8,36 @@ local setfenv = setfenv
 
 local inputs = {}
 
+-- luacheck: no self
+
 local function _makeCommon(default, call)
   local InputEditor = class:new()
   function InputEditor:instance(obj, _elementspec, _fieldschema)
     setfenv(1, obj)
-    function input(gui)
+    function input(_) -- luacheck: no global
+
+      local _active = not (not _elementspec[_fieldschema.id]
+                           and _fieldschema.optional)
+      if _fieldschema.optional then
+        IMGUI.PushID(_fieldschema.id .. ".check")
+        _active = IMGUI.Checkbox("", _active)
+        IMGUI.PopID()
+        IMGUI.SameLine()
+      end
       if _fieldschema.name then
         IMGUI.Text(_fieldschema.name)
       end
-      local value = _elementspec[_fieldschema.id] or default
-      _elementspec[_fieldschema.id] = value
-      IMGUI.PushID(_fieldschema.id)
-      local newvalue, changed = call(value, _fieldschema)
-      IMGUI.PopID()
-      if changed then
-        _elementspec[_fieldschema.id] = newvalue
+      if _active then
+        local value = _elementspec[_fieldschema.id] or default
+        IMGUI.PushID(_fieldschema.id)
+        local newvalue, changed = call(value, _fieldschema)
+        IMGUI.PopID()
+        if changed then
+          _elementspec[_fieldschema.id] = newvalue
+        end
       end
     end
-    function __operator:call(gui)
+    function __operator:call(gui) -- luacheck: no global
       return obj.input(gui)
     end
   end
@@ -34,7 +46,7 @@ end
 
 inputs.boolean = _makeCommon(
   false,
-  function(value, field)
+  function(value, _)
     return IMGUI.Checkbox("", value)
   end
 )
@@ -69,14 +81,14 @@ inputs.integer = _makeCommon(
 
 inputs.string = _makeCommon(
   "",
-  function(value, field)
+  function(value, _)
     return IMGUI.InputText("", value, 64)
   end
 )
 
 inputs.text = _makeCommon(
   "",
-  function(value, field)
+  function(value, _)
     IMGUI.PushItemWidth(360)
     local newvalue, changed = IMGUI.InputTextMultiline("", value, 1024)
     IMGUI.PopItemWidth()
@@ -86,7 +98,7 @@ inputs.text = _makeCommon(
 
 inputs.description = _makeCommon(
   "",
-  function(value, field)
+  function(_, field)
     IMGUI.Text(field.info)
     return "", false
   end

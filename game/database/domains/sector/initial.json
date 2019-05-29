@@ -8,7 +8,7 @@
   },
   "fixed_layout":{
     "encounters":[{
-        "body-specname":"corgi",
+        "body-specname":"npc-welcome",
         "pos":[3,1],
         "actor-specname":false
       }],

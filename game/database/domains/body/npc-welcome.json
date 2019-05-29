@@ -1,0 +1,25 @@
+{
+  "appearance":"corgi",
+  "dialogue":"Welcome to Backdoor Route!",
+  "drops":{
+    "1":{
+      "droprate":100,
+      "droptype":"pack"
+    },
+    "2":{
+      "droprate":10,
+      "droptype":"pack"
+    },
+    "3":{
+      "droprate":50,
+      "droptype":"food"
+    },
+    "drops":[{
+        "droprate":7,
+        "droptype":"pack"
+      }]
+  },
+  "extends":"corgi",
+  "faction":"agressive",
+  "name":"Welcomer"
+}

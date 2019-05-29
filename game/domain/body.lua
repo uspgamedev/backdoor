@@ -28,7 +28,6 @@ function Body:init(specname)
   self.armor = 0
   self.widgets = {}
   self.equipped = {}
-  self.dialogue = nil
   for placement in ipairs(PLACEMENTS) do
     self.equipped[placement] = false
   end
@@ -40,7 +39,6 @@ function Body:loadState(state)
   self:setSubtype(self.spectype)
   self.damage = state.damage or self.damage
   self.armor = state.armor or self.armor
-  self.dialogue = state.dialogue or self.dialogue
   self.killer = state.killer or false
   self.attr_lv = {}
   self.sector_id = state.sector_id or self.sector_id
@@ -70,7 +68,6 @@ function Body:saveState()
   state.armor = self.armor
   state.killer = self.killer
   state.sector_id = self.sector_id
-  state.dialogue = self.dialogue
   local equipped = {}
   for _,placement in ipairs(PLACEMENTS) do
     local equip = self:getEquipmentAt(placement)
@@ -442,7 +439,7 @@ end
 --Dialogue methods
 
 function Body:getDialogue()
-  return self.dialogue
+  return self:getSpec('dialogue')
 end
 
 return Body

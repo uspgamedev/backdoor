@@ -19,5 +19,6 @@ return {
     },
   },
   { id = 'description', name = "Description", type = 'text' },
+  { id = 'dialogue', name = "Dialogue", type = 'text', optional = true },
 }
 
