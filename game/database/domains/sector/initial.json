@@ -7,6 +7,13 @@
     "w":21
   },
   "fixed_layout":{
+    "drops":[{
+        "drop-specname":"food",
+        "pos":[2,1]
+      },{
+        "drop-specname":"pack",
+        "pos":[4,1]
+      }],
     "encounters":[{
         "body-specname":"npc-welcome",
         "pos":[3,1],
