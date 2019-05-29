@@ -1,5 +1,6 @@
 
 local Class    = require "steaming.extra_libs.hump.class"
+local Color    = require 'common.color'
 local VIEWDEFS = require 'view.definitions'
 local ELEMENT  = require "steaming.classes.primitives.element"
 local COLORS   = require 'domain.definitions.colors'
@@ -8,6 +9,11 @@ local RES      = require 'resources'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
+
+--Speed when box is changing sides
+local _MOVE_SPEED = .15
+
+--Oscillating fx on dialogue box
 local _FX_MAGNITUDE = 6
 local _FX_SPEED = 2.5
 
@@ -18,6 +24,10 @@ local _MAX_WIDTH = 2*_TILE_W
 
 --Text attributes
 local _TEXT_MARGIN = 5
+
+--Text objects entrance fx
+local _ENTER_SPEED = 10
+local _ENTER_OFFSET = 3
 
 --Different fonts a char can have
 local _CHAR_FONT = {
@@ -30,7 +40,7 @@ local _CHAR_FONT = {
 local _CHAR_SPEED = {
   slow      = .5,
   medium    = .12,
-  regular   = .07,
+  regular   = .06,
   fast      = .04,
   ultrafast = .02
 }
@@ -168,50 +178,86 @@ function DialogueBox:init(body, i, j, side)
   self.i = i
   self.j = j
   self.side = side
+  self.scale = 0
+  local x, y = self:getTargetPosition()
+  self.pos = {x = x, y = y}
 
+  self.deactivating = false
+  self.activating = true
+  self:addTimer("activating", MAIN_TIMER, "tween",
+                .3, self, {scale = 1}, "out-quad",
+                function()
+                  self.activating = false
+                end
+              )
 end
 
 function DialogueBox:draw()
   local g = love.graphics
-  local x, y = self:getPosition()
-  local w, h = self:getSize()
   local dt = love.timer.getDelta()
 
   g.push()
-  g.translate(x, y)
+
+  --Move box to target position
+  local tx, ty = self:getTargetPosition()
+  local eps = 1
+  self.pos.x = self.pos.x + (tx - self.pos.x)*_MOVE_SPEED
+  if math.abs(self.pos.x - tx) <= eps then self.pos.x = tx end
+  self.pos.y = self.pos.y + (ty - self.pos.y)*_MOVE_SPEED
+  if math.abs(self.pos.y - ty) <= eps then self.pos.y = ty end
+
+  g.translate(self.pos.x, self.pos.y)
 
   --Draw bg
-  g.setColor(COLORS.HUD_BG)
+  local w, h = self:getSize()
+  local mask = Color:new {1, 1, 1, self.scale * .8}
+  g.setColor(COLORS.HUD_BG * mask)
   g.rectangle("fill", 0, 0, w, h)
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL * mask)
   g.setLineWidth(3)
   g.rectangle("line", 0, 0, w, h)
 
   --Draw text
-  self:updateText(dt)
-  local t = self.text_start_up_time
-  if t < self.char_timer then
-    for i, c in ipairs(self.text) do
-      local ox, oy = 0, 0
-      if     c.style == "wave" then
-        oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
-      elseif c.style == "shake" then
-        ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
-        oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+  if not self.activating and not self.deactivating then
+
+    self:updateText(dt)
+    local t = self.text_start_up_time
+
+    if t < self.char_timer then
+
+      for i, c in ipairs(self.text) do
+        local ox, oy = 0, 0
+
+        --Update entrance fx for text objects
+        c.enter = math.min(c.enter + _ENTER_SPEED * dt, 1)
+
+        --Apply style
+        if     c.style == "wave" then
+          oy = math.sin((love.timer.getTime() + i/_WAVE_REGULATOR) * _WAVE_SPEED) * _WAVE_MAGNITUDE
+        elseif c.style == "shake" then
+          ox = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+          oy = math.random()*2*_SHAKE_MAGNITUDE - _SHAKE_MAGNITUDE
+        end
+
+        --Apply entrance offset fx
+        oy = oy - _ENTER_OFFSET * (1 - c.enter)
+
+        if c.type == "character" then
+          local color = COLORS[c.color]
+          g.setColor(color[1], color[2], color[3], c.opacity * c.enter)
+          c.font:set()
+          g.print(c.object, c.x + ox, c.y + oy)
+        elseif c.type == "image" then
+          g.setColor(1.0, 1.0, 1.0, c.opacity * c.enter)
+          g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
+        else
+          error("Not a valid type for object: " .. c.type)
+        end
+
+        t = t + c.time
+        if t > self.char_timer then break end
       end
-      if c.type == "character" then
-        local color = COLORS[c.color]
-        g.setColor(color[1], color[2], color[3], c.opacity)
-        c.font:set()
-        g.print(c.object, c.x + ox, c.y + oy)
-      elseif c.type == "image" then
-        g.setColor(1.0, 1.0, 1.0, c.opacity)
-        g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
-      else
-        error("Not a valid type for object: " .. c.type)
-      end
-      t = t + c.time
-      if t > self.char_timer then break end
+
     end
   end
 
@@ -222,7 +268,7 @@ function DialogueBox:setSide(side)
   self.side = side
 end
 
-function DialogueBox:getPosition()
+function DialogueBox:getTargetPosition()
   local x, y
   local w, h = self:getSize()
 
@@ -252,7 +298,7 @@ function DialogueBox:getSize()
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
   local h = max_y + _TEXT_MARGIN
-  return w, h
+  return w * self.scale, h*self.scale
 end
 
 function DialogueBox:updateText(dt)
@@ -300,6 +346,21 @@ function DialogueBox:stylizeText(text)
   end
 
   return parsed
+end
+
+function DialogueBox:kill(dialogue_boxes, id)
+  if self.deactivating then return end
+  self.deactivating = true
+
+  self:removeTimer("activating", MAIN_TIMER)
+  self:addTimer("deactivating", MAIN_TIMER, "tween",
+                .3, self, {scale = 0}, "out-quad",
+                function()
+                  --Remove this body from the dialogue boxes in sector view
+                  dialogue_boxes[id] = nil
+                  self:destroy()
+                end
+              )
 end
 
 --LOCAL FUNCTIONS--
@@ -462,6 +523,7 @@ function addCharacter(char, parsed_text, attributes, dialogue_box)
     {
       type = "character",
       object = char,
+      enter = 0,
       x = attributes.x,
       y = ty,
       width = w,
@@ -494,6 +556,7 @@ function addImage(image, scale, parsed_text, attributes, dialogue_box)
     {
       type = "image",
       object = image,
+      enter = 0,
       scale = scale,
       x = attributes.x,
       y = ty,
