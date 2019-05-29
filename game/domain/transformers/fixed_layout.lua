@@ -32,7 +32,16 @@ TRANSFORMER.schema = {
       { id = 'actor-specname', name = "Actor Specification", type = 'enum',
         options = 'domains.actor', optional = true },
     }
-  }
+  },
+  {
+    id = 'drops', name = "Drops", type = 'array',
+    schema = {
+      { id = 'pos', name = "Position", type = 'vector', size = 2,
+        range = { 0, 50, } },
+      { id = 'drop-specname', name = "Drop Specification", type = 'enum',
+        options = 'domains.drop' },
+    }
+  },
 }
 
 function TRANSFORMER.process(sectorinfo, params)
@@ -64,10 +73,15 @@ function TRANSFORMER.process(sectorinfo, params)
       drops[i] = drops[i] or {}
       drops[i][j] = {}
   end
+  for _, drop_spec in ipairs(params['drops']) do
+    local pos = drop_spec['pos']
+    local x, y = mw + ox + pos[1], mh + oy + pos[2]
+    table.insert(drops[y][x], drop_spec['drop-specname'])
+  end
   sectorinfo.drops = drops
 
   local encounters = {}
-  for i,encounter_spec in ipairs(params['encounters']) do
+  for i, encounter_spec in ipairs(params['encounters']) do
     local pos = encounter_spec['pos']
     local x, y = mw + ox + pos[1], mh + oy + pos[2]
     local encounter = {
