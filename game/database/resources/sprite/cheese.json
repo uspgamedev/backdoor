@@ -1,10 +1,10 @@
 {
   "animation":[{
       "quad_idx":1,
-      "time":999
+      "time":1
     }],
-  "loop":true,
   "offset":[16,16],
   "quad_division":[1,1],
-  "texture":"meat"
+  "texture":"cheese",
+  "loop":false
 }

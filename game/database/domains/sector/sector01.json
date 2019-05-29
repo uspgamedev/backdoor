@@ -20,11 +20,14 @@
   "drops":{
     "drop-info":"",
     "drops":[{
-        "droprate":4,
+        "droprate":2,
         "droptype":"food"
       },{
         "droprate":2,
         "droptype":"pack"
+      },{
+        "droprate":2,
+        "droptype":"food2"
       }]
   },
   "encounters":{
