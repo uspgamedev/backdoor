@@ -42,10 +42,12 @@ function EnumEditor:instance(obj, _elementspec, _fieldschema)
     end
   end
 
-  local _active = not (not _elementspec[_fieldschema.id] and _fieldschema.optional)
+  local _active = not (not _elementspec[_fieldschema.id]
+                       and _fieldschema.optional)
 
   if _active and _options[_current] ~= _NONE then
-    _elementspec[_fieldschema.id] = _elementspec[_fieldschema.id] or _options[_current]
+    _elementspec[_fieldschema.id] = _elementspec[_fieldschema.id]
+                                 or _options[_current]
   else
     _elementspec[_fieldschema.id] = false
   end
