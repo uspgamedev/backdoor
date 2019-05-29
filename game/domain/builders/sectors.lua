@@ -39,7 +39,7 @@ function BUILDER.build(idgenerator, player_data)
   }
   npcs[1].dialogue = "Welcome to pre-alpha backdoor!"
 
-  npcs[2].dialogue = "Find [type:color/value:red]Vanth's fruit[type:color/value:regular] to win the game."
+  npcs[2].dialogue = "Find [color value:red]Vanth's fruit[color value:regular] to win the game."
 
 
   -- generate first sector
