@@ -1,0 +1,17 @@
+{
+  "ability":{
+    "effects":[{
+        "amount":10,
+        "name":"reward_pp",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "amount":100,
+        "name":"has_less_pp",
+        "output":"not_full",
+        "type":"input"
+      }]
+  },
+  "name":"Food2",
+  "sprite":"cheese"
+}

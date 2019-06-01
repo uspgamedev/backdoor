@@ -6,6 +6,7 @@ local class       = require 'lux.class'
 
 local table = table
 local ipairs = ipairs
+local require = require
 local setfenv = setfenv
 
 local _CMDTYPES = {

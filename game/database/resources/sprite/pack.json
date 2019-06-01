@@ -19,7 +19,7 @@
       "time":100
     }],
   "loop":true,
-  "offset":[36,32],
+  "offset":[32,32],
   "quad_division":[6,1],
   "texture":"pack-drop"
 }

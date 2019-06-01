@@ -450,14 +450,14 @@ function SectorView:draw()
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
       local specname, x, y, z, oscilation, id = unpack(drop)
-      local offset = vec2(0,0)
+      local offset = vec2(_TILE_W/2, 0)
       local sprite = _loadDropSprite(self.drop_sprite_data, id, specname)
-      local rx = x + _TILE_W/2 + offset.x
-      local ry = y - _TILE_H*.25 + offset.y - z + oscilation
-      local iw, ih = sprite:getDimensions()
+      local rx = x + offset.x
+      local ry = y + offset.y - z + oscilation
+      local _, ih = sprite:getDimensions()
       g.setColor(COLORS.NEUTRAL)
       sprite:draw(rx, ry)
-      g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
+      g.draw(_sparkles, x + offset.x, y + offset.y, 0, 1, 1, 0, 0)
     end
 
     g.translate(0, _TILE_H)
