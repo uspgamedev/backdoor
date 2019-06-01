@@ -39,12 +39,19 @@ Should be enough to download, setup, and run the game.
 
 ### On Windows (experimental)
 
-Download:
+After cloning the repository, download these archives into the project folder:
 
-+ [love 11.1 for windows 32bits](https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip), and extract it somewhere easy to remember (this will be a copy specifically for Backdoor)
-+ [imgui.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the love folder
-+ [lua51.dll](https://uspgamedev.org/downloads/libs/windows/x86/imgui.dll) into the love folder (substitute if necessary)
-+ [libs.zip](https://uspgamedev.org/downloads/projects/backdoor/libs.zip) and extract it on `game/libs/` on this repository
+1. [Patched LÖVE 11.2 for windows x86](https://uspgamedev.org/downloads/projects/backdoor/love-11.2.0-win32-patched.zip)
+2. [Game libraries](https://uspgamedev.org/downloads/projects/backdoor/libs.zip)
 
-Then drag and drop the game folder over the LÖVE executable to run the game!
+Then, do the following:
 
+1. Extract `love-11.2.0-win32-patched.zip`
+2. Create a shortcut for the `love.exe` inside the extracted folder
+3. Move the shortcut to the root folder of the project
+4. Extract `libs.zip` (IMPORTANT: do it exactly where you downloaded it, i.e., the root project folder)
+5. Drag and drop the `game` folder onto the shortcut to run the game
+
+After this initial setup, you can simply use step 5 to run the game whenever
+you want. If an error occurs because of the libraries, it's likely because the
+download links are outdated - ask one of the unix developers to update them.
