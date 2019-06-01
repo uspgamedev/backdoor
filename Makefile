@@ -58,7 +58,10 @@ CPML_REPO=externals/cpml
 
 DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
+LIBS=$(LUX_LIB) $(STEAMING_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
+LIBS_ZIP=libs.zip
+
+DEPENDENCIES=$(LIBS) $(IMGUI_LIB)
 
 BUILD_TYPE=nightly
 
@@ -191,6 +194,11 @@ $(GAME_OSX): $(GAME) $(GAME_OSX_TEMPLATE)
 	zip -yr $(GAME_OSX) $(GAME_OSX_APP)
 	rm -rf $(GAME_OSX_TEMPLATE)
 
+## Libs
+
+$(LIBS_ZIP): $(LIBS)
+	zip -r $(LIBS_ZIP) $(LIBS)
+
 ## Deploy
 
 .PHONY: export
@@ -204,6 +212,10 @@ linux: $(GAME_LINUX64)
 
 .PHONY: osx
 osx: $(GAME_OSX)
+
+.PHONY: deploy-libs
+deploy-libs: $(LIBS_ZIP)
+	scp $(LIBS_ZIP) kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/
 
 .PHONY: deploy
 deploy: $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX)
