@@ -1,16 +1,25 @@
 
 local PlayerDeathView = require 'view.playerdeath'
 local Draw            = require "draw"
+local SoundTrack      = require 'view.soundtrack'
 
 local state = {}
 
+local _soundtrack
+
 function state:enter(from, player)
+
   self.view = PlayerDeathView(player)
   self.view:register("HUD")
-  print("YOU DIED YOU NOOB")
+
+  _soundtrack = SoundTrack.get()
+  _soundtrack:disableTrack("default")
+  _soundtrack:disableTrack("danger")
 end
 
 function state:leave()
+  _soundtrack:enableTrack("default")
+
   self.view:kill()
   self.view = nil
 end
