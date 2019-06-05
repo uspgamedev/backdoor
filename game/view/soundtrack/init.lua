@@ -47,10 +47,6 @@ function SoundTrack:playTheme(theme)
         source = RES.loadBGM(theme.multitrack.danger),
         active = false,
       }
-      self.streams['focused'] = {
-        source = RES.loadBGM(theme.multitrack.focused),
-        active = false,
-      }
     else
       error("theme isn't singletrack nor multitrack")
     end

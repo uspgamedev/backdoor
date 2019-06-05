@@ -190,13 +190,6 @@ function _updateSoundtrack()
       _soundtrack:disableTrack("danger")
     end
 
-    --Check for focus
-    if _route.getControlledActor():isFocused() then
-      _soundtrack:enableTrack("focused")
-    else
-      _soundtrack:disableTrack("focused")
-    end
-
   end
 end
 
