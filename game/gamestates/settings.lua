@@ -92,6 +92,7 @@ function state:leave()
     for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
+    SoundTrack.get():setVolumeToPreference()
   end
   _view:destroy()
 end
