@@ -1,6 +1,6 @@
 {
   "appearance":"corgi",
-  "dialogue":"Welcome to Backdoor Route!",
+  "dialogue":"Welcome to Back[newpage value:2]door Route!",
   "drops":{
     "1":{
       "droprate":100,

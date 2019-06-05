@@ -25,9 +25,10 @@ local _MAX_WIDTH = 2*_TILE_W
 --Text attributes
 local _TEXT_MARGIN = 5
 
---Text objects entrance fx
+--Text objects entrance and exit fx
 local _ENTER_SPEED = 10
 local _ENTER_OFFSET = 3
+local _EXIT_SPEED = 7
 
 --Different fonts a char can have
 local _CHAR_FONT = {
@@ -51,6 +52,7 @@ local _CHAR_COLOR = {
   red     = "NOTIFICATION",
   blue    = "VALID",
   green   = "SUCCESS",
+  grey    = "HALF_VISIBLE",
 }
 
 --Opacity for a character color
@@ -67,6 +69,13 @@ local _WAVE_REGULATOR = 10
 --Shake style consts
 local _SHAKE_MAGNITUDE = 1
 
+--Newpage string effect
+ _NEWPAGE_EFFECT = "[endl][size value:regular]" ..
+                   "[color value:grey]( [size value:big]" ..
+                   "[style value:wave]. . .[style value:none]" ..
+                   "[size value:regular] )[color value:regular]" ..
+                   "[pause value:%f][changepage][pause value:1.5][reset]"
+
 --Forward declaration for local functions
 local parseTag
 local interpretateTag
@@ -78,9 +87,15 @@ local wrapIfNeeded
 HOW TEXT AND TAGS WORK
 
 You can create a stylized text using tags.
-Tags are made of one or more attributes, following the pattern:
+Tags are made of a header and optionally one or more attributes, following the pattern:
 
 [header attribute1/attribute2/.../attributeX]
+
+or
+
+[header]
+
+when there are no attributes.
 
 A header defines the what effect you are trying to apply.
 Each attribute defines a characteristic for the effect you want to apply.
@@ -98,7 +113,7 @@ Example of a stylized "hello world", where the 'hello' is red:
 Below is a list of possible effects, detailed as followed:
 
 type_of_effect (header) - what it does
-  identifier1 - what it does
+  identifier1 <default value, if any> - what it does
     possible_value1 - what it does
     possible_value2 - what it does
     ...
@@ -143,15 +158,27 @@ image - Will draw an image on your text
     <any string> -- will search for an image in the db with this name to draw
   scale - (optional) defines a scale to apply when drawing this image
     <any number value> - set scale for this value
+
 pause - Wait an amount of time before continuing text
   value - how long to pause
     <any number value> - will wait this much time
 
 endl - Create a given amount of linebreaks
-  value - number of lines to break
+  value <1> - number of lines to break
     <any number value> - will break this much lines
 
+newpage - Create a new page after this tag, waiting an amount of time
+  wait - how long to wait on current page before going to next
+    <any number value> - will wait this much time
+(obs: 'newpage' effect resets 'size', 'color' and 'style' effects to default)
+
 ============================================================
+
+The following effects are for backend only and shouldn't be used otherwise
+
+reset - Returns the origin to start of dialogue box
+
+changepage - Increases page number
 
 ]]
 
@@ -181,6 +208,10 @@ function DialogueBox:init(body, i, j, side)
   self.scale = 0
   local x, y = self:getTargetPosition()
   self.pos = {x = x, y = y}
+
+  --Pages attributes
+  self.cur_page = 1
+  self.pages = 1
 
   self.deactivating = false
   self.activating = true
@@ -228,8 +259,15 @@ function DialogueBox:draw()
       for i, c in ipairs(self.text) do
         local ox, oy = 0, 0
 
+        --Update current page
+        self.cur_page = math.max(self.cur_page, c.page)
+
         --Update entrance fx for text objects
-        c.enter = math.min(c.enter + _ENTER_SPEED * dt, 1)
+        if c.page == self.cur_page then
+          c.enter = math.min(c.enter + _ENTER_SPEED * dt, 1)
+        else
+          c.enter = math.max(c.enter - _EXIT_SPEED * dt, 0)
+        end
 
         --Apply style
         if     c.style == "wave" then
@@ -317,6 +355,7 @@ function DialogueBox:stylizeText(text)
     opacity = _CHAR_OPACITY.regular,
     style = "none",
     font = _CHAR_FONT.regular,
+    page = 1
   }
 
   local i = 1
@@ -330,7 +369,7 @@ function DialogueBox:stylizeText(text)
       local data = parseTag(text, i)
 
       --Apply effect
-      interpretateTag(data, attributes, self, parsed)
+      interpretateTag(data, attributes, self, parsed, i)
 
       --Update text
       text = data.text
@@ -387,6 +426,9 @@ function parseTag(text, tag_start_pos)
 
   --Separate header from other attributes
   local header, attributes = effect:match("(%w+) ([%w:_%-%.%/]+)")
+  if not header or not attributes then
+    header = effect:match("(%w+)")
+  end
 
   if not header then
     error("tag didn't have a proper header.\nrelated tag:\n["..effect.."]")
@@ -395,15 +437,17 @@ function parseTag(text, tag_start_pos)
 
   --Iterate through all attributes the tag have
   local aux_att = {} --Table containing extracter auxiliary attributes
-  for att in attributes:gmatch("[^/]+") do
-    --Parse attribute and extract identifier/value from effect
-    local identifier, value = att:match("(%w+):([%w_%-%.]+)")
+  if attributes then
+    for att in attributes:gmatch("[^/]+") do
+      --Parse attribute and extract identifier/value from effect
+      local identifier, value = att:match("(%w+):([%w_%-%.]+)")
 
-    if not identifier or not value then
-      error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
+      if not identifier or not value then
+        error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
+      end
+
+      aux_att[identifier] = value
     end
-
-    aux_att[identifier] = value
   end
 
   --Remove tag from text
@@ -413,7 +457,7 @@ function parseTag(text, tag_start_pos)
 end
 
 --Apply correspondent effect from data and change correspondent attributes
-function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
+function interpretateTag(effect_data, attributes, dialogue_box, parsed_text, cur_pos)
   local err = false
   local header = effect_data.header
   local aux_att = effect_data.aux_att --Auxiliary attributes
@@ -484,13 +528,36 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
     end
 
   elseif header == "endl" then
-    if aux_att["value"] and tonumber(aux_att["value"]) then
-      local lines_amount = tonumber(aux_att["value"])
-      attributes.y = attributes.y + lines_amount * dialogue_box.text_line_h
+    if aux_att["value"] then
+      if tonumber(aux_att["value"]) then
+        local lines_amount = tonumber(aux_att["value"])
+        attributes.y = attributes.y + lines_amount * dialogue_box.text_line_h
+        attributes.x = _TEXT_MARGIN
+      else
+        err = true
+      end
+    else
+      --Syntax sugar for [endl value:1]
+      attributes.y = attributes.y + dialogue_box.text_line_h
       attributes.x = _TEXT_MARGIN
+    end
+
+  elseif header == "newpage" then
+    if aux_att["value"] and tonumber(aux_att["value"]) then
+      local wait_amount = tonumber(aux_att["value"])
+      local text = effect_data.text
+      local effect = _NEWPAGE_EFFECT:format(wait_amount)
+      effect_data.text = text:sub(0, cur_pos) .. effect .. text:sub(cur_pos + 1, -1)
     else
       err = true
     end
+
+  elseif header == "reset" then
+    attributes.y = _TEXT_MARGIN
+    attributes.x = _TEXT_MARGIN
+
+  elseif header == "changepage" then
+    attributes.page = attributes.page + 1
 
   else
     err = true
@@ -503,7 +570,7 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text)
       err_string = err_string .. id .. " : " .. value .. "\n"
     end
     error([[Effect invalid!
-         type : ]]..type..[[
+         header : ]]..header..[[
          ]]..err_string
          )
   end
@@ -532,7 +599,8 @@ function addCharacter(char, parsed_text, attributes, dialogue_box)
       color = attributes.color,
       opacity = attributes.opacity,
       style = attributes.style,
-      font = attributes.font
+      font = attributes.font,
+      page = attributes.page
     }
   )
   attributes.x = attributes.x + w
@@ -566,7 +634,8 @@ function addImage(image, scale, parsed_text, attributes, dialogue_box)
       color = {1.0,1.0,1.0,1.0},
       opacity = attributes.opacity,
       style = attributes.style,
-      font = attributes.font
+      font = attributes.font,
+      page = attributes.page
     }
   )
   attributes.x = attributes.x + w
