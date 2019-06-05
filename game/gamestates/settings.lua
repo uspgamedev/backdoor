@@ -90,7 +90,7 @@ function state:leave()
     PROFILE.save()
     PROFILE.init()
   else
-    for field, value in ipairs(_original) do
+    for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
   end
