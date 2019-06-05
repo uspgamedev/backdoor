@@ -16,6 +16,10 @@
         "body-specname":"npc-kid-1",
         "pos":[9,22],
         "actor-specname":false
+      },{
+        "body-specname":"npc-kid-2",
+        "pos":[7,21],
+        "actor-specname":false
       }],
     "layout-info":"",
     "map":{
