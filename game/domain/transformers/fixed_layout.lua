@@ -93,7 +93,7 @@ function TRANSFORMER.process(sectorinfo, params)
   end
   sectorinfo.encounters = encounters
 
-  sectorinfo.player_pos = { mw + ox + player_x, mh + oy + player_y }
+  sectorinfo.player_pos = { mh + oy + player_y, mw + ox + player_x }
 
   return sectorinfo
 end
