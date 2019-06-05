@@ -6,7 +6,6 @@ local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
 local Draw         = require "draw"
-local Util         = require "steaming.util"
 
 local state = {}
 
@@ -24,7 +23,6 @@ local _original
 local _view
 local _save
 local _changes
-local _soundtrack
 
 local function _changeField(field, offset)
   local low, high = unpack(_schema[field]["range"])
@@ -46,7 +44,6 @@ function state:init()
 end
 
 function state:enter(from)
-  _soundtrack = Util.findId("soundtrack")
   _selection = 1
   _original = {}
   for _,field in ipairs(_fields) do

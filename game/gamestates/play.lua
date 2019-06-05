@@ -10,6 +10,7 @@ local Route       = require 'domain.route'
 local FadeView    = require 'view.fade'
 local Util        = require "steaming.util"
 local Draw        = require "draw"
+local SoundTrack  = require 'view.soundtrack'
 
 local Activity    = require 'common.activity'
 
@@ -117,7 +118,7 @@ function state:enter(_, route_data)
   _route.loadState(route_data)
 
   -- setup soundtrack
-  _soundtrack = Util.findId("soundtrack")
+  _soundtrack = SoundTrack:get()
   _soundtrack:playTheme(_route.getCurrentSector():getTheme())
 
   -- create general gameplay view

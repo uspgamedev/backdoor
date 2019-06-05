@@ -9,8 +9,8 @@ local PLAYSFX         = require 'helpers.playsfx'
 local Activity        = require 'common.activity'
 local StartMenuView   = require 'view.startmenu'
 local FadeView        = require 'view.fade'
-local Draw            = require "draw"
-local Util            = require "steaming.util"
+local Draw            = require 'draw'
+local SoundTrack      = require 'view.soundtrack'
 
 local state = {}
 
@@ -68,7 +68,7 @@ function state:enter()
   _menu_view = StartMenuView()
   _menu_view:register("HUD")
 
-  _soundtrack = Util.findId("soundtrack")
+  _soundtrack = SoundTrack:get()
 
   _activity:enterMenu()
 end

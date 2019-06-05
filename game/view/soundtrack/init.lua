@@ -5,6 +5,9 @@ local RES     = require 'resources'
 local PROFILE = require 'infra.profile'
 local ELEMENT = require "steaming.classes.primitives.element"
 
+local _soundtrack
+local funcs = {}
+
 local SoundTrack  = Class {
   __includes = { ELEMENT }
 }
@@ -110,4 +113,20 @@ function fadeToVolume(source, target_vol, dt)
   source:setVolume(cur_vol + _FADE_RATIO*(target_vol - cur_vol)*dt)
 end
 
-return SoundTrack
+--Module functions
+
+function funcs.new()
+  _soundtrack = SoundTrack()
+  return _soundtrack
+end
+
+function funcs.get()
+  return _soundtrack
+end
+
+function funcs.clear()
+  _soundtrack:destroy()
+  _soundtrack = nil
+end
+
+return funcs

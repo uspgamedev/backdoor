@@ -68,7 +68,7 @@ function love.load(arg)
   PROFILE.init()
 
   -- initializes soundtrack singleton
-  SOUNDTRACK = SoundTrack()
+  SOUNDTRACK = SoundTrack.new()
 
   require 'tests'
 
