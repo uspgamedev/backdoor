@@ -28,7 +28,7 @@ local _TEXT_MARGIN = 5
 --Text objects entrance and exit fx
 local _ENTER_SPEED = 10
 local _ENTER_OFFSET = 3
-local _EXIT_SPEED = 7
+local _EXIT_SPEED = 10
 
 --Different fonts a char can have
 local _CHAR_FONT = {
