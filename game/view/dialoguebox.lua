@@ -21,7 +21,7 @@ local _FX_SPEED = 2.5
 --Box attributes
 local _X_MARGIN = _TILE_W/6
 local _Y_OFFSET = -_TILE_H/3
-local _MAX_WIDTH = 2*_TILE_W
+local _MAX_WIDTH = 3*_TILE_W
 
 --Text attributes
 local _TEXT_MARGIN = 5
