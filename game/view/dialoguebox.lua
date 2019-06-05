@@ -211,7 +211,6 @@ function DialogueBox:init(body, i, j, side)
 
   --Pages attributes
   self.cur_page = 1
-  self.pages = 1
 
   self.deactivating = false
   self.activating = true
@@ -327,11 +326,13 @@ end
 function DialogueBox:getSize()
   local max_x, max_y = 0, 0
   for _, c in ipairs(self.text) do
-    if max_x < c.x + c.width then
-      max_x = c.x + c.width
-    end
-    if max_y < c.y + c.height then
-      max_y = c.y + c.height
+    if c.page == self.cur_page then
+      if max_x < c.x + c.width then
+        max_x = c.x + c.width
+      end
+      if max_y < c.y + c.height then
+        max_y = c.y + c.height
+      end
     end
   end
   local w = math.min(max_x + _TEXT_MARGIN, _MAX_WIDTH)
