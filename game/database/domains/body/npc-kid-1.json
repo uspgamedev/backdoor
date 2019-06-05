@@ -1,0 +1,8 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[speed value:ultrafast]\n[opacity value:semi]Kid 1:\n[opacity value:regular] \nHey mister, I heard it's very dangerous out \nthere, full of monsters!\n[endl value:2]\nAre you bringing powerful \n[color value:blue]cards[color value:regular] \nwith you? Our dad says I can't leave until \nI learn how to use cards...",
+  "drops":[],
+  "extends":"corgi",
+  "faction":"allied",
+  "name":"Kid 1"
+}
