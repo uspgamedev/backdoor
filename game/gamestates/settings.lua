@@ -88,7 +88,6 @@ function state:leave()
   -- when you leave, it will either save or restore the changes
   if _save then
     PROFILE.save()
-    PROFILE.init()
   else
     for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
