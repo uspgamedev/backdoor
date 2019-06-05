@@ -6,6 +6,7 @@ local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
 local Draw         = require "draw"
+local SoundTrack   = require 'view.soundtrack'
 
 local state = {}
 
@@ -30,6 +31,7 @@ local function _changeField(field, offset)
   local value = (_changes[field] or _original[field]) + offset * step
   _changes[field] = min(high, max(low, value))
   PROFILE.setPreference(field, _changes[field])
+  SoundTrack.get():setVolumeToPreference()
 end
 
 function state:init()

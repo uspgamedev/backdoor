@@ -105,6 +105,15 @@ function SoundTrack:update(dt)
   end
 end
 
+--Hard set the volume of active tracks to current bgm volume profile preference
+function SoundTrack:setVolumeToPreference()
+  for _, stream in pairs(self.streams) do
+    if stream.active then
+      stream.source:setVolume(PROFILE.getPreference("bgm-volume") / 100)
+    end
+  end
+end
+
 --Local functions
 
 function fadeToVolume(source, target_vol, dt)
