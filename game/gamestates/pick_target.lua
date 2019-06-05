@@ -61,8 +61,6 @@ function state:leave()
 end
 
 function state:update(dt)
-  if DEBUG then return end
-
   _sector_view:lookAtCursor()
 
   if INPUT.wasActionPressed('CONFIRM') then

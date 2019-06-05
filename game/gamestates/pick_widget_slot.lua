@@ -50,22 +50,20 @@ function state:enter(from, actor, validator)
 end
 
 function state:update(dt)
-  if not DEBUG then
-    if _leave then
-      (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
-      SWITCHER.pop({})
-    else
-      if DIRECTIONALS.wasDirectionTriggered('UP') then
-        _prev()
-      elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-        _next()
-      elseif INPUT.wasActionPressed('CONFIRM') then
-        _confirm()
-      elseif INPUT.wasActionPressed('CANCEL') then
-        _cancel()
-      end
-      _view:setSelection(_selection)
+  if _leave then
+    (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
+    SWITCHER.pop({})
+  else
+    if DIRECTIONALS.wasDirectionTriggered('UP') then
+      _prev()
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      _next()
+    elseif INPUT.wasActionPressed('CONFIRM') then
+      _confirm()
+    elseif INPUT.wasActionPressed('CANCEL') then
+      _cancel()
     end
+    _view:setSelection(_selection)
   end
 end
 

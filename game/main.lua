@@ -1,4 +1,7 @@
 
+-- FIXME
+-- luacheck: no global
+
 -- set libs dir to path
 require 'libs'
 
@@ -28,8 +31,7 @@ local PROFILE = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
 local INPUT = require 'input'
 local DB = require 'database'
-
-local JSON = require 'dkjson'
+local GUI = require 'devmode.gui'
 
 local _globalvar_err = [=[
 
@@ -66,8 +68,10 @@ function love.load(arg)
 
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
 
+  GUI():register("GUI", nil, 'devmode-gui')
+
   setmetatable(_G, {
-    __newindex = function(self, k, v)
+    __newindex = function(_, k, _)
       return error(_globalvar_err:format(k, debug.traceback()))
     end
   })
@@ -75,7 +79,14 @@ end
 
 function love.update(dt)
   MAIN_TIMER:update(dt)
-  if INPUT.wasActionReleased('QUIT') then love.event.quit() end
+  if INPUT.wasActionReleased('QUIT') then
+    love.event.quit()
+  elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG then
+    DEBUG = true
+    local current = SWITCHER.current()
+    if current.devmode then current:devmode() end
+    SWITCHER.push(GS.DEVMODE)
+  end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
   Draw.update(dt)
@@ -87,6 +98,7 @@ function love.draw()
 end
 
 function love.quit()
+  Util.findId('devmode-gui'):destroy()
   imgui.ShutDown();
   PROFILE.quit()
 end

@@ -3,10 +3,11 @@ local IMGUI = require 'imgui'
 
 return function (actor)
 
-  local player = actor:getBody():getSector():getRoute().getControlledActor()
   return "Actor Inspector", 2, function(gui)
     local hp = actor:getBody():getHP()
-    gui.sector_view:lookAt(actor)
+    if gui.sector_view then
+      gui.sector_view:lookAt(actor)
+    end
     IMGUI.Text(("ID: %s"):format(actor:getId()))
     IMGUI.Text(("Title: %s"):format(actor:getTitle()))
     IMGUI.Separator()

@@ -24,7 +24,7 @@ function Route:instance(obj) -- luacheck: no self
   local _current_sector = nil
   local _controlled_actor = nil
 
-  Util.destroyAll 'true_force'
+  Util.destroyAll 'force'
 
   function obj.loadState(state)
     -- id
