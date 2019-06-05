@@ -16,10 +16,11 @@ identityp = common.identityp
 -- CPML
 cpml      = require 'cpml'
 
-local Res     = require "steaming.res_manager"
-local Setup   = require "setup"
-local Draw    = require "draw"
-local Util    = require "steaming.util"
+local Res        = require "steaming.res_manager"
+local Setup      = require "setup"
+local Draw       = require "draw"
+local Util       = require "steaming.util"
+local SoundTrack = require 'view.soundtrack'
 
 -- GAMESTATES
 GS = require 'gamestates'
@@ -27,11 +28,13 @@ GS = require 'gamestates'
 -- GAMESTATE SWITCHER
 SWITCHER = require 'infra.switcher'
 
-local PROFILE = require 'infra.profile'
+local PROFILE  = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
-local INPUT = require 'input'
-local DB = require 'database'
-local GUI = require 'devmode.gui'
+local INPUT    = require 'input'
+local DB       = require 'database'
+local GUI      = require 'devmode.gui'
+
+local SOUNDTRACK
 
 local _globalvar_err = [=[
 
@@ -64,6 +67,9 @@ function love.load(arg)
   -- initializes save & load system
   PROFILE.init()
 
+  -- initializes soundtrack singleton
+  SOUNDTRACK = SoundTrack.new()
+
   require 'tests'
 
   SWITCHER.start(GS.START_MENU) --Jump to the inicial state
@@ -90,6 +96,7 @@ function love.update(dt)
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
   Draw.update(dt)
+  SOUNDTRACK:update(dt)
   Util.destroyAll()
 end
 

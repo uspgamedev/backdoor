@@ -6,6 +6,7 @@ local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
 local Draw         = require "draw"
+local SoundTrack   = require 'view.soundtrack'
 
 local state = {}
 
@@ -23,7 +24,6 @@ local _original
 local _view
 local _save
 local _changes
-local _soundtrack
 
 local function _changeField(field, offset)
   local low, high = unpack(_schema[field]["range"])
@@ -31,10 +31,7 @@ local function _changeField(field, offset)
   local value = (_changes[field] or _original[field]) + offset * step
   _changes[field] = min(high, max(low, value))
   PROFILE.setPreference(field, _changes[field])
-  --Update on the spot menu bgm sound
-  if field == "bgm-volume" then
-      _soundtrack.updateVolume()
-  end
+  SoundTrack.get():setVolumeToPreference()
 end
 
 function state:init()
@@ -48,8 +45,7 @@ function state:init()
   _selection = 1
 end
 
-function state:enter(from, soundtrack)
-  _soundtrack = soundtrack
+function state:enter(from)
   _selection = 1
   _original = {}
   for _,field in ipairs(_fields) do
@@ -85,6 +81,7 @@ function state:update(dt)
     PLAYSFX 'ok-menu'
     _changeField(_fields[_selection], 1)
   end
+
 end
 
 function state:leave()

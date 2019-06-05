@@ -8,9 +8,9 @@ local PLAYSFX     = require 'helpers.playsfx'
 local GameplayView = require 'view.gameplay'
 local Route       = require 'domain.route'
 local FadeView    = require 'view.fade'
-local SoundTrack  = require 'view.soundtrack'
 local Util        = require "steaming.util"
 local Draw        = require "draw"
+local SoundTrack  = require 'view.soundtrack'
 
 local Activity    = require 'common.activity'
 
@@ -27,6 +27,9 @@ local _next_action
 local _view
 local _soundtrack
 
+--Forward functions declaration
+local _updateSoundtrack
+
 --LOCAL FUNCTION--
 
 local function _saveRoute()
@@ -35,6 +38,8 @@ end
 
 local function _playTurns(...)
   local request, extra = _route.playTurns(...)
+
+  _updateSoundtrack()
 
   if request == "playerDead" then
     _view.action_hud:destroy()
@@ -59,10 +64,6 @@ local function _initFrontend()
   local gui = Util.findId('devmode-gui')
   gui.sector_vew = _view.sector
 
-  -- Sound Track
-  _soundtrack = SoundTrack()
-  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
-
 end
 
 function _activity:saveAndQuit()
@@ -86,7 +87,7 @@ function _activity:changeSector()
   local change_sector_ok = _route.checkSector()
   assert(change_sector_ok, "Sector Change fuck up")
   _view.sector:sectorChanged()
-  _soundtrack.playTheme(_route.getCurrentSector():getTheme()['bgm'])
+  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
   self.wait()
   fade_view:fadeInAndThen(self.resume)
@@ -116,6 +117,10 @@ function state:enter(_, route_data)
   _route = Route()
   _route.loadState(route_data)
 
+  -- setup soundtrack
+  _soundtrack = SoundTrack:get()
+  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
+
   -- create general gameplay view
   _view = GameplayView()
 
@@ -136,8 +141,8 @@ function state:leave()
   _saveRoute()
   _route.destroyAll()
   _view:destroy()
-  _soundtrack.playTheme(nil)
   Util.findId('devmode-gui').sector_view = nil
+  _soundtrack:clearTheme()
   Util.destroyAll()
 
 end
@@ -171,6 +176,22 @@ end
 
 function state:draw()
   Draw.allTables()
+end
+
+--Local functions
+
+function _updateSoundtrack()
+  if _soundtrack then
+
+    --Check for danger
+    local hostile_bodies = _route.getControlledActor():getHostileBodies()
+    if #hostile_bodies > 0 then
+      _soundtrack:enableTrack("danger")
+    else
+      _soundtrack:disableTrack("danger")
+    end
+
+  end
 end
 
 --Return state functions
