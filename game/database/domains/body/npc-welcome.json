@@ -20,6 +20,6 @@
       }]
   },
   "extends":"corgi",
-  "faction":"agressive",
+  "faction":"allied",
   "name":"Welcomer"
 }
