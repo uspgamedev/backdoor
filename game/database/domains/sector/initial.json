@@ -20,6 +20,38 @@
         "body-specname":"npc-kid-2",
         "pos":[7,21],
         "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[8,15],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[9,13],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[12,14],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[15,17],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[17,15],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[13,10],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[11,8],
+        "actor-specname":false
+      },{
+        "body-specname":"npc-base",
+        "pos":[5,6],
+        "actor-specname":false
       }],
     "layout-info":"",
     "map":{
