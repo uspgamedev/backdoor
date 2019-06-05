@@ -1,7 +1,7 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
-local INPUT       = require 'input'
-local GUI         = require 'devmode.gui'
+-- luacheck: globals SWITCHER GS MAIN_TIMER
+
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
 
@@ -25,10 +25,7 @@ local _player
 local _next_action
 
 local _view
-local _gui
 local _soundtrack
-
-local _switch_to
 
 --LOCAL FUNCTION--
 
@@ -49,7 +46,6 @@ local function _playTurns(...)
   elseif request == "changeSector" then
     _activity:changeSector(...)
   elseif request == "report" then
-    
     SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
@@ -60,8 +56,8 @@ local function _initFrontend()
   _view:setup(_route)
 
   -- GUI
-  _gui = GUI(_view.sector)
-  _gui:register("GUI")
+  local gui = Util.findId('devmode-gui')
+  gui.sector_vew = _view.sector
 
   -- Sound Track
   _soundtrack = SoundTrack()
@@ -111,10 +107,10 @@ end
 
 --STATE FUNCTIONS--
 
-function state:init()
+function state:init() -- luacheck: no self
 end
 
-function state:enter(pre, route_data)
+function state:enter(_, route_data)
 
   -- load route
   _route = Route()
@@ -140,28 +136,24 @@ function state:leave()
   _saveRoute()
   _route.destroyAll()
   _view:destroy()
-  _gui:destroy()
   _soundtrack.playTheme(nil)
+  Util.findId('devmode-gui').sector_view = nil
   Util.destroyAll()
 
 end
 
 function state:update(dt)
-  if not DEBUG then
-
-    --FIXME:this doesn't need to happen every update (I think)
-    if _route.getControlledActor() or _player then
-      _view.sector:updateFov(_route.getControlledActor() or _player)
-    else
-      print("oops")
-    end
-
-    if _next_action then
-      _playTurns(unpack(_next_action))
-    end
-    _view.sector:lookAt(_route.getControlledActor() or _player)
+  --FIXME:this doesn't need to happen every update (I think)
+  if _route.getControlledActor() or _player then
+    _view.sector:updateFov(_route.getControlledActor() or _player)
+  else
+    print("oops")
   end
 
+  if _next_action then
+    _playTurns(unpack(_next_action))
+  end
+  _view.sector:lookAt(_route.getControlledActor() or _player)
 end
 
 function state:resume(state, args)
@@ -179,10 +171,6 @@ end
 
 function state:draw()
   Draw.allTables()
-end
-
-function state:keypressed(key)
-  if key == 'f1' then DEBUG = true end
 end
 
 --Return state functions

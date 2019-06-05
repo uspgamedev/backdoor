@@ -18,6 +18,7 @@
     "DOWNLEFT":["end","b"],
     "QUIT":["f8"],
     "PAUSE":["escape"],
+    "DEVMODE":["f1"],
     "HELP":["lshift"]
   },
   "analog":{

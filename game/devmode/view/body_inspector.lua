@@ -5,7 +5,9 @@ return function (body)
 
   return "Body Inspector", 2, function(gui)
     local hp = body:getHP()
-    gui.sector_view:lookAt(body)
+    if gui.sector_view then
+      gui.sector_view:lookAt(body)
+    end
     IMGUI.Text(("ID: %s"):format(body:getId()))
     IMGUI.Text(("Species: %s"):format(body:getSpec('name')))
     IMGUI.Separator()

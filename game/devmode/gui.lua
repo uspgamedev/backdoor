@@ -1,4 +1,6 @@
 
+-- luacheck: globals love DEBUG
+
 local IMGUI   = require 'imgui'
 local DB      = require 'database'
 local tween   = require 'helpers.tween'
@@ -41,23 +43,23 @@ local RESOURCES = {
 }
 
 
-local view = {}
+local _VIEW = {}
 
 -- This automatically loads all devmode menus in debug/view
 for _,file in ipairs(love.filesystem.getDirectoryItems "devmode/view") do
   if file:match "^.+%.lua$" then
     file = file:gsub("%.lua", "")
-    view[file] = require('devmode.view.' .. file)
+    _VIEW[file] = require('devmode.view.' .. file)
   end
 end
 
-function GUI:init(sector_view)
+function GUI:init()
 
   ELEMENT.init(self)
+  self.exception = true
   self.stack = {}
   self.active = false
   self.current_level = 1
-  self.sector_view = sector_view
   self.demo_window = false
 
   IMGUI.StyleColorsDark()
@@ -77,7 +79,7 @@ end
 function GUI:push(viewname, ...)
   local level = self.current_level+1
   self:pop(level)
-  local title, size, render = view[viewname](...)
+  local title, size, render = _VIEW[viewname](...)
   local length = self:length()
   local width = MENU_WIDTH * size
   local x = tween.start(
@@ -87,7 +89,7 @@ function GUI:push(viewname, ...)
   )
   self.stack[level] = {
     size = size,
-    draw = function (self)
+    draw = function (view)
       IMGUI.SetNextWindowPos(x(), 40, "Always")
       IMGUI.SetNextWindowSizeConstraints(width, 80, width, MENU_MAX_HEIGHT)
       IMGUI.PushStyleVar("WindowPadding", 16, 16)
@@ -95,7 +97,7 @@ function GUI:push(viewname, ...)
                                  { "NoCollapse", "AlwaysAutoResize",
                                  "AlwaysUseWindowPadding" })
       if open then
-        open = not render(self)
+        open = not render(view)
       end
       IMGUI.End()
       IMGUI.PopStyleVar()

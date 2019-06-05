@@ -3,17 +3,15 @@ local Route = require 'lux.class' :new{}
 
 local IDGenerator = require 'common.idgenerator'
 local RANDOM = require 'common.random'
-local PROFILE = require 'infra.profile'
 
 local BUILDERS = require 'lux.pack' 'domain.builders'
 local PACK = require 'domain.pack'
 local Body = require 'domain.body'
-local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
 local Behaviors = require 'domain.behaviors'
 local Util  = require "steaming.util"
 
-function Route:instance(obj)
+function Route:instance(obj) -- luacheck: no self
 
   -- Saved data
   local _id
@@ -26,7 +24,7 @@ function Route:instance(obj)
   local _current_sector = nil
   local _controlled_actor = nil
 
-  Util.destroyAll 'true_force'
+  Util.destroyAll 'force'
 
   function obj.loadState(state)
     -- id

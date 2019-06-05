@@ -1,11 +1,15 @@
-local Draw  = require "draw"
 
+-- luacheck: globals imgui DEBUG SWITCHER, no self
+
+local Draw  = require "draw"
+local INPUT = require 'input'
 
 local state = {}
 
-function state:update(dt)
-  if not DEBUG then
-    SWITCHER.pop()
+function state:update(_)
+  if INPUT.wasActionPressed('DEVMODE') and DEBUG then
+    DEBUG = false
+    return SWITCHER.pop()
   end
 end
 
@@ -15,9 +19,6 @@ end
 
 function state:keypressed(key)
   imgui.KeyPressed(key)
-  if not imgui.GetWantCaptureKeyboard() and key == 'f1' then
-    DEBUG = false
-  end
 end
 
 function state:textinput(t)
@@ -32,16 +33,17 @@ function state:mousemoved(x, y)
   imgui.MouseMoved(x, y)
 end
 
-function state:mousepressed(x, y, button)
+function state:mousepressed(_, _, button)
   imgui.MousePressed(button)
 end
 
-function state:mousereleased(x, y, button)
+function state:mousereleased(_, _, button)
   imgui.MouseReleased(button)
 end
 
-function state:wheelmoved(x, y)
+function state:wheelmoved(_, y)
   imgui.WheelMoved(y)
 end
 
 return state
+

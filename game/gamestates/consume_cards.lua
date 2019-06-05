@@ -51,8 +51,6 @@ function state:leave()
 end
 
 function state:update(dt)
-  if DEBUG then return end
-
   if _leave then
     PLAYSFX 'back-menu'
     SWITCHER.pop({})

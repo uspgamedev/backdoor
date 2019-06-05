@@ -134,13 +134,11 @@ function state:resume(from, args)
   _resumeTask(args)
 end
 
+function state:devmode()
+  _view.action_hud:disableTurn()
+end
+
 function state:update(dt)
-
-  if DEBUG then
-    _view.action_hud:disableTurn()
-    return SWITCHER.push(GS.DEVMODE)
-  end
-
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
@@ -167,10 +165,6 @@ end
 
 function state:draw()
   Draw.allTables()
-end
-
-function state:keypressed(key)
-  if key == 'f1' then DEBUG = true end
 end
 
 --[[ Action functions ]]--

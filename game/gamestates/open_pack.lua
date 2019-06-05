@@ -76,8 +76,6 @@ function state:leave()
 end
 
 function state:update(dt)
-  if DEBUG then return end
-
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
     PLAYSFX 'back-menu'

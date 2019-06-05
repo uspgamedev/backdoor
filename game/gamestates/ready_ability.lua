@@ -51,7 +51,6 @@ function state:enter(from, abilities, view)
 end
 
 function state:update(dt)
-  if DEBUG then return end
   _quick_toggle = min(_HOLDTIME, _quick_toggle + dt)
   if INPUT.wasActionReleased('ACTION_3') then
     if _quick_toggle < _HOLDTIME then
