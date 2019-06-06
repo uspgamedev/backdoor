@@ -544,8 +544,8 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text, cur
     end
 
   elseif header == "newpage" then
-    if aux_att["value"] and tonumber(aux_att["value"]) then
-      local wait_amount = tonumber(aux_att["value"])
+    if aux_att["wait"] and tonumber(aux_att["wait"]) then
+      local wait_amount = tonumber(aux_att["wait"])
       local text = effect_data.text
       local effect = _NEWPAGE_EFFECT:format(wait_amount)
       effect_data.text = text:sub(0, cur_pos) .. effect .. text:sub(cur_pos + 1, -1)
