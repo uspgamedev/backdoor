@@ -127,6 +127,7 @@ function PROFILE.saveRoute(route_data)
   _metadata.save_list[route_data.id] = {
     player_name = route_data.player_name,
     player_dead = route_data.player_dead,
+    player_won  = route_data.player_won,
   }
   _channel:push({
     filepath = SAVEDIR .. route_data.id,

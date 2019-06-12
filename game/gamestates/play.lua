@@ -46,6 +46,7 @@ local function _playTurns(...)
     _view.actor:destroy()
     SWITCHER.push(GS.GAMEOVER, _player, _view)
   elseif request == "playerWin" then
+      _route.win()
       _view.action_hud:destroy()
       _view.actor:destroy()
       SWITCHER.push(GS.WIN, _player, _view)

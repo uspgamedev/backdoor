@@ -19,6 +19,7 @@ function Route:instance(obj) -- luacheck: no self
   local _player_name = "Unknown"
   local _player_id
   local _player_dead = false
+  local _player_won = false
   local _sectors = {}
   local _behaviors = Behaviors()
   local _current_sector = nil
@@ -32,9 +33,10 @@ function Route:instance(obj) -- luacheck: no self
     _id_generator = IDGenerator(state.next_id)
 
     -- player
-    _player_id = state.player_id
+    _player_id   = state.player_id
     _player_name = state.player_name
     _player_dead = state.player_dead
+    _player_won  = state.player_won
 
     -- rng
     -- setState is theoretically enough to reproduce seed as well
@@ -64,6 +66,7 @@ function Route:instance(obj) -- luacheck: no self
     state.player_id   = _player_id
     state.player_name = _player_name
     state.player_dead = _player_dead
+    state.player_won  = _player_won
     -- rng
     state.rng_state = RANDOM.getState()
     state.rng_seed = RANDOM.getSeed()
@@ -90,6 +93,10 @@ function Route:instance(obj) -- luacheck: no self
 
   function obj.die()
     _player_dead = true
+  end
+
+  function obj.win()
+    _player_won = true
   end
 
   local function _generateSector(sector)
