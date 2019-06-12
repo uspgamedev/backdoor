@@ -7,7 +7,10 @@
     "w":34
   },
   "fixed_layout":{
-    "drops":[],
+    "drops":[{
+        "drop-specname":"food",
+        "pos":[8,12]
+      }],
     "encounters":[{
         "body-specname":"npc-welcome",
         "pos":[9,27],
@@ -18,18 +21,18 @@
         "actor-specname":false
       },{
         "body-specname":"npc-kid-2",
-        "pos":[7,21],
+        "pos":[6,21],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
-        "pos":[8,15],
+        "body-specname":"npc-adult-2",
+        "pos":[8,16],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
-        "pos":[9,13],
+        "body-specname":"npc-adult-1",
+        "pos":[9,12],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-adult-3",
         "pos":[12,14],
         "actor-specname":false
       },{
