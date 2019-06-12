@@ -9,7 +9,7 @@ return function()
   return "Current Route", 1, function(gui)
     local bodies = Util.findSubtype 'body'
     if bodies then
-      for body in pairs() do
+      for body in pairs(bodies) do
         local identity = ("%s: %s"):format(body:getId(), body:getSpec('name'))
         if IMGUI.Selectable(identity, body == selected) then
           selected = body
