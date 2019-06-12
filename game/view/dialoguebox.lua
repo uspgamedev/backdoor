@@ -77,7 +77,11 @@ local _NEWPAGE_EFFECT = "[endl][size value:regular]" ..
                         "[color value:grey]( [size value:big]" ..
                         "[style value:wave]. . .[style value:none]" ..
                         "[size value:regular] )[color value:regular]" ..
-                        "[pause value:%f][changepage][pause value:1.5][reset]"
+                        "[pause value:%f][changepage][reset]"
+
+--Header string effect
+local _HEADER_EFFECT = "[color value:green]%s:[color value:regular]" ..
+                       "[endl value:1]"
 
 --Forward declaration for local functions
 local parseTag
@@ -229,12 +233,12 @@ end
 function DialogueBox:draw()
   local g = love.graphics
   local dt = love.timer.getDelta()
+  local eps = 1
 
   g.push()
 
   --Scale box to target size
   local tw, th = self:getTargetSize()
-  local eps = 1
   self.w = self.w + (tw - self.w)*_RESIZE_SPEED
   if math.abs(self.w - tw) <= eps then self.w = tw end
   self.h = self.h + (th - self.h)*_RESIZE_SPEED
@@ -242,7 +246,6 @@ function DialogueBox:draw()
 
   --Move box to target position
   local tx, ty = self:getTargetPosition()
-  local eps = 1
   self.pos.x = self.pos.x + (tx - self.pos.x)*_MOVE_SPEED
   if math.abs(self.pos.x - tx) <= eps then self.pos.x = tx end
   self.pos.y = self.pos.y + (ty - self.pos.y)*_MOVE_SPEED
@@ -558,7 +561,19 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text, cur
       local wait_amount = tonumber(aux_att["wait"])
       local text = effect_data.text
       local effect = _NEWPAGE_EFFECT:format(wait_amount)
-      effect_data.text = text:sub(0, cur_pos - 1) .. effect .. text:sub(cur_pos, -1)
+      effect_data.text = text:sub(0, cur_pos - 1) .. effect
+                                                  .. text:sub(cur_pos + 1, -1)
+    else
+      err = true
+    end
+
+  elseif header == "header" then
+    if aux_att["name"] then
+      local name = aux_att["name"]
+      local text = effect_data.text
+      local effect = _HEADER_EFFECT:format(name)
+      effect_data.text = text:sub(0, cur_pos) .. effect
+                                              .. text:sub(cur_pos + 1, -1)
     else
       err = true
     end
