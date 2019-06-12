@@ -8,8 +8,7 @@ function FX.preview()
 end
 
 function FX.process(actor,fieldvalues)
-  coroutine.yield('playerDead')
+  coroutine.yield('playerWin')
 end
 
 return FX
-

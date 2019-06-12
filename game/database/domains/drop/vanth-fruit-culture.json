@@ -1,26 +1,10 @@
 {
   "ability":{
     "effects":[{
-        "attr":999,
-        "base":999,
-        "name":"damage_on_target",
-        "target":"=self_body",
-        "type":"effect",
-        "sfx":false
+        "name":"win",
+        "type":"effect"
       }],
-    "inputs":[{
-        "name":"is_controlled_actor",
-        "type":"input"
-      },{
-        "name":"self",
-        "output":"self_actor",
-        "type":"operator"
-      },{
-        "actor":"=self_actor",
-        "name":"get_actor_body",
-        "output":"self_body",
-        "type":"operator"
-      }]
+    "inputs":[]
   },
   "name":"Vanth Fruit of Culture",
   "sprite":"vanth-fruit-culture"

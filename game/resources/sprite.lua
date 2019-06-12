@@ -77,6 +77,7 @@ function Sprite:init(texture, animation)
   self.frame = 1
   self.decor = false
   self.timecount = 0
+  self.sx, self.sy = 1, 1
 end
 
 function Sprite:getDimensions()
@@ -85,6 +86,15 @@ end
 
 function Sprite:setDecorator(f)
   self.decor = f
+end
+
+function Sprite:getScale()
+  return self.sx, self.sy
+end
+
+function Sprite:setScale(sx, sy)
+  if sx then self.sx = sx end
+  if sy then self.sy = sy end
 end
 
 function Sprite:clearDecorator()
@@ -103,7 +113,7 @@ function Sprite:render(x, y)
   local quad = _updateAndGetCurrentQuadOfSprite(self)
   local tex = self.texture
   local ox, oy = unpack(self.animation.offset)
-  g.draw(tex, quad, x, y, 0, 1, 1, ox, oy)
+  g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
 end
 
 
