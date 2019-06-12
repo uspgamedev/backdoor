@@ -125,6 +125,8 @@ function state:update(dt)
         local savename = ("%s %s"):format(route_id, route_header.player_name)
         if route_header.player_dead then
           savename = savename .. " (DEAD)"
+        elseif route_header.player_won then
+          savename = savename .. " (WON)"
         end
         _menu_view:setItem(savename)
       end
