@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "con":0,
+  "dialogue":"[header name:Guard]\nGood luck! You'll need it! \nHere's one last tip...\n\n[newpage wait:2]\n[header name:Guard]\n[color value:blue]Hold SHIFT\n[color value:regular] to display the control \nhints!",
+  "drops":[],
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Fareweller",
+  "res":0
+}

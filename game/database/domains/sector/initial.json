@@ -10,6 +10,9 @@
     "drops":[{
         "drop-specname":"food",
         "pos":[8,12]
+      },{
+        "drop-specname":"pack",
+        "pos":[15,16]
       }],
     "encounters":[{
         "body-specname":"npc-welcome",
@@ -36,23 +39,23 @@
         "pos":[12,14],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-elder-1",
         "pos":[15,17],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-elder-2",
         "pos":[17,15],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-veteran-2",
         "pos":[13,10],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-veteran-1",
         "pos":[11,8],
         "actor-specname":false
       },{
-        "body-specname":"npc-base",
+        "body-specname":"npc-farewell",
         "pos":[5,6],
         "actor-specname":false
       }],
