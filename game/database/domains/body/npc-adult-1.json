@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "con":0,
+  "dialogue":"[header name:Worried Adult]\nAre you well rested for the journey?\n\n[newpage wait:2]\n[header name:Worried Adult]\nRemember that to get a new hand of cards, and \nrestart your [color value:blue]Focus\n[color value:regular], you need to \n[color value:blue]hold A[color value:regular].\n\n[newpage wait:2]\n[header name:Worried Adult]\nHowever, that costs you [color value:blue]\nPlay Points[color value:regular]! You \ncan get some of my [color value:blue]food\n[color value:regular] if you need to \nreplenish some...",
+  "drops":[],
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Adult 1",
+  "res":0
+}

@@ -73,8 +73,7 @@ local _WAVE_REGULATOR = 10
 local _SHAKE_MAGNITUDE = 1
 
 --Newpage string effect
-local _NEWPAGE_EFFECT = "[endl][size value:regular]" ..
-                        "[color value:grey]( [size value:big]" ..
+local _NEWPAGE_EFFECT = "[color value:grey] ( [size value:small]" ..
                         "[style value:wave]. . .[style value:none]" ..
                         "[size value:regular] )[color value:regular]" ..
                         "[pause value:%f][changepage][reset]"
@@ -439,7 +438,7 @@ function parseTag(text, tag_start_pos)
   local effect = text:sub(tag_start_pos + 1, tag_end_pos - 1)
 
   --Separate header from other attributes
-  local header, attributes = effect:match("(%w+) ([%w:_%-%.%/]+)")
+  local header, attributes = effect:match("(%w+) +([ %w:_%-%.%/]+)")
   if not header or not attributes then
     header = effect:match("(%w+)")
   end
@@ -454,7 +453,7 @@ function parseTag(text, tag_start_pos)
   if attributes then
     for att in attributes:gmatch("[^/]+") do
       --Parse attribute and extract identifier/value from effect
-      local identifier, value = att:match("(%w+):([%w_%-%.]+)")
+      local identifier, value = att:match("(%w+):([ %w_%-%.]+)")
 
       if not identifier or not value then
         error("attribute from tag didn't match 'id:value' pattern.\nrelated tag:\n["..effect.."]")
