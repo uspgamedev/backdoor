@@ -233,9 +233,9 @@ function DialogueBox:draw()
   --Scale box to target size
   local tw, th = self:getTargetSize()
   local eps = 1
-  self.w = self.w + (tw - self.w)*_MOVE_SPEED
+  self.w = self.w + (tw - self.w)*_RESIZE_SPEED
   if math.abs(self.w - tw) <= eps then self.w = tw end
-  self.h = self.h + (th - self.h)*_MOVE_SPEED
+  self.h = self.h + (th - self.h)*_RESIZE_SPEED
   if math.abs(self.h - th) <= eps then self.h = th end
 
   --Move box to target position
