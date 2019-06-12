@@ -1,4 +1,6 @@
 
+-- luacheck: globals MAIN_TIMER love
+
 local Class    = require "steaming.extra_libs.hump.class"
 local Color    = require 'common.color'
 local VIEWDEFS = require 'view.definitions'
@@ -40,11 +42,11 @@ local _CHAR_FONT = {
 
 --Time a character must stay active before next one appears
 local _CHAR_SPEED = {
-  slow      = .5,
-  medium    = .12,
-  regular   = .06,
-  fast      = .04,
-  ultrafast = .02
+  slow      = .1,
+  medium    = .05,
+  regular   = .02,
+  fast      = .01,
+  ultrafast = .005
 }
 
 --Color a character can have
@@ -71,11 +73,11 @@ local _WAVE_REGULATOR = 10
 local _SHAKE_MAGNITUDE = 1
 
 --Newpage string effect
- _NEWPAGE_EFFECT = "[endl][size value:regular]" ..
-                   "[color value:grey]( [size value:big]" ..
-                   "[style value:wave]. . .[style value:none]" ..
-                   "[size value:regular] )[color value:regular]" ..
-                   "[pause value:%f][changepage][pause value:1.5][reset]"
+local _NEWPAGE_EFFECT = "[endl][size value:regular]" ..
+                        "[color value:grey]( [size value:big]" ..
+                        "[style value:wave]. . .[style value:none]" ..
+                        "[size value:regular] )[color value:regular]" ..
+                        "[pause value:%f][changepage][pause value:1.5][reset]"
 
 --Forward declaration for local functions
 local parseTag

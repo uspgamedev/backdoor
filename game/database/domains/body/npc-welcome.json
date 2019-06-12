@@ -1,6 +1,6 @@
 {
   "appearance":"corgi",
-  "dialogue":"[speed value:ultrafast]\n[opacity value:semi]Elder:\n[opacity value:regular] \nToday is the fateful day! \nYou remember what you are supposed to do right?\n[newpage value:1]\nBring back a [color value:red]Fruit of Vanth\n[color value:regular] from the depths of the \nworld, so we may prosper once more.",
+  "dialogue":"[opacity value:semi]Elder: \n[opacity value:regular][endl value:1]\nToday is the fateful day! \nYou remember what you are supposed to do right?\n\n[newpage wait:0.5]\n[opacity value:semi]Elder: \n[opacity value:regular][endl value:1]\nBring back a [color value:red]Fruit of Vanth\n[color value:regular] from the depths of the \nworld, so we may prosper once more.",
   "drops":{
     "1":{
       "droprate":100,
