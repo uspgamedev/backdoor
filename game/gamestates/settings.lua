@@ -88,11 +88,11 @@ function state:leave()
   -- when you leave, it will either save or restore the changes
   if _save then
     PROFILE.save()
-    PROFILE.init()
   else
-    for field, value in ipairs(_original) do
+    for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
+    SoundTrack.get():setVolumeToPreference()
   end
   _view:destroy()
 end
