@@ -10,8 +10,9 @@ local RES      = require 'resources'
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 
---Speed when box is changing sides
+--Speed when box is changing sides or pages
 local _MOVE_SPEED = .15
+local _RESIZE_SPEED = .15
 
 --Oscillating fx on dialogue box
 local _FX_MAGNITUDE = 6
@@ -202,10 +203,11 @@ function DialogueBox:init(body, i, j, side)
   self.text = self:stylizeText(body:getDialogue())
 
   --Dialogue box position attributes
+  self.scale = 0
+  self.w, self.h = self:getTargetSize()
   self.i = i
   self.j = j
   self.side = side
-  self.scale = 0
   local x, y = self:getTargetPosition()
   self.pos = {x = x, y = y}
 
@@ -228,6 +230,14 @@ function DialogueBox:draw()
 
   g.push()
 
+  --Scale box to target size
+  local tw, th = self:getTargetSize()
+  local eps = 1
+  self.w = self.w + (tw - self.w)*_MOVE_SPEED
+  if math.abs(self.w - tw) <= eps then self.w = tw end
+  self.h = self.h + (th - self.h)*_MOVE_SPEED
+  if math.abs(self.h - th) <= eps then self.h = th end
+
   --Move box to target position
   local tx, ty = self:getTargetPosition()
   local eps = 1
@@ -239,13 +249,12 @@ function DialogueBox:draw()
   g.translate(self.pos.x, self.pos.y)
 
   --Draw bg
-  local w, h = self:getSize()
   local mask = Color:new {1, 1, 1, self.scale * .8}
   g.setColor(COLORS.HUD_BG * mask)
-  g.rectangle("fill", 0, 0, w, h)
+  g.rectangle("fill", 0, 0, self.w, self.h)
   g.setColor(COLORS.NEUTRAL * mask)
   g.setLineWidth(3)
-  g.rectangle("line", 0, 0, w, h)
+  g.rectangle("line", 0, 0, self.w, self.h)
 
   --Draw text
   if not self.activating and not self.deactivating then
@@ -307,23 +316,22 @@ end
 
 function DialogueBox:getTargetPosition()
   local x, y
-  local w, h = self:getSize()
 
   if self.side == "right" then
     x = (self.j+1)*_TILE_W + _X_MARGIN
   elseif self.side == "left" then
-    x = self.j*_TILE_W -_X_MARGIN - w
+    x = self.j*_TILE_W -_X_MARGIN - self.w
   else
     error("not a valid side for dialogue box")
   end
 
   local fx_offset = math.sin(love.timer.getTime() * _FX_SPEED) * _FX_MAGNITUDE
-  y = (self.i+.5)*_TILE_H - h/2 + _Y_OFFSET + fx_offset
+  y = (self.i+.5)*_TILE_H - self.h/2 + _Y_OFFSET + fx_offset
 
   return math.floor(x + .5), math.floor(y + .5)
 end
 
-function DialogueBox:getSize()
+function DialogueBox:getTargetSize()
   local max_x, max_y = 0, 0
   for _, c in ipairs(self.text) do
     if c.page == self.cur_page then
