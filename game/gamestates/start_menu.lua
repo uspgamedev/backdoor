@@ -159,7 +159,7 @@ function state:update(dt)
         for route_id, route_header in pairs(savelist) do
           local savename = ("%s %s"):format(route_id, route_header.player_name)
           if MENU.item(savename) then
-            if not route_header.player_dead then
+            if not route_header.player_dead and not route_header.player_won then
               local route_data = PROFILE.loadRoute(route_id)
               _activity:changeState('switch', GS.PLAY, route_data)
             else
