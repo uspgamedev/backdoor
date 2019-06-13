@@ -165,6 +165,12 @@ image - Will draw an image on your text
   scale - (optional) defines a scale to apply when drawing this image
     <any number value> - set scale for this value
 
+sprite - Will draw a sprite on your text
+  id - identifier for sprite (just as it is used in the database)
+    <any string> -- will search for an image in the db with this name to draw
+  scale - (optional) defines a scale to apply when drawing this sprite
+    <any number value> - set scale for this value
+
 pause - Wait an amount of time before continuing text
   value - how long to pause
     <any number value> - will wait this much time
@@ -300,6 +306,9 @@ function DialogueBox:draw()
         elseif c.type == "image" then
           g.setColor(1.0, 1.0, 1.0, c.opacity * c.enter)
           g.draw(c.object, c.x + ox, c.y + oy, nil, c.scale)
+        elseif c.type == "sprite" then
+          g.setColor(1.0, 1.0, 1.0, c.opacity * c.enter)
+          c.object:draw(c.x + ox, c.y + oy)
         else
           error("Not a valid type for object: " .. c.type)
         end
@@ -526,6 +535,14 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text, cur
       err = true
     end
 
+  elseif header == "sprite" then
+    if aux_att["id"] then
+      local sprite = RES.loadSprite(aux_att["id"])
+      addSprite(sprite, aux_att["scale"], parsed_text, attributes, dialogue_box)
+    else
+      err = true
+    end
+
   elseif header == "pause" then
     if aux_att["value"] and tonumber(aux_att["value"]) then
       local pause_amount = tonumber(aux_att["value"])
@@ -642,7 +659,7 @@ function addImage(image, scale, parsed_text, attributes, dialogue_box)
   local w = image:getWidth() * scale
   local h = image:getHeight() * scale
 
-  --Vertically centralize text
+  --Vertically centralize image
   local ty = attributes.y + dialogue_box.text_line_h/2 - h/2
 
   table.insert(parsed_text,
@@ -668,6 +685,47 @@ function addImage(image, scale, parsed_text, attributes, dialogue_box)
   wrapIfNeeded(parsed_text, attributes, dialogue_box)
 end
 
+--Add a sprite to our parsed table
+function addSprite(sprite, scale, parsed_text, attributes, dialogue_box)
+
+  scale = scale and tonumber(scale) or 1
+
+  --Get dimensions for our sprite
+  sprite:setScale(scale, scale)
+  local w = sprite:getWidth()
+  local h = sprite:getHeight()
+
+  --Vertically centralize sprite
+  local ty = attributes.y + dialogue_box.text_line_h/2 - h/2
+
+  --Get sprite offset
+  local ox, oy = sprite:getOffset()
+  ox, oy = ox * scale, oy * scale
+
+  table.insert(parsed_text,
+    {
+      type = "sprite",
+      object = sprite,
+      enter = 0,
+      scale = scale,
+      x = attributes.x + ox,
+      y = ty + oy,
+      width = w,
+      height = h,
+      time = attributes.time,
+      color = {1.0,1.0,1.0,1.0},
+      opacity = attributes.opacity,
+      style = attributes.style,
+      font = attributes.font,
+      page = attributes.page
+    }
+  )
+  attributes.x = attributes.x + w
+
+  wrapIfNeeded(parsed_text, attributes, dialogue_box)
+end
+
+
 function wrapIfNeeded(parsed_text, attributes, dialogue_box)
   --Checks if need wraps
   if attributes.x > _MAX_WIDTH - 2*_TEXT_MARGIN then
@@ -676,7 +734,11 @@ function wrapIfNeeded(parsed_text, attributes, dialogue_box)
     --Find start of current word
     local j = #parsed_text
     while j >= 1 do
-      if parsed_text[j].type == "image" or parsed_text[j].object == " " then break end
+      if parsed_text[j].type == "image" or
+         parsed_text[j].type == "sprite" or
+         parsed_text[j].object == " " then
+           break
+      end
       j = j - 1
     end
     if j == 0 then error("Word is too damn big") end

@@ -81,7 +81,18 @@ function Sprite:init(texture, animation)
 end
 
 function Sprite:getDimensions()
-  return unpack(self.animation.frame_size)
+  local w, h = unpack(self.animation.frame_size)
+  return w * self.sx, h * self.sy
+end
+
+function Sprite:getWidth()
+  local w, h = self:getDimensions()
+  return w
+end
+
+function Sprite:getHeight()
+  local w, h = self:getDimensions()
+  return h
 end
 
 function Sprite:setDecorator(f)
@@ -95,6 +106,11 @@ end
 function Sprite:setScale(sx, sy)
   if sx then self.sx = sx end
   if sy then self.sy = sy end
+end
+
+function Sprite:getOffset()
+  local ox, oy = unpack(self.animation.offset)
+  return ox * self.sx, oy * self.sy
 end
 
 function Sprite:clearDecorator()
@@ -112,7 +128,7 @@ end
 function Sprite:render(x, y)
   local quad = _updateAndGetCurrentQuadOfSprite(self)
   local tex = self.texture
-  local ox, oy = unpack(self.animation.offset)
+  local ox, oy = self:getOffset()
   g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
 end
 
