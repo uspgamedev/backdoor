@@ -1,4 +1,6 @@
 
+-- luacheck: no self
+
 local GameElement = require 'domain.gameelement'
 local DB          = require 'database'
 local Card        = require 'domain.card'
@@ -7,9 +9,7 @@ local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
-local PLACEMENTS  = require 'domain.definitions.placements'
-local PACK        = require 'domain.pack'
-local Visibility  = require 'common.visibility'
+local VISIBILITY  = require 'common.visibility'
 local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
 local Signal      = require "steaming.extra_libs.hump.signal"
@@ -329,7 +329,7 @@ end
 
 function Actor:countCardInBuffer(specname)
   local count = 0
-  for i,card in ipairs(self.buffer) do
+  for _,card in ipairs(self.buffer) do
     if card:getSpecName() == specname then
       count = count + 1
     end
@@ -381,7 +381,7 @@ function Actor:addCardToBackbuffer(card)
   table.insert(self.buffer, card)
 end
 
-function Actor:consumeCard(card)
+function Actor:consumeCard(card) -- luacheck: no unused
   --FIXME: add card rarity modifier!
   local cor, arc, ani = self:trainingDitribution()
   local xp = DEFS.CONSUME_EXP
@@ -416,12 +416,11 @@ function Actor:getPrizePackCount()
   return #self.prizes
 end
 
--- Visibility Methods --
+-- VISIBILITY Methods --
 
 function Actor:getVisibleBodies()
   local seen = {}
   local sector = self:getSector()
-  local w, h = sector:getDimensions()
 
   local range = self:getFovRange()
   local pi, pj = self:getPos()
@@ -469,16 +468,16 @@ end
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then
-    self.fov[sector:getId()] = Visibility.purgeFov(sector)
+    self.fov[sector:getId()] = VISIBILITY.purgeFov(sector)
   end
 end
 
 function Actor:resetFov(sector)
-  Visibility.resetFov(self:getFov(sector), sector)
+  VISIBILITY.resetFov(self:getFov(sector), sector)
 end
 
 function Actor:updateFov(sector)
-  Visibility.updateFov(self, sector)
+  VISIBILITY.updateFov(self, sector)
 end
 
 function Actor:getFov(sector)
@@ -597,7 +596,7 @@ end
 
 function Actor:getPowerLevel()
   local lvl = 0
-  for attr,value in pairs(self.upgrades) do
+  for _,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
   return lvl
