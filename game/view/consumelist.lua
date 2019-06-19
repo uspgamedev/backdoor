@@ -52,6 +52,10 @@ local function _initGraphicValues()
   _CH = CARD.getHeight()
 end
 
+local function stencil()
+  love.graphics.rectangle("fill", _WIDTH + 40, _HEIGHT - 388, 250, 105)
+end
+
 local function _next_circular(i, len, n)
   if n == 0 then return i end
   return _next_circular(i % len + 1, len, n - 1)
@@ -255,7 +259,10 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.95)
+  love.graphics.stencil(stencil, "replace", 1)
+  love.graphics.setStencilTest("less", 1)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
+  love.graphics.setStencilTest()
 end
 
 function View:drawCards(g, enter)
@@ -395,6 +402,5 @@ function View:drawHoldBar(g)
   end
   self.holdbar:draw(0, 0)
 end
-
 
 return View
