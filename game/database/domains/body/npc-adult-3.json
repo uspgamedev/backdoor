@@ -1,7 +1,7 @@
 {
   "appearance":"corgi",
   "con":0,
-  "dialogue":"[header name:Tired Adult]\nDon't forget that your hand is active only \nwhile your [color value:blue]Focus \n[color value:regular] lasts!\n\n[newpage wait:2]\n[header name:Tired Adult]\nWhen its over, you'll discard your whole \nhand automatically...",
+  "dialogue":"[header name:Tired Adult]\nDon't forget that your hand is active only \nwhile your [color value:purple]Focus \n[color value:regular] lasts!\n\n[newpage wait:2]\n[header name:Tired Adult]\nWhen its over, you'll discard your whole \nhand automatically...",
   "drops":[],
   "extends":"npc-base",
   "faction":"allied",

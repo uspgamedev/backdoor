@@ -250,7 +250,7 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0.5)
+  g.setColor(0, 0, 0, enter*0.85)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
 end
 

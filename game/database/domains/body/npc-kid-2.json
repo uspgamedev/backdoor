@@ -1,6 +1,6 @@
 {
   "appearance":"corgi",
-  "dialogue":"[header name:Hopeful Kid]\nOur dad says that, to get stronger, you need \nto [color value:blue]consume[color value:regular] \ncards. Is that right mister? I want to be strong \ntoo!",
+  "dialogue":"[header name:Hopeful Kid]\nOur dad says that, to get stronger, you need \nto [color value:red]consume[color value:regular] \ncards. Is that right mister?[endl][color value:grey]\n[size value:small]                      [speed value:medium]      I want to be strong too...",
   "drops":[],
   "extends":"npc-kid-1",
   "faction":"allied",
