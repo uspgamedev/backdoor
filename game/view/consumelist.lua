@@ -25,6 +25,8 @@ local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
+local _H_MARGIN = 30
+local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
 local _CONSUME_TEXT = "consume (+%d EXP)"
@@ -34,7 +36,8 @@ local _CW, _CH
 
 -- LOCAL VARS
 local _font
-local _otherfont
+local _titlefont
+local _subtitlefont
 
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
@@ -43,7 +46,8 @@ local function _initGraphicValues()
   _WIDTH = _FULL_WIDTH*3/4
   _LIST_VALIGN = 0.5*_HEIGHT
   _font = FONT.get("TextBold", 20)
-  _otherfont = FONT.get("Text", 20)
+  _titlefont = FONT.get("Text", 64)
+  _subtitlefont = FONT.get("Text", 35)
   _CW = CARD.getWidth()
   _CH = CARD.getHeight()
 end
@@ -250,7 +254,7 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0.85)
+  g.setColor(0, 0, 0, enter*0.95)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
 end
 
@@ -297,12 +301,18 @@ function View:drawCards(g, enter)
   g.translate(math.round(_WIDTH/2),
               math.round(_HEIGHT/2))
   enter = self.text
+  local owner
   if enter > 0 then
     if card_list[selection] then
+      owner = card_list[selection].card:getOwner()
       self:drawCardDesc(g, card_list[selection], enter)
     end
   end
   g.pop()
+
+  -- draw hud info
+  self:drawHUDInfo(g, owner, enter)
+
 end
 
 function View:drawArrow(g, enter)
@@ -337,26 +347,9 @@ function View:drawCardDesc(g, card, enter)
   g.setColor(COLORS.NEUTRAL)
   g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
-  _otherfont.set()
-  g.print("Keep", maxw + _PD, 0.5 * _otherfont:getHeight())
-  local consume, extra = "Consume\n", 0
-  if self.maxconsume then
-    consume = ("Consume [%d/%d]\n"):format(self.consumed_count, self.maxconsume)
-    extra = _CW/2 + 10
-  end
-  local cor, arc, ani = card.card:getOwner():trainingDitribution()
-  local cor_t = ("COR %.1f%%  "):format(cor*100)
-  local arc_t = ("ARC %.1f%%  "):format(arc*100)
-  local ani_t = ("ANI %.1f%%"):format(ani*100)
-  local table = {COLORS.NEUTRAL,consume,
-           COLORS.COR, cor_t,
-           COLORS.ARC, arc_t,
-           COLORS.ANI, ani_t
-          }
-  g.print(table, maxw + _PD, -2.5 * _otherfont:getHeight())
 
   g.push()
-  g.translate(maxw + _PD + 1.5*_CW + extra, -1.6 * _otherfont:getHeight())
+  g.translate(maxw + _PD + 1.5*_CW, 0)
   self:drawArrow(g, enter)
   g.pop()
 
@@ -368,6 +361,32 @@ function View:drawCardDesc(g, card, enter)
   g.pop()
 end
 
+function View:drawHUDInfo(g, owner, enter)
+
+    --Draw keep side
+    g.setColor(COLORS.NEUTRAL)
+    _titlefont.set()
+    g.print("Keep", _H_MARGIN, _HEIGHT - _V_MARGIN - _titlefont:getHeight())
+
+    --Draw consume side
+    local consume_text = "Consume"
+    g.print(consume_text, _H_MARGIN, _V_MARGIN)
+    if self.maxconsume then
+      local text = ("%d/%d"):format(self.consumed_count, self.maxconsume)
+      _subtitlefont.set()
+      local gap = 10
+      g.print(text, _H_MARGIN + _titlefont:getWidth(consume_text) + gap, _V_MARGIN + _titlefont:getHeight() - _subtitlefont:getHeight())
+    end
+
+
+    --Draw distribution
+    local cor, arc, ani = owner:trainingDitribution()
+    local cor_t = ("COR %.1f%%  "):format(cor*100)
+    local arc_t = ("ARC %.1f%%  "):format(arc*100)
+    local ani_t = ("ANI %.1f%%"):format(ani*100)
+    local table = {COLORS.COR, cor_t, COLORS.ARC, arc_t, COLORS.ANI, ani_t}
+
+end
 
 function View:drawHoldBar(g)
   self.holdbar:update()
