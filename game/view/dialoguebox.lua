@@ -35,8 +35,9 @@ local _EXIT_SPEED = 10
 
 --Different fonts a char can have
 local _CHAR_FONT = {
-  small = FONT.get('Text', 12),
+  small = FONT.get('Text', 16),
   regular = FONT.get('Text', 20),
+  plus = FONT.get('Text', 23),
   big = FONT.get('Text', 25),
 }
 
@@ -56,6 +57,7 @@ local _CHAR_COLOR = {
   blue    = "VALID",
   green   = "SUCCESS",
   grey    = "HALF_VISIBLE",
+  purple  = "PP",
 }
 
 --Opacity for a character color
@@ -70,7 +72,7 @@ local _WAVE_SPEED = 5
 local _WAVE_REGULATOR = 10
 
 --Shake style consts
-local _SHAKE_MAGNITUDE = 1
+local _SHAKE_MAGNITUDE = .75
 
 --Newpage string effect
 local _NEWPAGE_EFFECT = "[color value:grey] ( [size value:small]" ..
@@ -147,11 +149,14 @@ color - set current color to draw text
     red     - red color
     blue    - blue color
     green   - green color
+    grey    - grey color
+    purple  - purple color
 
 size - size of font to draw text
   value - what size to use
     small   - smol-sized font
     regular - default font size
+    plus    - bigger font than regular
     big     - big font for big bois
 
 opacity - Set opacity to draw text
@@ -509,20 +514,15 @@ function interpretateTag(effect_data, attributes, dialogue_box, parsed_text, cur
     end
 
   elseif header == "size" then
-    if aux_att["value"] and
-      (aux_att["value"] == "small" or
-       aux_att["value"] == "regular" or
-       aux_att["value"] == "big") then
-         attributes.font = _CHAR_FONT[aux_att["value"]]
+    if aux_att["value"] and _CHAR_FONT[aux_att["value"]] then
+      attributes.font = _CHAR_FONT[aux_att["value"]]
     else
       err = true
     end
 
   elseif header == "opacity" then
-    if aux_att["value"] and
-      (aux_att["value"] == "regular" or
-       aux_att["value"] == "semi") then
-         attributes.opacity = _CHAR_OPACITY[aux_att["value"]]
+    if aux_att["value"] and _CHAR_OPACITY[aux_att["value"]] then
+      attributes.opacity = _CHAR_OPACITY[aux_att["value"]]
     else
       err = true
     end

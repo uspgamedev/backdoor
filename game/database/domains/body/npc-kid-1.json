@@ -1,6 +1,6 @@
 {
   "appearance":"corgi",
-  "dialogue":"[header name:Impatient Kid]\nHey mister, I heard it's very dangerous out \nthere, full of monsters!\n\n[newpage wait:1.5]\n[header name:Impatient Kid]\nAre you bringing powerful \n[color value:blue]cards[color value:regular] \nwith you? Our dad says I can't leave until \nI learn how to use cards...",
+  "dialogue":"[header name:Impatient Kid]\nHey mister, I heard it's very dangerous out \nthere, full of [color value:red][style value:shake]monsters[style value:none][color value:regular]!\n\n[newpage wait:1.5]\n[header name:Impatient Kid]\nAre you bringing powerful \n[color value:blue]cards[color value:regular] \nwith you? Our dad says I can't leave until \nI learn how to use cards...",
   "drops":[],
   "extends":"corgi",
   "faction":"allied",

@@ -1,7 +1,7 @@
 {
   "appearance":"corgi",
   "con":0,
-  "dialogue":"[header name:Caring Elder]\n[color value:blue]Consuming[color value:regular] \nis important to improve your \n[color value:blue]attributes[color value:regular].\n\n[newpage wait:2]\n[header name:Caring Elder]\nHow much you improve in an \n[color value:blue]attribute\n[color value:regular] depends on how much \nyou use of each [color value:blue]card \ncolor[color value:regular].\n\n[newpage wait:2]\n[header name:Caring Elder]\nYou can consume a few cards in this \n[color value:blue]altar[color value:regular] \nnext to me.",
+  "dialogue":"[header name:Caring Elder]\n[color value:red]Consuming[color value:regular] \nis important to improve your \n[color value:blue]attributes[color value:regular].\n\n[newpage wait:2]\n[header name:Caring Elder]\nHow much you improve in an \n[color value:blue]attribute\n[color value:regular] depends on how much \nyou use of each [color value:blue]card \ncolor[color value:regular].\n\n[newpage wait:3]\n[header name:Caring Elder]\nYou can consume a few cards in this \n[color value:blue]altar[color value:regular] next to me.[endl]\n\nIf you are [color value:purple]not focused[color value:regular], just [color value:blue]press F[color value:regular] while on it to use it.",
   "drops":[],
   "extends":"npc-base",
   "faction":"allied",
