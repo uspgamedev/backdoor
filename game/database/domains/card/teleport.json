@@ -30,7 +30,7 @@
           "type":"operator"
         }]
     },
-    "cost":20
+    "cost":6
   },
   "attr":"ARC",
   "desc":"",

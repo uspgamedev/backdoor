@@ -3,7 +3,7 @@ local round = require 'common.math' .round
 
 local ATTR = {}
 
-ATTR.BASE_SPD = 3
+ATTR.BASE_SPD = 10
 ATTR.INITIAL_UPGRADE = 100
 
 ATTR.INFLUENCE = {

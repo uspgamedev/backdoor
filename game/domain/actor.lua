@@ -9,6 +9,9 @@ local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
+local PLACEMENTS  = require 'domain.definitions.placements'
+local ACTIONDEFS  = require 'domain.definitions.action'
+local PACK        = require 'domain.pack'
 local VISIBILITY  = require 'common.visibility'
 local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
@@ -514,7 +517,7 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.energy = math.max(0, self.energy - self:getSPD())
+  self.energy = self.energy + self:getSPD()
 end
 
 function Actor:resetFocus()
@@ -522,7 +525,7 @@ function Actor:resetFocus()
 end
 
 function Actor:ready()
-  return self:getBody():isAlive() and self.energy <= 0
+  return self:getBody():isAlive() and self.energy >= ACTIONDEFS.MAX_ENERGY
 end
 
 function Actor:playCard(card_index)
@@ -579,7 +582,7 @@ function Actor:makeAction()
 end
 
 function Actor:exhaust(n)
-  self.energy = self.energy + n
+  self.energy = self.energy - n * DEFS.ACTION.EXHAUSTION_UNIT
 end
 
 function Actor:rewardPP(n)

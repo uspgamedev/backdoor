@@ -10,7 +10,7 @@
     "charges":10,
     "operators":[{
         "attr":"SPD",
-        "op":"+",
+        "op":"*",
         "val":2
       }],
     "status-tags":[],

@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"from",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "aoe-hint":1,
@@ -38,7 +38,7 @@
           "type":"operator"
         }]
     },
-    "cost":60
+    "cost":5
   },
   "attr":"COR",
   "desc":"Take your best friend with you!",
