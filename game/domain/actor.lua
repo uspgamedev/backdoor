@@ -29,7 +29,7 @@ function Actor:init(spec_name)
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
   self.body_id = nil
-  self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
+  self.energy = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
   self.focus = 0
@@ -65,7 +65,7 @@ end
 function Actor:loadState(state)
   self:setId(state.id or self.id)
   self:setSubtype(self.spectype)
-  self.cooldown = state.cooldown or self.cooldown
+  self.energy = state.energy or self.energy
   self.body_id = state.body_id or self.body_id
   self.exp = state.exp or self.exp
   self.playpoints = state.playpoints or self.playpoints
@@ -105,7 +105,7 @@ function Actor:saveState()
   local state = {}
   state.id = self:getId()
   state.specname = self.specname
-  state.cooldown = self.cooldown
+  state.energy = self.energy
   state.body_id = self.body_id
   state.exp = self.exp
   state.playpoints = self.playpoints
@@ -152,8 +152,8 @@ function Actor:getExp()
   return self.exp
 end
 
-function Actor:getCooldown()
-  return self.cooldown
+function Actor:getEnergy()
+  return self.energy
 end
 
 function Actor:modifyExpBy(n)
@@ -514,7 +514,7 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  self.energy = math.max(0, self.energy - self:getSPD())
 end
 
 function Actor:resetFocus()
@@ -522,7 +522,7 @@ function Actor:resetFocus()
 end
 
 function Actor:ready()
-  return self:getBody():isAlive() and self.cooldown <= 0
+  return self:getBody():isAlive() and self.energy <= 0
 end
 
 function Actor:playCard(card_index)
@@ -579,7 +579,7 @@ function Actor:makeAction()
 end
 
 function Actor:exhaust(n)
-  self.cooldown = self.cooldown + n
+  self.energy = self.energy + n
 end
 
 function Actor:rewardPP(n)

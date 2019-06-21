@@ -1,7 +1,7 @@
 
 local ACTIONDEFS = require 'domain.definitions.action'
 
-local COOLDOWNBAR = {}
+local ENERGY_BAR = {}
 
 local _BARSCALE = 5
 local _SMOOTH_FACTOR = 0.2
@@ -10,21 +10,21 @@ local _barstates
 local _preview
 local _glow
 
-function COOLDOWNBAR.init()
+function ENERGY_BAR.init()
   _barstates = {}
   _preview = 0
   _glow = {}
 end
 
-function COOLDOWNBAR.setCooldownPreview(value)
+function ENERGY_BAR.setEnergyPreview(value)
   _preview = value or 0
 end
 
-function COOLDOWNBAR.draw(actor, x, y, is_controlled)
+function ENERGY_BAR.draw(actor, x, y, is_controlled)
   local g = love.graphics
-  local cooldown = actor:getCooldown()
+  local energy = actor:getEnergy()
   local last = _barstates[actor:getId()] or 0
-  local value = last + (cooldown - last)*_SMOOTH_FACTOR
+  local value = last + (energy - last)*_SMOOTH_FACTOR
   if math.abs(value) < 1 then
     value = 0
   end
@@ -67,5 +67,5 @@ function COOLDOWNBAR.draw(actor, x, y, is_controlled)
   g.pop()
 end
 
-return COOLDOWNBAR
+return ENERGY_BAR
 
