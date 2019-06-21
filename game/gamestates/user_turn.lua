@@ -130,7 +130,7 @@ end
 
 function state:resume(from, args)
   _view.action_hud:enableTurn()
-  _view.sector.setCooldownPreview(0)
+  _view.sector.setEnergyPreview(0)
   _resumeTask(args)
 end
 
@@ -177,7 +177,7 @@ local function _useAction(action_slot, params)
   local param = ACTION.pendingInput(action_slot, controlled_actor, params)
   while param do
     _view.action_hud:activateAbility()
-    _view.sector:setCooldownPreview(
+    _view.sector:setEnergyPreview(
       ACTION.exhaustionCost(action_slot, controlled_actor, params)
     )
     if param.name == 'choose_dir' then

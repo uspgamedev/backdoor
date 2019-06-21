@@ -95,8 +95,8 @@ function SectorView:getTarget()
   return self.target
 end
 
-function SectorView:setCooldownPreview(value)
-  return SECTOR_ENERGYBAR.setCooldownPreview(value)
+function SectorView:setEnergyPreview(value)
+  return SECTOR_ENERGYBAR.setEnergyPreview(value)
 end
 
 function SectorView:initSector(sector)
