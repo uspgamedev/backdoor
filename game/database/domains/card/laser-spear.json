@@ -37,11 +37,11 @@
       },
       "cost":10
     },
-    "charges":1,
+    "charges":5,
     "operators":[],
     "placement":"weapon",
     "status-tags":[],
-    "trigger":"on_focus_end"
+    "trigger":"on_use"
   },
   "one_time":false
 }
