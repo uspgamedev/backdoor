@@ -1,9 +1,12 @@
 
+-- luacheck: globals love
+
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
 
 local Activity    = require 'common.activity'
+local Deferred    = require 'common.deferred'
 local TweenValue  = require 'view.helpers.tweenvalue'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
@@ -11,7 +14,6 @@ local ELEMENT     = require "steaming.classes.primitives.element"
 local vec2        = require 'cpml' .vec2
 
 local _MW = 16
-local _SPD = 20
 local _FLASH_TIME = 0.2
 
 local _activity = Activity()
@@ -21,7 +23,6 @@ local Announcement = Class{
 }
 
 function Announcement:init()
-  local w, h = love.graphics.getDimensions()
   ELEMENT.init(self)
   self.pos = vec2()
   self.size = vec2()
@@ -32,6 +33,7 @@ function Announcement:init()
   self.cooldown = TweenValue(0, 'linear')
   self.invisible = true
   self.flashcolor = COLORS.FLASH_ANNOUNCE
+  self.deferred = {}
 end
 
 function _activity:announce(ann)
@@ -49,11 +51,16 @@ function _activity:announce(ann)
 
   ann.text = false
   ann.invisible = true
+  while #ann.deferred > 0 do
+    local deferred = table.remove(ann.deferred)
+    deferred:trigger()
+    if ann:isBusy() then return end
+  end
 end
 
 function Announcement:announce(text)
   assert(not self:isBusy())
-  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  local w, _ = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.text = text
   self.size.x = self.font:getWidth(self.text) + 2*_MW
   self.size.y = self.font:getHeight()
@@ -62,6 +69,15 @@ function Announcement:announce(text)
   self.invisible = false
   self.locked = false
   return _activity:announce(self)
+end
+
+function Announcement:interrupt()
+  if self:isBusy() then
+    self.cooldown:snap(0)
+    local deferred = Deferred:new()
+    table.insert(self.deferred, deferred)
+    return deferred
+  end
 end
 
 function Announcement:getPoint()
@@ -82,10 +98,6 @@ end
 
 function Announcement:isBusy()
   return not not self.text
-end
-
-function Announcement:interrupt()
-  self.cooldown:snap(0)
 end
 
 function Announcement:draw()

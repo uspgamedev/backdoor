@@ -20,7 +20,7 @@ function GameplayView:setup(route)
 
   -- actor HUD
   self.action_hud = ActionHUD(route)
-  self.action_hud:setSubtype('frontend-hud')
+  self.action_hud:setSubtype('task')
 
   -- buffer views
   self.frontbuffer = BufferView.newFrontBufferView(route)

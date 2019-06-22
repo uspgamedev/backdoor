@@ -1,5 +1,6 @@
 
 local Util          = require "steaming.util"
+local TweenValue    = require 'view.helpers.tweenvalue'
 local Transmission  = require 'view.transmission'
 local COLORS        = require 'domain.definitions.colors'
 
@@ -19,8 +20,8 @@ end
 
 function ANIM:script(route, view, report)
   local action_hud = view.action_hud
+  local delay = TweenValue(0)
   if report.actor == route:getControlledActor() then
-    print "playing card"
     local cardview = action_hud.handview.hand[report.card_index]
     action_hud.handview:keepFocusedCard(false)
     action_hud:disableCardInfo()
@@ -28,20 +29,17 @@ function ANIM:script(route, view, report)
     local ann = Util.findId('announcement')
     ann:lock()
     cardview:register("HUD_FX")
-    print "raising card"
     self.wait(cardview:raise())
-    print "raised card"
-    ann:interrupt()
-    --while ann:isBusy() do wait(1) end
+    local deferred = ann:interrupt()
+    if deferred then self.wait(deferred) end
     ann:announce(cardview.card:getName())
     local destination,color = _findPlayedCardViewDestination(cardview)
-    print "transmiting card"
     self.wait(Transmission(cardview, destination, 0.5, color))
     ann:unlock()
     cardview:kill()
     action_hud.handview:removeCard(report.card_index)
   end
-  print "ggkthx"
+  delay:kill()
   return self
 end
 

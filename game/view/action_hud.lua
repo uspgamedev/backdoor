@@ -83,9 +83,9 @@ function ActionHUD:activateAbility()
   self.handview:hide()
 end
 
-function ActionHUD:enableTurn()
+function ActionHUD:enableTurn(unlock_holdbar)
   self.player_turn = true
-  if not self.justheld then
+  if unlock_holdbar and not self.justheld then
     self.holdbar:unlock()
   end
 end

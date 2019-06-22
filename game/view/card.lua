@@ -96,6 +96,7 @@ end
 
 function CardView:getPoint()
   return self.position + vec2(self:getDimensions())/2
+                       - vec2(0,self.raised:get())
 end
 
 function CardView:draw()
