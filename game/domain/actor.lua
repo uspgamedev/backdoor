@@ -541,14 +541,6 @@ function Actor:playCard(card_index)
   return card
 end
 
-local function _removeEquipment(body, slot)
-  local equipment = body:getEquipmentAt(slot)
-  local widget_index = equipment and body:findWidget(equipment)
-  if widget_index then
-    body:removeWidget(widget_index)
-  end
-end
-
 function Actor:discardHand()
   while not self:isHandEmpty() do
     local card = self:removeHandCard(1)
@@ -603,8 +595,6 @@ function Actor:endFocus()
   end
   self:discardHand()
   body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
-  _removeEquipment(body, 'weapon')
-  _removeEquipment(body, 'offhand')
   body:removeAllArmor()
 end
 
