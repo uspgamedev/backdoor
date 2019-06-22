@@ -589,8 +589,7 @@ end
 function Actor:endFocus()
   local body = self:getBody()
   if self.focus > 0 then
-    self:exhaust((DEFS.ACTION.MAX_FOCUS - self.focus)
-                * DEFS.ACTION.EXHAUSTION_UNIT)
+    self:exhaust(DEFS.ACTION.MAX_FOCUS - self.focus)
     self.focus = 0
   end
   self:discardHand()
