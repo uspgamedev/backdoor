@@ -74,6 +74,7 @@ function PLAYCARD.perform(actor, inputvalues)
     })
   end
 
+  actor:checkFocus()
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
