@@ -7,7 +7,7 @@
   "set":"arcanist",
   "type-description":"",
   "widget":{
-    "charges":2,
+    "charges":1,
     "operators":[{
         "attr":"ARC",
         "op":"+",
@@ -15,37 +15,7 @@
       }],
     "placement":"offhand",
     "status-tags":[],
-    "trigger":"on_play",
-    "trigger-condition":{
-      "effects":[],
-      "inputs":[{
-          "name":"card",
-          "output":"card",
-          "type":"input"
-        },{
-          "attribute":"ARC",
-          "card":"=card",
-          "name":"card_has_attribute",
-          "output":"ok1",
-          "type":"input"
-        },{
-          "card":"=card",
-          "cardtype":"ART",
-          "name":"card_is_type",
-          "output":"ok2",
-          "type":"input"
-        },{
-          "name":"card",
-          "output":"widget_self",
-          "type":"input"
-        },{
-          "lhs":"=card",
-          "name":"different_card",
-          "output":"ok3",
-          "rhs":"=widget_self",
-          "type":"input"
-        }]
-    }
+    "trigger":"on_focus_end"
   },
   "art":false,
   "one_time":false

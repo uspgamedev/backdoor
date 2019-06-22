@@ -8,6 +8,8 @@
   "initial_buffer":[],
   "name":"Dumb",
   "signature":"tackle",
-  "traits":[],
+  "traits":[{
+      "specname":"slow"
+    }],
   "extends":false
 }
