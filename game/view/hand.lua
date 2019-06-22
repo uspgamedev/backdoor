@@ -1,15 +1,11 @@
+
+-- luacheck: globals love MAIN_TIMER DRAW_TABLE
+
 local FONT         = require 'view.helpers.font'
 local CARD         = require 'view.helpers.card'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.cardinfo'
-local COLORS       = require 'domain.definitions.colors'
-local ACTIONDEFS   = require 'domain.definitions.action'
-local RANDOM       = require 'common.random'
 local Button       = require 'view.controlhints.changehandcursor'
-local RES          = require 'resources'
-local Transmission = require 'view.transmission'
-local vec2         = require 'cpml' .vec2
-local Util         = require "steaming.util"
 local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
 
@@ -21,10 +17,6 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
-local _BG = {12/256, 12/256, 12/256, 1}
-local _FOCUS_ICON = {
-  -6, 0, 0, -9, 6, 0, 0, 9
-}
 local _FADE_SPD = 2
 
 local _font
@@ -43,8 +35,8 @@ function HandView:init(route)
 
   _WIDTH, _HEIGHT = love.graphics.getDimensions()
 
-  self.prev_cursor = Button(x, y, "left")
-  self.next_cursor = Button(x, y, "right")
+  self.prev_cursor = Button("left")
+  self.next_cursor = Button("right")
 
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
@@ -56,16 +48,10 @@ function HandView:init(route)
   self.hiding = false
   self.keep_focused_card = false
 
-  self.fxqueue = {}
-
   self:reset()
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
-end
-
-function HandView:isAnimating()
-  return #self.fxqueue > 0 or not not self.fx
 end
 
 function HandView:getFocus()
@@ -134,7 +120,7 @@ function HandView:update(dt)
     card:update(dt)
   end
   self.cardinfo:update(dt)
-  if not self.hiding or #self.fxqueue > 0 then
+  if not self.hiding then
     self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
   else
     if self.alpha > 0.10 then
@@ -142,10 +128,6 @@ function HandView:update(dt)
     else
       self.alpha = 0
     end
-  end
-  if #self.fxqueue > 0 and not self.fx then
-    self.fx = table.remove(self.fxqueue, 1)
-    self:fx()
   end
   self.prev_cursor:update(dt)
   self.next_cursor:update(dt)
@@ -155,26 +137,15 @@ function HandView:draw()
   local hand = self.hand
   local size = #hand
   if size <= 0 then return end
-  local card = hand[1]
+  local card_tmp = hand[1]
   local gap = _GAP * self.gap_scale
-  local step = card:getWidth() + gap
-  local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2, self.y
-  local enter = math.abs(y - self.initial_y) / (card:getHeight())
-  local boxwidth = 128
-  local g = love.graphics
+  local step = card_tmp:getWidth() + gap
+  local x, y = self.x + (size*card_tmp:getWidth() + (size-1)*gap)/2, self.y
+  local enter = math.abs(y - self.initial_y) / (card_tmp:getHeight())
 
 
   -- draw action type
   _font.set()
-  local colorname = "BACKGROUND"
-  local poly = {
-    -20, _HEIGHT/2,
-    self.x + boxwidth, _HEIGHT/2,
-    self.x + boxwidth, _HEIGHT/2 + 40,
-    self.x + boxwidth - 20, _HEIGHT/2 + 60,
-    -20, _HEIGHT/2 + 60,
-  }
-  local offset = self.x+boxwidth
 
   -- draw buttons
   local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
@@ -210,43 +181,13 @@ function HandView:draw()
   end
 end
 
-function HandView:doAddCard(actor, card)
-  MAIN_TIMER:script(function(wait)
-    if self.route.getControlledActor() == actor then
-      local view = CardView(card)
-      table.insert(self.hand, view)
-      local frontbuffer = Util.findId('frontbuffer_view')
-      Transmission(frontbuffer, view, 0.5, COLORS.FLASH_DRAW)
-      wait(0.1)
-      self.fx = false
-    end
-  end)
-end
-
-function HandView:doRemoveCard(actor, card_index, discarded)
-  MAIN_TIMER:script(function(wait)
-    if self.route.getControlledActor() == actor then
-      local view = self.hand[card_index]
-      if discarded then
-        local backbuffer = Util.findId('backbuffer_view')
-        Transmission(view, backbuffer, 0.2, COLORS.FLASH_DISCARD)
-        wait(0.2)
-      end
-      table.remove(self.hand, card_index)
-      self.fx = false
-    end
-  end)
-end
-
-function HandView:addCard(actor, card)
-  table.insert(self.fxqueue, function () self:doAddCard(actor, card) end)
+function HandView:addCard(card_view)
+  table.insert(self.hand, card_view)
 end
 
 --Remove card given by index (must be valid)
-function HandView:removeCard(actor, card_index, discarded)
-  table.insert(self.fxqueue, function ()
-    self:doRemoveCard(actor, card_index, discarded)
-  end)
+function HandView:removeCard( card_index)
+  table.remove(self.hand, card_index)
 end
 
 function HandView:reset()
@@ -272,3 +213,4 @@ function HandView:reset()
 end
 
 return HandView
+

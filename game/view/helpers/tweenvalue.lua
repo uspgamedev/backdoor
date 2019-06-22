@@ -41,9 +41,10 @@ function TweenValue:update(dt)
 end
 
 function TweenValue:checkCallback()
-  if math.abs(self.value - self.target) <= 0.01 then
+  if math.abs(self.value - self.target) <= self.target/100 then
     self.value = self.target
     if self.deferred then
+      print("done!")
       self.deferred:trigger()
       self.deferred = false
     end
@@ -64,11 +65,6 @@ end
 
 function TweenValue:get()
   return self.value
-end
-
-function TweenValue:defer(callback, once)
-  self.callback = callback
-  self.callback_once = once
 end
 
 return TweenValue

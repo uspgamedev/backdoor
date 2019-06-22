@@ -15,7 +15,6 @@ local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
-local Signal        = require "steaming.extra_libs.hump.signal"
 local ELEMENT       = require "steaming.classes.primitives.element"
 
 local _INFO_LAG = 2.0 -- seconds
@@ -44,18 +43,6 @@ function ActionHUD:init(route)
   -- Hand view
   self.handview = HandView(route)
   self.handview:register("HUD_BG", nil, "hand_view")
-  Signal.register(
-    "actor_draw",
-    function(actor, card)
-      self.handview:addCard(actor,card)
-    end
-  )
-  Signal.register(
-    "actor_remove_card",
-    function(actor, index, discarded)
-      self.handview:removeCard(actor, index, discarded)
-    end
-  )
 
   -- HUD state (player turn or not)
   self.player_turn = false
@@ -89,10 +76,6 @@ function ActionHUD:destroy()
   self.handview:destroy()
   self.focusbar:destroy()
   ELEMENT.destroy(self)
-end
-
-function ActionHUD:isAnimating()
-  return self.handview:isAnimating()
 end
 
 function ActionHUD:activateAbility()

@@ -25,10 +25,10 @@ end
 function DRAWHAND.perform(actor, inputvalues) -- luacheck: no unused
   actor:spendPP(actor:getBody():getConsumption())
   actor:discardHand()
+  actor:resetFocus()
   for _ = 1, DEFS.HAND_LIMIT do
     actor:drawCard()
   end
-  actor:resetFocus()
 end
 
 return DRAWHAND

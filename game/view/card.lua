@@ -1,13 +1,15 @@
-local TEXTURE = require 'view.helpers.texture'
-local FONT    = require 'view.helpers.font'
-local DEFS    = require 'view.definitions'
-local COLORS  = require 'domain.definitions.colors'
-local Color   = require 'common.color'
-local round   = require 'common.math' .round
-local vec2    = require 'cpml' .vec2
-local Util    = require "steaming.util"
-local Class   = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+
+-- luacheck: globals love
+
+local TEXTURE     = require 'view.helpers.texture'
+local FONT        = require 'view.helpers.font'
+local COLORS      = require 'domain.definitions.colors'
+local Color       = require 'common.color'
+local round       = require 'common.math' .round
+local vec2        = require 'cpml' .vec2
+local Class       = require "steaming.extra_libs.hump.class"
+local ELEMENT     = require "steaming.classes.primitives.element"
+local TweenValue  = require 'view.helpers.tweenvalue'
 
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
@@ -17,7 +19,6 @@ local CardView = Class{
   __includes = { ELEMENT }
 }
 
-local _ENTER_SPD = 5
 local _FLASH_SPD = 20
 
 function CardView:init(card)
@@ -32,6 +33,7 @@ function CardView:init(card)
   self.add = 0
   self.flashcolor = nil
   self.position = vec2()
+  self.raised = TweenValue(0, 'smooth', 5)
 end
 
 function CardView:getWidth()
@@ -63,6 +65,10 @@ function CardView:flashFor(duration, color)
   self.flashcolor = color or COLORS.NEUTRAL
 end
 
+function CardView:raise()
+  return self.raised:set(200)
+end
+
 function CardView:update(dt)
   if self.flash > 0 then
     self.flash = math.max(0, self.flash - dt)
@@ -92,29 +98,10 @@ function CardView:getPoint()
   return self.position + vec2(self:getDimensions())/2
 end
 
-function CardView:playAsArt()
-  MAIN_TIMER:script(function(wait)
-    local ann = Util.findId('announcement')
-    ann:lock()
-    self:register("HUD_FX")
-    self:addTimer(
-      nil, MAIN_TIMER, 'tween', 0.2, self,
-      { position = self.position + vec2(0,-200) }, 'out-cubic'
-    )
-    wait(0.2)
-    ann:interrupt()
-    while ann:isBusy() do wait(1) end
-    ann:announce(self.card:getName(), self, Util.findId('backbuffer_view'))
-    self:flashFor(0.5)
-    wait(0.5)
-    ann:unlock()
-    self:kill()
-  end)
-end
-
 function CardView:draw()
   --Draw card background
   local x,y = self.position:unpack()
+  y = y - self.raised:get()
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[self.card:getRelatedAttr()])
   local w, h = self.sprite:getDimensions()
@@ -181,3 +168,4 @@ function CardView:draw()
 end
 
 return CardView
+

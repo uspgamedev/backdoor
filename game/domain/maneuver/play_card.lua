@@ -47,20 +47,26 @@ end
 function PLAYCARD.perform(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local body = actor:getBody()
+
   actor:playCard(inputvalues.card_index)
 
   if card:isArt() then
-    actor:exhaust(card:getArtCost())
+    actor:spendFocus(card:getArtCost())
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
-    actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)
+    actor:spendFocus(ACTIONDEFS.PLAY_WIDGET_COST)
     body:placeWidget(card)
   end
 
   coroutine.yield('report', {
     type = 'body_acted',
     body = body,
+  })
+  coroutine.yield('report', {
+    type = 'play_card',
+    actor = actor,
+    card_index = inputvalues.card_index
   })
 
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })

@@ -1,6 +1,6 @@
 --MODULE FOR THE GAMESTATE: GAME--
 
--- luacheck: globals SWITCHER GS MAIN_TIMER
+-- luacheck: globals SWITCHER GS MAIN_TIMER, no self
 
 local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
@@ -41,6 +41,7 @@ local function _playTurns(...)
 
   _updateSoundtrack()
 
+  print("ui thread requested", request, extra and extra.type)
   if request == "playerDead" then
     _view.action_hud:destroy()
     _view.actor:destroy()
@@ -152,7 +153,7 @@ function state:leave()
 
 end
 
-function state:update(dt)
+function state:update(_)
   --FIXME:this doesn't need to happen every update (I think)
   if _route.getControlledActor() or _player then
     _view.sector:updateFov(_route.getControlledActor() or _player)
@@ -166,14 +167,14 @@ function state:update(dt)
   _view.sector:lookAt(_route.getControlledActor() or _player)
 end
 
-function state:resume(state, args)
+function state:resume(from, args)
 
-  if state == GS.USER_TURN then
+  if from == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
     _next_action = args.next_action
-  elseif state == GS.ANIMATION then
+  elseif from == GS.ANIMATION then
     _playTurns()
-  elseif state == GS.GAMEOVER or state == GS.WIN then
+  elseif from == GS.GAMEOVER or from == GS.WIN then
     SWITCHER.switch(GS.START_MENU)
   end
 

@@ -2,21 +2,19 @@
 --  This gamestate rolls out when the player's turn arrives. It pops the action
 --  the player chose to do.
 
+-- luacheck: globals SWITCHER GS, no self
+
 local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
-local SCHEMATICS    = require 'domain.definitions.schematics'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
-local DIRECTIONALS  = require 'infra.dir'
-local INPUT         = require 'input'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.action_hud'
 local Util          = require "steaming.util"
 local Draw          = require "draw"
 local Signal        = require "steaming.extra_libs.hump.signal"
 
-local vec2          = require 'cpml' .vec2
 
 local ReadyAbilityView = require 'view.readyability'
 
@@ -34,7 +32,6 @@ local _widget_abilities = {
   list = {},
 }
 local _save_and_quit
-local _was_on_menu
 
 local _ACTION = {}
 
@@ -84,7 +81,7 @@ local function _updateAbilityList()
   _widget_abilities.list = list
 end
 
-function _selectedAbilitySlot()
+local function _selectedAbilitySlot()
   local ready = _widget_abilities.ready
   if not ready then return false end
   local widget = Util.findId(ready)
@@ -113,8 +110,6 @@ function state:enter(_, route, view)
   ability_view:enter()
   _view.ability = ability_view
 
-  _was_on_menu = false
-
   _view.action_hud:enableTurn()
 
 end
@@ -128,7 +123,7 @@ function state:leave()
   _view.action_hud:disableTurn()
 end
 
-function state:resume(from, args)
+function state:resume(_, args)
   _view.action_hud:enableTurn()
   _view.sector.setEnergyPreview(0)
   _resumeTask(args)
@@ -138,7 +133,7 @@ function state:devmode()
   _view.action_hud:disableTurn()
 end
 
-function state:update(dt)
+function state:update(_)
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
@@ -147,10 +142,6 @@ function state:update(dt)
     SWITCHER.pop({next_action = _next_action})
     _next_action = nil
     return
-  end
-
-  if _view.action_hud:isAnimating() then
-    return SWITCHER.push(GS.HUD_ANIMATION, _view.action_hud)
   end
 
   local action_request, param = _view.action_hud:actionRequested()
@@ -171,7 +162,6 @@ end
 
 local function _useAction(action_slot, params)
   if not ACTION.exists(action_slot) then return false end
-  local current_sector = _route.getCurrentSector()
   local controlled_actor = _route.getControlledActor()
   params = params or {}
   local param = ACTION.pendingInput(action_slot, controlled_actor, params)
@@ -294,8 +284,7 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   PLAYSFX 'ok-menu'
   if _useAction(DEFS.ACTION.PLAY_CARD,
                 { card_index = card_index }) then
-    Signal.emit("actor_used_card", _route.getControlledActor(), index)
-    _view.action_hud:playCard(card_index)
+    Signal.emit("actor_used_card", _route.getControlledActor(), card_index)
   end
 end
 
@@ -305,7 +294,7 @@ _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
     PLAYSFX 'ok-menu'
     _view.action_hud:disableTurn()
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
-    local args = coroutine.yield(_task)
+    coroutine.yield(_task)
   else
     PLAYSFX 'denied'
   end
