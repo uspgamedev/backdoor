@@ -14,7 +14,6 @@ local PACK        = require 'domain.pack'
 local VISIBILITY  = require 'common.visibility'
 local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
-local Signal      = require "steaming.extra_libs.hump.signal"
 
 local math = require 'common.math'
 
@@ -366,16 +365,19 @@ function Actor:drawCard()
     card = table.remove(self.buffer, 1)
   end
   table.insert(self.hand, card)
-  Signal.emit("actor_draw", self, card)
+  coroutine.yield('report', {
+    type = "draw_card",
+    actor = self,
+    card = card
+  })
 end
 
 function Actor:getHandCard(index)
   return index and self.hand[index]
 end
 
-function Actor:removeHandCard(index, discarded)
+function Actor:removeHandCard(index)
   assert(index >= 1 and index <= #self.hand)
-  Signal.emit("actor_remove_card", self, index, discarded)
   return table.remove(self.hand, index)
 end
 
@@ -528,7 +530,7 @@ function Actor:ready()
 end
 
 function Actor:playCard(card_index)
-  local card = self:removeHandCard(card_index, false)
+  local card = self:removeHandCard(card_index)
   local attr = card:getRelatedAttr()
   if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
     self.training[attr] = self.training[attr] + 1
@@ -549,8 +551,13 @@ end
 
 function Actor:discardHand()
   while not self:isHandEmpty() do
-    local card = self:removeHandCard(1, true)
+    local card = self:removeHandCard(1)
     self:addCardToBackbuffer(card)
+    coroutine.yield('report', {
+      type = 'discard_card',
+      actor = self,
+      card_index = 1
+    })
   end
 end
 
@@ -577,6 +584,10 @@ function Actor:makeAction()
 end
 
 function Actor:exhaust(n)
+  self.energy = self.energy - n * DEFS.ACTION.EXHAUSTION_UNIT
+end
+
+function Actor:spendFocus(n)
   self.focus = math.max(0, self.focus - n)
   if self.focus == 0 then
     self:endFocus()

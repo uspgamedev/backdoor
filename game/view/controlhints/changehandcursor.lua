@@ -8,8 +8,8 @@ local Button = Class{
   __includes = { CONTROLHINT }
 }
 
-function Button:init(x, y, side)
-    CONTROLHINT.init(self, x, y)
+function Button:init(side)
+    CONTROLHINT.init(self, 0, 0)
 
     if side == "left" then
       self.image = RES.loadTexture("button-prev_hand_cursor")
