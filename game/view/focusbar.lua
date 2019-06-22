@@ -1,9 +1,10 @@
 
+-- luacheck: globals love
+
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local ACTIONDEFS  = require 'domain.definitions.action'
 
-local vec2        = require 'cpml' .vec2
 local math        = require 'common.math'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
@@ -83,10 +84,9 @@ function FocusBar:draw()
   local g = love.graphics
 
   -- draw hand countdown
-  local maxfocus = ACTIONDEFS.FOCUS_DURATION
+  local maxfocus = ACTIONDEFS.MAX_FOCUS
   local focuscountdown = math.min(self.actor:getFocus(), maxfocus)
   local current = self.hand_count_down or 0
-  local y = 144
   current = current + (focuscountdown - current) * 0.2
   if math.abs(current - focuscountdown) < 1 then
     current = focuscountdown
@@ -97,7 +97,6 @@ function FocusBar:draw()
   local handbar_width = 492/2
   local handbar_height = 12
   local handbar_gap = handbar_width / (maxfocus-1) local font = FONT.get("Text", 18)
-  local fh = font:getHeight()*font:getLineHeight()
   local mx, my = 60, 20
   local slope = handbar_height + 2*my
   font:set()
