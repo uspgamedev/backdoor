@@ -32,7 +32,7 @@ function TweenValue:init(value, interpolator_name, ...)
   self.target = value
   self.interpolator = _interpolators[interpolator_name or 'linear'](...)
   self.deferred = false
-  self:setSubtype('frontend-hud')
+  self:setSubtype('task')
 end
 
 function TweenValue:update(dt)
@@ -41,12 +41,12 @@ function TweenValue:update(dt)
 end
 
 function TweenValue:checkCallback()
-  if math.abs(self.value - self.target) <= self.target/100 then
+  if math.abs(self.value - self.target) <= math.max(0.01, self.target/100) then
     self.value = self.target
     if self.deferred then
-      print("done!")
-      self.deferred:trigger()
+      local deferred = self.deferred
       self.deferred = false
+      deferred:trigger()
     end
   end
 end

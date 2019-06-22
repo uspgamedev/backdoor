@@ -109,8 +109,7 @@ function state:enter(_, route, view)
   ability_view:register("HUD")
   ability_view:enter()
   _view.ability = ability_view
-
-  _view.action_hud:enableTurn()
+  _view.action_hud:enableTurn(true)
 
 end
 
@@ -120,11 +119,10 @@ function state:leave()
   end
   _view.ability:exit()
   _view.ability = nil
-  _view.action_hud:disableTurn()
 end
 
 function state:resume(_, args)
-  _view.action_hud:enableTurn()
+  _view.action_hud:enableTurn(true)
   _view.sector.setEnergyPreview(0)
   _resumeTask(args)
 end

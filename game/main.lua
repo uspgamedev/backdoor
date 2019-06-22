@@ -95,6 +95,7 @@ function love.update(dt)
   end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
+  Util.updateSubtype(dt, 'task')
   Draw.update(dt)
   SOUNDTRACK:update(dt)
   Util.destroyAll()

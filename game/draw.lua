@@ -17,7 +17,6 @@ local draw = {}
 
 --Update every drawable object
 function draw.update(dt)
-  Util.updateSubtype(dt, 'frontend-hud')
   for _,layer in pairs(DRAW_TABLE) do
     for o in pairs(layer) do
       if not o.death and not o.invisible and o.update then

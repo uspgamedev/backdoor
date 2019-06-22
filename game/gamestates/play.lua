@@ -41,22 +41,28 @@ local function _playTurns(...)
 
   _updateSoundtrack()
 
-  print("ui thread requested", request, extra and extra.type)
   if request == "playerDead" then
     _view.action_hud:destroy()
     _view.actor:destroy()
+    _view.action_hud:disableTurn()
     SWITCHER.push(GS.GAMEOVER, _player, _view)
   elseif request == "playerWin" then
-      _route.win()
-      _view.action_hud:destroy()
-      _view.actor:destroy()
-      SWITCHER.push(GS.WIN, _player, _view)
+    _route.win()
+    _view.action_hud:destroy()
+    _view.actor:destroy()
+    _view.action_hud:disableTurn()
+    SWITCHER.push(GS.WIN, _player, _view)
   elseif request == "userTurn" then
     _saveRoute()
     SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
+    _view.action_hud:disableTurn()
     _activity:changeSector(...)
   elseif request == "report" then
+    local player = _route.getControlledActor()
+    if extra.actor ~= player then
+      _view.action_hud:disableTurn()
+    end
     SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
