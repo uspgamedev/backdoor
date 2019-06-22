@@ -6,6 +6,7 @@ ACTION.MOVE             = 'move'
 ACTION.INTERACT         = 'interact'
 ACTION.USE_SIGNATURE    = 'use_signature'
 ACTION.DRAW_NEW_HAND    = 'draw_new_hand'
+ACTION.END_FOCUS        = 'end_focus'
 ACTION.PLAY_CARD        = 'play_card'
 ACTION.ACTIVATE_WIDGET  = 'activate_widget'
 ACTION.STASH_CARD       = 'stash_card'
@@ -22,6 +23,6 @@ ACTION.MAX_ENERGY         = 10 * ACTION.EXHAUSTION_UNIT
 ACTION.CYCLE_UNIT         = 10
 
 ACTION.NEW_HAND_COST = 2*10
-ACTION.FOCUS_DURATION = 8
+ACTION.MAX_FOCUS = 10
 
 return ACTION

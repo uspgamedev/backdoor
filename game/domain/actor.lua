@@ -9,7 +9,6 @@ local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
-local PLACEMENTS  = require 'domain.definitions.placements'
 local ACTIONDEFS  = require 'domain.definitions.action'
 local PACK        = require 'domain.pack'
 local VISIBILITY  = require 'common.visibility'
@@ -521,7 +520,7 @@ function Actor:tick()
 end
 
 function Actor:resetFocus()
-  self.focus = DEFS.ACTION.FOCUS_DURATION
+  self.focus = DEFS.ACTION.MAX_FOCUS
 end
 
 function Actor:ready()
@@ -548,20 +547,16 @@ local function _removeEquipment(body, slot)
   end
 end
 
+function Actor:discardHand()
+  while not self:isHandEmpty() do
+    local card = self:removeHandCard(1, true)
+    self:addCardToBackbuffer(card)
+  end
+end
+
 function Actor:turn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
-  self.focus = math.max(0, self.focus - 1)
-  if self.focus == 0 then
-    while not self:isHandEmpty() do
-      local card = self:removeHandCard(1, true)
-      self:addCardToBackbuffer(card)
-    end
-    body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
-    _removeEquipment(body, 'weapon')
-    _removeEquipment(body, 'offhand')
-    body:removeAllArmor()
-  end
 end
 
 function Actor:makeAction()
@@ -582,7 +577,24 @@ function Actor:makeAction()
 end
 
 function Actor:exhaust(n)
-  self.energy = self.energy - n * DEFS.ACTION.EXHAUSTION_UNIT
+  self.focus = math.max(0, self.focus - n)
+  if self.focus == 0 then
+    self:endFocus()
+  end
+end
+
+function Actor:endFocus()
+  local body = self:getBody()
+  if self.focus > 0 then
+    self:exhaust((DEFS.ACTION.MAX_FOCUS - self.focus)
+                * DEFS.ACTION.EXHAUSTION_UNIT)
+    self.focus = 0
+  end
+  self:discardHand()
+  body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
+  _removeEquipment(body, 'weapon')
+  _removeEquipment(body, 'offhand')
+  body:removeAllArmor()
 end
 
 function Actor:rewardPP(n)

@@ -36,7 +36,8 @@ function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local valid = false
   if card:isArt() then
-    valid = ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
+    valid = actor:getFocus() >= card:getArtCost()
+        and ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
   elseif card:isWidget() then
     valid = true
   end

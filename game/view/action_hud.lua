@@ -1,5 +1,6 @@
 
-local RANDOM        = require 'common.random'
+-- luacheck: globals MAIN_TIMER, no self
+
 local DIRECTIONALS  = require 'infra.dir'
 local LONG_WALK     = require 'view.helpers.long_walk'
 local ADJACENCY     = require 'view.helpers.adjacency'
@@ -193,18 +194,26 @@ function ActionHUD:wasAnyPressed()
   return INPUT.wasAnyPressed()
 end
 
+local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
+
 function ActionHUD:actionRequested()
   local action_request
+  local player_focused = self.route.getControlledActor():isFocused()
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if dir then
-    if INPUT.isActionDown('ACTION_4') and LONG_WALK.isAllowed(self) then
-      LONG_WALK.start(self, dir)
+    if player_focused then
+      if _HAND_FOCUS_DIR[dir] then
+        self:moveHandFocus(dir)
+      end
     else
-      action_request = {DEFS.ACTION.MOVE, dir}
+      if INPUT.isActionDown('ACTION_4') and LONG_WALK.isAllowed(self) then
+        LONG_WALK.start(self, dir)
+      else
+        action_request = {DEFS.ACTION.MOVE, dir}
+      end
     end
   end
 
-  local player_focused = self.route.getControlledActor():isFocused()
   if INPUT.wasActionPressed('CONFIRM') then
     if player_focused then
       local card_index = self.handview:getFocus()
@@ -215,20 +224,18 @@ function ActionHUD:actionRequested()
       action_request = {DEFS.ACTION.INTERACT}
     end
   elseif INPUT.wasActionPressed('CANCEL') then
-    action_request = {DEFS.ACTION.IDLE}
+    if player_focused then
+      action_request = {DEFS.ACTION.END_FOCUS}
+    else
+      action_request = {DEFS.ACTION.IDLE}
+    end
   elseif INPUT.wasActionPressed('SPECIAL') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_2') then
-    if player_focused then
-      self:moveHandFocus('LEFT')
-    else
+    if not player_focused then
       action_request = {DEFS.ACTION.RECEIVE_PACK}
-    end
-  elseif INPUT.wasActionPressed('ACTION_1') then
-    if player_focused then
-      self:moveHandFocus('RIGHT')
     end
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}

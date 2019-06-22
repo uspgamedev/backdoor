@@ -281,6 +281,15 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   end
 end
 
+_ACTION[DEFS.ACTION.END_FOCUS] = function()
+  if MANEUVERS['end_focus'].validate(_route.getControlledActor(), {}) then
+    PLAYSFX 'ok-menu'
+    _useAction(DEFS.ACTION.END_FOCUS)
+  else
+    PLAYSFX 'denied'
+  end
+end
+
 _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   PLAYSFX 'ok-menu'
   if _useAction(DEFS.ACTION.PLAY_CARD,
