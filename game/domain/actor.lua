@@ -519,7 +519,6 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
-  print("tick " .. self.id, self.energy)
 end
 
 function Actor:resetFocus()

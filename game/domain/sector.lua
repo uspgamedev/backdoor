@@ -410,7 +410,6 @@ function _turnLoop(self)
       local actor = table.remove(actors_queue)
 
       if actor:ready() then
-        print(actor.id .. "'s turn")
         while actor:ready() do
           actor:makeAction()
           manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
