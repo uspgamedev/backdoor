@@ -150,12 +150,16 @@ function CardView:draw()
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
-  g.printf(self.card:getType(), w-pd-typewidth, 0, typewidth, "right")
-  if self.card:isWidget() then
-    g.printf(("[%d]"):format(
-      self.card:getWidgetCharges() - self.card:getUsages()),
-      pd, h - pd - _card_font:getHeight(), w-pd*2, "left"
-    )
+  g.printf(self.card:getType(), pd, h - pd - _card_font:getHeight(), typewidth,
+           "left")
+  _info_font.set()
+  if self.card:isArt() then
+    g.printf(("(%d)"):format(self.card:getArtCost()),
+             pd, 0, w-pd*2, "right")
+  elseif self.card:isWidget() then
+    g.printf(("[%d]"):format(self.card:getWidgetCharges()
+                           - self.card:getUsages()),
+             pd, 0, w-pd*2, "right")
   end
   g.pop()
 

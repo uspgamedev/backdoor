@@ -51,14 +51,14 @@
       },
       "cost":10
     },
-    "charges":0,
+    "charges":3,
     "operators":[],
     "placement":"weapon",
     "status-tags":[],
+    "trigger":"on_use",
     "trigger-condition":{
       "effects":[],
       "inputs":[]
-    },
-    "trigger":false
+    }
   }
 }

@@ -11,7 +11,7 @@
       "ability":{
         "effects":[{
             "attr":"=base",
-            "base":12,
+            "base":3,
             "name":"damage_on_target",
             "target":"=target",
             "type":"effect",
@@ -66,11 +66,11 @@
       },
       "cost":10
     },
-    "charges":0,
+    "charges":5,
     "operators":[],
     "placement":"weapon",
     "status-tags":[],
-    "trigger":false
+    "trigger":"on_use"
   },
   "one_time":false
 }
