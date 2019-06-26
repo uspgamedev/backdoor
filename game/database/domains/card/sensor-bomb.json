@@ -22,7 +22,7 @@
           "type":"input"
         }]
     },
-    "cost":8
+    "cost":5
   },
   "attr":"COR",
   "desc":"This is going to be a blast!",

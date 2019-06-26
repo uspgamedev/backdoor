@@ -17,8 +17,8 @@
         "name":"choose_target",
         "output":"pos",
         "type":"input",
-        "empty-tile":false,
         "dif-fact":false,
+        "empty-tile":false,
         "non-wall":false
       },{
         "name":"get_attribute",
@@ -32,6 +32,6 @@
         "type":"operator"
       }]
   },
-  "cost":10,
+  "cost":5,
   "playpoints":0
 }

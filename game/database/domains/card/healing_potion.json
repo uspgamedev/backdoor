@@ -17,8 +17,8 @@
           "name":"choose_target",
           "output":"self_pos",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false
         },{
           "name":"self",
@@ -37,7 +37,7 @@
           "which":"VIT"
         }]
     },
-    "cost":2
+    "cost":1
   },
   "attr":"NONE",
   "desc":"Gulp. Down the hatch, foxy.",
