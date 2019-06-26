@@ -18,7 +18,8 @@ return {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
-      { id = 'cost', name = "Cost", type = 'range', min = 0, max = 10 },
+      { id = 'cost', name = "Cost", type = 'range', min = 0,
+        max = DEFS.ACTION.MAX_FOCUS },
       { id = 'art_ability', name = "Art Ability", type = 'ability',
         hint = "Happens when card is played from hand" },
     }
@@ -54,7 +55,8 @@ return {
       {
         id = 'activation', name = "Activated Ability", type = 'section',
         schema = {
-          { id = 'cost', name = "Cost", type = 'range', min = 0, max = 10 },
+          { id = 'cost', name = "Cost", type = 'range', min = 0,
+            max = DEFS.ACTION.MAX_FOCUS },
           { id = 'ability', name = "Ability", type = 'ability',
             hint = "Happens when widget is activated" }
         }

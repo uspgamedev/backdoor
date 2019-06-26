@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"target_pos",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false
         },{
           "name":"self",
@@ -56,7 +56,7 @@
           "type":"operator"
         }]
     },
-    "cost":2
+    "cost":1
   },
   "attr":"COR",
   "desc":"Outta my way!",

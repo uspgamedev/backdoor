@@ -30,7 +30,7 @@
             "type":"operator"
           }]
       },
-      "cost":10
+      "cost":5
     },
     "charges":3,
     "operators":[],

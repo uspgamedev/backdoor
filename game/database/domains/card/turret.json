@@ -22,7 +22,7 @@
           "type":"input"
         }]
     },
-    "cost":10
+    "cost":5
   },
   "attr":"ARC",
   "desc":"A true friend never let's you down.\n\nAnd also shoots your enemies in the face.",
