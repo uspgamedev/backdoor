@@ -15,7 +15,7 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
 local _FOCUS_ICON = {
-  -12, -3, 0, -9, 12, -3, 12, 3, 0, 9, -12, 3
+  -12, -4, 0, -9, 12, -4, 12, 4, 0, 9, -12, 4
 }
 
 local _font
