@@ -15,13 +15,13 @@ DEFS.PRIMARY_ATTRIBUTES = {
 }
 DEFS.ALL_ATTRIBUTES = {
   "COR", "ARC", "ANI",
-  "SPD", "FOV",
-  "DEF", "EFC", "VIT",
-  "RES", "FIN", "CON"
+  "FOV",
+  "SKL", "SPD", "VIT",
+  "EFC", "FIN", "RES"
 }
 DEFS.BODY_ATTRIBUTES = {
-  "DEF", "EFC", "VIT",
-  "FIN", "CON", "RES"
+  "SKL", "SPD", "VIT",
+  "EFC", "FIN", "RES"
 }
 DEFS.CARD_ATTRIBUTES = {
   "COR", "ARC", "ANI", "NONE",

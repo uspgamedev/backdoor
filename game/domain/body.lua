@@ -143,12 +143,12 @@ function Body:getAttribute(which)
   return self:getWithMod(which, base)
 end
 
-function Body:getDEF()
-  return self:getAttribute('DEF')
+function Body:getSKL()
+  return self:getAttribute('SKL')
 end
 
-function Body:getEFC()
-  return self:getAttribute('EFC')
+function Body:getSPD()
+  return self:getAttribute('SPD')
 end
 
 function Body:getVIT()
@@ -163,20 +163,24 @@ function Body:getFIN()
   return self:getAptitude('FIN')
 end
 
-function Body:getCON()
-  return self:getAptitude('CON')
+function Body:getEFC()
+  return self:getAptitude('EFC')
 end
 
-function Body:getBlockChance()
-  return APT.BLOCKCHANCE(self:getDEF(), self:getFIN())
+function Body:getSpeed()
+  return APT.SPEED(self:getSPD(), self:getFIN())
 end
 
-function Body:getConsumption()
-  return 1
+function Body:getSkill()
+  return APT.SKILL(self:getSKL(), self:getEFC())
 end
 
 function Body:getMaxHP()
   return APT.HP(self:getVIT(), self:getRES())
+end
+
+function Body:getConsumption()
+  return 1
 end
 
 --[[ Appearance methods ]]--
@@ -402,18 +406,13 @@ function Body:removeAllArmor()
 end
 
 function Body:takeDamageFrom(amount, source)
-  local blocked = false
-  if RANDOM.generate(100) <= self:getBlockChance() then
-    amount = math.floor(amount/2)
-    blocked = true
-  end
   local absorbed = math.min(amount, self.armor)
   self.armor = self.armor - absorbed -- should never go negative
   local dmg = math.max(0, amount - absorbed)
   self.damage = math.min(self:getMaxHP(), self.damage + dmg)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
-  return { dmg = dmg, blocked = blocked }
+  return { dmg = dmg }
 end
 
 function Body:loseLifeFrom(amount, source)

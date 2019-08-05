@@ -33,14 +33,12 @@ function APT.HP(vit, res)
   return math.floor((3 + res) * vit)
 end
 
-function APT.STAMINA(efc, con)
-  local min, max = 7 - 2.5*con, 25 - con
-  local food = max - (max-min)*efc/12
-  return math.floor(food)
+function APT.SPEED(spd, fin)
+  return math.floor(10 + 2*fin + spd)
 end
 
-function APT.BLOCKCHANCE(def, fin)
-  return math.floor(5 * def * (4 + fin) / 4)
+function APT.SKILL(skl, efc)
+  return math.floor(skl + efc)
 end
 
 return APT

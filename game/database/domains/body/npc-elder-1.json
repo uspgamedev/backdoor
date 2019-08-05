@@ -1,7 +1,7 @@
 {
   "appearance":"corgi",
-  "con":0,
-  "dialogue":"[header name:Helpful Elder]\nHere is a [color value:blue]pack[color value:regular][sprite id:pack/scale:.7]for you, young one.\n\n[newpage wait:2]\n[header name:Helpful Elder]\nYou can look at your collected packs \n[color value:blue]with E[color value:regular] \nand open them if you [color value:blue]hold F\n[color value:regular].\n\n[newpage wait:3]\n[header name:Helpful Elder]\nIts important to choose which cards to \n[color value:red]consume[color value:regular] \nand which to add to [color value:blue]\nyour buffer[color value:regular].",
+  "efc":0,
+  "dialogue":"[header name:Helpful Elder]\nHere is a [color value:blue]pack[color value:regular][sprite id:pack/scale:.7]for you, young one.\n\n[newpage wait:2]\n[header name:Helpful Elder]\nYou can look at your collected packs \n[color value:blue]with E[color value:regular] \nand open them if you [color value:blue]hold F\n[color value:regular].\n\n[newpage wait:3]\n[header name:Helpful Elder]\nIts important to choose which cards to \n[color value:red]efcsume[color value:regular] \nand which to add to [color value:blue]\nyour buffer[color value:regular].",
   "drops":[],
   "extends":"npc-base",
   "faction":"allied",
