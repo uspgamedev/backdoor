@@ -38,7 +38,7 @@
           "type":"operator"
         }]
     },
-    "cost":5
+    "cost":1
   },
   "attr":"COR",
   "desc":"Take your best friend with you!",

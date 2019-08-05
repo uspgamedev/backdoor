@@ -21,7 +21,7 @@ ACTION.MOVE_COST          = 10
 
 ACTION.CYCLE_UNIT         = 10
 
-ACTION.MAX_FOCUS          = 5
+ACTION.MAX_FOCUS          = 3
 ACTION.PLAY_WIDGET_FOCUS  = 0
 
 return ACTION
