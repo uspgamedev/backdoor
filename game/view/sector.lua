@@ -549,14 +549,6 @@ function _isInCone(origin_i, origin_j, target_i, target_j, dir)
     return j <= i and j >= -i
   elseif dir == "LEFT" then     --LEFT
     return i <= -j and i >= j
-  elseif dir == "UPRIGHT" then   --UPRIGHT
-    return i <= 0 and j >= 0
-  elseif dir == "DOWNRIGHT" then   --DOWNRIGHT
-    return i >= 0 and j >= 0
-  elseif dir == "DOWNLEFT" then   --DOWNLEFT
-    return i >= 0 and j <= 0
-  elseif dir == "UPLEFT" then   --UPLEFT
-    return i <= 0 and j <= 0
   else
     return error(("Not valid direction for cone function: %s"):format(dir))
   end
