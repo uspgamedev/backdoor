@@ -20,6 +20,7 @@ local _EMPTY = {}
 local _ENTER_TIMER = "manage_card_list_enter"
 local _TEXT_TIMER = "manage_card_list_text"
 local _ENTER_SPEED = .2
+local _CENTER_ALPHA_SPEED = 6
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
@@ -86,9 +87,9 @@ function View:init(hold_actions)
   ELEMENT.init(self)
 
   self.enter = 0
+  self.center_alpha = 1
   self.text = 0
   self.selection = 1
-  self.cursor = 0
   self.buffered_offset = {}
   self.consumed_offset = {}
   self.card_alpha = {}
@@ -100,6 +101,7 @@ function View:init(hold_actions)
   self.consumed_count = 0
   self.consume_log = false
   self.holdbar = HoldBar(hold_actions)
+  self.holdbar:setScale(3,2)
   self.exp_gained = 0
   self.ready_to_leave = false
   self.is_leaving = false
@@ -237,6 +239,11 @@ function View:removeConsume()
 end
 
 function View:update(dt)
+  if self.holdbar.is_playing then
+    self.center_alpha = math.max(0, self.center_alpha - _CENTER_ALPHA_SPEED*dt)
+  else
+    self.center_alpha = math.min(self.center_alpha + _CENTER_ALPHA_SPEED*dt, 1)
+  end
   for _,card in ipairs(self.card_list ) do
     card:update(dt)
   end
@@ -320,29 +327,6 @@ function View:drawCards(g, enter)
 
 end
 
-function View:drawArrow(g, enter)
-  local lh = 1.25
-  local text_height
-  local senoid
-
-  g.push()
-
-  -- move arrow in senoid
-  self.cursor = self.cursor + _SIN_INTERVAL
-  while self.cursor > 1 do self.cursor = self.cursor - 1 end
-  senoid = (_ARRSIZE/2)*math.sin(self.cursor*_PI)
-
-  _font:setLineHeight(lh)
-  _font.set()
-  text_height = _font:getHeight()*lh
-
-  g.translate(0, -text_height*.5)
-  g.setColor(1, 1, 1, enter)
-  self:drawHoldBar(g)
-
-  g.pop()
-end
-
 function View:drawCardDesc(g, card, enter)
   g.push()
 
@@ -352,14 +336,12 @@ function View:drawCardDesc(g, card, enter)
   g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
 
-  g.push()
-  g.translate(maxw + _PD + 1.5*_CW, 0)
-  self:drawArrow(g, enter)
-  g.pop()
+  local x, y = 0, -self.holdbar:getHeight()/2
+  self:drawHoldBar(g, enter * (1 - self.center_alpha), x, y)
 
   g.push()
   g.translate(-maxw, -CARD.getInfoHeight(4)/2)
-  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter, nil, true)
+  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter*self.center_alpha, nil, true)
   g.pop()
 
   g.pop()
@@ -400,12 +382,15 @@ function View:drawHUDInfo(g, owner, enter)
 
 end
 
-function View:drawHoldBar(g)
+function View:drawHoldBar(g, alpha, x, y)
+  g.push()
+  g.setColor(1, 1, 1, alpha)
   self.holdbar:update()
   if self.holdbar:confirmed() then
     self:startLeaving()
   end
-  self.holdbar:draw(0, 0)
+  self.holdbar:draw(x, y)
+  g.pop()
 end
 
 return View

@@ -62,28 +62,28 @@ local function _linear(from, to, time)
   return from + step
 end
 
-local function _render(enter, progress, x, y, particles)
+local function _render(enter, progress, x, y, w, h, particles)
   local g = love.graphics
   local alpha = enter
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
   g.push()
-  g.translate(x - _WIDTH/2, y)
+  g.translate(x - w/2, y)
   g.setColor(cr/4, cg/4, cb/4, alpha)
-  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+  g.rectangle("fill", 0, 0, w, h)
   g.setColor(cr, cg, cb, alpha)
-  g.rectangle("fill", 0, 0, _WIDTH*(progress/_TOTAL), _HEIGHT)
+  g.rectangle("fill", 0, 0, w*(progress/_TOTAL), h)
   g.setColor(1,1,1,alpha)
   local offset = 10
-  g.draw(particles, _WIDTH*(progress/_TOTAL) - offset, _HEIGHT/2)
+  g.draw(particles, w*(progress/_TOTAL) - offset, h/2)
   g.pop()
 end
 
-local function _renderExplosion(explosion, x, y)
+local function _renderExplosion(explosion, x, y, w, h)
   local g = love.graphics
   g.push()
-  g.translate(x - _WIDTH/2, y)
+  g.translate(x - w/2, y)
   g.setColor(COLORS.NEUTRAL)
-  g.draw(explosion, _WIDTH, _HEIGHT/2)
+  g.draw(explosion, w, h/2)
   g.pop()
 end
 
@@ -101,6 +101,9 @@ function HoldBar:init(hold_actions)
   self.hold_actions = hold_actions
   self.pos = vec2()
 
+  self.width_scale = 1
+  self.height_scale = 1
+
   self.particles = _newParticleSource()
 
   self.explosion = _newExplosionSource()
@@ -110,6 +113,19 @@ end
 
 function HoldBar:setPosition(pos)
   self.pos = pos
+end
+
+function HoldBar:setScale(w, h)
+  self.width_scale = w
+  self.height_scale = h
+end
+
+function HoldBar:getWidth()
+  return _WIDTH * self.width_scale
+end
+
+function HoldBar:getHeight()
+  return _HEIGHT * self.height_scale
 end
 
 function HoldBar:lock()
@@ -207,13 +223,15 @@ function HoldBar:draw(x, y)
     x, y = self.pos:unpack()
   end
 
+
+  local w, h = self:getWidth(), self:getHeight()
   -- render bar
   if self.enter > 0 and self.progress > 0 then
-    _render(self.enter, self.progress, x, y, self.particles)
+    _render(self.enter, self.progress, x, y, w, h, self.particles)
   end
 
   -- render explosion
-  _renderExplosion(self.explosion, x, y)
+  _renderExplosion(self.explosion, x, y, w, h)
 
 end
 
