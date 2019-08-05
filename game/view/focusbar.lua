@@ -96,7 +96,7 @@ function FocusBar:draw()
   local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12
-  local handbar_gap = handbar_width / (maxfocus-1) local font = FONT.get("Text", 18)
+  local handbar_gap = (handbar_width/2) / (maxfocus-1) local font = FONT.get("Text", 18)
   local mx, my = 60, 20
   local slope = handbar_height + 2*my
   font:set()
@@ -120,7 +120,7 @@ function FocusBar:draw()
                     blu + (1-blu)*self.emer_fx_v
   end
   g.push()
-  g.translate(0, 0.3*(handbar_height + 2*my))
+  g.translate(handbar_width/4, 0.3*(handbar_height + 2*my))
   for i=0,maxfocus-1 do
     g.push()
     g.translate(i * handbar_gap, 0)
