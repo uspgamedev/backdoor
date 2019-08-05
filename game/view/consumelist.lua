@@ -19,7 +19,6 @@ local View = Class({
 local _EMPTY = {}
 local _ENTER_TIMER = "manage_card_list_enter"
 local _TEXT_TIMER = "manage_card_list_text"
-local _CONSUMED_TIMER = "consumed_card:"
 local _ENTER_SPEED = .2
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
@@ -29,7 +28,6 @@ local _H_MARGIN = 30
 local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
-local _CONSUME_TEXT = "consume (+%d EXP)"
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
@@ -323,7 +321,6 @@ function View:drawCards(g, enter)
 end
 
 function View:drawArrow(g, enter)
-  local text_width = _font:getWidth(_CONSUME_TEXT)
   local lh = 1.25
   local text_height
   local senoid
@@ -361,7 +358,7 @@ function View:drawCardDesc(g, card, enter)
   g.pop()
 
   g.push()
-  g.translate(-maxw, -CARD.getInfoHeight(3)/2)
+  g.translate(-maxw, -CARD.getInfoHeight(4)/2)
   CARD.drawInfo(card.card, 0, 0, 2*maxw, enter, nil, true)
   g.pop()
 
