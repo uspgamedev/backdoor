@@ -1,5 +1,4 @@
 
-local RANDOM  = require 'common.random'
 local TILE    = require 'common.tile'
 local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
@@ -8,14 +7,13 @@ FX.schema = {
   { id = 'center', name = "Target position", type = 'value', match = 'pos' },
   { id = 'size', name = "Area Size", type = 'value', match = 'integer',
     range = {1} },
-  { id = 'base', name = "Base Power", type = 'integer',
-    range = {1} },
+  { id = 'base', name = "Base Power", type = 'integer' },
   { id = 'attr', name = "Mod Power", type = 'value', match = 'integer',
     range = {1} },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
 }
 
-function FX.preview (actor, fieldvalues)
+function FX.preview (_, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
   local size = fieldvalues['size'] * 2 - 1

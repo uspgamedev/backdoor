@@ -1,6 +1,4 @@
 
-local round = require 'common.math' .round
-
 local ATTR = {}
 
 ATTR.BASE_SPD = 10
@@ -13,7 +11,7 @@ ATTR.INFLUENCE = {
 }
 
 function ATTR.EFFECTIVE_POWER(base, mod)
-  return round(base * mod / 2)
+  return math.max(1, base + mod)
 end
 
 return ATTR
