@@ -1,12 +1,10 @@
 
-local RANDOM  = require 'common.random'
 local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'base', name = "Base Power", type = 'integer',
-    range = {1} },
+  { id = 'base', name = "Base Power", type = 'integer' },
   { id = 'attr', name = "Mod Power", type = 'value',
     match = 'integer', range = {1} },
   { id = 'sfx', name = "SFX", type = 'enum',
@@ -14,7 +12,7 @@ FX.schema = {
     optional = true },
 }
 
-function FX.preview (actor, fieldvalues)
+function FX.preview (_, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
   return ("Deal %s damage to target"):format(amount)

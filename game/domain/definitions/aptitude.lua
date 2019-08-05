@@ -30,7 +30,7 @@ function APT.ATTR_LEVEL(owner, which)
 end
 
 function APT.HP(vit, res)
-  return math.floor(20 + (4+res)*vit*vit - (7+res)*vit)
+  return math.floor((3 + res) * vit)
 end
 
 function APT.STAMINA(efc, con)

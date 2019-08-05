@@ -1,6 +1,10 @@
 
-local Color = require 'common.color'
-local VIEWDEFS = require 'view.definitions'
+-- luacheck: globals love
+
+local Color  = require 'common.color'
+local COLORS = require 'domain.definitions.colors'
+local RES    = require 'resources'
+local Text   = require 'view.helpers.text'
 
 local _SMOOTH_FACTOR = 0.2
 
@@ -21,24 +25,19 @@ function LIFEBAR.draw(body, x, y)
   end
   _lifestates[id] = current
   local hppercent = current / (max_hp + armor)
-  local armorpercent = armor / (max_hp + armor)
-  local hsvcol = { 0 + 100*hppercent, 240, 255 - 50*hppercent }
-  local cr, cg, cb = Color.fromHSV(unpack(hsvcol)):unpack()
-  local pi = math.pi
-  local start = pi/2 - 2*pi/36
-  local length = -2*pi/3
+  local hsvcol = { 0 + 100*hppercent, 240, 255 - 50*hppercent, 1 }
+  local color = Color.fromHSV(unpack(hsvcol))
+  local icon = RES.loadTexture("hp-icon")
+  local iw, ih = icon:getDimensions()
   g.push()
   g.translate(x, y)
-  g.scale(1, 1/2)
-  g.setLineWidth(8)
-  g.setColor(0, 0, 0, 0.2)
-  g.arc('line', 'open', 0, 0, 36, start, start + length, 32)
-  g.setColor(cr, cg, cb, 0.5)
-  g.arc('line', 'open', 0, 0, 36, start, start + length * hppercent, 32)
-  g.setColor(1, 1, 1, 0.5)
-  g.arc('line', 'open', 0, 0, 36, start + length * hppercent,
-                                  start + length * (hppercent + armorpercent),
-                                  32)
+
+  g.translate(32, 12)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+  local text = Text(hp, 'Text', 18, { dropshadow = true, align = 'center',
+                                      width = 36, color = color })
+  text:draw(-18, -text.font:getHeight()/2)
   g.pop()
 end
 
