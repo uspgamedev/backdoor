@@ -172,7 +172,7 @@ function Body:getBlockChance()
 end
 
 function Body:getConsumption()
-  return APT.STAMINA(self:getEFC(), self:getCON())
+  return 1
 end
 
 function Body:getMaxHP()
