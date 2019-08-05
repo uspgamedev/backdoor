@@ -1,5 +1,6 @@
 
 local RANDOM  = require 'common.random'
+local TILE    = require 'common.tile'
 local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
@@ -32,7 +33,8 @@ function FX.process (actor, fieldvalues)
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
-        if not ignore_owner or body ~= actor:getBody() then
+        if (not ignore_owner or body ~= actor:getBody()) and
+            TILE.dist(i,j,ci,cj) <= size - 1 then
           local result = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
             type = 'text_rise',

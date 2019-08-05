@@ -322,7 +322,7 @@ function SectorView:draw()
             local size   = self.cursor.aoe_hint or 1
             local abs    = math.abs
             if size and tile.type == SCHEMATICS.FLOOR
-                    and abs(i+1 - ci) < size and abs(j+1 - cj) < size then
+                    and TILE.dist(i+1, j+1, ci, cj) <= size-1 then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
                                          Color.fromInt {200, 100, 100, 100} })
             end
