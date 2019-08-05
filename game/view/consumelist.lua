@@ -19,22 +19,24 @@ local View = Class({
 local _EMPTY = {}
 local _ENTER_TIMER = "manage_card_list_enter"
 local _TEXT_TIMER = "manage_card_list_text"
-local _CONSUMED_TIMER = "consumed_card:"
 local _ENTER_SPEED = .2
+local _CENTER_ALPHA_SPEED = 6
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
+local _H_MARGIN = 30
+local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
-local _CONSUME_TEXT = "consume (+%d EXP)"
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
 
 -- LOCAL VARS
 local _font
-local _otherfont
+local _titlefont
+local _subtitlefont
 
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
@@ -43,9 +45,14 @@ local function _initGraphicValues()
   _WIDTH = _FULL_WIDTH*3/4
   _LIST_VALIGN = 0.5*_HEIGHT
   _font = FONT.get("TextBold", 20)
-  _otherfont = FONT.get("Text", 20)
+  _titlefont = FONT.get("Text", 64)
+  _subtitlefont = FONT.get("Text", 35)
   _CW = CARD.getWidth()
   _CH = CARD.getHeight()
+end
+
+local function stencil()
+  love.graphics.rectangle("fill", _WIDTH + 40, _HEIGHT - 388, 250, 105)
 end
 
 local function _next_circular(i, len, n)
@@ -80,9 +87,9 @@ function View:init(hold_actions)
   ELEMENT.init(self)
 
   self.enter = 0
+  self.center_alpha = 1
   self.text = 0
   self.selection = 1
-  self.cursor = 0
   self.buffered_offset = {}
   self.consumed_offset = {}
   self.card_alpha = {}
@@ -94,6 +101,7 @@ function View:init(hold_actions)
   self.consumed_count = 0
   self.consume_log = false
   self.holdbar = HoldBar(hold_actions)
+  self.holdbar:setScale(3,2)
   self.exp_gained = 0
   self.ready_to_leave = false
   self.is_leaving = false
@@ -231,6 +239,11 @@ function View:removeConsume()
 end
 
 function View:update(dt)
+  if self.holdbar.is_playing then
+    self.center_alpha = math.max(0, self.center_alpha - _CENTER_ALPHA_SPEED*dt)
+  else
+    self.center_alpha = math.min(self.center_alpha + _CENTER_ALPHA_SPEED*dt, 1)
+  end
   for _,card in ipairs(self.card_list ) do
     card:update(dt)
   end
@@ -250,8 +263,11 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0.85)
+  g.setColor(0, 0, 0, enter*0.95)
+  love.graphics.stencil(stencil, "replace", 1)
+  love.graphics.setStencilTest("less", 1)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
+  love.graphics.setStencilTest()
 end
 
 function View:drawCards(g, enter)
@@ -297,36 +313,18 @@ function View:drawCards(g, enter)
   g.translate(math.round(_WIDTH/2),
               math.round(_HEIGHT/2))
   enter = self.text
+  local owner
   if enter > 0 then
     if card_list[selection] then
+      owner = card_list[selection].card:getOwner()
       self:drawCardDesc(g, card_list[selection], enter)
     end
   end
   g.pop()
-end
 
-function View:drawArrow(g, enter)
-  local text_width = _font:getWidth(_CONSUME_TEXT)
-  local lh = 1.25
-  local text_height
-  local senoid
+  -- draw hud info
+  self:drawHUDInfo(g, owner, enter)
 
-  g.push()
-
-  -- move arrow in senoid
-  self.cursor = self.cursor + _SIN_INTERVAL
-  while self.cursor > 1 do self.cursor = self.cursor - 1 end
-  senoid = (_ARRSIZE/2)*math.sin(self.cursor*_PI)
-
-  _font:setLineHeight(lh)
-  _font.set()
-  text_height = _font:getHeight()*lh
-
-  g.translate(0, -text_height*.5)
-  g.setColor(1, 1, 1, enter)
-  self:drawHoldBar(g)
-
-  g.pop()
 end
 
 function View:drawCardDesc(g, card, enter)
@@ -337,45 +335,62 @@ function View:drawCardDesc(g, card, enter)
   g.setColor(COLORS.NEUTRAL)
   g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
-  _otherfont.set()
-  g.print("Keep", maxw + _PD, 0.5 * _otherfont:getHeight())
-  local consume, extra = "Consume\n", 0
-  if self.maxconsume then
-    consume = ("Consume [%d/%d]\n"):format(self.consumed_count, self.maxconsume)
-    extra = _CW/2 + 10
-  end
-  local cor, arc, ani = card.card:getOwner():trainingDitribution()
-  local cor_t = ("COR %.1f%%  "):format(cor*100)
-  local arc_t = ("ARC %.1f%%  "):format(arc*100)
-  local ani_t = ("ANI %.1f%%"):format(ani*100)
-  local table = {COLORS.NEUTRAL,consume,
-           COLORS.COR, cor_t,
-           COLORS.ARC, arc_t,
-           COLORS.ANI, ani_t
-          }
-  g.print(table, maxw + _PD, -2.5 * _otherfont:getHeight())
+
+  local x, y = 0, -self.holdbar:getHeight()/2
+  self:drawHoldBar(g, enter * (1 - self.center_alpha), x, y)
 
   g.push()
-  g.translate(maxw + _PD + 1.5*_CW + extra, -1.6 * _otherfont:getHeight())
-  self:drawArrow(g, enter)
-  g.pop()
-
-  g.push()
-  g.translate(-maxw, -CARD.getInfoHeight(3)/2)
-  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter, nil, true)
+  g.translate(-maxw, -CARD.getInfoHeight(4)/2)
+  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter*self.center_alpha, nil, true)
   g.pop()
 
   g.pop()
 end
 
+function View:drawHUDInfo(g, owner, enter)
 
-function View:drawHoldBar(g)
+    --Draw keep side
+    g.setColor(COLORS.NEUTRAL)
+    _titlefont.set()
+    g.print("Keep", _H_MARGIN, _HEIGHT - _V_MARGIN - _titlefont:getHeight())
+
+    --Draw consume side
+    local consume_text = "Consume"
+    g.print(consume_text, _H_MARGIN, _V_MARGIN)
+    if self.maxconsume then
+      local text = ("%d/%d"):format(self.consumed_count, self.maxconsume)
+      _subtitlefont.set()
+      local gap = 10
+      g.print(text, _H_MARGIN + _titlefont:getWidth(consume_text) + gap, _V_MARGIN + _titlefont:getHeight() - _subtitlefont:getHeight())
+    end
+
+
+    --Draw distribution
+    if owner then
+      local cor, arc, ani = owner:trainingDitribution()
+      local cor_t = ("%.1f%%"):format(cor*100)
+      local arc_t = ("%.1f%%"):format(arc*100)
+      local ani_t = ("%.1f%%"):format(ani*100)
+      _font.set()
+      g.setColor(COLORS.COR)
+      g.print(cor_t, _WIDTH + 57, _HEIGHT - 288)
+      g.setColor(COLORS.ARC)
+      g.print(arc_t, _WIDTH + 133, _HEIGHT - 288)
+      g.setColor(COLORS.ANI)
+      g.print(ani_t, _WIDTH + 209, _HEIGHT - 288)
+    end
+
+end
+
+function View:drawHoldBar(g, alpha, x, y)
+  g.push()
+  g.setColor(1, 1, 1, alpha)
   self.holdbar:update()
   if self.holdbar:confirmed() then
     self:startLeaving()
   end
-  self.holdbar:draw(0, 0)
+  self.holdbar:draw(x, y)
+  g.pop()
 end
-
 
 return View
