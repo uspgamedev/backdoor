@@ -387,11 +387,19 @@ function View:drawHUDInfo(g, owner, enter)
 
 
     --Draw distribution
-    local cor, arc, ani = owner:trainingDitribution()
-    local cor_t = ("COR %.1f%%  "):format(cor*100)
-    local arc_t = ("ARC %.1f%%  "):format(arc*100)
-    local ani_t = ("ANI %.1f%%"):format(ani*100)
-    local table = {COLORS.COR, cor_t, COLORS.ARC, arc_t, COLORS.ANI, ani_t}
+    if owner then
+      local cor, arc, ani = owner:trainingDitribution()
+      local cor_t = ("%.1f%%"):format(cor*100)
+      local arc_t = ("%.1f%%"):format(arc*100)
+      local ani_t = ("%.1f%%"):format(ani*100)
+      _font.set()
+      g.setColor(COLORS.COR)
+      g.print(cor_t, _WIDTH + 57, _HEIGHT - 288)
+      g.setColor(COLORS.ARC)
+      g.print(arc_t, _WIDTH + 133, _HEIGHT - 288)
+      g.setColor(COLORS.ANI)
+      g.print(ani_t, _WIDTH + 209, _HEIGHT - 288)
+    end
 
 end
 
