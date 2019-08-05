@@ -38,7 +38,7 @@
             "which":"ARC"
           }]
       },
-      "cost":20
+      "cost":10
     },
     "charges":0,
     "operators":[],
@@ -46,7 +46,7 @@
     "trigger":false,
     "placement":false
   },
-  "icon":false,
   "one_time":false,
+  "icon":false,
   "set":false
 }

@@ -18,7 +18,7 @@ return {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
-      { id = 'cost', name = "Cost", type = 'integer', range = {0} },
+      { id = 'cost', name = "Cost", type = 'range', min = 0, max = 10 },
       { id = 'art_ability', name = "Art Ability", type = 'ability',
         hint = "Happens when card is played from hand" },
     }
@@ -54,8 +54,7 @@ return {
       {
         id = 'activation', name = "Activated Ability", type = 'section',
         schema = {
-          { id = 'cost', name = "Time Cost", type = 'integer',
-            range = {0} },
+          { id = 'cost', name = "Cost", type = 'range', min = 0, max = 10 },
           { id = 'ability', name = "Ability", type = 'ability',
             hint = "Happens when widget is activated" }
         }

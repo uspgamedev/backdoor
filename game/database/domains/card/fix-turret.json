@@ -17,8 +17,8 @@
           "name":"choose_target",
           "output":"tgt",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "name":"get_body_at",
@@ -32,7 +32,7 @@
           "which":"ARC"
         }]
     },
-    "cost":20
+    "cost":1
   },
   "attr":"ARC",
   "desc":"A love kick and it's ready to go.",

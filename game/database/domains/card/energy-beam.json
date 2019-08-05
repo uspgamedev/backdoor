@@ -49,13 +49,13 @@
           "which":"ARC"
         }]
     },
-    "cost":10
+    "cost":2
   },
   "attr":"ARC",
   "desc":"",
   "name":"Energy Beam",
   "set":"gadgeteer",
   "type-description":"",
-  "one_time":false,
-  "icon":false
+  "icon":false,
+  "one_time":false
 }

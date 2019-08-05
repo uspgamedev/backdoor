@@ -1,36 +1,38 @@
 
 local ACTIONDEFS = require 'domain.definitions.action'
 
-local COOLDOWNBAR = {}
+local ENERGY_BAR = {}
 
 local _BARSCALE = 5
 local _SMOOTH_FACTOR = 0.2
+local _MAX_ENERGY = ACTIONDEFS.MAX_ENERGY
 
 local _barstates
 local _preview
 local _glow
 
-function COOLDOWNBAR.init()
+function ENERGY_BAR.init()
   _barstates = {}
   _preview = 0
   _glow = {}
 end
 
-function COOLDOWNBAR.setCooldownPreview(value)
-  _preview = value or 0
+function ENERGY_BAR.setEnergyPreview(value)
+  _preview = (value or 0) * ACTIONDEFS.EXHAUSTION_UNIT
 end
 
-function COOLDOWNBAR.draw(actor, x, y, is_controlled)
+function ENERGY_BAR.draw(actor, x, y, is_controlled)
   local g = love.graphics
-  local cooldown = actor:getCooldown()
+  local energy = math.max(0, actor:getEnergy())
   local last = _barstates[actor:getId()] or 0
-  local value = last + (cooldown - last)*_SMOOTH_FACTOR
+  local value = last + (energy - last)*_SMOOTH_FACTOR
   if math.abs(value) < 1 then
     value = 0
   end
   _barstates[actor:getId()] = value
-  local unit = actor:getSPD()*ACTIONDEFS.CYCLE_UNIT*_BARSCALE
-  local percent = math.fmod(value, unit)/unit
+  --local unit = actor:getSPD()*ACTIONDEFS.CYCLE_UNIT*_BARSCALE
+  --local percent = math.fmod(value, unit)/unit
+  local percent = value/_MAX_ENERGY
   local pi = math.pi
   local start = pi/2 + 2*pi/36
   local length = 2*pi/3
@@ -50,13 +52,16 @@ function COOLDOWNBAR.draw(actor, x, y, is_controlled)
 
   g.setColor(.8, .2, 0, alpha)
   if is_controlled then
-    g.arc('line', 'open', 0, 0, 36, start, start + (_preview/unit) * length, 32)
+    local top = start + length * percent
+    g.arc('line', 'open', 0, 0, 36, top - _preview/_MAX_ENERGY, top, 32)
   elseif _preview > 0 then
     local controlled = actor:getSector():getRoute().getControlledActor()
     local turns = math.ceil(_preview / controlled:getSPD())
-    local recovered = math.min(actor:getSPD() * turns, value)
-    g.arc('line', 'open', 0, 0, 36, start + (value - recovered) / unit * length,
-                                    start + percent * length, 32)
+    local recovered = actor:getSPD() * turns
+    g.arc('line', 'open', 0, 0, 36, start + length * percent,
+                                    start + length * (percent +
+                                                      recovered/_MAX_ENERGY),
+                                    32)
   end
   for i=1,4 do
     g.setColor(0, 0, 0.4, 0.5)
@@ -67,5 +72,5 @@ function COOLDOWNBAR.draw(actor, x, y, is_controlled)
   g.pop()
 end
 
-return COOLDOWNBAR
+return ENERGY_BAR
 

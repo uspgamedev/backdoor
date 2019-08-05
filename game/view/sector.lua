@@ -19,7 +19,7 @@ local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 
 local SECTOR_TILEMAP      = require 'view.sector.tilemap'
-local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
+local SECTOR_ENERGYBAR    = require 'view.sector.energybar'
 local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
 local SECTOR_WALL         = require 'view.sector.wall'
 
@@ -95,8 +95,8 @@ function SectorView:getTarget()
   return self.target
 end
 
-function SectorView:setCooldownPreview(value)
-  return SECTOR_COOLDOWNBAR.setCooldownPreview(value)
+function SectorView:setEnergyPreview(value)
+  return SECTOR_ENERGYBAR.setEnergyPreview(value)
 end
 
 function SectorView:initSector(sector)
@@ -108,7 +108,7 @@ function SectorView:initSector(sector)
 
 
     SECTOR_TILEMAP.init(sector, _tileset)
-    SECTOR_COOLDOWNBAR.init()
+    SECTOR_ENERGYBAR.init()
     SECTOR_WALL.load(sector)
 
     local pixel = RES.loadTexture('pixel')
@@ -464,7 +464,7 @@ function SectorView:draw()
   end
   g.pop()
 
-  -- Draw cooldown bars & HP
+  -- Draw energy bars & HP
   for _, body in ipairs(all_bodies) do
     local i,j = body:getPos()
     --Draw only if player is seeing them
@@ -473,7 +473,7 @@ function SectorView:draw()
       SECTOR_LIFEBAR.draw(body, x, y)
       local actor = body:getActor() if actor then
         local is_controlled = (actor == sector:getRoute().getControlledActor())
-        SECTOR_COOLDOWNBAR.draw(actor, x, y, is_controlled)
+        SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)
       end
     end
   end
