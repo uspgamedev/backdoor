@@ -1,6 +1,6 @@
 {
   "appearance":"corgi",
-  "con":2,
+  "efc":2,
   "dialogue":"[speed value:ultrafast]\n[opacity value:semi]NPC:\n[opacity value:regular] \nHello there!",
   "drops":[],
   "faction":"allied",

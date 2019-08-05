@@ -1,11 +1,11 @@
 {
   "appearance":"hillborn",
-  "con":-1,
+  "efc":0,
   "description":"With greyish blue skin partially covered by\ndark tattoo-like lines and patterns, these\nhumanoids bear a variety of horns growing from\ntheir temples and are known for their quick legs.",
   "drops":[],
   "extends":"demihuman",
   "faction":"allied",
   "fin":1,
   "name":"Hillborn",
-  "res":0
+  "res":-1
 }

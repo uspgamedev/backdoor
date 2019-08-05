@@ -223,7 +223,7 @@ function Actor:upgradeANI(n)
 end
 
 function Actor:getSPD()
-  return self:getWithMod('SPD', DEFS.ATTR.BASE_SPD)
+  return self:getWithMod('SPD', self:getBody():getSpeed())
 end
 
 --[[ Body methods ]]--
