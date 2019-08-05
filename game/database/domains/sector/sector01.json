@@ -36,11 +36,11 @@
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime",
-        "upgrade_power":60
+        "upgrade_power":100
       },{
         "actorspec":"dumb",
         "bodyspec":"stove",
-        "upgrade_power":70
+        "upgrade_power":120
       }]
   },
   "exits":{
