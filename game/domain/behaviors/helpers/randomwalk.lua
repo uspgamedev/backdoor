@@ -12,7 +12,7 @@ function RandomWalk.execute(actor)
   local i, j = actor:getPos()
   local input = {}
   repeat
-    local idx = RANDOM.generate(0, 8)
+    local idx = RANDOM.generate(0, 4)
     if idx == 0 then
       return ACTIONDEFS.IDLE, {}
     end
@@ -23,4 +23,3 @@ function RandomWalk.execute(actor)
 end
 
 return RandomWalk
-
