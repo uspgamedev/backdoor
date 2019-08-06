@@ -8,7 +8,7 @@
       "ability":{
         "effects":[{
             "attr":"=cor",
-            "base":3,
+            "base":0,
             "center":"=target_pos",
             "ignore_owner":true,
             "name":"damage_on_area",

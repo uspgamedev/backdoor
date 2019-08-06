@@ -11,7 +11,7 @@
       "ability":{
         "effects":[{
             "attr":"=cor",
-            "base":5,
+            "base":-1,
             "name":"damage_on_target",
             "target":"=body",
             "type":"effect",
@@ -35,7 +35,7 @@
             "which":"COR"
           }]
       },
-      "cost":5
+      "cost":10
     },
     "charges":5,
     "operators":[],

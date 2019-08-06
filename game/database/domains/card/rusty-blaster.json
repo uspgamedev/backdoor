@@ -12,21 +12,21 @@
       "ability":{
         "effects":[{
             "attr":"=arc",
-            "base":2,
+            "base":-2,
             "name":"damage_on_target",
             "target":"=body",
             "type":"effect",
             "sfx":false
           },{
             "attr":"=arc",
-            "base":2,
+            "base":-2,
             "name":"damage_on_target",
             "target":"=body",
             "type":"effect",
             "sfx":false
           },{
             "attr":"=arc",
-            "base":2,
+            "base":-2,
             "name":"damage_on_target",
             "target":"=body",
             "type":"effect",
@@ -50,7 +50,7 @@
             "which":"ARC"
           }]
       },
-      "cost":5
+      "cost":10
     },
     "charges":0,
     "operators":[],

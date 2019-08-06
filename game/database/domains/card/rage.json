@@ -13,9 +13,9 @@
         "op":"+",
         "val":2
       },{
-        "attr":"DEF",
+        "attr":"VIT",
         "op":"-",
-        "val":8
+        "val":1
       }],
     "status-tags":[],
     "trigger":"on_focus_end",

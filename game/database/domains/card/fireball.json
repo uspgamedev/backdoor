@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "base":4,
+          "base":1,
           "center":"=target",
           "name":"damage_on_area",
           "size":3,

@@ -56,7 +56,7 @@ return {
         id = 'activation', name = "Activated Ability", type = 'section',
         schema = {
           { id = 'cost', name = "Cost", type = 'range', min = 0,
-            max = DEFS.ACTION.MAX_FOCUS },
+            max = DEFS.MAX_PP },
           { id = 'ability', name = "Ability", type = 'ability',
             hint = "Happens when widget is activated" }
         }

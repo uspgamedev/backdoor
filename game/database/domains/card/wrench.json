@@ -11,7 +11,7 @@
       "ability":{
         "effects":[{
             "attr":"=base",
-            "base":3,
+            "base":-2,
             "name":"damage_on_target",
             "target":"=target",
             "type":"effect",

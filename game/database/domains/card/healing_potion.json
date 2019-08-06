@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=vit",
-          "base":8,
+          "base":6,
           "name":"heal",
           "target":"=self_body",
           "type":"effect"
@@ -31,7 +31,7 @@
           "type":"operator"
         },{
           "body":"=self_body",
-          "name":"get_body_attribite",
+          "name":"get_body_attribute",
           "output":"vit",
           "type":"operator",
           "which":"VIT"
