@@ -6,8 +6,7 @@ local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'base', name = "Heal power base", type = 'integer',
-    range = {1} },
+  { id = 'base', name = "Heal power base", type = 'integer' },
   { id = 'attr', name = "Heal power mod", type = 'value', match = 'integer',
     range = {1} },
 }

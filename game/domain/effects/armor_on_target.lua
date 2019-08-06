@@ -4,8 +4,7 @@ local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'base', name = "Base Power", type = 'integer',
-    range = {1} },
+  { id = 'base', name = "Base Power", type = 'integer' },
   { id = 'attr', name = "Mod Power", type = 'value',
     match = 'integer', range = {1} },
   { id = 'sfx', name = "SFX", type = 'enum',

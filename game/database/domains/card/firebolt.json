@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "base":0,
+          "base":-2,
           "name":"damage_on_target",
           "sfx":"example",
           "target":"=body",

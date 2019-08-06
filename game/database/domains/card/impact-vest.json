@@ -8,7 +8,7 @@
   "widget":{
     "charges":0,
     "operators":[{
-        "attr":"DEF",
+        "attr":"VIT",
         "op":"+",
         "val":1
       }],

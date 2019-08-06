@@ -8,14 +8,14 @@
       "ability":{
         "effects":[{
             "attr":"=cor",
-            "base":3,
+            "base":-1,
             "name":"damage_on_target",
             "sfx":"example",
             "target":"=target",
             "type":"effect"
           },{
             "attr":"=cor",
-            "base":1,
+            "base":0,
             "name":"armor_on_target",
             "target":"=self_body",
             "type":"effect",

@@ -10,7 +10,7 @@
           "vfx-spd":1
         },{
           "attr":"=cor",
-          "base":6,
+          "base":-1,
           "center":"=pos",
           "ignore_owner":true,
           "name":"damage_on_area",

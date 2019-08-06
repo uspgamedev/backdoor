@@ -12,14 +12,14 @@
       "ability":{
         "effects":[{
             "attr":"=cor",
-            "base":6,
+            "base":0,
             "name":"damage_on_target",
             "target":"=target_body",
             "type":"effect",
             "sfx":false
           },{
             "attr":"=cor",
-            "base":4,
+            "base":-2,
             "center":"=first_target",
             "ignore_owner":true,
             "name":"damage_on_area",
@@ -49,7 +49,7 @@
             "which":"COR"
           }]
       },
-      "cost":5
+      "cost":10
     },
     "charges":3,
     "operators":[],
