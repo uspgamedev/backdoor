@@ -4,17 +4,20 @@
 local Color  = require 'common.color'
 local COLORS = require 'domain.definitions.colors'
 local Text   = require 'view.helpers.text'
+local Class  = require "steaming.extra_libs.hump.class"
 
 local _SMOOTH_FACTOR = 0.2
 
-local _lifestates = {}
+local LifebarBatch = Class()
 
-local LIFEBAR = {}
+function LifebarBatch:init()
+  self.lifestates = {}
+end
 
-function LIFEBAR.draw(body, x, y)
+function LifebarBatch:drawFor(body, x, y)
   local g = love.graphics
   local id = body:getId()
-  local current = _lifestates[id] or 0
+  local current = self.lifestates[id] or 0
   local hp = body:getHP()
   local max_hp = body:getMaxHP()
   local armor = body:getArmor()
@@ -22,7 +25,7 @@ function LIFEBAR.draw(body, x, y)
   if math.abs(hp - current) < 1 then
     current = hp
   end
-  _lifestates[id] = current
+  self.lifestates[id] = current
   local armorpercent = armor / (max_hp + armor)
   local pi = math.pi
   local start = pi/2 - 3*pi/36
@@ -49,9 +52,6 @@ function LIFEBAR.draw(body, x, y)
 
   g.translate(0, 20)
   g.scale(1, 1)
-  --g.shear(.5, 0)
-  --g.rotate(-math.pi / 12)
-  --g.draw(icon, 0, 0, 0, 1, 1, iw/2, ih/2)
   g.setColor(cr, cg, cb, 1)
   g.circle('fill', 0, 0, 14, 16)
   local text = Text(hp, 'Text', 18, { dropshadow = true, align = 'center',
@@ -60,5 +60,5 @@ function LIFEBAR.draw(body, x, y)
   g.pop()
 end
 
-return LIFEBAR
+return LifebarBatch
 

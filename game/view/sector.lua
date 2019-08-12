@@ -21,10 +21,10 @@ local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 
-local SECTOR_TILEMAP      = require 'view.sector.tilemap'
-local SECTOR_ENERGYBAR    = require 'view.sector.energybar'
-local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
-local SECTOR_WALL         = require 'view.sector.wall'
+local SECTOR_TILEMAP    = require 'view.sector.tilemap'
+local SECTOR_ENERGYBAR  = require 'view.sector.energybar'
+local LifebarBatch      = require 'view.sector.lifebarbatch'
+local SECTOR_WALL       = require 'view.sector.wall'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -89,6 +89,8 @@ function SectorView:init(route)
   self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
+
+  self.lifebar_batch = LifebarBatch()
 
   _font = _font or FONT.get("Text", 16)
 
@@ -323,7 +325,6 @@ function SectorView:draw()
             end
             local ci, cj = self.cursor:getPos()
             local size   = self.cursor.aoe_hint or 1
-            local abs    = math.abs
             if size and tile.type == SCHEMATICS.FLOOR
                     and TILE.dist(i+1, j+1, ci, cj) <= size-1 then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
@@ -476,7 +477,7 @@ function SectorView:draw()
         local is_controlled = (actor == sector:getRoute().getControlledActor())
         SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)
       end
-      SECTOR_LIFEBAR.draw(body, x, y)
+      self.lifebar_batch:drawFor(body, x, y)
     end
   end
 
