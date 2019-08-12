@@ -2,6 +2,8 @@
 --Function that manipulate an actor's field of view
 local SCHEMATICS = require 'domain.definitions.schematics'
 
+local TILE = require 'common.tile'
+
 --LOCAL FUNCTIONS DECLARATIONS--
 
 local updateOctant
@@ -14,6 +16,7 @@ local addProjection
 local transformOctant
 local projectTile
 local fullShadow
+local isInRange
 
 local VISIBILITY = {}
 
@@ -93,7 +96,7 @@ function updateOctant(actor, sector, octant)
         --Set visibility of tile
         local projection = projectTile(row, col)
         local visible = 1 - visibilityOfShadow(line, projection)
-        if fov[pos[1]][pos[2]] or visible == 1  then
+        if isInRange(pos[1], pos[2], actor) and (fov[pos[1]][pos[2]] or visible == 1)  then
           fov[pos[1]][pos[2]] = visible
         end
 
@@ -231,5 +234,9 @@ function projectTile(row, col)
   return newShadow(top_left, bottom_right)
 end
 
-return VISIBILITY
+function isInRange(i, j, actor)
+  local actor_i, actor_j = actor:getPos()
+  return TILE.dist(i, j, actor_i, actor_j) <= actor:getFovRange()
+end
 
+return VISIBILITY

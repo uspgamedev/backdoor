@@ -55,8 +55,7 @@ function TILEMAP.init(sector, tileset)
   end
 end
 
-local _SIDES = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 },
-                 { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } }
+local _SIDES = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } }
 local function _isBorder(fov, i, j, outside)
   for _, side in ipairs(_SIDES) do
     local ti, tj = i + side[1], j + side[2]
@@ -149,4 +148,3 @@ function TILEMAP.drawWallInLine(g, i, fov) -- luacheck: no unused
 end
 
 return TILEMAP
-
