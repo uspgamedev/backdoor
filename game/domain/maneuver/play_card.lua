@@ -30,7 +30,8 @@ end
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
   return actor:getFocus() >= card:getCost() and
-           ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
+        (not card:isArt() or
+         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues))
 end
 
 function PLAYCARD.perform(actor, inputvalues)
