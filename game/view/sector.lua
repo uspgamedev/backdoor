@@ -1,3 +1,6 @@
+
+-- luacheck: globals love MAIN_TIMER
+
 local DB          = require 'database'
 local RES         = require 'resources'
 local Color       = require 'common.color'
@@ -95,7 +98,7 @@ function SectorView:getTarget()
   return self.target
 end
 
-function SectorView:setEnergyPreview(value)
+function SectorView:setEnergyPreview(value) -- luacheck: no self
   return SECTOR_ENERGYBAR.setEnergyPreview(value)
 end
 
@@ -203,7 +206,7 @@ function SectorView:setBodySprite(body, draw)
   self.body_sprites[body:getId()] = draw
 end
 
-function SectorView:getBodyDialogue(body, i, j, player_i, player_j)
+function SectorView:getBodyDialogue(body, i, j, player_j)
   local id = body:getId()
 
   --Get appropriate position for dialogue box
@@ -343,7 +346,7 @@ function SectorView:draw()
 
             if body ~= player and distance_to_player <= 1 then
               local body_dialogue = self:getBodyDialogue(body, body_i, body_j,
-                                                         player_i, player_j)
+                                                         player_j)
               table.insert(dialogue_boxes, body_dialogue)
             else
               local body_dialogue = self:resetBodyDialogue(body)
@@ -374,15 +377,15 @@ function SectorView:draw()
             end
             local drop_id = _dropId(i+1, j+1, k)
             local spread_off = self.drop_offsets[_dropId(i+1, j+1, k)]
-            local dx, dy, t = 0, 0, 0
+            local dx, dy, z = 0, 0, 0
             if spread_off then
               dx = (spread_off.j - (j+1))*_TILE_W
               dy = (spread_off.i - (i+1))*_TILE_H
-              t = spread_off.t
+              z = spread_off.t
             end
             table.insert(draw_drops, {
-              drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
-              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation, drop_id
+              drop, x + offset.x + (1-z)*dx, 0 + offset.y + (1-z)*dy,
+              2*_TILE_H*(0.25 - (z - 0.5)^2), oscilation, drop_id
             })
           end
         end
@@ -426,10 +429,10 @@ function SectorView:draw()
     -- Draw dem bodies
     for _, bodyinfo in ipairs(draw_bodies) do
       local body, x, y = unpack(bodyinfo)
-      local i,j = body:getPos()
+      local bi, bj = body:getPos()
 
       --Draw only bodies if player is seeing them
-      if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+      if not self.fov or (self.fov[bi][bj] and self.fov[bi][bj] ~= 0) then
 
         local body_sprite = self:getBodySprite(body)
         g.setColor(COLORS.NEUTRAL)
@@ -454,7 +457,6 @@ function SectorView:draw()
       local sprite = _loadDropSprite(self.drop_sprite_data, id, specname)
       local rx = x + offset.x
       local ry = y + offset.y - z + oscilation
-      local _, ih = sprite:getDimensions()
       g.setColor(COLORS.NEUTRAL)
       sprite:draw(rx, ry)
       g.draw(_sparkles, x + offset.x, y + offset.y, 0, 1, 1, 0, 0)
@@ -470,11 +472,11 @@ function SectorView:draw()
     --Draw only if player is seeing them
     local x, y = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
     if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
-      SECTOR_LIFEBAR.draw(body, x, y)
       local actor = body:getActor() if actor then
         local is_controlled = (actor == sector:getRoute().getControlledActor())
         SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)
       end
+      SECTOR_LIFEBAR.draw(body, x, y)
     end
   end
 

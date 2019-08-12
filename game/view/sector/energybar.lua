@@ -1,4 +1,7 @@
 
+
+-- luacheck: globals love
+
 local ACTIONDEFS = require 'domain.definitions.action'
 
 local ENERGY_BAR = {}
@@ -34,16 +37,17 @@ function ENERGY_BAR.draw(actor, x, y, is_controlled)
   --local percent = math.fmod(value, unit)/unit
   local percent = value/_MAX_ENERGY
   local pi = math.pi
-  local start = pi/2 + 2*pi/36
+  local start = pi/2 + 3*pi/36
   local length = 2*pi/3
+  local radius = 42
   g.push()
   g.translate(x, y)
   g.scale(1, 1/2)
   g.setLineWidth(8)
   g.setColor(1, 1, 1, 0.2)
-  g.arc('line', 'open', 0, 0, 36, start, start + length, 32)
+  g.arc('line', 'open', 0, 0, radius, start, start + length, 32)
   g.setColor(1, 1, 1, 0.8)
-  g.arc('line', 'open', 0, 0, 36, start, start + length * percent, 32)
+  g.arc('line', 'open', 0, 0, radius, start, start + length * percent, 32)
 
   local glow = _glow[actor:getId()] or 0
   glow = glow + love.timer.getDelta()
@@ -53,21 +57,21 @@ function ENERGY_BAR.draw(actor, x, y, is_controlled)
   g.setColor(.8, .2, 0, alpha)
   if is_controlled then
     local top = start + length * percent
-    g.arc('line', 'open', 0, 0, 36, top - _preview/_MAX_ENERGY, top, 32)
+    g.arc('line', 'open', 0, 0, radius, top - _preview/_MAX_ENERGY, top, 32)
   elseif _preview > 0 then
     local controlled = actor:getSector():getRoute().getControlledActor()
     local turns = math.ceil(_preview / controlled:getSPD())
     local recovered = actor:getSPD() * turns
-    g.arc('line', 'open', 0, 0, 36, start + length * percent,
-                                    start + length * (percent +
+    g.arc('line', 'open', 0, 0, radius, start + length * percent,
+                                        start + length * (percent +
                                                       recovered/_MAX_ENERGY),
-                                    32)
+                                        32)
   end
   for i=1,4 do
     g.setColor(0, 0, 0.4, 0.5)
     local r = start + length * i/_BARSCALE
     local w = length/100
-    g.arc('line', 'open', 0, 0, 36, r-w, r+w, 32)
+    g.arc('line', 'open', 0, 0, radius, r-w, r+w, 32)
   end
   g.pop()
 end
