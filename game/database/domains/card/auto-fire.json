@@ -3,8 +3,8 @@
   "desc":"",
   "name":"Auto-Fire",
   "one_time":true,
-  "pp":0,
   "type-description":"",
+  "cost":0,
   "widget":{
     "auto_activation":{
       "ability":{

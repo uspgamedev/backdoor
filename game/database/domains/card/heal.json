@@ -32,8 +32,8 @@
           "type":"operator"
         }]
     },
-    "cost":2
   },
+  "cost":2,
   "attr":"ANI",
   "desc":"",
   "icon":"card-heal",

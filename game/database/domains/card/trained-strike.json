@@ -49,8 +49,8 @@
           "type":"operator"
         }]
     },
-    "cost":2
   },
+  "cost":2,
   "attr":"COR",
   "desc":"",
   "icon":"card-dropkick",

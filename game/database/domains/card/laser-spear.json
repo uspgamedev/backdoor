@@ -3,7 +3,7 @@
   "desc":"A mass-produced weapon.",
   "icon":"card-laser-spear",
   "name":"Laser Spear",
-  "pp":0,
+  "cost":5,
   "set":"brawler",
   "type-description":"",
   "widget":{

@@ -3,7 +3,7 @@
   "desc":"",
   "icon":"card-focus-gem",
   "name":"Focus Gem",
-  "pp":0,
+  "cost":1,
   "set":"arcanist",
   "type-description":"",
   "widget":{

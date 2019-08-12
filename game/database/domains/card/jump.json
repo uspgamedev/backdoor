@@ -41,8 +41,8 @@
           "type":"operator"
         }]
     },
-    "cost":3
   },
+  "cost":3,
   "attr":"COR",
   "desc":"Take THAT gravity!",
   "icon":"card-jump",

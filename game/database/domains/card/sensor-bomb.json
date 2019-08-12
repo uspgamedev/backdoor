@@ -22,8 +22,8 @@
           "type":"input"
         }]
     },
-    "cost":3
   },
+  "cost":3,
   "attr":"COR",
   "desc":"This is going to be a blast!",
   "icon":"card-sensor-bomb",

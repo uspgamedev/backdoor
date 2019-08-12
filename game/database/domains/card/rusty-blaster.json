@@ -4,7 +4,7 @@
   "icon":"card-blaster",
   "name":"Rusty Blaster",
   "one_time":true,
-  "pp":0,
+  "cost":2,
   "set":"gadgeteer",
   "type-description":"",
   "widget":{

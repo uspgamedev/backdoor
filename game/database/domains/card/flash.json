@@ -27,8 +27,8 @@
           "type":"operator"
         }]
     },
-    "cost":2
   },
+  "cost":2,
   "attr":"ARC",
   "desc":"Aaaaaaahhh... Savior of the Universe!",
   "icon":"card-flash",

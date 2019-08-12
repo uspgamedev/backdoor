@@ -4,6 +4,7 @@
   "icon":"card-power-suit",
   "name":"Impact Vest",
   "set":"gadgeteer",
+  "cost":5,
   "type-description":"",
   "widget":{
     "charges":0,

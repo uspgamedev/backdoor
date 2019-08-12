@@ -3,7 +3,7 @@
   "desc":"",
   "icon":"card-wrench",
   "name":"Wrench",
-  "pp":0,
+  "cost":5,
   "set":"gadgeteer",
   "type-description":"",
   "widget":{

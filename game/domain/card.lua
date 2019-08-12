@@ -87,8 +87,8 @@ function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
 
-function Card:getArtCost()
-  return self:getSpec('art').cost
+function Card:getCost()
+  return self:getSpec('cost')
 end
 
 function Card:getWidgetTrigger()
@@ -177,10 +177,10 @@ function Card:getEffect()
   local effect
   local inputs = { self = self:getOwner() }
   if self:isArt() then
-    effect = ("Art [%d exhaustion]\n\n"):format(self:getArtCost())
+    effect = ("Art [%d exhaustion]\n\n"):format(self:getCost())
           .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
   elseif self:isWidget() then
-    effect = "Widget"
+    effect = ("Widget [%d exhaustion]\n\n"):format(self:getCost())
     local place = self:getWidgetPlacement() if place then
       effect = effect .. " [" .. place .. "]"
     end

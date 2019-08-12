@@ -3,7 +3,7 @@
   "desc":"",
   "icon":"card-soul-robe",
   "name":"Soul Robe",
-  "pp":3,
+  "cost":3,
   "set":"arcanist",
   "type-description":"",
   "widget":{

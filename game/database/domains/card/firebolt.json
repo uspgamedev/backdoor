@@ -32,8 +32,8 @@
           "which":"ARC"
         }]
     },
-    "cost":1
   },
+  "cost":1,
   "attr":"ARC",
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "icon":"card-firebolt",

@@ -2,6 +2,7 @@
   "attr":"NONE",
   "icon":"card-upgrade",
   "name":"Slow",
+  "cost":0,
   "widget":{
     "charges":0,
     "operators":[{

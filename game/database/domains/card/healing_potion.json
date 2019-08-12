@@ -37,8 +37,8 @@
           "which":"VIT"
         }]
     },
-    "cost":0
   },
+  "cost":0,
   "attr":"NONE",
   "desc":"Gulp. Down the hatch, foxy.",
   "icon":"card-potion",

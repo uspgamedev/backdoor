@@ -32,8 +32,8 @@
           "which":"ARC"
         }]
     },
-    "cost":1
   },
+  "cost":1,
   "attr":"ARC",
   "desc":"A love kick and it's ready to go.",
   "icon":"box",

@@ -28,8 +28,8 @@
           "which":"COR"
         }]
     },
-    "cost":1
   },
+  "cost":1,
   "attr":"ARC",
   "desc":"",
   "icon":"card-reinforce",

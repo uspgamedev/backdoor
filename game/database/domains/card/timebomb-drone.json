@@ -23,8 +23,8 @@
           "non-wall":false
         }]
     },
-    "cost":3
   },
+  "cost":3,
   "attr":"ARC",
   "desc":"",
   "icon":"card-timer-bomb",

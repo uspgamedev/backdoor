@@ -4,13 +4,13 @@
   "icon":"card-power-suit",
   "name":"Power Suit",
   "one_time":true,
-  "pp":0,
+  "cost":5,
   "set":"brawler",
   "type-description":"",
   "widget":{
     "charges":0,
     "operators":[{
-        "attr":"DEF",
+        "attr":"VIT",
         "op":"+",
         "val":5
       },{

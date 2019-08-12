@@ -1,4 +1,5 @@
 {
+  "cost":1,
   "art":{
     "art_ability":{
       "effects":[{
@@ -8,7 +9,6 @@
         }],
       "inputs":[]
     },
-    "cost":1
   },
   "attr":"ARC",
   "desc":"Close your eyes and see beyond.",

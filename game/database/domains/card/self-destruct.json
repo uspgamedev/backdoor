@@ -3,6 +3,7 @@
   "desc":"",
   "name":"Self Destruction",
   "one_time":true,
+  "cost":0,
   "type-description":"",
   "widget":{
     "auto_activation":{

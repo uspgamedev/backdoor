@@ -38,8 +38,8 @@
           "type":"operator"
         }]
     },
-    "cost":1
   },
+  "cost":0,
   "attr":"COR",
   "desc":"Take your best friend with you!",
   "icon":"card-reassemble",

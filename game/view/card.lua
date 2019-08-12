@@ -153,13 +153,12 @@ function CardView:draw()
   g.printf(self.card:getType(), pd, h - pd - _card_font:getHeight(), typewidth,
            "left")
   _info_font.set()
-  if self.card:isArt() then
-    g.printf(("(%d)"):format(self.card:getArtCost()),
-             pd, 0, w-pd*2, "right")
-  elseif self.card:isWidget() then
+  g.printf(("(%d)"):format(self.card:getCost()),
+  pd, 0, w-pd*2, "right")
+  if self.card:isWidget() then
     g.printf(("[%d]"):format(self.card:getWidgetCharges()
                            - self.card:getUsages()),
-             pd, 0, w-pd*2, "right")
+             pd, 0, w-pd*4, "right")
   end
   g.pop()
 
@@ -173,4 +172,3 @@ function CardView:draw()
 end
 
 return CardView
-

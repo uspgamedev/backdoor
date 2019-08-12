@@ -3,7 +3,7 @@
   "desc":"Don't stand so close to me!",
   "name":"Proximity Detector",
   "one_time":true,
-  "pp":0,
+  "cost":0,
   "type-description":"",
   "widget":{
     "auto_activation":{

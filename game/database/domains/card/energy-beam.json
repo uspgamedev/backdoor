@@ -49,8 +49,8 @@
           "which":"ARC"
         }]
     },
-    "cost":2
   },
+  "cost":2,
   "attr":"ARC",
   "desc":"",
   "name":"Energy Beam",

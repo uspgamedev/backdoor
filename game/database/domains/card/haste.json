@@ -3,7 +3,7 @@
   "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
   "icon":"card-haste",
   "name":"Haste",
-  "pp":4,
+  "cost":5,
   "set":"arcanist",
   "type-description":"",
   "widget":{

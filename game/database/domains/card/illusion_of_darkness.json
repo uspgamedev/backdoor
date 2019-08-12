@@ -20,8 +20,8 @@
           "type":"operator"
         }]
     },
-    "cost":1
   },
+  "cost":1,
   "attr":"ARC",
   "desc":"Goodnight sweet prince.",
   "icon":"card-illusion-of-darkness",

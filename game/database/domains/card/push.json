@@ -56,8 +56,8 @@
           "type":"operator"
         }]
     },
-    "cost":1
   },
+  "cost":1,
   "attr":"COR",
   "desc":"Outta my way!",
   "icon":"card-jump",

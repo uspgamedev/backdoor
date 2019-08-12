@@ -12,14 +12,14 @@ return {
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.CARD_ATTRIBUTES },
+  { id = 'cost', name = "Cost", type = 'range', min = 0,
+      max = DEFS.ACTION.MAX_FOCUS },
   { id = 'type-description', type = 'description',
     info = "Cards can be either Arts or Widgets" },
   {
     id = 'art', name = "Art",
     type = 'section',
     schema = {
-      { id = 'cost', name = "Cost", type = 'range', min = 0,
-        max = DEFS.ACTION.MAX_FOCUS },
       { id = 'art_ability', name = "Art Ability", type = 'ability',
         hint = "Happens when card is played from hand" },
     }

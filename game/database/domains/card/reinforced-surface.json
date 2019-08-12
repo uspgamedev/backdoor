@@ -3,6 +3,7 @@
   "desc":"",
   "name":"Reinforced Surface",
   "one_time":true,
+  "cost":0,
   "type-description":"",
   "widget":{
     "charges":10,

@@ -3,7 +3,7 @@
   "desc":"They say Rage is all the rage with the kids.",
   "icon":"card-rage",
   "name":"Rage",
-  "pp":0,
+  "cost":2,
   "set":"brawler",
   "type-description":"",
   "widget":{

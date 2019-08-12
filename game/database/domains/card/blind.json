@@ -3,6 +3,7 @@
   "desc":"",
   "name":"Blind",
   "one_time":true,
+  "cost":0,
   "type-description":"",
   "widget":{
     "charges":4,

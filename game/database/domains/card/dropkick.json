@@ -42,8 +42,8 @@
           "type":"operator"
         }]
     },
-    "cost":3
   },
+  "cost":3,
   "attr":"COR",
   "desc":"They say 'no pain, no gain'. I'll give them what they want.",
   "icon":"card-dropkick",

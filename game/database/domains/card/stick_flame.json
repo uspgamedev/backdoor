@@ -21,8 +21,8 @@
           "type":"operator"
         }]
     },
-    "cost":2
   },
+  "cost":2,
   "attr":"ARC",
   "desc":"'Hey Danny, hold this for me, will ya?'.\n\nRobert was surprised Danny didn't sent him an invite for his birthday the week after.",
   "icon":"card-sticky-flame",

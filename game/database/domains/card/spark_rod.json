@@ -4,7 +4,7 @@
   "icon":"card-spark-rod",
   "name":"Spark Rod 2000",
   "one_time":true,
-  "pp":4,
+  "cost":5,
   "set":"brawler",
   "type-description":"",
   "widget":{

@@ -24,24 +24,13 @@ end
 
 function PLAYCARD.exhaustionCost(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  if card:isArt() then
-    return card:getArtCost()
-  elseif card:isWidget() then
-    return ACTIONDEFS.PLAY_WIDGET_COST
-  end
-  return 0
+  return card:getCost()
 end
 
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  local valid = false
-  if card:isArt() then
-    valid = actor:getFocus() >= card:getArtCost()
-        and ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
-  elseif card:isWidget() then
-    valid = true
-  end
-  return valid
+  return actor:getFocus() >= card:getCost() and
+           ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
 end
 
 function PLAYCARD.perform(actor, inputvalues)
@@ -55,8 +44,8 @@ function PLAYCARD.perform(actor, inputvalues)
     body = body,
   })
 
+  actor:spendFocus(card:getCost())
   if card:isArt() then
-    actor:spendFocus(card:getArtCost())
     coroutine.yield('report', {
       type = 'play_card',
       actor = actor,
@@ -65,7 +54,6 @@ function PLAYCARD.perform(actor, inputvalues)
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
-    actor:spendFocus(ACTIONDEFS.PLAY_WIDGET_FOCUS)
     body:placeWidget(card)
     coroutine.yield('report', {
       type = 'play_card',
@@ -79,4 +67,3 @@ function PLAYCARD.perform(actor, inputvalues)
 end
 
 return PLAYCARD
-
