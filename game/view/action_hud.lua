@@ -17,7 +17,7 @@ local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
 local ELEMENT       = require "steaming.classes.primitives.element"
 
-local _INFO_LAG = 2.0 -- seconds
+local _INFO_LAG = 0.6 -- seconds
 
 local ActionHUD = Class{
   __includes = { ELEMENT }
