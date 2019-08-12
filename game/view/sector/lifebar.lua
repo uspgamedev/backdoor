@@ -3,7 +3,6 @@
 
 local Color  = require 'common.color'
 local COLORS = require 'domain.definitions.colors'
-local RES    = require 'resources'
 local Text   = require 'view.helpers.text'
 
 local _SMOOTH_FACTOR = 0.2
@@ -24,19 +23,39 @@ function LIFEBAR.draw(body, x, y)
     current = hp
   end
   _lifestates[id] = current
+  local armorpercent = armor / (max_hp + armor)
+  local pi = math.pi
+  local start = pi/2 - 3*pi/36
+  local length = -2*pi/3
   local hppercent = current / (max_hp + armor)
-  local hsvcol = { 0 + 100*hppercent, 240, 255 - 50*hppercent, 1 }
+  local hsvcol = { 0 + 100*hppercent, 240, 200 - 50*hppercent, 1 }
   local color = Color.fromHSV(unpack(hsvcol))
-  local icon = RES.loadTexture("hp-icon")
-  local iw, ih = icon:getDimensions()
+  local cr, cg, cb = color:unpack()
   g.push()
   g.translate(x, y)
 
-  g.translate(32, 12)
-  g.setColor(COLORS.NEUTRAL)
-  g.draw(icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+  g.push()
+  g.scale(1, 1/2)
+  g.setLineWidth(8)
+  g.setColor(0, 0, 0, 0.2)
+  g.arc('line', 'open', 0, 0, 42, start, start + length, 32)
+  g.setColor(cr, cg, cb, 1)
+  g.arc('line', 'open', 0, 0, 42, start, start + length * hppercent, 32)
+  g.setColor(1, 1, 1, 0.5)
+  g.arc('line', 'open', 0, 0, 42, start + length * hppercent,
+                                  start + length * (hppercent + armorpercent),
+                                  32)
+  g.pop()
+
+  g.translate(0, 20)
+  g.scale(1, 1)
+  --g.shear(.5, 0)
+  --g.rotate(-math.pi / 12)
+  --g.draw(icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+  g.setColor(cr, cg, cb, 1)
+  g.circle('fill', 0, 0, 14, 16)
   local text = Text(hp, 'Text', 18, { dropshadow = true, align = 'center',
-                                      width = 36, color = color })
+                                      width = 36, color = COLORS.NEUTRAL })
   text:draw(-18, -text.font:getHeight()/2)
   g.pop()
 end
