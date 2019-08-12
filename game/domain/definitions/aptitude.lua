@@ -34,7 +34,7 @@ function APT.HP(vit, res)
 end
 
 function APT.SPEED(spd, fin)
-  return math.floor(10 + 2*fin + spd)
+  return math.floor(10 + fin + spd/2)
 end
 
 function APT.SKILL(skl, efc)

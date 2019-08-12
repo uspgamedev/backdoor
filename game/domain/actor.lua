@@ -10,7 +10,6 @@ local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
 local ACTIONDEFS  = require 'domain.definitions.action'
-local PACK        = require 'domain.pack'
 local VISIBILITY  = require 'common.visibility'
 local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
@@ -591,10 +590,8 @@ end
 
 function Actor:endFocus()
   local body = self:getBody()
-  if self.focus > 0 then
-    self:exhaust(DEFS.ACTION.MAX_FOCUS - self.focus)
-    self.focus = 0
-  end
+  self:exhaust(DEFS.ACTION.FOCUS_COST)
+  self.focus = 0
   self:discardHand()
   body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
   body:removeAllArmor()
