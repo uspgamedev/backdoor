@@ -177,10 +177,10 @@ function Card:getEffect()
   local effect
   local inputs = { self = self:getOwner() }
   if self:isArt() then
-    effect = ("Art [%d exhaustion]\n\n"):format(self:getCost())
+    effect = ("Art [%d focus]\n\n"):format(self:getCost())
           .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
   elseif self:isWidget() then
-    effect = ("Widget [%d exhaustion]\n\n"):format(self:getCost())
+    effect = ("Widget [%d focus]\n\n"):format(self:getCost())
     local place = self:getWidgetPlacement() if place then
       effect = effect .. " [" .. place .. "]"
     end
