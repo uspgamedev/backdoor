@@ -21,15 +21,15 @@
           "output":"pos",
           "type":"input"
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"ARC",
+  "cost":3,
   "desc":"A true friend never let's you down.\n\nAnd also shoots your enemies in the face.",
   "icon":"card-turret",
   "name":"Turret",
   "pp":0,
+  "set":"gadgeteer",
   "type-description":"",
-  "one_time":false,
-  "set":false
+  "one_time":false
 }
