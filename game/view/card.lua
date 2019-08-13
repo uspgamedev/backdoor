@@ -99,6 +99,14 @@ function CardView:getPoint()
                        - vec2(0,self.raised:get())
 end
 
+local function _repeat(char, n)
+  local str = ""
+  for i=1,n do
+    str = str .. char
+  end
+  return str
+end
+
 function CardView:draw()
   --Draw card background
   local x,y = self.position:unpack()
@@ -150,16 +158,15 @@ function CardView:draw()
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
-  g.printf(self.card:getType(), pd, h - pd - _card_font:getHeight(), typewidth,
+  local type_str = self.card:getType() 
+  if self.card:isWidget() then
+    type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
+                                            - self.card:getUsages())
+  end
+  g.printf(type_str, pd, h - pd - _card_font:getHeight(), typewidth,
            "left")
   _info_font.set()
-  g.printf(("(%d)"):format(self.card:getCost()),
-  pd, 0, w-pd*2, "right")
-  if self.card:isWidget() then
-    g.printf(("[%d]"):format(self.card:getWidgetCharges()
-                           - self.card:getUsages()),
-             pd, 0, w-pd*4, "right")
-  end
+  g.printf(_repeat('*', self.card:getCost()), pd, 0, w-pd*2, "right")
   g.pop()
 
   if self.add > 0 then
