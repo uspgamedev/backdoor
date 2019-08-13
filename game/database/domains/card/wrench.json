@@ -1,9 +1,9 @@
 {
   "attr":"COR",
+  "cost":5,
   "desc":"",
   "icon":"card-wrench",
   "name":"Wrench",
-  "cost":5,
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
