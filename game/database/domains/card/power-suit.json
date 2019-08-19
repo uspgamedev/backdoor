@@ -18,7 +18,7 @@
         "op":"-",
         "val":4
       }],
-    "placement":"wearable",
+    "equipment":"wearable",
     "status-tags":[],
     "trigger":false
   }

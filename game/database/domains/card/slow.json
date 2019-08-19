@@ -16,7 +16,7 @@
       "inputs":[]
     },
     "trigger":false,
-    "placement":false
+    "equipment":false
   },
   "set":false
 }

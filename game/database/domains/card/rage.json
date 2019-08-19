@@ -19,7 +19,7 @@
       }],
     "status-tags":[],
     "trigger":"on_focus_end",
-    "placement":false
+    "equipment":false
   },
   "one_time":false
 }

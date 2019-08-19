@@ -17,13 +17,13 @@ local _WIDGETSTRING = {
 }
 
 local function _getPlacements(body)
-  local placements, n = {}, 0
+  local equipments, n = {}, 0
   for _,slot in ipairs(EQUIPMENTS) do
-    local placement = body:getEquipmentAt(slot)
+    local equipment = body:getEquipmentAt(slot)
     n = n + 1
-    placements[n] = placement
+    equipments[n] = equipment
   end
-  return placements
+  return equipments
 end
 
 local function _getTraits(body)

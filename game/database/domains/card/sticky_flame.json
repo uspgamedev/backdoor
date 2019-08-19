@@ -34,7 +34,7 @@
     "status-tags":[],
     "trigger":"on_cycle",
     "activation":false,
-    "placement":false
+    "equipment":false
   },
   "icon":false,
   "set":false

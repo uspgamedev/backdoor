@@ -53,7 +53,7 @@
     },
     "charges":3,
     "operators":[],
-    "placement":"wieldable",
+    "equipment":"wieldable",
     "status-tags":[],
     "trigger":"on_use",
     "trigger-condition":{

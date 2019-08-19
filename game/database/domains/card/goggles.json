@@ -13,7 +13,7 @@
         "op":"+",
         "val":6
       }],
-    "placement":"wearable",
+    "equipment":"wearable",
     "status-tags":[],
     "trigger":"on_turn",
     "trigger-condition":{

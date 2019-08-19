@@ -132,7 +132,7 @@ function Card:getWidgetActivationCost()
 end
 
 function Card:getWidgetPlacement()
-  return self:getSpec('widget').placement
+  return self:getSpec('widget').equipment
 end
 
 function Card:getWidgetCharges()

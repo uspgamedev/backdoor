@@ -12,7 +12,7 @@
         "tag":"stun"
       }],
     "trigger":"on_cycle",
-    "placement":false
+    "equipment":false
   },
   "icon":false,
   "set":false
