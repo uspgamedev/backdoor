@@ -3,18 +3,11 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":-1,
+          "base":0,
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
           "type":"effect"
-        },{
-          "attr":"=cor",
-          "base":0,
-          "name":"armor_on_target",
-          "target":"=self_body",
-          "type":"effect",
-          "sfx":false
         }],
       "inputs":[{
           "aoe-hint":1,
@@ -48,10 +41,10 @@
           "pos":"=target_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"COR",
+  "cost":2,
   "desc":"",
   "icon":"card-dropkick",
   "name":"Trained Strike",
