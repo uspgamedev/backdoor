@@ -1,8 +1,8 @@
 {
   "altars":{
-    "max":6,
-    "min":2,
-    "threshold":1
+    "max":2,
+    "min":1,
+    "threshold":3
   },
   "bootstrap":{
     "h":56,
@@ -23,7 +23,7 @@
         "droprate":4,
         "droptype":"food"
       },{
-        "droprate":1,
+        "droprate":0,
         "droptype":"pack"
       }]
   },
