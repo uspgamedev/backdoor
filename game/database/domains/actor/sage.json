@@ -12,10 +12,10 @@
       "amount":1,
       "card":"fireball"
     },{
-      "amount":4,
+      "amount":5,
       "card":"firebolt"
     },{
-      "amount":4,
+      "amount":3,
       "card":"catalyst"
     }],
   "name":"Sage",
