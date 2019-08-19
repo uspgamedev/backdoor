@@ -123,7 +123,6 @@ end
 
 function state:resume(_, args)
   _view.action_hud:enableTurn(true)
-  _view.sector.setEnergyPreview(0)
   _resumeTask(args)
 end
 
@@ -165,9 +164,6 @@ local function _useAction(action_slot, params)
   local param = ACTION.pendingInput(action_slot, controlled_actor, params)
   while param do
     _view.action_hud:activateAbility()
-    _view.sector:setEnergyPreview(
-      ACTION.exhaustionCost(action_slot, controlled_actor, params)
-    )
     if param.name == 'choose_dir' then
       _view.action_hud:disableTurn()
       SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'],

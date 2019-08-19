@@ -3,6 +3,7 @@
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
+local Color       = require 'common.color'
 local ACTIONDEFS  = require 'domain.definitions.action'
 
 local math        = require 'common.math'
@@ -28,7 +29,7 @@ local FocusBar = Class{
 
 --CLASS FUNCTIONS--
 
-function FocusBar:init(route)
+function FocusBar:init(route, handview)
 
   ELEMENT.init(self)
 
@@ -47,6 +48,8 @@ function FocusBar:init(route)
   -- Hide
   self.hidden = true
   self.v_offset = 1
+
+  self.handview = handview
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
@@ -85,14 +88,8 @@ function FocusBar:draw()
 
   -- draw hand countdown
   local maxfocus = ACTIONDEFS.MAX_FOCUS
-  local focuscountdown = math.min(self.actor:getFocus(), maxfocus)
-  local current = self.hand_count_down or 0
-  current = current + (focuscountdown - current) * 0.2
-  if math.abs(current - focuscountdown) < 1 then
-    current = focuscountdown
-  end
-  self.hand_count_down = current
-  local handbar_percent = current / maxfocus
+  local focus = math.min(self.actor:getFocus(), maxfocus)
+  local handbar_percent = focus / maxfocus
   local emergency_percent = .33
   local handbar_width = 492/2
   local handbar_height = 12
@@ -126,9 +123,18 @@ function FocusBar:draw()
     g.translate(i * handbar_gap, 0)
     g.setColor(COLORS.EMPTY)
     g.polygon('fill', _FOCUS_ICON)
-    if current >= i then
-      g.setColor(red, gre, blu, a * math.min(1, (current-i)))
+    if i < focus then
+      local alpha = a * math.min(1, (focus-i))
+      g.setColor(red, gre, blu, alpha)
       g.polygon('fill', _FOCUS_ICON)
+      local focused_card_view = self.handview:getFocusedCard()
+      if focused_card_view then
+        local cost = focused_card_view.card:getCost()
+        if cost <= focus and i >= focus - cost then
+          g.setColor(COLORS.WARNING * Color:new{1, 1, 1, alpha})
+          g.polygon('fill', _FOCUS_ICON)
+        end
+      end
     end
     g.pop()
   end

@@ -38,6 +38,7 @@ function HandView:init(route)
   self.prev_cursor = Button("left")
   self.next_cursor = Button("right")
 
+  self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
   self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
@@ -67,10 +68,11 @@ function HandView:moveFocus(dir)
 end
 
 function HandView:isActive()
-  return self.focus_index > 0
+  return self.active
 end
 
 function HandView:activate()
+  self.active = true
   self.focus_index = 1
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
@@ -80,7 +82,7 @@ function HandView:activate()
 end
 
 function HandView:deactivate()
-  self.focus_index = -1
+  self.active = false
 
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
@@ -188,6 +190,10 @@ end
 --Remove card given by index (must be valid)
 function HandView:removeCard( card_index)
   table.remove(self.hand, card_index)
+end
+
+function HandView:getFocusedCard()
+  return self.hand[self.focus_index]
 end
 
 function HandView:reset()
