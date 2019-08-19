@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "dialogue":"[header name:Pessimistic Veteran]\nSome widgets give you an \n[color value:blue]activated ability.[endl][pause value:.3][color value:regular]\nYou can use them [color value:blue]with S.[color value:regular]\n\n[newpage wait:2]\n[header name:Pessimistic Veteran]\nRemember that if your [color value:pp]Focus\n[color value:regular] runs out, you'll lose \nall active widgets that aren't equipments!",
-  "drops":[],
   "efc":0,
+  "dialogue":"[header name:Pessimistic Veteran]\nSome widgets give you an \n[color value:blue]activated ability\n[color value:blue].\n\n[newpage wait:2]\n[header name:Pessimistic Veteran]\nYou can toggle them [color value:blue]with W\n[color value:regular] and use them \n[color value:blue]with S[color value:regular]. \n\n[newpage wait:2]\n[header name:Pessimistic Veteran]\nRemember that if your [color value:blue]Focus\n[color value:regular] runs out, you'll lose \nall active widgets!",
+  "drops":[],
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,

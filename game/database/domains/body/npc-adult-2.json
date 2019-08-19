@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "dialogue":"[header name:Busy Adult]\nPretty sure you know the basics right?[pause value:.5][endl]\n[color value:blue]F confirms, D cancels...",
-  "drops":[],
   "efc":0,
+  "dialogue":"[header name:Busy Adult]\nPretty sure you know the basics right?\n\n[newpage wait:1]\n[header name:Busy Adult]\n[color value:blue]F efcfirms, D cancels\n[color value:regular], and you can change \nthe card you are selecting with \n[color value:blue]E or R[color value:regular].",
+  "drops":[],
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,
