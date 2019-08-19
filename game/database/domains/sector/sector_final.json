@@ -1,9 +1,4 @@
 {
-  "altars":{
-    "max":6,
-    "min":2,
-    "threshold":1
-  },
   "bootstrap":{
     "h":48,
     "mh":7,
@@ -59,5 +54,6 @@
     "rmar":1,
     "tries":256
   },
-  "theme":false
+  "theme":false,
+  "altars":false
 }
