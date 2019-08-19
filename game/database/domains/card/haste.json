@@ -4,7 +4,7 @@
   "icon":"card-haste",
   "name":"Haste",
   "cost":5,
-  "set":"arcanist",
+  "set":"sage",
   "type-description":"",
   "widget":{
     "charges":10,

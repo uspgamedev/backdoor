@@ -1,19 +1,19 @@
 {
-  "attr":"ARC",
+  "attr":"ANI",
   "cost":1,
   "desc":"",
   "icon":"card-focus-gem",
   "name":"Focus Gem",
-  "set":"arcanist",
+  "set":"sage",
   "type-description":"",
   "widget":{
     "charges":1,
+    "equipment":"wearable",
     "operators":[{
         "attr":"ARC",
         "op":"+",
         "val":2
       }],
-    "equipment":"wearable",
     "status-tags":[],
     "trigger":"on_focus_end"
   },
