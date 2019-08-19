@@ -16,10 +16,10 @@ local Slot = Class({ __includes = { Node } })
 
 Slot.SQRSIZE = 36
 
-function Slot:init(x, y, label)
+function Slot:init(x, y, icon)
   Node.init(self)
   self:setPosition(x, y)
-  self.label = label and label:lower()
+  self.icon = icon
   self.flash = TweenValue(0, 'linear')
   self.flashcolor = COLORS.FLASH_ANNOUNCE
   self.flashtime = 1
@@ -67,11 +67,13 @@ function Slot:render(g)
     g.rectangle("fill", 0, 0, sqsize, sqsize)
     g.setColor(COLORS.BLACK + flashfx * 2)
     g.draw(icon, 0, 0, 0, sqsize/iw, sqsize/ih)
-  elseif self.label then
-    g.setColor(COLORS.BLACK)
-    g.printf(self.label, 0, 0, sqsize, "center")
+  elseif self.icon then
+    g.setColor(COLORS.NEUTRAL)
+    local icon = RES.loadTexture(self.icon)
+    icon:setFilter('linear', 'linear')
+    local iw, ih = icon:getDimensions()
+    g.draw(icon, 0, 0, 0, sqsize/iw, sqsize/ih)
   end
 end
 
 return Slot
-

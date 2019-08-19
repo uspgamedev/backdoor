@@ -1,6 +1,6 @@
 return {
   "wieldable",
   "wearable",
-  wieldable   = "Wld",
-  wearable    = "Wear",
+  wieldable   = "icon-wieldable",
+  wearable    = "icon-wearable",
 }
