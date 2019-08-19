@@ -1,19 +1,19 @@
 
-local PLACEMENTS  = require 'domain.definitions.placements'
+local EQUIPMENTS  = require 'domain.definitions.equipments'
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local Node        = require 'view.node'
 local Slot        = require 'view.actorpanel.widgets.slot'
 local Class       = require "steaming.extra_libs.hump.class"
 
-local _PLACEMENTS = 1
+local _EQUIPMENTS = 1
 local _TRAITS = 2
 local _CONDITIONS = 3
 local _PD = 4
 local _MG = 24
 
 local _WIDGETSTRING = {
-  "PLACEMENTS",
+  "EQUIPMENTS",
   "TRAITS",
   "CONDITIONS",
 }
@@ -29,10 +29,11 @@ function Widgets:init(actor, x, y)
   local sqsize = Slot.SQRSIZE
   for i=1,3 do
     self.slots[i] = {}
-    for j=1,5 do
+    local n = (i == _EQUIPMENTS) and 2 or 5
+    for j=1,n do
       local slot = Slot((j - 1) * (sqsize + _PD),
                         i*(_MG*2 + self.font:getHeight()),
-                        i == _PLACEMENTS and PLACEMENTS[PLACEMENTS[j]])
+                        i == _EQUIPMENTS and EQUIPMENTS[EQUIPMENTS[j]])
       self.slots[i][j] = slot
       self:addChild(slot)
     end
@@ -41,7 +42,7 @@ end
 
 function Widgets:findCardSlot(widget_card)
   for i=1,3 do
-    for j=1,5 do
+    for j=1,#self.slots[i] do
       local slot = self.slots[i][j]
       if slot.widget == widget_card then
         return slot
@@ -51,8 +52,8 @@ function Widgets:findCardSlot(widget_card)
 end
 
 function Widgets:updatePlacements()
-  local equipment = self.slots[_PLACEMENTS]
-  for n,slot in ipairs(PLACEMENTS) do
+  local equipment = self.slots[_EQUIPMENTS]
+  for n,slot in ipairs(EQUIPMENTS) do
     local widget = self.actor:getBody():getEquipmentAt(slot)
     equipment[n]:setWidget(widget)
   end
@@ -105,4 +106,3 @@ function Widgets:render(g)
 end
 
 return Widgets
-

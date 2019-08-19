@@ -14,7 +14,7 @@
       }],
     "status-tags":[],
     "trigger":"on_turn",
-    "placement":false
+    "equipment":false
   },
   "icon":false,
   "set":false

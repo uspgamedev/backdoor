@@ -68,7 +68,7 @@
     },
     "charges":5,
     "operators":[],
-    "placement":"weapon",
+    "equipment":"wieldable",
     "status-tags":[],
     "trigger":"on_use"
   },

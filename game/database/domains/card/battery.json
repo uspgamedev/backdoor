@@ -23,7 +23,7 @@
     "operators":[],
     "status-tags":[],
     "trigger":"on_cycle",
-    "placement":false
+    "equipment":false
   },
   "icon":false,
   "attr":false,

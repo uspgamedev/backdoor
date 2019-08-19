@@ -2,7 +2,7 @@
 local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
-local PLACEMENTS  = require 'domain.definitions.placements'
+local EQUIPMENTS  = require 'domain.definitions.equipments'
 local APT         = require 'domain.definitions.aptitude'
 local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
@@ -28,8 +28,8 @@ function Body:init(specname)
   self.armor = 0
   self.widgets = {}
   self.equipped = {}
-  for placement in ipairs(PLACEMENTS) do
-    self.equipped[placement] = false
+  for equipment in ipairs(EQUIPMENTS) do
+    self.equipped[equipment] = false
   end
   self.sector_id = nil
 end
@@ -53,8 +53,8 @@ function Body:loadState(state)
   local equipped = self.equipped
   if state.equipped then
     equipped = {}
-    for _,placement in ipairs(PLACEMENTS) do
-      equipped[placement] = self.widgets[state.equipped[placement]]
+    for _,equipment in ipairs(EQUIPMENTS) do
+      equipped[equipment] = self.widgets[state.equipped[equipment]]
     end
   end
   self.equipped = equipped
@@ -69,11 +69,11 @@ function Body:saveState()
   state.killer = self.killer
   state.sector_id = self.sector_id
   local equipped = {}
-  for _,placement in ipairs(PLACEMENTS) do
-    local equip = self:getEquipmentAt(placement)
+  for _,equipment in ipairs(EQUIPMENTS) do
+    local equip = self:getEquipmentAt(equipment)
     if equip then
       local index = self:findWidget(equip)
-      equipped[placement] = index
+      equipped[equipment] = index
     end
   end
   state.equipped = equipped
@@ -228,7 +228,7 @@ end
 
 function Body:equip(place, card)
   if not place then return end
-  -- check if placement is being used
+  -- check if equipment is being used
   -- if it is, then remove card from that slot
   if self:getEquipmentAt(place) then
     local index
@@ -255,7 +255,7 @@ end
 
 function Body:removeWidget(index)
   local card = self.widgets[index]
-  local placement = card:getWidgetPlacement()
+  local equipment = card:getWidgetPlacement()
   local owner = card:getOwner()
   self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
   coroutine.yield('report', {
@@ -263,7 +263,7 @@ function Body:removeWidget(index)
     body = self,
     widget_card = card
   })
-  self:unequip(placement)
+  self:unequip(equipment)
   table.remove(self.widgets, index)
   if owner and not card:isOneTimeOnly() then
     card:resetUsages()
@@ -273,8 +273,8 @@ function Body:removeWidget(index)
 end
 
 function Body:placeWidget(card)
-  local placement = card:getWidgetPlacement()
-  self:equip(placement, card)
+  local equipment = card:getWidgetPlacement()
+  self:equip(equipment, card)
   table.insert(self.widgets, card)
   card:resetTicks()
   return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE)
@@ -442,4 +442,3 @@ function Body:getDialogue()
 end
 
 return Body
-

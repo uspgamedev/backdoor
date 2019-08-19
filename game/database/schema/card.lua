@@ -33,8 +33,8 @@ return {
         options = DEFS.TRIGGERS },
       { id = 'trigger-condition', name = "Spend Trigger Condition",
         type = 'ability', optional = true },
-      { id = 'placement', name = "Placement", type = 'enum',
-        options = DEFS_PACK.placements, optional = true },
+      { id = 'equipment', name = "Placement", type = 'enum',
+        options = DEFS_PACK.equipments, optional = true },
       {
         id = 'operators', name = "Static Attribute Operator",
         type = 'array', schema = {
