@@ -101,7 +101,7 @@ end
 
 local function _repeat(char, n)
   local str = ""
-  for i=1,n do
+  for _=1,n do
     str = str .. char
   end
   return str
@@ -114,7 +114,7 @@ function CardView:draw()
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS[self.card:getRelatedAttr()])
   local w, h = self.sprite:getDimensions()
-  local typewidth = _info_font:getWidth(self.card:getType())
+  local typewidth = _card_font:getWidth(self.card:getType() .. " [ xx ]")
   local pd = 12
   g.push()
   g.scale(self.scale, self.scale)
@@ -158,10 +158,10 @@ function CardView:draw()
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
-  local type_str = self.card:getType() 
+  local type_str = self.card:getType()
   if self.card:isWidget() then
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
-                                            - self.card:getUsages())
+                                             - self.card:getUsages())
   end
   g.printf(type_str, pd, h - pd - _card_font:getHeight(), typewidth,
            "left")
