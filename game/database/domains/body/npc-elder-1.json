@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "dialogue":"[header name:Helpful Elder]\n[speed value:medium]Here is a [color value:blue]pack[color value:regular][sprite id:pack/scale:.7]for you,[pause value:.3] young one.\n\n[newpage wait:2]\n[header name:Helpful Elder]\n[speed value:medium]\nYou can look at your collected packs \n[color value:blue]with E,[color value:regular][pause value:.5] \nand open them if you [color value:blue]hold F.\n[color value:regular]\n\n[newpage wait:2.6]\n[header name:Helpful Elder]\n[speed value:medium]\nIts important to choose which cards to \n[color value:red]consume and gain experience,[pause value:.7][color value:regular] \nand which to[color value:blue] keep and add to \nyour buffer.[color value:regular]",
-  "drops":[],
   "efc":0,
+  "dialogue":"[header name:Helpful Elder]\nHere is a [color value:blue]pack[color value:regular][sprite id:pack/scale:.7]for you, young one.\n\n[newpage wait:2]\n[header name:Helpful Elder]\nYou can look at your collected packs \n[color value:blue]with E[color value:regular] \nand open them if you [color value:blue]hold F\n[color value:regular].\n\n[newpage wait:3]\n[header name:Helpful Elder]\nIts important to choose which cards to \n[color value:red]efcsume[color value:regular] \nand which to add to [color value:blue]\nyour buffer[color value:regular].",
+  "drops":[],
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,
