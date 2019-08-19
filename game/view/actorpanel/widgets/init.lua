@@ -42,7 +42,7 @@ end
 
 function Widgets:findCardSlot(widget_card)
   for i=1,3 do
-    for j=1,5 do
+    for j=1,#self.slots[i] do
       local slot = self.slots[i][j]
       if slot.widget == widget_card then
         return slot
