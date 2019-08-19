@@ -100,10 +100,6 @@ function SectorView:getTarget()
   return self.target
 end
 
-function SectorView:setEnergyPreview(value) -- luacheck: no self
-  return SECTOR_ENERGYBAR.setEnergyPreview(value)
-end
-
 function SectorView:initSector(sector)
   if sector and sector ~= self.sector then
     local g = love.graphics

@@ -51,7 +51,7 @@ function ActionHUD:init(route)
   self.info_lag = false
 
   -- Focus bar
-  self.focusbar = FocusBar(route)
+  self.focusbar = FocusBar(route, self.handview)
   self.focusbar:register("HUD")
 
   -- Hold bar
