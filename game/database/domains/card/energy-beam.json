@@ -48,14 +48,14 @@
           "type":"operator",
           "which":"ARC"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"ARC",
+  "cost":2,
   "desc":"",
+  "icon":"card-energy-beam",
   "name":"Energy Beam",
   "set":"gadgeteer",
   "type-description":"",
-  "icon":false,
   "one_time":false
 }
