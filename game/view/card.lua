@@ -164,7 +164,7 @@ function CardView:draw()
   for i = 1, self.card:getCost() do
     g.setColor(br, bg, bb, self.alpha)
     g.push()
-    g.translate(w - pd - (i - 1) * (pd + 2), pd)
+    g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     g.pop()
   end
