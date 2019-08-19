@@ -1,6 +1,6 @@
 
 local RES        = require 'resources'
-local PLACEMENTS = require 'domain.definitions.placements'
+local EQUIPMENTS = require 'domain.definitions.equipments'
 local COLORS     = require 'domain.definitions.colors'
 local FONT       = require 'view.helpers.font'
 
@@ -11,14 +11,14 @@ local _SQRSIZE = 36
 
 local _WIDGETGETTER
 local _WIDGETSTRING = {
-  "PLACEMENTS",
+  "EQUIPMENTS",
   "TRAITS",
   "CONDITIONS",
 }
 
 local function _getPlacements(body)
   local placements, n = {}, 0
-  for _,slot in ipairs(PLACEMENTS) do
+  for _,slot in ipairs(EQUIPMENTS) do
     local placement = body:getEquipmentAt(slot)
     n = n + 1
     placements[n] = placement
@@ -86,7 +86,7 @@ function WIDGETS.draw(g, actor, wtype)
       g.draw(icon, 0, 0, 0, _SQRSIZE/iw, _SQRSIZE/ih)
     elseif wtype == 1 then
       g.setColor(COLORS.BLACK)
-      g.printf(PLACEMENTS[PLACEMENTS[i]]:lower(), 0, 0, _SQRSIZE, "center")
+      g.printf(EQUIPMENTS[EQUIPMENTS[i]]:lower(), 0, 0, _SQRSIZE, "center")
     end
     g.pop()
   end
@@ -104,4 +104,3 @@ function WIDGETS.draw(g, actor, wtype)
 end
 
 return WIDGETS
-

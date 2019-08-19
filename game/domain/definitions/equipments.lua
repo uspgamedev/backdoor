@@ -1,4 +1,3 @@
-
 return {
   "wieldable",
   "wearable",

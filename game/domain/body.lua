@@ -2,7 +2,7 @@
 local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
-local PLACEMENTS  = require 'domain.definitions.placements'
+local EQUIPMENTS  = require 'domain.definitions.equipments'
 local APT         = require 'domain.definitions.aptitude'
 local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
@@ -28,7 +28,7 @@ function Body:init(specname)
   self.armor = 0
   self.widgets = {}
   self.equipped = {}
-  for placement in ipairs(PLACEMENTS) do
+  for placement in ipairs(EQUIPMENTS) do
     self.equipped[placement] = false
   end
   self.sector_id = nil
@@ -53,7 +53,7 @@ function Body:loadState(state)
   local equipped = self.equipped
   if state.equipped then
     equipped = {}
-    for _,placement in ipairs(PLACEMENTS) do
+    for _,placement in ipairs(EQUIPMENTS) do
       equipped[placement] = self.widgets[state.equipped[placement]]
     end
   end
@@ -69,7 +69,7 @@ function Body:saveState()
   state.killer = self.killer
   state.sector_id = self.sector_id
   local equipped = {}
-  for _,placement in ipairs(PLACEMENTS) do
+  for _,placement in ipairs(EQUIPMENTS) do
     local equip = self:getEquipmentAt(placement)
     if equip then
       local index = self:findWidget(equip)
@@ -442,4 +442,3 @@ function Body:getDialogue()
 end
 
 return Body
-
