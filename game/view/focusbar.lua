@@ -9,15 +9,13 @@ local ACTIONDEFS  = require 'domain.definitions.action'
 local math        = require 'common.math'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
+local RES         = require 'resources'
 
 --CONSTS--
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
-local _FOCUS_ICON = {
-  -12, -4, 0, -9, 12, -4, 12, 4, 0, 9, -12, 4
-}
 
 local _font
 
@@ -91,9 +89,9 @@ function FocusBar:draw()
   local focus = math.min(self.actor:getFocus(), maxfocus)
   local handbar_percent = focus / maxfocus
   local emergency_percent = .33
-  local handbar_width = 492/2
+  local handbar_width = 492/4
   local handbar_height = 12
-  local handbar_gap = (handbar_width/2) / (maxfocus-1) local font = FONT.get("Text", 18)
+  local font = FONT.get("Text", 18)
   local mx, my = 60, 20
   local slope = handbar_height + 2*my
   font:set()
@@ -117,22 +115,25 @@ function FocusBar:draw()
                     blu + (1-blu)*self.emer_fx_v
   end
   g.push()
-  g.translate(handbar_width/4, 0.3*(handbar_height + 2*my))
+  g.translate(0, 0.3*(handbar_height + 2*my))
+  local handbar_gap = handbar_width / (maxfocus-1)
+  local focus_icon = RES.loadTexture('focus-icon')
+  local iw, ih = focus_icon:getDimensions()
   for i=0,maxfocus-1 do
     g.push()
     g.translate(i * handbar_gap, 0)
     g.setColor(COLORS.EMPTY)
-    g.polygon('fill', _FOCUS_ICON)
+    g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     if i < focus then
       local alpha = a * math.min(1, (focus-i))
       g.setColor(red, gre, blu, alpha)
-      g.polygon('fill', _FOCUS_ICON)
+      g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
       local focused_card_view = self.handview:getFocusedCard()
       if focused_card_view then
         local cost = focused_card_view.card:getCost()
         if cost <= focus and i >= focus - cost then
           g.setColor(COLORS.WARNING * Color:new{1, 1, 1, alpha})
-          g.polygon('fill', _FOCUS_ICON)
+          g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
         end
       end
     end

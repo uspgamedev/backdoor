@@ -10,6 +10,7 @@ local vec2        = require 'cpml' .vec2
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 local TweenValue  = require 'view.helpers.tweenvalue'
+local RES         = require 'resources'
 
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
@@ -99,14 +100,6 @@ function CardView:getPoint()
                        - vec2(0,self.raised:get())
 end
 
-local function _repeat(char, n)
-  local str = ""
-  for _=1,n do
-    str = str .. char
-  end
-  return str
-end
-
 function CardView:draw()
   --Draw card background
   local x,y = self.position:unpack()
@@ -166,7 +159,15 @@ function CardView:draw()
   g.printf(type_str, pd, h - pd - _card_font:getHeight(), typewidth,
            "left")
   _info_font.set()
-  g.printf(_repeat('*', self.card:getCost()), pd, 0, w-pd*2, "right")
+  local focus_icon = RES.loadTexture('focus-icon')
+  local iw, ih = focus_icon:getDimensions()
+  for i = 1, self.card:getCost() do
+    g.setColor(br, bg, bb, self.alpha)
+    g.push()
+    g.translate(w - pd - (i - 1) * (pd + 2), pd)
+    g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+    g.pop()
+  end
   g.pop()
 
   if self.add > 0 then
