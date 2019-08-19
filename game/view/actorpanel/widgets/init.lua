@@ -29,7 +29,8 @@ function Widgets:init(actor, x, y)
   local sqsize = Slot.SQRSIZE
   for i=1,3 do
     self.slots[i] = {}
-    for j=1,5 do
+    local n = (i == 1) and 2 or 5
+    for j=1,n do
       local slot = Slot((j - 1) * (sqsize + _PD),
                         i*(_MG*2 + self.font:getHeight()),
                         i == _PLACEMENTS and PLACEMENTS[PLACEMENTS[j]])
