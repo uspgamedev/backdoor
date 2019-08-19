@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "efc":0,
-  "dialogue":"[header name:Wise Veteran]\nThere are two types of cards, \n[color value:blue]arts[color value:regular] \nand [color value:blue]widgets\n[color value:regular].\n\n[newpage wait:2]\n[header name:Wise Veteran]\nArt cards produce an [color value:blue]\nimmediate effect[color value:regular] but \nwidgets are different.\n\n[newpage wait:2.5]\n[header name:Wise Veteran]\nYou'll get a [color value:blue]lasting effect\n[color value:regular] or \n[color value:blue]equipment\n[color value:regular].\n\n[newpage wait:2]\n[header name:Wise Veteran]\nBe careful though, because widgets may have \na [color value:blue]limited number of charges \n[color value:regular].",
+  "dialogue":"[header name:Wise Veteran]\nThere are two types of cards, \n[color value:blue]arts[color value:regular] \nand [color value:blue]widgets\n[color value:regular].\n\n[newpage wait:2]\n[header name:Wise Veteran]\nArt cards produce an [color value:blue]\nimmediate effect[color value:regular] but \nwidgets are different.\n\n[newpage wait:2.5]\n[header name:Wise Veteran]\nYou'll get a [color value:blue]lasting effect\n[color value:regular] or \n[color value:blue]equipment\n[color value:regular].\n\n[newpage wait:2]\n[header name:Wise Veteran]\nBe careful though, because widgets may have \na [color value:blue]limited number of charges. \n[color value:regular]",
   "drops":[],
+  "efc":0,
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,
