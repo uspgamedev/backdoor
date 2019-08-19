@@ -1,9 +1,9 @@
 {
   "attr":"ARC",
+  "cost":1,
   "desc":"",
   "icon":"card-focus-gem",
   "name":"Focus Gem",
-  "cost":1,
   "set":"arcanist",
   "type-description":"",
   "widget":{
@@ -13,7 +13,7 @@
         "op":"+",
         "val":2
       }],
-    "placement":"offhand",
+    "placement":"wearable",
     "status-tags":[],
     "trigger":"on_focus_end"
   },

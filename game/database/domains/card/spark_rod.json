@@ -53,7 +53,7 @@
     },
     "charges":3,
     "operators":[],
-    "placement":"weapon",
+    "placement":"wieldable",
     "status-tags":[],
     "trigger":"on_use",
     "trigger-condition":{

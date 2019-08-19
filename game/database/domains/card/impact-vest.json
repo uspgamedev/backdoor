@@ -13,7 +13,7 @@
         "op":"+",
         "val":1
       }],
-    "placement":"suit",
+    "placement":"wearable",
     "status-tags":[],
     "trigger":false
   },

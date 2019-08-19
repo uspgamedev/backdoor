@@ -13,7 +13,7 @@ local _PD = 4
 local _MG = 24
 
 local _WIDGETSTRING = {
-  "PLACEMENTS",
+  "EQUIPMENT",
   "TRAITS",
   "CONDITIONS",
 }
@@ -105,4 +105,3 @@ function Widgets:render(g)
 end
 
 return Widgets
-

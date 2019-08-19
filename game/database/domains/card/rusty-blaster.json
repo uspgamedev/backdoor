@@ -54,7 +54,7 @@
     },
     "charges":0,
     "operators":[],
-    "placement":"weapon",
+    "placement":"wieldable",
     "status-tags":[],
     "trigger":false
   }

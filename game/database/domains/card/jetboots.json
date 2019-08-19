@@ -49,7 +49,7 @@
     },
     "charges":8,
     "operators":[],
-    "placement":"accessory",
+    "placement":"wieldable",
     "status-tags":[],
     "trigger":"on_use"
   },
