@@ -1,8 +1,20 @@
 {
   "appearance":"stove",
-  "efc":0,
   "description":"",
-  "drops":[],
+  "drops":[{
+      "droprate":50,
+      "droptype":"pack"
+    },{
+      "droprate":50,
+      "droptype":"pack"
+    },{
+      "droprate":50,
+      "droptype":"food"
+    },{
+      "droprate":30,
+      "droptype":"food2"
+    }],
+  "efc":0,
   "faction":"agressive",
   "fin":-2,
   "name":"Stove Construct",
