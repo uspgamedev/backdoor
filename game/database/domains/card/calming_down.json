@@ -1,9 +1,9 @@
 {
   "attr":"ANI",
+  "cost":5,
   "desc":"",
   "icon":"card-meditation",
   "name":"Meditation",
-  "cost":3,
   "set":"brawler",
   "type-description":"",
   "widget":{
