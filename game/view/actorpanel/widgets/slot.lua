@@ -68,7 +68,7 @@ function Slot:render(g)
     g.setColor(COLORS.BLACK + flashfx * 2)
     g.draw(icon, 0, 0, 0, sqsize/iw, sqsize/ih)
   elseif self.icon then
-    g.setColor(COLORS.NEUTRAL)
+    g.setColor(COLORS.BLACK)
     local icon = RES.loadTexture(self.icon)
     icon:setFilter('linear', 'linear')
     local iw, ih = icon:getDimensions()
