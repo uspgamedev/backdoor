@@ -3,7 +3,6 @@
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
-local Color       = require 'common.color'
 local ACTIONDEFS  = require 'domain.definitions.action'
 
 local math        = require 'common.math'
@@ -87,8 +86,6 @@ function FocusBar:draw()
   -- draw hand countdown
   local maxfocus = ACTIONDEFS.MAX_FOCUS
   local focus = math.min(self.actor:getFocus(), maxfocus)
-  local handbar_percent = focus / maxfocus
-  local emergency_percent = .33
   local handbar_width = 492/4
   local handbar_height = 12
   local font = FONT.get("Text", 18)
@@ -108,12 +105,10 @@ function FocusBar:draw()
                     handbar_width + mx, handbar_height + my)
   --Drawing focus bar
   g.setLineWidth(1)
-  local red, gre, blu, a = unpack(COLORS.NOTIFICATION)
-  if handbar_percent <= emergency_percent then
-    red, gre, blu = red + (1-red)*self.emer_fx_v,
-                    gre + (1-gre)*self.emer_fx_v,
-                    blu + (1-blu)*self.emer_fx_v
-  end
+  local red, gre, blu, a = unpack(COLORS.WARNING)
+  red, gre, blu = red + (1-red)*self.emer_fx_v,
+                  gre + (1-gre)*self.emer_fx_v,
+                  blu + (1-blu)*self.emer_fx_v
   g.push()
   g.translate(0, 0.3*(handbar_height + 2*my))
   local handbar_gap = handbar_width / (maxfocus-1)
@@ -125,14 +120,14 @@ function FocusBar:draw()
     g.setColor(COLORS.EMPTY)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     if i < focus then
-      local alpha = a * math.min(1, (focus-i))
-      g.setColor(red, gre, blu, alpha)
+      g.setColor(COLORS.FOCUS)
       g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
       local focused_card_view = self.handview:getFocusedCard()
       if focused_card_view then
         local cost = focused_card_view.card:getCost()
+        local alpha = a * math.min(1, (focus-i))
         if cost <= focus and i >= focus - cost then
-          g.setColor(COLORS.WARNING * Color:new{1, 1, 1, alpha})
+          g.setColor(red, gre, blu, alpha)
           g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
         end
       end
