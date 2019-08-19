@@ -246,13 +246,11 @@ end
 --[[ Action methods ]]--
 
 function Actor:isWidget(slot)
-  return type(slot) == 'string'
-         and slot:match("^WIDGET/%d+$")
+  return type(slot) == 'string' and slot:match("^WIDGET/%d+$")
 end
 
 function Actor:isCard(slot)
-  return type(slot) == 'string'
-         and slot:match("^CARD/%d+$")
+  return type(slot) == 'string' and slot:match("^CARD/%d+$")
 end
 
 function Actor:getSignature()
@@ -521,6 +519,9 @@ function Actor:tick()
 end
 
 function Actor:resetFocus()
+  if self:isFocused() then
+    self:endFocus()
+  end
   self.focus = DEFS.ACTION.MAX_FOCUS
 end
 
