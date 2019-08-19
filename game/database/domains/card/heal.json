@@ -39,7 +39,7 @@
   "icon":"card-heal",
   "name":"Heal",
   "pp":3,
-  "set":"arcanist",
+  "set":"sage",
   "type-description":"",
   "one_time":false
 }
