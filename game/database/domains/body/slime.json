@@ -1,17 +1,20 @@
 {
   "appearance":"slime",
-  "efc":-1,
   "description":"Delicious when fried.",
   "drops":[{
-      "droprate":10,
+      "droprate":20,
       "droptype":"pack"
     },{
-      "droprate":80,
+      "droprate":99,
       "droptype":"food"
     },{
-      "droprate":10,
+      "droprate":20,
       "droptype":"pack"
+    },{
+      "droprate":20,
+      "droptype":"food2"
     }],
+  "efc":-1,
   "faction":"agressive",
   "fin":-2,
   "name":"Slime",
