@@ -161,7 +161,7 @@ function CardView:draw()
   local type_str = self.card:getType()
   if self.card:isWidget() then
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
-                                             - self.card:getUsages())
+                                            - self.card:getUsages())
   end
   g.printf(type_str, pd, h - pd - _card_font:getHeight(), typewidth,
            "left")
