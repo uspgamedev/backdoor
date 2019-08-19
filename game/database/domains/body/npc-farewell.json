@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "efc":0,
-  "dialogue":"[header name:Guard]\nHere's one last tip...\n\n[newpage wait:1.5]\n[header name:Guard]\n[color value:blue]Press F\n[color value:regular] to use stairs and[endl]\n[color value:blue]Hold SHIFT\n[color value:regular] to display the efctrol \nhints!\n\n[newpage wait:2.5]\n[header name:Guard]\nGood luck! You'll need it!",
+  "dialogue":"[header name:Guard]\nHere's one last tip...\n\n[newpage wait:1.5]\n[header name:Guard]\n[color value:blue]Press F\n[color value:regular] to use stairs and[endl]\n[color value:blue]Hold SHIFT\n[color value:regular] to display the control \nhints!\n\n[newpage wait:2.5]\n[header name:Guard]\nGood luck! [pause value:.5]You'll need it!",
   "drops":[],
+  "efc":0,
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,
