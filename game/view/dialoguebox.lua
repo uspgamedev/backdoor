@@ -44,10 +44,10 @@ local _CHAR_FONT = {
 --Time a character must stay active before next one appears
 local _CHAR_SPEED = {
   slow      = .1,
-  medium    = .05,
-  regular   = .02,
-  fast      = .01,
-  ultrafast = .005
+  medium    = .04,
+  regular   = .025,
+  fast      = .015,
+  ultrafast = .01
 }
 
 --Color a character can have
@@ -57,7 +57,10 @@ local _CHAR_COLOR = {
   blue    = "VALID",
   green   = "SUCCESS",
   grey    = "HALF_VISIBLE",
-  purple  = "PP",
+  pp      = "PP",
+  cor     = "COR",
+  arc     = "ARC",
+  ani     = "ANI"
 }
 
 --Opacity for a character color
@@ -75,14 +78,17 @@ local _WAVE_REGULATOR = 10
 local _SHAKE_MAGNITUDE = .75
 
 --Newpage string effect
-local _NEWPAGE_EFFECT = "[color value:grey] ( [size value:small]" ..
+local _NEWPAGE_EFFECT = "[speed value:fast][pause value:.2]" ..
+                        "[color value:grey] ( [size value:small]" ..
                         "[style value:wave]. . .[style value:none]" ..
                         "[size value:regular] )[color value:regular]" ..
-                        "[pause value:%f][changepage][reset]"
+                        "[pause value:%f][changepage][reset]" ..
+                        "[speed value:regular]"
 
 --Header string effect
-local _HEADER_EFFECT = "[color value:green]%s:[color value:regular]" ..
-                       "[endl value:1]"
+local _HEADER_EFFECT = "[speed value:regular][pause value:.2]" ..
+                       "[color value:green]%s:[color value:regular]" ..
+                       "[pause value:.10][endl value:1]"
 
 --Forward declaration for local functions
 local parseTag
@@ -150,7 +156,10 @@ color - set current color to draw text
     blue    - blue color
     green   - green color
     grey    - grey color
-    purple  - purple color
+    pp      - color identity for pp in-game
+    cor     - color identity for corporis in-game
+    arc     - color identity for arcana in-game
+    ani     - color identity for anima in-game
 
 size - size of font to draw text
   value - what size to use
@@ -166,13 +175,13 @@ opacity - Set opacity to draw text
 
 image - Will draw an image on your text
   id - identifier for image (just as it is used in the database)
-    <any string> -- will search for an image in the db with this name to draw
+    <any string> - will search for an image in the db with this name to draw
   scale - (optional) defines a scale to apply when drawing this image
     <any number value> - set scale for this value
 
 sprite - Will draw a sprite on your text
   id - identifier for sprite (just as it is used in the database)
-    <any string> -- will search for an image in the db with this name to draw
+    <any string> - will search for an image in the db with this name to draw
   scale - (optional) defines a scale to apply when drawing this sprite
     <any number value> - set scale for this value
 
@@ -187,7 +196,12 @@ endl - Create a given amount of linebreaks
 newpage - Create a new page after this tag, waiting an amount of time
   wait - how long to wait on current page before going to next
     <any number value> - will wait this much time
-(obs: 'newpage' effect resets 'size', 'color' and 'style' effects to default)
+(obs: 'newpage' effect resets 'speed', 'size', 'color' and 'style' effects to default)
+
+header - Create a padronized header given a name
+  name - name of the character to appear in the header
+    <any string> - name displayed on header
+(obs: 'header' effect resets 'speed', and 'color' effects to default)
 
 ============================================================
 
@@ -214,7 +228,7 @@ function DialogueBox:init(body, i, j, side)
   self.char_timer = 0
 
   self.text_line_h = 4*_CHAR_FONT.regular:getHeight()/5
-  self.text_start_up_time = .15
+  self.text_start_up_time = 0
 
   self.text = self:stylizeText(body:getDialogue())
 
@@ -287,7 +301,8 @@ function DialogueBox:draw()
 
         --Update entrance fx for text objects
         if c.page == self.cur_page then
-          c.enter = math.min(c.enter + _ENTER_SPEED * dt, 1)
+          local mod = c.type == "character" and 1 or .2
+          c.enter = math.min(c.enter + _ENTER_SPEED * mod * dt, 1)
         else
           c.enter = math.max(c.enter - _EXIT_SPEED * dt, 0)
         end

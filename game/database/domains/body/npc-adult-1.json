@@ -1,8 +1,8 @@
 {
   "appearance":"corgi",
-  "efc":0,
-  "dialogue":"[header name:Worried Adult]\nAre you well rested for the journey?\n\n[newpage wait:2]\n[header name:Worried Adult]\nRemember that to get a new hand of cards, and \nrestart your [color value:purple]Focus\n[color value:regular], you need to \n[color value:blue]hold A[color value:regular].\n\n[newpage wait:3.3]\n[header name:Worried Adult]\nHowever, that costs you [color value:purple][endl]\nPlay Points (PP)[color value:regular]. You can get some of my [color value:purple]food\n[color value:regular] [style value:wave][sprite id:food/scale:.7][style value:none] if you need to \n replenish some...",
+  "dialogue":"[header name:Worried Adult]\nAre you well rested for the journey?\n\n[newpage wait:1.2]\n[header name:Worried Adult]\nRemember that to get a new hand of cards, [pause value:.25]and \nrestart your [color value:pp]Focus,[pause value:.25]\n[color value:regular] you need to \n[color value:blue]hold A.[color value:regular]\n\n[newpage wait:3.3]\n[header name:Worried Adult]\nHowever, that costs you [color value:pp][endl]\nPlay Points (PP).[color value:regular] [pause value:.5]You can get some of my [color value:pp]food\n[color value:regular] [style value:wave][sprite id:food/scale:.7][style value:none] if you need to \n replenish some...",
   "drops":[],
+  "efc":0,
   "extends":"npc-base",
   "faction":"allied",
   "fin":0,
