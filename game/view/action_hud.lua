@@ -212,8 +212,6 @@ function ActionHUD:actionRequested()
     else
       action_request = {DEFS.ACTION.IDLE}
     end
-  elseif INPUT.wasActionPressed('SPECIAL') then
-    action_request = {ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY}
   elseif INPUT.wasActionPressed('ACTION_3') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_2') then

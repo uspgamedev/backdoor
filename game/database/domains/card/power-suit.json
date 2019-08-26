@@ -8,17 +8,18 @@
   "set":"brawler",
   "type-description":"",
   "widget":{
-    "charges":0,
+    "charges":5,
     "operators":[{
-        "attr":"VIT",
-        "op":"+",
-        "val":5
-      },{
         "attr":"SPD",
         "op":"-",
         "val":4
       }],
-    "equipment":"wearable",
+    "equipment":{
+      "active":false,
+      "defensive":{
+        "defense":3
+      }
+    },
     "status-tags":[],
     "trigger":false
   }

@@ -49,10 +49,6 @@ function Card:getIconTexture()
   return self:getSpec('icon')
 end
 
-function Card:getPPReward()
-  return self:getSpec('pp') or 0
-end
-
 function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
@@ -69,6 +65,10 @@ function Card:isOneTimeOnly()
   return self:getSpec('one_time')
 end
 
+function Card:getCost()
+  return self:getSpec('cost')
+end
+
 function Card:isArt()
   return not not self:getSpec('art')
 end
@@ -83,13 +83,13 @@ function Card:getType()
   end
 end
 
+--[[ Art methods ]]--
+
 function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
 
-function Card:getCost()
-  return self:getSpec('cost')
-end
+--[[ Widget methods ]]--
 
 function Card:getWidgetTrigger()
   return self:getSpec('widget')['trigger']
@@ -113,26 +113,15 @@ function Card:hasStatusTag(tag)
   return false
 end
 
-function Card:getWidgetActivation()
-  return self:getSpec('widget')['activation']
-end
-
 function Card:getWidgetTriggeredAbility()
   return self:getSpec('widget')['auto_activation']
 end
 
-function Card:getWidgetAbility()
-  local activation = self:getWidgetActivation()
-  return activation and activation.ability
-end
-
-function Card:getWidgetActivationCost()
-  local activation = self:getWidgetActivation()
-  return activation and activation.cost
-end
-
 function Card:getWidgetPlacement()
-  return self:getSpec('widget').equipment
+  local equipspec = self:getSpec('widget').equipment
+  return equipspec
+     and ((equipspec.active and 'wieldable')
+       or (equipspec.defensive and 'wearable'))
 end
 
 function Card:getWidgetCharges()
@@ -188,11 +177,12 @@ function Card:getEffect()
       local trigger = self:getWidgetTrigger()
       effect = effect .. (" [%d/%s charges]"):format(charges, trigger)
     end
-    local activation = self:getWidgetActivation() if activation then
-      local ability, cost = activation.ability, activation.cost
-      effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
-                      .. ABILITY.preview(ability, self:getOwner(), inputs)
-    end
+    -- TODO: describe created cards
+    --local activation = self:getWidgetActivation() if activation then
+    --  local ability, cost = activation.ability, activation.cost
+    --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
+    --                  .. ABILITY.preview(ability, self:getOwner(), inputs)
+    --end
     local auto = self:getWidgetTriggeredAbility() if auto then
       local ability, trigger = auto.ability, auto.trigger
       effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
@@ -211,3 +201,4 @@ function Card:getEffect()
 end
 
 return Card
+

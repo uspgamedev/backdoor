@@ -7,13 +7,18 @@
   "set":"sage",
   "type-description":"",
   "widget":{
-    "charges":0,
+    "charges":5,
     "operators":[{
         "attr":"ANI",
         "op":"+",
         "val":2
       }],
-    "equipment":"wearable",
+    "equipment":{
+      "active":false,
+      "defensive":{
+        "defense":0
+      }
+    },
     "status-tags":[],
     "trigger-condition":{
       "effects":[],
