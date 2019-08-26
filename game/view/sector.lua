@@ -10,6 +10,7 @@ local TILE        = require 'common.tile'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
+local EXP_DIR     = require 'domain.definitions.expanded_dir'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
@@ -540,13 +541,13 @@ function _isInCone(origin_i, origin_j, target_i, target_j, dir)
   local i = target_i - origin_i
   local j = target_j - origin_j
 
-  if     dir == "UP" then   --UP
+  if     dir == "UP" then
     return j >= i and j <= -i
-  elseif dir == "RIGHT" then   --RIGHT
+  elseif dir == "RIGHT" then
     return i >= -j and i <= j
-  elseif dir == "DOWN" then   --DOWN
+  elseif dir == "DOWN" then
     return j <= i and j >= -i
-  elseif dir == "LEFT" then     --LEFT
+  elseif dir == "LEFT" then
     return i <= -j and i >= j
   else
     return error(("Not valid direction for cone function: %s"):format(dir))
@@ -592,8 +593,8 @@ function SectorView:moveCursor(di, dj)
     local pos = queue.pop()
 
     --Else add all other valid positions to the queue
-    for _,dir in ipairs(DIR) do
-      local i, j = unpack(DIR[dir])
+    for _,dir in ipairs(EXP_DIR) do
+      local i, j = unpack(EXP_DIR[dir])
       local target_pos = {pos[1] + i, pos[2] + j}
       --Check if position is inside sector
       if sector:isInside(unpack(target_pos))
@@ -603,7 +604,8 @@ function SectorView:moveCursor(di, dj)
          and _isInCone(self.cursor.i, self.cursor.j,
                        target_pos[1], target_pos[2], dirname)
          -- Check if position is within range
-         and self.cursor.range_checker(unpack(target_pos)) then
+         and self.cursor.range_checker(unpack(target_pos))
+      then
 
         -- if it's a valid target use it!
         if self.cursor.validator(unpack(target_pos)) then
