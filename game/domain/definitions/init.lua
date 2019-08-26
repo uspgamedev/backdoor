@@ -32,7 +32,7 @@ DEFS.CARD_ATTRIBUTES = {
 }
 
 DEFS.HAND_LIMIT = 5
-DEFS.PACK_SIZE  = 5
+DEFS.PACK_SIZE  = 3
 
 DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
