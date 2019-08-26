@@ -13,7 +13,7 @@ function ANIM:script(route, view, report)
     local card_view = CardView(report.card)
     view.action_hud.handview:addCard(card_view)
     action_hud:disableCardInfo()
-    local eqp_slot = view.actor.widgets.slots[1][1]
+    local eqp_slot = view.actor.widgets:getActiveEquipmentSlot()
     Transmission(eqp_slot, card_view, 0.5, COLORS.FLASH_DRAW)
     self.wait(delay:set(0.2))
   end

@@ -51,6 +51,10 @@ function Widgets:findCardSlot(widget_card)
   end
 end
 
+function Widgets:getActiveEquipmentSlot()
+  return self.slots[1][1]
+end
+
 function Widgets:updatePlacements()
   local equipment = self.slots[_EQUIPMENTS]
   for n,slot in ipairs(EQUIPMENTS) do
@@ -62,7 +66,7 @@ end
 function Widgets:updateTraits()
   local traits = self.slots[_TRAITS]
   local n = 0
-  for i,widget in self.actor:getBody():eachWidget() do
+  for _,widget in self.actor:getBody():eachWidget() do
     if not widget:getWidgetPlacement() and widget:isWidgetPermanent() then
       n = n + 1
       traits[n]:setWidget(widget)
@@ -76,7 +80,7 @@ end
 function Widgets:updateConditions()
   local conditions = self.slots[_CONDITIONS]
   local n = 0
-  for i,widget in self.actor:getBody():eachWidget() do
+  for _,widget in self.actor:getBody():eachWidget() do
     if not widget:getWidgetPlacement() and not widget:isWidgetPermanent() then
       n = n + 1
       conditions[n]:setWidget(widget)
@@ -87,7 +91,7 @@ function Widgets:updateConditions()
   end
 end
 
-function Widgets:process(dt)
+function Widgets:process(_)
   self:updatePlacements()
   self:updateTraits()
   self:updateConditions()
@@ -106,3 +110,4 @@ function Widgets:render(g)
 end
 
 return Widgets
+
