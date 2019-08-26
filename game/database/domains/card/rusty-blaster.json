@@ -8,53 +8,14 @@
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
-    "activation":{
-      "ability":{
-        "effects":[{
-            "attr":"=arc",
-            "base":-2,
-            "name":"damage_on_target",
-            "target":"=body",
-            "type":"effect",
-            "sfx":false
-          },{
-            "attr":"=arc",
-            "base":-2,
-            "name":"damage_on_target",
-            "target":"=body",
-            "type":"effect",
-            "sfx":false
-          },{
-            "attr":"=arc",
-            "base":-2,
-            "name":"damage_on_target",
-            "target":"=body",
-            "type":"effect",
-            "sfx":false
-          }],
-        "inputs":[{
-            "body-only":[],
-            "max-range":5,
-            "name":"choose_target",
-            "output":"target",
-            "type":"input"
-          },{
-            "name":"get_body_at",
-            "output":"body",
-            "pos":"=target",
-            "type":"operator"
-          },{
-            "name":"get_attribute",
-            "output":"arc",
-            "type":"operator",
-            "which":"ARC"
-          }]
-      },
-      "cost":10
-    },
-    "charges":0,
+    "charges":5,
     "operators":[],
-    "equipment":"wieldable",
+    "equipment":{
+      "defensive":false,
+      "active":{
+        "cards":[]
+      }
+    },
     "status-tags":[],
     "trigger":false
   }

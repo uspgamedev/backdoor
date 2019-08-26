@@ -7,13 +7,14 @@
   "cost":5,
   "type-description":"",
   "widget":{
-    "charges":0,
-    "operators":[{
-        "attr":"VIT",
-        "op":"+",
-        "val":1
-      }],
-    "equipment":"wearable",
+    "charges":5,
+    "operators":[],
+    "equipment":{
+      "active":false,
+      "defensive":{
+        "defense":1
+      }
+    },
     "status-tags":[],
     "trigger":false
   },

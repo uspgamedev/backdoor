@@ -11,12 +11,8 @@ local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.action_hud'
-local Util          = require "steaming.util"
 local Draw          = require "draw"
 local Signal        = require "steaming.extra_libs.hump.signal"
-
-
-local ReadyAbilityView = require 'view.readyability'
 
 local state = {}
 
@@ -27,10 +23,6 @@ local _route
 local _next_action
 local _view
 
-local _widget_abilities = {
-  ready = false,
-  list = {},
-}
 local _save_and_quit
 
 local _ACTION = {}
@@ -53,41 +45,6 @@ local function _startTask(action, ...)
   end
 end
 
---[[ Abilities ]]--
-
-local function _updateAbilityList()
-  local n = 0
-  local list = _widget_abilities.list
-  local ready = _widget_abilities.ready
-  for _,widget in _route.getControlledActor():getBody():eachWidget() do
-    if widget:getWidgetAbility() then
-      n = n + 1
-      list[n] = widget
-    end
-  end
-  if n > 0 then
-    local is_ready
-    for i = 1, n do
-      -- if there is a ready ability, keep it ready
-      is_ready = is_ready or list[i]:getId() == ready
-    end
-    -- if there isn't, select the first one
-    ready = is_ready and ready or list[1]:getId()
-  else
-    -- no ability to select
-    ready = false
-  end
-  _widget_abilities.ready = ready
-  _widget_abilities.list = list
-end
-
-local function _selectedAbilitySlot()
-  local ready = _widget_abilities.ready
-  if not ready then return false end
-  local widget = Util.findId(ready)
-  return _route.getControlledActor():getBody():findWidget(widget)
-end
-
 --[[ State Methods ]]--
 
 function state:enter(_, route, view)
@@ -95,30 +52,12 @@ function state:enter(_, route, view)
   _route = route
   _save_and_quit = false
 
-  _updateAbilityList()
-
   _view = view
-  local ability_idx = 1
-  for i, widget in ipairs(_widget_abilities.list) do
-    if widget:getId() == _widget_abilities.ready then
-      ability_idx = i
-      break
-    end
-  end
-  local ability_view = ReadyAbilityView(_widget_abilities.list, ability_idx)
-  ability_view:register("HUD")
-  ability_view:enter()
-  _view.ability = ability_view
   _view.action_hud:enableTurn(true)
 
 end
 
 function state:leave()
-  for i = #_widget_abilities.list, 1, -1 do
-    _widget_abilities.list[i] = nil
-  end
-  _view.ability:exit()
-  _view.ability = nil
 end
 
 function state:resume(_, args)
@@ -317,23 +256,5 @@ _ACTION[DEFS.ACTION.IDLE] = function()
   _useAction(DEFS.ACTION.IDLE)
 end
 
-_ACTION[ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION] = function()
-  if _widget_abilities.list[2] then
-    PLAYSFX 'open-menu'
-    SWITCHER.push(GS.READY_ABILITY, _widget_abilities, _view.ability)
-  else
-    PLAYSFX 'denied'
-  end
-end
-
-_ACTION[ActionHUD.INTERFACE_COMMANDS.USE_READY_ABILITY] = function()
-  local slot = _selectedAbilitySlot()
-  if slot then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET, { widget_slot = slot })
-  else
-    PLAYSFX 'denied'
-  end
-end
-
 return state
+

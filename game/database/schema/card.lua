@@ -1,5 +1,4 @@
 
-local DEFS_PACK = require 'lux.pack' 'domain.definitions'
 local DEFS = require 'domain.definitions'
 
 return {
@@ -33,8 +32,6 @@ return {
         options = DEFS.TRIGGERS },
       { id = 'trigger-condition', name = "Spend Trigger Condition",
         type = 'ability', optional = true },
-      { id = 'equipment', name = "Placement", type = 'enum',
-        options = DEFS_PACK.equipments, optional = true },
       {
         id = 'operators', name = "Static Attribute Operator",
         type = 'array', schema = {
@@ -53,15 +50,6 @@ return {
         }
       },
       {
-        id = 'activation', name = "Activated Ability", type = 'section',
-        schema = {
-          { id = 'cost', name = "Cost", type = 'range', min = 0,
-            max = DEFS.MAX_PP },
-          { id = 'ability', name = "Ability", type = 'ability',
-            hint = "Happens when widget is activated" }
-        }
-      },
-      {
         id = 'auto_activation', name = "Triggered Ability", type = 'section',
         schema = {
           { id = 'trigger', name = "Trigger", type = 'enum',
@@ -70,6 +58,16 @@ return {
             hint = "Happens when trigger is detected" }
         }
       },
-    },
+      { id = 'equipment', name = "Equipment", type = 'section',
+        schema = { { id = 'active', name = "Active", type = 'section',
+                     schema = { { id = 'cards', name = "Action Card",
+                                  type = 'array',
+                                  schema = { id = 'card', name = 'Card',
+                                             type = 'enum',
+                                             options = 'domains.card' } } } },
+                   { id = 'defensive', name = "Defensive", type = 'section',
+                     schema = { { id = 'defense', name = "Defense",
+                                  type = 'integer', range = { 0, 99 } } } }, } }
+    }
   }
 }

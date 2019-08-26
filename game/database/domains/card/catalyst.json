@@ -8,7 +8,7 @@
   "type-description":"",
   "widget":{
     "charges":1,
-    "equipment":"wearable",
+    "equipment":false,
     "operators":[{
         "attr":"ARC",
         "op":"+",

@@ -7,39 +7,14 @@
   "set":"brawler",
   "type-description":"",
   "widget":{
-    "activation":{
-      "ability":{
-        "effects":[{
-            "attr":"=cor",
-            "base":-1,
-            "name":"damage_on_target",
-            "target":"=body",
-            "type":"effect",
-            "sfx":false
-          }],
-        "inputs":[{
-            "body-only":[],
-            "max-range":1,
-            "name":"choose_target",
-            "output":"target",
-            "type":"input"
-          },{
-            "name":"get_body_at",
-            "output":"body",
-            "pos":"=target",
-            "type":"operator"
-          },{
-            "name":"get_attribute",
-            "output":"cor",
-            "type":"operator",
-            "which":"COR"
-          }]
-      },
-      "cost":10
-    },
     "charges":5,
     "operators":[],
-    "equipment":"wieldable",
+    "equipment":{
+      "defensive":false,
+      "active":{
+        "cards":[]
+      }
+    },
     "status-tags":[],
     "trigger":"on_use"
   },

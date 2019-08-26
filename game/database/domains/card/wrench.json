@@ -7,68 +7,14 @@
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
-    "activation":{
-      "ability":{
-        "effects":[{
-            "attr":"=base",
-            "base":-2,
-            "name":"damage_on_target",
-            "target":"=target",
-            "type":"effect",
-            "sfx":false
-          }],
-        "inputs":[{
-            "body-only":[],
-            "max-range":1,
-            "name":"choose_target",
-            "output":"pos",
-            "type":"input"
-          },{
-            "name":"get_attribute",
-            "output":"cor",
-            "type":"operator",
-            "which":"COR"
-          },{
-            "name":"self",
-            "output":"self",
-            "type":"operator"
-          },{
-            "actor":"=self",
-            "name":"get_actor_body",
-            "output":"body",
-            "type":"operator"
-          },{
-            "body":"=body",
-            "name":"get_body_pos",
-            "output":"center",
-            "type":"operator"
-          },{
-            "body-type":"machine",
-            "ignore-owner":true,
-            "name":"count_nearby_bodies",
-            "output":"count",
-            "pos":"=center",
-            "range":5,
-            "type":"operator"
-          },{
-            "lhs":"=count",
-            "name":"integer_binop",
-            "op":"+",
-            "output":"base",
-            "rhs":"=cor",
-            "type":"operator"
-          },{
-            "name":"get_body_at",
-            "output":"target",
-            "pos":"=pos",
-            "type":"operator"
-          }]
-      },
-      "cost":5
-    },
     "charges":5,
     "operators":[],
-    "equipment":"wieldable",
+    "equipment":{
+      "defensive":false,
+      "active":{
+        "cards":[]
+      }
+    },
     "status-tags":[],
     "trigger":"on_use"
   },
