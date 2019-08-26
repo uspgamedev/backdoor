@@ -12,8 +12,10 @@
         }],
       "inputs":[{
           "empty-tile":true,
+          "has-floor":true,
           "max-range":2,
           "name":"choose_target",
+          "non-wall":true,
           "output":"target_pos",
           "type":"input"
         },{
