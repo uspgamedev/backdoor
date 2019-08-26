@@ -1,22 +1,29 @@
 {
   "attr":"COR",
+  "cost":5,
   "desc":"A mass-produced weapon.",
   "icon":"card-laser-spear",
   "name":"Laser Spear",
-  "cost":5,
   "set":"brawler",
   "type-description":"",
   "widget":{
     "charges":5,
-    "operators":[],
     "equipment":{
-      "defensive":false,
       "active":{
-        "cards":[]
-      }
+        "cards":[{
+            "card":"laser-cut"
+          }]
+      },
+      "defensive":false
     },
+    "operators":[],
     "status-tags":[],
-    "trigger":"on_use"
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false,
+    "auto_activation":false
   },
   "one_time":false
 }

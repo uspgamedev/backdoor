@@ -1,6 +1,4 @@
 
-local DEFS = require 'domain.definitions'
-
 local DRAWHAND = {}
 
 DRAWHAND.input_specs = {}
@@ -26,7 +24,8 @@ function DRAWHAND.perform(actor, inputvalues) -- luacheck: no unused
   actor:spendPP(actor:getBody():getConsumption())
   actor:discardHand()
   actor:resetFocus()
-  for _ = 1, DEFS.HAND_LIMIT do
+  actor:createEquipmentCards()
+  while not actor:isHandFull() do
     actor:drawCard()
   end
 end

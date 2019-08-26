@@ -369,6 +369,23 @@ function Actor:drawCard()
   })
 end
 
+function Actor:createEquipmentCards()
+  local active_eqp = self:getBody():getEquipmentAt('wieldable')
+  if active_eqp then
+    active_eqp:addUsages()
+    for _,card_spec in active_eqp:eachActiveEquipmentCards() do
+      local card = Card(card_spec.card)
+      card:setOwner(self)
+      table.insert(self.hand, card)
+      coroutine.yield('report', {
+        type = "create_equipment_card",
+        actor = self,
+        card = card,
+      })
+    end
+  end
+end
+
 function Actor:getHandCard(index)
   return index and self.hand[index]
 end
