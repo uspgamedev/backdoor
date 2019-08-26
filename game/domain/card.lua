@@ -149,6 +149,10 @@ function Card:isSpent()
   return max > 0 and self:getUsages() >= max
 end
 
+function Card:eachActiveEquipmentCards()
+  return ipairs(self:getSpec('widget').equipment.active.cards)
+end
+
 function Card:resetTicks()
   self.ticks = 0
 end

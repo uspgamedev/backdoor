@@ -62,9 +62,9 @@ return {
         schema = { { id = 'active', name = "Active", type = 'section',
                      schema = { { id = 'cards', name = "Action Card",
                                   type = 'array',
-                                  schema = { id = 'card', name = 'Card',
-                                             type = 'enum',
-                                             options = 'domains.card' } } } },
+                                  schema = { { id = 'card', name = 'Card',
+                                               type = 'enum',
+                                               options = 'domains.card' } } } } },
                    { id = 'defensive', name = "Defensive", type = 'section',
                      schema = { { id = 'defense', name = "Defense",
                                   type = 'integer', range = { 0, 99 } } } }, } }
