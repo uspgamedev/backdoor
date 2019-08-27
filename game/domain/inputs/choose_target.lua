@@ -18,6 +18,7 @@ INPUT.schema = {
   { id = 'empty-tile', name = "Only empty position", type = 'boolean' },
   { id = 'dif-fact', name = "Only different faction", type = 'boolean' },
   { id = 'non-wall', name = "Only without wall", type = 'boolean' },
+  { id = 'has-floor', name = "Only positions with a floor", type = 'boolean' },
   { id = 'aoe-hint', name = "Size of previewed AoE", type = 'integer',
     range = {1} },
   { id = 'output', name = "Label", type = 'output' }
@@ -62,6 +63,9 @@ function INPUT.isValid(actor, fieldvalues, value)
   if fieldvalues['non-wall'] and tile and tile.type == SCHEMATICS.WALL then
     return false
   end
+  if fieldvalues['has-floor'] and (not tile or tile.type ~= SCHEMATICS.FLOOR) then
+    return false
+  end
   if not INPUT.isWithinRange(actor, fieldvalues, value) then
     return false
   end
@@ -73,4 +77,3 @@ function INPUT.isValid(actor, fieldvalues, value)
 end
 
 return INPUT
-
