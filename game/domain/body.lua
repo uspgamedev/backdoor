@@ -406,13 +406,16 @@ function Body:removeAllArmor()
 end
 
 function Body:takeDamageFrom(amount, source)
-  local absorbed = math.min(amount, self.armor)
-  self.armor = self.armor - absorbed -- should never go negative
-  local dmg = math.max(0, amount - absorbed)
-  self.damage = math.min(self:getMaxHP(), self.damage + dmg)
+  local defeqp = self:getEquipmentAt('wearable')
+  if defeqp then
+    local absorbed = math.min(amount, defeqp:getEquipmentDefense())
+    defeqp:addUsages(1)
+    amount = math.max(0, amount - absorbed)
+  end
+  self.damage = math.min(self:getMaxHP(), self.damage + amount)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
-  return { dmg = dmg }
+  return { dmg = amount }
 end
 
 function Body:loseLifeFrom(amount, source)
