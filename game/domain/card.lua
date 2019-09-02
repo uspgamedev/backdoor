@@ -1,6 +1,7 @@
 
 local ABILITY     = require 'domain.ability'
 local ACTIONSDEFS = require 'domain.definitions.action'
+local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
 local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
@@ -174,27 +175,31 @@ function Card:tick()
   return false
 end
 
+local _EPQ_TYPENAMES = {
+  wieldable = "Weapon",
+  wearable = "Armor",
+}
+
 function Card:getEffect()
-  local effect
+  local effect = ""
   local inputs = { self = self:getOwner() }
   if self:isArt() then
-    effect = ("Art [%d focus]\n\n"):format(self:getCost())
-          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
+    effect = effect .. ("Art (%d focus)\n\n"):format(self:getCost())
+                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
   elseif self:isWidget() then
-    effect = ("Widget [%d focus]\n\n"):format(self:getCost())
     local place = self:getWidgetPlacement() if place then
-      effect = effect .. " [" .. place .. "]"
+      effect = effect .. _EPQ_TYPENAMES[place]
+    else
+      effect = effect .. "Condition"
     end
+    effect = effect .. (" (%d focus)\n\n"):format(self:getCost())
     local charges = self:getWidgetCharges() if charges > 0 then
       local trigger = self:getWidgetTrigger()
-      effect = effect .. (" [%d/%s charges]"):format(charges, trigger)
+      effect = effect .. ("%d charges%s"):format(
+        charges,
+        trigger and "/" .. trigger or ""
+      )
     end
-    -- TODO: describe created cards
-    --local activation = self:getWidgetActivation() if activation then
-    --  local ability, cost = activation.ability, activation.cost
-    --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
-    --                  .. ABILITY.preview(ability, self:getOwner(), inputs)
-    --end
     local auto = self:getWidgetTriggeredAbility() if auto then
       local ability, trigger = auto.ability, auto.trigger
       effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
@@ -207,6 +212,19 @@ function Card:getEffect()
     end
     if n > 0 then
       effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
+    end
+    -- TODO: describe created cards
+    local equip = self:getSpec('widget').equipment
+    if equip and equip.active then
+      effect = effect .. "\n"
+      for _, action in ipairs(equip.active.cards) do
+        local spec = DB.loadSpec('card', action.card)
+        effect = effect .. ("\n%s: "):format(spec.name)
+                        .. ABILITY.preview(spec.art.art_ability,
+                                           self:getOwner(), inputs)
+      end
+    --  local ability, cost = activation.ability, activation.cost
+    --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
     end
   end
   return effect
