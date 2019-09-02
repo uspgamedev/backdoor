@@ -60,9 +60,8 @@ function Transmission:init(origin, target, duration, color)
   self:register('HUD_FX')
 
   self.origin:flashFor(duration, self.color)
-  if self.target.flashFor then
-    self.target:flashFor(duration, self.color)
-  end
+  self.target:flashFor(duration, self.color)
+
   self:addTimer("start", MAIN_TIMER, "tween", duration, self,
                 { width_scale = 0 }, 'in-back',
                 function () self:kill(); return self.deferred() end)

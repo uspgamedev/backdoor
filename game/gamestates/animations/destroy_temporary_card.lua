@@ -1,5 +1,5 @@
 
-local Transmission  = require 'view.transmission'
+local Dissolve      = require 'view.dissolvecard'
 local COLORS        = require 'domain.definitions.colors'
 local Util          = require "steaming.util"
 
@@ -10,7 +10,7 @@ function ANIM:script(route, view, report)
     local hand_view = view.action_hud.handview
     local card_index = report.card_index
     local cardview = hand_view.hand[card_index]
-    self.wait(Transmission(cardview, {getPoint = function() return {x = 500, y = 500} end}, 0.5, COLORS.FLASH_DISCARD))
+    self.wait(Dissolve(cardview))
     hand_view:removeCard(card_index)
   end
 end

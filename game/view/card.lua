@@ -31,11 +31,13 @@ function CardView:init(card)
   self.card = card
   self.scale = 1
   self.focused = false
+  self.hide_name = false
   self.alpha = 1
   self.flash = 0
   self.add = 0
   self.flashcolor = nil
   self.position = vec2()
+  self.offset = vec2()
   self.raised = TweenValue(0, 'smooth', 5)
 end
 
@@ -57,6 +59,14 @@ end
 
 function CardView:setAlpha(alpha)
   self.alpha = alpha
+end
+
+function CardView:hideName()
+  self.hide_name = true
+end
+
+function CardView:showName()
+  self.hide_name = false
 end
 
 function CardView:setScale(scale)
@@ -97,6 +107,14 @@ function CardView:getPosition()
   return self.position:unpack()
 end
 
+function CardView:setOffset(x, y)
+  self.offset = vec2(x,y)
+end
+
+function CardView:getOffset()
+  return self.offset:unpack()
+end
+
 function CardView:getPoint()
   return self.position + vec2(self:getDimensions())/2
                        - vec2(0,self.raised:get())
@@ -112,9 +130,10 @@ function CardView:draw()
   local typewidth = _card_font:getWidth(self.card:getType() .. " [ xx ]")
   local pd = 12
   g.push()
+  g.translate(self:getOffset())
   g.scale(self.scale, self.scale)
 
-  if self.focused then
+  if self.focused and not self.hide_name then
     -- shine!
     local shine = 50/255
     local cardname = self.card:getName()
@@ -137,8 +156,7 @@ function CardView:draw()
   self.sprite:draw(x+2, y+2)
 
   --card
-  local alpha_mod = self.card:isTemporary() and 1 or 1
-  g.setColor(cr, cg, cb, self.alpha * alpha_mod)
+  g.setColor(cr, cg, cb, self.alpha)
   self.sprite:draw(x, y)
 
   --card icon
