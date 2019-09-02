@@ -1,11 +1,13 @@
 --MODULE FOR DRAWING STUFF--
 
+-- luacheck: globals love DRAW_TABLE DrawTable DEBUG SWITCHER
+
 local CAM = require 'common.camera'
+local VIEWDEFS = require 'view.definitions'
 local tween = require 'helpers.tween'
 local first_time = false
-local Util  = require "steaming.util"
 
-local _GAMEFRAMEWIDTH = 960
+local _GAMEFRAMEWIDTH = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
 local _fade
 
@@ -19,7 +21,7 @@ local draw = {}
 function draw.update(dt)
   for _,layer in pairs(DRAW_TABLE) do
     for o in pairs(layer) do
-      if not o.death and not o.invisible and o.update then
+      if not o.death and o.update then
         o:update(dt)
       end
     end

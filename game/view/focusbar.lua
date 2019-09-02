@@ -3,6 +3,7 @@
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
+local VIEWDEFS    = require 'view.definitions'
 local ACTIONDEFS  = require 'domain.definitions.action'
 
 local math        = require 'common.math'
@@ -30,9 +31,9 @@ function FocusBar:init(route, handview)
 
   ELEMENT.init(self)
 
-  _WIDTH, _HEIGHT = love.graphics.getDimensions()
+  _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
-  self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
+  self.x, self.y = _WIDTH/2, _HEIGHT - 50
   self.route = route
   self.actor = nil
 
