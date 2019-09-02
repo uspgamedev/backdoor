@@ -137,21 +137,6 @@ local function _useAction(action_slot, params)
       else
         return false
       end
-    elseif param.name == "choose_widget_slot" then
-      _view.action_hud:disableTurn()
-      SWITCHER.push(
-        GS.PICK_WIDGET_SLOT, controlled_actor,
-        function (which_slot)
-          return ABILITY.validate('choose_widget_slot', controlled_actor, param,
-                                  which_slot)
-        end
-      )
-      local args = coroutine.yield(_task)
-      if args.picked_slot then
-        params[param.output] = args.picked_slot
-      else
-        return false
-      end
     elseif param.name == "choose_consume_list" then
       _view.action_hud:disableTurn()
       SWITCHER.push(GS.CONSUME_CARDS, controlled_actor, param.max)
@@ -185,14 +170,6 @@ end
 
 _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
-end
-
-_ACTION[DEFS.ACTION.ACTIVATE_WIDGET] = function()
-  local has_widget = _route.getControlledActor():getBody():hasWidgetAt(1)
-  if has_widget then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.ACTIVATE_WIDGET)
-  end
 end
 
 _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
@@ -257,4 +234,3 @@ _ACTION[DEFS.ACTION.IDLE] = function()
 end
 
 return state
-

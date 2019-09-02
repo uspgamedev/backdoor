@@ -28,8 +28,6 @@ local ActionHUD = Class{
 ActionHUD.INTERFACE_COMMANDS = {
   INSPECT_MENU = "INSPECT_MENU",
   SAVE_QUIT = "SAVE_QUIT",
-  USE_READY_ABILITY = "USE_READY_ABILITY",
-  READY_ABILITY_ACTION = "READY_ABILITY"
 }
 
 --[[ Basic methods ]]--
@@ -189,7 +187,7 @@ function ActionHUD:actionRequested()
         self:moveHandFocus(dir)
       end
     else
-      if INPUT.isActionDown('ACTION_4') and LONG_WALK.isAllowed(self) then
+      if INPUT.isActionDown('ACTION_3') and LONG_WALK.isAllowed(self) then
         LONG_WALK.start(self, dir)
       else
         action_request = {DEFS.ACTION.MOVE, dir}
@@ -212,8 +210,6 @@ function ActionHUD:actionRequested()
     else
       action_request = {DEFS.ACTION.IDLE}
     end
-  elseif INPUT.wasActionPressed('ACTION_3') then
-    action_request = {ActionHUD.INTERFACE_COMMANDS.READY_ABILITY_ACTION}
   elseif INPUT.wasActionPressed('ACTION_2') then
     if not player_focused then
       action_request = {DEFS.ACTION.RECEIVE_PACK}
@@ -297,7 +293,7 @@ function ActionHUD:update(dt)
     end
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
-      if INPUT.isActionDown('ACTION_4') then
+      if INPUT.isActionDown('ACTION_3') then
         self.handview:hide()
         self:disableCardInfo()
         if self.handview:isActive() then

@@ -96,8 +96,7 @@ function state:update(dt)
     if INPUT.wasActionPressed('CONFIRM') then
       PLAYSFX 'ok-menu'
       MENU.confirm()
-    elseif INPUT.wasActionPressed('SPECIAL') or
-           INPUT.wasActionPressed('CANCEL') or
+    elseif INPUT.wasActionPressed('CANCEL') or
            INPUT.wasActionPressed('QUIT') then
       PLAYSFX 'back-menu'
       MENU.cancel()
