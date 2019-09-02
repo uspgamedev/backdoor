@@ -32,7 +32,7 @@ function CardView:init(card)
   self.scale = 1
   self.focused = false
   self.alpha = 1
-  self.effect_alpha = 1
+  self.stencil = function() end
   self.flash = 0
   self.add = 0
   self.flashcolor = nil
@@ -61,8 +61,8 @@ function CardView:setAlpha(alpha)
   self.alpha = alpha
 end
 
-function CardView:setEffectAlpha(alpha)
-  self.effect_alpha = alpha
+function CardView:setStencil(func)
+  self.stencil = func
 end
 
 function CardView:setScale(scale)
@@ -112,7 +112,7 @@ function CardView:getOffset()
 end
 
 function CardView:getPoint()
-  return self.position + vec2(self:getDimensions())/2
+  return self.position + self.offset + vec2(self:getDimensions())/2
                        - vec2(0,self.raised:get())
 end
 
@@ -126,6 +126,8 @@ function CardView:draw()
   local typewidth = _card_font:getWidth(self.card:getType() .. " [ xx ]")
   local pd = 12
   g.push()
+  g.stencil(self.stencil, "replace", 1)
+  g.setStencilTest("equal", 0)
   g.translate(self:getOffset())
   g.scale(self.scale, self.scale)
 
@@ -139,7 +141,7 @@ function CardView:draw()
     cg = cg + shine
     cb = cb + shine
     _title_font:set()
-    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha*self.effect_alpha})
+    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
              namewidth, "center")
@@ -148,17 +150,17 @@ function CardView:draw()
   _card_font.set()
 
   --shadow
-  g.setColor(0, 0, 0, self.alpha*self.effect_alpha)
+  g.setColor(0, 0, 0, self.alpha)
   self.sprite:draw(x+2, y+2)
 
   --card
-  g.setColor(cr, cg, cb, self.alpha*self.effect_alpha)
+  g.setColor(cr, cg, cb, self.alpha)
   self.sprite:draw(x, y)
 
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
-  g.setColor(br, bg, bb, self.alpha*self.effect_alpha)
+  g.setColor(br, bg, bb, self.alpha)
   icon_texture:setFilter('linear', 'linear')
   icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
@@ -167,7 +169,7 @@ function CardView:draw()
   g.push()
   g.translate(x, y)
   --Draw card info
-  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.effect_alpha)
+  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
   local type_str = self.card:getType()
   if self.card:isWidget() then
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
@@ -179,7 +181,7 @@ function CardView:draw()
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i = 1, self.card:getCost() do
-    g.setColor(br, bg, bb, self.alpha*self.effect_alpha)
+    g.setColor(br, bg, bb, self.alpha)
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
@@ -192,7 +194,7 @@ function CardView:draw()
                self.add)
     self.sprite:draw(x, y)
   end
-
+  g.setStencilTest()
   g.pop()
 end
 

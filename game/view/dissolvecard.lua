@@ -9,25 +9,28 @@ local Dissolve = Class{
   __includes = { ELEMENT }
 }
 
-local _DURATION = .3
 local _MAX_OFFSET = 90
-function Dissolve:init(cardview)
+local _MAX_RADIUS = 300
+
+function Dissolve:init(cardview, duration)
   ELEMENT.init(self)
 
   self.card = cardview
-  self.alpha = 1
+  self.radius = 0
 
   self.offset = 0
+
+  self.duration = duration
 
   self.deferred = function () end
 
   --PLAYSFX 'dissolve' TODO add a sfx for this
   self:register('HUD_FX')
 
-  self:addTimer(nil, MAIN_TIMER, "tween", _DURATION, self,
-                { offset = -_MAX_OFFSET }, 'out-quad')
-  self:addTimer("start", MAIN_TIMER, "tween", _DURATION, self,
-                { alpha = 0 }, 'in-back',
+  self:addTimer(nil, MAIN_TIMER, "tween", 3*duration/4, self,
+                { radius = _MAX_RADIUS }, 'in-quad')
+  self:addTimer("start", MAIN_TIMER, "tween", duration, self,
+                { offset = -_MAX_OFFSET }, 'in-quad',
                 function () self:kill(); return self.deferred() end)
 end
 
@@ -37,7 +40,14 @@ end
 
 function Dissolve:update(dt)
   self.card:setOffset(0, self.offset)
-  self.card:setEffectAlpha(self.alpha)
+  self.card:setStencil(self:getStencilFunction())
+end
+
+function Dissolve:getStencilFunction()
+  return function()
+            local x, y = self.card:getPoint():unpack()
+            love.graphics.circle("fill", x, y, self.radius)
+         end
 end
 
 function Dissolve:draw()
