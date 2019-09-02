@@ -51,4 +51,3 @@ function FX.process (actor, fieldvalues)
 end
 
 return FX
-
