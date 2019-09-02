@@ -6,6 +6,7 @@ local CARD         = require 'view.helpers.card'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.cardinfo'
 local Button       = require 'view.controlhints.changehandcursor'
+local VIEWDEFS     = require 'view.definitions'
 local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
 
@@ -33,14 +34,14 @@ function HandView:init(route)
 
   ELEMENT.init(self)
 
-  _WIDTH, _HEIGHT = love.graphics.getDimensions()
+  _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
   self.prev_cursor = Button("left")
   self.next_cursor = Button("right")
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
-  self.x, self.y = (3*_WIDTH/4)/2, _HEIGHT - 50
+  self.x, self.y = _WIDTH/2, _HEIGHT - 50
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
