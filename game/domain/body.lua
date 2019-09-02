@@ -407,7 +407,7 @@ end
 function Body:takeDamageFrom(amount, source)
   local defeqp = self:getEquipmentAt('wearable')
   if defeqp then
-    local absorbed = math.min(amount, defeqp:getWidgetCharges())
+    local absorbed = math.min(amount, defeqp:getCurrentWidgetCharges())
     defeqp:addUsages(absorbed)
     amount = math.max(0, amount - absorbed)
   end
