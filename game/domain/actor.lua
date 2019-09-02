@@ -561,7 +561,7 @@ function Actor:playCard(card_index)
   if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
     self.training[attr] = self.training[attr] + 1
   end
-  if not card:isOneTimeOnly() and not card:isWidget() then
+  if not card:isOneTimeOnly() and not card:isWidget() and not card:isTemporary() then
     self:addCardToBackbuffer(card)
   end
   return card
@@ -570,12 +570,20 @@ end
 function Actor:discardHand()
   while not self:isHandEmpty() do
     local card = self:removeHandCard(1)
-    self:addCardToBackbuffer(card)
-    coroutine.yield('report', {
-      type = 'discard_card',
-      actor = self,
-      card_index = 1
-    })
+    if not card:isTemporary() then
+      self:addCardToBackbuffer(card)
+      coroutine.yield('report', {
+        type = 'discard_card',
+        actor = self,
+        card_index = 1
+      })
+    else
+      coroutine.yield('report', {
+        type = 'destroy_temporary_card',
+        actor = self,
+        card_index = 1
+      })
+    end
   end
 end
 

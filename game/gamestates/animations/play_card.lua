@@ -2,6 +2,7 @@
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local Transmission  = require 'view.transmission'
+local Dissolve      = require 'view.dissolvecard'
 local COLORS        = require 'domain.definitions.colors'
 
 local ANIM = require 'common.activity' ()
@@ -35,7 +36,11 @@ function ANIM:script(route, view, report)
     ann:announce(cardview.card:getName())
     local destination,color = _findPlayedCardViewDestination(cardview)
     delay:set(0.25):andThen(function () cardview:kill() end)
-    self.wait(Transmission(cardview, destination, 0.5, color))
+    if not cardview.temporary then
+      self.wait(Transmission(cardview, destination, 0.5, color))
+    else
+      self.wait(Dissolve(cardview))
+    end
     ann:unlock()
     action_hud.handview:removeCard(report.card_index)
   end
@@ -44,4 +49,3 @@ function ANIM:script(route, view, report)
 end
 
 return ANIM
-

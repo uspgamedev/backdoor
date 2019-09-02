@@ -24,7 +24,9 @@ local _FLASH_SPD = 20
 
 function CardView:init(card)
   ELEMENT.init(self)
-  self.sprite = TEXTURE.get('card-base')
+  self.temporary = card:isTemporary()
+  self.sprite = self.temporary and TEXTURE.get('temporary-card-base') or
+                                   TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
   self.card = card
   self.scale = 1
@@ -135,7 +137,8 @@ function CardView:draw()
   self.sprite:draw(x+2, y+2)
 
   --card
-  g.setColor(cr, cg, cb, self.alpha)
+  local alpha_mod = self.card:isTemporary() and 1 or 1
+  g.setColor(cr, cg, cb, self.alpha * alpha_mod)
   self.sprite:draw(x, y)
 
   --card icon

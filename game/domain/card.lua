@@ -66,6 +66,10 @@ function Card:isOneTimeOnly()
   return self:getSpec('one_time')
 end
 
+function Card:isTemporary()
+  return self:getSpec('temporary')
+end
+
 function Card:getCost()
   return self:getSpec('cost')
 end
@@ -235,4 +239,3 @@ function Card:getEffect()
 end
 
 return Card
-
