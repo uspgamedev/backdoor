@@ -34,9 +34,9 @@ function ANIM:script(route, view, report)
     if deferred then self.wait(deferred) end
     ann:announce(cardview.card:getName())
     local destination,color = _findPlayedCardViewDestination(cardview)
+    delay:set(0.25):andThen(function () cardview:kill() end)
     self.wait(Transmission(cardview, destination, 0.5, color))
     ann:unlock()
-    cardview:kill()
     action_hud.handview:removeCard(report.card_index)
   end
   delay:kill()
