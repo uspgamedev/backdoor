@@ -1,21 +1,27 @@
 {
   "attr":"COR",
+  "cost":5,
   "desc":"An old but reliable arcane blaster.",
   "icon":"card-blaster",
   "name":"Rusty Blaster",
   "one_time":true,
-  "cost":2,
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
     "charges":5,
-    "operators":[],
     "equipment":{
-      "defensive":false,
       "active":{
-        "cards":[]
-      }
+        "cards":[{
+            "card":"rusty-blaster-shot"
+          },{
+            "card":"rusty-blaster-shot"
+          },{
+            "card":"rusty-blaster-shot"
+          }]
+      },
+      "defensive":false
     },
+    "operators":[],
     "status-tags":[],
     "trigger":false
   }
