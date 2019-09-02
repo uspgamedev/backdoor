@@ -1,20 +1,18 @@
 {
   "attr":"ARC",
+  "cost":0,
   "desc":"",
   "name":"Reinforced Surface",
   "one_time":true,
-  "cost":0,
   "type-description":"",
   "widget":{
-    "charges":10,
-    "operators":[{
-        "attr":"VIT",
-        "op":"+",
-        "val":1
-      }],
+    "charges":5,
+    "equipment":{
+      "defensive":true
+    },
+    "operators":[],
     "status-tags":[],
-    "trigger":"on_hit",
-    "equipment":false
+    "trigger":false
   },
   "icon":false,
   "set":false

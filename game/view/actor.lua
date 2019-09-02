@@ -1,7 +1,7 @@
 
-local RES        = require 'resources'
+-- luacheck: globals love DEV
+
 local FONT       = require 'view.helpers.font'
-local ACTIONDEFS = require 'domain.definitions.action'
 local COLORS     = require 'domain.definitions.colors'
 local DEFS       = require 'domain.definitions'
 
@@ -14,8 +14,6 @@ local VIEWDEFS      = require 'view.definitions'
 local Class         = require "steaming.extra_libs.hump.class"
 local ELEMENT       = require "steaming.classes.primitives.element"
 
-local math = require 'common.math'
-
 local ActorView = Class{
   __includes = { ELEMENT }
 }
@@ -26,12 +24,9 @@ local _PANEL_WIDTH
 local _PANEL_HEIGHT
 local _PANEL_INNERWIDTH
 
-local _WIDTH, _HEIGHT
-
 
 local function _initGraphicValues()
   local g = love.graphics
-  _WIDTH, _HEIGHT = g.getDimensions()
   -- panel
   _PANEL_WIDTH = g.getWidth()/4
   _PANEL_HEIGHT = g.getHeight()
@@ -70,7 +65,6 @@ function ActorView:draw()
   local g = love.graphics
   local actor = self:loadActor()
   if not actor then return end
-  local cr,cg,cb = unpack(COLORS.NEUTRAL)
 
   -- always visible
   g.push()
@@ -92,7 +86,7 @@ function ActorView:draw()
   end
 end
 
-function ActorView:drawPanel(g)
+function ActorView:drawPanel(g) --luacheck: no self
   g.setColor(COLORS.NEUTRAL)
   g.translate(3/4*g.getWidth(), 0)
   ACTOR_PANEL.draw(g, -_PANEL_MG*2, -_PANEL_MG)
@@ -102,7 +96,6 @@ function ActorView:drawHP(g, actor)
   local body = actor:getBody()
   local hp, pp = body:getHP(), actor:getPP()
   local max_hp, max_pp = body:getMaxHP(), DEFS.MAX_PP
-  local armor = body:getArmor()
   -- character name
   FONT.set("TextBold", 22)
   g.translate(_PANEL_MG, _PANEL_MG)
@@ -111,8 +104,7 @@ function ActorView:drawHP(g, actor)
            0, -8)
   -- character hp & pp
   g.translate(0, 48)
-  ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION,
-                       armor)
+  ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
   g.translate(0, 32)
   ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
 end
@@ -122,7 +114,7 @@ function ActorView:drawMiniMap(g, actor)
   ACTOR_MINIMAP.draw(g, actor, sector)
 end
 
-function ActorView:drawAttributes(g, actor)
+function ActorView:drawAttributes(g, actor) --luacheck: no self
   FONT.set("Text", 20)
   g.translate(_PANEL_MG*4/3, 2*_PANEL_MG + 192)
 
@@ -154,7 +146,7 @@ function ActorView:drawAttributes(g, actor)
   g.pop()
 end
 
-function ActorView:drawWidgets(g, actor)
+function ActorView:drawWidgets(g, actor) --luacheck: no self
   g.push()
   g.translate(0, 16)
   for wtype = 1, 3 do
