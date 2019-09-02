@@ -36,5 +36,6 @@
   "icon":"card-laser-spear",
   "name":"Laser Cut",
   "one_time":true,
+  "temporary":true,
   "set":false
 }

@@ -125,7 +125,7 @@ function HandView:update(dt)
   if not self.hiding then
     self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
   else
-    if self.alpha > 0.10 then
+    if self.alpha > 0.01 then
       self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
     else
       self.alpha = 0
@@ -219,4 +219,3 @@ function HandView:reset()
 end
 
 return HandView
-

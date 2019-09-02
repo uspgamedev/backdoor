@@ -261,7 +261,7 @@ function Body:removeWidget(index)
   })
   self:unequip(equipment)
   table.remove(self.widgets, index)
-  if owner and not card:isOneTimeOnly() then
+  if owner and not card:isOneTimeOnly() and not card:isTemporary() then
     card:resetUsages()
     owner:addCardToBackbuffer(card)
   end

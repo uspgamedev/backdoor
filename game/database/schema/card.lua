@@ -5,6 +5,7 @@ local _CARDS = 'domains.card'
 
 return {
   { id = 'one_time', name = "Is One Time Usage", type = 'boolean' },
+  { id = 'temporary', name = "Is Temporary", type = 'boolean' },
   { id = 'name', name = "Name", type = 'string' },
   { id = 'icon', name = "Icon", type = 'enum',
     options = 'resources.texture',

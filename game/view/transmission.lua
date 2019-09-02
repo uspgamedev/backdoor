@@ -61,6 +61,7 @@ function Transmission:init(origin, target, duration, color)
 
   self.origin:flashFor(duration, self.color)
   self.target:flashFor(duration, self.color)
+
   self:addTimer("start", MAIN_TIMER, "tween", duration, self,
                 { width_scale = 0 }, 'in-back',
                 function () self:kill(); return self.deferred() end)
