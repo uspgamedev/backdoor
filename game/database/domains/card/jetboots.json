@@ -1,57 +1,31 @@
 {
   "attr":"NONE",
+  "cost":3,
   "desc":"'Now with less Carbon Dioxide emission!' - Jetboots UltraSlim Model commercial slogan.",
   "icon":"card-jetboots",
   "name":"Jetboots",
-  "cost":3,
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
-    "activation":{
-      "ability":{
-        "effects":[{
-            "body":"=body",
-            "name":"move_to",
-            "pos":"=target-pos",
-            "type":"effect",
-            "vfx":"SLIDE",
-            "vfx-spd":1
-          }],
-        "inputs":[{
-            "body-block":true,
-            "name":"choose_dir",
-            "output":"dir",
-            "type":"input"
+    "charges":3,
+    "equipment":{
+      "active":{
+        "cards":[{
+            "card":"jet-boost"
           },{
-            "name":"self",
-            "output":"self",
-            "type":"operator"
-          },{
-            "actor":"=self",
-            "name":"get_actor_body",
-            "output":"body",
-            "type":"operator"
-          },{
-            "body":"=body",
-            "name":"get_body_pos",
-            "output":"origin",
-            "type":"operator"
-          },{
-            "dir":"=dir",
-            "maxrange":5,
-            "name":"hitscan",
-            "output":"target-pos",
-            "pos":"=origin",
-            "type":"operator"
-          }],
+            "card":"jet-boost"
+          }]
       },
-      "cost":10,
+      "defensive":false
     },
-    "charges":8,
     "operators":[],
-    "equipment":"wieldable",
     "status-tags":[],
-    "trigger":"on_use"
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false,
+    "auto_activation":false
   },
   "one_time":false
 }

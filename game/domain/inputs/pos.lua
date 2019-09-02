@@ -1,6 +1,4 @@
 
-local DB = require 'database'
-
 local INPUT = {}
 
 INPUT.schema = {
@@ -14,4 +12,3 @@ function INPUT.isValid(actor, fieldvalues, value)
 end
 
 return INPUT
-

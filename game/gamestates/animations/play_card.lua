@@ -39,8 +39,8 @@ function ANIM:script(route, view, report)
       delay:set(0.25):andThen(function () cardview:kill() end)
       self.wait(Transmission(cardview, destination, 0.5, color))
     else
-      delay:set(1.6):andThen(function () cardview:kill() end)
-      self.wait(Dissolve(cardview, 1.5))
+      delay:set(.8):andThen(function () cardview:kill() end)
+      self.wait(Dissolve(cardview, .8))
     end
     ann:unlock()
     action_hud.handview:removeCard(report.card_index)
