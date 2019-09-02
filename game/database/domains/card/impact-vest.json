@@ -1,20 +1,20 @@
 {
   "attr":"NONE",
+  "cost":5,
   "desc":"",
   "icon":"card-power-suit",
   "name":"Impact Vest",
   "set":"gadgeteer",
-  "cost":5,
   "type-description":"",
   "widget":{
-    "charges":5,
-    "operators":[],
+    "charges":4,
     "equipment":{
-      "active":false,
       "defensive":{
         "defense":1
-      }
+      },
+      "active":false
     },
+    "operators":[],
     "status-tags":[],
     "trigger":false
   },

@@ -1,6 +1,8 @@
 
 local DEFS = require 'domain.definitions'
 
+local _CARDS = 'domains.card'
+
 return {
   { id = 'one_time', name = "Is One Time Usage", type = 'boolean' },
   { id = 'name', name = "Name", type = 'string' },
@@ -58,16 +60,16 @@ return {
             hint = "Happens when trigger is detected" }
         }
       },
-      { id = 'equipment', name = "Equipment", type = 'section',
+      {
+        id = 'equipment', name = "Equipment", type = 'section',
         schema = { { id = 'active', name = "Active", type = 'section',
                      schema = { { id = 'cards', name = "Action Card",
                                   type = 'array',
                                   schema = { { id = 'card', name = 'Card',
                                                type = 'enum',
-                                               options = 'domains.card' } } } } },
-                   { id = 'defensive', name = "Defensive", type = 'section',
-                     schema = { { id = 'defense', name = "Defense",
-                                  type = 'integer', range = { 0, 99 } } } }, } }
+                                               options = _CARDS } } } } },
+                   { id = 'defensive', name = "Defensive", type = 'boolean' } }
+      }
     }
   }
 }

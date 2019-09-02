@@ -6,10 +6,7 @@ local TweenValue  = require 'view.helpers.tweenvalue'
 local COLORS      = require 'domain.definitions.colors'
 local RES         = require 'resources'
 local Class       = require "steaming.extra_libs.hump.class"
-local common      = require 'lux.common'
 
-local _MG = 24
-local _PD = 4
 local _DECAY_TIME = 0.5
 
 local Slot = Class({ __includes = { Node } })
@@ -23,6 +20,7 @@ function Slot:init(x, y, icon)
   self.flash = TweenValue(0, 'linear')
   self.flashcolor = COLORS.FLASH_ANNOUNCE
   self.flashtime = 1
+  self.font = FONT.get('Text', 16)
 end
 
 function Slot:setWidget(widget)
@@ -67,6 +65,8 @@ function Slot:render(g)
     g.rectangle("fill", 0, 0, sqsize, sqsize)
     g.setColor(COLORS.BLACK + flashfx * 2)
     g.draw(icon, 0, 0, 0, sqsize/iw, sqsize/ih)
+    self.font:set()
+    g.print(widget:getCurrentWidgetCharges(), 0, 0)
   elseif self.icon then
     g.setColor(COLORS.BLACK)
     local icon = RES.loadTexture(self.icon)

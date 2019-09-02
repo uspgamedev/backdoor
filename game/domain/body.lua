@@ -1,5 +1,4 @@
 
-local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local EQUIPMENTS  = require 'domain.definitions.equipments'
@@ -179,7 +178,7 @@ function Body:getMaxHP()
   return APT.HP(self:getVIT(), self:getRES())
 end
 
-function Body:getConsumption()
+function Body:getConsumption() -- luacheck: no self
   return 1
 end
 
@@ -408,8 +407,8 @@ end
 function Body:takeDamageFrom(amount, source)
   local defeqp = self:getEquipmentAt('wearable')
   if defeqp then
-    local absorbed = math.min(amount, defeqp:getEquipmentDefense())
-    defeqp:addUsages(1)
+    local absorbed = math.min(amount, defeqp:getWidgetCharges())
+    defeqp:addUsages(absorbed)
     amount = math.max(0, amount - absorbed)
   end
   self.damage = math.min(self:getMaxHP(), self.damage + amount)
