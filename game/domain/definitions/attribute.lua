@@ -11,7 +11,7 @@ ATTR.INFLUENCE = {
 }
 
 function ATTR.EFFECTIVE_POWER(base, mod)
-  return math.max(1, base + mod)
+  return math.floor(math.max(1, base + mod))
 end
 
 return ATTR

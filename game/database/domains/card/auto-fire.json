@@ -1,16 +1,16 @@
 {
   "attr":"COR",
+  "cost":0,
   "desc":"",
   "name":"Auto-Fire",
   "one_time":true,
   "type-description":"",
-  "cost":0,
   "widget":{
     "auto_activation":{
       "ability":{
         "effects":[{
             "attr":"=cor",
-            "base":0,
+            "base":-3,
             "name":"damage_on_target",
             "target":"=target",
             "type":"effect",
