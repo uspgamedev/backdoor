@@ -144,6 +144,10 @@ function Card:getUsages()
   return self.usages
 end
 
+function Card:getCurrentWidgetCharges()
+  return self:getWidgetCharges() - self:getUsages()
+end
+
 function Card:isSpent()
   local max = self:getWidgetCharges()
   return max > 0 and self:getUsages() >= max
