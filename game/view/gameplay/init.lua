@@ -30,6 +30,7 @@ function GameplayView:setup(route)
 
   -- actor view
   self.actor = ActorView(route:getControlledActor())
+  self.actor.invisible = true
 
   -- announcement box
   self.announcement = Announcement()
