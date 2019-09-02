@@ -579,7 +579,7 @@ function Actor:discardHand()
       })
     else
       coroutine.yield('report', {
-        type = 'destroy_temporary_card',
+        type = 'discard_temporary_card',
         actor = self,
         card_index = 1
       })
