@@ -386,6 +386,15 @@ function Actor:createEquipmentCards()
   end
 end
 
+function Actor:getActionCardsCount()
+  local active_eqp = self:getBody():getEquipmentAt('wieldable')
+  if active_eqp then
+    return active_eqp:getActiveEquipmentCardCount()
+  else
+    return 0
+  end
+end
+
 function Actor:getHandCard(index)
   return index and self.hand[index]
 end
