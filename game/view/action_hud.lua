@@ -7,11 +7,9 @@ local ADJACENCY     = require 'view.helpers.adjacency'
 local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
-local COLORS        = require 'domain.definitions.colors'
 local HandView      = require 'view.hand'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
-local Transmission  = require 'view.transmission'
 local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
@@ -108,41 +106,6 @@ end
 
 function ActionHUD:isHandActive()
   return self.handview:isActive()
-end
-
-local function _findPlayedCardViewDestination(cardview)
-  if cardview.card:isArt() then
-    return Util.findId('backbuffer_view'), COLORS.FLASH_DISCARD
-  elseif cardview.card:isWidget() then
-    return Util.findId('actor_panel'):getWidgets():findCardSlot(cardview.card),
-           COLORS.EQUIP
-  end
-  return error("Non card type encountered")
-end
-
-function ActionHUD:playCard(index)
-  local cardview = self.handview.hand[index]
-  MAIN_TIMER:script(function(wait)
-    self.handview:keepFocusedCard(false)
-    self:disableCardInfo()
-    cardview:setAlpha(1)
-    local ann = Util.findId('announcement')
-    ann:lock()
-    cardview:register("HUD_FX")
-    cardview:addTimer(
-      nil, MAIN_TIMER, 'tween', 0.2, cardview,
-      { position = cardview.position + vec2(0,-200) }, 'out-cubic'
-    )
-    wait(0.2)
-    ann:interrupt()
-    while ann:isBusy() do wait(1) end
-    ann:announce(cardview.card:getName())
-    local destination,color = _findPlayedCardViewDestination(cardview)
-    Transmission(cardview, destination, 0.5, color)
-    wait(0.5)
-    ann:unlock()
-    cardview:kill()
-  end)
 end
 
 function ActionHUD:moveHandFocus(dir)
