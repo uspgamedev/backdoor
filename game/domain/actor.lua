@@ -612,7 +612,6 @@ function Actor:endFocus()
   self.focus = 0
   self:discardHand()
   body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
-  body:removeAllArmor()
 end
 
 function Actor:rewardPP(n)

@@ -2,12 +2,10 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":4,
-          "name":"armor_on_target",
-          "target":"=machine",
-          "type":"effect",
-          "sfx":false
+          "body":"=machine",
+          "card":"reinforced-surface",
+          "name":"place_widget",
+          "type":"effect"
         }],
       "inputs":[{
           "body-only":{
@@ -21,16 +19,11 @@
           "output":"machine",
           "pos":"=target",
           "type":"operator"
-        },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
         }]
-    },
+    }
   },
-  "cost":1,
   "attr":"ARC",
+  "cost":1,
   "desc":"",
   "icon":"card-reinforce",
   "name":"Reinforce",

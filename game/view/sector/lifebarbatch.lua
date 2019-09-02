@@ -20,17 +20,15 @@ function LifebarBatch:drawFor(body, x, y)
   local current = self.lifestates[id] or 0
   local hp = body:getHP()
   local max_hp = body:getMaxHP()
-  local armor = body:getArmor()
   current = current + (hp - current) * _SMOOTH_FACTOR
   if math.abs(hp - current) < 1 then
     current = hp
   end
   self.lifestates[id] = current
-  local armorpercent = armor / (max_hp + armor)
   local pi = math.pi
   local start = pi/2 - 3*pi/36
   local length = -2*pi/3
-  local hppercent = current / (max_hp + armor)
+  local hppercent = current / max_hp
   local hsvcol = { 0 + 100*hppercent, 240, 200 - 50*hppercent, 1 }
   local color = Color.fromHSV(unpack(hsvcol))
   local cr, cg, cb = color:unpack()
@@ -44,10 +42,6 @@ function LifebarBatch:drawFor(body, x, y)
   g.arc('line', 'open', 0, 0, 42, start, start + length, 32)
   g.setColor(cr, cg, cb, 1)
   g.arc('line', 'open', 0, 0, 42, start, start + length * hppercent, 32)
-  g.setColor(1, 1, 1, 0.5)
-  g.arc('line', 'open', 0, 0, 42, start + length * hppercent,
-                                  start + length * (hppercent + armorpercent),
-                                  32)
   g.pop()
 
   g.translate(0, 20)
