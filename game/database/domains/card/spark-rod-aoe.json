@@ -1,0 +1,33 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "base":1,
+          "center":"=target-pos",
+          "ignore_owner":true,
+          "name":"damage_on_area",
+          "size":3,
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":3,
+          "max-range":1,
+          "name":"choose_target",
+          "output":"target-pos",
+          "type":"input"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        }]
+    }
+  },
+  "attr":"COR",
+  "cost":3,
+  "icon":"card-spark-rod",
+  "name":"Spark Blast",
+  "temporary":true,
+  "set":false
+}

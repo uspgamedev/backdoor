@@ -4,10 +4,11 @@
   "desc":"A mass-produced weapon.",
   "icon":"card-laser-spear",
   "name":"Laser Spear",
+  "one_time":true,
   "set":"brawler",
   "type-description":"",
   "widget":{
-    "charges":5,
+    "charges":7,
     "equipment":{
       "active":{
         "cards":[{
@@ -24,6 +25,5 @@
     },
     "trigger":false,
     "auto_activation":false
-  },
-  "one_time":false
+  }
 }

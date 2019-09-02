@@ -8,7 +8,7 @@
   "set":"gadgeteer",
   "type-description":"",
   "widget":{
-    "charges":5,
+    "charges":4,
     "equipment":{
       "active":{
         "cards":[{
