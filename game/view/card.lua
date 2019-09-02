@@ -31,8 +31,8 @@ function CardView:init(card)
   self.card = card
   self.scale = 1
   self.focused = false
-  self.hide_name = false
   self.alpha = 1
+  self.effect_alpha = 1
   self.flash = 0
   self.add = 0
   self.flashcolor = nil
@@ -61,12 +61,8 @@ function CardView:setAlpha(alpha)
   self.alpha = alpha
 end
 
-function CardView:hideName()
-  self.hide_name = true
-end
-
-function CardView:showName()
-  self.hide_name = false
+function CardView:setEffectAlpha(alpha)
+  self.effect_alpha = alpha
 end
 
 function CardView:setScale(scale)
@@ -133,7 +129,7 @@ function CardView:draw()
   g.translate(self:getOffset())
   g.scale(self.scale, self.scale)
 
-  if self.focused and not self.hide_name then
+  if self.focused then
     -- shine!
     local shine = 50/255
     local cardname = self.card:getName()
@@ -143,7 +139,7 @@ function CardView:draw()
     cg = cg + shine
     cb = cb + shine
     _title_font:set()
-    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha*self.effect_alpha})
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
              namewidth, "center")
@@ -152,17 +148,17 @@ function CardView:draw()
   _card_font.set()
 
   --shadow
-  g.setColor(0, 0, 0, self.alpha)
+  g.setColor(0, 0, 0, self.alpha*self.effect_alpha)
   self.sprite:draw(x+2, y+2)
 
   --card
-  g.setColor(cr, cg, cb, self.alpha)
+  g.setColor(cr, cg, cb, self.alpha*self.effect_alpha)
   self.sprite:draw(x, y)
 
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
-  g.setColor(br, bg, bb, self.alpha)
+  g.setColor(br, bg, bb, self.alpha*self.effect_alpha)
   icon_texture:setFilter('linear', 'linear')
   icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
@@ -171,7 +167,7 @@ function CardView:draw()
   g.push()
   g.translate(x, y)
   --Draw card info
-  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
+  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.effect_alpha)
   local type_str = self.card:getType()
   if self.card:isWidget() then
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
@@ -183,7 +179,7 @@ function CardView:draw()
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i = 1, self.card:getCost() do
-    g.setColor(br, bg, bb, self.alpha)
+    g.setColor(br, bg, bb, self.alpha*self.effect_alpha)
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)

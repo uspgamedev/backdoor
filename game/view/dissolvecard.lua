@@ -9,8 +9,8 @@ local Dissolve = Class{
   __includes = { ELEMENT }
 }
 
-local _DURATION = .6
-local _MAX_OFFSET = 50
+local _DURATION = .3
+local _MAX_OFFSET = 90
 function Dissolve:init(cardview)
   ELEMENT.init(self)
 
@@ -18,8 +18,6 @@ function Dissolve:init(cardview)
   self.alpha = 1
 
   self.offset = 0
-
-  self.card:hideName()
 
   self.deferred = function () end
 
@@ -39,7 +37,7 @@ end
 
 function Dissolve:update(dt)
   self.card:setOffset(0, self.offset)
-  self.card:setAlpha(self.alpha)
+  self.card:setEffectAlpha(self.alpha)
 end
 
 function Dissolve:draw()
