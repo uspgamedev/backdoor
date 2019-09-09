@@ -16,6 +16,20 @@ local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
+local _HANDBAR_WIDTH = 492/4
+local _HANDBAR_HEIGHT = 12
+local _MARGIN_WIDTH = 60
+local _MARGIN_HEIGHT = 16
+local _PAD_HEIGHT = 32
+local _SLOPE = _HANDBAR_HEIGHT + _MARGIN_HEIGHT
+local _PANEL_VTX = {
+  -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2 + _MARGIN_HEIGHT / 2,
+  -_MARGIN_WIDTH + _SLOPE, -_MARGIN_HEIGHT / 2,
+  _HANDBAR_WIDTH + _MARGIN_WIDTH - _SLOPE, -_MARGIN_HEIGHT / 2,
+  _HANDBAR_WIDTH + _MARGIN_WIDTH, _HANDBAR_HEIGHT / 2 + _MARGIN_HEIGHT / 2,
+  _HANDBAR_WIDTH + _MARGIN_WIDTH - _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT,
+  -_MARGIN_WIDTH + _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT,
+}
 
 local _font
 
@@ -33,7 +47,7 @@ function FocusBar:init(route, handview)
 
   _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
-  self.x, self.y = _WIDTH/2, _HEIGHT - 50
+  self.x, self.y = _WIDTH/2, _HEIGHT - _HANDBAR_HEIGHT - _MARGIN_HEIGHT - _PAD_HEIGHT
   self.route = route
   self.actor = nil
 
@@ -87,23 +101,16 @@ function FocusBar:draw()
   -- draw hand countdown
   local maxfocus = ACTIONDEFS.MAX_FOCUS
   local focus = math.min(self.actor:getFocus(), maxfocus)
-  local handbar_width = 492/4
-  local handbar_height = 12
   local font = FONT.get("Text", 18)
-  local mx, my = 60, 20
-  local slope = handbar_height + 2*my
   font:set()
   g.push()
   g.origin()
-  g.translate(0, self.v_offset * 60)
-  g.translate(self.x - handbar_width/2, _HEIGHT - handbar_height - my)
+  g.translate(self.x - _HANDBAR_WIDTH/2, self.y)
+  g.translate(0, self.v_offset * 80)
 
   --Drawing background
   g.setColor(_BG)
-  g.polygon('fill', -mx, handbar_height+my,
-                    -mx + slope, -my,
-                    handbar_width + mx - slope, -my,
-                    handbar_width + mx, handbar_height + my)
+  g.polygon('fill', _PANEL_VTX)
   --Drawing focus bar
   g.setLineWidth(1)
   local red, gre, blu, a = unpack(COLORS.WARNING)
@@ -111,8 +118,8 @@ function FocusBar:draw()
                   gre + (1-gre)*self.emer_fx_v,
                   blu + (1-blu)*self.emer_fx_v
   g.push()
-  g.translate(0, 0.3*(handbar_height + 2*my))
-  local handbar_gap = handbar_width / (maxfocus-1)
+  g.translate(-_MARGIN_WIDTH/4, 0.4*(_HANDBAR_HEIGHT + _MARGIN_HEIGHT))
+  local handbar_gap = (_HANDBAR_WIDTH + _MARGIN_WIDTH/2) / (maxfocus-1)
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i=0,maxfocus-1 do
@@ -140,20 +147,10 @@ function FocusBar:draw()
   --Drawing contour lines
   g.setColor(COLORS.NEUTRAL)
   g.setLineWidth(2)
-  g.line(-mx, handbar_height+my,
-         -mx + slope, -my,
-         handbar_width + mx - slope, -my,
-         handbar_width + mx, handbar_height + my)
+  g.polygon('line', _PANEL_VTX)
 
-
-  --Draw text
-  g.translate(0, -20)
-  g.setColor(COLORS.BLACK)
-  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
-  g.translate(-1, -1)
-  g.setColor(COLORS.NEUTRAL)
-  g.printf("Focus Duration", 0, 0, handbar_width, 'center')
   g.pop()
 end
 
 return FocusBar
+
