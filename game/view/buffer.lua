@@ -13,6 +13,7 @@ local _W_OFFSET = 2
 local _H_OFFSET = -1
 local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
+local _MAX_CARDS = 15
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -105,9 +106,9 @@ function BufferView:draw()
     --Draw button ontop of front buffer
     self.button:draw()
 
-    finish, step = self.amount - 1, 1
+    finish, step = math.min(self.amount, _MAX_CARDS) - 1, 1
   elseif self.side == "back" then
-    finish, step = -self.amount + 1, -1
+    finish, step = -math.min(self.amount, _MAX_CARDS) + 1, -1
   else
     error("Not a valid side for bufferview: "..self.side)
   end
