@@ -7,7 +7,7 @@ local COLORS  = require 'domain.definitions.colors'
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
-local _SCALE = 0.3
+local _SCALE = 0.75
 local _MX = 48
 local _MY = 32
 local _FLASH_SPD = 20
@@ -18,8 +18,7 @@ local BufferView = Class{
 
 function BufferView:init(route)
   ELEMENT.init(self)
-  self.sprite = TEXTURE.get('buffer')
-  self.flashsprite = TEXTURE.get('buffer-flat')
+  self.sprite = TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
@@ -44,7 +43,7 @@ end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {1, 1, 1, 1}
+  bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
   bufview:calculatePosition()
   return bufview
@@ -131,17 +130,26 @@ function BufferView:draw()
 
   --Draw buffer
   self.font:set()
-  g.scale(_SCALE, _SCALE)
+  local size
+  if     self.side == "front" then
+    size = self.route:getControlledActor():getBufferSize()
+  elseif self.side == "back" then
+    size = self.route:getControlledActor():getBackBufferSize()
+  else
+    error ("Not a valid side for buffer view: "..self.side)
+  end
+  local offset_x = 2
+  local offset_y = -1
+  for i = 0, size-1 do
+    local grd = i == (size - 1) and 1 or .3
+    g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
+
+    self.sprite:draw(0 + i*offset_x, 0 - i*offset_y, 0, _SCALE, _SCALE, self.offset.x, self.offset.y)
+  end
   g.setColor(self.clr)
-  self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
-  g.printf(text, 0, 0, limit, self.align, 0, 1/_SCALE, 1/_SCALE,
+  g.printf(text, 0, 0, limit, self.align, 0, nil, nil,
            self.textoffx * limit, self.font:getHeight())
 
-  if self.add > 0 then
-    local cr, cg, cb = self.flashcolor:unpack()
-    g.setColor(cr, cg, cb, self.add)
-    self.flashsprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
-  end
   g.pop()
 end
 
