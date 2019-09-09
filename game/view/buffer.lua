@@ -7,12 +7,12 @@ local COLORS  = require 'domain.definitions.colors'
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
-local _SCALE = 0.75
-local _MX = 48
+local _MX = 32
 local _MY = 32
 local _W_OFFSET = 2
 local _H_OFFSET = -1
 local _GRADIENT_FILTER = .3
+local _BACKGROUND_ALPHA = .1
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -34,7 +34,7 @@ function BufferView:init(route)
   self.format = nil
 
   -- hint button
-  self.button = Button(-5, -115)
+  self.button = Button(-5, -50)
 
 end
 
@@ -70,11 +70,11 @@ end
 function BufferView:getPoint()
   local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(size * _W_OFFSET + self.sprite:getWidth()/2*_SCALE,
-                           size * _H_OFFSET + self.sprite:getHeight()/2*_SCALE)
+    return self.pos + vec2(size * _W_OFFSET + self.sprite:getWidth()/2,
+                           size * _H_OFFSET + self.sprite:getHeight()/2)
   elseif self.side == 'back' then
-    return self.pos + vec2(size * -_W_OFFSET + self.sprite:getWidth()/2*_SCALE,
-                           size * _H_OFFSET + self.sprite:getHeight()/2*_SCALE)
+    return self.pos + vec2(size * -_W_OFFSET + self.sprite:getWidth()/2,
+                           size * _H_OFFSET + self.sprite:getHeight()/2)
   end
 end
 
@@ -113,18 +113,18 @@ function BufferView:draw()
   end
 
   --Draw buffer "background"
-  g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[3]*.1)
-  self.sprite:draw(0, 0, 0, _SCALE, _SCALE)
+  g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[4]*_BACKGROUND_ALPHA)
+  self.sprite:draw(0, 0)
 
   --Draw buffer
   local grd
   for i = 0, finish, step do
     grd = (i == finish) and 1 or _GRADIENT_FILTER
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
-    self.sprite:draw(i*_W_OFFSET, -step*i*_H_OFFSET, 0, _SCALE, _SCALE)
+    self.sprite:draw(i*_W_OFFSET, -step*i*_H_OFFSET)
   end
   --Draw buffer size
-  local card_w, card_h = self.sprite:getWidth()*_SCALE, self.sprite:getHeight()*_SCALE
+  local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
   local text_w, text_h = self.font:getWidth(text), self.font:getHeight()
   grd = _GRADIENT_FILTER
   self.font:set()
