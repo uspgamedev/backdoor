@@ -100,21 +100,25 @@ function BufferView:draw()
   g.push()
   g.translate(self.pos.x, self.pos.y)
 
-  local start, finish, step
+  local finish, step
   if self.side == "front" then
     --Draw button ontop of front buffer
-      self.button:draw()
+    self.button:draw()
 
-      start, finish, step = 0, self.amount - 1, 1
+    finish, step = self.amount - 1, 1
   elseif self.side == "back" then
-    start, finish, step = 0, -self.amount + 1, -1
+    finish, step = -self.amount + 1, -1
   else
     error("Not a valid side for bufferview: "..self.side)
   end
 
+  --Draw buffer "background"
+  g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[3]*.1)
+  self.sprite:draw(0, 0, 0, _SCALE, _SCALE)
+
   --Draw buffer
   local grd
-  for i = start, finish, step do
+  for i = 0, finish, step do
     grd = (i == finish) and 1 or _GRADIENT_FILTER
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
     self.sprite:draw(i*_W_OFFSET, -step*i*_H_OFFSET, 0, _SCALE, _SCALE)
