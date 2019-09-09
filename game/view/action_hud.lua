@@ -8,6 +8,7 @@ local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
 local HandView      = require 'view.hand'
+local Minimap       = require 'view.actor.minimap'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
 local vec2          = require 'cpml' .vec2
@@ -16,6 +17,7 @@ local Class         = require "steaming.extra_libs.hump.class"
 local ELEMENT       = require "steaming.classes.primitives.element"
 
 local _INFO_LAG = 0.65 -- seconds
+local _MARGIN = 20
 
 local ActionHUD = Class{
   __includes = { ELEMENT }
@@ -39,6 +41,12 @@ function ActionHUD:init(route)
   -- Hand view
   self.handview = HandView(route)
   self.handview:register("HUD_BG", nil, "hand_view")
+
+  -- Minimap
+  local W, H = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  local size = 192
+  self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
+  self.minimap:register("HUD_BG", nil, "minimap")
 
   -- HUD state (player turn or not)
   self.player_turn = false
@@ -71,6 +79,7 @@ end
 function ActionHUD:destroy()
   self.handview:destroy()
   self.focusbar:destroy()
+  self.minimap:destroy()
   ELEMENT.destroy(self)
 end
 
