@@ -1,6 +1,7 @@
 
 -- luacheck: globals love MAIN_TIMER DRAW_TABLE
 
+local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CARD         = require 'view.helpers.card'
 local CardView     = require 'view.card'
@@ -19,6 +20,17 @@ local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
 local _FADE_SPD = 2
+local _BACKPANEL_MARGIN = 20
+local _BACKPANEL_WIDTH = 512
+local _BACKPANEL_HEIGHT = 64
+local _BACKPANEL_VTX = {
+  -_BACKPANEL_WIDTH / 2, 0,
+  -_BACKPANEL_WIDTH / 2 + _BACKPANEL_MARGIN, -_BACKPANEL_HEIGHT / 2,
+  _BACKPANEL_WIDTH / 2 - _BACKPANEL_MARGIN, -_BACKPANEL_HEIGHT / 2,
+  _BACKPANEL_WIDTH / 2, 0,
+  _BACKPANEL_WIDTH / 2 - _BACKPANEL_MARGIN, _BACKPANEL_HEIGHT / 2,
+  -_BACKPANEL_WIDTH / 2 + _BACKPANEL_MARGIN, _BACKPANEL_HEIGHT / 2,
+}
 
 local _font
 
@@ -41,7 +53,7 @@ function HandView:init(route)
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
-  self.x, self.y = _WIDTH/2, _HEIGHT - 50
+  self.x, self.y = _WIDTH/2, _HEIGHT
   self.initial_x, self.initial_y = self.x, self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MIN
@@ -146,6 +158,7 @@ function HandView:draw()
   local width = (size*card_tmp:getWidth() + (size-1)*gap)
   local x, y = self.x - width/2, self.y
   local enter = math.abs(y - self.initial_y) / (card_tmp:getHeight())
+  local g = love.graphics
 
 
   -- draw action type
@@ -161,7 +174,11 @@ function HandView:draw()
   self.next_cursor:draw()
 
   -- draw back panel
-
+  g.setColor(COLORS.DARK)
+  g.push()
+  g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2)
+  g.polygon('fill', _BACKPANEL_VTX)
+  g.pop()
 
   -- draw each card
   for i=1,size do
@@ -175,7 +192,7 @@ function HandView:draw()
       card:setAlpha(self.alpha)
     end
     card:setPosition(x + dx,
-                     y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
+                     y - 50 + (0.2+enter*0.4)*_GAP)
     card:draw()
   end
   if self.cardinfo:isVisible() then
