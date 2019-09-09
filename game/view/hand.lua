@@ -199,7 +199,6 @@ function HandView:draw()
     local i = self.focus_index
     local card = hand[i]
     if not card then return end
-    self.cardinfo:anchorTo(card, i <= #hand/2 and 'right' or 'left')
     self.cardinfo:setCard(card.card)
     self.cardinfo:draw()
   end
