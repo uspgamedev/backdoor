@@ -1,15 +1,19 @@
 
-local CARD    = require 'view.helpers.card'
-local COLORS  = require 'domain.definitions.colors'
-local FONT    = require 'view.helpers.font'
-local Color   = require 'common.color'
-local vec2    = require 'cpml' .vec2
-local Class   = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+-- luacheck: globals love
 
-local _W
+local Color     = require 'common.color'
+local COLORS    = require 'domain.definitions.colors'
+local FONT      = require 'view.helpers.font'
+local vec2      = require 'cpml' .vec2
+local Class     = require "steaming.extra_libs.hump.class"
+local ELEMENT   = require "steaming.classes.primitives.element"
+local VIEWDEFS  = require 'view.definitions'
+
+local _SCALE = 4
 local _MW = 16
 local _MH = 12
+local _PW = 16
+local _PH = 12
 
 local CardInfo = Class{
   __includes = { ELEMENT }
@@ -19,11 +23,12 @@ function CardInfo:init(route)
 
   ELEMENT.init(self)
 
+  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.route = route
   self.card = nil
-  self.position = vec2()
+  self.position = vec2(w * 0.02, h * 0.1)
   self.hide_desc = true
-  self.title_font = FONT.get("TextBold", 18)
+  self.title_font = FONT.get("TextBold", 24)
   self.text_font = FONT.get("Text", 18)
   self.alpha = 1
   self.invisible = true
@@ -34,29 +39,10 @@ function CardInfo:init(route)
   self.oscilate_magnitude = 4
   self.oscilate_speed = 6
 
-  _W = love.graphics.getDimensions()/4.5
-
 end
 
 function CardInfo:setCard(card)
   self.card = card
-end
-
-function CardInfo:setPosition(pos)
-  self.position = pos
-end
-
-function CardInfo:anchorTo(cardview, side)
-  local gap = 20
-  local rise = 80
-  local offset
-  self.side = side
-  if side == 'right' then
-    offset = vec2(cardview:getWidth() * cardview.scale + gap, -rise)
-  elseif side == 'left' then
-    offset = vec2(-_W - gap - 2*_MW, -rise)
-  end
-  self.position = cardview.position + offset
 end
 
 function CardInfo:show()
@@ -82,8 +68,10 @@ end
 function CardInfo:draw()
   local alpha = self.alpha
   local g = love.graphics
-  local cr, cg, cb = unpack(COLORS.NEUTRAL)
+  local cr, cg, cb = unpack(COLORS.BLACK)
   local player_actor = self.route.getPlayerActor()
+  local width = VIEWDEFS.CARD_W * _SCALE
+  local height = VIEWDEFS.CARD_H * _SCALE
 
   local desc = self.card:getEffect(player_actor)
   if not self.hide_desc then
@@ -94,53 +82,67 @@ function CardInfo:draw()
   desc = desc:gsub("\n\n", "\n")
 
   self.text_font:setLineHeight(1)
-  local lines = select(2, self.text_font:getWrap(desc, _W))
-  local height = self.title_font:getHeight()
-               + #lines * self.text_font:getHeight()
-                        * self.text_font:getLineHeight()
 
   g.push()
-  g.translate(0,math.sin(self.oscilate)*self.oscilate_magnitude)
   g.translate(self.position:unpack())
-  local mask = Color:new{1,1,1,alpha}
+  local offset = math.sin(self.oscilate)*self.oscilate_magnitude
+  g.translate(0, offset)
 
-  local boxw = _W + 2*_MW
-  local boxh = height + 2*_MH
-  local trih = 20
+  local boxw = width
+  local boxh = height
+  local corner = 12 * _SCALE
   local box = {
-    0, 0,
+    0, corner,
+    corner, 0,
     boxw, 0,
-    boxw, 0.8*boxh - trih/2,
-    boxw + trih*0.5, 0.8*boxh,
-    boxw, 0.8*boxh + trih/2,
-    boxw, boxh,
+    boxw, boxh - corner,
+    boxw - corner, boxh,
     0, boxh
   }
 
+  -- Draw card-shaped panel
   g.push()
-  if self.side == 'right' then
-    g.translate(boxw, 0)
-    g.scale(-1, 1)
-  end
-  g.setColor(COLORS.DARKER * mask)
+  local shadow = 8
+  g.translate(shadow, 2*shadow - offset)
+  g.setColor(COLORS[self.card:getRelatedAttr()] * Color:new{.4, .4, .4, alpha/2})
   g.polygon('fill', box)
-  g.setColor(COLORS.NEUTRAL * mask)
-  g.setLineWidth(2)
-  g.polygon('line', box)
+  g.translate(-shadow, -(2*shadow - offset))
+  g.setColor(COLORS[self.card:getRelatedAttr()] * Color:new{1, 1, 1, alpha})
+  g.polygon('fill', box)
   g.pop()
 
   g.translate(_MW, _MH)
+
+  -- Draw icon
+  local inner_corner = corner
+  local left, right = 0, width - (_MW+_PW)*2
+  local top, bottom = 0, (height - (_MH+_PH)*2) / 2
+  g.push()
+  g.translate(_PW, _PH)
+  g.setColor(COLORS.DARK)
+  g.polygon('fill', left, top + inner_corner,
+                    left + inner_corner, top,
+                    right - inner_corner, top,
+                    right, top + inner_corner,
+                    right, bottom - inner_corner,
+                    right - inner_corner, bottom,
+                    left + inner_corner, bottom,
+                    left, bottom - inner_corner)
+  g.pop()
+
+  -- Draw description
+  g.translate(0, height / 2)
 
   g.setColor(cr, cg, cb, alpha)
 
   self.title_font:setLineHeight(1.5)
   self.title_font.set()
-  g.printf(self.card:getName(), 0, 0, _W)
+  g.printf(self.card:getName(), 0, 0, width - _MW*2, 'center')
 
-  g.translate(0, self.title_font:getHeight())
+  g.translate(0, 2 * self.title_font:getHeight())
 
   self.text_font.set()
-  g.printf(desc, 0, 0, _W)
+  g.printf(desc, 0, 0, width - _MW*2)
 
   g.pop()
 end
