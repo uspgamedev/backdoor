@@ -136,7 +136,7 @@ function CardView:draw()
     local shine = 50/255
     local cardname = self.card:getName()
     local namewidth = _title_font:getWidth(cardname)
-    g.translate(0, -10)
+    g.translate(0, -40)
     cr = cr + shine
     cg = cg + shine
     cb = cb + shine
