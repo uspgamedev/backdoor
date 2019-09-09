@@ -7,10 +7,13 @@ local COLORS  = require 'domain.definitions.colors'
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
-local _SCALE = 0.3
-local _MX = 48
+local _MX = 32
 local _MY = 32
-local _FLASH_SPD = 20
+local _W_OFFSET = 2
+local _H_OFFSET = -1
+local _GRADIENT_FILTER = .3
+local _BACKGROUND_ALPHA = .1
+local _MAX_CARDS = 15
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -18,33 +21,27 @@ local BufferView = Class{
 
 function BufferView:init(route)
   ELEMENT.init(self)
-  self.sprite = TEXTURE.get('buffer')
-  self.flashsprite = TEXTURE.get('buffer-flat')
+  self.route = route
+
+  self.sprite = TEXTURE.get('card-base')
   self.sprite:setFilter("linear", "linear", 1)
   self.clr = {1, 1, 1, 1}
   self.side = 'front'
   self.font = FONT.get("Text", 24)
   self.amount = 0
-  self.route = route
 
   -- define later
   self.pos = nil
-  self.offset = nil
-  self.align = nil
   self.format = nil
-  self.textoffx = nil
 
-  self.button = Button(-5, -115)
+  -- hint button
+  self.button = Button(-5, -50)
 
-  -- Flash FX
-  self.flash = 0
-  self.add = 0
-  self.flashcolor = COLORS.NEUTRAL
 end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {1, 1, 1, 1}
+  bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
   bufview:calculatePosition()
   return bufview
@@ -61,33 +58,29 @@ end
 function BufferView:calculatePosition()
   local W,H = DEFS.VIEWPORT_DIMENSIONS()
   if self.side == 'front' then
-    self.pos = vec2(_MX, H - _MY)
-    self.offset = vec2(0, self.sprite:getHeight())
+    self.pos = vec2(_MX, H - _MY - self.sprite:getHeight())
     self.format = "x %d"
-    self.align = 'right'
-    self.textoffx = 0
   elseif self.side == 'back' then
-    self.pos = vec2(W - _MX, H - _MY)
-    self.offset = vec2(self.sprite:getDimensions())
+    self.pos = vec2(W - _MX - self.sprite:getWidth(), H - _MY - self.sprite:getHeight())
     self.format = "%d x"
-    self.align = 'left'
-    self.textoffx = 1
   else
     return error("invalid buffer view side position")
   end
 end
 
 function BufferView:getPoint()
+  local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+    return self.pos + vec2(size * _W_OFFSET + self.sprite:getWidth()/2,
+                           size * _H_OFFSET + self.sprite:getHeight()/2)
   elseif self.side == 'back' then
-    return self.pos + vec2(-self.sprite:getWidth(), -self.offset.y)/2*_SCALE
+    return self.pos + vec2(size * -_W_OFFSET + self.sprite:getWidth()/2,
+                           size * _H_OFFSET + self.sprite:getHeight()/2)
   end
 end
 
 function BufferView:flashFor(duration, color)
-  self.flash = duration
-  self.flashcolor = color or COLORS.NEUTRAL
+  --pass
 end
 
 function BufferView:update(dt)
@@ -99,49 +92,48 @@ function BufferView:update(dt)
   elseif self.side == 'back' then
     self.amount = actor:getBackBufferSize()
   end
-
-  if self.flash > 0 then
-    self.flash = math.max(0, self.flash - dt)
-    if self.add < 0.95 then
-      self.add = self.add + (1 - self.add) * dt * _FLASH_SPD
-    else
-      self.add = 1
-    end
-  else
-    if self.add > 0.05 then
-      self.add = self.add - self.add * dt * _FLASH_SPD
-    else
-      self.add = 0
-    end
-  end
 end
 
 function BufferView:draw()
   local g = love.graphics
   local text = self.format:format(self.amount)
-  local limit = self.sprite:getWidth() * _SCALE + self.font:getWidth(text)
-              + _MX/3
+
   g.push()
   g.translate(self.pos.x, self.pos.y)
 
-  --Draw button ontop of front buffer
+  local finish, step
   if self.side == "front" then
-      self.button:draw()
+    --Draw button ontop of front buffer
+    self.button:draw()
+
+    finish, step = math.min(self.amount, _MAX_CARDS) - 1, 1
+  elseif self.side == "back" then
+    finish, step = -math.min(self.amount, _MAX_CARDS) + 1, -1
+  else
+    error("Not a valid side for bufferview: "..self.side)
   end
+
+  --Draw buffer "background"
+  g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[4]*_BACKGROUND_ALPHA)
+  self.sprite:draw(0, 0)
 
   --Draw buffer
-  self.font:set()
-  g.scale(_SCALE, _SCALE)
-  g.setColor(self.clr)
-  self.sprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
-  g.printf(text, 0, 0, limit, self.align, 0, 1/_SCALE, 1/_SCALE,
-           self.textoffx * limit, self.font:getHeight())
-
-  if self.add > 0 then
-    local cr, cg, cb = self.flashcolor:unpack()
-    g.setColor(cr, cg, cb, self.add)
-    self.flashsprite:draw(0, 0, 0, 1, 1, self.offset.x, self.offset.y)
+  local grd
+  for i = 0, finish, step do
+    grd = (i == finish) and 1 or _GRADIENT_FILTER
+    g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
+    self.sprite:draw(i*_W_OFFSET, -step*i*_H_OFFSET)
   end
+  --Draw buffer size
+  local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
+  local text_w, text_h = self.font:getWidth(text), self.font:getHeight()
+  grd = _GRADIENT_FILTER
+  self.font:set()
+  g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
+  g.print(text, finish*_W_OFFSET + card_w/2 - text_w/2,
+                -step*finish*_H_OFFSET + card_h/2 - text_h/2)
+
+
   g.pop()
 end
 
