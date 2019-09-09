@@ -143,7 +143,8 @@ function HandView:draw()
   local card_tmp = hand[1]
   local gap = _GAP * self.gap_scale
   local step = card_tmp:getWidth() + gap
-  local x, y = self.x + (size*card_tmp:getWidth() + (size-1)*gap)/2, self.y
+  local width = (size*card_tmp:getWidth() + (size-1)*gap)
+  local x, y = self.x - width/2, self.y
   local enter = math.abs(y - self.initial_y) / (card_tmp:getHeight())
 
 
@@ -152,17 +153,20 @@ function HandView:draw()
 
   -- draw buttons
   local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
-  local button_x = x - size * step - self.prev_cursor:getWidth()
+  local button_x = x - self.prev_cursor:getWidth()
   self.prev_cursor:setPos(button_x, button_y)
   self.prev_cursor:draw()
-  button_x = x + gap
+  button_x = x + width
   self.next_cursor:setPos(button_x, button_y)
   self.next_cursor:draw()
 
+  -- draw back panel
+
+
   -- draw each card
-  for i=size,1,-1 do
+  for i=1,size do
     local card = hand[i]
-    local dx = (size-i+1)*step
+    local dx = (i-1)*step
     card:setFocus(i == self.focus_index)
     if DRAW_TABLE['HUD_FX'][card]
        or (self.keep_focused_card and i == self.focus_index) then
@@ -170,7 +174,7 @@ function HandView:draw()
     else
       card:setAlpha(self.alpha)
     end
-    card:setPosition(x - dx + gap,
+    card:setPosition(x + dx,
                      y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP)
     card:draw()
   end
