@@ -38,6 +38,8 @@ local MINIMAP = Class{
 }
 
 function MINIMAP:init(route, x, y, width, height)
+  ELEMENT.init(self)
+  
   self.w, self.h = width, height
   self.x, self.y = x, y
 
