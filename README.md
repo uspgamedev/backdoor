@@ -1,4 +1,6 @@
 
+<img src="https://camo.githubusercontent.com/1779bb0fca2dd020c03393005c8640c4aa1bb980/68747470733a2f2f75737067616d656465762e6f72672f6d6564696177696b692f696d616765732f382f38392f4261636b646f6f72636f7665722e706e67" alt="cover" data-canonical-src="https://uspgamedev.org/mediawiki/images/8/89/Backdoorcover.png" style="margin-left, margin-right: auto;display: block; width: 50%;" width="400">
+
 At the *Front Stage*, from the *Fateful Dream* Endless saga:
 The *Outermaze* Book of Rhapsodies'
 
