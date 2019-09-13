@@ -1,5 +1,7 @@
 
 local Color      = require 'common.color'
+local Class      = require "steaming.extra_libs.hump.class"
+local ELEMENT    = require "steaming.classes.primitives.element"
 local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
 local FONT       = require 'view.helpers.font'
@@ -7,7 +9,6 @@ local FONT       = require 'view.helpers.font'
 local min = math.min
 local max = math.max
 
-local _WIDTH, _HEIGHT
 local _TILE_W = 8
 local _TILE_H = 8
 local _RAD_W = _TILE_W/2
@@ -32,37 +33,47 @@ local _TILE_COLORS = {
   [SCHEMATICS.ALTAR]  = Color.fromInt {30, 100,  240, 255},
 }
 
-local _map
-local _font
+local MINIMAP = Class{
+  __includes = {ELEMENT}
+}
 
-local MINIMAP = {}
+function MINIMAP:init(route, x, y, width, height)
+  ELEMENT.init(self)
+  
+  self.w, self.h = width, height
+  self.x, self.y = x, y
 
-function MINIMAP.init(width, height)
-  _WIDTH, _HEIGHT = width, height
-  _map = love.graphics.newCanvas(width, height)
-  _font = FONT.get("Text", 20)
+  self.map = love.graphics.newCanvas(width, height)
+
+  self.route = route
+  self.actor = self.route:getControlledActor()
+
+  self.font = FONT.get("Text", 20)
 end
 
-function MINIMAP.draw(g, actor, sector)
+function MINIMAP:draw()
+  local g = love.graphics
+  local sector = self.route:getCurrentSector()
   local w, h = sector:getDimensions()
-  local ai, aj = actor:getPos()
+  local ai, aj = self.actor:getPos()
   local tiles = sector.tiles
   local zonename = sector:getZoneName()
   local nr, ng, nb = unpack(COLORS.NEUTRAL)
-  local fov = actor:getFov(sector)
+  local fov = self.actor:getFov(sector)
 
-  _font:set()
-  g.translate(0, 48)
+  g.push()
+  g.translate(self.x, self.y)
+  self.font:set()
   do
-    g.setCanvas(_map)
+    g.setCanvas(self.map)
     g.push()
     g.origin()
     g.clear()
     g.setColor(COLORS.EMPTY)
-    g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+    g.rectangle("fill", 0, 0, self.w, self.h)
     g.setColor(COLORS.NEUTRAL)
-    local translation_x = -aj*_TILE_W + _WIDTH/2
-    local translation_y = -ai*_TILE_H + _HEIGHT/2
+    local translation_x = -aj*_TILE_W + self.w/2
+    local translation_y = -ai*_TILE_H + self.h/2
     g.translate(
       translation_x,
       translation_y
@@ -95,16 +106,16 @@ function MINIMAP.draw(g, actor, sector)
     g.setCanvas()
   end
   g.setColor(COLORS.NEUTRAL)
-  g.draw(_map, 0, 0)
+  g.draw(self.map, 0, 0)
   g.push()
-  g.translate(2, _HEIGHT-20)
+  g.translate(2, self.h-20)
   g.setColor(COLORS.BLACK)
-  g.printf(zonename:upper(), 0, 0, _WIDTH-8, "right")
+  g.printf(zonename:upper(), 0, 0, self.w-8, "right")
   g.translate(-2, -2)
   g.setColor(COLORS.NEUTRAL)
-  g.printf(zonename:upper(), 0, 0, _WIDTH-8, "right")
+  g.printf(zonename:upper(), 0, 0, self.w-8, "right")
+  g.pop()
   g.pop()
 end
 
 return MINIMAP
-

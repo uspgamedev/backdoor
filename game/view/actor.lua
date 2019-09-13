@@ -7,7 +7,6 @@ local DEFS       = require 'domain.definitions'
 
 local ACTOR_PANEL   = require 'view.actor.panel'
 local ACTOR_HEADER  = require 'view.actor.header'
-local ACTOR_MINIMAP = require 'view.actor.minimap'
 local ACTOR_ATTR    = require 'view.actor.attr'
 local ACTOR_WIDGETS = require 'view.actor.widgets'
 local VIEWDEFS      = require 'view.definitions'
@@ -34,8 +33,6 @@ local function _initGraphicValues()
   ACTOR_PANEL.init(_PANEL_WIDTH, _PANEL_HEIGHT, _PANEL_MG)
   -- header
   ACTOR_HEADER.init(_PANEL_WIDTH, _PANEL_MG, _PANEL_PD)
-  -- minimap
-  ACTOR_MINIMAP.init(_PANEL_INNERWIDTH, 192)
   -- attributes
   ACTOR_ATTR.init(_PANEL_INNERWIDTH)
   -- widgets
@@ -70,7 +67,6 @@ function ActorView:draw()
   g.push()
   self:drawPanel(g)
   self:drawHP(g, actor)
-  self:drawMiniMap(g, actor)
   self:drawAttributes(g, actor)
   self:drawWidgets(g, actor)
   g.pop()
@@ -107,11 +103,6 @@ function ActorView:drawHP(g, actor)
   ACTOR_HEADER.drawBar(g, "HP", hp, max_hp, COLORS.SUCCESS, COLORS.NOTIFICATION)
   g.translate(0, 32)
   ACTOR_HEADER.drawBar(g, "PP", pp, max_pp, COLORS.PP, COLORS.PP)
-end
-
-function ActorView:drawMiniMap(g, actor)
-  local sector = self.route.getCurrentSector()
-  ACTOR_MINIMAP.draw(g, actor, sector)
 end
 
 function ActorView:drawAttributes(g, actor) --luacheck: no self
