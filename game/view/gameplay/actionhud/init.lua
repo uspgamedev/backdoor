@@ -7,8 +7,9 @@ local ADJACENCY     = require 'view.helpers.adjacency'
 local INPUT         = require 'input'
 local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
-local HandView      = require 'view.hand'
-local Minimap       = require 'view.actor.minimap'
+local HandView      = require 'view.gameplay.actionhud.hand'
+local Minimap       = require 'view.gameplay.actionhud.minimap'
+local CardDock      = require 'view.gameplay.actionhud.carddock'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
 local vec2          = require 'cpml' .vec2
@@ -38,12 +39,29 @@ function ActionHUD:init(route)
 
   self.route = route
 
+  local W, _ = VIEWDEFS.VIEWPORT_DIMENSIONS()
+
   -- Hand view
   self.handview = HandView(route)
   self.handview:register("HUD_BG", nil, "hand_view")
 
+  local maxslots = 16
+  local shortwidth = CardDock.widthFor(1)
+  local longwidth = CardDock.widthFor(maxslots)
+
+  -- Wieldable dock
+  self.wielddock = CardDock(W/5 - (longwidth - shortwidth)/2, 1)
+  self.wielddock:register("HUD")
+
+  -- Wearable dock
+  self.weardock = CardDock(W/5 + (longwidth - shortwidth)/2, 1)
+  self.weardock:register("HUD")
+
+  -- Conditions dock
+  self.conddock = CardDock(4*W/5, maxslots)
+  self.conddock:register("HUD")
+
   -- Minimap
-  local W, H = VIEWDEFS.VIEWPORT_DIMENSIONS()
   local size = 192
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
   self.minimap:register("HUD_BG", nil, "minimap")

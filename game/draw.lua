@@ -1,6 +1,6 @@
 --MODULE FOR DRAWING STUFF--
 
--- luacheck: globals love DRAW_TABLE DrawTable DEBUG SWITCHER
+-- luacheck: globals love DRAW_TABLE DEBUG SWITCHER
 
 local CAM = require 'common.camera'
 local VIEWDEFS = require 'view.definitions'
@@ -16,6 +16,17 @@ local draw = {}
 ----------------------
 --BASIC DRAW FUNCTIONS
 ----------------------
+
+--Draw all the elements in a table
+local function DrawTable(t)
+
+  for o in pairs(t) do
+    if not o.invisible then
+      o:draw() --Call the object respective draw function
+    end
+  end
+
+end
 
 --Update every drawable object
 function draw.update(dt)
@@ -63,17 +74,6 @@ function draw.allTables()
   DrawTable(DRAW_TABLE.GUI)
 
   SWITCHER.handleChangedState()
-end
-
---Draw all the elements in a table
-function DrawTable(t)
-
-  for o in pairs(t) do
-    if not o.invisible then
-      o:draw() --Call the object respective draw function
-    end
-  end
-
 end
 
 --Return functions
