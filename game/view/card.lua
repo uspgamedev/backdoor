@@ -15,7 +15,7 @@ local RES         = require 'resources'
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
 local _card_font = FONT.get("Text", 12)
-local _focus_speed = 8
+local _focus_speed = 5
 
 local CardView = Class{
   __includes = { ELEMENT }
