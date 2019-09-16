@@ -5,7 +5,7 @@ local AnimationPlayer  = require 'view.helpers.animationplayer'
 local BufferView  = require 'view.buffer'
 local ActorView   = require 'view.actorpanel'
 local Announcement = require 'view.announcement'
-local ActionHUD   = require 'view.action_hud'
+local ActionHUD   = require 'view.gameplay.actionhud'
 
 local GameplayView = Class {}
 
