@@ -1,9 +1,11 @@
+
+-- luacheck: globals love
+
 local vec2    = require 'cpml' .vec2
 local Button  = require 'view.controlhints.newhand'
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'
-local COLORS  = require 'domain.definitions.colors'
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
@@ -68,6 +70,10 @@ function BufferView:calculatePosition()
   end
 end
 
+function BufferView:getPosition()
+  return self.pos:unpack()
+end
+
 function BufferView:getPoint()
   local size = self.amount
   if self.side == 'front' then
@@ -79,7 +85,7 @@ function BufferView:getPoint()
   end
 end
 
-function BufferView:flashFor(duration, color)
+function BufferView:flashFor(_, _) -- luacheck: no self
   --pass
 end
 
