@@ -17,6 +17,7 @@ function ANIM:script(route, view, report)
     local finish = vec2(backbuffer:getPosition())
     hand:removeCard(card_index)
     action_hud:disableCardInfo()
+    cardview:setFocus(false)
     cardview:register("HUD")
     cardview:addTimer("slide", MAIN_TIMER, "tween", 0.5, cardview,
                       { position = finish }, 'out-cubic',
