@@ -1,6 +1,7 @@
 
 -- luacheck: globals love MAIN_TIMER DRAW_TABLE
 
+local DEFS         = require 'domain.definitions'
 local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CARD         = require 'view.helpers.card'
@@ -73,9 +74,9 @@ function HandView:getFocus()
 end
 
 function HandView:moveFocus(dir)
-  if dir == "LEFT" then
+  if dir == "RIGHT" then
     self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
-  elseif dir == "RIGHT" then
+  elseif dir == "LEFT" then
     self.focus_index = self.focus_index % (#self.hand) + 1
   end
 end
@@ -86,7 +87,7 @@ end
 
 function HandView:activate()
   self.active = true
-  self.focus_index = 1
+  self.focus_index = DEFS.HAND_LIMIT
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
@@ -110,16 +111,15 @@ function HandView:keepFocusedCard(flag)
 end
 
 function HandView:positionForIndex(i)
-  local size = #self.hand + 1
-  local card = self.hand[i]
+  local size = #self.hand
+  i = size + 1 - i
   local gap = _GAP * self.gap_scale
-  local step = card:getWidth() + gap
-  local x, y = self.x + (size*card:getWidth() + (size-1)*gap)/2,
-               self.y
-  local enter = math.abs(y - self.initial_y) / (card:getHeight())
-  local dx = (size-i+1)*step
-  return x - dx + gap,
-         y - 50 + (0.2+enter*0.4)*(i - (size+1)/2)^2*_GAP
+  local step = VIEWDEFS.CARD_W + gap
+  local width = size*VIEWDEFS.CARD_W + (size-1)*gap
+  local x, y = self.x - width/2, self.y
+  local enter = math.abs(y - self.initial_y) / VIEWDEFS.CARD_H
+  local dx = (i-1)*step
+  return x + dx, y - 50 + (0.2+enter*0.4)*_GAP
 end
 
 function HandView:hide()
@@ -152,12 +152,10 @@ function HandView:draw()
   local hand = self.hand
   local size = #hand
   if size <= 0 then return end
-  local card_tmp = hand[1]
   local gap = _GAP * self.gap_scale
-  local step = card_tmp:getWidth() + gap
-  local width = (size*card_tmp:getWidth() + (size-1)*gap)
+  local width = (size*VIEWDEFS.CARD_W + (size-1)*gap)
   local x, y = self.x - width/2, self.y
-  local enter = math.abs(y - self.initial_y) / (card_tmp:getHeight())
+  local enter = math.abs(y - self.initial_y) / VIEWDEFS.CARD_H
   local g = love.graphics
 
 
@@ -183,7 +181,6 @@ function HandView:draw()
   -- draw each card
   for i=1,size do
     local card = hand[i]
-    local dx = (i-1)*step
     card:setFocus(i == self.focus_index)
     if DRAW_TABLE['HUD_FX'][card]
        or (self.keep_focused_card and i == self.focus_index) then
@@ -191,9 +188,7 @@ function HandView:draw()
     else
       card:setAlpha(self.alpha)
     end
-    card:setPosition(x + dx,
-                     y - 50 + (0.2+enter*0.4)*_GAP)
-    card:draw()
+    card:setPosition(self:positionForIndex(i))
   end
   if self.cardinfo:isVisible() then
     local i = self.focus_index
@@ -210,7 +205,11 @@ end
 
 --Remove card given by index (must be valid)
 function HandView:removeCard( card_index)
-  table.remove(self.hand, card_index)
+  table.remove(self.hand, card_index):kill()
+end
+
+function HandView:cardCount()
+  return #self.hand
 end
 
 function HandView:getFocusedCard()
