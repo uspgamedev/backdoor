@@ -10,9 +10,8 @@ local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local PLAYSFX       = require 'helpers.playsfx'
-local ActionHUD     = require 'view.action_hud'
+local ActionHUD     = require 'view.gameplay.actionhud'
 local Draw          = require "draw"
-local Signal        = require "steaming.extra_libs.hump.signal"
 
 local state = {}
 
