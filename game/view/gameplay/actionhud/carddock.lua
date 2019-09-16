@@ -28,7 +28,7 @@ function CardDock:init(x, slots)
 end
 
 function CardDock:getSlotPosition(i)
-  local width = self:widthFor(self.slots)
+  local width = self.widthFor(self.slots)
   local left = self.x - width/2 + _MW + _PW
   return left + (i - 1) * _SLOT_OFFSET
 end
@@ -43,7 +43,7 @@ end
 
 function CardDock:drawFG()
   local g = love.graphics
-  local width = self:widthFor(self.slots)
+  local width = self.widthFor(self.slots)
   local left, right = -width/2, width/2
   local top, bottom = -_HEIGHT/2, _HEIGHT/2
   local shape = { left, bottom, left, 0, left + _MW, top, right - _MW, top,
