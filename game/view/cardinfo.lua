@@ -2,18 +2,23 @@
 -- luacheck: globals love
 
 local Color     = require 'common.color'
+local TEXTURE   = require 'view.helpers.texture'
 local COLORS    = require 'domain.definitions.colors'
 local FONT      = require 'view.helpers.font'
 local vec2      = require 'cpml' .vec2
 local Class     = require "steaming.extra_libs.hump.class"
 local ELEMENT   = require "steaming.classes.primitives.element"
 local VIEWDEFS  = require 'view.definitions'
+local RES       = require 'resources'
 
 local _SCALE = 4
+local _WIDTH = VIEWDEFS.CARD_W * _SCALE
+local _HEIGHT = VIEWDEFS.CARD_H * _SCALE
 local _MW = 16
 local _MH = 12
 local _PW = 16
 local _PH = 12
+local _CORNER = 12 * _SCALE
 
 local CardInfo = Class{
   __includes = { ELEMENT }
@@ -70,8 +75,6 @@ function CardInfo:draw()
   local g = love.graphics
   local cr, cg, cb = unpack(COLORS.BLACK)
   local player_actor = self.route.getPlayerActor()
-  local width = VIEWDEFS.CARD_W * _SCALE
-  local height = VIEWDEFS.CARD_H * _SCALE
 
   local desc = self.card:getEffect(player_actor)
   if not self.hide_desc then
@@ -88,8 +91,8 @@ function CardInfo:draw()
   local offset = math.sin(self.oscilate)*self.oscilate_magnitude
   g.translate(0, offset)
 
-  local boxw = width
-  local boxh = height
+  local boxw = _WIDTH
+  local boxh = _HEIGHT
   local corner = 12 * _SCALE
   local box = {
     0, corner,
@@ -103,20 +106,59 @@ function CardInfo:draw()
   -- Draw card-shaped panel
   g.push()
   local shadow = 8
+  local attr_color = COLORS[self.card:getRelatedAttr()]
   g.translate(shadow, 2*shadow - offset)
-  g.setColor(COLORS[self.card:getRelatedAttr()] * Color:new{.4, .4, .4, alpha/2})
+  g.setColor(attr_color * Color:new{.4, .4, .4, alpha/2})
   g.polygon('fill', box)
   g.translate(-shadow, -(2*shadow - offset))
-  g.setColor(COLORS[self.card:getRelatedAttr()] * Color:new{1, 1, 1, alpha})
+  g.setColor(attr_color * Color:new{1, 1, 1, alpha})
   g.polygon('fill', box)
   g.pop()
 
-  g.translate(_MW, _MH)
+  self:drawFocusCost()
 
-  -- Draw icon
-  local inner_corner = corner
-  local left, right = 0, width - (_MW+_PW)*2
-  local top, bottom = 0, (height - (_MH+_PH)*2) / 2
+  g.translate(_MW, _MH*4)
+  self:drawIcon()
+
+  -- Draw description
+  g.translate(0, _HEIGHT / 2)
+
+  g.setColor(cr, cg, cb, alpha)
+
+  self.title_font:setLineHeight(1.5)
+  self.title_font.set()
+  g.printf(self.card:getName(), 0, 0, _WIDTH - _MW*2, 'center')
+
+  g.translate(0, 1.5 * self.title_font:getHeight())
+
+  self.text_font.set()
+  g.printf(desc, 0, 0, _WIDTH - _MW*2)
+
+  g.pop()
+end
+
+function CardInfo:drawFocusCost()
+  local g = love.graphics
+  local focus_icon = RES.loadTexture('focus-icon')
+  local iw, _ = focus_icon:getDimensions()
+  local pd = 4 + iw
+  for i = 1, self.card:getCost() do
+    g.setColor(COLORS.DARK * Color:new{1,1,1, self.alpha})
+    g.push()
+    g.translate(_WIDTH - _MW - (i - 1) * pd * 2, _MH)
+    g.scale(2, 2)
+    g.draw(focus_icon, 0, 0, 0, 1, 1, iw, 0)
+    g.pop()
+  end
+end
+
+function CardInfo:drawIcon()
+  local g = love.graphics
+  local inner_corner = _CORNER
+  local left, right = 0, _WIDTH - (_MW+_PW)*2
+  local top, bottom = 0, (_HEIGHT - (_MH+_PH)*2) / 2
+  local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
+  local attr_color = COLORS[self.card:getRelatedAttr()]
   g.push()
   g.translate(_PW, _PH)
   g.setColor(COLORS.DARK)
@@ -128,23 +170,13 @@ function CardInfo:draw()
                     right - inner_corner, bottom,
                     left + inner_corner, bottom,
                     left, bottom - inner_corner)
-  g.pop()
-
-  -- Draw description
-  g.translate(0, height / 2)
-
-  g.setColor(cr, cg, cb, alpha)
-
-  self.title_font:setLineHeight(1.5)
-  self.title_font.set()
-  g.printf(self.card:getName(), 0, 0, width - _MW*2, 'center')
-
-  g.translate(0, 2 * self.title_font:getHeight())
-
-  self.text_font.set()
-  g.printf(desc, 0, 0, width - _MW*2)
-
+  g.setColor(attr_color * Color:new{1, 1, 1, self.alpha})
+  icon_texture:setFilter('linear', 'linear')
+  icon_texture:draw((left+right)/2, (top+bottom)/2, 0, 1, 1,
+                    icon_texture:getWidth()/2,
+                    icon_texture:getHeight()/2)
   g.pop()
 end
 
 return CardInfo
+
