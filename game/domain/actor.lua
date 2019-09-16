@@ -400,6 +400,7 @@ function Actor:getHandCard(index)
 end
 
 function Actor:removeHandCard(index)
+  index = index or #self.hand
   assert(index >= 1 and index <= #self.hand)
   return table.remove(self.hand, index)
 end
@@ -569,19 +570,20 @@ end
 
 function Actor:discardHand()
   while not self:isHandEmpty() do
-    local card = self:removeHandCard(1)
+    local index = self:getHandSize()
+    local card = self:removeHandCard(index)
     if not card:isTemporary() then
       self:addCardToBackbuffer(card)
       coroutine.yield('report', {
         type = 'discard_card',
         actor = self,
-        card_index = 1
+        card_index = index
       })
     else
       coroutine.yield('report', {
         type = 'discard_temporary_card',
         actor = self,
-        card_index = 1
+        card_index = index
       })
     end
   end
@@ -625,9 +627,9 @@ end
 
 function Actor:endFocus()
   local body = self:getBody()
+  self:discardHand()
   self:exhaust(DEFS.ACTION.FOCUS_COST)
   self.focus = 0
-  self:discardHand()
   body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
 end
 

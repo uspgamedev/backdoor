@@ -1,7 +1,6 @@
 
 -- luacheck: globals love MAIN_TIMER DRAW_TABLE
 
-local DEFS         = require 'domain.definitions'
 local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CARD         = require 'view.helpers.card'
@@ -13,6 +12,7 @@ local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
 
 local math = require 'common.math'
+local vec2 = require 'cpml' .vec2
 
 --CONSTS--
 local _WIDTH, _HEIGHT
@@ -74,9 +74,9 @@ function HandView:getFocus()
 end
 
 function HandView:moveFocus(dir)
-  if dir == "RIGHT" then
+  if dir == "LEFT" then
     self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
-  elseif dir == "LEFT" then
+  elseif dir == "RIGHT" then
     self.focus_index = self.focus_index % (#self.hand) + 1
   end
 end
@@ -87,7 +87,7 @@ end
 
 function HandView:activate()
   self.active = true
-  self.focus_index = DEFS.HAND_LIMIT
+  self.focus_index = 1
   self:removeTimer("start", MAIN_TIMER)
   self:removeTimer("end", MAIN_TIMER)
   self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
@@ -112,7 +112,6 @@ end
 
 function HandView:positionForIndex(i)
   local size = #self.hand
-  i = size + 1 - i
   local gap = _GAP * self.gap_scale
   local step = VIEWDEFS.CARD_W + gap
   local width = size*VIEWDEFS.CARD_W + (size-1)*gap
@@ -131,8 +130,19 @@ function HandView:show()
 end
 
 function HandView:update(dt)
-  for _,card in ipairs(self.hand) do
+  for i,card in ipairs(self.hand) do
     card:update(dt)
+    card:setFocus(i == self.focus_index)
+    if DRAW_TABLE['HUD_FX'][card]
+       or (self.keep_focused_card and i == self.focus_index) then
+      card:setAlpha(1)
+    else
+      card:setAlpha(self.alpha)
+    end
+    local pos = vec2(card:getPosition())
+    local target = vec2(self:positionForIndex(i))
+    local diff = (target - pos) * 10 * dt
+    card:setPosition((pos + diff):unpack())
   end
   self.cardinfo:update(dt)
   if not self.hiding then
@@ -178,18 +188,6 @@ function HandView:draw()
   g.polygon('fill', _BACKPANEL_VTX)
   g.pop()
 
-  -- draw each card
-  for i=1,size do
-    local card = hand[i]
-    card:setFocus(i == self.focus_index)
-    if DRAW_TABLE['HUD_FX'][card]
-       or (self.keep_focused_card and i == self.focus_index) then
-      card:setAlpha(1)
-    else
-      card:setAlpha(self.alpha)
-    end
-    card:setPosition(self:positionForIndex(i))
-  end
   if self.cardinfo:isVisible() then
     local i = self.focus_index
     local card = hand[i]
@@ -200,12 +198,12 @@ function HandView:draw()
 end
 
 function HandView:addCard(card_view)
-  table.insert(self.hand, card_view)
+  table.insert(self.hand, 1, card_view)
 end
 
 --Remove card given by index (must be valid)
-function HandView:removeCard( card_index)
-  table.remove(self.hand, card_index):kill()
+function HandView:removeCard(card_index)
+  table.remove(self.hand, card_index)
 end
 
 function HandView:cardCount()
