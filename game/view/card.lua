@@ -15,6 +15,7 @@ local RES         = require 'resources'
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
 local _card_font = FONT.get("Text", 12)
+local _focus_speed = 5
 
 local CardView = Class{
   __includes = { ELEMENT }
@@ -31,6 +32,7 @@ function CardView:init(card)
   self.card = card
   self.scale = 1
   self.focused = false
+  self.focus_value = 0
   self.alpha = 1
   self.stencil = function() end
   self.flash = 0
@@ -79,6 +81,11 @@ function CardView:raise()
 end
 
 function CardView:update(dt)
+  if self.focused then
+    self.focus_value = math.min(1, self.focus_value + _focus_speed*dt)
+  else
+    self.focus_value = math.max(0, self.focus_value - _focus_speed*dt)
+  end
   if self.flash > 0 then
     self.flash = math.max(0, self.flash - dt)
     if self.add < 0.95 then
@@ -130,17 +137,12 @@ function CardView:draw()
   g.setStencilTest("equal", 0)
   g.translate(self:getOffset())
   g.scale(self.scale, self.scale)
+  g.translate(0, -40*self.focus_value)
 
   if self.focused then
-    -- shine!
-    local shine = 50/255
+    _title_font:set()
     local cardname = self.card:getName()
     local namewidth = _title_font:getWidth(cardname)
-    g.translate(0, -40)
-    cr = cr + shine
-    cg = cg + shine
-    cb = cb + shine
-    _title_font:set()
     g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
@@ -154,6 +156,10 @@ function CardView:draw()
   self.sprite:draw(x+2, y+2)
 
   --card
+  local shine = 50/255
+  cr = cr + shine
+  cg = cg + shine
+  cb = cb + shine
   g.setColor(cr, cg, cb, self.alpha)
   self.sprite:draw(x, y)
 
