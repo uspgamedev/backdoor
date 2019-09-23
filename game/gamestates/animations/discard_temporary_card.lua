@@ -10,8 +10,10 @@ function ANIM:script(route, view, report)
     local hand_view = view.action_hud.handview
     local card_index = report.card_index
     local cardview = hand_view.hand[card_index]
-    self.wait(Dissolve(cardview, .5))
+    cardview:setFocus(false)
     hand_view:removeCard(card_index)
+    self.wait(Dissolve(cardview, .5))
+    cardview:kill()
   end
 end
 
