@@ -29,6 +29,7 @@ function BufferView:init(route)
   self.side = 'front'
   self.font = FONT.get("Text", 24)
   self.amount = 0
+  self.fake_amount = nil --Used for shuffle animation
 
   self.card_w_offset = 2
   self.card_h_offset = 1
@@ -59,8 +60,11 @@ function BufferView.newBackBufferView(route)
   return bufview
 end
 
-function BufferView:changeSide(duration, target_buffer)
+function BufferView:changeSide(duration, target_buffer, actor)
   if self.side == 'back' then
+    self:setDrawTable("HUD_FX")
+    self.fake_amount = actor:getBufferSize()
+    target_buffer.fake_amount = actor:getBackBufferSize()
     local delta = target_buffer:getPosition() - self:getPosition()
     local r, g, b = self.clr[1], self.clr[2], self.clr[3]
     local t_clr = target_buffer.clr
@@ -82,6 +86,9 @@ function BufferView:changeSide(duration, target_buffer)
                     self:removeTimer("changecolor")
                     self.clr[1], self.clr[2], self.clr[3] = r, g, b
                     self.card_w_offset = 2
+                    target_buffer.fake_amount = nil
+                    self.fake_amount = nil
+                    self:setDrawTable("HUD_BG")
                   end)
   end
 end
@@ -129,7 +136,7 @@ end
 
 function BufferView:draw()
   local g = love.graphics
-  local text = self.format:format(self.amount)
+  local text = self.format:format(self.fake_amount or self.amount)
 
   g.push()
   g.translate(self.pos.x, self.pos.y)
@@ -139,9 +146,9 @@ function BufferView:draw()
     --Draw button ontop of front buffer
     self.button:draw()
 
-    finish, step = math.min(self.amount, _MAX_CARDS) - 1, 1
+    finish, step = math.min(self.fake_amount or self.amount, _MAX_CARDS) - 1, 1
   elseif self.side == "back" then
-    finish, step = -math.min(self.amount, _MAX_CARDS) + 1, -1
+    finish, step = -math.min(self.fake_amount or self.amount, _MAX_CARDS) + 1, -1
   else
     error("Not a valid side for bufferview: "..self.side)
   end
