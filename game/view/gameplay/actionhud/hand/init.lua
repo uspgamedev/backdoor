@@ -69,6 +69,13 @@ function HandView:init(route)
 
 end
 
+function HandView:destroy()
+  for _, cardview in ipairs(self.hand) do
+    cardview:destroy()
+  end
+  ELEMENT.destroy(self)
+end
+
 function HandView:getFocus()
   return self.focus_index
 end
