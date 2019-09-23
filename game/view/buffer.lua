@@ -11,8 +11,6 @@ local ELEMENT = require "steaming.classes.primitives.element"
 
 local _MX = 32
 local _MY = 32
-local _W_OFFSET = 2
-local _H_OFFSET = 1
 local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
 local _MAX_CARDS = 15
@@ -31,6 +29,9 @@ function BufferView:init(route)
   self.side = 'front'
   self.font = FONT.get("Text", 24)
   self.amount = 0
+
+  self.card_w_offset = 2
+  self.card_h_offset = 1
 
   -- define later
   self.pos = nil
@@ -65,19 +66,22 @@ function BufferView:changeSide(duration, target_buffer)
     local t_clr = target_buffer.clr
     local tr, tg, tb = t_clr[1], t_clr[2], t_clr[3]
     self.format = "x %d"
-    self:addTimer("changeside", MAIN_TIMER, "tween", duration,
-                  self.offset, {x = delta.x, y = delta.y}, "out-cubic",
-                  function()
-                    self.ormat = "%d x"
-                    self.offset = vec2()
-                    self:removeTimer("changecolor")
-                    self.clr[1], self.clr[2], self.clr[3] = r, g, b
-                  end)
     self:addTimer("changecolor", MAIN_TIMER, "during", duration,
                   function(dt)
                     self.clr[1] = self.clr[1] + (tr - r)*dt/duration
                     self.clr[2] = self.clr[2] + (tg - g)*dt/duration
                     self.clr[3] = self.clr[3] + (tb - b)*dt/duration
+                  end)
+    self:addTimer("changecardoffset", MAIN_TIMER, "tween", duration,
+                  self, {card_w_offset = -2}, "out-cubic")
+    self:addTimer("changeside", MAIN_TIMER, "tween", duration,
+                  self.offset, {x = delta.x, y = delta.y}, "out-cubic",
+                  function()
+                    self.format = "%d x"
+                    self.offset = vec2()
+                    self:removeTimer("changecolor")
+                    self.clr[1], self.clr[2], self.clr[3] = r, g, b
+                    self.card_w_offset = 2
                   end)
   end
 end
@@ -102,9 +106,9 @@ end
 function BufferView:getTopCardPosition()
   local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(size * _W_OFFSET, size * _H_OFFSET) + self.offset
+    return self.pos + vec2(size * self.card_w_offset, size * self.card_h_offset) + self.offset
   elseif self.side == 'back' then
-    return self.pos + vec2(size * -_W_OFFSET, size * _H_OFFSET) + self.offset
+    return self.pos + vec2(size * -self.card_w_offset, size * self.card_h_offset) + self.offset
   end
 end
 
@@ -153,7 +157,7 @@ function BufferView:draw()
   for i = 0, finish, step do
     grd = (i == finish) and 1 or _GRADIENT_FILTER
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
-    self.sprite:draw(i*_W_OFFSET, step*i*_H_OFFSET)
+    self.sprite:draw(i*self.card_w_offset, step*i*self.card_h_offset)
   end
   --Draw buffer size
   local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
@@ -161,8 +165,8 @@ function BufferView:draw()
   grd = _GRADIENT_FILTER
   self.font:set()
   g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
-  g.print(text, finish*_W_OFFSET + card_w/2 - text_w/2,
-                step*finish*_H_OFFSET + card_h/2 - text_h/2)
+  g.print(text, finish*self.card_w_offset + card_w/2 - text_w/2,
+                step*finish*self.card_h_offset + card_h/2 - text_h/2)
 
 
   g.pop()
