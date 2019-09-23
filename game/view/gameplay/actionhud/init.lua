@@ -97,6 +97,9 @@ end
 function ActionHUD:destroy()
   self.handview:destroy()
   self.focusbar:destroy()
+  self.wielddock:destroy()
+  self.weardock:destroy()
+  self.conddock:destroy()
   self.minimap:destroy()
   ELEMENT.destroy(self)
 end
