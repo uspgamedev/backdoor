@@ -15,7 +15,7 @@ function ANIM:script(route, view, report)
     local hand = action_hud.handview
     hand:addCard(cardview)
     cardview:register("HUD")
-    cardview:setPosition(frontbuffer:getPosition())
+    cardview:setPosition(frontbuffer:getTopCardPosition():unpack())
     action_hud:disableCardInfo()
     self.wait(delay:set(0.2))
     cardview:setDrawTable("HUD_FX")

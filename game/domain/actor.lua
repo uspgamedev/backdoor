@@ -573,12 +573,12 @@ function Actor:discardHand()
     local index = self:getHandSize()
     local card = self:removeHandCard(index)
     if not card:isTemporary() then
-      self:addCardToBackbuffer(card)
       coroutine.yield('report', {
         type = 'discard_card',
         actor = self,
         card_index = index
       })
+      self:addCardToBackbuffer(card)
     else
       coroutine.yield('report', {
         type = 'discard_temporary_card',

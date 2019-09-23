@@ -12,7 +12,7 @@ local ELEMENT = require "steaming.classes.primitives.element"
 local _MX = 32
 local _MY = 32
 local _W_OFFSET = 2
-local _H_OFFSET = -1
+local _H_OFFSET = 1
 local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
 local _MAX_CARDS = 15
@@ -74,14 +74,12 @@ function BufferView:getPosition()
   return self.pos:unpack()
 end
 
-function BufferView:getPoint()
+function BufferView:getTopCardPosition()
   local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(size * _W_OFFSET + self.sprite:getWidth()/2,
-                           size * _H_OFFSET + self.sprite:getHeight()/2)
+    return self.pos + vec2(size * _W_OFFSET, size * _H_OFFSET)
   elseif self.side == 'back' then
-    return self.pos + vec2(size * -_W_OFFSET + self.sprite:getWidth()/2,
-                           size * _H_OFFSET + self.sprite:getHeight()/2)
+    return self.pos + vec2(size * -_W_OFFSET, size * _H_OFFSET)
   end
 end
 
@@ -128,7 +126,7 @@ function BufferView:draw()
   for i = 0, finish, step do
     grd = (i == finish) and 1 or _GRADIENT_FILTER
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
-    self.sprite:draw(i*_W_OFFSET, -step*i*_H_OFFSET)
+    self.sprite:draw(i*_W_OFFSET, step*i*_H_OFFSET)
   end
   --Draw buffer size
   local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
@@ -137,7 +135,7 @@ function BufferView:draw()
   self.font:set()
   g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
   g.print(text, finish*_W_OFFSET + card_w/2 - text_w/2,
-                -step*finish*_H_OFFSET + card_h/2 - text_h/2)
+                step*finish*_H_OFFSET + card_h/2 - text_h/2)
 
 
   g.pop()
