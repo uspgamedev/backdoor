@@ -10,9 +10,9 @@ function ANIM:script(route, view, report)
   if report.actor == route:getControlledActor() then
     local frontbuffer = view.frontbuffer
     local backbuffer = view.backbuffer
-    local d = .7
-    backbuffer:changeSide(d, frontbuffer)
-    self.wait(delay:set(d))
+    local d = .8
+    backbuffer:changeSide(d, frontbuffer, report.actor)
+    self.wait(delay:set(d-.1))
   end
   delay:kill()
 end
