@@ -34,6 +34,7 @@ function BufferView:init(route)
 
   -- define later
   self.pos = nil
+  self.offset = vec2()
   self.format = nil
 
   -- hint button
@@ -57,6 +58,30 @@ function BufferView.newBackBufferView(route)
   return bufview
 end
 
+function BufferView:changeSide(duration, target_buffer)
+  if self.side == 'back' then
+    local delta = target_buffer:getPosition() - self:getPosition()
+    local r, g, b = self.clr[1], self.clr[2], self.clr[3]
+    local t_clr = target_buffer.clr
+    local tr, tg, tb = t_clr[1], t_clr[2], t_clr[3]
+    self.format = "x %d"
+    self:addTimer("changeside", MAIN_TIMER, "tween", duration,
+                  self.offset, {x = delta.x, y = delta.y}, "out-cubic",
+                  function()
+                    self.ormat = "%d x"
+                    self.offset = vec2()
+                    self:removeTimer("changecolor")
+                    self.clr[1], self.clr[2], self.clr[3] = r, g, b
+                  end)
+    self:addTimer("changecolor", MAIN_TIMER, "during", duration,
+                  function(dt)
+                    self.clr[1] = self.clr[1] + (tr - r)*dt/duration
+                    self.clr[2] = self.clr[2] + (tg - g)*dt/duration
+                    self.clr[3] = self.clr[3] + (tb - b)*dt/duration
+                  end)
+  end
+end
+
 function BufferView:calculatePosition()
   local W,H = DEFS.VIEWPORT_DIMENSIONS()
   if self.side == 'front' then
@@ -71,15 +96,15 @@ function BufferView:calculatePosition()
 end
 
 function BufferView:getPosition()
-  return self.pos:unpack()
+  return self.pos+self.offset
 end
 
 function BufferView:getTopCardPosition()
   local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(size * _W_OFFSET, size * _H_OFFSET)
+    return self.pos + vec2(size * _W_OFFSET, size * _H_OFFSET) + self.offset
   elseif self.side == 'back' then
-    return self.pos + vec2(size * -_W_OFFSET, size * _H_OFFSET)
+    return self.pos + vec2(size * -_W_OFFSET, size * _H_OFFSET) + self.offset
   end
 end
 
@@ -120,6 +145,8 @@ function BufferView:draw()
   --Draw buffer "background"
   g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[4]*_BACKGROUND_ALPHA)
   self.sprite:draw(0, 0)
+
+  g.translate(self.offset.x, self.offset.y)
 
   --Draw buffer
   local grd
