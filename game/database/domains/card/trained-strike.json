@@ -49,6 +49,7 @@
   "icon":"card-dropkick",
   "name":"Trained Strike",
   "set":"brawler",
+  "temporary":true,
   "type-description":"",
   "one_time":false
 }

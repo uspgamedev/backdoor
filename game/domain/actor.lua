@@ -361,7 +361,7 @@ function Actor:drawCard()
     table.insert(self.buffer, DEFS.DONE)
     card = table.remove(self.buffer, 1)
   end
-  table.insert(self.hand, card)
+  table.insert(self.hand, 1, card)
   coroutine.yield('report', {
     type = "draw_card",
     actor = self,
