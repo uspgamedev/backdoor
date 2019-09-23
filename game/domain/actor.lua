@@ -376,7 +376,7 @@ function Actor:createEquipmentCards()
     for _,card_spec in active_eqp:eachActiveEquipmentCards() do
       local card = Card(card_spec.card)
       card:setOwner(self)
-      table.insert(self.hand, card)
+      table.insert(self.hand, 1, card)
       coroutine.yield('report', {
         type = "create_equipment_card",
         actor = self,
