@@ -14,18 +14,22 @@ function ANIM:script(route, view, report)
     local backbuffer = view.backbuffer
     local hand = action_hud.handview
     local cardview = hand.hand[card_index]
-    local finish = vec2(backbuffer:getPosition())
+    local finish = backbuffer:getTopCardPosition()
     hand:removeCard(card_index)
     action_hud:disableCardInfo()
     cardview:setFocus(false)
     cardview:register("HUD")
-    cardview:addTimer("slide", MAIN_TIMER, "tween", 0.5, cardview,
-                      { position = finish }, 'out-cubic',
-                      function () cardview:kill() end)
-    self.wait(delay:set(0.2))
+    cardview:addTimer("slide", MAIN_TIMER, "tween", .5, cardview,
+                      { position = finish }, 'out-cubic')
+    cardview:addTimer("wait", MAIN_TIMER, "after", .3,
+                      function ()
+                        cardview:addTimer("fadeout", MAIN_TIMER, "tween", .3,
+                                          cardview, {alpha = 0}, 'out-cubic',
+                                          function() cardview:kill() end)
+                      end)
+    self.wait(delay:set(0.25))
   end
   delay:kill()
 end
 
 return ANIM
-
