@@ -11,6 +11,7 @@ function ANIM:script(route, view, report)
   local action_hud = view.action_hud
   if report.actor == route:getControlledActor() then
     local card_view = CardView(report.card)
+    card_view:register("HUD")
     view.action_hud.handview:addCard(card_view)
     action_hud:disableCardInfo()
     local eqp_slot = view.actor.widgets:getActiveEquipmentSlot()
