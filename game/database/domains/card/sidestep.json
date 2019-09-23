@@ -36,5 +36,5 @@
   "icon":"card-sidestep",
   "name":"Side-step",
   "set":"brawler",
-  "temporary":false
+  "temporary":true
 }
