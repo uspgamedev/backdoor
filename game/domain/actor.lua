@@ -359,6 +359,10 @@ function Actor:drawCard()
   if card == DEFS.DONE then
     RANDOM.shuffle(self.buffer)
     table.insert(self.buffer, DEFS.DONE)
+    coroutine.yield('report', {
+      type = "shuffle_buffers",
+      actor = self,
+    })
     card = table.remove(self.buffer, 1)
   end
   table.insert(self.hand, 1, card)
