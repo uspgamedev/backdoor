@@ -18,7 +18,6 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
-local _FADE_SPD = 2
 local _BACKPANEL_MARGIN = 20
 local _BACKPANEL_WIDTH = 512
 local _BACKPANEL_HEIGHT = 64
@@ -92,7 +91,7 @@ end
 
 function HandView:activate()
   self.active = true
-  self.focus_index = 1
+  self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
 end
 
 function HandView:deactivate()
@@ -137,15 +136,6 @@ function HandView:update(dt)
     card:setPosition((pos + diff):unpack())
   end
   self.cardinfo:update(dt)
-  if not self.hiding then
-    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
-  else
-    if self.alpha > 0.01 then
-      self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
-    else
-      self.alpha = 0
-    end
-  end
   self.prev_cursor:update(dt)
   self.next_cursor:update(dt)
 end
@@ -153,7 +143,6 @@ end
 function HandView:draw()
   local hand = self.hand
   local size = #hand
-  if size <= 0 then return end
   local gap = _GAP * self.gap_scale
   local width = (size*VIEWDEFS.CARD_W + (size-1)*gap)
   local x, y = self.x - width/2, self.y
