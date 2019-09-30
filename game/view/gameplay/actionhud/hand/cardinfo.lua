@@ -44,10 +44,13 @@ function CardInfo:init(route)
   self.oscilate_magnitude = 4
   self.oscilate_speed = 6
 
+  -- For custom animations
+  self.force_show = false
+
 end
 
 function CardInfo:setCard(card)
-  self.card = card
+  self.card = self.force_show or card
 end
 
 function CardInfo:show()
@@ -56,7 +59,14 @@ function CardInfo:show()
 end
 
 function CardInfo:hide()
-  self.invisible = true
+  if not self.force_show then
+    self.invisible = true
+  end
+end
+
+function CardInfo:forceShow(card)
+  self.force_show = card
+  self.invisible = not card
 end
 
 function CardInfo:isVisible()
