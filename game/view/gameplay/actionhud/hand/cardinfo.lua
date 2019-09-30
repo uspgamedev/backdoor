@@ -38,6 +38,7 @@ function CardInfo:init(route)
   self.alpha = 1
   self.invisible = true
   self.side = 'right'
+  self.locked_card = nil
 
   --Oscilating effect
   self.oscilate = 0
@@ -47,7 +48,7 @@ function CardInfo:init(route)
 end
 
 function CardInfo:setCard(card)
-  self.card = card
+  self.card = self.locked_card or card
 end
 
 function CardInfo:show()
@@ -56,7 +57,14 @@ function CardInfo:show()
 end
 
 function CardInfo:hide()
-  self.invisible = true
+  if not self.locked_card then
+    self.invisible = true
+  end
+end
+
+function CardInfo:lockCard(card)
+  self.locked_card = card
+  self.invisible = not card
 end
 
 function CardInfo:isVisible()
