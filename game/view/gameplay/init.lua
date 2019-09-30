@@ -50,4 +50,3 @@ function GameplayView:destroy()
 end
 
 return GameplayView
-

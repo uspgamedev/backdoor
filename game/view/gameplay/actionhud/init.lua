@@ -162,6 +162,22 @@ function ActionHUD:unlockHoldbar()
   self.holdbar:unlock()
 end
 
+function ActionHUD:getWearDockPosition()
+  return self.weardock:getSlotPosition(1)
+end
+
+function ActionHUD:getWieldDockPosition()
+  return self.wielddock:getSlotPosition(1)
+end
+
+function ActionHUD:getCondDockPosition(index)
+  return self.conddock:getSlotPosition(index)
+end
+
+function ActionHUD:getConditionsCount()
+  return self.conddock:getOccupiedSlotCount()
+end
+
 --[[ INPUT methods ]]--
 
 function ActionHUD:wasAnyPressed()

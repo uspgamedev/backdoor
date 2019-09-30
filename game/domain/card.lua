@@ -158,6 +158,10 @@ function Card:isSpent()
   return max > 0 and self:getUsages() >= max
 end
 
+function Card:isEquipment()
+  return self:getSpec('widget').equipment
+end
+
 function Card:getActiveEquipmentCardCount()
   return #self:getSpec('widget').equipment.active.cards
 end
