@@ -25,6 +25,13 @@ function EquipmentDock:init(x)
   self.pos = vec2(x, h - _HEIGHT/2)
 end
 
+function EquipmentDock:destroy()
+  if self.cardview then
+    self.cardview:kill()
+  end
+  ELEMENT.destroy(self)
+end
+
 function EquipmentDock:isEmpty()
   return not self.cardview
 end
