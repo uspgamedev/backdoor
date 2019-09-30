@@ -28,7 +28,7 @@ function ANIM:script(route, view, report)
     cardview:setFocus(false)
     cardview:register("HUD_FX")
     _slideRight(cardview, backbuffer, self)
-    if not cardview.temporary then
+    if not cardview.temporary and cardview.card:isOneTimeOnly() then
       _slideDown(cardview, backbuffer)
     else
       _dissolve(cardview)
