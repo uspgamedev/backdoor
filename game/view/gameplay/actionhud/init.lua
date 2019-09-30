@@ -9,7 +9,8 @@ local DEFS          = require 'domain.definitions'
 local VIEWDEFS      = require 'view.definitions'
 local HandView      = require 'view.gameplay.actionhud.hand'
 local Minimap       = require 'view.gameplay.actionhud.minimap'
-local CardDock      = require 'view.gameplay.actionhud.carddock'
+local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
+local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
 local vec2          = require 'cpml' .vec2
@@ -45,21 +46,19 @@ function ActionHUD:init(route)
   self.handview = HandView(route)
   self.handview:register("HUD_BG", nil, "hand_view")
 
-  local maxslots = 16
-  local shortwidth = CardDock.widthFor(1)
-  local longwidth = CardDock.widthFor(maxslots)
+  local margin, off = 20, 20
 
   -- Wieldable dock
-  self.wielddock = CardDock(W/5 - (longwidth - shortwidth)/2, 1)
+  self.wielddock = EquipmentDock(W/5 - EquipmentDock.getWidth()/2 - margin/2 + off)
   self.wielddock:register("HUD")
 
   -- Wearable dock
-  self.weardock = CardDock(W/5 + (longwidth - shortwidth)/2, 1)
+  self.weardock = EquipmentDock(W/5 + EquipmentDock.getWidth()/2 + margin/2 + off)
   self.weardock:register("HUD")
 
   -- Conditions dock
-  self.conddock = CardDock(4*W/5, maxslots)
-  self.conddock:register("HUD")
+  self.conddock = ConditionDock(4*W/5, 5)
+  self.conddock:register("HUD_BG")
 
   -- Minimap
   local size = 192
@@ -163,11 +162,11 @@ function ActionHUD:unlockHoldbar()
 end
 
 function ActionHUD:getWearDockPosition()
-  return self.weardock:getSlotPosition(1)
+  return self.weardock:getSlotPosition()
 end
 
 function ActionHUD:getWieldDockPosition()
-  return self.wielddock:getSlotPosition(1)
+  return self.wielddock:getSlotPosition()
 end
 
 function ActionHUD:getCondDockPosition(index)
@@ -175,7 +174,7 @@ function ActionHUD:getCondDockPosition(index)
 end
 
 function ActionHUD:getConditionsCount()
-  return self.conddock:getOccupiedSlotCount()
+  return self.conddock:getConditionsCount()
 end
 
 function ActionHUD:findWidgetCard(card)
