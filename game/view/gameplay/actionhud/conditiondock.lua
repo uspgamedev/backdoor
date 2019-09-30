@@ -16,6 +16,13 @@ local ConditionDock = Class {
   __includes = {ELEMENT}
 }
 
+function ConditionDock:destroy()
+  for _, card in ipairs(self.cardviews) do
+    card:kill()
+  end
+  ELEMENT.destroy(self)
+end
+
 function ConditionDock:getWidth()
   return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (self.slots - 1) * _SLOT_OFFSET
 end
