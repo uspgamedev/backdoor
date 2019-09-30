@@ -42,7 +42,7 @@ end
 function CardDock:getSlotPosition(i)
   local width = self.widthFor(self.slots)
   local left = self.pos.x - width/2 + _MW + _PW
-  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - 3*VIEWDEFS.CARD_H/4)
+  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
 end
 
 function CardDock:draw()

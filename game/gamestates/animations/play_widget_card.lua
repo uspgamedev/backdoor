@@ -1,6 +1,7 @@
 
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
+local VIEWDEFS      = require 'view.definitions'
 local Dissolve      = require 'view.dissolvecard'
 local vec2          = require 'cpml' .vec2
 
@@ -41,7 +42,7 @@ function ANIM:script(route, view, report)
     ann:announce(cardview.card:getName())
     local destination, dock, slot = _findPlayedCardViewDestination(view, cardview)
 
-    local offset = vec2(0, -100)
+    local offset = vec2(0, -2*VIEWDEFS.CARD_H)
     cardview:addTimer("slide", MAIN_TIMER, "tween", .6, cardview,
                       {position = destination + offset}, 'out-cubic',
       function()
