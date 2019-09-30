@@ -12,44 +12,43 @@ local _PW = 2
 local _HEIGHT = 32
 local _SLOT_OFFSET = 8
 
-local CardDock = Class {
+local ConditionDock = Class {
   __includes = {ELEMENT}
 }
 
-function CardDock.widthFor(slots)
-  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (slots - 1) * _SLOT_OFFSET
+function ConditionDock:getWidth()
+  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (self.slots - 1) * _SLOT_OFFSET
 end
 
-function CardDock:init(x, slots)
+function ConditionDock:init(x, slots)
   local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.slots = slots
   self.cardviews = {}
   self.pos = vec2(x, h - _HEIGHT/2)
 end
 
-function CardDock:getOccupiedSlotCount()
+function ConditionDock:getConditionsCount()
   return #self.cardviews
 end
 
-function CardDock:addCard(cardview, slot_index)
-  table.insert(self.cardviews, slot_index, cardview)
+function ConditionDock:addCard(cardview)
+  table.insert(self.cardviews, cardview)
 end
 
-function CardDock:getCard(slot_index)
+function ConditionDock:getCard(slot_index)
   return self.cardviews[slot_index]
 end
 
-function CardDock:removeCard(slot_index)
+function ConditionDock:removeCard(slot_index)
   return table.remove(self.cardviews, slot_index)
 end
 
-function CardDock:getSlotPosition(i)
-  local width = self.widthFor(self.slots)
-  local right = self.pos.x -(- width/2 + _MW + _PW) - VIEWDEFS.CARD_W
-  return vec2(right - (i - 1) * _SLOT_OFFSET, self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
+function ConditionDock:getSlotPosition(i)
+  local left = self.pos.x - self:getWidth()/2 + _MW + _PW
+  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
 end
 
-function CardDock:draw()
+function ConditionDock:draw()
   local g = love.graphics
   g.push()
   g.translate(self.pos:unpack())
@@ -57,9 +56,9 @@ function CardDock:draw()
   g.pop()
 end
 
-function CardDock:drawFG()
+function ConditionDock:drawFG()
   local g = love.graphics
-  local width = self.widthFor(self.slots)
+  local width = self:getWidth()
   local left, right = -width/2, width/2
   local top, bottom = -_HEIGHT/2, _HEIGHT/2
   local shape = { left, bottom, left, 0, left + _MW, top, right - _MW, top,
@@ -68,4 +67,4 @@ function CardDock:drawFG()
   g.polygon('fill', shape)
 end
 
-return CardDock
+return ConditionDock
