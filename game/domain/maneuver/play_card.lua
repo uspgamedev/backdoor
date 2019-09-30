@@ -1,5 +1,4 @@
 
-local ACTIONDEFS  = require 'domain.definitions.action'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local ABILITY     = require 'domain.ability'
 
@@ -38,8 +37,6 @@ function PLAYCARD.perform(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local body = actor:getBody()
 
-  actor:playCard(inputvalues.card_index)
-
   coroutine.yield('report', {
     type = 'body_acted',
     body = body,
@@ -48,7 +45,7 @@ function PLAYCARD.perform(actor, inputvalues)
   actor:spendFocus(card:getCost())
   if card:isArt() then
     coroutine.yield('report', {
-      type = 'play_card',
+      type = 'play_art_card',
       actor = actor,
       card_index = inputvalues.card_index
     })
@@ -63,6 +60,7 @@ function PLAYCARD.perform(actor, inputvalues)
     })
   end
 
+  actor:playCard(inputvalues.card_index)
   actor:checkFocus()
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
