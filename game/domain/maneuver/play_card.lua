@@ -53,13 +53,13 @@ function PLAYCARD.perform(actor, inputvalues)
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
+    body:placeWidget(card)
     coroutine.yield('report', {
       type = 'play_widget_card',
       actor = actor,
       card_index = inputvalues.card_index
     })
     actor:playCard(inputvalues.card_index)
-    body:placeWidget(card)
   end
 
   actor:checkFocus()
