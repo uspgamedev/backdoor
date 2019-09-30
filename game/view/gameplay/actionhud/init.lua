@@ -178,6 +178,25 @@ function ActionHUD:getConditionsCount()
   return self.conddock:getOccupiedSlotCount()
 end
 
+function ActionHUD:findWidgetCard(card)
+  if self.weardock:getCard(1) and
+     self.weardock:getCard(1).card == card then
+    return self.weardock:removeCard(1)
+  end
+  if self.wielddock:getCard(1) and
+     self.wielddock:getCard(1).card == card then
+      return self.wielddock:removeCard(1)
+  end
+  for i = 1, self:getConditionsCount() do
+    if self.conddock:getCard(i) and
+       self.conddock:getCard(i).card == card then
+        return self.conddock:removeCard(i)
+    end
+  end
+
+  return error("Couldn't find widget")
+end
+
 --[[ INPUT methods ]]--
 
 function ActionHUD:wasAnyPressed()
