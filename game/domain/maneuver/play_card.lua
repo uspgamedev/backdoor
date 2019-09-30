@@ -52,7 +52,6 @@ function PLAYCARD.perform(actor, inputvalues)
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
-    print("used widget")
     body:placeWidget(card)
     coroutine.yield('report', {
       type = 'play_widget_card',
