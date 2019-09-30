@@ -19,7 +19,7 @@ local function _findPlayedCardViewDestination(view, cardview)
       return hud:getWearDockPosition(), hud.weardock, 1
     end
   else --Is a condition widget
-    local slot = hud:getConditionsCount()
+    local slot = hud:getConditionsCount() + 1
     return hud:getCondDockPosition(slot), hud.conddock, slot
   end
   return error("Error with widget card")
@@ -30,7 +30,6 @@ function ANIM:script(route, view, report)
   local delay = TweenValue(0)
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
-    --action_hud.handview:keepFocusedCard(false)
     action_hud.handview:removeCard(report.card_index)
     cardview:setAlpha(1)
     cardview:setFocus(false)

@@ -35,6 +35,10 @@ function CardDock:addCard(cardview, slot_index)
   table.insert(self.cardviews, slot_index, cardview)
 end
 
+function CardDock:getCard(slot_index)
+  return self.cardviews[slot_index]
+end
+
 function CardDock:removeCard(slot_index)
   return table.remove(self.cardviews, slot_index)
 end
