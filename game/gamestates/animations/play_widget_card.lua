@@ -2,12 +2,11 @@
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local VIEWDEFS      = require 'view.definitions'
-local Dissolve      = require 'view.dissolvecard'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
 
--- luacheck: no self
+-- luacheck: no self, globals MAIN_TIMER
 
 local function _findPlayedCardViewDestination(view, cardview)
   local hud = view.action_hud
@@ -31,6 +30,7 @@ function ANIM:script(route, view, report)
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
     action_hud.handview:removeCard(report.card_index)
+    action_hud.handview.cardinfo:lockCard(cardview.card)
     cardview:setAlpha(1)
     cardview:setFocus(false)
     local ann = Util.findId('announcement')
@@ -49,6 +49,8 @@ function ANIM:script(route, view, report)
         cardview:setMode(mode)
         cardview:addTimer("wait", MAIN_TIMER, "after", .1,
               function()
+                action_hud.handview.cardinfo:lockCard()
+                action_hud:disableCardInfo()
                 cardview:addTimer("final_slide", MAIN_TIMER, "tween", .6,
                                   cardview, {position = destination}, 'out-cubic',
                   function()
