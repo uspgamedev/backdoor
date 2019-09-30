@@ -11,6 +11,7 @@ function ANIM:script(route, view, report)
     local backbuffer = view.backbuffer
     local finish = backbuffer:getTopCardPosition()
     local offset = vec2(0, -2*VIEWDEFS.CARD_H)
+    cardview:setMode("normal")
     cardview:addTimer("slide", MAIN_TIMER, "tween", .5, cardview,
                       { position = finish + offset }, 'out-cubic',
                     function()

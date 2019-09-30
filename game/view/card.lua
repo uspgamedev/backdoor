@@ -16,6 +16,14 @@ local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
 local _card_font = FONT.get("Text", 12)
 local _focus_speed = 5
+local _icon_offset_speed = 80
+local _cost_alpha_speed = 5
+
+local _MODE = {
+    normal = "normal",
+    cond =  "condition",
+    equip = "equipment"
+}
 
 local CardView = Class{
   __includes = { ELEMENT }
@@ -41,6 +49,11 @@ function CardView:init(card)
   self.position = vec2()
   self.offset = vec2()
   self.raised = TweenValue(0, 'smooth', 5)
+
+  --Attributes related to different modes
+  self.mode = _MODE.normal
+  self.icon_offset = vec2(0,0)
+  self.cost_alpha = 1
 end
 
 function CardView:getWidth()
@@ -57,6 +70,11 @@ end
 
 function CardView:setFocus(flag)
   self.focused = flag
+end
+
+function CardView:setMode(mode)
+  assert(_MODE[mode], "Not a valid mode for cardview")
+  self.mode = _MODE[mode]
 end
 
 function CardView:setAlpha(alpha)
@@ -99,6 +117,19 @@ function CardView:update(dt)
     else
       self.add = 0
     end
+  end
+
+  --Switch between modes
+  if self.mode == _MODE.normal then
+    self.icon_offset.y = math.min(self.icon_offset.y + _icon_offset_speed*dt, 0)
+    self.cost_alpha = math.min(self.cost_alpha + _cost_alpha_speed*dt, 1)
+  elseif self.mode == _MODE.equip then
+    self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -30)
+    self.cost_alpha = math.max(self.cost_alpha - _cost_alpha_speed*dt, 0)
+  elseif self.mode == _MODE.cond then
+
+  else
+    error("Not a valid mode for cardview")
   end
 end
 
@@ -167,11 +198,14 @@ function CardView:draw()
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
   g.setColor(br, bg, bb, self.alpha)
+  g.push()
+  g.translate(self.icon_offset.x, self.icon_offset.y)
   icon_texture:setFilter('linear', 'linear')
   icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2
   )
+  g.pop()
   g.push()
   g.translate(x, y)
   --Draw card info
@@ -187,7 +221,7 @@ function CardView:draw()
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i = 1, self.card:getCost() do
-    g.setColor(br, bg, bb, self.alpha)
+    g.setColor(br, bg, bb, self.alpha * self.cost_alpha)
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
