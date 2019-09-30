@@ -9,8 +9,8 @@ local vec2      = require 'cpml' .vec2
 
 local _MW = 16
 local _PW = 2
-local _HEIGHT = 32
-local _SLOT_OFFSET = 8
+local _HEIGHT = 48
+local _SLOT_OFFSET = 55
 
 local ConditionDock = Class {
   __includes = {ELEMENT}
@@ -45,7 +45,7 @@ end
 
 function ConditionDock:getSlotPosition(i)
   local left = self.pos.x - self:getWidth()/2 + _MW + _PW
-  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
+  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - _HEIGHT)
 end
 
 function ConditionDock:draw()

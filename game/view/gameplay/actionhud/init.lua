@@ -57,7 +57,7 @@ function ActionHUD:init(route)
   self.weardock:register("HUD")
 
   -- Conditions dock
-  self.conddock = ConditionDock(4*W/5, 5)
+  self.conddock = ConditionDock(4*W/5, 4)
   self.conddock:register("HUD_BG")
 
   -- Minimap
