@@ -27,10 +27,22 @@ function CardDock:init(x, slots)
   self.pos = vec2(x, h - _HEIGHT/2)
 end
 
+function CardDock:getOccupiedSlotCount()
+  return #self.cardviews
+end
+
+function CardDock:addCard(cardview, slot_index)
+  table.insert(self.cardviews, slot_index, cardview)
+end
+
+function CardDock:removeCard(slot_index)
+  return table.remove(self.cardviews, slot_index)
+end
+
 function CardDock:getSlotPosition(i)
   local width = self.widthFor(self.slots)
-  local left = self.x - width/2 + _MW + _PW
-  return left + (i - 1) * _SLOT_OFFSET
+  local left = self.pos.x - width/2 + _MW + _PW
+  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - 3*VIEWDEFS.CARD_H/4)
 end
 
 function CardDock:draw()
@@ -53,4 +65,3 @@ function CardDock:drawFG()
 end
 
 return CardDock
-
