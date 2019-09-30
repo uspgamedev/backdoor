@@ -30,7 +30,7 @@ function ANIM:script(route, view, report)
     _slideRight(cardview, backbuffer, self)
     action_hud.handview.cardinfo:lockCard()
     action_hud:disableCardInfo()
-    if not cardview.temporary then
+    if not cardview.temporary and cardview.card:isOneTimeOnly() then
       _slideDown(cardview, backbuffer)
     else
       _dissolve(cardview)
