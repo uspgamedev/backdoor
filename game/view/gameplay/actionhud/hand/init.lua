@@ -3,7 +3,6 @@
 
 local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
-local CARD         = require 'view.helpers.card'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
 local Button       = require 'view.controlhints.changehandcursor'
@@ -11,7 +10,6 @@ local VIEWDEFS     = require 'view.definitions'
 local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
 
-local math = require 'common.math'
 local vec2 = require 'cpml' .vec2
 
 --CONSTS--
@@ -20,7 +18,6 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
-local _FADE_SPD = 2
 local _BACKPANEL_MARGIN = 20
 local _BACKPANEL_WIDTH = 512
 local _BACKPANEL_HEIGHT = 64
@@ -54,10 +51,10 @@ function HandView:init(route)
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
-  self.x, self.y = _WIDTH/2, _HEIGHT
-  self.initial_x, self.initial_y = self.x, self.y
+  self.x, self.y = _WIDTH/2, _HEIGHT - VIEWDEFS.CARD_H
+  self.initial_y = self.y
   self.route = route
-  self.gap_scale = _GAP_SCALE.MIN
+  self.gap_scale = _GAP_SCALE.MAX
   self.cardinfo = CardInfo(route)
   self.alpha = 1
   self.hiding = false
@@ -94,23 +91,11 @@ end
 
 function HandView:activate()
   self.active = true
-  self.focus_index = 1
-  self:removeTimer("start", MAIN_TIMER)
-  self:removeTimer("end", MAIN_TIMER)
-  self:addTimer("start", MAIN_TIMER, "tween", 0.2, self,
-                { y = self.initial_y - CARD.getHeight(),
-                  gap_scale = _GAP_SCALE.MAX }, 'out-back')
+  self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
 end
 
 function HandView:deactivate()
   self.active = false
-
-  self:removeTimer("start", MAIN_TIMER)
-  self:removeTimer("end", MAIN_TIMER)
-
-  self:addTimer("end", MAIN_TIMER, "tween", 0.2, self,
-                { y = self.initial_y, gap_scale = _GAP_SCALE.MIN },
-                'out-back')
 end
 
 function HandView:keepFocusedCard(flag)
@@ -123,9 +108,8 @@ function HandView:positionForIndex(i)
   local step = VIEWDEFS.CARD_W + gap
   local width = size*VIEWDEFS.CARD_W + (size-1)*gap
   local x, y = self.x - width/2, self.y
-  local enter = math.abs(y - self.initial_y) / VIEWDEFS.CARD_H
   local dx = (i-1)*step
-  return x + dx, y - 50 + (0.2+enter*0.4)*_GAP
+  return x + dx, y - 50 + 0.2*_GAP
 end
 
 function HandView:hide()
@@ -152,15 +136,6 @@ function HandView:update(dt)
     card:setPosition((pos + diff):unpack())
   end
   self.cardinfo:update(dt)
-  if not self.hiding then
-    self.alpha = self.alpha + (1 - self.alpha) * dt * _FADE_SPD * 4
-  else
-    if self.alpha > 0.01 then
-      self.alpha = self.alpha + (0 - self.alpha) * dt * _FADE_SPD
-    else
-      self.alpha = 0
-    end
-  end
   self.prev_cursor:update(dt)
   self.next_cursor:update(dt)
 end
@@ -168,11 +143,9 @@ end
 function HandView:draw()
   local hand = self.hand
   local size = #hand
-  if size <= 0 then return end
   local gap = _GAP * self.gap_scale
   local width = (size*VIEWDEFS.CARD_W + (size-1)*gap)
   local x, y = self.x - width/2, self.y
-  local enter = math.abs(y - self.initial_y) / VIEWDEFS.CARD_H
   local g = love.graphics
 
 
@@ -180,7 +153,7 @@ function HandView:draw()
   _font.set()
 
   -- draw buttons
-  local button_y = y + 20 + (0.2+enter*0.4)*(1 - (size+1)/2)^2*_GAP
+  local button_y = y + 20 + 0.2*(1 - (size+1)/2)^2*_GAP
   local button_x = x - self.prev_cursor:getWidth()
   self.prev_cursor:setPos(button_x, button_y)
   self.prev_cursor:draw()
