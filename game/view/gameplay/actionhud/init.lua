@@ -105,7 +105,6 @@ end
 
 function ActionHUD:activateAbility()
   self.handview:keepFocusedCard(true)
-  self.handview:hide()
 end
 
 function ActionHUD:enableTurn(unlock_holdbar)
@@ -268,7 +267,9 @@ function ActionHUD:actionRequested()
   end
 
   if not self.inspecting and action_request then
-    self:resetCardInfoLag()
+    if action_request[1] ~= DEFS.ACTION.PLAY_CARD then
+      self:resetCardInfoLag()
+    end
     return unpack(action_request)
   end
 
@@ -278,8 +279,7 @@ end
 --[[ Update ]]--
 
 local function _disableHUDElements(self)
-  self.handview:hide()
-  self:disableCardInfo()
+  --self:disableCardInfo()
   if self.handview:isActive() then
     self.handview:deactivate()
   end
@@ -321,14 +321,12 @@ function ActionHUD:update(dt)
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
       if INPUT.isActionDown('ACTION_3') then
-        self.handview:hide()
         self:disableCardInfo()
         if self.handview:isActive() then
           self.handview:deactivate()
         end
         _startInspect(self)
       else
-        self.handview:show()
         self:enableCardInfo()
         if not self.handview:isActive() then
           self.handview:activate()
