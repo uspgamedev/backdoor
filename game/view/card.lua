@@ -17,7 +17,8 @@ local _info_font = FONT.get("Text", 18)
 local _card_font = FONT.get("Text", 12)
 local _focus_speed = 5
 local _icon_offset_speed = 80
-local _cost_alpha_speed = 5
+local _info_alpha_speed = 5
+local _mode_scale_speed = 3
 
 local _MODE = {
     normal = "normal",
@@ -53,7 +54,8 @@ function CardView:init(card)
   --Attributes related to different modes
   self.mode = _MODE.normal
   self.icon_offset = vec2(0,0)
-  self.cost_alpha = 1
+  self.info_alpha = 1
+  self.mode_scale = vec2(1,1)
 end
 
 function CardView:getWidth()
@@ -121,13 +123,23 @@ function CardView:update(dt)
 
   --Switch between modes
   if self.mode == _MODE.normal then
+    self.icon_offset.x = math.min(self.icon_offset.x + _icon_offset_speed*dt, 0)
     self.icon_offset.y = math.min(self.icon_offset.y + _icon_offset_speed*dt, 0)
-    self.cost_alpha = math.min(self.cost_alpha + _cost_alpha_speed*dt, 1)
+    self.info_alpha = math.min(self.info_alpha + _info_alpha_speed*dt, 1)
+    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed, 1)
+    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed, 1)
   elseif self.mode == _MODE.equip then
+    self.icon_offset.x = math.min(self.icon_offset.x + _icon_offset_speed*dt, 0)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -30)
-    self.cost_alpha = math.max(self.cost_alpha - _cost_alpha_speed*dt, 0)
+    self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
+    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed, 1)
+    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed, 1)
   elseif self.mode == _MODE.cond then
-
+    self.icon_offset.x = math.max(self.icon_offset.x - _icon_offset_speed*dt, -5)
+    self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -23)
+    self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
+    self.mode_scale.x = math.max(self.mode_scale.x - _mode_scale_speed*dt, .64)
+    self.mode_scale.y = math.max(self.mode_scale.y - _mode_scale_speed*dt, .40)
   else
     error("Not a valid mode for cardview")
   end
@@ -184,7 +196,9 @@ function CardView:draw()
 
   --shadow
   g.setColor(0, 0, 0, self.alpha)
-  self.sprite:draw(x+2, y+2)
+  self.sprite:draw(x+2, y+2, 0, self.mode_scale.x, self.mode_scale.y,
+                   (self.mode_scale.x-1)*self.sprite:getWidth()/2,
+                   (self.mode_scale.y-1)*self.sprite:getHeight()/2)
 
   --card
   local shine = 50/255
@@ -192,7 +206,9 @@ function CardView:draw()
   cg = cg + shine
   cb = cb + shine
   g.setColor(cr, cg, cb, self.alpha)
-  self.sprite:draw(x, y)
+  self.sprite:draw(x, y, 0, self.mode_scale.x, self.mode_scale.y,
+                   (self.mode_scale.x-1)*self.sprite:getWidth()/2,
+                   (self.mode_scale.y-1)*self.sprite:getHeight()/2)
 
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
@@ -201,7 +217,7 @@ function CardView:draw()
   g.push()
   g.translate(self.icon_offset.x, self.icon_offset.y)
   icon_texture:setFilter('linear', 'linear')
-  icon_texture:draw(x+w/2, y+h/2, 0, 72/120, 72/120,
+  icon_texture:draw(x+w/2, y+h/2, 0, self.mode_scale.x*72/120, self.mode_scale.x*72/120,
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2
   )
@@ -209,7 +225,7 @@ function CardView:draw()
   g.push()
   g.translate(x, y)
   --Draw card info
-  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha)
+  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.info_alpha)
   local type_str = self.card:getType()
   if self.card:isWidget() then
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
@@ -221,7 +237,7 @@ function CardView:draw()
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i = 1, self.card:getCost() do
-    g.setColor(br, bg, bb, self.alpha * self.cost_alpha)
+    g.setColor(br, bg, bb, self.alpha * self.info_alpha)
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
