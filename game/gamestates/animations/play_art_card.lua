@@ -23,12 +23,11 @@ function ANIM:script(route, view, report)
     _waitAndAnnounce(cardview, self.wait)
     action_hud.handview:keepFocusedCard(false)
     action_hud.handview:removeCard(report.card_index)
-    action_hud.handview.cardinfo:forceShow(cardview.card)
+    action_hud:disableCardInfo()
     cardview:setAlpha(1)
     cardview:setFocus(false)
     cardview:register("HUD_FX")
     _slideRight(cardview, backbuffer, self)
-    action_hud.handview.cardinfo:forceShow(false)
     if not cardview.temporary then
       _slideDown(cardview, backbuffer)
     else
@@ -56,7 +55,7 @@ function _slideRight(cardview, backbuffer, task)
                     { position = target_pos }, 'out-cubic',
                     function () task.resume() end)
   task.wait()
-  task.wait(delay:set(0.6))
+  task.wait(delay:set(0.2))
   delay:kill()
 end
 
