@@ -10,30 +10,46 @@ local vec2      = require 'cpml' .vec2
 local _MW = 16
 local _PW = 2
 local _HEIGHT = 32
-local _SLOT_OFFSET = 8
 
-local CardDock = Class {
+local EquipmentDock = Class {
   __includes = {ELEMENT}
 }
 
-function CardDock.widthFor(slots)
-  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (slots - 1) * _SLOT_OFFSET
+function EquipmentDock.getWidth()
+  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W
 end
 
-function CardDock:init(x, slots)
+function EquipmentDock:init(x)
   local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.slots = slots
-  self.cardviews = {}
+  self.cardview = nil
   self.pos = vec2(x, h - _HEIGHT/2)
 end
 
-function CardDock:getSlotPosition(i)
-  local width = self.widthFor(self.slots)
-  local left = self.x - width/2 + _MW + _PW
-  return left + (i - 1) * _SLOT_OFFSET
+function EquipmentDock:isEmpty()
+  return not self.cardview
 end
 
-function CardDock:draw()
+function EquipmentDock:addCard(cardview, slot_index)
+  self.cardview = cardview
+end
+
+function EquipmentDock:getCard()
+  return self.cardview
+end
+
+function EquipmentDock:removeCard()
+  local card = self.cardview
+  self.cardview = nil
+  return card
+end
+
+--Where to "insert" card
+function EquipmentDock:getSlotPosition()
+  return vec2(self.pos.x - self.getWidth()/2 + _MW + _PW,
+              self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
+end
+
+function EquipmentDock:draw()
   local g = love.graphics
   g.push()
   g.translate(self.pos:unpack())
@@ -41,9 +57,9 @@ function CardDock:draw()
   g.pop()
 end
 
-function CardDock:drawFG()
+function EquipmentDock:drawFG()
   local g = love.graphics
-  local width = self.widthFor(self.slots)
+  local width = self.getWidth()
   local left, right = -width/2, width/2
   local top, bottom = -_HEIGHT/2, _HEIGHT/2
   local shape = { left, bottom, left, 0, left + _MW, top, right - _MW, top,
@@ -52,5 +68,4 @@ function CardDock:drawFG()
   g.polygon('fill', shape)
 end
 
-return CardDock
-
+return EquipmentDock

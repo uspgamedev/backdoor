@@ -54,7 +54,7 @@ function PLAYCARD.perform(actor, inputvalues)
   elseif card:isWidget() then
     body:placeWidget(card)
     coroutine.yield('report', {
-      type = 'play_card',
+      type = 'play_widget_card',
       actor = actor,
       card_index = inputvalues.card_index
     })
