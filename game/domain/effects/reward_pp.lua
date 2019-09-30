@@ -9,7 +9,7 @@ FX.schema = {
     match = 'body' },
 }
 
-function FX.preview()
+function FX.preview(_, fieldvalues)
   return ("Give %s PP"):format(fieldvalues['amount'])
 end
 

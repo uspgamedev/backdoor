@@ -9,3 +9,9 @@ savedir
 import
 /bin
 /libs.zip
+/_savedata
+/assets
+/build
+/docs
+/screenshots
+/workbench
