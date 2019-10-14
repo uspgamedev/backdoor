@@ -14,7 +14,7 @@ local _NUMBER_COLOR = {
   ['blocked-damage'] = 'NOTIFICATION',
   damage = 'NOTIFICATION',
   heal = 'SUCCESS',
-  food = 'WARNING',
+  food = 'PP',
   status = 'WARNING'
 }
 
