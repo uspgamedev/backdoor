@@ -176,14 +176,33 @@ function ActionHUD:getConditionsCount()
   return self.conddock:getConditionsCount()
 end
 
-function ActionHUD:findWidgetCard(card)
-  if self.weardock:getCard(1) and
-     self.weardock:getCard(1).card == card then
-    return self.weardock:removeCard(1)
+function ActionHUD:getWidgetCard(card)
+  if self.weardock:getCard() and
+     self.weardock:getCard().card == card then
+    return self.weardock:getCard()
   end
-  if self.wielddock:getCard(1) and
-     self.wielddock:getCard(1).card == card then
-      return self.wielddock:removeCard(1)
+  if self.wielddock:getCard() and
+     self.wielddock:getCard().card == card then
+      return self.wielddock:getCard()
+  end
+  for i = 1, self:getConditionsCount() do
+    if self.conddock:getCard(i) and
+       self.conddock:getCard(i).card == card then
+        return self.conddock:getCard(i)
+    end
+  end
+
+  return error("Couldn't find widget")
+end
+
+function ActionHUD:removeWidgetCard(card)
+  if self.weardock:getCard() and
+     self.weardock:getCard().card == card then
+    return self.weardock:removeCard()
+  end
+  if self.wielddock:getCard() and
+     self.wielddock:getCard().card == card then
+      return self.wielddock:removeCard()
   end
   for i = 1, self:getConditionsCount() do
     if self.conddock:getCard(i) and

@@ -32,7 +32,7 @@ function state:enter(_, route, view, report)
   local ok, animation = pcall(function () return ANIMATIONS[report.type] end)
   if ok then
     _animation_task = animation:script(route, view, report)
-  else 
+  else
     _view.sector:startVFX(report)
     _view.action_hud:sendAlert(
       report.type == 'text_rise' and
@@ -70,4 +70,3 @@ function state:draw()
 end
 
 return state
-
