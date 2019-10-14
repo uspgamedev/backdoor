@@ -1,3 +1,4 @@
+
 local ADJACENCY = require 'view.helpers.adjacency'
 local DIR       = require 'domain.definitions.dir'
 
@@ -5,7 +6,7 @@ local LONG_WALK = {}
 
 function LONG_WALK.isAllowed(hud)
   local hostile_bodies = hud.route.getControlledActor():getHostileBodies()
-  return (not hud.long_walk) and #hostile_bodies == 0
+  return #hostile_bodies == 0
 end
 
 function LONG_WALK.start(hud, dir)
@@ -34,3 +35,4 @@ function LONG_WALK.continue(hud)
 end
 
 return LONG_WALK
+
