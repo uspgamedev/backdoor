@@ -379,6 +379,11 @@ function Body:triggerOneWidget(index, trigger, inputs)
     local ability = triggered_ability.ability
     if ability then
       if ABILITY.checkInputs(ability, owner, inputs) then
+        coroutine.yield('report', {
+          type = 'activate_widget',
+          body = self,
+          widget = widget
+        })
         ABILITY.execute(ability, owner, inputs)
       end
     end

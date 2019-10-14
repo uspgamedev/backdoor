@@ -8,7 +8,7 @@ local vec2       = require 'cpml' .vec2
 function ANIM:script(route, view, report)
   local delay = TweenValue(0)
   if report.body == route:getControlledActor():getBody() then
-    local cardview = view.action_hud:findWidgetCard(report.widget_card)
+    local cardview = view.action_hud:removeWidgetCard(report.widget_card)
     local backbuffer = view.backbuffer
     local finish = backbuffer:getTopCardPosition()
     local offset = vec2(0, -2*VIEWDEFS.CARD_H)
