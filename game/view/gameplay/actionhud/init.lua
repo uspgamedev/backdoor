@@ -264,6 +264,13 @@ function ActionHUD:actionRequested()
     end
   elseif INPUT.wasActionPressed('PAUSE') then
     action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
+  elseif INPUT.wasActionPressed('HELP') then
+    local control_hints = Util.findSubtype("control_hints")
+    if control_hints then
+      for button in pairs(control_hints) do
+          button:toggleShow()
+      end
+    end
   end
 
   if self.justheld and self.player_turn
@@ -334,12 +341,6 @@ function ActionHUD:update(dt)
   end
 
   if self.player_turn then
-    local control_hints = Util.findSubtype("control_hints")
-    if control_hints then
-      for button in pairs(control_hints) do
-          button:setShow(INPUT.isActionDown('HELP'))
-      end
-    end
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
       if INPUT.isActionDown('ACTION_3') then
