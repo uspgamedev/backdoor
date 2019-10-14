@@ -10,6 +10,7 @@ function LifeBar:init(actor, x, y)
   Node.init(self)
   self:setPosition(x, y)
   self.actor = actor
+  self.progress = 0
   self.label = "HP"
   self.fullcolor = COLORS.SUCCESS
   self.emptycolor = COLORS.NOTIFICATION

@@ -8,10 +8,10 @@ local PPCounter = Class{
   __includes = {ELEMENT}
 }
 
-function PPCounter:init(x, y)
+function PPCounter:init()
   ELEMENT.init(self)
 
-  self.position = vec2(x, y)
+  self.position = vec2()
   self.pp = 0
 end
 
@@ -19,7 +19,7 @@ function PPCounter:draw()
   local g = love.graphics
 
   g.setColor(COLORS.PP)
-  g.circle("fill", self.position.x, self.position.y, 20)
+  g.circle("line", self.position.x, self.position.y, 30)
 end
 
 function PPCounter:setPP(value)

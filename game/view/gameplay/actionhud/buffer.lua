@@ -54,7 +54,7 @@ function BufferView.newFrontBufferView(route)
   bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
   bufview.button = HintButton(-5, -50)
-  bufview.ppcounter = PPCounter(0, -30)
+  bufview.ppcounter = PPCounter()
   _calculatePosition(bufview)
   return bufview
 end
@@ -169,7 +169,11 @@ function BufferView:draw()
 
   --Draw pp counter
   if self.side == "front" then
+    g.push()
+    g.translate(finish*self.card_w_offset + card_w/2,
+                step*finish*self.card_h_offset + card_h/2)
     self.ppcounter:draw()
+    g.pop()
   end
 
   g.pop()
