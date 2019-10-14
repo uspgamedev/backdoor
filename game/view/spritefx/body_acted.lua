@@ -8,7 +8,7 @@ local _TILE_H = VIEWDEFS.TILE_H
 function SPRITEFX.apply(sectorview, args)
   local body = args.body
   local t = {0}
-  local body_sprite = sectorview:getBodySprite(body)
+  local body_sprite = sectorview:getBodyView(body).sprite
   body_sprite:setDecorator(
     function (self, x, y, ...)
       local s = (t[1] - 0.5)*2
