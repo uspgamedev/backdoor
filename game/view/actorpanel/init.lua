@@ -7,7 +7,6 @@ local VIEWDEFS  = require 'view.definitions'
 local Class     = require "steaming.extra_libs.hump.class"
 
 local LifeBar = require 'view.actorpanel.lifebar'
-local PPBar   = require 'view.actorpanel.ppbar'
 local Stats   = require 'view.actorpanel.stats'
 local Widgets = require 'view.actorpanel.widgets'
 
@@ -26,11 +25,9 @@ function ActorHudTree:init(actor)
   local name = ("%s the %s"):format(route.getPlayerName(), actor:getTitle())
   self.nametext = Text(name, "TextBold", 22)
   self.lifebar  = LifeBar(actor, 0, 48)
-  self.ppbar    = PPBar(actor, 0, 48+32)
   self.stats    = Stats(actor, _MG*4/3, 112 + 192 + 2*_MG - 32, _INNERWIDTH)
   self.widgets  = Widgets(actor, _MG*4/3, 112 + 192 + 2*_MG + 16)
   self:addChild(self.lifebar)
-  self:addChild(self.ppbar)
   self:addChild(self.stats)
   self:addChild(self.widgets)
   self:setPosition(960 + _MG, _MG)
