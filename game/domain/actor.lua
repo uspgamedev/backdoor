@@ -385,6 +385,7 @@ function Actor:createEquipmentCards()
         type = "create_equipment_card",
         actor = self,
         card = card,
+        widget = active_eqp,
       })
     end
   end
