@@ -238,6 +238,7 @@ end
 
 function SectorView:sectorChanged()
   self.sector_changed = true
+  self.body_views = {}
 end
 
 function SectorView:draw()
