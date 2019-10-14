@@ -29,4 +29,8 @@ function ControlHint:setShow(v)
   self.show = v
 end
 
+function ControlHint:toggleShow()
+  self.show = not self.show
+end
+
 return ControlHint
