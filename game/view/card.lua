@@ -248,7 +248,9 @@ function CardView:draw()
   if self.add > 0 then
     g.setColor(self.flashcolor[1], self.flashcolor[2], self.flashcolor[3],
                self.add)
-    self.sprite:draw(x, y)
+    self.sprite:draw(x, y, 0, self.mode_scale.x, self.mode_scale.y,
+                     (self.mode_scale.x-1)*self.sprite:getWidth()/2,
+                     (self.mode_scale.y-1)*self.sprite:getHeight()/2)
   end
   g.setStencilTest()
   g.pop()

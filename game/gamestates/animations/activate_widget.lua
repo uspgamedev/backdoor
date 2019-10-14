@@ -7,7 +7,8 @@ local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
 
-local OFFSET = 30
+local _OFFSET = 50
+local _DURATION = .4
 
 local _waitAndAnnounce
 local _slideUp
@@ -21,6 +22,7 @@ function ANIM:script(route, view, report)
     _waitAndAnnounce(report.widget, self.wait)
     _slideUp(widgetview, self)
     _slideDown(widgetview, self)
+    self.wait(delay:set(_DURATION))
   end
   delay:kill()
   return self
@@ -37,8 +39,9 @@ end
 
 function _slideUp(cardview, task)
   local delay = TweenValue(0)
-  local target_pos = vec2(cardview.position.x, cardview.position.y - OFFSET)
-  cardview:addTimer("slide_up", MAIN_TIMER, "tween", .3, cardview,
+  local target_pos = vec2(cardview.position.x, cardview.position.y - _OFFSET)
+  cardview:flashFor(_DURATION)
+  cardview:addTimer("slide_up", MAIN_TIMER, "tween", _DURATION, cardview,
                     { position = target_pos }, 'out-cubic',
                     function () task.resume() end)
   task.wait()
@@ -47,8 +50,8 @@ end
 
 function _slideDown(cardview, task)
   local delay = TweenValue(0)
-  local target_pos = vec2(cardview.position.x, cardview.position.y + OFFSET)
-  cardview:addTimer("slide_down", MAIN_TIMER, "tween", .3, cardview,
+  local target_pos = vec2(cardview.position.x, cardview.position.y + _OFFSET)
+  cardview:addTimer("slide_down", MAIN_TIMER, "tween", _DURATION, cardview,
                     { position = target_pos }, 'out-cubic',
                     function () task.resume() end)
   task.wait()
