@@ -1,16 +1,10 @@
 
 local INPUT = require 'input'
-local DIR = require 'domain.definitions.dir'
-
-local pi    = math.pi
-local abs   = math.abs
-local atan2 = math.atan2
 
 local DIRECTIONALS = {}
 
 local _DEADZONE = .5
 local _DEADZONE_SQR = _DEADZONE * _DEADZONE
-local _SIXTEENTH = math.pi / 8
 
 local _DIR_ENUM = {
   c  = false,
@@ -101,6 +95,20 @@ function DIRECTIONALS.isDirectionDown(direction)
   _last_axis = axis
 
   return dir == hat or dir == axis or INPUT.isActionDown(direction)
+end
+
+function DIRECTIONALS.getDirectionDown()
+  if DIRECTIONALS.isDirectionDown('UP') then
+    return 'UP'
+  elseif DIRECTIONALS.isDirectionDown('DOWN') then
+    return 'DOWN'
+  elseif DIRECTIONALS.isDirectionDown('LEFT') then
+    return 'LEFT'
+  elseif DIRECTIONALS.isDirectionDown('RIGHT') then
+    return 'RIGHT'
+  end
+
+  return nil
 end
 
 --Check the if any direction is triggered

@@ -226,17 +226,20 @@ function ActionHUD:actionRequested()
   local action_request
   local player_focused = self.route.getControlledActor():isFocused()
   local dir = DIRECTIONALS.hasDirectionTriggered()
-  if dir then
-    if player_focused then
-      if _HAND_FOCUS_DIR[dir] then
-        self:moveHandFocus(dir)
-      end
-    else
-      if INPUT.isActionDown('ACTION_3') and LONG_WALK.isAllowed(self) then
-        LONG_WALK.start(self, dir)
+  if player_focused then
+    if dir and _HAND_FOCUS_DIR[dir] then
+      self:moveHandFocus(dir)
+    end
+  else
+    if LONG_WALK.isAllowed(self) then
+      local dir_down = DIRECTIONALS.getDirectionDown()
+      if dir_down ~= self.long_walk then
+        LONG_WALK.start(self, dir_down)
       else
-        action_request = {DEFS.ACTION.MOVE, dir}
+        self.alert = true
       end
+    elseif dir then
+      action_request = {DEFS.ACTION.MOVE, dir}
     end
   end
 
