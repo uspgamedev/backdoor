@@ -1,13 +1,13 @@
 
+-- luacheck: no self, globals MAIN_TIMER
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local VIEWDEFS      = require 'view.definitions'
-local Dissolve      = require 'view.dissolvecard'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
 
--- luacheck: no self, globals MAIN_TIMER
+local OFFSET = 30
 
 local _waitAndAnnounce
 local _slideUp
@@ -17,9 +17,10 @@ function ANIM:script(route, view, report)
   local action_hud = view.action_hud
   local delay = TweenValue(0)
   if report.body:getActor() == route:getControlledActor() then
-    local backbuffer = view.backbuffer
+    local widgetview = action_hud:getWidgetCard(report.widget)
     _waitAndAnnounce(report.widget, self.wait)
-    --local widgetview = action_hud:getWidgetCard(widget)
+    _slideUp(widgetview, self)
+    _slideDown(widgetview, self)
   end
   delay:kill()
   return self
@@ -34,35 +35,24 @@ function _waitAndAnnounce(widget, wait)
   ann:unlock()
 end
 
--- function _slideUp(cardview, backbuffer, task)
---   local delay = TweenValue(0)
---   local target_pos = backbuffer:getTopCardPosition()
---                    - vec2(0,VIEWDEFS.CARD_H) * 2
---   cardview:addTimer("slide_right", MAIN_TIMER, "tween", .5, cardview,
---                     { position = target_pos }, 'out-cubic',
---                     function () task.resume() end)
---   task.wait()
---   task.wait(delay:set(0.2))
---   delay:kill()
--- end
---
--- function _slideDown(cardview, backbuffer)
---     cardview:addTimer("slide_down", MAIN_TIMER, "tween", .5, cardview,
---                       { position = backbuffer:getTopCardPosition() },
---                       'out-cubic')
---     cardview:addTimer("wait", MAIN_TIMER, "after", .3,
---                       function ()
---                         cardview:addTimer("fadeout", MAIN_TIMER, "tween", .3,
---                                           cardview, {alpha = 0}, 'out-cubic',
---                                           function() cardview:kill() end)
---                       end)
--- end
---
--- function _dissolve(cardview)
---   local delay = TweenValue(0)
---   delay:set(1.6):andThen(function () cardview:kill() end)
---   Dissolve(cardview, 1.5)
---   delay:kill()
--- end
+function _slideUp(cardview, task)
+  local delay = TweenValue(0)
+  local target_pos = vec2(cardview.position.x, cardview.position.y - OFFSET)
+  cardview:addTimer("slide_up", MAIN_TIMER, "tween", .3, cardview,
+                    { position = target_pos }, 'out-cubic',
+                    function () task.resume() end)
+  task.wait()
+  delay:kill()
+end
+
+function _slideDown(cardview, task)
+  local delay = TweenValue(0)
+  local target_pos = vec2(cardview.position.x, cardview.position.y + OFFSET)
+  cardview:addTimer("slide_down", MAIN_TIMER, "tween", .3, cardview,
+                    { position = target_pos }, 'out-cubic',
+                    function () task.resume() end)
+  task.wait()
+  delay:kill()
+end
 
 return ANIM
