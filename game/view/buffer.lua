@@ -15,6 +15,9 @@ local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
 local _MAX_CARDS = 15
 
+--forward functions declaration
+local _calculatePosition
+
 local BufferView = Class{
   __includes = { ELEMENT }
 }
@@ -48,7 +51,7 @@ function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
-  bufview:calculatePosition()
+  _calculatePosition(bufview)
   return bufview
 end
 
@@ -56,7 +59,7 @@ function BufferView.newBackBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {1, 0.5, 0.5, 1}
   bufview.side = 'back'
-  bufview:calculatePosition()
+  _calculatePosition(bufview)
   return bufview
 end
 
@@ -93,19 +96,6 @@ function BufferView:changeSide(duration, target_buffer, actor)
   end
 end
 
-function BufferView:calculatePosition()
-  local W,H = DEFS.VIEWPORT_DIMENSIONS()
-  if self.side == 'front' then
-    self.pos = vec2(_MX, H - _MY - self.sprite:getHeight())
-    self.format = "x %d"
-  elseif self.side == 'back' then
-    self.pos = vec2(W - _MX - self.sprite:getWidth(), H - _MY - self.sprite:getHeight())
-    self.format = "%d x"
-  else
-    return error("invalid buffer view side position")
-  end
-end
-
 function BufferView:getPosition()
   return self.pos+self.offset
 end
@@ -117,10 +107,6 @@ function BufferView:getTopCardPosition()
   elseif self.side == 'back' then
     return self.pos + vec2(size * -self.card_w_offset, size * self.card_h_offset) + self.offset
   end
-end
-
-function BufferView:flashFor(_, _) -- luacheck: no self
-  --pass
 end
 
 function BufferView:update(dt)
@@ -178,5 +164,20 @@ function BufferView:draw()
 
   g.pop()
 end
+
+--local functions
+function _calculatePosition(self)
+  local W,H = DEFS.VIEWPORT_DIMENSIONS()
+  if self.side == 'front' then
+    self.pos = vec2(_MX, H - _MY - self.sprite:getHeight())
+    self.format = "x %d"
+  elseif self.side == 'back' then
+    self.pos = vec2(W - _MX - self.sprite:getWidth(), H - _MY - self.sprite:getHeight())
+    self.format = "%d x"
+  else
+    return error("invalid buffer view side position")
+  end
+end
+
 
 return BufferView
