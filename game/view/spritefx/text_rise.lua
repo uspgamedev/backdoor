@@ -31,7 +31,7 @@ function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local text_type = args.text_type
   local signal = _SIGNALS[text_type]
-  local body_sprite = sectorview:getBodySprite(body)
+  local body_sprite = sectorview:getBodyView(body).sprite
   local animation_info = { y = 0, a = 0.5}
   local text
   if args.string then

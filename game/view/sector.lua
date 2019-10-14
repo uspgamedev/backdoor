@@ -26,6 +26,7 @@ local SECTOR_TILEMAP    = require 'view.sector.tilemap'
 local SECTOR_ENERGYBAR  = require 'view.sector.energybar'
 local LifebarBatch      = require 'view.sector.lifebarbatch'
 local SECTOR_WALL       = require 'view.sector.wall'
+local BodyView          = require 'view.sector.bodyview'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
@@ -84,7 +85,7 @@ function SectorView:init(route)
   self.fov = nil --Fov to apply on the sector
 
   self.route = route
-  self.body_sprites = {}
+  self.body_views = {}
   self.body_dialogues = {}
   self.drop_sprite_data = {}
   self.drop_offsets = {}
@@ -185,24 +186,23 @@ function SectorView:updateFov(actor)
   self.fov = actor:getFov(sector)
 end
 
+function SectorView:isInsideFov(i, j)
+  return not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0)
+end
+
 function SectorView:setRayDir(dir, body_block)
   self.ray_dir = dir
   self.ray_body_block = body_block
 end
 
-function SectorView:getBodySprite(body)
+function SectorView:getBodyView(body)
   local id = body:getId()
-  local body_sprite = self.body_sprites[id]
-  if not body_sprite then
-    local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-    body_sprite = RES.loadSprite(idle)
-    self.body_sprites[id] = body_sprite
+  local body_view = self.body_views[id]
+  if not body_view then
+    body_view = BodyView(body)
+    self.body_views[id] = body_view
   end
-  return body_sprite
-end
-
-function SectorView:setBodySprite(body, draw)
-  self.body_sprites[body:getId()] = draw
+  return body_view
 end
 
 function SectorView:getBodyDialogue(body, i, j, player_j)
@@ -333,7 +333,7 @@ function SectorView:draw()
                                      Color.fromInt {200, 100, 100, 100} })
         end
         if body then
-          table.insert(draw_bodies, {body, x, 0})
+          table.insert(draw_bodies, body)
           table.insert(all_bodies, body)
           local player = self.route.getControlledActor():getBody()
           local player_i, player_j = player:getPos()
@@ -425,17 +425,11 @@ function SectorView:draw()
     end
 
     -- Draw dem bodies
-    for _, bodyinfo in ipairs(draw_bodies) do
-      local body, x, y = unpack(bodyinfo)
-      local bi, bj = body:getPos()
-
-      --Draw only bodies if player is seeing them
-      if not self.fov or (self.fov[bi][bj] and self.fov[bi][bj] ~= 0) then
-
-        local body_sprite = self:getBodySprite(body)
+    for _, body in ipairs(draw_bodies) do
+      local body_view = self:getBodyView(body)
+      if self:isInsideFov(body:getPos()) then
         g.setColor(COLORS.NEUTRAL)
-        body_sprite:draw(x, y)
-
+        body_view:drawAtRow(i)
       end
     end
 
@@ -466,10 +460,10 @@ function SectorView:draw()
 
   -- Draw energy bars & HP
   for _, body in ipairs(all_bodies) do
-    local i,j = body:getPos()
+    local body_view = self:getBodyView(body)
     --Draw only if player is seeing them
-    local x, y = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
-    if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
+    local x, y = (body_view.position + vec2(_TILE_W, _TILE_H) / 2):unpack()
+    if self:isInsideFov(body:getPos()) then
       local actor = body:getActor() if actor then
         local is_controlled = (actor == sector:getRoute().getControlledActor())
         SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)

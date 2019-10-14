@@ -35,7 +35,7 @@ function MOVE.perform(actor, inputvalues)
     body = actor:getBody(),
     origin = pos,
     sfx = 'footstep',
-    speed_factor = 1.0
+    speed_factor = .5
   })
 end
 
