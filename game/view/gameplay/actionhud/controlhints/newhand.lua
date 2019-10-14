@@ -1,7 +1,7 @@
 local COLORS      = require 'domain.definitions.colors'
 local FONT        = require 'view.helpers.font'
 local RES         = require 'resources'
-local CONTROLHINT = require 'view.controlhints.controlhint'
+local CONTROLHINT = require 'view.gameplay.actionhud.controlhints'
 local Class       = require "steaming.extra_libs.hump.class"
 
 local Button = Class{

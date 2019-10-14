@@ -2,7 +2,7 @@
 -- luacheck: globals love
 
 local vec2    = require 'cpml' .vec2
-local Button  = require 'view.controlhints.newhand'
+local Button  = require 'view.gameplay.actionhud.controlhints.newhand'
 local TEXTURE = require 'view.helpers.texture'
 local FONT    = require 'view.helpers.font'
 local DEFS    = require 'view.definitions'

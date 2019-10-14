@@ -2,7 +2,7 @@
 local Class = require "steaming.extra_libs.hump.class"
 local SectorView  = require 'view.sector'
 local AnimationPlayer  = require 'view.helpers.animationplayer'
-local BufferView  = require 'view.buffer'
+local BufferView  = require 'view.gameplay.actionhud.buffer'
 local ActorView   = require 'view.actorpanel'
 local Announcement = require 'view.announcement'
 local ActionHUD   = require 'view.gameplay.actionhud'
