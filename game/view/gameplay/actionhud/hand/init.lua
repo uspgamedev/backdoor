@@ -5,7 +5,6 @@ local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
-local Button       = require 'view.controlhints.changehandcursor'
 local VIEWDEFS     = require 'view.definitions'
 local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
@@ -45,9 +44,6 @@ function HandView:init(route)
   ELEMENT.init(self)
 
   _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
-
-  self.prev_cursor = Button("left")
-  self.next_cursor = Button("right")
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
@@ -136,8 +132,6 @@ function HandView:update(dt)
     card:setPosition((pos + diff):unpack())
   end
   self.cardinfo:update(dt)
-  self.prev_cursor:update(dt)
-  self.next_cursor:update(dt)
 end
 
 function HandView:draw()
@@ -148,18 +142,8 @@ function HandView:draw()
   local x, y = self.x - width/2, self.y
   local g = love.graphics
 
-
   -- draw action type
   _font.set()
-
-  -- draw buttons
-  local button_y = y + 20 + 0.2*(1 - (size+1)/2)^2*_GAP
-  local button_x = x - self.prev_cursor:getWidth()
-  self.prev_cursor:setPos(button_x, button_y)
-  self.prev_cursor:draw()
-  button_x = x + width
-  self.next_cursor:setPos(button_x, button_y)
-  self.next_cursor:draw()
 
   -- draw back panel
   g.setColor(COLORS.DARK)
