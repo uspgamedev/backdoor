@@ -2,7 +2,6 @@
 -- luacheck: no self, globals MAIN_TIMER
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
-local VIEWDEFS      = require 'view.definitions'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
