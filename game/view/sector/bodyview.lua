@@ -16,6 +16,9 @@ local BodyView = Class {
 
 function BodyView:init(body)
   ELEMENT.init(self)
+  if body.getBody then
+    body = body:getBody()
+  end
   local idle_appearance = DB.loadSpec('appearance', body:getAppearance()).idle
   local i, j = body:getPos()
   self.sprite = RES.loadSprite(idle_appearance)
