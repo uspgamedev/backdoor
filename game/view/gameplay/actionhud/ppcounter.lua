@@ -6,8 +6,10 @@ local COLORS     = require 'domain.definitions.colors'
 local ELEMENT    = require "steaming.classes.primitives.element"
 
 local _RADIUS = 35
-local _CIRCLE_WIDTH = 10
-local _SEPARATOR_WIDTH = 8
+local _BAR_WIDTH = 10
+local _MARGIN = 8
+local _SPEED = 3*math.pi/2
+
 
 local _stencil
 local _draw_polygon
@@ -45,7 +47,11 @@ end
 
 function PPCounter:update(dt)
   local target_angle = (self.pp/DEFS.MAX_PP)*2*math.pi
-  self.angle = self.angle - (self.angle - target_angle)*.99*dt
+  if target_angle > self.angle then
+    self.angle = math.min(self.angle + _SPEED*dt, target_angle)
+  else
+    self.angle = math.max(self.angle - _SPEED*dt, target_angle)
+  end
 end
 
 --local functions
@@ -71,14 +77,14 @@ function _draw_polygon()
   local v1 = vec2(x, y)
   local v2 = v1:rotate(angle/2)
   v2 = v2 - v1
-  v2 = v2*((v2:len()-_SEPARATOR_WIDTH)/v2:len())
+  v2 = v2*((v2:len()-_MARGIN)/v2:len())
   v2 = vec2(x + v2.x, y + v2.y)
   add(v2.x)
   add(v2.y)
-  local v3 = v2*((v2:len() - _CIRCLE_WIDTH)/v2:len())
+  local v3 = v2*((v2:len() - _BAR_WIDTH)/v2:len())
   add(v3.x)
   add(v3.y)
-  local v4 = v1*((v1:len() - _CIRCLE_WIDTH)/v1:len())
+  local v4 = v1*((v1:len() - _BAR_WIDTH)/v1:len())
   --add(v4.x)
   --add(v4.y)
   local v5 = v3 - v4
