@@ -7,8 +7,8 @@ local ELEMENT    = require "steaming.classes.primitives.element"
 local RES        = require 'resources'
 
 local _RADIUS = 35
-local _BAR_WIDTH = 10
-local _MARGIN = 8
+local _BAR_WIDTH = 9
+local _MARGIN = 6
 local _SPEED = 3*math.pi/2
 
 local PPCounter = Class{
@@ -34,8 +34,8 @@ function PPCounter:draw()
   self:draw_bars()
 
   local stencil = function()
-                    local start_angle = math.pi/DEFS.MAX_PP
-                    love.graphics.arc("fill", 0, 0, _RADIUS, -math.pi/2 + start_angle, -math.pi/2 + self.angle + start_angle)
+                    local start_angle = -math.pi/2 + math.pi/DEFS.MAX_PP
+                    love.graphics.arc("fill", 0, 0, _RADIUS, start_angle, self.angle + start_angle)
                   end
   g.stencil(stencil, "replace", 1)
   g.setStencilTest("equal", 1)
@@ -60,6 +60,7 @@ function PPCounter:draw_bars()
   local scale_y = _BAR_WIDTH/self.texture:getHeight()
 
   g.push()
+  g.rotate(math.pi)
   for i = 1, DEFS.MAX_PP do
     g.draw(self.texture, v3.x, v3.y, nil, scale_x, scale_y)
     g.rotate(2*math.pi/DEFS.MAX_PP)
