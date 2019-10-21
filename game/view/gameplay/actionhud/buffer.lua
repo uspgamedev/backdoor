@@ -10,8 +10,8 @@ local DEFS       = require 'view.definitions'
 local Class      = require "steaming.extra_libs.hump.class"
 local ELEMENT    = require "steaming.classes.primitives.element"
 
-local _MX = 32
-local _MY = 32
+local _MX = 16
+local _MY = 16
 local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
 local _MAX_CARDS = 15
@@ -53,7 +53,7 @@ function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
-  bufview.button = HintButton(-5, -50)
+  bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
   _calculatePosition(bufview)
   return bufview
