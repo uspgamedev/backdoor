@@ -5,11 +5,12 @@ local DEFS       = require 'domain.definitions'
 local COLORS     = require 'domain.definitions.colors'
 local ELEMENT    = require "steaming.classes.primitives.element"
 
-local _RADIUS = 28
-local _CIRCLE_WIDTH = 5
-local _SEPARATOR_WIDTH = 5
+local _RADIUS = 35
+local _CIRCLE_WIDTH = 10
+local _SEPARATOR_WIDTH = 8
 
 local _stencil
+local _draw_polygon
 
 local PPCounter = Class{
   __includes = {ELEMENT}
@@ -26,11 +27,16 @@ end
 function PPCounter:draw()
   local g = love.graphics
 
+
+  g.stencil(_stencil, "replace", 1)
+  g.setStencilTest("equal", 1)
+  g.setColor(COLORS.HALF_VISIBLE)
+  g.circle("fill", 0, 0, _RADIUS)
+  g.setStencilTest("equal", 1)
   g.setColor(COLORS.PP)
-  love.graphics.stencil(_stencil, "replace", 1)
-  love.graphics.setStencilTest("less", 1)
-  g.arc("fill", 0, 0, _RADIUS, -math.pi/2, -math.pi/2 + self.angle)
-  love.graphics.setStencilTest()
+  local start_angle = math.pi/DEFS.MAX_PP
+  g.arc("fill", 0, 0, _RADIUS, -math.pi/2 + start_angle, -math.pi/2 + self.angle + start_angle)
+  g.setStencilTest()
 end
 
 function PPCounter:setPP(value)
@@ -39,21 +45,55 @@ end
 
 function PPCounter:update(dt)
   local target_angle = (self.pp/DEFS.MAX_PP)*2*math.pi
-  self.angle = self.angle - (self.angle - target_angle)*.9*dt
+  self.angle = self.angle - (self.angle - target_angle)*.99*dt
 end
 
 --local functions
 function _stencil()
   local g = love.graphics
   g.push()
-  g.rotate(2*math.pi/DEFS.MAX_PP)
-  g.setLineWidth(_SEPARATOR_WIDTH)
   for i = 1, DEFS.MAX_PP do
-    g.line(0, 0, 0, -_RADIUS-_CIRCLE_WIDTH)
+    _draw_polygon()
     g.rotate(2*math.pi/DEFS.MAX_PP)
   end
   g.pop()
-  g.circle("fill", 0, 0, _RADIUS - _CIRCLE_WIDTH)
+end
+
+function _draw_polygon()
+  local x, y = 0, -_RADIUS
+  local angle = 2*math.pi/DEFS.MAX_PP
+  local vertices = {} --Vertices of polygon
+  local add = function(value)
+                table.insert(vertices, value)
+              end
+  --add(x)
+  --add(y)
+  local v1 = vec2(x, y)
+  local v2 = v1:rotate(angle/2)
+  v2 = v2 - v1
+  v2 = v2*((v2:len()-_SEPARATOR_WIDTH)/v2:len())
+  v2 = vec2(x + v2.x, y + v2.y)
+  add(v2.x)
+  add(v2.y)
+  local v3 = v2*((v2:len() - _CIRCLE_WIDTH)/v2:len())
+  add(v3.x)
+  add(v3.y)
+  local v4 = v1*((v1:len() - _CIRCLE_WIDTH)/v1:len())
+  --add(v4.x)
+  --add(v4.y)
+  local v5 = v3 - v4
+  v5.x = -v5.x
+  v5 = v4 + v5
+  add(v5.x)
+  add(v5.y)
+  local v6 = v2 - v1
+  v6.x = -v6.x
+  v6 = v1 + v6
+  add(v6.x)
+  add(v6.y)
+
+  local g = love.graphics
+  g.polygon("fill", vertices)
 end
 
 return PPCounter

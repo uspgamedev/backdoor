@@ -158,23 +158,25 @@ function BufferView:draw()
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
     self.sprite:draw(i*self.card_w_offset, step*i*self.card_h_offset)
   end
-  --Draw buffer size
+
   local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
   local text_w, text_h = self.font:getWidth(text), self.font:getHeight()
+
+  --Draw pp counter
+  if self.side == "front" then
+    g.push()
+    g.translate(math.max(finish,0)*self.card_w_offset + card_w/2,
+                step*finish*self.card_h_offset + card_h/2)
+    self.ppcounter:draw()
+    g.pop()
+  end
+
+  --Draw buffer size
   grd = _GRADIENT_FILTER
   self.font:set()
   g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
   g.print(text, finish*self.card_w_offset + card_w/2 - text_w/2,
                 step*finish*self.card_h_offset + card_h/2 - text_h/2)
-
-  --Draw pp counter
-  if self.side == "front" then
-    g.push()
-    g.translate(finish*self.card_w_offset + card_w/2,
-                step*finish*self.card_h_offset + card_h/2)
-    self.ppcounter:draw()
-    g.pop()
-  end
 
   g.pop()
 end
