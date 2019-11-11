@@ -1,6 +1,7 @@
 {
   "altars":{
     "max":1,
+    "min":0,
     "threshold":4
   },
   "bootstrap":{
