@@ -13,7 +13,8 @@
     "QUIT":["f8"],
     "PAUSE":["escape"],
     "DEVMODE":["f1"],
-    "HELP":["lshift"]
+    "HELP":["lshift"],
+    "STATUS":["tab"]
   },
   "analog":{
     "AXIS_X":1,
