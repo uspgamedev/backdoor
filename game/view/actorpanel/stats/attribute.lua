@@ -1,4 +1,6 @@
 
+-- luacheck: globals love
+
 local RES     = require 'resources'
 local APT     = require 'domain.definitions.aptitude'
 local COLORS  = require 'domain.definitions.colors'
@@ -12,7 +14,6 @@ local abs  = math.abs
 local min  = math.min
 local max  = math.max
 local pi   = math.pi
-local fmod = math.fmod
 
 local function _newParticleSource()
   local pixel = RES.loadTexture('pixel')
@@ -87,7 +88,7 @@ function Attribute:process(dt)
   self.attribute_text:setText{
     COLORS.NEUTRAL,
     ("%s: "):format(self.attribute_name),
-    rise and COLORS.NEUTRAL or color,
+    self.rise and COLORS.NEUTRAL or color,
     ("%02d"):format(self.level)
   }
   self.particles:update(dt)
@@ -107,7 +108,7 @@ function Attribute:render(g)
     g.setColor(COLORS.EMPTY)
   end
   g.rectangle("fill", 0, 0, self.width, bar_height)
-  if not self.rise then 
+  if not self.rise then
     g.setColor(COLORS[self.attribute_name])
   end
   g.rectangle("fill", 0, 0, self.percent*self.width, bar_height)
