@@ -4,6 +4,7 @@ local Attribute = require 'view.actorpanel.stats.attribute'
 local VIEWDEFS  = require 'view.definitions'
 local COLORS    = require 'domain.definitions.colors'
 local DEFS      = require 'domain.definitions'
+local FONT      = require 'view.helpers.font'
 local Text      = require 'view.helpers.text'
 local Class     = require "steaming.extra_libs.hump.class"
 
@@ -55,6 +56,7 @@ end
 function Stats:render(g)
   -- exp
   g.push()
+  FONT.set('Text', 22)
   g.setColor(COLORS.NEUTRAL)
   local text = ("EXP: %04d"):format(self.actor:getExp())
   g.print(text, 0, 0)
