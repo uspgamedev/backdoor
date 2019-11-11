@@ -47,10 +47,6 @@
         "pos":[17,14],
         "actor-specname":false
       },{
-        "body-specname":"npc-veteran-2",
-        "pos":[13,9],
-        "actor-specname":false
-      },{
         "body-specname":"npc-veteran-1",
         "pos":[10,8],
         "actor-specname":false
