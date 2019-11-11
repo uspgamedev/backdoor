@@ -11,6 +11,7 @@ local ABILITY       = require 'domain.ability'
 local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
+local INPUT         = require 'input'
 local Draw          = require "draw"
 
 local state = {}
@@ -77,6 +78,12 @@ function state:update(_)
     SWITCHER.pop({next_action = _next_action})
     _next_action = nil
     return
+  end
+
+  if INPUT.wasActionPressed('STATUS') then
+    _view.actor:show()
+  elseif INPUT.wasActionReleased('STATUS') then
+    _view.actor:hide()
   end
 
   local action_request, param = _view.action_hud:actionRequested()
