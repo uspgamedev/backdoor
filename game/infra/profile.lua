@@ -26,6 +26,7 @@ local _id_generator
 local _metadata
 local _savethread
 local _channel
+local _confirm
 local _compress
 
 local function _decompress(str) --> str
@@ -71,18 +72,19 @@ local function _cleanSlate ()
   end
 end
 
-local function _saveProfile(base)
+local function _saveProfile(base, confirm)
   local profile_data = base or _metadata
   return _channel:push({
     filepath = PROFILE_PATH,
     data = profile_data,
     compress = _compress,
+    confirm = confirm,
   })
 end
 
 local function _newProfile()
   filesystem.createDirectory(SAVEDIR)
-  _saveProfile(METABASE)
+  _saveProfile(METABASE, true)
 end
 
 local function _loadProfile()
@@ -105,12 +107,18 @@ function PROFILE.init()
 
   -- setup writing thread
   _channel = love.thread.getChannel('write_data')
+  _confirm = love.thread.getChannel('confirm')
   _savethread = love.thread.newThread(IO_THREAD_FILE)
   _savethread:start()
 
   if RUNFLAGS.CLEAR then _cleanSlate() end
   -- check if profile exists and generate one if not
-  if not filesystem.getInfo(PROFILE_PATH, 'file') then _newProfile() end
+  if not filesystem.getInfo(PROFILE_PATH, 'file') then
+    print("Creating new profile...")
+    _newProfile()
+    _confirm:demand()
+    print("Created new profile!")
+  end
   -- load profile from disk
   _loadProfile()
   _loadInput()

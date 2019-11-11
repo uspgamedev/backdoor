@@ -21,13 +21,16 @@ local function _writeData(filepath, data, compress)
 end
 
 local _channel = love.thread.getChannel('write_data')
+local _confirm = love.thread.getChannel('confirm')
 
 while true do
   local msg = _channel:pop()
   if msg then
     if msg.die then break end
     _writeData(msg.filepath, msg.data, msg.compress)
+    if msg.confirm then
+      _confirm:push("finished")
+    end
     collectgarbage() -- free channel data, according to documentation
   end
 end
-
