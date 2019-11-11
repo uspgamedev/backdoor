@@ -31,7 +31,7 @@ function CardInfo:init(route)
   local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.route = route
   self.card = nil
-  self.position = vec2(w * 0.02, h * 0.1)
+  self.position = vec2(w * 0.02, h * 0.07)
   self.hide_desc = true
   self.title_font = FONT.get("TextBold", 24)
   self.text_font = FONT.get("Text", 18)
@@ -187,4 +187,3 @@ function CardInfo:drawIcon()
 end
 
 return CardInfo
-

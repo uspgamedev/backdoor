@@ -1,13 +1,16 @@
 
 local COLORS  = require 'domain.definitions.colors'
 local FONT    = require 'view.helpers.font'
-local PPBar   = require 'view.actorpanel.ppbar'
 local Class   = require "steaming.extra_libs.hump.class"
+local Node   = require 'view.node'
 
-local LifeBar = Class({ __includes = { PPBar } })
+local LifeBar = Class({ __includes = { Node } })
 
 function LifeBar:init(actor, x, y)
-  PPBar.init(self, actor, x, y)
+  Node.init(self)
+  self:setPosition(x, y)
+  self.actor = actor
+  self.progress = 0
   self.label = "HP"
   self.fullcolor = COLORS.SUCCESS
   self.emptycolor = COLORS.NOTIFICATION
@@ -23,4 +26,3 @@ function LifeBar:process(dt)
 end
 
 return LifeBar
-

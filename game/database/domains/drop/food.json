@@ -6,7 +6,7 @@
         "type":"effect"
       }],
     "inputs":[{
-        "amount":10,
+        "amount":6,
         "name":"has_less_pp",
         "output":"not_full",
         "type":"input"

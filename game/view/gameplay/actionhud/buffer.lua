@@ -1,19 +1,23 @@
 
 -- luacheck: globals love
 
-local vec2    = require 'cpml' .vec2
-local Button  = require 'view.controlhints.newhand'
-local TEXTURE = require 'view.helpers.texture'
-local FONT    = require 'view.helpers.font'
-local DEFS    = require 'view.definitions'
-local Class   = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+local vec2       = require 'cpml' .vec2
+local HintButton = require 'view.gameplay.actionhud.controlhints.newhand'
+local PPCounter  = require 'view.gameplay.actionhud.ppcounter'
+local TEXTURE    = require 'view.helpers.texture'
+local FONT       = require 'view.helpers.font'
+local DEFS       = require 'view.definitions'
+local Class      = require "steaming.extra_libs.hump.class"
+local ELEMENT    = require "steaming.classes.primitives.element"
 
-local _MX = 32
-local _MY = 32
+local _MX = 16
+local _MY = 16
 local _GRADIENT_FILTER = .3
 local _BACKGROUND_ALPHA = .1
 local _MAX_CARDS = 15
+
+--forward functions declaration
+local _calculatePosition
 
 local BufferView = Class{
   __includes = { ELEMENT }
@@ -38,9 +42,10 @@ function BufferView:init(route)
   self.pos = nil
   self.offset = vec2()
   self.format = nil
+  self.ppcounter = nil
 
   -- hint button
-  self.button = Button(-5, -50)
+  self.button = nil
 
 end
 
@@ -48,7 +53,9 @@ function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {.8, .8, .8, 1}
   bufview.side = 'front'
-  bufview:calculatePosition()
+  bufview.button = HintButton(-5, -45)
+  bufview.ppcounter = PPCounter()
+  _calculatePosition(bufview)
   return bufview
 end
 
@@ -56,7 +63,7 @@ function BufferView.newBackBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = {1, 0.5, 0.5, 1}
   bufview.side = 'back'
-  bufview:calculatePosition()
+  _calculatePosition(bufview)
   return bufview
 end
 
@@ -93,19 +100,6 @@ function BufferView:changeSide(duration, target_buffer, actor)
   end
 end
 
-function BufferView:calculatePosition()
-  local W,H = DEFS.VIEWPORT_DIMENSIONS()
-  if self.side == 'front' then
-    self.pos = vec2(_MX, H - _MY - self.sprite:getHeight())
-    self.format = "x %d"
-  elseif self.side == 'back' then
-    self.pos = vec2(W - _MX - self.sprite:getWidth(), H - _MY - self.sprite:getHeight())
-    self.format = "%d x"
-  else
-    return error("invalid buffer view side position")
-  end
-end
-
 function BufferView:getPosition()
   return self.pos+self.offset
 end
@@ -119,15 +113,13 @@ function BufferView:getTopCardPosition()
   end
 end
 
-function BufferView:flashFor(_, _) -- luacheck: no self
-  --pass
-end
-
 function BufferView:update(dt)
   local actor = self.route.getControlledActor()
   if self.side == 'front' then
     self.button:setCost(actor:getBody():getConsumption())
     self.button:update(dt)
+    self.ppcounter:setPP(actor:getPP())
+    self.ppcounter:update(dt)
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then
     self.amount = actor:getBackBufferSize()
@@ -143,7 +135,7 @@ function BufferView:draw()
 
   local finish, step
   if self.side == "front" then
-    --Draw button ontop of front buffer
+    --Draw button above front buffer
     self.button:draw()
 
     finish, step = math.min(self.fake_amount or self.amount, _MAX_CARDS) - 1, 1
@@ -166,17 +158,42 @@ function BufferView:draw()
     g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
     self.sprite:draw(i*self.card_w_offset, step*i*self.card_h_offset)
   end
-  --Draw buffer size
+
   local card_w, card_h = self.sprite:getWidth(), self.sprite:getHeight()
   local text_w, text_h = self.font:getWidth(text), self.font:getHeight()
+
+  --Draw pp counter
+  if self.side == "front" then
+    g.push()
+    g.translate(math.max(finish,0)*self.card_w_offset + card_w/2,
+                step*finish*self.card_h_offset + card_h/2)
+    self.ppcounter:draw()
+    g.pop()
+  end
+
+  --Draw buffer size
   grd = _GRADIENT_FILTER
   self.font:set()
   g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
   g.print(text, finish*self.card_w_offset + card_w/2 - text_w/2,
                 step*finish*self.card_h_offset + card_h/2 - text_h/2)
 
-
   g.pop()
 end
+
+--local functions
+function _calculatePosition(self)
+  local W,H = DEFS.VIEWPORT_DIMENSIONS()
+  if self.side == 'front' then
+    self.pos = vec2(_MX, H - _MY - self.sprite:getHeight())
+    self.format = "x %d"
+  elseif self.side == 'back' then
+    self.pos = vec2(W - _MX - self.sprite:getWidth(), H - _MY - self.sprite:getHeight())
+    self.format = "%d x"
+  else
+    return error("invalid buffer view side position")
+  end
+end
+
 
 return BufferView
