@@ -327,6 +327,7 @@ local function _endInspect(self)
 end
 
 function ActionHUD:update(dt)
+  self.minimap:update(dt)
   --Checks if player can draw a new hand
   local player = self.route.getControlledActor()
   if player:getPP() < player:getBody():getConsumption() and

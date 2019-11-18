@@ -61,6 +61,7 @@ end
 
 function state:enter(from, view, route, packlist)
   _view = view
+  _view.action_hud.minimap:hide()
   _status = "choosing_pack"
   _route = route
   _pack = nil
@@ -74,6 +75,7 @@ end
 
 function state:leave()
   _view.actor:hide()
+  _view.action_hud.minimap:show()
   _leave = false
   _card_list_view:close()
   _card_list_view = nil
