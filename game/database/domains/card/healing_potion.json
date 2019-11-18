@@ -4,6 +4,7 @@
       "effects":[{
           "attr":"=vit",
           "mod":100,
+          "base":0,
           "name":"heal",
           "target":"=self_body",
           "type":"effect"

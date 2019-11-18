@@ -15,6 +15,7 @@
           },{
             "attr":"=arc",
             "mod":100,
+            "base":0,
             "center":"=pos",
             "name":"damage_on_area",
             "size":2,

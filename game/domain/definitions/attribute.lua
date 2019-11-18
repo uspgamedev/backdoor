@@ -10,8 +10,8 @@ ATTR.INFLUENCE = {
   VIT = {'ANI', 'COR'}
 }
 
-function ATTR.EFFECTIVE_POWER(base, mod)
-  return math.floor(base * mod / 100 + .5)
+function ATTR.EFFECTIVE_POWER(base, attr, mod)
+  return math.floor(base + attr * mod / 100)
 end
 
 return ATTR

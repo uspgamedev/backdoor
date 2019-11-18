@@ -4,6 +4,7 @@
       "effects":[{
           "attr":"=cor",
           "mod":100,
+          "base":0,
           "center":"=target-pos",
           "ignore_owner":true,
           "name":"damage_on_area",

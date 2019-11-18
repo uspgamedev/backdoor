@@ -11,6 +11,7 @@
         "effects":[{
             "attr":"=ARC",
             "mod":100,
+            "base":0,
             "name":"damage_on_target",
             "target":"=body_self",
             "type":"effect",

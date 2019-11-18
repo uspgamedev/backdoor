@@ -4,6 +4,7 @@
       "effects":[{
           "attr":"=arc",
           "mod":100,
+          "base":0,
           "center":"=target",
           "name":"damage_on_area",
           "size":3,
