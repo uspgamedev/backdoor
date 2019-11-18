@@ -68,7 +68,7 @@ inputs.float = _makeCommon(
 inputs.integer = _makeCommon(
   0,
   function(value, field)
-    value = value or (field.range or {0})[1]
+    value = value or field.default or (field.range or {0})[1]
     local range = field.range
     local newvalue, changed = IMGUI.InputInt("", value, 1, 10)
     if range then

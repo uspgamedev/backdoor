@@ -14,7 +14,7 @@
             "type":"effect"
           },{
             "attr":"=arc",
-            "base":0,
+            "mod":100,
             "center":"=pos",
             "name":"damage_on_area",
             "size":2,

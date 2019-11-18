@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=ANI",
-          "base":2,
+          "mod":100,
           "name":"heal",
           "target":"=self",
           "type":"effect"

@@ -7,9 +7,9 @@ FX.schema = {
   { id = 'center', name = "Target position", type = 'value', match = 'pos' },
   { id = 'size', name = "Area Size", type = 'value', match = 'integer',
     range = {1} },
-  { id = 'base', name = "Base Power", type = 'integer' },
-  { id = 'attr', name = "Mod Power", type = 'value', match = 'integer',
-    range = {1} },
+  { id = 'attr', name = "Base Power", type = 'value', match = 'integer' },
+  { id = 'mod', name = "%Mod", type = 'integer', range = {1,10000},
+    default = 100 },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
 }
 

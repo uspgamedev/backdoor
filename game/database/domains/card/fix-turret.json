@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "base":6,
+          "mod":100,
           "name":"heal",
           "target":"=turret",
           "type":"effect"

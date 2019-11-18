@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":1,
+          "mod":100,
           "center":"=target-pos",
           "ignore_owner":true,
           "name":"damage_on_area",

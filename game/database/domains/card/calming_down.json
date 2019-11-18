@@ -11,7 +11,7 @@
       "ability":{
         "effects":[{
             "attr":"=ani",
-            "base":-2,
+            "mod":100,
             "name":"heal",
             "target":"=actor_body",
             "type":"effect"
