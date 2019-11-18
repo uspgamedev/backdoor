@@ -2,18 +2,16 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":2,
-          "name":"damage_on_target",
-          "sfx":"attack-hit",
-          "target":"=target_body",
+          "body":"=target_body",
+          "card":"stunned",
+          "name":"place_widget",
           "type":"effect"
         }],
       "inputs":[{
+          "aoe-hint":1,
           "body-only":{
             "body-type":false
           },
-          "dif-fact":true,
           "max-range":1,
           "name":"choose_target",
           "output":"target_pos",
@@ -23,19 +21,13 @@
           "output":"target_body",
           "pos":"=target_pos",
           "type":"operator"
-        },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
         }]
     }
   },
-  "attr":"COR",
-  "cost":3,
-  "icon":"card-laser-spear",
-  "name":"Laser Cut",
-  "one_time":true,
-  "temporary":true,
-  "set":false
+  "attr":"ANI",
+  "cost":2,
+  "desc":"The best defense is a good offense.\nThe best offense is a good punch.",
+  "icon":"card-dropkick",
+  "name":"Stunning Blow",
+  "set":"brawler"
 }

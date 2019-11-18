@@ -7,16 +7,16 @@
   "extends":"sentient",
   "initial_buffer":[{
       "amount":1,
-      "card":"calming_down"
+      "card":"stunning-blow"
     },{
       "amount":1,
       "card":"laser-spear"
     },{
-      "amount":3,
+      "amount":4,
       "card":"sidestep"
     },{
-      "amount":5,
-      "card":"trained-strike"
+      "amount":4,
+      "card":"strike"
     }],
   "name":"Brawler",
   "signature":"tackle",

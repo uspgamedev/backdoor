@@ -1,17 +1,17 @@
 {
   "attr":"COR",
+  "cost":0,
   "desc":"",
   "name":"Stunned",
   "one_time":true,
-  "cost":0,
   "type-description":"",
   "widget":{
-    "charges":8,
+    "charges":2,
     "operators":[],
     "status-tags":[{
         "tag":"stun"
       }],
-    "trigger":"on_cycle",
+    "trigger":"on_turn",
     "equipment":false
   },
   "icon":false,

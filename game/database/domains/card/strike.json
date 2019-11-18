@@ -3,13 +3,14 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":2,
+          "base":-2,
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
           "type":"effect"
         }],
       "inputs":[{
+          "aoe-hint":1,
           "body-only":{
             "body-type":false
           },
@@ -17,25 +18,29 @@
           "max-range":1,
           "name":"choose_target",
           "output":"target_pos",
-          "type":"input"
-        },{
-          "name":"get_body_at",
-          "output":"target_body",
-          "pos":"=target_pos",
-          "type":"operator"
+          "type":"input",
+          "empty-tile":false,
+          "non-wall":false
         },{
           "name":"get_attribute",
           "output":"cor",
           "type":"operator",
           "which":"COR"
+        },{
+          "name":"get_body_at",
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
         }]
     }
   },
   "attr":"COR",
-  "cost":3,
-  "icon":"card-laser-spear",
-  "name":"Laser Cut",
-  "one_time":true,
-  "temporary":true,
-  "set":false
+  "cost":1,
+  "desc":"",
+  "icon":"card-dropkick",
+  "name":"Strike",
+  "set":"brawler",
+  "type-description":"",
+  "one_time":false,
+  "temporary":false
 }

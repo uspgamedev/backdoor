@@ -1,6 +1,6 @@
 {
   "attr":"COR",
-  "cost":5,
+  "cost":3,
   "desc":"A mass-produced weapon.",
   "icon":"card-laser-spear",
   "name":"Laser Spear",
@@ -8,7 +8,7 @@
   "set":"brawler",
   "type-description":"",
   "widget":{
-    "charges":7,
+    "charges":2,
     "equipment":{
       "active":{
         "cards":[{
