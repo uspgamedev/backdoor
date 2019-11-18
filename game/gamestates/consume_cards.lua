@@ -49,7 +49,6 @@ end
 function state:leave()
   _leave = false
   _card_list_view:close()
-  _card_list_view:destroy()
   _card_list_view = nil
   _view.actor:hide()
 end
