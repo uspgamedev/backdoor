@@ -15,6 +15,7 @@ local _NUMBER_COLOR = {
   damage = 'NOTIFICATION',
   heal = 'SUCCESS',
   food = 'PP',
+  focus = 'FOCUS',
   status = 'WARNING'
 }
 
@@ -22,6 +23,7 @@ local _SIGNALS = {
   ['blocked-damage'] = '↓-',
   damage = '-',
   heal = '+',
+  focus = '+',
   food = '+',
 }
 
