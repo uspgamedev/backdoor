@@ -48,9 +48,13 @@ end
 
 function state:leave()
   _leave = false
+  if _card_list_view:getExpGained() > 0 then
+    _view.actor:timedHide(1)
+  else
+    _view.actor:hide()
+  end
   _card_list_view:close()
   _card_list_view = nil
-  _view.actor:hide()
 end
 
 function state:update(dt)
