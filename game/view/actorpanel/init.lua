@@ -14,7 +14,7 @@ local Deferred = require 'common.deferred'
 
 local ActorHUDTree = Class({ __includes = { Node } })
 
-local _WIDTH, _HEIGHT = 320, 180
+local _WIDTH, _HEIGHT = VIEWDEFS.PANEL_W, VIEWDEFS.PANEL_H
 local _MG = VIEWDEFS.PANEL_MG
 local _PD = 8
 local _INNERWIDTH = _WIDTH - 2*_PD - 2*_MG

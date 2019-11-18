@@ -145,7 +145,7 @@ local function _useAction(action_slot, params)
       end
     elseif param.name == "choose_consume_list" then
       _view.action_hud:disableTurn()
-      SWITCHER.push(GS.CONSUME_CARDS, controlled_actor, param.max)
+      SWITCHER.push(GS.CONSUME_CARDS, _view, controlled_actor, param.max)
       local args = coroutine.yield(_task)
       if args.consumed then
         params[param.output] = args.consumed

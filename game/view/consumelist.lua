@@ -6,6 +6,7 @@ local FONT     = require 'view.helpers.font'
 local COLORS   = require 'domain.definitions.colors'
 local DEFS     = require 'domain.definitions'
 local CardView = require 'view.card'
+local VIEWDEFS = require 'view.definitions'
 local Class    = require "steaming.extra_libs.hump.class"
 local Util     = require "steaming.util"
 local ELEMENT  = require "steaming.classes.primitives.element"
@@ -52,7 +53,10 @@ local function _initGraphicValues()
 end
 
 local function stencil()
-  love.graphics.rectangle("fill", _WIDTH + 40, _HEIGHT - 388, 250, 105)
+  local margin = 4
+  love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
+                          _HEIGHT - 448 - margin, VIEWDEFS.PANEL_W + margin,
+                          VIEWDEFS.PANEL_H + margin)
 end
 
 local function _next_circular(i, len, n)
@@ -372,12 +376,12 @@ function View:drawHUDInfo(g, owner, enter)
       local arc_t = ("%.1f%%"):format(arc*100)
       local ani_t = ("%.1f%%"):format(ani*100)
       _font.set()
-      g.setColor(COLORS.COR)
-      g.print(cor_t, _WIDTH + 57, _HEIGHT - 288)
-      g.setColor(COLORS.ARC)
-      g.print(arc_t, _WIDTH + 133, _HEIGHT - 288)
-      g.setColor(COLORS.ANI)
-      g.print(ani_t, _WIDTH + 209, _HEIGHT - 288)
+      g.setColor(COLORS.COR[1], COLORS.COR[2], COLORS.COR[3], enter*enter*enter)
+      g.print(cor_t, _WIDTH + 57, _HEIGHT - 308)
+      g.setColor(COLORS.ARC[1], COLORS.ARC[2], COLORS.ARC[3], enter*enter*enter)
+      g.print(arc_t, _WIDTH + 133, _HEIGHT - 308)
+      g.setColor(COLORS.ANI[1], COLORS.ANI[2], COLORS.ANI[3], enter*enter*enter)
+      g.print(ani_t, _WIDTH + 209, _HEIGHT - 308)
     end
 
 end
