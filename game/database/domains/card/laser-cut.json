@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "mod":120,
+          "mod":150,
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
