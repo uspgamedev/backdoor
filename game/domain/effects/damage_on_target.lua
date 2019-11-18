@@ -13,14 +13,14 @@ FX.schema = {
 }
 
 function FX.preview (_, fieldvalues)
-  local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
+  local attr, mod = fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
   return ("Deal %s damage to target"):format(amount)
 end
 
 function FX.process (actor, fieldvalues)
-  local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
+  local attr, mod = fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
   local result = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
