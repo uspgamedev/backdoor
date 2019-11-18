@@ -4,7 +4,8 @@ local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'attr', name = "Base Power", type = 'value', match = 'integer' },
+  { id = 'base', name = "Base Power", type = 'integer', range = {0,100} },
+  { id = 'attr', name = "Scaling Factor", type = 'value', match = 'integer' },
   { id = 'mod', name = "%Mod", type = 'integer', default = 100,
     range = {1,10000} },
   { id = 'sfx', name = "SFX", type = 'enum',
@@ -13,14 +14,14 @@ FX.schema = {
 }
 
 function FX.preview (_, fieldvalues)
-  local attr, mod = fieldvalues.attr, fieldvalues.mod
-  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
+  local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
   return ("Deal %s damage to target"):format(amount)
 end
 
 function FX.process (actor, fieldvalues)
-  local attr, mod = fieldvalues.attr, fieldvalues.mod
-  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
+  local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
   local result = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {

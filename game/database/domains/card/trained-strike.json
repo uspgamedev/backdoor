@@ -4,6 +4,7 @@
       "effects":[{
           "attr":"=cor",
           "mod":100,
+          "base":0,
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",

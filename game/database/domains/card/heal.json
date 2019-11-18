@@ -4,6 +4,7 @@
       "effects":[{
           "attr":"=ANI",
           "mod":100,
+          "base":0,
           "name":"heal",
           "target":"=self",
           "type":"effect"
