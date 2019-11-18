@@ -55,12 +55,25 @@ function state:enter(_, route, view)
   _view = view
   _view.action_hud:enableTurn(true)
 
+  if INPUT.isActionDown('STATUS') then
+    _view.actor:show()
+  else
+    _view.actor:hide()
+  end
+
 end
 
 function state:leave()
 end
 
 function state:resume(_, args)
+
+  if INPUT.isActionDown('STATUS') then
+    _view.actor:show()
+  else
+    _view.actor:hide()
+  end
+
   _view.action_hud:enableTurn(true)
   _resumeTask(args)
 end
