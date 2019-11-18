@@ -4,7 +4,7 @@
       "effects":[{
           "attr":"=arc",
           "base":0,
-          "mod":30,
+          "mod":50,
           "name":"damage_on_target",
           "sfx":"example",
           "target":"=body",
