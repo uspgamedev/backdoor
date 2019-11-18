@@ -31,7 +31,7 @@
     }
   },
   "attr":"ANI",
-  "cost":1,
+  "cost":2,
   "desc":"Ooops, excuse me!",
   "icon":"card-sidestep",
   "name":"Side-step",
