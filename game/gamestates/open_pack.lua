@@ -12,6 +12,7 @@ local _route
 local _card_list_view
 local _pack
 local _leave
+local _view
 local _status
 local _pack_index
 
@@ -40,6 +41,7 @@ local function _confirm()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
     _card_list_view:register("HUD")
+    _view.actor:show()
   end
 end
 
@@ -57,7 +59,8 @@ local function _consumeCards(consumed)
   end
 end
 
-function state:enter(from, route, packlist)
+function state:enter(from, view, route, packlist)
+  _view = view
   _status = "choosing_pack"
   _route = route
   _pack = nil
@@ -70,6 +73,7 @@ function state:enter(from, route, packlist)
 end
 
 function state:leave()
+  _view.actor:hide()
   _leave = false
   _card_list_view:close()
   _card_list_view = nil
