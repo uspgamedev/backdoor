@@ -6,7 +6,9 @@ local FONT     = require 'view.helpers.font'
 local COLORS   = require 'domain.definitions.colors'
 local DEFS     = require 'domain.definitions'
 local CardView = require 'view.card'
+local VIEWDEFS = require 'view.definitions'
 local Class    = require "steaming.extra_libs.hump.class"
+local Dissolve = require 'view.dissolvecard'
 local Util     = require "steaming.util"
 local ELEMENT  = require "steaming.classes.primitives.element"
 
@@ -52,7 +54,10 @@ local function _initGraphicValues()
 end
 
 local function stencil()
-  love.graphics.rectangle("fill", _WIDTH + 40, _HEIGHT - 388, 250, 105)
+  local margin = 4
+  love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
+                          _HEIGHT - 448 - margin, VIEWDEFS.PANEL_W + margin,
+                          VIEWDEFS.PANEL_H + margin)
 end
 
 local function _next_circular(i, len, n)
@@ -91,7 +96,6 @@ function View:init(hold_actions)
   self.text = 0
   self.selection = 1
   self.buffered_offset = {}
-  self.consumed_offset = {}
   self.card_alpha = {}
   self.move = self.selection
   self.offsets = {}
@@ -127,7 +131,6 @@ function View:open(card_list, maxconsume)
   self.maxconsume = maxconsume
   for i=1,#card_list do
     self.buffered_offset[i] = 0
-    self.consumed_offset[i] = 0
     self.card_alpha[i] = 1
     self.consumed[i] = false
   end
@@ -181,17 +184,12 @@ function View:startLeaving()
                                     "tween", .3, self.buffered_offset,
                                     {[i] = _HEIGHT}, "in-back")
                     else
-                      self:addTimer("consuming_card_off"..i, MAIN_TIMER,
-                                    "tween", .3, self.consumed_offset,
-                                    {[i] = 30}, "in-quad")
-                      self:addTimer("consuming_card_alpha"..i, MAIN_TIMER,
-                                    "tween", .3, self.card_alpha,
-                                    {[i] = 0}, "in-quad")
+                      Dissolve(self.card_list[i], .5)
                     end
                   end)
   end
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                0.65, function() self.ready_to_leave = true end)
+                0.75, function() self.ready_to_leave = true end)
 
 end
 
@@ -298,7 +296,7 @@ function View:drawCards(g, enter)
     offset = offset > _EPSILON and offset - offset * _MOVE_SMOOTH or 0
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), _LIST_VALIGN - consumed)
-    g.translate(0, self.buffered_offset[i] + -self.consumed_offset[i])
+    g.translate(0, self.buffered_offset[i])
     local card = card_list[i]
     card:setFocus(focus and not self.is_leaving)
     card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
@@ -332,7 +330,7 @@ function View:drawCardDesc(g, card, enter)
 
   g.setLineWidth(2)
   local maxw = 2*_CW
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
   g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
 
@@ -350,7 +348,7 @@ end
 function View:drawHUDInfo(g, owner, enter)
 
     --Draw keep side
-    g.setColor(COLORS.NEUTRAL)
+    g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
     _titlefont.set()
     g.print("Keep", _H_MARGIN, _HEIGHT - _V_MARGIN - _titlefont:getHeight())
 
@@ -372,12 +370,12 @@ function View:drawHUDInfo(g, owner, enter)
       local arc_t = ("%.1f%%"):format(arc*100)
       local ani_t = ("%.1f%%"):format(ani*100)
       _font.set()
-      g.setColor(COLORS.COR)
-      g.print(cor_t, _WIDTH + 57, _HEIGHT - 288)
-      g.setColor(COLORS.ARC)
-      g.print(arc_t, _WIDTH + 133, _HEIGHT - 288)
-      g.setColor(COLORS.ANI)
-      g.print(ani_t, _WIDTH + 209, _HEIGHT - 288)
+      g.setColor(COLORS.COR[1], COLORS.COR[2], COLORS.COR[3], enter*enter*enter)
+      g.print(cor_t, _WIDTH + 57, _HEIGHT - 308)
+      g.setColor(COLORS.ARC[1], COLORS.ARC[2], COLORS.ARC[3], enter*enter*enter)
+      g.print(arc_t, _WIDTH + 133, _HEIGHT - 308)
+      g.setColor(COLORS.ANI[1], COLORS.ANI[2], COLORS.ANI[3], enter*enter*enter)
+      g.print(ani_t, _WIDTH + 209, _HEIGHT - 308)
     end
 
 end

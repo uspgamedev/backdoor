@@ -12,6 +12,7 @@ local _actor
 local _card_list_view
 local _leave
 local _status
+local _view
 
 function state:init()
 end
@@ -32,7 +33,9 @@ local function _cancel()
   _leave = true
 end
 
-function state:enter(from, actor, maxconsume)
+function state:enter(from, view, actor, maxconsume)
+  _view = view
+  _view.actor:show()
   _card_list_view = CardView({"CONFIRM"})
   local buffer = actor:copyBuffer()
   _actor = actor
@@ -46,8 +49,8 @@ end
 function state:leave()
   _leave = false
   _card_list_view:close()
-  _card_list_view:destroy()
   _card_list_view = nil
+  _view.actor:hide()
 end
 
 function state:update(dt)

@@ -9,6 +9,7 @@ local FONT       = require 'view.helpers.font'
 local min = math.min
 local max = math.max
 
+local _ALPHA_SPEED = 2
 local _TILE_W = 8
 local _TILE_H = 8
 local _RAD_W = _TILE_W/2
@@ -39,16 +40,35 @@ local MINIMAP = Class{
 
 function MINIMAP:init(route, x, y, width, height)
   ELEMENT.init(self)
-  
+
   self.w, self.h = width, height
   self.x, self.y = x, y
 
   self.map = love.graphics.newCanvas(width, height)
 
+  self.visible = true
+  self.alpha = 1
+
   self.route = route
   self.actor = self.route:getControlledActor()
 
   self.font = FONT.get("Text", 20)
+end
+
+function MINIMAP:show()
+  self.visible = true
+end
+
+function MINIMAP:hide()
+  self.visible = false
+end
+
+function MINIMAP:update(dt)
+  if self.visible then
+    self.alpha = math.min(self.alpha + dt * _ALPHA_SPEED, 1)
+  else
+    self.alpha = math.max(self.alpha - dt * _ALPHA_SPEED, 0)
+  end
 end
 
 function MINIMAP:draw()
@@ -69,9 +89,9 @@ function MINIMAP:draw()
     g.push()
     g.origin()
     g.clear()
-    g.setColor(COLORS.EMPTY)
+    g.setColor(COLORS.EMPTY[1], COLORS.EMPTY[2], COLORS.EMPTY[3], self.alpha)
     g.rectangle("fill", 0, 0, self.w, self.h)
-    g.setColor(COLORS.NEUTRAL)
+    g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
     local translation_x = -aj*_TILE_W + self.w/2
     local translation_y = -ai*_TILE_H + self.h/2
     g.translate(
@@ -88,14 +108,15 @@ function MINIMAP:draw()
         if tile and seen then
           local x, y = j, i
           g.push()
-          g.setColor(_TILE_COLORS[tile.type])
+          local c = _TILE_COLORS[tile.type]
+          g.setColor(c[1], c[2], c[3], self.alpha)
           g.translate(x, y)
           g.polygon("fill", _TILE_POLYGON)
           if ai == ti and aj == tj then
-            g.setColor(COLORS.NEUTRAL)
+            g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
             g.polygon("fill", _BODY_POLYGON)
           elseif seen > 0 and sector:getBodyAt(ti, tj) then
-            g.setColor(1, 0.4, 0.1)
+            g.setColor(1, 0.4, 0.1, alpha)
             g.polygon("fill", _BODY_POLYGON)
           end
           g.pop()
@@ -105,14 +126,14 @@ function MINIMAP:draw()
     g.pop()
     g.setCanvas()
   end
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
   g.draw(self.map, 0, 0)
   g.push()
   g.translate(2, self.h-20)
-  g.setColor(COLORS.BLACK)
+  g.setColor(COLORS.BLACK[1], COLORS.BLACK[2], COLORS.BLACK[3], self.alpha)
   g.printf(zonename:upper(), 0, 0, self.w-8, "right")
   g.translate(-2, -2)
-  g.setColor(COLORS.NEUTRAL)
+  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
   g.printf(zonename:upper(), 0, 0, self.w-8, "right")
   g.pop()
   g.pop()

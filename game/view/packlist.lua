@@ -29,7 +29,7 @@ local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _HOLDBAR_TEXT = "open pack"
-local _FULL_WIDTH, _WIDTH, _HEIGHT
+local _WIDTH, _HEIGHT
 local _CW, _CH
 
 -- LOCAL VARS
@@ -38,27 +38,12 @@ local _font
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
-  _FULL_WIDTH, _HEIGHT = g.getDimensions()
+  _WIDTH, _HEIGHT = g.getDimensions()
 
-  _WIDTH = 3*_FULL_WIDTH/4
   _font = FONT.get("TextBold", 20)
   _CW = CARD.getWidth() + 20
   _CH = CARD.getHeight() + 20
 end
-
-local function _stencilFunction(g)
-   g.polygon("fill",
-     {
-       0, 0,
-       _WIDTH - 24, 0,
-       _WIDTH - 24, _HEIGHT/2 + 24,
-       _WIDTH, _HEIGHT/2 + 48,
-       _WIDTH, _HEIGHT,
-       0, _HEIGHT,
-     }
-   )
-end
-
 
 local function _next_circular(i, len, n)
   if n == 0 then return i end
@@ -157,7 +142,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.95)
-  g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
+  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
 
 function View:drawPacks(g, enter)
@@ -166,9 +151,6 @@ function View:drawPacks(g, enter)
   local pack_list_size = #pack_list
 
   g.push()
-
-  g.stencil(function() _stencilFunction(g) end, "replace", 1)
-  g.setStencilTest("greater", 0)
 
   -- smooth enter!
   g.translate(math.round((_WIDTH/2)*(1-enter)+_WIDTH/2-_CW/2),
@@ -227,7 +209,7 @@ function View:drawPacks(g, enter)
       self:drawPackDesc(g, pack_list[selection], enter)
     end
   end
-  g.setStencilTest()
+
   g.pop()
 end
 
