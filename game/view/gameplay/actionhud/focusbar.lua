@@ -16,19 +16,19 @@ local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
-local _HANDBAR_WIDTH = 492/4
+local _HANDBAR_WIDTH = 492/8
 local _HANDBAR_HEIGHT = 12
 local _MARGIN_WIDTH = 60
 local _MARGIN_HEIGHT = 16
 local _PAD_HEIGHT = 32
 local _SLOPE = _HANDBAR_HEIGHT + _MARGIN_HEIGHT
 local _PANEL_VTX = {
-  -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2 + _MARGIN_HEIGHT / 2,
+  -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2,
   -_MARGIN_WIDTH + _SLOPE, -_MARGIN_HEIGHT / 2,
   _HANDBAR_WIDTH + _MARGIN_WIDTH - _SLOPE, -_MARGIN_HEIGHT / 2,
-  _HANDBAR_WIDTH + _MARGIN_WIDTH, _HANDBAR_HEIGHT / 2 + _MARGIN_HEIGHT / 2,
-  _HANDBAR_WIDTH + _MARGIN_WIDTH - _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT,
-  -_MARGIN_WIDTH + _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT,
+  _HANDBAR_WIDTH + _MARGIN_WIDTH, _HANDBAR_HEIGHT / 2,
+  _HANDBAR_WIDTH + _MARGIN_WIDTH - _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT / 2,
+  -_MARGIN_WIDTH + _SLOPE, _HANDBAR_HEIGHT + _MARGIN_HEIGHT / 2,
 }
 
 local _font
@@ -118,7 +118,7 @@ function FocusBar:draw()
                   gre + (1-gre)*self.emer_fx_v,
                   blu + (1-blu)*self.emer_fx_v
   g.push()
-  g.translate(-_MARGIN_WIDTH/4, 0.4*(_HANDBAR_HEIGHT + _MARGIN_HEIGHT))
+  g.translate(-_MARGIN_WIDTH / 4, _HANDBAR_HEIGHT / 2)
   local handbar_gap = (_HANDBAR_WIDTH + _MARGIN_WIDTH/2) / (maxfocus-1)
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
