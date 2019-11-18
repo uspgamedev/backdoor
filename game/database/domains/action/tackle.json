@@ -2,7 +2,7 @@
   "ability":{
     "effects":[{
         "attr":"=cor",
-        "base":0,
+        "mod":100,
         "name":"damage_on_target",
         "target":"=target",
         "type":"effect",

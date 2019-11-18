@@ -10,7 +10,7 @@
           "type":"effect"
         },{
           "attr":"=ani",
-          "base":-1,
+          "mod":100,
           "center":"=self_pos",
           "ignore_owner":true,
           "name":"damage_on_area",

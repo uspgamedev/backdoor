@@ -1,25 +1,24 @@
 
-local RANDOM  = require 'common.random'
 local ATTR    = require 'domain.definitions.attribute'
 
 local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'base', name = "Heal power base", type = 'integer' },
-  { id = 'attr', name = "Heal power mod", type = 'value', match = 'integer',
+  { id = 'attr', name = "Heal power base", type = 'integer' },
+  { id = 'mod', name = "% Mod", type = 'value', match = 'integer',
     range = {1} },
 }
 
-function FX.preview(actor, fieldvalues)
+function FX.preview(_, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
   return ("Heal %s hit points"):format(amount)
 end
 
-function FX.process(actor, fieldvalues)
+function FX.process(_, fieldvalues)
   local attr, base = fieldvalues.attr, fieldvalues.base
-  local target = fieldvalues['target'] 
+  local target = fieldvalues['target']
   local amount = ATTR.EFFECTIVE_POWER(base, attr)
   local effective_amount = target:heal(amount)
   coroutine.yield('report', {

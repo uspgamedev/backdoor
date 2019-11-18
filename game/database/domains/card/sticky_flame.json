@@ -10,7 +10,7 @@
       "ability":{
         "effects":[{
             "attr":"=ARC",
-            "base":-1,
+            "mod":100,
             "name":"damage_on_target",
             "target":"=body_self",
             "type":"effect",
