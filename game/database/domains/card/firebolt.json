@@ -9,10 +9,6 @@
           "sfx":"example",
           "target":"=body",
           "type":"effect"
-        },{
-          "amount":1,
-          "name":"gain_focus",
-          "type":"effect"
         }],
       "inputs":[{
           "body-only":[],
