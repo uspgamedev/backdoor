@@ -6,17 +6,8 @@
   "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
   "extends":"sentient",
   "initial_buffer":[{
-      "amount":1,
-      "card":"heal"
-    },{
-      "amount":1,
-      "card":"fireball"
-    },{
-      "amount":5,
+      "amount":10,
       "card":"firebolt"
-    },{
-      "amount":3,
-      "card":"catalyst"
     }],
   "name":"Sage",
   "signature":"bolting",

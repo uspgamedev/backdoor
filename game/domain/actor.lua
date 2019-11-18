@@ -624,6 +624,10 @@ function Actor:spendFocus(n)
   self.focus = math.max(0, self.focus - n)
 end
 
+function Actor:gainFocus(n)
+  self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
+end
+
 function Actor:checkFocus()
   if self.focus == 0 then
     self:endFocus()

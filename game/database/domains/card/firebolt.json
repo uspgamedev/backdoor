@@ -3,15 +3,15 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "mod":100,
           "base":0,
+          "mod":30,
           "name":"damage_on_target",
           "sfx":"example",
           "target":"=body",
           "type":"effect"
         },{
           "amount":1,
-          "name":"draw_card",
+          "name":"gain_focus",
           "type":"effect"
         }],
       "inputs":[{
@@ -32,10 +32,10 @@
           "type":"operator",
           "which":"ARC"
         }]
-    },
+    }
   },
-  "cost":1,
   "attr":"ARC",
+  "cost":2,
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "icon":"card-firebolt",
   "name":"Firebolt",
