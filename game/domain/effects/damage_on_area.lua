@@ -14,8 +14,8 @@ FX.schema = {
 }
 
 function FX.preview (_, fieldvalues)
-  local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
+  local attr, mod = fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
   local size = fieldvalues['size'] * 2 - 1
   return ("Deal %s damage on %sx%s area"):format(amount, size, size)
 end
@@ -25,9 +25,9 @@ function FX.process (actor, fieldvalues)
   local ci, cj  = unpack(fieldvalues['center'])
   local size    = fieldvalues['size']
   local attr    = fieldvalues['attr']
-  local base    = fieldvalues['base']
+  local mod     = fieldvalues['mod']
   local ignore_owner = fieldvalues['ignore_owner']
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
+  local amount = ATTR.EFFECTIVE_POWER(mod, attr)
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
