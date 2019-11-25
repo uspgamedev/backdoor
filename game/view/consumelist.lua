@@ -190,21 +190,25 @@ function View:startLeaving()
   end
   for i = 1, #self.card_list do
     self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  i*3/60 + .05,
+                  i*5/60 + .05,
                   function()
                     if not self.consumed[i] then
                       if self.send_to_backbuffer then
                         local backbuffer = self.backbuffer
-                        local finish = backbuffer:getTopCardPosition()
+                        local finish = backbuffer:getTopCardPosition(i-1)
                         local cardview = self.card_list[i]
                         local offset = _BACKBUFFER_OFFSET - vec2((i-1)*(_CW+_PD) - math.round((_CW+_PD)*(self.move-1)),0)
                         self:addTimer("slide_card_"..i, MAIN_TIMER, "tween", .5, cardview,
                                       {position = finish + offset}, 'out-cubic')
                         self:addTimer("wait_card_"..i, MAIN_TIMER, "after", .3,
-                                          function ()
+                                          function()
+                                            self:addTimer("add_fakecard_"..i, MAIN_TIMER, "after", .15,
+                                                          function()
+                                                            backbuffer:addFakeCard()
+                                                          end)
                                             self:addTimer("fadeout_card_"..i, MAIN_TIMER, "tween", .3,
-                                                              cardview, {alpha = 0}, 'out-cubic',
-                                                              function() cardview:destroy() end)
+                                                          cardview, {alpha = 0}, 'out-cubic',
+                                                          function() cardview:destroy() end)
                                           end)
                       else
                         self:addTimer("getting_card_"..i, MAIN_TIMER,
@@ -218,7 +222,12 @@ function View:startLeaving()
   end
   local d = self.send_to_backbuffer and 1.2 or .75
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                d, function() self.ready_to_leave = true end)
+                d, function()
+                  if self.backbuffer then
+                    self.backbuffer:resetFakeCards()
+                  end
+                  self.ready_to_leave = true
+                end)
 
 end
 

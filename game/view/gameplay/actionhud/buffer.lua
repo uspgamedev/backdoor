@@ -33,7 +33,7 @@ function BufferView:init(route)
   self.side = 'front'
   self.font = FONT.get("Text", 24)
   self.amount = 0
-  self.fake_amount = nil --Used for shuffle animation
+  self.fake_amount = nil --Used for shuffle animation and pack cards
 
   self.card_w_offset = 2
   self.card_h_offset = 1
@@ -104,12 +104,17 @@ function BufferView:getPosition()
   return self.pos+self.offset
 end
 
-function BufferView:getTopCardPosition()
+function BufferView:getTopCardPosition(index_offset)
+  index_offset = index_offset or 0
   local size = self.amount
   if self.side == 'front' then
-    return self.pos + vec2(size * self.card_w_offset, size * self.card_h_offset) + self.offset
+    return self.pos + vec2((size + index_offset) * self.card_w_offset,
+                           (size + index_offset) * self.card_h_offset)
+                    + self.offset
   elseif self.side == 'back' then
-    return self.pos + vec2(size * -self.card_w_offset, size * self.card_h_offset) + self.offset
+    return self.pos + vec2((size + index_offset) * -self.card_w_offset,
+                           (size + index_offset) * self.card_h_offset)
+                    + self.offset
   end
 end
 
@@ -179,6 +184,17 @@ function BufferView:draw()
                 step*finish*self.card_h_offset + card_h/2 - text_h/2)
 
   g.pop()
+end
+
+function BufferView:addFakeCard()
+  if not self.fake_amount then
+    self.fake_amount = self.amount
+  end
+  self.fake_amount = self.fake_amount + 1
+end
+
+function BufferView:resetFakeCards()
+  self.fake_amount = nil
 end
 
 --local functions
