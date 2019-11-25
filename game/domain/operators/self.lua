@@ -9,11 +9,13 @@ OP.schema = {
 
 OP.type = 'actor'
 
-function OP.process(actor, fieldvalues)
+function OP.process(actor, _)
   return actor
 end
 
-OP.preview = OP.process
+function OP.preview(_, _)
+  return "self"
+end
 
 return OP
 

@@ -1,7 +1,6 @@
 
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local TILE        = require 'common.tile'
-local DB          = require 'database'
 
 local INPUT = {}
 
@@ -37,6 +36,11 @@ function INPUT.isWithinRange(actor, fieldvalues, value)
   return true
 end
 
+function INPUT.preview(_, fieldvalues)
+  local range = fieldvalues['max-range']
+  return ("within %s tile%s"):format(range, range > 1 and "s" or "")
+end
+
 function INPUT.isValid(actor, fieldvalues, value)
   local sector = actor:getBody():getSector()
   local i, j = unpack(value)
@@ -53,10 +57,12 @@ function INPUT.isValid(actor, fieldvalues, value)
       return false
     end
   end
-  if fieldvalues['empty-tile'] and sector:getBodyAt(i, j) then
+  local target_body = sector:getBodyAt(i, j)
+  if fieldvalues['empty-tile'] and target_body then
     return false
   end
-  if fieldvalues['dif-fact'] and sector:getBodyAt(i, j):getFaction() == actor:getBody():getFaction() then
+  if fieldvalues['dif-fact'] and
+     target_body:getFaction() == actor:getBody():getFaction() then
     return false
   end
   local tile = sector:getTile(i, j)

@@ -14,5 +14,9 @@ function OP.process(actor, fieldvalues)
   return actor:getBody():getSector():getBodyAt(unpack(fieldvalues.pos))
 end
 
+function OP.preview(_, fieldvalues)
+  return ("body %s"):format(fieldvalues.pos)
+end
+
 return OP
 

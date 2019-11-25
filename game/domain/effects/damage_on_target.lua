@@ -16,7 +16,7 @@ FX.schema = {
 function FX.preview (_, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
   local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
-  return ("Deal %s damage to target"):format(amount)
+  return ("Deal %s damage to %s"):format(amount, fieldvalues.target)
 end
 
 function FX.process (actor, fieldvalues)
