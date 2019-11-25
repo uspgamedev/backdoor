@@ -13,6 +13,7 @@ local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
 local HoldBar       = require 'view.helpers.holdbar'
+local CardView      = require 'view.card'
 local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
@@ -60,6 +61,8 @@ function ActionHUD:init(route)
   self.conddock = ConditionDock(4*W/5, 4)
   self.conddock:register("HUD_BG")
 
+  self:_loadDocks()
+
   -- Minimap
   local size = 192
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
@@ -91,6 +94,33 @@ function ActionHUD:init(route)
 
   -- Inspector mode
   self.inspecting = false
+end
+
+function ActionHUD:_loadDocks()
+  local player = assert(self.route.getControlledActor())
+  for _, widget in player:getBody():eachWidget() do
+    local cardview = CardView(widget)
+    local dock, pos
+    cardview:register('HUD_FX')
+    if widget:isEquipment() then
+      local placement = widget:getWidgetPlacement()
+      if placement == "wieldable" then
+        dock = self.wielddock
+      elseif placement == "wearable" then
+        dock = self.weardock
+      else
+        return error("unknown equipment placement: ".. placement)
+      end
+      pos = dock:getSlotPosition()
+      cardview:setMode('equip')
+    else
+      dock = self.conddock
+      pos = dock:getNextSlotPosition()
+      cardview:setMode('cond')
+    end
+    dock:addCard(cardview)
+    cardview.position = pos
+  end
 end
 
 function ActionHUD:destroy()

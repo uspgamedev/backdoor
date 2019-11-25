@@ -55,6 +55,10 @@ function ConditionDock:getSlotPosition(i)
   return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - _HEIGHT)
 end
 
+function ConditionDock:getNextSlotPosition()
+  return self:getSlotPosition(self:getConditionsCount() + 1)
+end
+
 function ConditionDock:draw()
   local g = love.graphics
   g.push()
