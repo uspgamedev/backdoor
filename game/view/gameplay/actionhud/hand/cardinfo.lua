@@ -180,7 +180,7 @@ function CardInfo:drawIcon()
                     left, bottom - inner_corner)
   g.setColor(attr_color * Color:new{1, 1, 1, self.alpha})
   icon_texture:setFilter('linear', 'linear')
-  icon_texture:draw((left+right)/2, (top+bottom)/2, 0, 1, 1,
+  icon_texture:draw((left+right)/2, (top+bottom)/2, 0, 1.5, 1.5,
                     icon_texture:getWidth()/2,
                     icon_texture:getHeight()/2)
   g.pop()
