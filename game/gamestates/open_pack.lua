@@ -41,6 +41,7 @@ local function _confirm()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
     _card_list_view:register("HUD")
+    _card_list_view:sendToBackbuffer()
     _view.actor:show()
   end
 end
@@ -74,7 +75,7 @@ function state:enter(from, view, route, packlist)
 end
 
 function state:leave()
-  if _card_list_view:getExpGained() > 0 then
+  if _card_list_view.getExpGained and _card_list_view:getExpGained() > 0 then
     _view.actor:timedHide(1)
   else
     _view.actor:hide()

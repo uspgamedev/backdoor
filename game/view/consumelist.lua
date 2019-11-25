@@ -109,6 +109,7 @@ function View:init(hold_actions)
   self.exp_gained = 0
   self.ready_to_leave = false
   self.is_leaving = false
+  self.send_to_backbuffer = false
 
   _initGraphicValues()
 end
@@ -198,17 +199,15 @@ function View:isReadyToLeave()
 end
 
 function View:toggleSelected()
-  local changed = false
+
   if self.consumed[self.selection] then
-    changed = true
     self:removeConsume()
+    self.consumed[self.selection] = not self.consumed[self.selection]
   elseif not self.maxconsume or self.consumed_count < self.maxconsume then
-    changed = true
     self:addConsume()
-  end
-  if changed then
     self.consumed[self.selection] = not self.consumed[self.selection]
   end
+
 end
 
 function View:getConsumeLog()
@@ -246,7 +245,7 @@ function View:update(dt)
   else
     self.center_alpha = math.min(self.center_alpha + _CENTER_ALPHA_SPEED*dt, 1)
   end
-  for _,card in ipairs(self.card_list ) do
+  for _,card in ipairs(self.card_list) do
     card:update(dt)
   end
 end
@@ -393,6 +392,10 @@ function View:drawHoldBar(g, alpha, x, y)
   end
   self.holdbar:draw(x, y)
   g.pop()
+end
+
+function View:sendToBackbuffer()
+  self.send_to_backbuffer = true
 end
 
 return View
