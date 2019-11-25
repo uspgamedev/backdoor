@@ -11,6 +11,7 @@ local Class    = require "steaming.extra_libs.hump.class"
 local Dissolve = require 'view.dissolvecard'
 local Util     = require "steaming.util"
 local ELEMENT  = require "steaming.classes.primitives.element"
+local vec2     = require 'cpml' .vec2
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -31,6 +32,7 @@ local _H_MARGIN = 30
 local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
+local _BACKBUFFER_OFFSET = vec2(-441, -507)
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
@@ -53,11 +55,15 @@ local function _initGraphicValues()
   _CH = CARD.getHeight()
 end
 
-local function stencil()
+local function stencil(self)
   local margin = 4
+  --Panel region
   love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
                           _HEIGHT - 448 - margin, VIEWDEFS.PANEL_W + margin,
                           VIEWDEFS.PANEL_H + margin)
+  --Backbuffer region
+  local w, h = 120*self.backbuffer_show, 160*self.backbuffer_show
+  love.graphics.rectangle("fill", _FULL_WIDTH - w, _HEIGHT - h, w, h)
 end
 
 local function _next_circular(i, len, n)
@@ -109,6 +115,9 @@ function View:init(hold_actions)
   self.exp_gained = 0
   self.ready_to_leave = false
   self.is_leaving = false
+  self.send_to_backbuffer = false
+  self.backbuffer = nil
+  self.backbuffer_show = 0
 
   _initGraphicValues()
 end
@@ -175,21 +184,50 @@ function View:startLeaving()
   self.is_leaving = true
   self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
                 self, {text=0}, "in-quad")
+  if self.send_to_backbuffer then
+    self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", .25,
+                  self, {backbuffer_show=1}, "in-quad")
+  end
   for i = 1, #self.card_list do
     self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  i*3/60 + .05,
+                  i*5/60 + .05,
                   function()
                     if not self.consumed[i] then
-                      self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                    "tween", .3, self.buffered_offset,
-                                    {[i] = _HEIGHT}, "in-back")
+                      if self.send_to_backbuffer then
+                        local backbuffer = self.backbuffer
+                        local finish = backbuffer:getTopCardPosition(i-1)
+                        local cardview = self.card_list[i]
+                        local offset = _BACKBUFFER_OFFSET - vec2((i-1)*(_CW+_PD) - math.round((_CW+_PD)*(self.move-1)),0)
+                        self:addTimer("slide_card_"..i, MAIN_TIMER, "tween", .5, cardview,
+                                      {position = finish + offset}, 'out-cubic')
+                        self:addTimer("wait_card_"..i, MAIN_TIMER, "after", .3,
+                                          function()
+                                            self:addTimer("add_fakecard_"..i, MAIN_TIMER, "after", .15,
+                                                          function()
+                                                            backbuffer:addFakeCard()
+                                                          end)
+                                            self:addTimer("fadeout_card_"..i, MAIN_TIMER, "tween", .3,
+                                                          cardview, {alpha = 0}, 'out-cubic',
+                                                          function() cardview:destroy() end)
+                                          end)
+                      else
+                        self:addTimer("getting_card_"..i, MAIN_TIMER,
+                                      "tween", .3, self.buffered_offset,
+                                      {[i] = _HEIGHT}, "in-back")
+                      end
                     else
                       Dissolve(self.card_list[i], .5)
                     end
                   end)
   end
+  local d = self.send_to_backbuffer and 1.2 or .75
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                0.75, function() self.ready_to_leave = true end)
+                d, function()
+                  if self.backbuffer then
+                    self.backbuffer:resetFakeCards()
+                  end
+                  self.ready_to_leave = true
+                end)
 
 end
 
@@ -198,17 +236,15 @@ function View:isReadyToLeave()
 end
 
 function View:toggleSelected()
-  local changed = false
+
   if self.consumed[self.selection] then
-    changed = true
     self:removeConsume()
+    self.consumed[self.selection] = not self.consumed[self.selection]
   elseif not self.maxconsume or self.consumed_count < self.maxconsume then
-    changed = true
     self:addConsume()
-  end
-  if changed then
     self.consumed[self.selection] = not self.consumed[self.selection]
   end
+
 end
 
 function View:getConsumeLog()
@@ -246,7 +282,7 @@ function View:update(dt)
   else
     self.center_alpha = math.min(self.center_alpha + _CENTER_ALPHA_SPEED*dt, 1)
   end
-  for _,card in ipairs(self.card_list ) do
+  for _,card in ipairs(self.card_list) do
     card:update(dt)
   end
 end
@@ -266,7 +302,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.95)
-  love.graphics.stencil(stencil, "replace", 1)
+  love.graphics.stencil(function() stencil(self) end, "replace", 1)
   love.graphics.setStencilTest("less", 1)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
   love.graphics.setStencilTest()
@@ -303,8 +339,10 @@ function View:drawCards(g, enter)
     g.translate(0, self.buffered_offset[i])
     local card = card_list[i]
     card:setFocus(focus and not self.is_leaving)
-    card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
-                            or enter*self.card_alpha[i])
+    if not self.is_leaving then
+      card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
+                              or enter*self.card_alpha[i])
+    end
     card:draw()
     g.pop()
   end
@@ -393,6 +431,11 @@ function View:drawHoldBar(g, alpha, x, y)
   end
   self.holdbar:draw(x, y)
   g.pop()
+end
+
+function View:sendToBackbuffer(backbuffer)
+  self.send_to_backbuffer = true
+  self.backbuffer = backbuffer
 end
 
 return View
