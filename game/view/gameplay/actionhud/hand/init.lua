@@ -182,20 +182,13 @@ function HandView:reset()
 
   local controlled_actor = self.route.getControlledActor()
 
-  local cache = {}
-  for _,view in ipairs(self.hand or {}) do
-    cache[view.card:getId()] = view
-  end
   self.hand = {}
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
-      self.hand[i] = cache[card:getId()] or CardView(card)
-      cache[card:getId()] = nil
+      local cardview = CardView(card)
+      self.hand[i] = cardview
+      cardview:register('HUD_FX')
     end
-  end
-
-  for _,view in pairs(cache) do
-    view:setFocus(false)
   end
 
 end
