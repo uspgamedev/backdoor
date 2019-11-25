@@ -164,7 +164,7 @@ function state:update(_)
   if _route.getControlledActor() or _player then
     _view.sector:updateFov(_route.getControlledActor() or _player)
   else
-    print("oops")
+    return error("missing player")
   end
 
   if _next_action then

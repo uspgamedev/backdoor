@@ -74,7 +74,11 @@ function state:enter(from, view, route, packlist)
 end
 
 function state:leave()
-  _view.actor:hide()
+  if _card_list_view:getExpGained() > 0 then
+    _view.actor:timedHide(1)
+  else
+    _view.actor:hide()
+  end
   _view.action_hud.minimap:show()
   _leave = false
   _card_list_view:close()

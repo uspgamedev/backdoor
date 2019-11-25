@@ -222,6 +222,10 @@ function View:getConsumeLog()
   return t
 end
 
+function View:getExpGained()
+  return self.exp_gained
+end
+
 function View:addConsume()
   self.exp_gained = self.exp_gained + 1
   self.consumed_count = self.consumed_count + 1
