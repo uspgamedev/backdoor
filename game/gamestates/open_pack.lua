@@ -41,7 +41,7 @@ local function _confirm()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
     _card_list_view:register("HUD")
-    _card_list_view:sendToBackbuffer()
+    _card_list_view:sendToBackbuffer(_view.backbuffer)
     _view.actor:show()
   end
 end

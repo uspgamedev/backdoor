@@ -11,6 +11,7 @@ local Class    = require "steaming.extra_libs.hump.class"
 local Dissolve = require 'view.dissolvecard'
 local Util     = require "steaming.util"
 local ELEMENT  = require "steaming.classes.primitives.element"
+local vec2     = require 'cpml' .vec2
 
 -- MODULE -----------------------------------
 local View = Class({
@@ -31,6 +32,7 @@ local _H_MARGIN = 30
 local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
+local _BACKBUFFER_OFFSET = vec2(-441, -507)
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
@@ -55,9 +57,13 @@ end
 
 local function stencil()
   local margin = 4
+  --Panel region
   love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
                           _HEIGHT - 448 - margin, VIEWDEFS.PANEL_W + margin,
                           VIEWDEFS.PANEL_H + margin)
+  --Backbuffer region
+  local w, h = 120, 160
+  love.graphics.rectangle("fill", _FULL_WIDTH - w, _HEIGHT - h, w, h)
 end
 
 local function _next_circular(i, len, n)
@@ -110,6 +116,7 @@ function View:init(hold_actions)
   self.ready_to_leave = false
   self.is_leaving = false
   self.send_to_backbuffer = false
+  self.backbuffer = nil
 
   _initGraphicValues()
 end
@@ -181,16 +188,32 @@ function View:startLeaving()
                   i*3/60 + .05,
                   function()
                     if not self.consumed[i] then
-                      self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                    "tween", .3, self.buffered_offset,
-                                    {[i] = _HEIGHT}, "in-back")
+                      if self.send_to_backbuffer then
+                        local backbuffer = self.backbuffer
+                        local finish = backbuffer:getTopCardPosition()
+                        local cardview = self.card_list[i]
+                        local offset = _BACKBUFFER_OFFSET - vec2((i-1)*(_CW+_PD) - math.round((_CW+_PD)*(self.move-1)),0)
+                        self:addTimer("slide_card_"..i, MAIN_TIMER, "tween", .5, cardview,
+                                      {position = finish + offset}, 'out-cubic')
+                        self:addTimer("wait_card_"..i, MAIN_TIMER, "after", .3,
+                                          function ()
+                                            self:addTimer("fadeout_card_"..i, MAIN_TIMER, "tween", .3,
+                                                              cardview, {alpha = 0}, 'out-cubic',
+                                                              function() cardview:destroy() end)
+                                          end)
+                      else
+                        self:addTimer("getting_card_"..i, MAIN_TIMER,
+                                      "tween", .3, self.buffered_offset,
+                                      {[i] = _HEIGHT}, "in-back")
+                      end
                     else
                       Dissolve(self.card_list[i], .5)
                     end
                   end)
   end
+  local d = self.send_to_backbuffer and 2.2 or .75
   self:addTimer("finish_collection", MAIN_TIMER, "after",
-                0.75, function() self.ready_to_leave = true end)
+                d, function() self.ready_to_leave = true end)
 
 end
 
@@ -302,8 +325,10 @@ function View:drawCards(g, enter)
     g.translate(0, self.buffered_offset[i])
     local card = card_list[i]
     card:setFocus(focus and not self.is_leaving)
-    card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
-                            or enter*self.card_alpha[i])
+    if not self.is_leaving then
+      card:setAlpha(dist > 0 and enter/dist*self.card_alpha[i]
+                              or enter*self.card_alpha[i])
+    end
     card:draw()
     g.pop()
   end
@@ -394,8 +419,9 @@ function View:drawHoldBar(g, alpha, x, y)
   g.pop()
 end
 
-function View:sendToBackbuffer()
+function View:sendToBackbuffer(backbuffer)
   self.send_to_backbuffer = true
+  self.backbuffer = backbuffer
 end
 
 return View
