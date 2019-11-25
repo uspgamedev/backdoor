@@ -5,10 +5,6 @@
           "amount":2,
           "name":"gain_focus",
           "type":"effect"
-        },{
-          "amount":1,
-          "name":"draw_card",
-          "type":"effect"
         }],
       "inputs":[]
     }
