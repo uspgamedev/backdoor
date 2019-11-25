@@ -55,14 +55,14 @@ local function _initGraphicValues()
   _CH = CARD.getHeight()
 end
 
-local function stencil()
+local function stencil(self)
   local margin = 4
   --Panel region
   love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
                           _HEIGHT - 448 - margin, VIEWDEFS.PANEL_W + margin,
                           VIEWDEFS.PANEL_H + margin)
   --Backbuffer region
-  local w, h = 120, 160
+  local w, h = 120*self.backbuffer_show, 160*self.backbuffer_show
   love.graphics.rectangle("fill", _FULL_WIDTH - w, _HEIGHT - h, w, h)
 end
 
@@ -117,6 +117,7 @@ function View:init(hold_actions)
   self.is_leaving = false
   self.send_to_backbuffer = false
   self.backbuffer = nil
+  self.backbuffer_show = 0
 
   _initGraphicValues()
 end
@@ -183,6 +184,10 @@ function View:startLeaving()
   self.is_leaving = true
   self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", _ENTER_SPEED,
                 self, {text=0}, "in-quad")
+  if self.send_to_backbuffer then
+    self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", .25,
+                  self, {backbuffer_show=1}, "in-quad")
+  end
   for i = 1, #self.card_list do
     self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
                   i*3/60 + .05,
@@ -211,7 +216,7 @@ function View:startLeaving()
                     end
                   end)
   end
-  local d = self.send_to_backbuffer and 2.2 or .75
+  local d = self.send_to_backbuffer and 1.2 or .75
   self:addTimer("finish_collection", MAIN_TIMER, "after",
                 d, function() self.ready_to_leave = true end)
 
@@ -288,7 +293,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.95)
-  love.graphics.stencil(stencil, "replace", 1)
+  love.graphics.stencil(function() stencil(self) end, "replace", 1)
   love.graphics.setStencilTest("less", 1)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
   love.graphics.setStencilTest()
