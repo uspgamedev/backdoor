@@ -100,26 +100,13 @@ function ActionHUD:_loadDocks()
   local player = assert(self.route.getControlledActor())
   for _, widget in player:getBody():eachWidget() do
     local cardview = CardView(widget)
-    local dock, pos
+    local dock = self:getDockFor(widget)
+    local pos = dock:getSlotPosition()
+    local mode = dock:getCardMode()
     cardview:register('HUD_FX')
-    if widget:isEquipment() then
-      local placement = widget:getWidgetPlacement()
-      if placement == "wieldable" then
-        dock = self.wielddock
-      elseif placement == "wearable" then
-        dock = self.weardock
-      else
-        return error("unknown equipment placement: ".. placement)
-      end
-      pos = dock:getSlotPosition()
-      cardview:setMode('equip')
-    else
-      dock = self.conddock
-      pos = dock:getNextSlotPosition()
-      cardview:setMode('cond')
-    end
-    dock:addCard(cardview)
+    cardview:setMode(mode)
     cardview.position = pos
+    dock:addCard(cardview)
   end
 end
 
@@ -190,20 +177,21 @@ function ActionHUD:unlockHoldbar()
   self.holdbar:unlock()
 end
 
-function ActionHUD:getWearDockPosition()
-  return self.weardock:getSlotPosition()
-end
-
-function ActionHUD:getWieldDockPosition()
-  return self.wielddock:getSlotPosition()
-end
-
-function ActionHUD:getCondDockPosition(index)
-  return self.conddock:getSlotPosition(index)
-end
-
-function ActionHUD:getConditionsCount()
-  return self.conddock:getConditionsCount()
+function ActionHUD:getDockFor(card)
+  if card:isWidget() then
+    if card:isEquipment() then
+      local placement = card:getWidgetPlacement()
+      if placement == "wieldable" then
+        return self.wielddock
+      elseif placement == "wearable" then
+        return self.weardock
+      else
+        return error("unknown equipment placement: ".. placement)
+      end
+    else
+      return self.conddock
+    end
+  end
 end
 
 function ActionHUD:getWidgetCard(card)
