@@ -39,8 +39,8 @@ function ANIM:script(route, view, report)
     local deferred = ann:interrupt()
     if deferred then self.wait(deferred) end
     ann:announce(cardview.card:getName())
-    local destination, dock, mode = _findPlayedCardViewDestination(view, cardview)
-
+    local destination, dock, mode =
+      _findPlayedCardViewDestination(view, cardview)
 
     local offset = vec2(0, -2*VIEWDEFS.CARD_H)
     cardview:addTimer("slide", MAIN_TIMER, "tween", .6, cardview,
@@ -52,7 +52,8 @@ function ANIM:script(route, view, report)
                 action_hud.handview.cardinfo:lockCard()
                 action_hud:disableCardInfo()
                 cardview:addTimer("final_slide", MAIN_TIMER, "tween", .6,
-                                  cardview, {position = destination}, 'out-cubic',
+                                  cardview, {position = destination},
+                                  'out-cubic',
                   function()
                     dock:addCard(cardview)
                     self.resume()
