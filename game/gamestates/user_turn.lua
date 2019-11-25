@@ -27,6 +27,10 @@ local _save_and_quit
 
 local _ACTION = {}
 
+--[[ Local functions ]]--
+
+local _update_panel
+
 --[[ Task Functions ]]--
 
 local function _resumeTask(...)
@@ -55,11 +59,7 @@ function state:enter(_, route, view)
   _view = view
   _view.action_hud:enableTurn(true)
 
-  if INPUT.isActionDown('STATUS') then
-    _view.actor:show()
-  else
-    _view.actor:hide()
-  end
+  _update_panel("isdown")
 
 end
 
@@ -68,11 +68,7 @@ end
 
 function state:resume(_, args)
 
-  if INPUT.isActionDown('STATUS') then
-    _view.actor:show()
-  else
-    _view.actor:hide()
-  end
+  _update_panel("isdown")
 
   _view.action_hud:enableTurn(true)
   _resumeTask(args)
@@ -93,11 +89,7 @@ function state:update(_)
     return
   end
 
-  if INPUT.wasActionPressed('STATUS') then
-    _view.actor:show()
-  elseif INPUT.wasActionReleased('STATUS') then
-    _view.actor:hide()
-  end
+  _update_panel("waspressed")
 
   local action_request, param = _view.action_hud:actionRequested()
 
@@ -250,6 +242,26 @@ end
 
 _ACTION[DEFS.ACTION.IDLE] = function()
   _useAction(DEFS.ACTION.IDLE)
+end
+
+function _update_panel(mode)
+
+  if mode == "isdown" then
+    if INPUT.isActionDown('STATUS') then
+      _view.actor:show()
+    else
+      _view.actor:hide()
+    end
+  elseif mode == "waspressed" then
+    if INPUT.wasActionPressed('STATUS') then
+      _view.actor:show()
+    elseif INPUT.wasActionReleased('STATUS') then
+      _view.actor:hide()
+    end
+  else
+    error("Not a valid mode to update panel")
+  end
+
 end
 
 return state
