@@ -2,8 +2,8 @@
   "attr":"COR",
   "cost":3,
   "desc":"A mass-produced weapon.",
-  "icon":"card-laser-spear",
-  "name":"Laser Spear",
+  "icon":"card-old-laddle",
+  "name":"Old Laddle",
   "one_time":true,
   "set":"brawler",
   "type-description":"",
@@ -12,7 +12,7 @@
     "equipment":{
       "active":{
         "cards":[{
-            "card":"laser-cut"
+            "card":"old-laddle-strike"
           }]
       },
       "defensive":false

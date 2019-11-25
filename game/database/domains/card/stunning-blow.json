@@ -27,7 +27,7 @@
   "attr":"ANI",
   "cost":2,
   "desc":"The best defense is a good offense.\nThe best offense is a good punch.",
-  "icon":"card-dropkick",
+  "icon":"card-stunning-blow",
   "name":"Stunning Blow",
   "set":"brawler"
 }

@@ -3,9 +3,9 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
+          "base":8,
           "mod":40,
           "name":"damage_on_target",
-          "base":8,
           "sfx":"attack-hit",
           "target":"=target_body",
           "type":"effect"
@@ -34,8 +34,8 @@
   },
   "attr":"COR",
   "cost":3,
-  "icon":"card-laser-spear",
-  "name":"Laser Cut",
+  "icon":"card-old-laddle-strike",
+  "name":"Old Laddle Strike",
   "one_time":true,
   "temporary":true,
   "set":false

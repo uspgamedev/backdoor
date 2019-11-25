@@ -37,7 +37,7 @@ function CardView:init(card)
   self.temporary = card:isTemporary()
   self.sprite = self.temporary and TEXTURE.get('temporary-card-base') or
                                    TEXTURE.get('card-base')
-  self.sprite:setFilter("linear", "linear", 1)
+  self.sprite:setFilter("nearest", "nearest", 1)
   self.card = card
   self.scale = 1
   self.focused = false
@@ -213,14 +213,13 @@ function CardView:draw()
   --card icon
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
+  local tw, th = icon_texture:getDimensions()
   g.setColor(br, bg, bb, self.alpha)
   g.push()
   g.translate(self.icon_offset.x, self.icon_offset.y)
   icon_texture:setFilter('linear', 'linear')
-  icon_texture:draw(x+w/2, y+h/2, 0, self.mode_scale.x*72/120, self.mode_scale.x*72/120,
-                    icon_texture:getWidth()/2,
-                    icon_texture:getHeight()/2
-  )
+  icon_texture:draw(x+w/2, y+h/2, 0, self.mode_scale.x*64/tw,
+                    self.mode_scale.x*64/th, tw/2, th/2)
   g.pop()
   g.push()
   g.translate(x, y)
@@ -231,7 +230,7 @@ function CardView:draw()
     type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
                                             - self.card:getUsages())
   end
-  g.printf(type_str, pd, h - pd - _card_font:getHeight(), typewidth,
+  g.printf(type_str, pd, h - pd - _card_font:getHeight()/2, typewidth,
            "left")
   _info_font.set()
   local focus_icon = RES.loadTexture('focus-icon')
