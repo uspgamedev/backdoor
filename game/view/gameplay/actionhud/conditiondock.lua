@@ -38,6 +38,10 @@ function ConditionDock:getConditionsCount()
   return #self.cardviews
 end
 
+function ConditionDock:getCardMode() -- luacheck: no self
+  return 'cond'
+end
+
 function ConditionDock:addCard(cardview)
   table.insert(self.cardviews, cardview)
 end
@@ -50,13 +54,13 @@ function ConditionDock:removeCard(slot_index)
   return table.remove(self.cardviews, slot_index)
 end
 
-function ConditionDock:getSlotPosition(i)
+function ConditionDock:getSlotPositionForIndex(i)
   local left = self.pos.x - self:getWidth()/2 + _MW + _PW
   return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - _HEIGHT)
 end
 
-function ConditionDock:getNextSlotPosition()
-  return self:getSlotPosition(self:getConditionsCount() + 1)
+function ConditionDock:getSlotPosition()
+  return self:getSlotPositionForIndex(self:getConditionsCount() + 1)
 end
 
 function ConditionDock:draw()

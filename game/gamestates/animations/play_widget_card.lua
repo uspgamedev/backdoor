@@ -6,23 +6,7 @@ local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
 
--- luacheck: no self, globals MAIN_TIMER
-
-local function _findPlayedCardViewDestination(view, cardview)
-  local hud = view.action_hud
-  if cardview.card:isEquipment() then
-    local placement  = cardview.card:getWidgetPlacement()
-    if placement == "wieldable" then
-      return hud:getWieldDockPosition(), hud.wielddock, "equip"
-    elseif placement == "wearable" then
-      return hud:getWearDockPosition(), hud.weardock, "equip"
-    end
-  else --Is a condition widget
-    local slot = hud:getConditionsCount() + 1
-    return hud:getCondDockPosition(slot), hud.conddock, "cond"
-  end
-  return error("Not a valid placement for equipment widget")
-end
+-- luacheck: globals MAIN_TIMER
 
 function ANIM:script(route, view, report)
   local action_hud = view.action_hud
@@ -39,8 +23,9 @@ function ANIM:script(route, view, report)
     local deferred = ann:interrupt()
     if deferred then self.wait(deferred) end
     ann:announce(cardview.card:getName())
-    local destination, dock, mode =
-      _findPlayedCardViewDestination(view, cardview)
+    local dock = view.action_hud:getDockFor(cardview.card)
+    local destination = dock:getSlotPosition()
+    local mode = dock:getCardMode()
 
     local offset = vec2(0, -2*VIEWDEFS.CARD_H)
     cardview:addTimer("slide", MAIN_TIMER, "tween", .6, cardview,

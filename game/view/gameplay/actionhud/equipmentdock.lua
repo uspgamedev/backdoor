@@ -36,7 +36,11 @@ function EquipmentDock:isEmpty()
   return not self.cardview
 end
 
-function EquipmentDock:addCard(cardview, slot_index)
+function EquipmentDock:getCardMode() -- luacheck: no self
+  return 'equip'
+end
+
+function EquipmentDock:addCard(cardview)
   self.cardview = cardview
 end
 
