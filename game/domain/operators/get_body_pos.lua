@@ -10,10 +10,12 @@ OP.schema = {
 
 OP.type = 'pos'
 
-function OP.process(actor, fieldvalues)
+function OP.process(_, fieldvalues)
   return { fieldvalues['body']:getPos() }
 end
 
-OP.preview = OP.process
+function OP.preview(_, fieldvalues)
+  return ("%s's position"):format(fieldvalues['body'])
+end
 
 return OP

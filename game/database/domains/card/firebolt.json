@@ -11,8 +11,10 @@
           "type":"effect"
         }],
       "inputs":[{
-          "body-only":[],
-          "max-range":7,
+          "body-only":{
+            "body-type":false
+          },
+          "max-range":4,
           "name":"choose_target",
           "output":"tgt",
           "type":"input",

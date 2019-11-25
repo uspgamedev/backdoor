@@ -81,8 +81,8 @@ inputs.integer = _makeCommon(
 
 inputs.string = _makeCommon(
   "",
-  function(value, _)
-    return IMGUI.InputText("", value, 64)
+  function(value, field)
+    return IMGUI.InputText("", value or field.default, 64)
   end
 )
 

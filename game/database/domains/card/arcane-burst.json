@@ -18,13 +18,27 @@
           },
           "max-range":0,
           "name":"choose_target",
-          "output":"self_pos",
+          "output":"dummy",
           "type":"input"
         },{
           "name":"get_attribute",
           "output":"arc",
           "type":"operator",
           "which":"ARC"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "type":"operator"
+        },{
+          "body":"=self_body",
+          "name":"get_body_pos",
+          "output":"self_pos",
+          "type":"operator"
         }]
     }
   },
