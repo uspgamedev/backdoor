@@ -33,10 +33,13 @@ local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
 local _DESC_LINES = 4
+local _WAIT_TIME = 2
+local _DESC_SCROLL_SPEED = 20
 local _BACKBUFFER_OFFSET = vec2(-441, -507)
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
 local _CW, _CH
+local _DESC_MAXW
 
 -- LOCAL VARS
 local _font
@@ -54,6 +57,7 @@ local function _initGraphicValues()
   _subtitlefont = FONT.get("Text", 35)
   _CW = CARD.getWidth()
   _CH = CARD.getHeight()
+  _DESC_MAXW = 2*_CW
 end
 
 local function _descriptionStencil()
@@ -125,6 +129,8 @@ function View:init(hold_actions)
   self.send_to_backbuffer = false
   self.backbuffer = nil
   self.backbuffer_show = 0
+  self.desc_offset = 0
+  self.show_bouncing_arrow = false
 
   _initGraphicValues()
 end
@@ -153,6 +159,7 @@ function View:open(card_list, maxconsume)
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=1, text=1 }, "out-quad")
+  self:resetDescriptionScrolling()
 end
 
 function View:close()
@@ -173,6 +180,7 @@ function View:selectPrev(n)
   n = n or 1
   self.selection = _prev_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
+  self:resetDescriptionScrolling()
 end
 
 function View:selectNext(n)
@@ -180,10 +188,12 @@ function View:selectNext(n)
   n = n or 1
   self.selection = _next_circular(self.selection, #self.card_list, n)
   self.holdbar:reset()
+  self:resetDescriptionScrolling()
 end
 
 function View:setSelection(n)
   self.selection = n
+  self:resetDescriptionScrolling()
 end
 
 function View:startLeaving()
@@ -283,6 +293,48 @@ function View:removeConsume()
                                                 DEFS.CONSUME_EXP)
 end
 
+function View:stopDescriptionScrolling()
+  self.desc_offset = 0
+  self.show_bouncing_arrow = false
+  self:removeTimer("initial_wait", MAIN_TIMER)
+  self:removeTimer("scrolling_desc", MAIN_TIMER)
+  self:removeTimer("finish_wait", MAIN_TIMER)
+  self:removeTimer("scroll_up", MAIN_TIMER)
+end
+
+function View:resetDescriptionScrolling()
+  self:stopDescriptionScrolling()
+  local card = self.card_list[self.selection].card
+  if CARD.getInfoLines(card, 2*_DESC_MAXW) > _DESC_LINES then
+    self:startDescriptionScrolling()
+  end
+end
+
+function View:startDescriptionScrolling()
+  self.show_bouncing_arrow = true
+  self:addTimer("initial_wait", MAIN_TIMER, "after", _WAIT_TIME,
+      function()
+        local card = self.card_list[self.selection].card
+        local target_off = -CARD.getInfoHeight(CARD.getInfoLines(card, 2*_DESC_MAXW) - _DESC_LINES)
+        local d = math.abs(target_off/_DESC_SCROLL_SPEED)
+        self:addTimer("scrolling_desc", MAIN_TIMER, "tween", d, self,
+                     {desc_offset = target_off}, "in-linear",
+            function()
+              self.show_bouncing_arrow = false
+              self:addTimer("finish_wait", MAIN_TIMER, "after", _WAIT_TIME,
+                function()
+                  local d = math.abs(target_off/(_DESC_SCROLL_SPEED*15))
+                  self:addTimer("scroll_up", MAIN_TIMER, "tween", d, self,
+                                {desc_offset = 0}, "out-quad",
+                        function()
+                            self.desc_offset = 0
+                            self:startDescriptionScrolling()
+                        end)
+                end)
+            end)
+      end)
+end
+
 function View:update(dt)
   if self.holdbar.is_playing then
     self.center_alpha = math.max(0, self.center_alpha - _CENTER_ALPHA_SPEED*dt)
@@ -378,31 +430,33 @@ function View:drawCardDesc(g, card, enter)
   g.push()
 
   g.setLineWidth(2)
-  local maxw = 2*_CW
 
-
+  --Draw lines besides description
   g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
-  g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
-  g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
+  g.line(-0.45*_WIDTH, 0, -_DESC_MAXW - _PD, 0)
+  g.line(_DESC_MAXW + _PD, 0, 0.45*_WIDTH, 0)
 
+  --Draw holdbar
   local x, y = 0, -self.holdbar:getHeight()/2
   self:drawHoldBar(g, enter * (1 - self.center_alpha), x, y)
 
   g.push()
 
   --Draw bouncing arrow if description is too big
-  local lines = CARD.getInfoLines(card.card, 2*maxw)
-  if lines > _DESC_LINES then
+  local lines = CARD.getInfoLines(card.card, 2*_DESC_MAXW)
+  if self.show_bouncing_arrow and lines > _DESC_LINES then
     local off = math.sin(5*love.timer.getTime())*5
     local tmargin, tsize, ty = 10, 10, CARD.getInfoHeight(_DESC_LINES)/2 + off
-    g.polygon("fill", maxw + _PD - tsize - tmargin, ty,
-                       maxw + _PD - tmargin, ty,
-                       maxw + _PD - tsize/2 - tmargin, ty + tsize)
+    g.polygon("fill", _DESC_MAXW + _PD - tsize - tmargin, ty,
+                       _DESC_MAXW + _PD - tmargin, ty,
+                       _DESC_MAXW + _PD - tsize/2 - tmargin, ty + tsize)
   end
+
+  --Draw card description
   g.stencil(_descriptionStencil, "replace", 1)
   g.setStencilTest("equal", 1)
-  g.translate(-maxw, -CARD.getInfoHeight(_DESC_LINES)/2)
-  CARD.drawInfo(card.card, 0, 0, 2*maxw, enter*self.center_alpha, nil, true)
+  g.translate(-_DESC_MAXW, -CARD.getInfoHeight(_DESC_LINES)/2 + self.desc_offset)
+  CARD.drawInfo(card.card, 0, 0, 2*_DESC_MAXW, enter*self.center_alpha, nil, true)
   g.setStencilTest()
   g.pop()
 
