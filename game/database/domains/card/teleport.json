@@ -8,7 +8,7 @@
           "sfx":"teleport",
           "type":"effect",
           "vfx-spd":1,
-          "vfx":false
+          "vfx":"SLIDE"
         }],
       "inputs":[{
           "aoe-hint":0,
