@@ -203,7 +203,7 @@ function ActionHUD:getWidgetCard(card)
      self.wielddock:getCard().card == card then
       return self.wielddock:getCard()
   end
-  for i = 1, self:getConditionsCount() do
+  for i = 1, self.conddock:getConditionsCount() do
     if self.conddock:getCard(i) and
        self.conddock:getCard(i).card == card then
         return self.conddock:getCard(i)
@@ -222,7 +222,7 @@ function ActionHUD:removeWidgetCard(card)
      self.wielddock:getCard().card == card then
       return self.wielddock:removeCard()
   end
-  for i = 1, self:getConditionsCount() do
+  for i = 1, self.conddock:getConditionsCount() do
     if self.conddock:getCard(i) and
        self.conddock:getCard(i).card == card then
         return self.conddock:removeCard(i)
