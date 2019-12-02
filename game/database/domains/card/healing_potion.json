@@ -31,13 +31,12 @@
           "output":"self_body",
           "type":"operator"
         },{
-          "body":"=self_body",
           "name":"get_body_attribute",
           "output":"vit",
           "type":"operator",
           "which":"VIT"
         }]
-    },
+    }
   },
   "cost":0,
   "attr":"NONE",

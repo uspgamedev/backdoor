@@ -11,6 +11,7 @@
           "body-only":{
             "body-type":"machine"
           },
+          "max-range":1,
           "name":"choose_target",
           "output":"target",
           "type":"input"
