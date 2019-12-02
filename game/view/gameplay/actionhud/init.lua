@@ -80,7 +80,7 @@ function ActionHUD:init(route)
 
   -- Hold bar
   local w,h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.holdbar = HoldBar{'EXTRA'}
+  self.holdbar = HoldBar{'SPECIAL'}
   self.holdbar:setPosition(vec2(w,h)/2)
   self.holdbar:lock()
   self.holdbar:register("HUD")
@@ -91,9 +91,6 @@ function ActionHUD:init(route)
   self.long_walk = false
   self.adjacency = {}
   ADJACENCY.unset(self.adjacency)
-
-  -- Inspector mode
-  self.inspecting = false
 end
 
 function ActionHUD:_loadDocks()
@@ -276,7 +273,7 @@ function ActionHUD:actionRequested()
     else
       action_request = {DEFS.ACTION.IDLE}
     end
-  elseif INPUT.wasActionPressed('ACTION_2') then
+  elseif INPUT.wasActionPressed('MENU') then
     if not player_focused then
       action_request = {DEFS.ACTION.RECEIVE_PACK}
     end
@@ -292,7 +289,7 @@ function ActionHUD:actionRequested()
   end
 
   if self.justheld and self.player_turn
-                   and not INPUT.isActionDown('EXTRA') then
+                   and not INPUT.isActionDown('SPECIAL') then
     self.holdbar:unlock()
     self.justheld = false
   end
@@ -313,7 +310,7 @@ function ActionHUD:actionRequested()
     end
   end
 
-  if not self.inspecting and action_request then
+  if action_request then
     if action_request[1] ~= DEFS.ACTION.PLAY_CARD then
       self:resetCardInfoLag()
     end
@@ -329,18 +326,6 @@ local function _disableHUDElements(self)
   --self:disableCardInfo()
   if self.handview:isActive() then
     self.handview:deactivate()
-  end
-end
-
-local function _startInspect(self)
-  self.inspecting = true
-  self.holdbar:lock()
-end
-
-local function _endInspect(self)
-  self.inspecting = false
-  if not self.justheld and self.holdbar:isLocked() then
-    self.holdbar:unlock()
   end
 end
 
@@ -362,32 +347,15 @@ function ActionHUD:update(dt)
   if self.player_turn then
     if self.route.getControlledActor():isFocused() then
       self.focusbar:show()
-      if INPUT.isActionDown('ACTION_3') then
-        self:disableCardInfo()
-        if self.handview:isActive() then
-          self.handview:deactivate()
-        end
-        _startInspect(self)
-      else
-        self:enableCardInfo()
-        if not self.handview:isActive() then
-          self.handview:activate()
-        end
-        if self.inspecting then
-          _endInspect(self)
-        end
+      self:enableCardInfo()
+      if not self.handview:isActive() then
+        self.handview:activate()
       end
     else
-      if self.inspecting then
-        _endInspect(self)
-      end
       self.focusbar:hide()
       _disableHUDElements(self)
     end
   else
-    if self.inspecting then
-      _endInspect(self)
-    end
     _disableHUDElements(self)
   end
 

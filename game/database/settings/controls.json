@@ -1,11 +1,9 @@
 {
   "digital":{
-    "ACTION_1":["r"],
-    "ACTION_2":["e"],
-    "ACTION_3":["q"],
-    "CONFIRM":["f", true, "return"],
-    "CANCEL":["d"],
-    "EXTRA":["a"],
+    "CONFIRM":["d", true, "return"],
+    "CANCEL":["s"],
+    "SPECIAL":["a"],
+    "MENU":["w"],
     "UP":["up","k"],
     "RIGHT":["right","l"],
     "DOWN":["down","j"],
