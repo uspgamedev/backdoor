@@ -3,8 +3,8 @@
     "art_ability":{
       "effects":[{
           "attr":"=ANI",
-          "mod":100,
           "base":0,
+          "mod":100,
           "name":"heal",
           "target":"=self",
           "type":"effect"
@@ -32,15 +32,15 @@
           "pos":"=body-pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"ANI",
+  "cost":2,
   "desc":"",
   "icon":"card-heal",
   "name":"Heal",
   "pp":3,
-  "set":"sage",
+  "set":"support_advanced",
   "type-description":"",
   "one_time":false
 }

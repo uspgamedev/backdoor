@@ -17,8 +17,8 @@
           "name":"choose_target",
           "output":"tgt",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "name":"get_body_at",
@@ -31,10 +31,10 @@
           "type":"operator",
           "which":"ARC"
         }]
-    },
+    }
   },
-  "cost":1,
   "attr":"ARC",
+  "cost":1,
   "desc":"A love kick and it's ready to go.",
   "icon":"box",
   "name":"Fix Turret",

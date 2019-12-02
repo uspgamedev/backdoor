@@ -21,10 +21,10 @@
           "output":"pos",
           "type":"input"
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"COR",
+  "cost":3,
   "desc":"This is going to be a blast!",
   "icon":"card-sensor-bomb",
   "name":"Sensor Bomb",

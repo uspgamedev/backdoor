@@ -10,10 +10,10 @@
           "type":"effect"
         },{
           "attr":"=ani",
-          "mod":100,
           "base":0,
           "center":"=self_pos",
           "ignore_owner":true,
+          "mod":100,
           "name":"damage_on_area",
           "size":3,
           "type":"effect"
@@ -40,10 +40,10 @@
           "pos":"=self_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"ANI",
+  "cost":3,
   "desc":"",
   "icon":"card-stomp",
   "name":"Stomp",

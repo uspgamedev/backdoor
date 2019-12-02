@@ -26,10 +26,10 @@
           "pos":"=self_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"ARC",
+  "cost":2,
   "desc":"Aaaaaaahhh... Savior of the Universe!",
   "icon":"card-flash",
   "name":"Flash",

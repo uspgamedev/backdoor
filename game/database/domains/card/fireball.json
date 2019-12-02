@@ -3,9 +3,9 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "mod":100,
           "base":0,
           "center":"=target",
+          "mod":100,
           "name":"damage_on_area",
           "size":3,
           "type":"effect",
@@ -25,15 +25,15 @@
           "type":"operator",
           "which":"ARC"
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"ARC",
+  "cost":3,
   "desc":"Ages go by, and the fireball spell remains the\nbread and butter of arcane artists.",
   "icon":"card-fireball",
   "name":"Fireball",
   "pp":0,
-  "set":"sage",
+  "set":"ranged_expert",
   "type-description":"",
   "one_time":false
 }

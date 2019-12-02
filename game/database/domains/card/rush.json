@@ -10,9 +10,9 @@
           "vfx-spd":1
         },{
           "attr":"=cor",
-          "mod":100,
           "base":0,
           "center":"=damage_pos",
+          "mod":100,
           "name":"damage_on_area",
           "size":1,
           "type":"effect",
@@ -56,10 +56,10 @@
           "type":"operator",
           "which":"COR"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"COR",
+  "cost":2,
   "desc":"It's rush hour.And I'm not talking about kung-fu.",
   "icon":"card-rush",
   "name":"Rush",

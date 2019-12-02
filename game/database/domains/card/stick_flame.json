@@ -20,15 +20,15 @@
           "pos":"=target_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"ARC",
+  "cost":2,
   "desc":"'Hey Danny, hold this for me, will ya?'.\n\nRobert was surprised Danny didn't sent him an invite for his birthday the week after.",
   "icon":"card-sticky-flame",
   "name":"Stick Flame",
   "pp":4,
-  "set":"sage",
+  "set":"ranged_advanced",
   "type-description":"",
   "one_time":false
 }

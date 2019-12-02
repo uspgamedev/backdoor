@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"from",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "aoe-hint":1,
@@ -37,10 +37,10 @@
           "pos":"=from",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":0,
   "attr":"COR",
+  "cost":0,
   "desc":"Take your best friend with you!",
   "icon":"card-reassemble",
   "name":"Reassemble",

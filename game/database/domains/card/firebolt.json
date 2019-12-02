@@ -38,7 +38,7 @@
   "icon":"card-firebolt",
   "name":"Firebolt",
   "pp":4,
-  "set":"sage",
+  "set":"ranged_common",
   "type-description":"",
   "one_time":false
 }

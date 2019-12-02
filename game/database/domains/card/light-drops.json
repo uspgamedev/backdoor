@@ -1,0 +1,22 @@
+{
+  "attr":"NONE",
+  "cost":1,
+  "name":"Light Drops",
+  "one_time":true,
+  "set":"consumables_advanced",
+  "widget":{
+    "charges":30,
+    "operators":[{
+        "attr":"FOV",
+        "op":"+",
+        "val":3
+      }],
+    "status-tags":[],
+    "trigger":"on_turn",
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    }
+  },
+  "icon":false
+}

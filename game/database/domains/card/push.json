@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"target_pos",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "name":"self",
@@ -55,10 +55,10 @@
           "pos":"=target_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":1,
   "attr":"COR",
+  "cost":1,
   "desc":"Outta my way!",
   "icon":"card-jump",
   "name":"Push",

@@ -1,6 +1,5 @@
 {
   "appearance":"corgi",
-  "efc":0,
   "description":"Rewaswat. Also known as the furry hater.\nOne day he befell the curse of the furries,\nand his fursona was given life. Now it roams\nthe ruins, in search of newbies to bark at.",
   "drops":{
     "1":{
@@ -20,6 +19,7 @@
         "droptype":"pack"
       }]
   },
+  "efc":0,
   "extends":"corgi",
   "faction":"agressive",
   "fin":0,

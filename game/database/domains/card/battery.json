@@ -1,8 +1,8 @@
 {
+  "cost":0,
   "desc":"",
   "name":"Battery",
   "type-description":"",
-  "cost":0,
   "widget":{
     "auto_activation":{
       "ability":{
@@ -25,8 +25,8 @@
     "trigger":"on_cycle",
     "equipment":false
   },
-  "icon":false,
   "attr":false,
+  "icon":false,
   "set":false,
   "one_time":false
 }
