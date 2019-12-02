@@ -56,8 +56,15 @@ function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
 end
 
 function CARD.getInfoHeight(lines)
-  _title_font:setLineHeight(1.5)
   return _text_font:getHeight() * _text_font:getLineHeight() * lines
+end
+
+function CARD.getInfoLines(card, maxwidth)
+  local desc = card:getEffect()
+  desc = desc:gsub("([^\n])[\n]([^\n])", "%1 %2")
+  desc = desc:gsub("\n\n", "\n")
+  local _, lines = _text_font:getWrap(desc, maxwidth)
+  return #lines + 1 --One extra for the title
 end
 
 function CARD.getInfoWidth(card, width)
@@ -75,4 +82,3 @@ function CARD.getHeight()
 end
 
 return CARD
-
