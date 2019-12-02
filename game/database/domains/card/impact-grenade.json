@@ -20,10 +20,10 @@
         }]
     }
   },
+  "attr":"NONE",
   "cost":1,
   "name":"Impact Grenade",
   "one_time":true,
   "set":"consumables_common",
-  "attr":false,
   "icon":false
 }

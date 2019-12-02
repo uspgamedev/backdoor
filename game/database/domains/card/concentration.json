@@ -14,7 +14,7 @@
         "val":2
       }],
     "status-tags":[],
-    "trigger":"on_focus_end",
+    "trigger":"on_turn",
     "equipment":false
   },
   "art":false,
