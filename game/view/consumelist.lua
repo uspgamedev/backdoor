@@ -55,7 +55,13 @@ local function _initGraphicValues()
   _CH = CARD.getHeight()
 end
 
-local function stencil(self)
+local function _descriptionStencil()
+  love.graphics.rectangle("fill", -2*_CW - _PD, -CARD.getInfoHeight(4)/2,
+                          2*(2*_CW + _PD), CARD.getInfoHeight(4))
+
+end
+
+local function _stencil(self)
   local margin = 4
   --Panel region
   love.graphics.rectangle("fill", _FULL_WIDTH - VIEWDEFS.PANEL_W - margin,
@@ -302,7 +308,7 @@ end
 
 function View:drawBG(g, enter)
   g.setColor(0, 0, 0, enter*0.95)
-  love.graphics.stencil(function() stencil(self) end, "replace", 1)
+  love.graphics.stencil(function() _stencil(self) end, "replace", 1)
   love.graphics.setStencilTest("less", 1)
   g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
   love.graphics.setStencilTest()
@@ -372,6 +378,8 @@ function View:drawCardDesc(g, card, enter)
 
   g.setLineWidth(2)
   local maxw = 2*_CW
+
+
   g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
   g.line(-0.45*_WIDTH, 0, -maxw - _PD, 0)
   g.line(maxw + _PD, 0, 0.45*_WIDTH, 0)
@@ -380,8 +388,11 @@ function View:drawCardDesc(g, card, enter)
   self:drawHoldBar(g, enter * (1 - self.center_alpha), x, y)
 
   g.push()
+  love.graphics.stencil(_descriptionStencil, "replace", 1)
+  love.graphics.setStencilTest("equal", 1)
   g.translate(-maxw, -CARD.getInfoHeight(4)/2)
   CARD.drawInfo(card.card, 0, 0, 2*maxw, enter*self.center_alpha, nil, true)
+  love.graphics.setStencilTest()
   g.pop()
 
   g.pop()
