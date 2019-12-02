@@ -18,6 +18,6 @@
       "drop":10,
       "set":"consumables_advanced"
     }],
-  "name":"Slime Collection",
-  "image":false
+  "image":"card-upgrade",
+  "name":"Slime Collection"
 }

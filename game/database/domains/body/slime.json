@@ -3,13 +3,13 @@
   "description":"Delicious when fried.",
   "drops":[{
       "droprate":20,
-      "droptype":"pack"
+      "droptype":"slime-pack"
     },{
       "droprate":99,
       "droptype":"food"
     },{
       "droprate":20,
-      "droptype":"pack"
+      "droptype":"slime-pack"
     },{
       "droprate":20,
       "droptype":"food2"
