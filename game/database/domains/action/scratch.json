@@ -2,8 +2,8 @@
   "ability":{
     "effects":[{
         "attr":"=arc",
-        "mod":100,
         "base":0,
+        "mod":100,
         "name":"damage_on_target",
         "sfx":"example",
         "target":"=target",
@@ -18,8 +18,8 @@
         "name":"choose_target",
         "output":"pos",
         "type":"input",
-        "empty-tile":false,
         "dif-fact":false,
+        "empty-tile":false,
         "non-wall":false
       },{
         "name":"get_attribute",

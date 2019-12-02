@@ -10,10 +10,10 @@
           "vfx-spd":1
         },{
           "attr":"=cor",
-          "mod":100,
           "base":0,
           "center":"=pos",
           "ignore_owner":true,
+          "mod":100,
           "name":"damage_on_area",
           "size":2,
           "type":"effect"
@@ -41,10 +41,10 @@
           "output":"body",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"COR",
+  "cost":3,
   "desc":"Take THAT gravity!",
   "icon":"card-jump",
   "name":"Jump",

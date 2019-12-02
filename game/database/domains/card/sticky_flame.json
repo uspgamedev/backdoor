@@ -1,17 +1,17 @@
 {
   "attr":"ARC",
+  "cost":0,
   "desc":"Oh man, this is gonna blow...",
   "name":"Sticky Flame",
   "one_time":true,
-  "cost":0,
   "type-description":"",
   "widget":{
     "auto_activation":{
       "ability":{
         "effects":[{
             "attr":"=ARC",
-            "mod":100,
             "base":0,
+            "mod":100,
             "name":"damage_on_target",
             "target":"=body_self",
             "type":"effect",

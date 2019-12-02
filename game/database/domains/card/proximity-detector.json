@@ -1,9 +1,9 @@
 {
   "attr":"ARC",
+  "cost":0,
   "desc":"Don't stand so close to me!",
   "name":"Proximity Detector",
   "one_time":true,
-  "cost":0,
   "type-description":"",
   "widget":{
     "auto_activation":{
@@ -14,9 +14,9 @@
             "type":"effect"
           },{
             "attr":"=arc",
-            "mod":100,
             "base":0,
             "center":"=pos",
+            "mod":100,
             "name":"damage_on_area",
             "size":2,
             "type":"effect",

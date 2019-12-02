@@ -8,13 +8,13 @@
   "type-description":"",
   "widget":{
     "charges":5,
-    "operators":[],
     "equipment":{
-      "defensive":false,
       "active":{
         "cards":[]
-      }
+      },
+      "defensive":false
     },
+    "operators":[],
     "status-tags":[],
     "trigger":"on_use"
   },

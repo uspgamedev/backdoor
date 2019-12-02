@@ -46,5 +46,5 @@
   "cost":3,
   "icon":"card-fireball",
   "name":"Arcane Burst",
-  "set":"sage"
+  "set":"ranged_common"
 }

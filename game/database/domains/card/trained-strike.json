@@ -3,8 +3,8 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "mod":100,
           "base":0,
+          "mod":100,
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
@@ -50,7 +50,7 @@
   "icon":"card-dropkick",
   "name":"Trained Strike",
   "set":"brawler",
-  "temporary":false,
   "type-description":"",
-  "one_time":false
+  "one_time":false,
+  "temporary":false
 }

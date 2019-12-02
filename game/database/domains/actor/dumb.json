@@ -2,14 +2,12 @@
   "ani":-2,
   "arc":-2,
   "behavior":"aggro",
-  "collection":"anything",
   "cor":-2,
   "description":"Oh honey...",
   "initial_buffer":[],
   "name":"Dumb",
   "signature":"tackle",
-  "traits":[{
-      "specname":"slow"
-    }],
+  "traits":[],
+  "collection":false,
   "extends":false
 }

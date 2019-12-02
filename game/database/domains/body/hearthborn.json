@@ -1,8 +1,8 @@
 {
   "appearance":"hearthborn",
-  "efc":0,
   "description":"With dark-orange skin, colorful hair and round\nnoses, these humanoids can boost their muscles for\na few bare seefcds by pumping their blood faster\nand hotter, unleashing steam from their bodies.",
   "drops":[],
+  "efc":0,
   "extends":"demihuman",
   "faction":"allied",
   "fin":0,

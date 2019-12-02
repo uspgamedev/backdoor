@@ -1,24 +1,24 @@
 {
   "attr":"ANI",
+  "cost":2,
   "desc":"They say Rage is all the rage with the kids.",
   "icon":"card-rage",
   "name":"Rage",
-  "cost":2,
-  "set":"brawler",
+  "set":"support_advanced",
   "type-description":"",
   "widget":{
-    "charges":1,
+    "charges":5,
     "operators":[{
         "attr":"COR",
         "op":"+",
-        "val":2
+        "val":4
       },{
-        "attr":"VIT",
+        "attr":"FOV",
         "op":"-",
-        "val":1
+        "val":2
       }],
     "status-tags":[],
-    "trigger":"on_focus_end",
+    "trigger":"on_turn",
     "equipment":false
   },
   "one_time":false

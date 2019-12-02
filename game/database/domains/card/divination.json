@@ -1,5 +1,4 @@
 {
-  "cost":1,
   "art":{
     "art_ability":{
       "effects":[{
@@ -8,13 +7,14 @@
           "type":"effect"
         }],
       "inputs":[]
-    },
+    }
   },
   "attr":"ARC",
+  "cost":1,
   "desc":"Close your eyes and see beyond.",
   "icon":"card-divination",
   "name":"Divination",
-  "set":"sage",
+  "set":"support_advanced",
   "type-description":"",
   "one_time":false
 }

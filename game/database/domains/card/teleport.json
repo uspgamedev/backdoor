@@ -29,10 +29,10 @@
           "output":"Body",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":2,
   "attr":"ARC",
+  "cost":2,
   "desc":"",
   "icon":"card-teleport",
   "name":"Teleport",

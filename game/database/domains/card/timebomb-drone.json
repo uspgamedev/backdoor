@@ -22,10 +22,10 @@
           "type":"input",
           "non-wall":false
         }]
-    },
+    }
   },
-  "cost":3,
   "attr":"ARC",
+  "cost":3,
   "desc":"",
   "icon":"card-timer-bomb",
   "name":"Timed Combustion Drone",

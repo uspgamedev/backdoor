@@ -1,0 +1,18 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "amount":3,
+          "name":"gain_focus",
+          "type":"effect"
+        }],
+      "inputs":[]
+    }
+  },
+  "attr":"NONE",
+  "cost":1,
+  "name":"Vial of Essence",
+  "one_time":true,
+  "set":"consumables_advanced",
+  "icon":false
+}

@@ -1,24 +1,24 @@
 {
   "attr":"ANI",
+  "cost":3,
   "desc":"",
   "icon":"card-soul-robe",
   "name":"Soul Robe",
-  "cost":3,
   "set":"sage",
   "type-description":"",
   "widget":{
     "charges":5,
+    "equipment":{
+      "defensive":{
+        "defense":0
+      },
+      "active":false
+    },
     "operators":[{
         "attr":"ANI",
         "op":"+",
         "val":2
       }],
-    "equipment":{
-      "active":false,
-      "defensive":{
-        "defense":0
-      }
-    },
     "status-tags":[],
     "trigger-condition":{
       "effects":[],

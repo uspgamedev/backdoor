@@ -1,0 +1,23 @@
+{
+  "cards":[{
+      "drop":50,
+      "set":"ranged_common"
+    },{
+      "drop":5,
+      "set":"ranged_advanced"
+    },{
+      "drop":50,
+      "set":"support_common"
+    },{
+      "drop":5,
+      "set":"support_advanced"
+    },{
+      "drop":100,
+      "set":"consumables_common"
+    },{
+      "drop":10,
+      "set":"consumables_advanced"
+    }],
+  "name":"Slime Collection",
+  "image":false
+}

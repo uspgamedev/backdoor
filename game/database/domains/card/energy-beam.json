@@ -3,9 +3,9 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "mod":100,
           "base":0,
           "center":"=target_pos",
+          "mod":100,
           "name":"damage_on_area",
           "size":1,
           "type":"effect",

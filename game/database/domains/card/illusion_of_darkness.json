@@ -19,10 +19,10 @@
           "pos":"=target_pos",
           "type":"operator"
         }]
-    },
+    }
   },
-  "cost":1,
   "attr":"ARC",
+  "cost":1,
   "desc":"Goodnight sweet prince.",
   "icon":"card-illusion-of-darkness",
   "name":"Illusion of Darkness",

@@ -7,6 +7,6 @@
   "initial_buffer":[],
   "name":"Sentient",
   "signature":"tackle",
-  "extends":false,
-  "collection":false
+  "collection":false,
+  "extends":false
 }
