@@ -32,6 +32,7 @@ local _H_MARGIN = 30
 local _V_MARGIN = 10
 local _ARRSIZE = 20
 local _PI = math.pi
+local _DESC_LINES = 4
 local _BACKBUFFER_OFFSET = vec2(-441, -507)
 local _FULL_WIDTH, _WIDTH, _HEIGHT
 local _LIST_VALIGN
@@ -56,8 +57,8 @@ local function _initGraphicValues()
 end
 
 local function _descriptionStencil()
-  love.graphics.rectangle("fill", -2*_CW - _PD, -CARD.getInfoHeight(4)/2,
-                          2*(2*_CW + _PD), CARD.getInfoHeight(4))
+  love.graphics.rectangle("fill", -2*_CW - _PD, -CARD.getInfoHeight(_DESC_LINES)/2,
+                          2*(2*_CW + _PD), CARD.getInfoHeight(_DESC_LINES))
 
 end
 
@@ -388,11 +389,21 @@ function View:drawCardDesc(g, card, enter)
   self:drawHoldBar(g, enter * (1 - self.center_alpha), x, y)
 
   g.push()
-  love.graphics.stencil(_descriptionStencil, "replace", 1)
-  love.graphics.setStencilTest("equal", 1)
-  g.translate(-maxw, -CARD.getInfoHeight(4)/2)
+
+  --Draw bouncing arrow if description is too big
+  local lines = CARD.getInfoLines(card.card, 2*maxw)
+  if lines > _DESC_LINES then
+    local off = math.sin(5*love.timer.getTime())*5
+    local tmargin, tsize, ty = 10, 10, CARD.getInfoHeight(_DESC_LINES)/2 + off
+    g.polygon("fill", maxw + _PD - tsize - tmargin, ty,
+                       maxw + _PD - tmargin, ty,
+                       maxw + _PD - tsize/2 - tmargin, ty + tsize)
+  end
+  g.stencil(_descriptionStencil, "replace", 1)
+  g.setStencilTest("equal", 1)
+  g.translate(-maxw, -CARD.getInfoHeight(_DESC_LINES)/2)
   CARD.drawInfo(card.card, 0, 0, 2*maxw, enter*self.center_alpha, nil, true)
-  love.graphics.setStencilTest()
+  g.setStencilTest()
   g.pop()
 
   g.pop()
