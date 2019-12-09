@@ -5,6 +5,9 @@ local VIEWDEFS  = require 'view.definitions'
 local FONT      = require 'view.helpers.font'
 local COLORS    = require 'domain.definitions.colors'
 local Color     = require 'common.color'
+local Sparkle   = require 'view.gameplay.actionhud.fx.sparkle'
+local Util      = require 'steaming.util'
+local vec2      = require 'cpml' .vec2
 local SPRITEFX  = {}
 
 local _TILE_W = VIEWDEFS.TILE_W
@@ -33,7 +36,8 @@ function SPRITEFX.apply(sectorview, args)
   local body, amount = args.body, args.amount
   local text_type = args.text_type
   local signal = _SIGNALS[text_type]
-  local body_sprite = sectorview:getBodyView(body).sprite
+  local body_view = sectorview:getBodyView(body)
+  local body_sprite = body_view.sprite
   local animation_info = { y = 0, a = 0.5}
   local text
   if args.string then
@@ -42,8 +46,14 @@ function SPRITEFX.apply(sectorview, args)
     text = ("%s%d"):format(signal, amount)
   end
   _font = _font or FONT.get('Text', 32)
+  local particles_done = false
   body_sprite:setDecorator(
     function (_, x, y, ...)
+      if not particles_done and text_type == 'food' then
+        local fbuffer = Util.findId('frontbuffer_view')
+        particles_done = true
+        Sparkle(vec2(x, y), fbuffer:getCenter())
+      end
       local g = love.graphics
       body_sprite:render(x, y, ...)
       x = x + _TILE_W/2 - _font:getWidth(text)/2
