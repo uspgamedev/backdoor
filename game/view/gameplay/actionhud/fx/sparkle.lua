@@ -15,26 +15,32 @@ function Sparkle:init(origin, target)
   self.particles:start()
   self:register("HUD")
   self.position = origin
-  self:addTimer("dash_sparkles", MAIN_TIMER, "tween", 5, self,
-                { position = target }, 'out-cubic',
-                function () self:destroy() end )
+  self:addTimer(
+    "dash_sparkles", MAIN_TIMER, "tween", 1, self, { position = target },
+    'out-cubic',
+    function ()
+      self.particles:setEmissionRate(0)
+      self.particles:setParticleLifetime(.5)
+      self:addTimer("wait_sparkles", MAIN_TIMER, "after", 1,
+                    function () self:destroy() end)
+    end
+  )
 end
 
 function Sparkle._makeParticles()
   local pixel = RES.loadTexture('pixel')
-  local p = love.graphics.newParticleSystem(pixel, 128)
+  local p = love.graphics.newParticleSystem(pixel, 256)
   p:reset()
   p:setTexture(pixel)
   p:setParticleLifetime(1)
-  p:setEmissionRate(6)
-  p:setSizes(2)
+  p:setEmissionRate(128)
+  p:setSizes(4)
   p:setSizeVariation(1)
   p:setSpread(0)
-  p:setSpeed(0,0)
-  p:setRotation(0, 2*math.pi)
-  p:setAreaSpread('normal', 2, 2)
+  p:setSpeed(0, 0)
+  p:setAreaSpread('normal', 8, 8)
   p:setLinearAcceleration(0, 0, 0, 0)
-  p:setColors(COLORS.PP, COLORS.TRANSP)
+  p:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
   p:setEmitterLifetime(-1)
   return p
 end
