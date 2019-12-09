@@ -3,6 +3,7 @@
 
 local VIEWDEFS  = require 'view.definitions'
 local FONT      = require 'view.helpers.font'
+local BodyView  = require 'view.sector.bodyview'
 local COLORS    = require 'domain.definitions.colors'
 local Color     = require 'common.color'
 local Sparkle   = require 'view.gameplay.actionhud.fx.sparkle'
@@ -46,14 +47,18 @@ function SPRITEFX.apply(sectorview, args)
     text = ("%s%d"):format(signal, amount)
   end
   _font = _font or FONT.get('Text', 32)
-  local particles_done = false
+  if text_type == 'food' then
+    local fbuffer = Util.findId('frontbuffer_view')
+    local route = body:getSector():getRoute()
+    local controlled_actor = route.getControlledActor()
+    local controlled_body = controlled_actor:getBody()
+    --if body == controlled_actor then
+      local camera_pos = vec2(VIEWDEFS.VIEWPORT_DIMENSIONS()) / 2
+      Sparkle(camera_pos, fbuffer:getCenter())
+    --end
+  end
   body_sprite:setDecorator(
     function (_, x, y, ...)
-      if not particles_done and text_type == 'food' then
-        local fbuffer = Util.findId('frontbuffer_view')
-        particles_done = true
-        Sparkle(vec2(x, y), fbuffer:getCenter())
-      end
       local g = love.graphics
       body_sprite:render(x, y, ...)
       x = x + _TILE_W/2 - _font:getWidth(text)/2

@@ -30,8 +30,11 @@ function BodyView.tileToScreen(i, j)
   return vec2((j - 1) * VIEWDEFS.TILE_W, (i - 1) * VIEWDEFS.TILE_H)
 end
 
-function BodyView:getPosition()
-  return self.position
+function BodyView:getScreenPosition()
+  local route = self.body:getSector():getRoute()
+  local controlled_actor = route.getControlledActor()
+  local camera_pos = BodyView.tileToScreen(controlled_actor:getBody():getPos())
+  return self.position - camera_pos
 end
 
 function BodyView:setPosition(i, j)
