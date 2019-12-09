@@ -21,8 +21,13 @@ local _icon_offset_speed = 80
 local _info_alpha_speed = 5
 local _mode_scale_speed = 3
 local _charge_offset_speed = 200
-local _widget_charge_pos = vec2(5, 7)
-local _widget_charge_radius = 10
+local _widget_charge_pos = vec2(7, 4)
+local _widget_charge_radius = 13
+local _widget_charge_linew = 3
+
+--Local functions
+
+local _draw_hexagon
 
 local _MODE = {
     normal = "normal",
@@ -60,7 +65,7 @@ function CardView:init(card)
   self.icon_offset = vec2(0,0)
   self.info_alpha = 1
   self.mode_scale = vec2(1,1)
-  self.charge_offset = 0
+  self.charge_offset = vec2(0,0)
 end
 
 function CardView:getWidth()
@@ -133,20 +138,24 @@ function CardView:update(dt)
     self.info_alpha = math.min(self.info_alpha + _info_alpha_speed*dt, 1)
     self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed*dt, 1)
     self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed*dt, 1)
-    self.charge_offset = math.max(self.charge_offset - _charge_offset_speed*dt, 0)
+    self.charge_offset.x = math.max(self.charge_offset.x - _charge_offset_speed*dt, 0)
+    self.charge_offset.y = math.max(self.charge_offset.y - _charge_offset_speed*dt, 0)
   elseif self.mode == _MODE.equip then
     self.icon_offset.x = math.min(self.icon_offset.x + _icon_offset_speed*dt, 0)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -30)
     self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
     self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed*dt, 1)
     self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed*dt, 1)
-    self.charge_offset = math.min(self.charge_offset + _charge_offset_speed*dt, 60)
+    self.charge_offset.x = math.min(self.charge_offset.x + _charge_offset_speed*dt, 56)
+    self.charge_offset.y = math.max(self.charge_offset.y - _charge_offset_speed*dt, 0)
   elseif self.mode == _MODE.cond then
     self.icon_offset.x = math.max(self.icon_offset.x - _icon_offset_speed*dt, -5)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -23)
     self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
     self.mode_scale.x = math.max(self.mode_scale.x - _mode_scale_speed*dt, .64)
     self.mode_scale.y = math.max(self.mode_scale.y - _mode_scale_speed*dt, .40)
+    self.charge_offset.x = math.min(self.charge_offset.x + _charge_offset_speed*dt, 10)
+    self.charge_offset.y = math.min(self.charge_offset.y + _charge_offset_speed*dt, 10)
   else
     error("Not a valid mode for cardview")
   end
@@ -252,15 +261,19 @@ function CardView:draw()
 
   --Draw charge counter for widgets
   if self.card:isWidget() then
-    local x, y = _widget_charge_pos.x + self.charge_offset, _widget_charge_pos.y
+    local x = _widget_charge_pos.x + self.charge_offset.x
+    local y = _widget_charge_pos.y + self.charge_offset.y
     local font = _widget_charge_font
     --Print background
-    g.setColor(COLORS.NOTIFICATION * Color:new{1,1,1,self.alpha})
-    g.circle("fill", x, y, _widget_charge_radius)
+    g.setColor(0, 0, 0, self.alpha)
+    _draw_hexagon("fill", x, y, _widget_charge_radius)
+    g.setColor(cr, cg, cb, self.alpha)
+    g.setLineWidth(_widget_charge_linew)
+    _draw_hexagon("line", x, y, _widget_charge_radius)
 
     --Print charges
     font.set()
-    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+    g.setColor(cr, cg, cb, self.alpha)
     local charges = self.card:getCurrentWidgetCharges()
     g.print(charges, x - font:getWidth(charges)/2,
                      y - font:getHeight()/2)
@@ -275,12 +288,25 @@ function CardView:draw()
                      (self.mode_scale.x-1)*self.sprite:getWidth()/2,
                      (self.mode_scale.y-1)*self.sprite:getHeight()/2)
     if self.card:isWidget() then
-      g.circle("fill", x + _widget_charge_pos.x + self.charge_offset,
-                       y + _widget_charge_pos.y, _widget_charge_radius)
+      g.circle("fill", x + _widget_charge_pos.x + self.charge_offset.x,
+                y + _widget_charge_pos.y + self.charge_offset.y, _widget_charge_radius)
     end
   end
   g.setStencilTest()
   g.pop()
+end
+
+--Local functions
+
+function _draw_hexagon(mode, x, y, r)
+  local v = vec2(r, 0)
+  local points = {}
+  for i = 1, 6 do
+    table.insert(points,x + v.x)
+    table.insert(points,y + v.y)
+    v = vec2.rotate(v, math.pi/3)
+  end
+  love.graphics.polygon(mode, points)
 end
 
 return CardView
