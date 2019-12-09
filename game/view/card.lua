@@ -242,10 +242,6 @@ function CardView:draw()
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.info_alpha)
   local type_str = self.card:getType()
-  if self.card:isWidget() then
-    type_str = type_str .. (" [ %d ]"):format(self.card:getWidgetCharges()
-                                            - self.card:getUsages())
-  end
   g.printf(type_str, pd, h - pd - _card_font:getHeight()/2, typewidth,
            "left")
   _info_font.set()
