@@ -7,7 +7,7 @@ DO NOT USE THIS TOGETHER WITH OTHER TRANSFORMERS
 ]]
 
 local PALETTE = { SCHEMATICS.NAUGHT, SCHEMATICS.FLOOR, SCHEMATICS.WALL,
-                  SCHEMATICS.EXIT, SCHEMATICS.ALTAR }
+                  SCHEMATICS.EXITUP, SCHEMATICS.EXITDOWN, SCHEMATICS.ALTAR }
 
 local TRANSFORMER = {}
 
@@ -58,7 +58,7 @@ function TRANSFORMER.process(sectorinfo, params)
       local raw = map.data[1 + y * map.width + x]
       local fill = PALETTE[raw]
       sectorinfo.grid.set(real_x, real_y, fill)
-      if fill == SCHEMATICS.EXIT then
+      if fill == SCHEMATICS.EXITDOWN then
         local exit
         last_exit_id, exit = next(sectorinfo.exits, last_exit_id)
         if last_exit_id then

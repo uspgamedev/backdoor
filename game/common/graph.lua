@@ -12,14 +12,13 @@ local function Node(id, zone, symb)
   return state
 end
 
-
-local function NodeInfo(node)
+local function NodeInfo(node) -- luacheck: no unused
   return string.format("%s(%s:%s)", node.id, node.zone, node.specname)
 end
 
 -- Create Graph
 function Graph:create(idgenerator)
-  local newgraph = Graph:new {}
+  local newgraph = self:new {}
   newgraph.idgen = idgenerator
   newgraph.nodes = {}
   newgraph.edges = {}
@@ -36,7 +35,7 @@ end
 
 -- Remove Node from Graph
 function Graph:removeNode(id)
-  local node = _nodes[id]
+  local node = self.nodes[id]
   for other_id in pairs(node.exits) do
     self:disconnect(id, other_id)
   end
@@ -47,8 +46,8 @@ end
 function Graph:connect(id1, id2)
   local nodes = self.nodes
   assert(nodes[id1] and nodes[id2], "Invalid node id.")
-  nodes[id1].exits[id2] = {pos = false, target_pos = false}
-  nodes[id2].exits[id1] = {pos = false, target_pos = false}
+  nodes[id1].exits[id2] = {pos = false, target_pos = false, dir = 'down'}
+  nodes[id2].exits[id1] = {pos = false, target_pos = false, dir = 'up'}
   --[[--
   printf("Connecting [%s] to [%s]",
          NodeInfo(self:getNode(id1)),
