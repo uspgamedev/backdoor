@@ -302,6 +302,11 @@ function View:stopDescriptionScrolling()
   self:removeTimer("scroll_up", MAIN_TIMER)
 end
 
+function View:destroy()
+  self:stopDescriptionScrolling()
+  ELEMENT.destroy(self)
+end
+
 function View:resetDescriptionScrolling()
   self:stopDescriptionScrolling()
   local card = self.card_list[self.selection].card
