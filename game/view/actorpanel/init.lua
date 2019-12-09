@@ -47,13 +47,16 @@ function ActorHUDTree:getWidgets()
 end
 
 function ActorHUDTree:hide()
-  self:removeTimer("timed_hide", MAIN_TIMER)
+  if self:getTimer("timed_hide", MAIN_TIMER) then
+    return
+  end
   return self:_slideTo(ActorHUDTree.HIDDEN_POSITION())
 end
 
 function ActorHUDTree:timedHide(t)
   self:addTimer("timed_hide", MAIN_TIMER, "after", t,
                 function()
+                  self:removeTimer("timed_hide", MAIN_TIMER)
                   return self:_slideTo(ActorHUDTree.HIDDEN_POSITION())
                 end)
 end
