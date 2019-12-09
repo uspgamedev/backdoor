@@ -1,5 +1,5 @@
 
--- luacheck: globals love
+-- luacheck: globals love MAIN_TIMER
 
 local vec2       = require 'cpml' .vec2
 local HintButton = require 'view.gameplay.actionhud.controlhints.newhand'
@@ -55,6 +55,7 @@ function BufferView.newFrontBufferView(route)
   bufview.side = 'front'
   bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
+  bufview.ppcounter:setPP(route.getControlledActor():getPP())
   _calculatePosition(bufview)
   return bufview
 end
@@ -127,7 +128,6 @@ function BufferView:update(dt)
   if self.side == 'front' then
     self.button:setCost(actor:getBody():getConsumption())
     self.button:update(dt)
-    self.ppcounter:setPP(actor:getPP())
     self.ppcounter:update(dt)
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then

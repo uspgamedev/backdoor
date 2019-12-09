@@ -3,7 +3,6 @@
 
 local VIEWDEFS  = require 'view.definitions'
 local FONT      = require 'view.helpers.font'
-local BodyView  = require 'view.sector.bodyview'
 local COLORS    = require 'domain.definitions.colors'
 local Color     = require 'common.color'
 local Sparkle   = require 'view.gameplay.actionhud.fx.sparkle'
@@ -52,10 +51,13 @@ function SPRITEFX.apply(sectorview, args)
     local route = body:getSector():getRoute()
     local controlled_actor = route.getControlledActor()
     local controlled_body = controlled_actor:getBody()
-    --if body == controlled_actor then
+    if body == controlled_body then
       local camera_pos = vec2(VIEWDEFS.VIEWPORT_DIMENSIONS()) / 2
-      Sparkle(camera_pos, fbuffer:getCenter())
-    --end
+      Sparkle():go(camera_pos, fbuffer:getCenter())
+               :andThen(function()
+                 fbuffer.ppcounter:setPP(controlled_actor:getPP())
+               end)
+    end
   end
   body_sprite:setDecorator(
     function (_, x, y, ...)
