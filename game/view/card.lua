@@ -15,10 +15,14 @@ local RES         = require 'resources'
 local _title_font = FONT.get("TextBold", 20)
 local _info_font = FONT.get("Text", 18)
 local _card_font = FONT.get("Text", 12)
+local _widget_charge_font = FONT.get("TextBold", 14)
 local _focus_speed = 5
 local _icon_offset_speed = 80
 local _info_alpha_speed = 5
 local _mode_scale_speed = 3
+local _charge_offset_speed = 200
+local _widget_charge_pos = vec2(5, 7)
+local _widget_charge_radius = 10
 
 local _MODE = {
     normal = "normal",
@@ -56,6 +60,7 @@ function CardView:init(card)
   self.icon_offset = vec2(0,0)
   self.info_alpha = 1
   self.mode_scale = vec2(1,1)
+  self.charge_offset = 0
 end
 
 function CardView:getWidth()
@@ -126,14 +131,16 @@ function CardView:update(dt)
     self.icon_offset.x = math.min(self.icon_offset.x + _icon_offset_speed*dt, 0)
     self.icon_offset.y = math.min(self.icon_offset.y + _icon_offset_speed*dt, 0)
     self.info_alpha = math.min(self.info_alpha + _info_alpha_speed*dt, 1)
-    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed, 1)
-    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed, 1)
+    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed*dt, 1)
+    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed*dt, 1)
+    self.charge_offset = math.max(self.charge_offset - _charge_offset_speed*dt, 0)
   elseif self.mode == _MODE.equip then
     self.icon_offset.x = math.min(self.icon_offset.x + _icon_offset_speed*dt, 0)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -30)
     self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
-    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed, 1)
-    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed, 1)
+    self.mode_scale.x = math.min(self.mode_scale.x + _mode_scale_speed*dt, 1)
+    self.mode_scale.y = math.min(self.mode_scale.y + _mode_scale_speed*dt, 1)
+    self.charge_offset = math.min(self.charge_offset + _charge_offset_speed*dt, 60)
   elseif self.mode == _MODE.cond then
     self.icon_offset.x = math.max(self.icon_offset.x - _icon_offset_speed*dt, -5)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -23)
@@ -242,6 +249,23 @@ function CardView:draw()
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     g.pop()
   end
+
+  --Draw charge counter for widgets
+  if self.card:isWidget() then
+    local x, y = _widget_charge_pos.x + self.charge_offset, _widget_charge_pos.y
+    local font = _widget_charge_font
+    --Print background
+    g.setColor(COLORS.NOTIFICATION * Color:new{1,1,1,self.alpha})
+    g.circle("fill", x, y, _widget_charge_radius)
+
+    --Print charges
+    font.set()
+    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+    local charges = self.card:getCurrentWidgetCharges()
+    g.print(charges, x - font:getWidth(charges)/2,
+                     y - font:getHeight()/2)
+  end
+
   g.pop()
 
   if self.add > 0 then
@@ -250,6 +274,10 @@ function CardView:draw()
     self.sprite:draw(x, y, 0, self.mode_scale.x, self.mode_scale.y,
                      (self.mode_scale.x-1)*self.sprite:getWidth()/2,
                      (self.mode_scale.y-1)*self.sprite:getHeight()/2)
+    if self.card:isWidget() then
+      g.circle("fill", x + _widget_charge_pos.x + self.charge_offset,
+                       y + _widget_charge_pos.y, _widget_charge_radius)
+    end
   end
   g.setStencilTest()
   g.pop()
