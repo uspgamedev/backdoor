@@ -6,14 +6,9 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 local COLORS     = require 'domain.definitions.colors'
 local FONT       = require 'view.helpers.font'
 
-local min = math.min
-local max = math.max
-
 local _ALPHA_SPEED = 2
 local _TILE_W = 8
 local _TILE_H = 8
-local _RAD_W = _TILE_W/2
-local _RAD_H = _TILE_H/2
 local _TILE_POLYGON = {
   0, 0,
   1, 0,
@@ -30,7 +25,8 @@ local _BODY_POLYGON = {
 local _TILE_COLORS = {
   [SCHEMATICS.WALL]  = Color:new {0.3, 0.5, 0.9, 1},
   [SCHEMATICS.FLOOR] = Color:new {0.1, 0.3, 0.7, 1},
-  [SCHEMATICS.EXIT]  = Color.fromInt {200, 200,  40, 255},
+  [SCHEMATICS.EXITUP]  = Color.fromInt {100, 200,  40, 255},
+  [SCHEMATICS.EXITDOWN]  = Color.fromInt {200, 100,  40, 255},
   [SCHEMATICS.ALTAR]  = Color.fromInt {30, 100,  240, 255},
 }
 
@@ -78,7 +74,6 @@ function MINIMAP:draw()
   local ai, aj = self.actor:getPos()
   local tiles = sector.tiles
   local zonename = sector:getZoneName()
-  local nr, ng, nb = unpack(COLORS.NEUTRAL)
   local fov = self.actor:getFov(sector)
 
   g.push()
@@ -116,7 +111,7 @@ function MINIMAP:draw()
             g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
             g.polygon("fill", _BODY_POLYGON)
           elseif seen > 0 and sector:getBodyAt(ti, tj) then
-            g.setColor(1, 0.4, 0.1, alpha)
+            g.setColor(1, 0.4, 0.1)
             g.polygon("fill", _BODY_POLYGON)
           end
           g.pop()
