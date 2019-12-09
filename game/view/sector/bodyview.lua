@@ -30,6 +30,10 @@ function BodyView.tileToScreen(i, j)
   return vec2((j - 1) * VIEWDEFS.TILE_W, (i - 1) * VIEWDEFS.TILE_H)
 end
 
+function BodyView:getPosition()
+  return self.position
+end
+
 function BodyView:setPosition(i, j)
   self.position = BodyView.tileToScreen(i, j)
 end

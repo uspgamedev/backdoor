@@ -104,6 +104,10 @@ function BufferView:getPosition()
   return self.pos+self.offset
 end
 
+function BufferView:getCenter()
+  return self:getTopCardPosition() + vec2(self.sprite:getDimensions())/2
+end
+
 function BufferView:getTopCardPosition(index_offset)
   index_offset = index_offset or 0
   local size = self.amount
