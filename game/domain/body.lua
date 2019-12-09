@@ -402,7 +402,15 @@ function Body:takeDamageFrom(amount, source)
       coroutine.yield('report', {
         type = "absorb_damage",
         actor = self:getActor(),
+        body = self,
+        amount = absorbed,
         widget = def_eqp,
+      })
+      coroutine.yield('report', {
+        type = 'text_rise',
+        text_type = 'blocked-damage',
+        body = self,
+        amount = absorbed,
       })
     end
   end

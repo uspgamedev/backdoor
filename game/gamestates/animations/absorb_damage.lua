@@ -7,7 +7,7 @@ local vec2          = require 'cpml' .vec2
 local ANIM = require 'common.activity' ()
 
 local _OFFSET = 20
-local _DURATION = .4
+local _DURATION = .3
 
 local _waitAndAnnounce
 local _slideUp

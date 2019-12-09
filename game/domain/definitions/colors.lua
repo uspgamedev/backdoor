@@ -9,6 +9,7 @@ COLORS.SEMITRANSP = Color.fromInt {0xff, 0xff, 0xff, 0x80}
 COLORS.BLACK = Color.fromInt {0x00, 0x00, 0x00, 0xff}
 COLORS.VOID = Color.fromInt {0, 0, 0, 0}
 COLORS.HALF_VISIBLE = Color.fromInt {0x80, 0x80, 0x80, 0xff}
+COLORS.LIGHT_GRAY = Color:new {.7, .7, .7, 1}
 COLORS.GRAY = Color.fromInt {0x4a, 0x54, 0x62, 0xff}
 COLORS.DARK = Color.fromInt {0x1f, 0x1f, 0x1f, 0xff}
 COLORS.DARKER = Color.fromInt {12, 12, 12, 255}
