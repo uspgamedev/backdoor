@@ -4,7 +4,6 @@
   "desc":"A mass-produced weapon.",
   "icon":"card-old-laddle",
   "name":"Old Laddle",
-  "one_time":true,
   "set":"brawler",
   "type-description":"",
   "widget":{
@@ -25,5 +24,6 @@
     },
     "trigger":false,
     "auto_activation":false
-  }
+  },
+  "one_time":false
 }
