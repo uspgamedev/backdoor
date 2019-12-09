@@ -648,6 +648,10 @@ end
 
 function Actor:spendPP(n)
   self.playpoints = math.max(self.playpoints - n, 0)
+  coroutine.yield('report', {
+    type = "change_pp",
+    actor = self,
+  })
 end
 
 function Actor:getPP()
