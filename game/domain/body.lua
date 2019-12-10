@@ -393,11 +393,26 @@ end
 --[[ Combat methods ]]--
 
 function Body:takeDamageFrom(amount, source)
-  local defeqp = self:getEquipmentAt('wearable')
-  if defeqp then
-    local absorbed = math.min(amount, defeqp:getCurrentWidgetCharges())
-    defeqp:addUsages(absorbed)
+  local def_eqp = self:getEquipmentAt('wearable')
+  if def_eqp then
+    local absorbed = math.min(amount, def_eqp:getCurrentWidgetCharges())
+    def_eqp:addUsages(absorbed)
     amount = math.max(0, amount - absorbed)
+    if self:getActor() then
+      coroutine.yield('report', {
+        type = "absorb_damage",
+        actor = self:getActor(),
+        body = self,
+        amount = absorbed,
+        widget = def_eqp,
+      })
+      coroutine.yield('report', {
+        type = 'text_rise',
+        text_type = 'blocked-damage',
+        body = self,
+        amount = absorbed,
+      })
+    end
   end
   self.damage = math.min(self:getMaxHP(), self.damage + amount)
   self.killer = source:getId()

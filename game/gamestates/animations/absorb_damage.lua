@@ -7,7 +7,7 @@ local vec2          = require 'cpml' .vec2
 local ANIM = require 'common.activity' ()
 
 local _OFFSET = 20
-local _DURATION = .4
+local _DURATION = .3
 
 local _waitAndAnnounce
 local _slideUp
@@ -20,14 +20,7 @@ function ANIM:script(route, view, report)
     local widgetview = action_hud:getWidgetCard(report.widget)
     _waitAndAnnounce(report.widget, self.wait)
     _slideUp(widgetview, self)
-
-    local cardview = CardView(report.card)
-    cardview:register("HUD")
-    view.action_hud.handview:addCard(cardview)
-    action_hud:disableCardInfo()
-    cardview:setPosition(widgetview.position:unpack())
     self.wait(delay:set(0.2))
-    cardview:register("HUD_FX")
     _slideDown(widgetview, self)
     self.wait(delay:set(_DURATION))
   end
