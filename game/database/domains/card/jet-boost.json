@@ -44,6 +44,6 @@
   "icon":"card-jetboots",
   "name":"JetBoost",
   "temporary":true,
-  "one_time":false,
-  "set":false
+  "set":false,
+  "one_time":false
 }

@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"target_pos",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false
         },{
           "name":"self",
@@ -62,7 +62,7 @@
   "desc":"Outta my way!",
   "icon":"card-jump",
   "name":"Push",
-  "set":"gadgeteer",
+  "set":"control_common",
   "type-description":"",
   "one_time":false
 }

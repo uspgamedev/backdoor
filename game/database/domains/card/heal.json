@@ -18,8 +18,8 @@
           "name":"choose_target",
           "output":"body-pos",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "name":"get_attribute",

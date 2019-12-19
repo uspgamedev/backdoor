@@ -35,6 +35,6 @@
   "desc":"Ooops, excuse me!",
   "icon":"card-sidestep",
   "name":"Side-step",
-  "set":"brawler",
+  "set":"maneuver_common",
   "temporary":false
 }

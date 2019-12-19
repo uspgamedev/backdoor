@@ -5,7 +5,7 @@
   "icon":"card-spark-rod",
   "name":"Spark Rod 2000",
   "one_time":true,
-  "set":"brawler",
+  "set":"weapon_expert",
   "type-description":"",
   "widget":{
     "charges":3,

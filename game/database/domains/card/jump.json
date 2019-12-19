@@ -49,7 +49,7 @@
   "icon":"card-jump",
   "name":"Jump",
   "pp":3,
-  "set":"brawler",
+  "set":"maneuver_expert",
   "type-description":"",
   "one_time":false
 }

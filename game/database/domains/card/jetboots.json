@@ -4,7 +4,6 @@
   "desc":"'Now with less Carbon Dioxide emission!' - Jetboots UltraSlim Model commercial slogan.",
   "icon":"card-jetboots",
   "name":"Jetboots",
-  "set":"gadgeteer",
   "type-description":"",
   "widget":{
     "charges":3,
@@ -27,5 +26,6 @@
     "trigger":false,
     "auto_activation":false
   },
+  "set":false,
   "one_time":false
 }

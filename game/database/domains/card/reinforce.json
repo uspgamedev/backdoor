@@ -29,7 +29,7 @@
   "icon":"card-reinforce",
   "name":"Reinforce",
   "pp":0,
-  "set":"gadgeteer",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

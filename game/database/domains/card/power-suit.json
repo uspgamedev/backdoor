@@ -5,7 +5,6 @@
   "icon":"card-power-suit",
   "name":"Power Suit",
   "one_time":true,
-  "set":"brawler",
   "type-description":"",
   "widget":{
     "charges":5,
@@ -22,5 +21,6 @@
       }],
     "status-tags":[],
     "trigger":false
-  }
+  },
+  "set":false
 }

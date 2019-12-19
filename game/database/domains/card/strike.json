@@ -40,7 +40,7 @@
   "desc":"",
   "icon":"card-strike",
   "name":"Strike",
-  "set":"brawler",
+  "set":"strikes_common",
   "type-description":"",
   "one_time":false,
   "temporary":false

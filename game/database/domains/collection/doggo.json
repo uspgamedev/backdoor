@@ -1,0 +1,17 @@
+{
+  "cards":[{
+      "drop":30,
+      "set":"weapon_advanced"
+    },{
+      "drop":25,
+      "set":"weapon_expert"
+    },{
+      "drop":30,
+      "set":"support_advanced"
+    },{
+      "drop":25,
+      "set":"support_advanced"
+    }],
+  "image":"card-upgrade",
+  "name":"Doggo Collection"
+}

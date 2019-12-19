@@ -1,0 +1,26 @@
+{
+  "cards":[{
+      "drop":20,
+      "set":"maneuver_common"
+    },{
+      "drop":20,
+      "set":"maneuver_advanced"
+    },{
+      "drop":15,
+      "set":"maneuver_expert"
+    },{
+      "drop":40,
+      "set":"strikes_advanced"
+    },{
+      "drop":15,
+      "set":"strikes_expert"
+    },{
+      "drop":40,
+      "set":"control_advanced"
+    },{
+      "drop":15,
+      "set":"control_expert"
+    }],
+  "image":"card-upgrade",
+  "name":"Imp Collection"
+}
