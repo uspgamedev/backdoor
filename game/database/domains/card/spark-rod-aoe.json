@@ -3,10 +3,10 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":0,
+          "base":4,
           "center":"=target-pos",
           "ignore_owner":true,
-          "mod":100,
+          "mod":30,
           "name":"damage_on_area",
           "size":3,
           "type":"effect"
@@ -27,7 +27,7 @@
   },
   "attr":"COR",
   "cost":3,
-  "icon":"card-spark-rod",
+  "icon":"card-spark-rod-shockwave",
   "name":"Spark Blast",
   "temporary":true,
   "set":false

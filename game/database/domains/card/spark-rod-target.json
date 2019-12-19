@@ -3,8 +3,8 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":0,
-          "mod":100,
+          "base":6,
+          "mod":30,
           "name":"damage_on_target",
           "target":"=target-body",
           "type":"effect",
@@ -35,8 +35,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "icon":"card-spark-rod",
-  "name":"Spark Thrust",
+  "icon":"card-spark-rod-strike",
+  "name":"Rod Strike",
   "temporary":true,
   "set":false
 }
