@@ -17,9 +17,9 @@ ROUTEMAP.initial_nodes = {
   { ZONES.B, SYMBOLS.V },
   --{ ZONES.B, SYMBOLS.V },
   --{ ZONES.B, SYMBOLS.V },
-  --{ ZONES.C, SYMBOLS.V },
-  --{ ZONES.C, SYMBOLS.V },
-  --{ ZONES.C, SYMBOLS.V },
+  { ZONES.C, SYMBOLS.V },
+  { ZONES.C, SYMBOLS.V },
+  { ZONES.C, SYMBOLS.V },
   --{ ZONES.C, SYMBOLS.V },
   --{ ZONES.C, SYMBOLS.V },
   --{ ZONES.D, SYMBOLS.v },
@@ -50,6 +50,9 @@ ROUTEMAP.initial_connections = {
   {5, 6},
   {6, 7},
   {7, 8},
+  {8, 9},
+  {9, 10},
+  {10, 11},
 }
 
 --ROUTEMAP.initial_connections = {
