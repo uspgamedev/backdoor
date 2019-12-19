@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "base":2,
+          "base":1,
           "center":"=self_pos",
           "ignore_owner":true,
           "mod":80,
