@@ -36,7 +36,6 @@ DEFS.PACK_SIZE  = 3
 
 DEFS.ACTION       = require 'domain.definitions.action'
 DEFS.TRIGGERS     = require 'domain.definitions.triggers'
-DEFS.STASH_CARDS  = require 'domain.definitions.stash_cards'
 DEFS.APT          = require 'domain.definitions.aptitude'
 DEFS.ATTR         = require 'domain.definitions.attribute'
 DEFS.STATUS_TAGS  = require 'domain.definitions.status_tags'
