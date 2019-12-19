@@ -44,7 +44,7 @@
   },
   "attr":"ARC",
   "cost":3,
-  "icon":"card-fireball",
+  "icon":"card-arcane-burst",
   "name":"Arcane Burst",
   "set":"ranged_common"
 }
