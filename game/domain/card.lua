@@ -195,6 +195,11 @@ local _EPQ_TYPENAMES = {
 function Card:getEffect()
   local effect = ""
   local inputs = { self = self:getOwner() }
+  if self:isTemporary() then
+    effect = effect .. "Temporary "
+  elseif self:isOneTimeOnly() then
+    effect = effect .. "Single-Use "
+  end
   if self:isArt() then
     effect = effect .. ("Art (%d focus)\n\n"):format(self:getCost())
                     .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
