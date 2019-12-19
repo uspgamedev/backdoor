@@ -100,9 +100,9 @@ function Route:instance(obj) -- luacheck: no self
   end
 
   local function _generateSector(sector)
-      local state = sector:saveState()
-      BUILDERS.sector.generateState(_id_generator, state)
-      sector:loadState(state)
+    local state = sector:saveState()
+    BUILDERS.sector.generateState(_id_generator, state)
+    sector:loadState(state)
   end
 
   function obj.setCurrentSector(id)

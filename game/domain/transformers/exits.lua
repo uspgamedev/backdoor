@@ -2,9 +2,9 @@
 local RANDOM = require 'common.random'
 local SCHEMATICS = require 'domain.definitions.schematics'
 
-local transformer = {}
+local TRANSFORMER = {}
 
-transformer.schema = {
+TRANSFORMER.schema = {
   { id = 'threshold', name = "Threshold spacing", type = 'integer',
     range = {0} },
   { id = 'distance', name = "Distance between exits", type = 'integer',
@@ -28,6 +28,7 @@ local function _hasSpaceForExit(grid, x, y)
 end
 
 local _IS_EXIT = { [SCHEMATICS.EXITUP] = true, [SCHEMATICS.EXITDOWN] = true }
+local _EXITDIR2TILE = { down = SCHEMATICS.EXITDOWN, up = SCHEMATICS.EXITUP }
 
 local function _hasNoExitNearby(grid, x, y)
   for dx = -EXIT_THRESHOLD, EXIT_THRESHOLD, 1 do
@@ -45,7 +46,7 @@ local function _isPossibleExit(grid, x, y)
   return _hasSpaceForExit(grid, x, y) and _hasNoExitNearby(grid, x, y)
 end
 
-function transformer.process(sectorinfo, params)
+function TRANSFORMER.process(sectorinfo, params)
   local sectorgrid = sectorinfo.grid
   local exits_specs = sectorinfo.exits
 
@@ -89,12 +90,12 @@ function transformer.process(sectorinfo, params)
       exit.pos = {i, j}
       -- add exit info to sectorinfo
       -- and set and exit tile on the sectorgrid
-      sectorgrid.set(j, i, SCHEMATICS.EXITDOWN)
+      sectorgrid.set(j, i, _EXITDIR2TILE[exit.dir])
     end
   end
 
   return sectorinfo
 end
 
-return transformer
+return TRANSFORMER
 
