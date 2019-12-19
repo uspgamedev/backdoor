@@ -12,8 +12,8 @@
   "attr":"ARC",
   "cost":1,
   "desc":"Close your eyes and see beyond.",
-  "icon":"card-divination",
-  "name":"Divination",
+  "icon":"card-change-of-plans",
+  "name":"Change of Plans",
   "set":"support_advanced",
   "type-description":"",
   "one_time":false
