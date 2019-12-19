@@ -39,7 +39,6 @@ other contributors (as per game-icons.net/about.html#authors):
 + square-bottle.png
 + teleport.png
 + time-bomb.png
-+ triorb.png
 + upgrade.png
 + warlock-eye.png
 + wide-arrow-dunk.png
