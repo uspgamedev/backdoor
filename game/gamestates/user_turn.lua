@@ -116,8 +116,7 @@ local function _useAction(action_slot, params)
     _view.action_hud:activateAbility()
     if param.name == 'choose_dir' then
       _view.action_hud:disableTurn()
-      SWITCHER.push(GS.PICK_DIR, _view.sector, param['body-block'],
-                    ACTION.card(action_slot, controlled_actor, params))
+      SWITCHER.push(GS.PICK_DIR, _view.sector, param)
       local dir = coroutine.yield(_task)
       if dir then
         params[param.output] = dir

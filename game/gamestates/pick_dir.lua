@@ -1,9 +1,10 @@
 
+-- luacheck: globals SWITCHER, no self
+
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local DIR          = require 'domain.definitions.dir'
 local PLAYSFX      = require 'helpers.playsfx'
-local vec2         = require 'cpml' .vec2
 local Draw         = require "draw"
 
 local state = {}
@@ -11,23 +12,24 @@ local state = {}
 local _sector_view
 local _current_dir
 local _body_block
-local _card
+local _reach
 
 local function _updateDir(dir)
   _current_dir = DIR[dir]
-  _sector_view:setRayDir(_current_dir, _body_block)
+  _sector_view:setRayDir(_current_dir, _body_block, _reach)
 end
 
-function state:enter(prev, sector_view, body_block, card)
+function state:enter(_, sector_view, param)
   _sector_view = sector_view
-  _body_block = body_block
+  _body_block = param['body-block']
+  _reach = param['reach']
   _updateDir(DIR[1])
 end
 
 function state:leave()
 end
 
-function state:update(dt)
+function state:update(_)
   if INPUT.wasActionPressed('CONFIRM') then
     _sector_view:setRayDir()
     SWITCHER.pop(_current_dir)

@@ -11,8 +11,10 @@
           "type":"effect"
         }],
       "inputs":[{
+          "body-block":true,
           "name":"choose_dir",
           "output":"dir",
+          "reach":3,
           "type":"input"
         },{
           "name":"self",

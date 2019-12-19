@@ -78,8 +78,7 @@ function SectorView:init(route)
 
   self.target = nil
   self.cursor = nil
-  self.ray_dir = nil
-  self.ray_body_block = false
+  self.ray = nil
   self.vfx = nil
 
   self.fov = nil --Fov to apply on the sector
@@ -190,9 +189,8 @@ function SectorView:isInsideFov(i, j)
   return not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0)
 end
 
-function SectorView:setRayDir(dir, body_block)
-  self.ray_dir = dir
-  self.ray_body_block = body_block
+function SectorView:setRayDir(dir, body_block, reach)
+  self.ray = dir and { dir = dir, body_block = body_block, reach = reach }
 end
 
 function SectorView:getBodyView(body)
@@ -277,20 +275,27 @@ function SectorView:draw()
     end
   end
 
-  if self.ray_dir and self.target then
-    local dir = self.ray_dir
+  if self.ray and self.target then
+    local dir = self.ray.dir
     local i, j = self.target:getPos()
     local check
-    if self.ray_body_block then
+    if self.ray.body_block then
       check = sector.isValid
     else
       check = sector.isWalkable
     end
+    local count = 0
     repeat
       rays[i][j] = true
       i = i + dir[1]
       j = j + dir[2]
+      count = count + 1
     until not check(sector, i, j) or not self.fov[i][j]
+                                  or count > self.ray.reach
+    if self.ray.body_block and sector:getBodyAt(i, j)
+                           and count <= self.ray.reach then
+      rays[i][j] = true
+    end
   end
 
   -- draw tall things
@@ -329,7 +334,7 @@ function SectorView:draw()
                                          Color.fromInt {200, 100, 100, 100} })
             end
           end
-        elseif self.ray_dir and rays[i+1][j+1] then
+        elseif self.ray and rays[i+1][j+1] then
           table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
                                      Color.fromInt {200, 100, 100, 100} })
         end
