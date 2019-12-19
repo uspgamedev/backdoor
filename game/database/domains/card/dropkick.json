@@ -50,7 +50,7 @@
   "icon":"card-dropkick",
   "name":"Unreserved Punch",
   "pp":0,
-  "set":"brawler",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

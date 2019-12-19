@@ -29,7 +29,7 @@
   "icon":"card-sensor-bomb",
   "name":"Sensor Bomb",
   "pp":0,
-  "set":"gadgeteer",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

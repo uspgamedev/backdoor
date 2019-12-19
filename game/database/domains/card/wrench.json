@@ -4,7 +4,6 @@
   "desc":"",
   "icon":"card-wrench",
   "name":"Wrench",
-  "set":"gadgeteer",
   "type-description":"",
   "widget":{
     "charges":5,
@@ -18,5 +17,6 @@
     "status-tags":[],
     "trigger":"on_use"
   },
+  "set":false,
   "one_time":false
 }

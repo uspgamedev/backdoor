@@ -29,7 +29,7 @@
   "icon":"card-turret",
   "name":"Turret",
   "pp":0,
-  "set":"gadgeteer",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

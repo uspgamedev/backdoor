@@ -4,7 +4,7 @@
   "desc":"A mass-produced weapon.",
   "icon":"card-old-laddle",
   "name":"Old Laddle",
-  "set":"brawler",
+  "set":"weapon_common",
   "type-description":"",
   "widget":{
     "charges":2,

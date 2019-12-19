@@ -7,8 +7,8 @@
           "pos":"=target_pos",
           "sfx":"teleport",
           "type":"effect",
-          "vfx-spd":1,
-          "vfx":"SLIDE"
+          "vfx":"SLIDE",
+          "vfx-spd":1
         }],
       "inputs":[{
           "aoe-hint":0,
@@ -37,7 +37,7 @@
   "icon":"card-teleport",
   "name":"Teleport",
   "pp":4,
-  "set":"sage",
+  "set":"maneuver_advanced",
   "type-description":"",
   "one_time":false
 }

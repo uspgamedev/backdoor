@@ -4,7 +4,6 @@
   "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
   "icon":"card-haste",
   "name":"Haste",
-  "set":"sage",
   "type-description":"",
   "widget":{
     "charges":10,
@@ -21,5 +20,6 @@
     },
     "equipment":false
   },
+  "set":false,
   "one_time":false
 }

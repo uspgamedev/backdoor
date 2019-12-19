@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"from",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false
         },{
           "aoe-hint":1,
@@ -45,7 +45,7 @@
   "icon":"card-reassemble",
   "name":"Reassemble",
   "pp":0,
-  "set":"gadgeteer",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

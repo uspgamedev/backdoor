@@ -30,7 +30,7 @@
   "icon":"card-timer-bomb",
   "name":"Timed Combustion Drone",
   "pp":10,
-  "set":"gadgeteer",
   "type-description":"",
+  "set":false,
   "one_time":false
 }

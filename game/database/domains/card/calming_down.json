@@ -4,7 +4,6 @@
   "desc":"",
   "icon":"card-meditation",
   "name":"Meditation",
-  "set":"brawler",
   "type-description":"",
   "widget":{
     "auto_activation":{
@@ -43,5 +42,6 @@
     "trigger":"on_cycle",
     "equipment":false
   },
+  "set":false,
   "one_time":false
 }

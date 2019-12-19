@@ -5,7 +5,6 @@
   "icon":"card-blaster",
   "name":"Rusty Blaster",
   "one_time":true,
-  "set":"gadgeteer",
   "type-description":"",
   "widget":{
     "charges":4,
@@ -24,5 +23,6 @@
     "operators":[],
     "status-tags":[],
     "trigger":false
-  }
+  },
+  "set":false
 }

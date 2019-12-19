@@ -1,0 +1,26 @@
+{
+  "cards":[{
+      "drop":20,
+      "set":"ranged_common"
+    },{
+      "drop":20,
+      "set":"ranged_advanced"
+    },{
+      "drop":15,
+      "set":"ranged_expert"
+    },{
+      "drop":30,
+      "set":"control_common"
+    },{
+      "drop":25,
+      "set":"control_advanced"
+    },{
+      "drop":40,
+      "set":"consumables_advanced"
+    },{
+      "drop":15,
+      "set":"consumables_expert"
+    }],
+  "image":"card-upgrade",
+  "name":"Eye Collection"
+}
