@@ -42,7 +42,7 @@ local function _seek(actor, inputvalues)
   return inputvalues.interaction
 end
 
-function INTERACT.card(actor, inputvalues)
+function INTERACT.card(_, _)
   return nil
 end
 
@@ -55,7 +55,7 @@ function INTERACT.activatedAbility(actor, inputvalues)
   end
 end
 
-function INTERACT.exhaustionCost(actor, inputvalues)
+function INTERACT.exhaustionCost(_, _)
   return ACTIONDEFS.MOVE_COST
 end
 

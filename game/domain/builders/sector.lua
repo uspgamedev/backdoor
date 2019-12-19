@@ -23,6 +23,7 @@ function BUILDER.generateState(idgenerator, state)
   -- sector grid generation
   for _,transformer in DB.schemaFor('sector') do
     local spec = DB.loadSpec('sector', state.specname)[transformer.id]
+    -- FIXME hardcoded check
     if spec and transformer.id ~= 'theme' then
       info = TRANSFORMERS[transformer.id].process(info, spec)
     end

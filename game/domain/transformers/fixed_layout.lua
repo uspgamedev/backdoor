@@ -44,26 +44,33 @@ TRANSFORMER.schema = {
   },
 }
 
+local _EXIT = { [SCHEMATICS.EXITDOWN] = 'down', [SCHEMATICS.EXITUP] = 'up' }
+
+local function _findExitByDir(exits, dir, checked)
+  for _,exit in pairs(exits) do
+    if exit.dir == dir and not checked[exit] then
+      return exit
+    end
+  end
+end
+
 function TRANSFORMER.process(sectorinfo, params)
   local map = params['map']
   local ox, oy = unpack(params['offset'])
   local player_x, player_y = unpack(params['player-pos'])
   local mw, mh = sectorinfo.grid.getMargins()
 
-  local last_exit_id = nil
-
+  local checked = {}
   for y = 0, map.height - 1 do
     for x = 0, map.width - 1 do
       local real_x, real_y = 1 + mw + ox + x, 1 + mh + oy + y
       local raw = map.data[1 + y * map.width + x]
       local fill = PALETTE[raw]
       sectorinfo.grid.set(real_x, real_y, fill)
-      if fill == SCHEMATICS.EXITDOWN then
-        local exit
-        last_exit_id, exit = next(sectorinfo.exits, last_exit_id)
-        if last_exit_id then
-          exit.pos = { real_y, real_x }
-        end
+      if _EXIT[fill] then
+        local exit = _findExitByDir(sectorinfo.exits, _EXIT[fill], checked)
+        assert(exit, 'no matching exit for tile')
+        exit.pos = { real_y, real_x }
       end
     end
   end
