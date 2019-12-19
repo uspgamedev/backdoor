@@ -31,9 +31,9 @@
         "bodyspec":"eye",
         "upgrade_power":150
       },{
-        "actorspec":"grinful",
-        "bodyspec":"imp",
-        "upgrade_power":180
+        "actorspec":"dumb",
+        "bodyspec":"slime",
+        "upgrade_power":240
       }]
   },
   "exits":{
