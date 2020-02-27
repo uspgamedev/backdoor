@@ -17,8 +17,11 @@ local ConditionDock = Class {
 }
 
 function ConditionDock:destroy()
-  for _, card in ipairs(self.cardviews) do
-    card:kill()
+  for i = 1, self.slots do
+    local card = self.cardviews[i]
+    if card then
+      card:kill()
+    end
   end
   ELEMENT.destroy(self)
 end
@@ -31,6 +34,9 @@ function ConditionDock:init(x, slots)
   local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.slots = slots
   self.cardviews = {}
+  for i = 1, self.slots do
+    self.cardviews[i] = false
+  end
   self.pos = vec2(x, h - _HEIGHT/2)
 end
 
@@ -38,12 +44,23 @@ function ConditionDock:getConditionsCount()
   return #self.cardviews
 end
 
+function ConditionDock:getSlots()
+  return self.slots
+end
+
 function ConditionDock:getCardMode() -- luacheck: no self
   return 'cond'
 end
 
 function ConditionDock:addCard(cardview)
-  table.insert(self.cardviews, cardview)
+  for i = 1, self.slots do
+    if not self.cardviews[i] then
+      self.cardviews[i] = cardview
+      return
+    end
+  end
+  --FIXME treat this properly in the future
+  error("Not enough space for new condition")
 end
 
 function ConditionDock:getCard(slot_index)
@@ -51,7 +68,9 @@ function ConditionDock:getCard(slot_index)
 end
 
 function ConditionDock:removeCard(slot_index)
-  return table.remove(self.cardviews, slot_index)
+  local cardview = self.cardviews[slot_index]
+  self.cardviews[slot_index] = false
+  return cardview
 end
 
 function ConditionDock:getSlotPositionForIndex(i)
@@ -60,7 +79,13 @@ function ConditionDock:getSlotPositionForIndex(i)
 end
 
 function ConditionDock:getSlotPosition()
-  return self:getSlotPositionForIndex(self:getConditionsCount() + 1)
+  for i = 1, self.slots do
+    if not self.cardviews[i] then
+      return self:getSlotPositionForIndex(i)
+    end
+  end
+  --FIXME treat this properly in the future
+  error("Not enough space for new condition")
 end
 
 function ConditionDock:draw()
