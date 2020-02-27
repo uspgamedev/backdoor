@@ -137,7 +137,7 @@ function CardInfo:draw()
   self.title_font.set()
   g.printf(self.card:getName(), 0, 0, _WIDTH - _MW*2, 'center')
 
-  g.translate(0, 1.5 * self.title_font:getHeight())
+  g.translate(0, 1.0 * self.title_font:getHeight())
 
   self.text_font.set()
   g.printf(desc, 0, 0, _WIDTH - _MW*2)
