@@ -1,5 +1,5 @@
 
-local PlayerWinView = require 'view.playerwin'
+local PlayerWinView   = require 'view.playerwin'
 local Draw            = require "draw"
 local SoundTrack      = require 'view.soundtrack'
 

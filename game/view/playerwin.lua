@@ -24,11 +24,13 @@ function PlayerWinView:init(playeractor)
   noise:setLooping(true)
   self.camera = require 'common.camera'
   self.sprite = RES.loadSprite(appearance.idle)
+  self.sprite_w = self.sprite:getWidth()
   self.initial_x = x
   self.pos = {x, y}
   self.color = Color:new({1, 1, 1, 1})
   self.volume = 0
   self.scale = 1
+  self.spinning_speed = 1
   self.out = 0
   self.done = false
   self.timer = Timer:new()
@@ -40,9 +42,10 @@ function PlayerWinView:init(playeractor)
       noise:setVolume(self.volume)
       self.sprite:setScale(self.scale)
       local w = self.sprite:getDimensions()
-      self.pos[1] = self.initial_x + (1 - self.scale)*w/2
+      self.pos[1] = self.initial_x + (1 - self.scale)*self.sprite_w/2
     end)
     self:rotatePlayer()
+    self.timer:tween(5, self, {spinning_speed = 8}, "in-quad")
     self.timer:tween(5, self.pos, {[2] = y - 120}, "linear")
     self.timer:tween(3, self.color, {0.6, 0.6, 1, 0.9}, "in-out-quad")
     self.timer:tween(2, self, { volume = max_volume }, "linear")
@@ -67,7 +70,8 @@ function PlayerWinView:isDone()
 end
 
 function PlayerWinView:rotatePlayer()
-  local time = 1
+  local time = 1/self.spinning_speed
+  if self:isDone() then return end
   if self.scale == 1 then
     self.timer:tween(time, self, {scale = -1}, "linear",
     function()
