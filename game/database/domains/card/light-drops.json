@@ -1,6 +1,7 @@
 {
   "attr":"NONE",
   "cost":1,
+  "icon":"card-light-drops",
   "name":"Light Drops",
   "one_time":true,
   "set":"consumables_advanced",
@@ -17,6 +18,5 @@
       "effects":[],
       "inputs":[]
     }
-  },
-  "icon":false
+  }
 }
