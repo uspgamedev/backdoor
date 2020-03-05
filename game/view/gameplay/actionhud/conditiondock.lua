@@ -7,10 +7,12 @@ local ELEMENT   = require "steaming.classes.primitives.element"
 local Class     = require "steaming.extra_libs.hump.class"
 local vec2      = require 'cpml' .vec2
 
-local _MW = 16
+local _MW = 10
+local _MH = 16
 local _PW = 2
 local _HEIGHT = 48
-local _SLOT_OFFSET = 165
+local _SLOT_OFFSET = 55
+local _MAX_COND_PER_LINE = 4
 
 local ConditionDock = Class {
   __includes = {ELEMENT}
@@ -33,7 +35,7 @@ function ConditionDock:destroy()
 end
 
 function ConditionDock:getWidth()
-  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + _SLOT_OFFSET
+  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (_MAX_COND_PER_LINE - 1) * _SLOT_OFFSET
 end
 
 function ConditionDock:getConditionsCount()
@@ -61,18 +63,20 @@ end
 function ConditionDock:getSlotPositionForIndex(i, number_slots)
   --Optional variable to simulate a different sized dock
   number_slots = number_slots or self:getConditionsCount()
+  local levels = math.ceil(number_slots/_MAX_COND_PER_LINE)
   local left = self.pos.x - self:getWidth()/2
-  local division = self:getWidth()/(number_slots + 1)
-
+  local division = self:getWidth()/(math.min(number_slots,_MAX_COND_PER_LINE) + 1)
   --[[
     This magic number compensates for the charge counter slightly leaving
     the condition widget, so that visually they all look more centralized in the
     condition dock
   ]]
-  local cond_fix = 20
-
+  local cond_fix = 18
   local cond_w = VIEWDEFS.CARD_W * VIEWDEFS.CARD_COND_SCALE_X + cond_fix
-  return vec2(left + i * division - cond_w/2, self.pos.y - _HEIGHT)
+  local cond_level = levels - math.ceil(i/_MAX_COND_PER_LINE) + 1
+  local y = self.pos.y - _HEIGHT*cond_level - _MH*(cond_level-1)
+
+  return vec2(left + ((i-1)%(_MAX_COND_PER_LINE) + 1) * division - cond_w/2, y)
 end
 
 function ConditionDock:getAvailableSlotPosition()
@@ -102,9 +106,12 @@ function ConditionDock:drawFG()
   local g = love.graphics
   local width = self:getWidth()
   local left, right = -width/2, width/2
-  local top, bottom = -_HEIGHT/2, _HEIGHT/2
-  local shape = { left, bottom, left, 0, left + _MW, top, right - _MW, top,
-                  right, 0, right, bottom }
+  local bottom = _HEIGHT/2
+  local levels = math.ceil(self:getConditionsCount()/_MAX_COND_PER_LINE)
+  local top = bottom -_HEIGHT*levels - _MH *(levels - 1)
+  local shape = { left, bottom, left, top + _HEIGHT/2, left + _MW, top, right - _MW, top,
+                  right, top + _HEIGHT/2, right, bottom }
+
   g.setColor(COLORS.DARK)
   g.polygon('fill', shape)
 end
