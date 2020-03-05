@@ -11,8 +11,8 @@
   },
   "attr":"NONE",
   "cost":1,
+  "icon":"card-vial-of-essence",
   "name":"Vial of Essence",
   "one_time":true,
-  "set":"consumables_advanced",
-  "icon":false
+  "set":"consumables_advanced"
 }
