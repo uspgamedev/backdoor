@@ -7,7 +7,7 @@
   "set":"support_advanced",
   "type-description":"",
   "widget":{
-    "charges":5,
+    "charges":10,
     "operators":[{
         "attr":"COR",
         "op":"+",
