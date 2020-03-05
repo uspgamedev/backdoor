@@ -58,7 +58,7 @@ function ActionHUD:init(route)
   self.weardock:register("HUD")
 
   -- Conditions dock
-  self.conddock = ConditionDock(4*W/5 + 10)
+  self.conddock = ConditionDock(4*W/5 + 15)
   self.conddock:register("HUD_BG")
 
   self:_loadDocks()

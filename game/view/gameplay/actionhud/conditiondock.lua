@@ -7,11 +7,11 @@ local ELEMENT   = require "steaming.classes.primitives.element"
 local Class     = require "steaming.extra_libs.hump.class"
 local vec2      = require 'cpml' .vec2
 
-local _MW = 8
+local _MW = 16
 local _MH = 16
 local _PW = 2
 local _HEIGHT = 48
-local _SLOT_OFFSET = 55
+local _SLOT_OFFSET = 78
 local _MAX_COND_PER_LINE = 4
 
 local ConditionDock = Class {
@@ -27,17 +27,14 @@ function ConditionDock:init(x)
 end
 
 function ConditionDock:destroy()
-  for i = 1, self.slots do
-    local card = self.cardviews[i]
-    if card then
-      card:kill()
-    end
+  for _, card in ipairs(self.cardviews) do
+    card:kill()
   end
   ELEMENT.destroy(self)
 end
 
 function ConditionDock:getWidth()
-  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (_MAX_COND_PER_LINE - 1) * _SLOT_OFFSET
+  return 2 * (_MW+_PW) + (_MAX_COND_PER_LINE - 1) * _SLOT_OFFSET
 end
 
 function ConditionDock:getConditionsCount()
@@ -65,9 +62,10 @@ end
 function ConditionDock:getSlotPositionForIndex(i, number_slots)
   --Optional variable to simulate a different sized dock
   number_slots = number_slots or self:getConditionsCount()
+
+  local division = self:getWidth()/(math.min(number_slots, _MAX_COND_PER_LINE) + 1)
   local levels = math.ceil(number_slots/_MAX_COND_PER_LINE)
-  local left = self.pos.x - self:getWidth()/2
-  local division = self:getWidth()/(math.min(number_slots,_MAX_COND_PER_LINE) + 1)
+  local cond_level = levels - math.ceil(i/_MAX_COND_PER_LINE) + 1
   --[[
     This magic number compensates for the charge counter slightly leaving
     the condition widget, so that visually they all look more centralized in the
@@ -75,10 +73,12 @@ function ConditionDock:getSlotPositionForIndex(i, number_slots)
   ]]
   local cond_fix = 18
   local cond_w = VIEWDEFS.CARD_W * VIEWDEFS.CARD_COND_SCALE_X + cond_fix
-  local cond_level = levels - math.ceil(i/_MAX_COND_PER_LINE) + 1
+
+  local left = self.pos.x - self:getWidth()/2
   local y = self.pos.y - _HEIGHT*cond_level - _MH*(cond_level-1)
 
-  return vec2(left + ((i-1)%(_MAX_COND_PER_LINE) + 1) * division - cond_w/2, y)
+  local index_on_level = (i-1)%(_MAX_COND_PER_LINE) + 1
+  return vec2(left + index_on_level * division - cond_w/2, y)
 end
 
 function ConditionDock:getAvailableSlotPosition()
