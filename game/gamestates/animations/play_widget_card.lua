@@ -31,6 +31,8 @@ function ANIM:script(route, view, report)
 
     if dock:getCardMode() == 'cond' then
         dock:updateConditionsPositions(dock:getConditionsCount() + 1)
+    elseif dock:getCardMode() == 'equip' then
+      dock:updateDockPosition(true)
     end
 
     cardview:addTimer("slide", MAIN_TIMER, "tween", .6, cardview,
