@@ -22,8 +22,8 @@
   },
   "attr":"NONE",
   "cost":1,
+  "icon":"card-impact-grenade",
   "name":"Impact Grenade",
   "one_time":true,
-  "set":"consumables_common",
-  "icon":false
+  "set":"consumables_common"
 }
