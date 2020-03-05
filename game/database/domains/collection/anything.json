@@ -1,19 +1,28 @@
 {
   "cards":[{
       "drop":50,
-      "set":"sage"
-    },{
-      "drop":50,
-      "set":"brawler"
-    },{
-      "drop":50,
-      "set":"gadgeteer"
+      "set":"armor"
     },{
       "drop":50,
       "set":"consumables"
     },{
       "drop":50,
-      "set":"consumables"
+      "set":"control"
+    },{
+      "drop":50,
+      "set":"maneuver"
+    },{
+      "drop":50,
+      "set":"ranged"
+    },{
+      "drop":50,
+      "set":"strikes"
+    },{
+      "drop":50,
+      "set":"support"
+    },{
+      "drop":50,
+      "set":"weapon"
     }],
   "description":"",
   "image":"card-upgrade",
