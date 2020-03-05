@@ -31,8 +31,8 @@
       }]
   },
   "encounters":{
-    "max":8,
-    "min":4,
+    "max":16,
+    "min":12,
     "recipes":[{
         "actorspec":"dumb",
         "bodyspec":"slime",
