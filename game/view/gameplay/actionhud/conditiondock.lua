@@ -10,11 +10,17 @@ local vec2      = require 'cpml' .vec2
 local _MW = 16
 local _PW = 2
 local _HEIGHT = 48
-local _SLOT_OFFSET = 55
+local _SLOT_OFFSET = 165
 
 local ConditionDock = Class {
   __includes = {ELEMENT}
 }
+
+function ConditionDock:init(x)
+  local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  self.cardviews = {}
+  self.pos = vec2(x, h - _HEIGHT/2)
+end
 
 function ConditionDock:destroy()
   for i = 1, self.slots do
@@ -27,25 +33,11 @@ function ConditionDock:destroy()
 end
 
 function ConditionDock:getWidth()
-  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + (self.slots - 1) * _SLOT_OFFSET
-end
-
-function ConditionDock:init(x, slots)
-  local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.slots = slots
-  self.cardviews = {}
-  for i = 1, self.slots do
-    self.cardviews[i] = false
-  end
-  self.pos = vec2(x, h - _HEIGHT/2)
+  return 2 * (_MW+_PW) + VIEWDEFS.CARD_W + _SLOT_OFFSET
 end
 
 function ConditionDock:getConditionsCount()
   return #self.cardviews
-end
-
-function ConditionDock:getSlots()
-  return self.slots
 end
 
 function ConditionDock:getCardMode() -- luacheck: no self
@@ -53,14 +45,7 @@ function ConditionDock:getCardMode() -- luacheck: no self
 end
 
 function ConditionDock:addCard(cardview)
-  for i = 1, self.slots do
-    if not self.cardviews[i] then
-      self.cardviews[i] = cardview
-      return
-    end
-  end
-  --FIXME treat this properly in the future
-  error("Not enough space for new condition")
+  table.insert(self.cardviews, cardview)
 end
 
 function ConditionDock:getCard(slot_index)
@@ -68,24 +53,41 @@ function ConditionDock:getCard(slot_index)
 end
 
 function ConditionDock:removeCard(slot_index)
-  local cardview = self.cardviews[slot_index]
-  self.cardviews[slot_index] = false
+  local cardview = table.remove(self.cardviews, slot_index)
+  self:updateConditionsPositions()
   return cardview
 end
 
-function ConditionDock:getSlotPositionForIndex(i)
-  local left = self.pos.x - self:getWidth()/2 + _MW + _PW
-  return vec2(left + (i - 1) * _SLOT_OFFSET, self.pos.y - _HEIGHT)
+function ConditionDock:getSlotPositionForIndex(i, number_slots)
+  --Optional variable to simulate a different sized dock
+  number_slots = number_slots or self:getConditionsCount()
+  local left = self.pos.x - self:getWidth()/2
+  local division = self:getWidth()/(number_slots + 1)
+
+  --[[
+    This magic number compensates for the charge counter slightly leaving
+    the condition widget, so that visually they all look more centralized in the
+    condition dock
+  ]]
+  local cond_fix = 20
+
+  local cond_w = VIEWDEFS.CARD_W * VIEWDEFS.CARD_COND_SCALE_X + cond_fix
+  return vec2(left + i * division - cond_w/2, self.pos.y - _HEIGHT)
 end
 
-function ConditionDock:getSlotPosition()
-  for i = 1, self.slots do
-    if not self.cardviews[i] then
-      return self:getSlotPositionForIndex(i)
-    end
+function ConditionDock:getAvailableSlotPosition()
+  local count = self:getConditionsCount()
+    return self:getSlotPositionForIndex(count + 1, count + 1)
+end
+
+function ConditionDock:updateConditionsPositions(number_slots)
+  number_slots = number_slots or self:getConditionsCount()
+  for i, cond in ipairs(self.cardviews) do
+    cond:removeTimer("update_cond_pos", MAIN_TIMER)
+    cond:addTimer("update_cond_pos", MAIN_TIMER, "tween", .1, cond,
+                  {position = self:getSlotPositionForIndex(i, number_slots)},
+                  'out-cubic')
   end
-  --FIXME treat this properly in the future
-  error("Not enough space for new condition")
 end
 
 function ConditionDock:draw()

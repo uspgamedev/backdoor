@@ -55,7 +55,7 @@ function EquipmentDock:removeCard()
 end
 
 --Where to "insert" card
-function EquipmentDock:getSlotPosition()
+function EquipmentDock:getAvailableSlotPosition()
   return vec2(self.pos.x - self.getWidth()/2 + _MW + _PW,
               self.pos.y - VIEWDEFS.CARD_H/2 - _HEIGHT/2)
 end
