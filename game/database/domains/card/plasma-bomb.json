@@ -22,8 +22,8 @@
   },
   "attr":"NONE",
   "cost":1,
+  "icon":"card-plasma-bomb",
   "name":"Plasma Bomb",
   "one_time":true,
-  "set":"consumables_expert",
-  "icon":false
+  "set":"consumables_expert"
 }
