@@ -1,0 +1,41 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "base":7,
+          "mod":30,
+          "name":"damage_on_target",
+          "sfx":"attack-hit",
+          "target":"=body",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
+          "max-range":1,
+          "name":"choose_target",
+          "output":"pos",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"body",
+          "pos":"=pos",
+          "type":"operator"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        }]
+    }
+  },
+  "attr":"COR",
+  "cost":3,
+  "icon":"card-lead-pipe",
+  "name":"Lead Pipe Strike",
+  "temporary":true,
+  "set":false
+}
