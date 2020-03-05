@@ -76,7 +76,7 @@ function FocusBar:hide()
 end
 
 function FocusBar:update(dt)
-  local _OFF_SPD = 2
+  local _OFF_SPD = 2.5
   self.actor = self.route.getControlledActor()
   --update emergency effect
   self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
@@ -153,4 +153,3 @@ function FocusBar:draw()
 end
 
 return FocusBar
-

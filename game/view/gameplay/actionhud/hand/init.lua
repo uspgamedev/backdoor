@@ -17,6 +17,8 @@ local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
+local _BACKPANEL_OFFSET = 140
+local _BACKPANEL_OFFSET_SPEED = 600
 local _BACKPANEL_MARGIN = 20
 local _BACKPANEL_WIDTH = 512
 local _BACKPANEL_HEIGHT = 64
@@ -55,6 +57,8 @@ function HandView:init(route)
   self.alpha = 1
   self.hiding = false
   self.keep_focused_card = false
+
+  self.backpanel_off = 0
 
   self:reset()
 
@@ -117,6 +121,8 @@ function HandView:show()
 end
 
 function HandView:update(dt)
+  self:updateBackpanel(dt)
+
   for i,card in ipairs(self.hand) do
     card:update(dt)
     card:setFocus(i == self.focus_index)
@@ -148,7 +154,7 @@ function HandView:draw()
   -- draw back panel
   g.setColor(COLORS.DARK)
   g.push()
-  g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2)
+  g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2 + self.backpanel_off)
   g.polygon('fill', _BACKPANEL_VTX)
   g.pop()
 
@@ -191,6 +197,15 @@ function HandView:reset()
     end
   end
 
+end
+
+function HandView:updateBackpanel(dt)
+  if self:cardCount() > 0 then
+    self.backpanel_off = math.max(self.backpanel_off - _BACKPANEL_OFFSET_SPEED*dt, 0)
+  else
+    self.backpanel_off = math.min(self.backpanel_off + _BACKPANEL_OFFSET_SPEED*dt,
+    _BACKPANEL_OFFSET)
+  end
 end
 
 return HandView
