@@ -7,7 +7,7 @@ local ELEMENT   = require "steaming.classes.primitives.element"
 local Class     = require "steaming.extra_libs.hump.class"
 local vec2      = require 'cpml' .vec2
 
-local _MW = 10
+local _MW = 8
 local _MH = 16
 local _PW = 2
 local _HEIGHT = 48
@@ -19,9 +19,11 @@ local ConditionDock = Class {
 }
 
 function ConditionDock:init(x)
+  ELEMENT.init(self)
   local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.cardviews = {}
   self.pos = vec2(x, h - _HEIGHT/2)
+  self.top = _HEIGHT/2
 end
 
 function ConditionDock:destroy()
@@ -86,12 +88,22 @@ end
 
 function ConditionDock:updateConditionsPositions(number_slots)
   number_slots = number_slots or self:getConditionsCount()
+
+  --Update dock background
+  local levels = math.ceil(number_slots/_MAX_COND_PER_LINE)
+  self:removeTimer("update_top_pos", MAIN_TIMER)
+  self:addTimer("update_top_pos", MAIN_TIMER, "tween", .1, self,
+                {top = _HEIGHT/2 -_HEIGHT*levels - _MH *(levels - 1)},
+                'in-out-quad')
+
+  --Update conditions
   for i, cond in ipairs(self.cardviews) do
     cond:removeTimer("update_cond_pos", MAIN_TIMER)
-    cond:addTimer("update_cond_pos", MAIN_TIMER, "tween", .1, cond,
+    cond:addTimer("update_cond_pos", MAIN_TIMER, "tween", .15, cond,
                   {position = self:getSlotPositionForIndex(i, number_slots)},
                   'out-cubic')
   end
+
 end
 
 function ConditionDock:draw()
@@ -107,8 +119,7 @@ function ConditionDock:drawFG()
   local width = self:getWidth()
   local left, right = -width/2, width/2
   local bottom = _HEIGHT/2
-  local levels = math.ceil(self:getConditionsCount()/_MAX_COND_PER_LINE)
-  local top = bottom -_HEIGHT*levels - _MH *(levels - 1)
+  local top = self.top
   local shape = { left, bottom, left, top + _HEIGHT/2, left + _MW, top, right - _MW, top,
                   right, top + _HEIGHT/2, right, bottom }
 
