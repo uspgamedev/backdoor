@@ -58,7 +58,7 @@ function ActionHUD:init(route)
   self.weardock:register("HUD")
 
   -- Conditions dock
-  self.conddock = ConditionDock(4*W/5, 4)
+  self.conddock = ConditionDock(4*W/5 + 15)
   self.conddock:register("HUD_BG")
 
   self:_loadDocks()
@@ -98,7 +98,7 @@ function ActionHUD:_loadDocks()
   for _, widget in player:getBody():eachWidget() do
     local cardview = CardView(widget)
     local dock = self:getDockFor(widget)
-    local pos = dock:getSlotPosition()
+    local pos = dock:getAvailableSlotPosition()
     local mode = dock:getCardMode()
     cardview:register('HUD_FX')
     cardview:setMode(mode)
@@ -200,7 +200,7 @@ function ActionHUD:getWidgetCard(card)
      self.wielddock:getCard().card == card then
       return self.wielddock:getCard()
   end
-  for i = 1, self.conddock:getSlots() do
+  for i = 1, self.conddock:getConditionsCount() do
     local condition = self.conddock:getCard(i)
     if condition and
        condition.card == card then

@@ -1,6 +1,7 @@
 
 -- luacheck: globals love
 
+local VIEWDEFS  = require 'view.definitions'
 local TEXTURE     = require 'view.helpers.texture'
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
@@ -69,15 +70,15 @@ function CardView:init(card)
 end
 
 function CardView:getWidth()
-  return self.sprite:getWidth()
+  return self.sprite:getWidth() * self.mode_scale.x
 end
 
 function CardView:getHeight()
-  return self.sprite:getHeight()
+  return self.sprite:getHeight() * self.mode_scale.y
 end
 
 function CardView:getDimensions()
-  return self.sprite:getDimensions()
+  return self:getWidth(), self:getHeight()
 end
 
 function CardView:setFocus(flag)
@@ -152,8 +153,10 @@ function CardView:update(dt)
     self.icon_offset.x = math.max(self.icon_offset.x - _icon_offset_speed*dt, -5)
     self.icon_offset.y = math.max(self.icon_offset.y - _icon_offset_speed*dt, -23)
     self.info_alpha = math.max(self.info_alpha - _info_alpha_speed*dt, 0)
-    self.mode_scale.x = math.max(self.mode_scale.x - _mode_scale_speed*dt, .64)
-    self.mode_scale.y = math.max(self.mode_scale.y - _mode_scale_speed*dt, .40)
+    self.mode_scale.x = math.max(self.mode_scale.x - _mode_scale_speed*dt,
+                                 VIEWDEFS.CARD_COND_SCALE_X)
+    self.mode_scale.y = math.max(self.mode_scale.y - _mode_scale_speed*dt,
+                                 VIEWDEFS.CARD_COND_SCALE_Y)
     self.charge_offset.x = math.min(self.charge_offset.x + _charge_offset_speed*dt, 10)
     self.charge_offset.y = math.min(self.charge_offset.y + _charge_offset_speed*dt, 10)
   else

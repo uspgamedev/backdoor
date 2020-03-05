@@ -24,10 +24,17 @@ function ANIM:script(route, view, report)
     if deferred then self.wait(deferred) end
     ann:announce(cardview.card:getName())
     local dock = view.action_hud:getDockFor(cardview.card)
-    local destination = dock:getSlotPosition()
+    local destination = dock:getAvailableSlotPosition()
     local mode = dock:getCardMode()
 
     local offset = vec2(0, -2*VIEWDEFS.CARD_H)
+
+    if dock:getCardMode() == 'cond' then
+        dock:updateConditionsPositions(dock:getConditionsCount() + 1)
+    elseif dock:getCardMode() == 'equip' then
+      dock:updateDockPosition(true)
+    end
+
     cardview:addTimer("slide", MAIN_TIMER, "tween", .6, cardview,
                       {position = destination + offset}, 'out-cubic',
       function()
