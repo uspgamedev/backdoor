@@ -92,16 +92,22 @@ function ConditionDock:updateConditionsPositions(number_slots)
   --Update dock background
   local levels = math.ceil(number_slots/_MAX_COND_PER_LINE)
   self:removeTimer("update_top_pos", MAIN_TIMER)
-  self:addTimer("update_top_pos", MAIN_TIMER, "tween", .1, self,
+  self:addTimer("update_top_pos", MAIN_TIMER, "tween", .25, self,
                 {top = _HEIGHT/2 -_HEIGHT*levels - _MH *(levels - 1)},
-                'in-out-quad')
+                'in-out-back')
 
   --Update conditions
   for i, cond in ipairs(self.cardviews) do
     cond:removeTimer("update_cond_pos", MAIN_TIMER)
-    cond:addTimer("update_cond_pos", MAIN_TIMER, "tween", .15, cond,
-                  {position = self:getSlotPositionForIndex(i, number_slots)},
-                  'out-cubic')
+    cond:removeTimer("update_cond_pos_delay", MAIN_TIMER)
+
+    cond:addTimer("update_cond_pos_delay", MAIN_TIMER, "after", .045*i,
+      function()
+        cond:addTimer("update_cond_pos", MAIN_TIMER, "tween", .2, cond,
+                      {position = self:getSlotPositionForIndex(i, number_slots)},
+                      'out-back')
+      end
+    )
   end
 
 end
