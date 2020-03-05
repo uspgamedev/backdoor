@@ -209,14 +209,15 @@ function Card:getEffect()
     else
       effect = effect .. "Condition"
     end
-    effect = effect .. (" (%d focus)\n\n"):format(self:getCost())
+    effect = effect .. (" (%d focus"):format(self:getCost())
     local charges = self:getWidgetCharges() if charges > 0 then
       local trigger = self:getWidgetTrigger()
-      effect = effect .. ("%d charges%s"):format(
+      effect = effect .. (", %d charges%s"):format(
         charges,
         trigger and "/" .. trigger or ""
       )
     end
+    effect = effect .. ")"
     local auto = self:getWidgetTriggeredAbility() if auto then
       local ability, trigger = auto.ability, auto.trigger
       effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
@@ -234,11 +235,16 @@ function Card:getEffect()
     local equip = self:getSpec('widget').equipment
     if equip and equip.active then
       effect = effect .. "\n"
+      local count = {}
       for _, action in ipairs(equip.active.cards) do
         local spec = DB.loadSpec('card', action.card)
-        effect = effect .. ("\n%s: "):format(spec.name)
+        count[spec] = (count[spec] or 0) + 1
+      end
+      for spec, n in pairs(count) do
+        effect = effect .. ("\n%dx %s: "):format(n, spec.name)
                         .. ABILITY.preview(spec.art.art_ability,
                                            self:getOwner(), inputs)
+                        .. "\n"
       end
     --  local ability, cost = activation.ability, activation.cost
     --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
