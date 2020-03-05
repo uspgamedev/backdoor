@@ -3,22 +3,18 @@
     "art_ability":{
       "effects":[{
           "attr":"=cor",
-          "base":0,
-          "mod":100,
+          "base":12,
+          "mod":50,
           "name":"damage_on_target",
           "target":"=target",
           "type":"effect",
           "sfx":false
         },{
-          "name":"self",
-          "output":"self",
-          "type":"operator"
-        },{
           "name":"lose_life",
-          "percentage":25,
-          "target":"=self",
-          "type":"effect",
-          "stay_alive":false
+          "percentage":40,
+          "stay_alive":true,
+          "target":"=self-body",
+          "type":"effect"
         }],
       "inputs":[{
           "aoe-hint":0,
@@ -41,16 +37,25 @@
           "output":"target",
           "pos":"=pos",
           "type":"operator"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self-body",
+          "type":"operator"
         }]
     }
   },
   "attr":"COR",
   "cost":3,
-  "desc":"They say 'no pain, no gain'. I'll give them what they want.",
-  "icon":"card-dropkick",
-  "name":"Unreserved Punch",
+  "desc":"They say 'no pain, no gain'.\nI'll give them what they want.",
+  "icon":"card-reckless-smash",
+  "name":"Reckless Smash",
   "pp":0,
+  "set":"strikes_advanced",
   "type-description":"",
-  "set":false,
   "one_time":false
 }
