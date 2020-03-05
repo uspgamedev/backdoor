@@ -23,8 +23,9 @@
   },
   "attr":"NONE",
   "cost":1,
-  "icon":"card-potion",
+  "icon":"card-greater-potion",
   "name":"Greater Healing Potion",
   "one_time":true,
-  "set":"consumables_advanced"
+  "set":"consumables_advanced",
+  "temporary":true
 }
