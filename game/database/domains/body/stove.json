@@ -3,10 +3,10 @@
   "description":"",
   "drops":[{
       "droprate":50,
-      "droptype":"pack"
+      "droptype":"stove-pack"
     },{
       "droprate":50,
-      "droptype":"pack"
+      "droptype":"stove-pack"
     },{
       "droprate":50,
       "droptype":"food"
