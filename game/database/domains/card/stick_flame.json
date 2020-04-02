@@ -9,7 +9,10 @@
         }],
       "inputs":[{
           "aoe-hint":1,
-          "body-only":[],
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
           "max-range":4,
           "name":"choose_target",
           "output":"target_pos",

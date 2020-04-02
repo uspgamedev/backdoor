@@ -10,7 +10,7 @@
       "ability":{
         "effects":[{
             "attr":"=ARC",
-            "base":0,
+            "base":1,
             "mod":100,
             "name":"damage_on_target",
             "target":"=body_self",
@@ -28,12 +28,12 @@
             "which":"ARC"
           }]
       },
-      "trigger":"on_cycle"
+      "trigger":"on_done"
     },
-    "charges":8,
+    "charges":4,
     "operators":[],
     "status-tags":[],
-    "trigger":"on_cycle",
+    "trigger":"on_turn",
     "activation":false,
     "equipment":false
   },
