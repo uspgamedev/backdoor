@@ -10,10 +10,10 @@
           "vfx-spd":1
         },{
           "attr":"=cor",
-          "base":0,
+          "base":4,
           "center":"=pos",
           "ignore_owner":true,
-          "mod":100,
+          "mod":50,
           "name":"damage_on_area",
           "size":2,
           "type":"effect"
