@@ -19,8 +19,8 @@
           "name":"choose_target",
           "output":"target_pos",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "name":"self",
@@ -44,7 +44,7 @@
           "type":"operator"
         },{
           "dir":"=dir",
-          "maxrange":5,
+          "maxrange":3,
           "name":"hitscan",
           "output":"push_pos",
           "pos":"=target_pos",
@@ -60,7 +60,7 @@
   "attr":"COR",
   "cost":1,
   "desc":"Outta my way!",
-  "icon":"card-jump",
+  "icon":"card-push",
   "name":"Push",
   "set":"control_common",
   "type-description":"",

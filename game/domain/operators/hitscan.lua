@@ -13,6 +13,11 @@ OP.schema = {
 
 OP.type = 'pos'
 
+function OP.preview(_, fieldvalues)
+  local range = fieldvalues['maxrange']
+  return ("%d tiles away"):format(range)
+end
+
 function OP.process(actor, fieldvalues)
   local sector = actor:getBody():getSector()
   local pos = {}
