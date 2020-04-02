@@ -1,0 +1,20 @@
+{
+  "attr":"NONE",
+  "cost":3,
+  "icon":"card-plated-shield",
+  "name":"Plated Shield",
+  "set":"armor_expert",
+  "widget":{
+    "charges":30,
+    "equipment":{
+      "defensive":true
+    },
+    "operators":[{
+        "attr":"SPD",
+        "op":"-",
+        "val":3
+      }],
+    "status-tags":[],
+    "trigger":false
+  }
+}
