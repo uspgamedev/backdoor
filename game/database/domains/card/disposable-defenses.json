@@ -1,0 +1,17 @@
+{
+  "attr":"NONE",
+  "cost":3,
+  "icon":"card-disposable-defenses",
+  "name":"Disposable Defenses",
+  "one_time":true,
+  "set":"armor_advanced",
+  "widget":{
+    "charges":30,
+    "equipment":{
+      "defensive":true
+    },
+    "operators":[],
+    "status-tags":[],
+    "trigger":false
+  }
+}
