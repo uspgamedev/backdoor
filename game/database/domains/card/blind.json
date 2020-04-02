@@ -6,7 +6,7 @@
   "one_time":true,
   "type-description":"",
   "widget":{
-    "charges":4,
+    "charges":6,
     "operators":[{
         "attr":"FOV",
         "op":"-",
