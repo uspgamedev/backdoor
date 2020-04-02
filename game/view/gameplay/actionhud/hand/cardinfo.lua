@@ -43,7 +43,7 @@ function CardInfo:init(route)
   --Oscilating effect
   self.oscilate = 0
   self.oscilate_magnitude = 4
-  self.oscilate_speed = 6
+  self.oscilate_speed = 4
 
 end
 
@@ -97,7 +97,7 @@ function CardInfo:draw()
   g.push()
   g.translate(self.position:unpack())
   local offset = math.sin(self.oscilate)*self.oscilate_magnitude
-  g.translate(0, offset)
+  g.translate(0, math.floor(offset+.5))
 
   local boxw = _WIDTH
   local boxh = _HEIGHT
