@@ -13,7 +13,8 @@
       "inputs":[{
           "aoe-hint":0,
           "empty-tile":true,
-          "max-range":7,
+          "has-floor":true,
+          "max-range":6,
           "name":"choose_target",
           "non-wall":true,
           "output":"target_pos",
