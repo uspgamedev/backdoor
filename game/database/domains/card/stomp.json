@@ -3,17 +3,17 @@
     "art_ability":{
       "effects":[{
           "card":"stunned",
-          "center":"=self_pos",
+          "center":"=pos",
           "ignore_owner":true,
           "name":"place_widget_on_area",
           "size":3,
           "type":"effect"
         },{
           "attr":"=ani",
-          "base":0,
-          "center":"=self_pos",
+          "base":4,
+          "center":"=pos",
           "ignore_owner":true,
-          "mod":100,
+          "mod":20,
           "name":"damage_on_area",
           "size":3,
           "type":"effect"
@@ -35,9 +35,18 @@
           "type":"operator",
           "which":"ANI"
         },{
-          "name":"get_body_at",
-          "output":"body",
-          "pos":"=self_pos",
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "type":"operator"
+        },{
+          "body":"=self_body",
+          "name":"get_body_pos",
+          "output":"pos",
           "type":"operator"
         }]
     }
