@@ -7,10 +7,11 @@
           "pos":"=target_pos",
           "type":"effect",
           "vfx":"SLIDE",
-          "vfx-spd":1
+          "vfx-spd":1,
+          "sfx":false
         },{
           "attr":"=cor",
-          "base":0,
+          "base":1,
           "center":"=damage_pos",
           "mod":100,
           "name":"damage_on_area",
@@ -22,6 +23,7 @@
           "body-block":true,
           "name":"choose_dir",
           "output":"dir",
+          "reach":6,
           "type":"input"
         },{
           "name":"self",
