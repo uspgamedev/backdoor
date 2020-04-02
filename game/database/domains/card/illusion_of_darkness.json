@@ -8,7 +8,10 @@
           "type":"effect"
         }],
       "inputs":[{
-          "body-only":[],
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
           "max-range":6,
           "name":"choose_target",
           "output":"target_pos",
