@@ -1,0 +1,16 @@
+{
+  "attr":"NONE",
+  "cost":3,
+  "icon":"card-hide-vest",
+  "name":"Hide Vest",
+  "set":"armor_common",
+  "widget":{
+    "charges":10,
+    "equipment":{
+      "defensive":true
+    },
+    "operators":[],
+    "status-tags":[],
+    "trigger":false
+  }
+}
