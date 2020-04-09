@@ -32,7 +32,6 @@ local PROFILE  = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
 local INPUT    = require 'input'
 local DB       = require 'database'
-local GUI
 
 local SOUNDTRACK
 
@@ -48,12 +47,6 @@ HERE IS WHERE YOU DID IT, MORTAL:
 ------------------
 
 function love.load(arg)
-
-  DEVELOPMENT = false
-
-  if DEVELOPMENT then
-    GUI = require 'devmode.gui'
-  end
 
   Setup.config() --Configure your game
 
@@ -78,9 +71,10 @@ function love.load(arg)
 
   require 'tests'
 
-  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
+  SWITCHER.start(GS.START_MENU) --Jump to the initial state
 
-  if DEVELOPMENT and GUI then
+  if RUNFLAGS.DEVELOPMENT then
+    local GUI = require 'devmode.gui'
     GUI():register("GUI", nil, 'devmode-gui')
   end
 
@@ -95,7 +89,8 @@ function love.update(dt)
   MAIN_TIMER:update(dt)
   if INPUT.wasActionReleased('QUIT') then
     love.event.quit()
-  elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG and DEVELOPMENT then
+  elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG
+                                           and RUNFLAGS.DEVELOPMENT then
     DEBUG = true
     local current = SWITCHER.current()
     if current.devmode then current:devmode() end
@@ -114,7 +109,7 @@ function love.draw()
 end
 
 function love.quit()
-  if DEVELOPMENT then
+  if RUNFLAGS.DEVELOPMENT then
     Util.findId('devmode-gui'):destroy()
     imgui.ShutDown();
   end

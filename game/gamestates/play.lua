@@ -2,8 +2,9 @@
 
 -- luacheck: globals SWITCHER GS MAIN_TIMER, no self
 
-local PROFILE     = require 'infra.profile'
 local PLAYSFX     = require 'helpers.playsfx'
+local PROFILE     = require 'infra.profile'
+local RUNFLAGS    = require 'infra.runflags'
 
 local GameplayView = require 'view.gameplay'
 local Route       = require 'domain.route'
@@ -73,7 +74,7 @@ local function _initFrontend()
   _view:setup(_route)
 
   -- GUI
-  if DEVELOPMENT then
+  if RUNFLAGS.DEVELOPMENT then
     local gui = Util.findId('devmode-gui')
     gui.sector_view = _view.sector
   end
@@ -155,7 +156,7 @@ function state:leave()
   _saveRoute()
   _route.destroyAll()
   _view:destroy()
-  if DEVELOPMENT then
+  if RUNFLAGS.DEVELOPMENT then
     Util.findId('devmode-gui').sector_view = nil
   end
   _soundtrack:clearTheme()
