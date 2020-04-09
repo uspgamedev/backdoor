@@ -11,7 +11,7 @@ DEPLOY_URL=$(DEPLOY_SITE)/$(DEPLOY_PATH)
 BIN_DIR_WIN32=$(BIN_DIR)/win32
 BIN_DIR_WIN32_PACKAGE=$(BIN_DIR_WIN32)/backdoor
 BIN_DIR_WIN32_DEPS=$(BIN_DIR_WIN32)/deps
-LOVE_WIN32=$(BIN_DIR_WIN32_DEPS)/love-11.1-win32.zip
+LOVE_WIN32=$(BIN_DIR_WIN32_DEPS)/love-11.3-win32.zip
 GAME_WIN32=$(BIN_DIR_WIN32)/backdoor-win32.zip
 
 BIN_DIR_LINUX64=$(BIN_DIR)/linux64
@@ -162,7 +162,7 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 
 $(LOVE_WIN32): $(GAME)
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
-	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip
+	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.3-win32.zip
 
 $(IMGUI_DLL):
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
@@ -174,7 +174,7 @@ $(LUAJIT_DLL):
 
 $(GAME_WIN32): $(GAME) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32)
 	unzip $(LOVE_WIN32) -d $(BIN_DIR_WIN32)
-	mv $(BIN_DIR_WIN32)/love-11.1.0-win32 $(BIN_DIR_WIN32_PACKAGE)
+	mv $(BIN_DIR_WIN32)/love-11.3-win32 $(BIN_DIR_WIN32_PACKAGE)
 	cp $(IMGUI_DLL) $(LUAJIT_DLL) $(BIN_DIR_WIN32_PACKAGE)
 	cat $(BIN_DIR_WIN32_PACKAGE)/love.exe $(GAME) > $(BIN_DIR_WIN32_PACKAGE)/backdoor.exe
 	rm $(BIN_DIR_WIN32_PACKAGE)/love.exe $(BIN_DIR_WIN32_PACKAGE)/lovec.exe
