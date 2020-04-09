@@ -68,7 +68,7 @@ BUILD_TYPE=nightly
 ## MAIN TARGETS
 
 all: $(DEPENDENCIES)
-	love game $(FLAGS)
+	love game --development $(FLAGS)
 
 update:
 	cd $(LUX_REPO); git pull
