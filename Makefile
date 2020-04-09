@@ -189,7 +189,7 @@ $(GAME_OSX_TEMPLATE):
 
 $(GAME_OSX): $(GAME) $(GAME_OSX_TEMPLATE)
 	cd $(BIN_DIR_OSX); unzip $(GAME_OSX_TEMPLATE_NAME)
-	cp $(GAME) $(GAME_OSX_APP)/Contents/Resources
+	cp $(GAME) $(IMGUI_LIB) $(GAME_OSX_APP)/Contents/Resources
 	zip -yr $(GAME_OSX) $(GAME_OSX_APP)
 	rm -rf $(GAME_OSX_TEMPLATE)
 
