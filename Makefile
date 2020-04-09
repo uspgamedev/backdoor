@@ -45,7 +45,7 @@ STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
 INPUT_LIB=$(LIBS_DIR)/input
 INPUT_REPO=externals/input
 
-IMGUI_LIB=imgui.so
+IMGUI_LIB=$(GAME_DIR)/imgui.so
 IMGUI_DLL=$(BIN_DIR_WIN32_DEPS)/imgui.dll
 LUAJIT_DLL=$(BIN_DIR_WIN32_DEPS)/lua51.dll
 IMGUI_REPO=externals/love-imgui
@@ -153,7 +153,6 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 	cd $(BIN_DIR_LINUX64_IMG); tar -xf $(GAME_LINUX64_TEMPLATE_NAME)
 	cat $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/love $(GAME) > $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
 	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
-	cp $(IMGUI_LIB) $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin
 	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/AppRun
 	cd $(BIN_DIR_LINUX64_IMG); ./$(APPIMG_TOOL_NAME) squashfs-root
 	mv $(BIN_DIR_LINUX64_IMG)/backdoor-x86_64.AppImage $(BIN_DIR_LINUX64)
@@ -190,7 +189,7 @@ $(GAME_OSX_TEMPLATE):
 
 $(GAME_OSX): $(GAME) $(GAME_OSX_TEMPLATE)
 	cd $(BIN_DIR_OSX); unzip $(GAME_OSX_TEMPLATE_NAME)
-	cp $(GAME) $(IMGUI_LIB) $(GAME_OSX_APP)/Contents/Resources
+	cp $(GAME) $(GAME_OSX_APP)/Contents/Resources
 	zip -yr $(GAME_OSX) $(GAME_OSX_APP)
 	rm -rf $(GAME_OSX_TEMPLATE)
 
