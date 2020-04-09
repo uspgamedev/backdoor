@@ -73,8 +73,10 @@ local function _initFrontend()
   _view:setup(_route)
 
   -- GUI
-  local gui = Util.findId('devmode-gui')
-  gui.sector_vew = _view.sector
+  if DEVELOPMENT then
+    local gui = Util.findId('devmode-gui')
+    gui.sector_view = _view.sector
+  end
 
 end
 
@@ -153,7 +155,9 @@ function state:leave()
   _saveRoute()
   _route.destroyAll()
   _view:destroy()
-  Util.findId('devmode-gui').sector_view = nil
+  if DEVELOPMENT then
+    Util.findId('devmode-gui').sector_view = nil
+  end
   _soundtrack:clearTheme()
   Util.destroyAll()
 
