@@ -254,7 +254,8 @@ function ActionHUD:actionRequested()
     end
   elseif INPUT.wasActionPressed('CANCEL') then
     if player_focused then
-      action_request = {DEFS.ACTION.END_FOCUS}
+      self.player_focused = false
+      return
     else
       action_request = {DEFS.ACTION.IDLE}
     end
