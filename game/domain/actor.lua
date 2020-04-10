@@ -358,6 +358,10 @@ function Actor:drawCard()
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
+  if self:createEquipmentCards() then
+    return
+  end
+
   if self:canDrawCard() then
     local card = table.remove(self.buffer, 1)
     if card == DEFS.DONE then
@@ -394,6 +398,7 @@ function Actor:createEquipmentCards()
         widget = active_eqp,
       })
     end
+    return true
   end
 end
 
