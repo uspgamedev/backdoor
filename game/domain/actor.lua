@@ -572,24 +572,28 @@ function Actor:playCard(card_index)
   return card
 end
 
+function Actor:discardCard(index)
+  local card = self:removeHandCard(index)
+  if not card:isTemporary() then
+    coroutine.yield('report', {
+      type = 'discard_card',
+      actor = self,
+      card_index = index
+    })
+    self:addCardToBackbuffer(card)
+  else
+    coroutine.yield('report', {
+      type = 'discard_temporary_card',
+      actor = self,
+      card_index = index
+    })
+  end
+end
+
 function Actor:discardHand()
   while not self:isHandEmpty() do
     local index = self:getHandSize()
-    local card = self:removeHandCard(index)
-    if not card:isTemporary() then
-      coroutine.yield('report', {
-        type = 'discard_card',
-        actor = self,
-        card_index = index
-      })
-      self:addCardToBackbuffer(card)
-    else
-      coroutine.yield('report', {
-        type = 'discard_temporary_card',
-        actor = self,
-        card_index = index
-      })
-    end
+    self:discardCard(index)
   end
 end
 

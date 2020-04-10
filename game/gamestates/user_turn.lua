@@ -205,6 +205,11 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
 end
 
+_ACTION[DEFS.ACTION.DISCARD_CARD] = function(card_index)
+  PLAYSFX 'ok-menu'
+  _useAction(DEFS.ACTION.DISCARD_CARD, { card_index = card_index })
+end
+
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   local actor = _route.getControlledActor()
   if actor:getBackBufferSize() > 0 then

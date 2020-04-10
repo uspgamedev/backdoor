@@ -259,7 +259,12 @@ function ActionHUD:actionRequested()
       action_request = {DEFS.ACTION.IDLE}
     end
   elseif INPUT.wasActionPressed('MENU') then
-    if not player_focused then
+    if player_focused then
+      local card_index = self.handview:getFocus()
+      if card_index > 0 then
+        action_request = {DEFS.ACTION.DISCARD_CARD, card_index}
+      end
+    else
       action_request = {DEFS.ACTION.RECEIVE_PACK}
     end
   elseif INPUT.wasActionPressed('PAUSE') then
