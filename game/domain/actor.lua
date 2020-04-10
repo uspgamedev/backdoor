@@ -349,27 +349,34 @@ function Actor:copyBuffer()
   return copy
 end
 
+function Actor:canDrawCard()
+  return self:getBufferSize() > 0 or self:getPP() > 0
+end
+
 --- Draw a card from actor's buffer
 function Actor:drawCard()
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
-  local card = table.remove(self.buffer, 1)
-  if card == DEFS.DONE then
-    RANDOM.shuffle(self.buffer)
-    table.insert(self.buffer, DEFS.DONE)
+  if self:canDrawCard() then
+    local card = table.remove(self.buffer, 1)
+    if card == DEFS.DONE then
+      RANDOM.shuffle(self.buffer)
+      table.insert(self.buffer, DEFS.DONE)
+      coroutine.yield('report', {
+        type = "shuffle_buffers",
+        actor = self,
+      })
+      self:spendPP(1)
+      card = table.remove(self.buffer, 1)
+    end
+    table.insert(self.hand, 1, card)
     coroutine.yield('report', {
-      type = "shuffle_buffers",
+      type = "draw_card",
       actor = self,
+      card = card
     })
-    card = table.remove(self.buffer, 1)
   end
-  table.insert(self.hand, 1, card)
-  coroutine.yield('report', {
-    type = "draw_card",
-    actor = self,
-    card = card
-  })
 end
 
 function Actor:createEquipmentCards()
@@ -598,7 +605,7 @@ function Actor:discardHand()
 end
 
 function Actor:beginTurn()
-  while self:getHandSize() < DEFS.HAND_LIMIT do
+  while self:getHandSize() < DEFS.HAND_LIMIT and self:canDrawCard() do
     self:drawCard()
   end
 end
