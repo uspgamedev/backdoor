@@ -11,7 +11,7 @@ OP.schema = {
 
 OP.type = 'dir'
 
-function OP.process(actor, fieldvalues)
+function OP.process(_, fieldvalues)
   local from = fieldvalues['from']
   local to = fieldvalues['to']
   return { to[1]-from[1], to[2]-from[2] }

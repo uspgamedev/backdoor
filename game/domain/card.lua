@@ -1,7 +1,10 @@
 
 local ABILITY     = require 'domain.ability'
 local ACTIONSDEFS = require 'domain.definitions.action'
+local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
 
 local Card = Class{
   __includes = { GameElement }
@@ -47,10 +50,6 @@ function Card:getIconTexture()
   return self:getSpec('icon')
 end
 
-function Card:getPPReward()
-  return self:getSpec('pp') or 0
-end
-
 function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
@@ -67,6 +66,14 @@ function Card:isOneTimeOnly()
   return self:getSpec('one_time')
 end
 
+function Card:isTemporary()
+  return self:getSpec('temporary')
+end
+
+function Card:getCost()
+  return self:getSpec('cost')
+end
+
 function Card:isArt()
   return not not self:getSpec('art')
 end
@@ -81,13 +88,13 @@ function Card:getType()
   end
 end
 
+--[[ Art methods ]]--
+
 function Card:getArtAbility()
   return self:getSpec('art').art_ability
 end
 
-function Card:getArtCost()
-  return self:getSpec('art').cost
-end
+--[[ Widget methods ]]--
 
 function Card:getWidgetTrigger()
   return self:getSpec('widget')['trigger']
@@ -111,26 +118,15 @@ function Card:hasStatusTag(tag)
   return false
 end
 
-function Card:getWidgetActivation()
-  return self:getSpec('widget')['activation']
-end
-
 function Card:getWidgetTriggeredAbility()
   return self:getSpec('widget')['auto_activation']
 end
 
-function Card:getWidgetAbility()
-  local activation = self:getWidgetActivation()
-  return activation and activation.ability
-end
-
-function Card:getWidgetActivationCost()
-  local activation = self:getWidgetActivation()
-  return activation and activation.cost
-end
-
 function Card:getWidgetPlacement()
-  return self:getSpec('widget').placement
+  local equipspec = self:getSpec('widget').equipment
+  return equipspec
+     and ((equipspec.active and 'wieldable')
+       or (equipspec.defensive and 'wearable'))
 end
 
 function Card:getWidgetCharges()
@@ -153,9 +149,29 @@ function Card:getUsages()
   return self.usages
 end
 
+function Card:getCurrentWidgetCharges()
+  return self:getWidgetCharges() - self:getUsages()
+end
+
 function Card:isSpent()
   local max = self:getWidgetCharges()
   return max > 0 and self:getUsages() >= max
+end
+
+function Card:isEquipment()
+  return self:getSpec('widget').equipment
+end
+
+function Card:getActiveEquipmentCardCount()
+  return #self:getSpec('widget').equipment.active.cards
+end
+
+function Card:eachActiveEquipmentCards()
+  return ipairs(self:getSpec('widget').equipment.active.cards)
+end
+
+function Card:getEquipmentDefense()
+  return self:getSpec('widget').equipment.defensive.defense
 end
 
 function Card:resetTicks()
@@ -171,26 +187,37 @@ function Card:tick()
   return false
 end
 
+local _EPQ_TYPENAMES = {
+  wieldable = "Weapon",
+  wearable = "Armor",
+}
+
 function Card:getEffect()
-  local effect
+  local effect = ""
   local inputs = { self = self:getOwner() }
+  if self:isTemporary() then
+    effect = effect .. "Temporary "
+  elseif self:isOneTimeOnly() then
+    effect = effect .. "Single-Use "
+  end
   if self:isArt() then
-    effect = ("Art [%d exhaustion]\n\n"):format(self:getArtCost())
-          .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
+    effect = effect .. ("Art (%d focus)\n\n"):format(self:getCost())
+                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
   elseif self:isWidget() then
-    effect = "Widget"
     local place = self:getWidgetPlacement() if place then
-      effect = effect .. " [" .. place .. "]"
+      effect = effect .. _EPQ_TYPENAMES[place]
+    else
+      effect = effect .. "Condition"
     end
+    effect = effect .. (" (%d focus"):format(self:getCost())
     local charges = self:getWidgetCharges() if charges > 0 then
       local trigger = self:getWidgetTrigger()
-      effect = effect .. (" [%d/%s charges]"):format(charges, trigger)
+      effect = effect .. (", %d charges%s"):format(
+        charges,
+        trigger and "/" .. trigger or ""
+      )
     end
-    local activation = self:getWidgetActivation() if activation then
-      local ability, cost = activation.ability, activation.cost
-      effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
-                      .. ABILITY.preview(ability, self:getOwner(), inputs)
-    end
+    effect = effect .. ")"
     local auto = self:getWidgetTriggeredAbility() if auto then
       local ability, trigger = auto.ability, auto.trigger
       effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
@@ -204,9 +231,26 @@ function Card:getEffect()
     if n > 0 then
       effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
     end
+    -- TODO: describe created cards
+    local equip = self:getSpec('widget').equipment
+    if equip and equip.active then
+      effect = effect .. "\n"
+      local count = {}
+      for _, action in ipairs(equip.active.cards) do
+        local spec = DB.loadSpec('card', action.card)
+        count[spec] = (count[spec] or 0) + 1
+      end
+      for spec, n in pairs(count) do
+        effect = effect .. ("\n%dx %s: "):format(n, spec.name)
+                        .. ABILITY.preview(spec.art.art_ability,
+                                           self:getOwner(), inputs)
+                        .. "\n"
+      end
+    --  local ability, cost = activation.ability, activation.cost
+    --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)
+    end
   end
   return effect
 end
 
 return Card
-

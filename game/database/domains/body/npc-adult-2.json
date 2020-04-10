@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Busy Adult]\nPretty sure you know the basics right?[pause value:.5][endl]\n[color value:blue]D confirms, S cancels...",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Adult 2",
+  "res":0
+}

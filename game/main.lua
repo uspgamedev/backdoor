@@ -1,4 +1,7 @@
 
+-- FIXME
+-- luacheck: no global
+
 -- set libs dir to path
 require 'libs'
 
@@ -13,24 +16,11 @@ identityp = common.identityp
 -- CPML
 cpml      = require 'cpml'
 
--- HUMP
-Timer     = require "steaming.extra_libs.hump.timer"
-Class     = require "steaming.extra_libs.hump.class"
-Camera    = require "steaming.extra_libs.hump.camera"
-Vector    = require "steaming.extra_libs.hump.vector"
-Signal    = require "steaming.extra_libs.hump.signal"
-
-
--- CLASSES
-require "steaming.classes.primitive"
-
--- STEAMING MODULES
-Util      = require "steaming.util"
-Font      = require "steaming.font"
-Res       = require "steaming.res_manager"
-
-Draw      = require "draw"
-Setup     = require "setup"
+local Res        = require "steaming.res_manager"
+local Setup      = require "setup"
+local Draw       = require "draw"
+local Util       = require "steaming.util"
+local SoundTrack = require 'view.soundtrack'
 
 -- GAMESTATES
 GS = require 'gamestates'
@@ -38,13 +28,20 @@ GS = require 'gamestates'
 -- GAMESTATE SWITCHER
 SWITCHER = require 'infra.switcher'
 
-local PROFILE = require 'infra.profile'
+local PROFILE  = require 'infra.profile'
 local RUNFLAGS = require 'infra.runflags'
-local INPUT = require 'input'
-local DB = require 'database'
+local INPUT    = require 'input'
+local DB       = require 'database'
 
-local JSON = require 'dkjson'
+local SOUNDTRACK
 
+local _globalvar_err = [=[
+
+HOW DARE YOU CREATE THE GLOBAL VARIABLE `%s`
+HERE IS WHERE YOU DID IT, MORTAL:
+%s
+
+]=]
 ------------------
 --LÖVE FUNCTIONS--
 ------------------
@@ -69,17 +66,42 @@ function love.load(arg)
   -- initializes save & load system
   PROFILE.init()
 
+  -- initializes soundtrack singleton
+  SOUNDTRACK = SoundTrack.new()
+
   require 'tests'
 
-  SWITCHER.start(GS.START_MENU) --Jump to the inicial state
+  SWITCHER.start(GS.START_MENU) --Jump to the initial state
+
+  if RUNFLAGS.DEVELOPMENT then
+    local GUI = require 'devmode.gui'
+    GUI():register("GUI", nil, 'devmode-gui')
+  end
+
+  setmetatable(_G, {
+    __newindex = function(_, k, _)
+      return error(_globalvar_err:format(k, debug.traceback()))
+    end
+  })
 end
 
 function love.update(dt)
   MAIN_TIMER:update(dt)
-  if INPUT.wasActionReleased('QUIT') then love.event.quit() end
+  if INPUT.wasActionReleased('QUIT') then
+    love.event.quit()
+  elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG
+                                           and RUNFLAGS.DEVELOPMENT then
+    DEBUG = true
+    local current = SWITCHER.current()
+    if current.devmode then current:devmode() end
+    SWITCHER.push(GS.DEVMODE)
+  end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
+  Util.updateSubtype(dt, 'task')
   Draw.update(dt)
+  SOUNDTRACK:update(dt)
+  Util.destroyAll()
 end
 
 function love.draw()
@@ -87,7 +109,9 @@ function love.draw()
 end
 
 function love.quit()
-  imgui.ShutDown();
+  if RUNFLAGS.DEVELOPMENT then
+    Util.findId('devmode-gui'):destroy()
+    imgui.ShutDown();
+  end
   PROFILE.quit()
 end
-

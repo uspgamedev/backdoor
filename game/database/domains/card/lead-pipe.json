@@ -1,0 +1,20 @@
+{
+  "attr":"COR",
+  "cost":3,
+  "icon":"card-lead-pipe",
+  "name":"Lead Pipe",
+  "set":"weapon_advanced",
+  "widget":{
+    "charges":4,
+    "equipment":{
+      "active":{
+        "cards":[{
+            "card":"lead-pipe-strike"
+          }]
+      }
+    },
+    "operators":[],
+    "status-tags":[],
+    "trigger":false
+  }
+}

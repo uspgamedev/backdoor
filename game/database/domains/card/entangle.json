@@ -1,0 +1,32 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "body":"=target-body",
+          "card":"entangled",
+          "name":"place_widget",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
+          "max-range":4,
+          "name":"choose_target",
+          "output":"target-pos",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"target-body",
+          "pos":"=target-pos",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"ANI",
+  "cost":1,
+  "icon":"card-entangle",
+  "name":"Entangle",
+  "set":"maneuver_advanced"
+}

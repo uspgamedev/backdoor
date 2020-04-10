@@ -1,61 +1,62 @@
 {
-  "attr":"ARC",
-  "icon":false,
-  "set":"gadgeteer",
   "art":{
     "art_ability":{
       "effects":[{
           "attr":"=arc",
+          "base":0,
           "center":"=target_pos",
+          "mod":100,
+          "name":"damage_on_area",
           "size":1,
           "type":"effect",
-          "ignore_owner":false,
-          "name":"damage_on_area",
-          "base":5
+          "ignore_owner":false
         }],
       "inputs":[{
-          "type":"input",
           "body-block":true,
           "name":"choose_dir",
-          "output":"dir"
+          "output":"dir",
+          "type":"input"
         },{
-          "type":"operator",
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
-          "type":"operator",
-          "output":"self_body",
+          "actor":"=self",
           "name":"get_actor_body",
-          "actor":"=self"
+          "output":"self_body",
+          "type":"operator"
         },{
-          "type":"operator",
           "body":"=self_body",
           "name":"get_body_pos",
-          "output":"self_pos"
+          "output":"self_pos",
+          "type":"operator"
         },{
-          "pos":"=self_pos",
           "dir":"=dir",
-          "type":"operator",
           "maxrange":4,
           "name":"hitscan",
-          "output":"hitscan"
+          "output":"hitscan",
+          "pos":"=self_pos",
+          "type":"operator"
         },{
-          "pos":"=hitscan",
           "dir":"=dir",
-          "type":"operator",
           "name":"translated",
-          "output":"target_pos"
+          "output":"target_pos",
+          "pos":"=hitscan",
+          "type":"operator"
         },{
-          "type":"operator",
-          "which":"ARC",
           "name":"get_attribute",
-          "output":"arc"
+          "output":"arc",
+          "type":"operator",
+          "which":"ARC"
         }]
-    },
-    "cost":10
+    }
   },
+  "attr":"ARC",
+  "cost":2,
   "desc":"",
-  "type-description":"",
+  "icon":"card-energy-beam",
   "name":"Energy Beam",
+  "type-description":"",
+  "set":false,
   "one_time":false
 }

@@ -1,0 +1,17 @@
+{
+  "attr":"ANI",
+  "icon":"card-entangle",
+  "name":"Entangled",
+  "one_time":true,
+  "widget":{
+    "charges":8,
+    "operators":[{
+        "attr":"SPD",
+        "op":"-",
+        "val":3
+      }],
+    "status-tags":[],
+    "trigger":"on_turn"
+  },
+  "set":false
+}

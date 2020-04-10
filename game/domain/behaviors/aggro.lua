@@ -12,7 +12,6 @@ return function (actor)
   local sector = actor:getSector()
   local behaviors = sector:getRoute().getBehaviors()
   local ai = behaviors.getAI(actor) or behaviors.newAI(actor)
-  local i, j = actor:getPos()
 
   local target = ai.target
   local target_pos = ai.target_pos
@@ -26,8 +25,7 @@ return function (actor)
     -- if i have a target, can i see it?
     if actor:canSee(target) then
       -- if so, lock on to it
-      local k, l = target:getPos()
-      target_pos = { k, l }
+      target_pos = { target:getPos() }
     else
       -- if not, lose the target, but not its position
       target = false
@@ -35,6 +33,7 @@ return function (actor)
   elseif target_pos then
     -- if i don't have a target, but i have its last position...
     -- ...am i in the target's position?
+    local i, j = actor:getPos()
     local k, l = unpack(target_pos)
     if i == k and l == j then
       -- if so, then i lost them completely
@@ -54,7 +53,8 @@ return function (actor)
       return _USE_SIGNATURE, inputs
     end
     -- ...if i can't see or reach them, then at least chase it!
-    local next_step = FindPath.getNextStep({i, j}, target_pos, sector)
+    local actor_pos = { actor:getPos() }
+    local next_step = FindPath.getNextStep(actor_pos, target_pos, sector)
     inputs.pos = next_step
     if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
       return _MOVE, inputs

@@ -1,28 +1,36 @@
 {
-  "extends":"demihuman",
-  "faction":"agressive",
+  "appearance":"corgi",
+  "description":"Stubby legs, a heart-shaped butt,\na happy goofy face. But don't be fooled!\nNot all of them are friendly...",
   "drops":{
-    "2":{
-      "droptype":"pack",
-      "droprate":10
-    },
-    "drops":[{
-        "droptype":"pack",
-        "droprate":7
-      }],
     "1":{
-      "droptype":"pack",
-      "droprate":100
+      "droprate":70,
+      "droptype":"food2"
+    },
+    "2":{
+      "droprate":10,
+      "droptype":"food"
     },
     "3":{
-      "droptype":"food",
-      "droprate":50
-    }
+      "droprate":10,
+      "droptype":"food2"
+    },
+    "4":{
+      "droprate":20,
+      "droptype":"food"
+    },
+    "5":{
+      "droprate":20,
+      "droptype":"pack"
+    },
+    "drops":[{
+        "droprate":7,
+        "droptype":"pack"
+      }]
   },
-  "res":-1,
-  "con":-1,
-  "appearance":"corgi",
+  "efc":-1,
+  "extends":"demihuman",
+  "faction":"agressive",
   "fin":-1,
   "name":"Corgiborn",
-  "description":"Stubby legs, a heart-shaped butt,\na happy goofy face. But don't be fooled!\nNot all of them are friendly..."
+  "res":-1
 }

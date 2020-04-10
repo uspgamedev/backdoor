@@ -1,35 +1,34 @@
 
-local RANDOM  = require 'common.random'
 local ATTR    = require 'domain.definitions.attribute'
 local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'base', name = "Base Power", type = 'integer',
-    range = {1} },
-  { id = 'attr', name = "Mod Power", type = 'value',
-    match = 'integer', range = {1} },
+  { id = 'base', name = "Base Power", type = 'integer', range = {0,100} },
+  { id = 'attr', name = "Scaling Factor", type = 'value', match = 'integer' },
+  { id = 'mod', name = "%Mod", type = 'integer', default = 100,
+    range = {1,10000} },
   { id = 'sfx', name = "SFX", type = 'enum',
     options = 'resources.sfx',
     optional = true },
 }
 
-function FX.preview (actor, fieldvalues)
-  local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  return ("Deal %s damage to target"):format(amount)
+function FX.preview (_, fieldvalues)
+  local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
+  return ("Deal %s damage to %s"):format(amount, fieldvalues.target)
 end
 
 function FX.process (actor, fieldvalues)
-  local attr, base = fieldvalues.attr, fieldvalues.base
-  local amount = ATTR.EFFECTIVE_POWER(base, attr)
-  local dmg = fieldvalues.target:takeDamageFrom(amount, actor)
+  local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
+  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
+  local result = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
     type = 'text_rise',
     text_type = 'damage',
     body = fieldvalues['target'],
-    amount = dmg,
+    amount = result.dmg,
     sfx = fieldvalues.sfx,
   })
 end

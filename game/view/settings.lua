@@ -2,6 +2,9 @@
 local COLORS = require 'domain.definitions.colors'
 local PROFILE = require 'infra.profile'
 local FONT = require 'view.helpers.font'
+local Text = require 'view.helpers.text'
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local fmod = math.fmod
 local sin = math.sin
@@ -18,6 +21,7 @@ local _getPreference = PROFILE.getPreference
 
 function SettingsView:init(fields)
   ELEMENT.init(self)
+  self.title = Text("SETTINGS", "Title", 32, {color = "NEUTRAL"})
   self.fields = fields
   self.focus = 1
   _font = FONT.get("Text", 20)
@@ -38,9 +42,7 @@ function SettingsView:draw()
   local base_y = 256
   local x = 320
   -- draw one settings input type
-  FONT.set("Title", 32)
-  g.setColor(COLORS.NEUTRAL)
-  g.print("SETTINGS", x, base_y - 80)
+  self.title:draw(x, base_y - 80)
   _font:set()
   for i, field in ipairs(self.fields) do
     local y = base_y + (i - 1) * (height + 4*my + font_height)
@@ -72,4 +74,3 @@ function SettingsView:draw()
 end
 
 return SettingsView
-

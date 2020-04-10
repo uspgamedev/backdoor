@@ -1,69 +1,72 @@
 {
-  "attr":"COR",
-  "icon":"card-rush",
-  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "type":"input",
-          "output":"dir",
-          "body-block":true,
-          "name":"choose_dir"
-        },{
-          "type":"operator",
-          "name":"self",
-          "output":"self"
-        },{
-          "type":"operator",
-          "name":"get_actor_body",
-          "output":"body_self",
-          "actor":"=self"
-        },{
-          "type":"operator",
-          "body":"=body_self",
-          "name":"get_body_pos",
-          "output":"origin"
-        },{
-          "maxrange":6,
-          "dir":"=dir",
-          "type":"operator",
-          "pos":"=origin",
-          "name":"hitscan",
-          "output":"target_pos"
-        },{
-          "pos":"=target_pos",
-          "dir":"=dir",
-          "type":"operator",
-          "name":"translated",
-          "output":"damage_pos"
-        },{
-          "type":"operator",
-          "output":"cor",
-          "name":"get_attribute",
-          "which":"COR"
-        }],
       "effects":[{
-          "vfx-spd":1,
-          "vfx":"SLIDE",
-          "type":"effect",
           "body":"=body_self",
           "name":"move_to",
-          "pos":"=target_pos"
+          "pos":"=target_pos",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
+          "sfx":false
         },{
           "attr":"=cor",
+          "base":1,
           "center":"=damage_pos",
+          "mod":100,
+          "name":"damage_on_area",
           "size":1,
           "type":"effect",
-          "ignore_owner":false,
-          "name":"damage_on_area",
-          "base":8
+          "ignore_owner":false
+        }],
+      "inputs":[{
+          "body-block":true,
+          "name":"choose_dir",
+          "output":"dir",
+          "reach":6,
+          "type":"input"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"body_self",
+          "type":"operator"
+        },{
+          "body":"=body_self",
+          "name":"get_body_pos",
+          "output":"origin",
+          "type":"operator"
+        },{
+          "dir":"=dir",
+          "maxrange":6,
+          "name":"hitscan",
+          "output":"target_pos",
+          "pos":"=origin",
+          "type":"operator"
+        },{
+          "dir":"=dir",
+          "name":"translated",
+          "output":"damage_pos",
+          "pos":"=target_pos",
+          "type":"operator"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
         }]
     }
   },
-  "desc":"It's rush hour.And I'm not talking about kong-fu.",
-  "type-description":"",
-  "pp":10,
+  "attr":"COR",
+  "cost":2,
+  "desc":"It's rush hour. And I'm not talking about kung-fu.",
+  "icon":"card-rush",
   "name":"Rush",
-  "set":"brawler"
+  "pp":10,
+  "set":"maneuver_advanced",
+  "type-description":"",
+  "one_time":false
 }

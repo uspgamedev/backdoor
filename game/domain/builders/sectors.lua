@@ -1,9 +1,9 @@
 
-local DB = require 'database'
 local Graph = require 'common.graph'
 local ROUTEMAPDEFS = require 'domain.definitions.routemap'
 local BODY_BUILDER = require 'domain.builders.body'
 local ACTOR_BUILDER = require 'domain.builders.actor'
+local SECTOR_BUILDER = require 'domain.builders.sector'
 
 local BUILDER = {}
 
@@ -11,48 +11,54 @@ function BUILDER.build(idgenerator, player_data)
   local route_map = Graph:create(idgenerator)
   local sectors = {}
 
-  -- create nodes
+  BUILDER._createNodes(route_map, sectors)
+  BUILDER._connectNodes(route_map, sectors)
+
+  local first_sector = BUILDER._findFirstSector(sectors)
+
+  assert(first_sector, "No first sector???")
+
+  local info = SECTOR_BUILDER.generateState(idgenerator, first_sector)
+
+  -- generate player
+  BUILDER._insertPlayer(first_sector, player_data, info.player_pos, idgenerator)
+
+  return sectors, first_sector
+end
+
+function BUILDER._createNodes(route_map, sectors)
   for i, node_info in ipairs(ROUTEMAPDEFS.initial_nodes) do
     local id = route_map:addNode(unpack(node_info))
     sectors[i] = route_map:getNode(id)
   end
+end
 
-  -- connect nodes
-  for i, connection_info in ipairs(ROUTEMAPDEFS.initial_connections) do
+function BUILDER._connectNodes(route_map, sectors)
+  for _, connection_info in ipairs(ROUTEMAPDEFS.initial_connections) do
     local idx, jdx = unpack(connection_info)
     local id1 = sectors[idx].id
     local id2 = sectors[jdx].id
     route_map:connect(id1, id2)
   end
+end
 
-  -- generate player
-  local species = player_data.species
-  local background = player_data.background
-  local pbody = BODY_BUILDER.buildState(idgenerator, species, 16, 12)
-  local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
-
-  -- generate first sector
-  local tiledata = DB.loadSetting('init_tiledata')
-  local first_sector
+function BUILDER._findFirstSector(sectors)
   for _,sector in ipairs(sectors) do
     if sector.specname == "initial" then
-      first_sector = sector
-      break
+      return sector
     end
   end
+end
 
-  assert(first_sector, "No first sector???")
+function BUILDER._insertPlayer(sector, player_data, pos, idgenerator)
+  local species = player_data.species
+  local background = player_data.background
+  local pbody = BODY_BUILDER.buildState(idgenerator, species, unpack(pos))
+  local pactor = ACTOR_BUILDER.buildState(idgenerator, background, pbody)
 
-  first_sector.tiles = tiledata.tiles
-  first_sector.h = #tiledata.tiles
-  first_sector.w = #tiledata.tiles[1]
-  first_sector.bodies = { pbody }
-  first_sector.actors = { pactor }
-  first_sector.generated = true
-  local _,exit = next(first_sector.exits)
-  exit.pos = tiledata.exit
-
-  return sectors, first_sector
+  -- Place player
+  table.insert(sector.bodies, pbody)
+  table.insert(sector.actors, pactor)
 end
 
 return BUILDER

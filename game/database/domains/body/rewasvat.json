@@ -1,28 +1,28 @@
 {
-  "extends":"corgi",
-  "faction":"agressive",
+  "appearance":"corgi",
+  "description":"Rewaswat. Also known as the furry hater.\nOne day he befell the curse of the furries,\nand his fursona was given life. Now it roams\nthe ruins, in search of newbies to bark at.",
   "drops":{
-    "2":{
-      "droptype":"pack",
-      "droprate":10
-    },
-    "drops":[{
-        "droptype":"pack",
-        "droprate":7
-      }],
     "1":{
-      "droptype":"pack",
-      "droprate":100
+      "droprate":100,
+      "droptype":"pack"
+    },
+    "2":{
+      "droprate":10,
+      "droptype":"pack"
     },
     "3":{
-      "droptype":"food",
-      "droprate":50
-    }
+      "droprate":50,
+      "droptype":"food"
+    },
+    "drops":[{
+        "droprate":7,
+        "droptype":"pack"
+      }]
   },
-  "res":0,
-  "con":0,
-  "appearance":"corgi",
+  "efc":0,
+  "extends":"corgi",
+  "faction":"agressive",
   "fin":0,
   "name":"Rewasvat",
-  "description":"Rewaswat. Also known as the furry hater.\nOne day he befell the curse of the furries,\nand his fursona was given life. Now it roams\nthe ruins, in search of newbies to bark at."
+  "res":0
 }

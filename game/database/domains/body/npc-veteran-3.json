@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Colorful Veteran]\nThere are [color value:blue]3 attributes,[color value:regular][pause value:.5] each one associated with a [color value:blue]different color.[color value:regular]\n\n[newpage wait:2]\n[header name:Colorful Veteran]\n[color value:cor]Corporis (COR)[color value:regular] is the attribute associated with strength and reflexes.\n\n[newpage wait:2]\n[header name:Colorful Veteran]\n[color value:arc]Arcana (ARC)[color value:regular] is the attribute associated with knowledge of the arcane.\n\n[newpage wait:2]\n[header name:Colorful Veteran]\n[color value:ani]Anima (ANI)[color value:regular] is the attribute associated with survival and instinct.\n\n[newpage wait:2]\n[header name:Colorful Veteran]\nPay attention to what [color value:blue]color[color value:regular] your cards have. [pause value:.5][endl]\nImproving the correspondent attribute is a sure way to make some cards stronger!",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Veteran 3",
+  "res":0
+}

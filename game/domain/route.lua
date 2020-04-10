@@ -3,28 +3,29 @@ local Route = require 'lux.class' :new{}
 
 local IDGenerator = require 'common.idgenerator'
 local RANDOM = require 'common.random'
-local PROFILE = require 'infra.profile'
 
 local BUILDERS = require 'lux.pack' 'domain.builders'
 local PACK = require 'domain.pack'
 local Body = require 'domain.body'
-local Actor = require 'domain.actor'
 local Sector = require 'domain.sector'
 local Behaviors = require 'domain.behaviors'
+local Util  = require "steaming.util"
 
-function Route:instance(obj)
+function Route:instance(obj) -- luacheck: no self
 
   -- Saved data
   local _id
   local _id_generator = IDGenerator()
   local _player_name = "Unknown"
   local _player_id
+  local _player_dead = false
+  local _player_won = false
   local _sectors = {}
   local _behaviors = Behaviors()
   local _current_sector = nil
   local _controlled_actor = nil
 
-  Util.destroyAll 'true_force'
+  Util.destroyAll("force")
 
   function obj.loadState(state)
     -- id
@@ -32,8 +33,10 @@ function Route:instance(obj)
     _id_generator = IDGenerator(state.next_id)
 
     -- player
+    _player_id   = state.player_id
     _player_name = state.player_name
-    _player_id = state.player_id
+    _player_dead = state.player_dead
+    _player_won  = state.player_won
 
     -- rng
     -- setState is theoretically enough to reproduce seed as well
@@ -59,9 +62,11 @@ function Route:instance(obj)
     -- id
     state.id = _id
     state.next_id = _id_generator.getNextID()
-    -- id
+    -- player
+    state.player_id   = _player_id
     state.player_name = _player_name
-    state.player_id = _player_id
+    state.player_dead = _player_dead
+    state.player_won  = _player_won
     -- rng
     state.rng_state = RANDOM.getState()
     state.rng_seed = RANDOM.getSeed()
@@ -86,8 +91,25 @@ function Route:instance(obj)
     return _behaviors
   end
 
+  function obj.die()
+    _player_dead = true
+  end
+
+  function obj.win()
+    _player_won = true
+  end
+
+  local function _generateSector(sector)
+    local state = sector:saveState()
+    BUILDERS.sector.generateState(_id_generator, state)
+    sector:loadState(state)
+  end
+
   function obj.setCurrentSector(id)
     _current_sector = Util.findId(id)
+    if not _current_sector:isGenerated() then
+      _generateSector(_current_sector)
+    end
   end
 
   function obj.getCurrentSector()
@@ -106,7 +128,7 @@ function Route:instance(obj)
     if not exit.target_pos then
       local to_sector = Util.findId(target_sector_id)
       if not to_sector:isGenerated() then
-        to_sector:generate()
+        _generateSector(to_sector)
       end
       local entry = to_sector:getExit(from_sector.id)
       to_sector:link(from_sector.id, unpack(exit.pos))

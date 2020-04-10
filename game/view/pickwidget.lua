@@ -3,6 +3,8 @@ local RES = require 'resources'
 local DEFS = require 'domain.definitions'
 local Color = require 'common.color'
 local FONT = require 'view.helpers.font'
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local PickWidgetView = Class{
   __includes = { ELEMENT }
@@ -97,4 +99,3 @@ function PickWidgetView:fadeIn()
 end
 
 return PickWidgetView
-

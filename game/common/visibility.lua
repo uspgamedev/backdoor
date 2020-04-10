@@ -1,5 +1,8 @@
+
 --Function that manipulate an actor's field of view
 local SCHEMATICS = require 'domain.definitions.schematics'
+
+local TILE = require 'common.tile'
 
 --LOCAL FUNCTIONS DECLARATIONS--
 
@@ -12,11 +15,12 @@ local visibilityOfShadow
 local addProjection
 local transformOctant
 local projectTile
+local fullShadow
+local isInRange
 
-local funcs = {}
+local VISIBILITY = {}
 
-
-function funcs.purgeFov(sector)
+function VISIBILITY.purgeFov(sector)
   local w, h = sector:getDimensions()
   local fov = {}
   for i = 1, h do
@@ -29,7 +33,7 @@ function funcs.purgeFov(sector)
 end
 
 --- Reset actor field of view based on a given sector
-function funcs.resetFov(fov, sector)
+function VISIBILITY.resetFov(fov, sector)
 
   local w, h = sector:getDimensions()
   for i = 1, h do
@@ -44,8 +48,8 @@ function funcs.resetFov(fov, sector)
 end
 
 --Update actors field of view based on his position in a given sector
-function funcs.updateFov(actor, sector)
-  funcs.resetFov(actor:getFov(sector), sector)
+function VISIBILITY.updateFov(actor, sector)
+  VISIBILITY.resetFov(actor:getFov(sector), sector)
   for octant = 1, 8 do
     updateOctant(actor, sector, octant)
   end
@@ -66,13 +70,15 @@ function updateOctant(actor, sector, octant)
   local row = 0
   while true do
 
-    local d_i, d_j = transformOctant(row, 0, octant)
-    local pos = {actor_i + d_i, actor_j + d_j}
+    do
+      local d_i, d_j = transformOctant(row, 0, octant)
+      local pos = {actor_i + d_i, actor_j + d_j}
 
-    --Check if tile is inside sector
-    if not sector:isInside(pos[1],pos[2]) then break end
-    if row > actor:getFovRange() then
-      full_shadow = true
+      --Check if tile is inside sector
+      if not sector:isInside(pos[1],pos[2]) then break end
+      if row > actor:getFovRange() then
+        full_shadow = true
+      end
     end
 
     for col = 0, row do
@@ -90,7 +96,7 @@ function updateOctant(actor, sector, octant)
         --Set visibility of tile
         local projection = projectTile(row, col)
         local visible = 1 - visibilityOfShadow(line, projection)
-        if fov[pos[1]][pos[2]] or visible == 1  then
+        if isInRange(pos[1], pos[2], actor) and (fov[pos[1]][pos[2]] or visible == 1)  then
           fov[pos[1]][pos[2]] = visible
         end
 
@@ -116,24 +122,6 @@ end
 function isShadowLineFull(shadow_line)
     local list = shadow_line.shadow_list
     return (#list == 1 and list[1].start == 0 and list[1].finish == 1)
-end
-
-local MAX = 80
-
-function printShadowLine(shadow_line)
-  local string = {}
-  for i=1,MAX do
-    string[i] = '.'
-  end
-  for _,shadow in ipairs(shadow_line.shadow_list) do
-    local a,b = shadow.start*MAX,shadow.finish*MAX
-    a = math.floor(a + 0.5)
-    b = math.floor(b + 0.5)
-    for i=a,b do
-      string[i] = 'X'
-    end
-  end
-  print(table.concat(string))
 end
 
 --Create a shadow table
@@ -246,4 +234,9 @@ function projectTile(row, col)
   return newShadow(top_left, bottom_right)
 end
 
-return funcs
+function isInRange(i, j, actor)
+  local actor_i, actor_j = actor:getPos()
+  return TILE.dist(i, j, actor_i, actor_j) <= actor:getFovRange()
+end
+
+return VISIBILITY

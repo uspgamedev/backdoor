@@ -1,49 +1,48 @@
 {
-  "fillings":[],
+  "altars":{
+    "max":2,
+    "min":1,
+    "threshold":7
+  },
+  "bootstrap":{
+    "h":48,
+    "mh":7,
+    "mw":9,
+    "tileset":"demo",
+    "w":48
+  },
   "connections":{
     "loops":24
-  },
-  "encounters":{
-    "max":8,
-    "recipes":[{
-        "bodyspec":"slime",
-        "actorspec":"dumb",
-        "upgrade_power":60
-      },{
-        "bodyspec":"imp",
-        "actorspec":"grinful",
-        "upgrade_power":80
-      }],
-    "min":4
-  },
-  "drops":{
-    "drops":[{
-        "droptype":"food",
-        "droprate":4
-      },{
-        "droptype":"pack",
-        "droprate":2
-      }]
-  },
-  "rooms":{
-    "minh":3,
-    "minw":3,
-    "rmar":1,
-    "tries":256,
-    "maxh":9,
-    "count":24,
-    "maxw":9
-  },
-  "holes":false,
-  "altars":{
-    "max":6,
-    "min":2,
-    "threshold":1
   },
   "deadends":{
     "amount":128
   },
-  "theme":false,
+  "drops":{
+    "drop-info":"",
+    "drops":[{
+        "droprate":2,
+        "droptype":"food"
+      },{
+        "droprate":0,
+        "droptype":"pack"
+      },{
+        "droprate":2,
+        "droptype":"food2"
+      }]
+  },
+  "encounters":{
+    "max":16,
+    "min":12,
+    "recipes":[{
+        "actorspec":"dumb",
+        "bodyspec":"slime",
+        "upgrade_power":100
+      },{
+        "actorspec":"dumb",
+        "bodyspec":"stove",
+        "upgrade_power":120
+      }]
+  },
   "exits":{
     "distance":5,
     "exits":[{
@@ -55,14 +54,19 @@
       }],
     "threshold":2
   },
-  "bootstrap":{
-    "w":48,
-    "mh":7,
-    "tileset":"demo",
-    "h":48,
-    "mw":9
-  },
+  "fillings":[],
   "maze":{
     "double":false
-  }
+  },
+  "rooms":{
+    "count":24,
+    "maxh":9,
+    "maxw":9,
+    "minh":3,
+    "minw":3,
+    "rmar":1,
+    "tries":256
+  },
+  "holes":false,
+  "theme":false
 }

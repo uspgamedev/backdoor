@@ -1,64 +1,30 @@
 {
   "attr":"COR",
-  "icon":"card-spark-rod",
-  "one_time":true,
+  "cost":3,
   "desc":"'Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children' - old and controversial commercial from Tark Tech.",
-  "type-description":"",
-  "set":"brawler",
-  "pp":4,
+  "icon":"card-spark-rod",
   "name":"Spark Rod 2000",
+  "set":"weapon_expert",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
-    "activation":{
-      "cost":20,
-      "ability":{
-        "inputs":[{
-            "aoe-hint":3,
-            "body-only":{
-              "body-type":false
-            },
-            "output":"first_target",
-            "non-wall":false,
-            "type":"input",
-            "empty-tile":false,
-            "name":"choose_target",
-            "max-range":1
+    "charges":3,
+    "equipment":{
+      "active":{
+        "cards":[{
+            "card":"spark-rod-target"
           },{
-            "type":"operator",
-            "pos":"=first_target",
-            "name":"get_body_at",
-            "output":"target_body"
-          },{
-            "type":"operator",
-            "output":"cor",
-            "name":"get_attribute",
-            "which":"COR"
-          }],
-        "effects":[{
-            "attr":"=cor",
-            "target":"=target_body",
-            "base":6,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
-          },{
-            "attr":"=cor",
-            "center":"=first_target",
-            "size":3,
-            "type":"effect",
-            "ignore_owner":true,
-            "name":"damage_on_area",
-            "base":4
+            "card":"spark-rod-aoe"
           }]
-      }
+      },
+      "defensive":false
     },
+    "operators":[],
     "status-tags":[],
+    "trigger":"on_use",
     "trigger-condition":{
-      "inputs":[],
-      "effects":[]
-    },
-    "charges":0,
-    "placement":"weapon"
-  }
+      "effects":[],
+      "inputs":[]
+    }
+  },
+  "one_time":false
 }

@@ -1,0 +1,42 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "base":6,
+          "mod":30,
+          "name":"damage_on_target",
+          "target":"=target-body",
+          "type":"effect",
+          "sfx":false
+        }],
+      "inputs":[{
+          "aoe-hint":1,
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
+          "max-range":1,
+          "name":"choose_target",
+          "output":"target",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"target-body",
+          "pos":"=target",
+          "type":"operator"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        }]
+    }
+  },
+  "attr":"COR",
+  "cost":2,
+  "icon":"card-spark-rod-strike",
+  "name":"Rod Strike",
+  "temporary":true,
+  "set":false
+}

@@ -1,54 +1,56 @@
 {
-  "attr":"COR",
-  "icon":"card-jump",
-  "one_time":false,
   "art":{
     "art_ability":{
       "effects":[{
-          "vfx-spd":1,
-          "vfx":"JUMP",
-          "type":"effect",
           "body":"=body",
           "name":"move_to",
-          "pos":"=pos"
+          "pos":"=pos",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
+          "sfx":false
         },{
           "attr":"=cor",
+          "base":4,
           "center":"=pos",
-          "size":2,
-          "type":"effect",
           "ignore_owner":true,
+          "mod":50,
           "name":"damage_on_area",
-          "base":6
+          "size":2,
+          "type":"effect"
         }],
       "inputs":[{
           "aoe-hint":2,
+          "empty-tile":true,
           "max-range":4,
           "name":"choose_target",
-          "type":"input",
           "non-wall":true,
           "output":"pos",
-          "empty-tile":true
+          "type":"input"
         },{
-          "type":"operator",
-          "which":"COR",
+          "name":"get_attribute",
           "output":"cor",
-          "name":"get_attribute"
-        },{
           "type":"operator",
+          "which":"COR"
+        },{
           "name":"self",
-          "output":"self"
+          "output":"self",
+          "type":"operator"
         },{
-          "type":"operator",
-          "output":"body",
+          "actor":"=self",
           "name":"get_actor_body",
-          "actor":"=self"
+          "output":"body",
+          "type":"operator"
         }]
-    },
-    "cost":40
+    }
   },
+  "attr":"COR",
+  "cost":3,
   "desc":"Take THAT gravity!",
-  "type-description":"",
-  "pp":3,
+  "icon":"card-jump",
   "name":"Jump",
-  "set":"brawler"
+  "pp":3,
+  "set":"maneuver_expert",
+  "type-description":"",
+  "one_time":false
 }

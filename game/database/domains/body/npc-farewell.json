@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Guard]\nHere's one last tip...\n\n[newpage wait:1.5]\n[header name:Guard]\n[color value:blue]Press D\n[color value:regular] to use stairs, [pause value:.5][endl]\n[color value:blue]Hold TAB[color value:regular] to show stats, [pause value:.5]and[endl]\n[color value:blue]Press SHIFT[color value:regular] to toggle the control hints!\n\n[newpage wait:2.8]\n[header name:Guard]\n[size value:plus]Good luck![size value:regular] [pause value:.5]You'll need it!",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Fareweller",
+  "res":0
+}

@@ -39,4 +39,3 @@ function SPRITEFX.apply(sectorview, args)
 end
 
 return SPRITEFX
-

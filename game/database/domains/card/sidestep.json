@@ -1,0 +1,40 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "body":"=self_body",
+          "name":"move_to",
+          "pos":"=target_pos",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
+          "sfx":false
+        }],
+      "inputs":[{
+          "empty-tile":true,
+          "has-floor":true,
+          "max-range":2,
+          "name":"choose_target",
+          "non-wall":true,
+          "output":"target_pos",
+          "type":"input"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"ANI",
+  "cost":2,
+  "desc":"Ooops, excuse me!",
+  "icon":"card-sidestep",
+  "name":"Side-step",
+  "set":"maneuver_common",
+  "temporary":false
+}

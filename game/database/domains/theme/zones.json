@@ -1,4 +1,9 @@
 {
-  "bgm":"ruins",
-  "tileset":"ruins"
+  "multitrack":{
+    "danger":"ruins-danger",
+    "default":"ruins-default",
+    "focused":"ruins-focused"
+  },
+  "tileset":"ruins",
+  "singletrack":false
 }

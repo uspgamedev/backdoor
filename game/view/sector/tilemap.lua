@@ -1,4 +1,6 @@
 
+-- luacheck: globals love
+
 local RES        = require 'resources'
 local CAM        = require 'common.camera'
 local SCHEMATICS = require 'domain.definitions.schematics'
@@ -9,7 +11,6 @@ local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
 local _VIEW_W = VIEWDEFS.HALF_W*2 - 2
 local _VIEW_H = VIEWDEFS.HALF_H*2 - 2
-local _SEEN_ABYSS = COLORS.BACKGROUND * COLORS.HALF_VISIBLE
 
 local _FXCODE = [[
 uniform Image mask;
@@ -25,11 +26,12 @@ local TILEMAP = {}
 
 local _sector
 local _tile_batch
+local _tile_offset
+local _tile_quads
 local _fovmask
 local _tilemask
 
 function TILEMAP.init(sector, tileset)
-  local pixel_texture = RES.loadTexture("pixel")
   local texture = RES.loadTexture(tileset.texture)
   _tile_batch = love.graphics.newSpriteBatch(texture, 512, "stream")
   _tile_offset = tileset.offsets
@@ -42,9 +44,9 @@ function TILEMAP.init(sector, tileset)
     data:mapPixel(
       function (x, y)
         y = y*_TILE_W/_TILE_H
-        local px = math.max(_TILE_W, math.min(2*_TILE_W, x))
-        local py = math.max(_TILE_W, math.min(2*_TILE_W, y))
-        local d = math.sqrt((x - px)^2 + (y - py)^2)/_TILE_W*2
+        local px = math.max(0.5*_TILE_W, math.min(2.5*_TILE_W, x))
+        local py = math.max(0.5*_TILE_W, math.min(2.5*_TILE_W, y))
+        local d = math.sqrt((x - px)^2 + (y - py)^2)/_TILE_W * 2
         local c = math.max(0, (1-d^2))
         return c, c, c, 1
       end
@@ -52,6 +54,20 @@ function TILEMAP.init(sector, tileset)
     _tilemask = love.graphics.newImage(data)
   end
 end
+
+local _SIDES = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } }
+local function _isBorder(fov, i, j, outside)
+  for _, side in ipairs(_SIDES) do
+    local ti, tj = i + side[1], j + side[2]
+    if fov[ti] and outside(fov[ti][tj]) then
+      return true
+    end
+  end
+  return false
+end
+
+local function NOT_VISIBLE(v) return not v or v == 0 end
+local function UNSEEN(v) return not v end
 
 function TILEMAP.calculateFOVMask(g, fov)
   g.setCanvas(_fovmask)
@@ -67,15 +83,19 @@ function TILEMAP.calculateFOVMask(g, fov)
   for i, j in CAM:tilesInRange() do
     local ti, tj = i+1, j+1 -- logic coordinates
     local x, y = j*_TILE_W, i*_TILE_H
-    local color = COLORS.NEUTRAL
+    local color = COLORS.BLACK
     if fov and fov[ti] then
-      local visibility = fov[ti][tj]
-      if not visibility then
-        color = COLORS.BLACK
-      elseif visibility == 0 then
-        color = COLORS.HALF_VISIBLE
-      else
-        color = COLORS.NEUTRAL
+      local visible = fov[ti][tj]
+      if visible then
+        if visible > 0 then
+          if not _isBorder(fov, ti, tj, NOT_VISIBLE) then
+            color = COLORS.NEUTRAL
+          elseif not _isBorder(fov, ti, tj, UNSEEN) then
+            color = COLORS.HALF_VISIBLE
+          end
+        elseif visible == 0 and not _isBorder(fov, ti, tj, UNSEEN) then
+          color = COLORS.HALF_VISIBLE
+        end
       end
     end
     g.setColor(color)
@@ -87,7 +107,7 @@ function TILEMAP.calculateFOVMask(g, fov)
   return _fovmask
 end
 
-function TILEMAP.drawAbyss(g, fov)
+function TILEMAP.drawAbyss(g)
   g.push()
 
   g.origin()
@@ -123,9 +143,8 @@ function TILEMAP.drawFloor(g)
   _tile_batch:clear()
 end
 
-function TILEMAP.drawWallInLine(g, i, fov)
+function TILEMAP.drawWallInLine(g, i, fov) -- luacheck: no unused
   -- to be implemented in v11.0
 end
 
 return TILEMAP
-

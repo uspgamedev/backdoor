@@ -1,42 +1,45 @@
 {
-  "attr":"ARC",
-  "icon":"card-firebolt",
-  "one_time":false,
   "art":{
     "art_ability":{
       "effects":[{
           "attr":"=arc",
-          "target":"=body",
-          "type":"effect",
-          "base":2,
+          "base":0,
+          "mod":50,
           "name":"damage_on_target",
-          "sfx":"example"
+          "sfx":"example",
+          "target":"=body",
+          "type":"effect"
         }],
       "inputs":[{
-          "type":"input",
-          "name":"choose_target",
-          "max-range":7,
-          "empty-tile":false,
           "body-only":{
+            "body-type":false
           },
-          "output":"tgt"
+          "dif-fact":true,
+          "max-range":4,
+          "name":"choose_target",
+          "output":"tgt",
+          "type":"input",
+          "empty-tile":false
         },{
-          "type":"operator",
-          "pos":"=tgt",
           "name":"get_body_at",
-          "output":"body"
+          "output":"body",
+          "pos":"=tgt",
+          "type":"operator"
         },{
-          "type":"operator",
-          "which":"ARC",
           "name":"get_attribute",
-          "output":"arc"
+          "output":"arc",
+          "type":"operator",
+          "which":"ARC"
         }]
-    },
-    "cost":10
+    }
   },
+  "attr":"ARC",
+  "cost":2,
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
-  "type-description":"",
-  "pp":4,
+  "icon":"card-firebolt",
   "name":"Firebolt",
-  "set":"arcanist"
+  "pp":4,
+  "set":"ranged_common",
+  "type-description":"",
+  "one_time":false
 }

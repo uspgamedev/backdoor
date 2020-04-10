@@ -1,10 +1,13 @@
 
-local math = require 'common.math'
+local math    = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
-local CARD = require 'view.helpers.card'
-local FONT = require 'view.helpers.font'
-local RES  = require 'resources'
-local DB   = require 'database'
+local CARD    = require 'view.helpers.card'
+local FONT    = require 'view.helpers.font'
+local COLORS  = require 'domain.definitions.colors'
+local RES     = require 'resources'
+local DB      = require 'database'
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 
 -- MODULE -----------------------------------
@@ -26,7 +29,7 @@ local _ARRSIZE = 20
 local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _HOLDBAR_TEXT = "open pack"
-local _FULL_WIDTH, _WIDTH, _HEIGHT
+local _WIDTH, _HEIGHT
 local _CW, _CH
 
 -- LOCAL VARS
@@ -35,27 +38,12 @@ local _font
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
   local g = love.graphics
-  _FULL_WIDTH, _HEIGHT = g.getDimensions()
+  _WIDTH, _HEIGHT = g.getDimensions()
 
-  _WIDTH = 3*_FULL_WIDTH/4
   _font = FONT.get("TextBold", 20)
   _CW = CARD.getWidth() + 20
   _CH = CARD.getHeight() + 20
 end
-
-local function _stencilFunction(g)
-   g.polygon("fill",
-     {
-       0, 0,
-       _WIDTH - 24, 0,
-       _WIDTH - 24, _HEIGHT/2 + 24,
-       _WIDTH, _HEIGHT/2 + 48,
-       _WIDTH, _HEIGHT,
-       0, _HEIGHT,
-     }
-   )
-end
-
 
 local function _next_circular(i, len, n)
   if n == 0 then return i end
@@ -120,7 +108,7 @@ function View:selectPrev(n)
   self.holdbar:reset()
 end
 
-function View:selectNext()
+function View:selectNext(n)
   if self:isLocked() then return end
   n = n or 1
   self.selection = _next_circular(self.selection, #self.pack_list, n)
@@ -153,8 +141,8 @@ function View:draw()
 end
 
 function View:drawBG(g, enter)
-  g.setColor(0, 0, 0, enter*0.5)
-  g.rectangle("fill", 0, 0, _FULL_WIDTH, _HEIGHT)
+  g.setColor(0, 0, 0, enter*0.95)
+  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
 
 function View:drawPacks(g, enter)
@@ -163,9 +151,6 @@ function View:drawPacks(g, enter)
   local pack_list_size = #pack_list
 
   g.push()
-
-  g.stencil(function() _stencilFunction(g) end, "replace", 1)
-  g.setStencilTest("greater", 0)
 
   -- smooth enter!
   g.translate(math.round((_WIDTH/2)*(1-enter)+_WIDTH/2-_CW/2),
@@ -188,7 +173,7 @@ function View:drawPacks(g, enter)
     self.offsets[i] = offset
     g.translate((_CW+_PD)*(i-1+offset), 0)
     g.translate(0, self.y_offset[i])
-    packbg = RES.loadTexture("pack")
+    local packbg = RES.loadTexture("pack")
 
     local shiny = 1/255
     if focus then
@@ -206,7 +191,8 @@ function View:drawPacks(g, enter)
     --draw icon
     local collection = DB.loadSpec("collection", pack_list[selection])
     local icon = RES.loadTexture(collection.image)
-    g.setColor(1, 1, 1)
+    local br, bg, bb = unpack(COLORS.DARK)
+    g.setColor(br, bg, bb)
     g.draw(icon,15,55, nil, .5)
     g.pop()
   end
@@ -223,7 +209,7 @@ function View:drawPacks(g, enter)
       self:drawPackDesc(g, pack_list[selection], enter)
     end
   end
-  g.setStencilTest()
+
   g.pop()
 end
 
@@ -269,7 +255,8 @@ function View:usedHoldbar()
 end
 
 function View:drawHoldBar(g)
-  if self.holdbar:update() then
+  self.holdbar:update()
+  if self.holdbar:confirmed() then
     self.holdbar_activated = true
   end
   self.holdbar:draw(0, 0)

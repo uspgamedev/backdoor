@@ -25,7 +25,7 @@ function BUILDER.buildState(idgenerator, background, body_state)
     id = id,
     body_id = body_state.id,
     specname = background,
-    cooldown = 10,
+    energy = 0,
     exp = 0,
     playpoints = DEFS.MAX_PP,
     upgrades = {

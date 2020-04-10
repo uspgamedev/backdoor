@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
-local CardView = require 'view.consumelist'
+local DEFS         = require 'domain.definitions'
+local PLAYSFX      = require 'helpers.playsfx'
+local CardView     = require 'view.consumelist'
+local Draw         = require "draw"
 
 local state = {}
 
@@ -11,6 +12,7 @@ local _actor
 local _card_list_view
 local _leave
 local _status
+local _view
 
 function state:init()
 end
@@ -31,12 +33,14 @@ local function _cancel()
   _leave = true
 end
 
-function state:enter(from, actor, maxconsume)
+function state:enter(from, view, actor, maxconsume)
+  _view = view
+  _view.actor:show()
   _card_list_view = CardView({"CONFIRM"})
   local buffer = actor:copyBuffer()
   _actor = actor
   _card_list_view:open(buffer, maxconsume)
-  _card_list_view:addElement("HUD")
+  _card_list_view:register("HUD_MIDDLE")
   if #buffer == 0 then
     _leave = true
   end
@@ -44,14 +48,16 @@ end
 
 function state:leave()
   _leave = false
+  if _card_list_view:getExpGained() > 0 then
+    _view.actor:timedHide(1)
+  else
+    _view.actor:hide()
+  end
   _card_list_view:close()
-  _card_list_view:destroy()
   _card_list_view = nil
 end
 
 function state:update(dt)
-  if DEBUG then return end
-
   if _leave then
     PLAYSFX 'back-menu'
     SWITCHER.pop({})

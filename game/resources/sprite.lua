@@ -1,7 +1,7 @@
-
 --DEPENDENCIES--
 local DB = require 'database'
-
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 --?????--
 local floor = math.floor
@@ -37,6 +37,7 @@ local function _newAnimationMeta(name, info, texture)
   end
 
   local anim = {
+    frame_size = {qw, qh},
     frames = frames,
     framecount = #frames,
     loop = info.loop,
@@ -52,8 +53,8 @@ local function _updateAndGetCurrentQuadOfSprite(sprite)
   local animation = sprite.animation
   local dt = floor(delta()*1000)
   sprite.timecount = sprite.timecount + dt
-  if sprite.timecount >= animation.frames[sprite.frame].time then
-    sprite.timecount = 0
+  while sprite.timecount >= animation.frames[sprite.frame].time do
+    sprite.timecount = sprite.timecount - animation.frames[sprite.frame].time
     if animation.loop then
       sprite.frame = sprite.frame % animation.framecount + 1
     else
@@ -76,10 +77,40 @@ function Sprite:init(texture, animation)
   self.frame = 1
   self.decor = false
   self.timecount = 0
+  self.sx, self.sy = 1, 1
+end
+
+function Sprite:getDimensions()
+  local w, h = unpack(self.animation.frame_size)
+  return w * self.sx, h * self.sy
+end
+
+function Sprite:getWidth()
+  local w, h = self:getDimensions()
+  return w
+end
+
+function Sprite:getHeight()
+  local w, h = self:getDimensions()
+  return h
 end
 
 function Sprite:setDecorator(f)
   self.decor = f
+end
+
+function Sprite:getScale()
+  return self.sx, self.sy
+end
+
+function Sprite:setScale(sx, sy)
+  if sx then self.sx = sx end
+  if sy then self.sy = sy end
+end
+
+function Sprite:getOffset()
+  local ox, oy = unpack(self.animation.offset)
+  return ox * self.sx, oy * self.sy
 end
 
 function Sprite:clearDecorator()
@@ -97,8 +128,8 @@ end
 function Sprite:render(x, y)
   local quad = _updateAndGetCurrentQuadOfSprite(self)
   local tex = self.texture
-  local ox, oy = unpack(self.animation.offset)
-  g.draw(tex, quad, x, y, 0, 1, 1, ox, oy)
+  local ox, oy = self:getOffset()
+  g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
 end
 
 
@@ -111,4 +142,3 @@ function SpriteLoader.load(name, info, texture)
 end
 
 return SpriteLoader
-

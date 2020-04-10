@@ -12,7 +12,7 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('card', fieldvalues['card'])['name']
-  return ("Cause %s"):format(name)
+  return ("Cause %s to %s"):format(name, fieldvalues['body'])
 end
 
 function FX.process(actor, fieldvalues)

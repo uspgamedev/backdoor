@@ -1,21 +1,30 @@
 {
   "cards":[{
-      "set":"arcanist",
-      "drop":50
+      "drop":50,
+      "set":"armor"
     },{
-      "set":"brawler",
-      "drop":50
+      "drop":50,
+      "set":"consumables"
     },{
-      "set":"gadgeteer",
-      "drop":50
+      "drop":50,
+      "set":"control"
     },{
-      "set":"consumables",
-      "drop":50
+      "drop":50,
+      "set":"maneuver"
     },{
-      "set":"consumables",
-      "drop":50
+      "drop":50,
+      "set":"ranged"
+    },{
+      "drop":50,
+      "set":"strikes"
+    },{
+      "drop":50,
+      "set":"support"
+    },{
+      "drop":50,
+      "set":"weapon"
     }],
-  "name":"Anything",
+  "description":"",
   "image":"card-upgrade",
-  "description":""
+  "name":"Anything"
 }

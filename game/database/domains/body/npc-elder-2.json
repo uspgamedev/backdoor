@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Caring Elder]\n[color value:red]Consuming[color value:regular] \nis important to improve your \n[color value:blue]attributes.[color value:regular]\n\n[newpage wait:2]\n[header name:Caring Elder]\nHow much you improve in an \n[color value:blue]attribute\n[color value:regular] depends on how much \nyou use each [color value:blue]card \ncolor.[color value:regular][endl]\n\n[newpage wait:3]\n[header name:Caring Elder]\nYou can consume a few cards in this \n[color value:blue]altar[color value:regular] next to me.\n[endl][pause value:.5]\nIf you are [color value:pp]not focused,[color value:regular] just step on it and [color value:blue]press D.[color value:regular]",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Elder 2",
+  "res":0
+}

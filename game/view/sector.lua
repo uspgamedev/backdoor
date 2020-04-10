@@ -1,36 +1,36 @@
 
+-- luacheck: globals love MAIN_TIMER
+
 local DB          = require 'database'
 local RES         = require 'resources'
 local Color       = require 'common.color'
 local math        = require 'common.math'
 local CAM         = require 'common.camera'
+local TILE        = require 'common.tile'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
-local ACTION      = require 'domain.definitions.action'
+local EXP_DIR     = require 'domain.definitions.expanded_dir'
 local FONT        = require 'view.helpers.font'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
+local DIALOGUEBOX = require 'view.dialoguebox'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
+local ELEMENT     = require "steaming.classes.primitives.element"
 
-local SECTOR_TILEMAP      = require 'view.sector.tilemap'
-local SECTOR_COOLDOWNBAR  = require 'view.sector.cooldownbar'
-local SECTOR_LIFEBAR      = require 'view.sector.lifebar'
-local SECTOR_WALL         = require 'view.sector.wall'
+local SECTOR_TILEMAP    = require 'view.sector.tilemap'
+local SECTOR_ENERGYBAR  = require 'view.sector.energybar'
+local LifebarBatch      = require 'view.sector.lifebarbatch'
+local SECTOR_WALL       = require 'view.sector.wall'
+local BodyView          = require 'view.sector.bodyview'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
-local _HALF_W = VIEWDEFS.HALF_W
-local _HALF_H = VIEWDEFS.HALF_H
 
-local _HEALTHBAR_WIDTH = 56
-local _HEALTHBAR_HEIGHT = 4
-
-local _texture
-local _tile_offset
-local _tile_quads
 local _tileset
 local _cursor_sprite
 local _font
@@ -58,23 +58,40 @@ local function _dropId(i, j, k)
   return ("%d:%d:%d"):format(i, j, k)
 end
 
+local function _loadDropSprite(sprite_data, id, specname)
+  local data = sprite_data[id]
+
+  if not data or data.specname ~= specname then
+    data = {
+      specname = specname,
+      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)
+    }
+    sprite_data[id] = data
+  end
+
+  return data.sprite
+end
+
 function SectorView:init(route)
 
   ELEMENT.init(self)
 
   self.target = nil
   self.cursor = nil
-  self.ray_dir = nil
-  self.ray_body_block = false
+  self.ray = nil
   self.vfx = nil
 
   self.fov = nil --Fov to apply on the sector
 
   self.route = route
-  self.body_sprites = {}
+  self.body_views = {}
+  self.body_dialogues = {}
+  self.drop_sprite_data = {}
   self.drop_offsets = {}
   self.sector = false
   self.sector_changed = false
+
+  self.lifebar_batch = LifebarBatch()
 
   _font = _font or FONT.get("Text", 16)
 
@@ -84,23 +101,16 @@ function SectorView:getTarget()
   return self.target
 end
 
-function SectorView:setCooldownPreview(value)
-  return SECTOR_COOLDOWNBAR.setCooldownPreview(value)
-end
-
 function SectorView:initSector(sector)
   if sector and sector ~= self.sector then
     local g = love.graphics
     self.sector = sector
 
     _tileset = RES.loadTileSet(sector:getTileSet())
-    _texture = RES.loadTexture(_tileset.texture)
 
-    _tile_offset = _tileset.offsets
-    _tile_quads = _tileset.quads
 
     SECTOR_TILEMAP.init(sector, _tileset)
-    SECTOR_COOLDOWNBAR.init()
+    SECTOR_ENERGYBAR.init()
     SECTOR_WALL.load(sector)
 
     local pixel = RES.loadTexture('pixel')
@@ -115,7 +125,6 @@ function SectorView:initSector(sector)
     _sparkles:setEmissionArea("uniform", 16, 16, 0, false)
     _sparkles:setSizes(2, 4)
 
-    _tall_batch = g.newSpriteBatch(_texture, 512, "stream")
     --FIXME: Get tile info from resource cache or something
   end
 end
@@ -131,30 +140,39 @@ function SectorView:lookAt(target)
   end
 end
 
-function SectorView:updateVFX(dt)
-
-end
 
 function SectorView:setDropOffset(i, j, k, offset)
   self.drop_offsets[_dropId(i, j, k)] = offset
 end
 
-function SectorView:startVFX(extra)
-  --Play SFX if any
-  if extra.sfx then
-    local target = self.target
-    if not target or not target.fov or not extra.body then
+local function _playSFX(target, extra)
+  if not target or not target.fov or not extra.body then
+    PLAYSFX(extra.sfx)
+  else
+    if target:canSee(extra.body) then
       PLAYSFX(extra.sfx)
-    else
-      if target:canSee(extra.body) then
-        PLAYSFX(extra.sfx)
-      end
     end
   end
+end
+
+function SectorView:startVFX(extra)
   if extra.type then
     local spritefx = SPRITEFX[extra.type]
     self.vfx = spritefx
-    spritefx.apply(self, extra)
+    MAIN_TIMER:script(function(wait)
+      local ann = Util.findId('announcement')
+      if ann:isLocked() then
+        while ann:isLocked() do wait(1) end
+        wait(0.2)
+      end
+      spritefx.apply(self, extra)
+      --Play SFX if any
+      if extra.sfx then
+        _playSFX(self.target, extra)
+      end
+    end)
+  elseif extra.sfx then
+    _playSFX(self.target, extra)
   end
 end
 
@@ -167,28 +185,58 @@ function SectorView:updateFov(actor)
   self.fov = actor:getFov(sector)
 end
 
-function SectorView:setRayDir(dir, body_block)
-  self.ray_dir = dir
-  self.ray_body_block = body_block
+function SectorView:isInsideFov(i, j)
+  return not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0)
 end
 
-function SectorView:getBodySprite(body)
+function SectorView:setRayDir(dir, body_block, reach)
+  self.ray = dir and { dir = dir, body_block = body_block, reach = reach }
+end
+
+function SectorView:getBodyView(body)
   local id = body:getId()
-  local body_sprite = self.body_sprites[id]
-  if not body_sprite then
-    local idle = DB.loadSpec('appearance', body:getAppearance()).idle
-    body_sprite = RES.loadSprite(idle)
-    self.body_sprites[id] = body_sprite
+  local body_view = self.body_views[id]
+  if not body_view then
+    body_view = BodyView(body)
+    self.body_views[id] = body_view
   end
-  return body_sprite
+  return body_view
 end
 
-function SectorView:setBodySprite(body, draw)
-  self.body_sprites[body:getId()] = draw
+function SectorView:getBodyDialogue(body, i, j, player_j)
+  local id = body:getId()
+
+  --Get appropriate position for dialogue box
+  local side
+  if player_j <= j then
+    side = "right"
+  else
+    side = "left"
+  end
+
+  local dialogue_box = self.body_dialogues[id]
+  if not dialogue_box then
+    dialogue_box = DIALOGUEBOX(body, i - 1, j - 1, side)
+    self.body_dialogues[id] = dialogue_box
+  else
+    dialogue_box:setSide(side)
+  end
+  return dialogue_box
+end
+
+function SectorView:resetBodyDialogue(body)
+  local id = body:getId()
+
+  if self.body_dialogues[id] then
+    self.body_dialogues[id]:kill(self.body_dialogues, id)
+  end
+
+  return self.body_dialogues[id]
 end
 
 function SectorView:sectorChanged()
   self.sector_changed = true
+  self.body_views = {}
 end
 
 function SectorView:draw()
@@ -227,25 +275,33 @@ function SectorView:draw()
     end
   end
 
-  if self.ray_dir and self.target then
-    local dir = self.ray_dir
+  if self.ray and self.target then
+    local dir = self.ray.dir
     local i, j = self.target:getPos()
     local check
-    if self.ray_body_block then
+    if self.ray.body_block then
       check = sector.isValid
     else
       check = sector.isWalkable
     end
+    local count = 0
     repeat
       rays[i][j] = true
       i = i + dir[1]
       j = j + dir[2]
+      count = count + 1
     until not check(sector, i, j) or not self.fov[i][j]
+                                  or count > self.ray.reach
+    if self.ray.body_block and sector:getBodyAt(i, j)
+                           and count <= self.ray.reach then
+      rays[i][j] = true
+    end
   end
 
   -- draw tall things
   g.push()
   local all_bodies = {}
+  local dialogue_boxes = {}
   local named
   for i = 0, sector.h-1 do
     local draw_bodies = {}
@@ -272,21 +328,40 @@ function SectorView:draw()
             end
             local ci, cj = self.cursor:getPos()
             local size   = self.cursor.aoe_hint or 1
-            local abs    = math.abs
             if size and tile.type == SCHEMATICS.FLOOR
-                    and abs(i+1 - ci) < size and abs(j+1 - cj) < size then
+                    and TILE.dist(i+1, j+1, ci, cj) <= size-1 then
               table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
                                          Color.fromInt {200, 100, 100, 100} })
             end
           end
-        elseif self.ray_dir and rays[i+1][j+1] then
+        elseif self.ray and rays[i+1][j+1] then
           table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
                                      Color.fromInt {200, 100, 100, 100} })
         end
         if body then
-          table.insert(draw_bodies, {body, x, 0})
+          table.insert(draw_bodies, body)
           table.insert(all_bodies, body)
+          local player = self.route.getControlledActor():getBody()
+          local player_i, player_j = player:getPos()
+          local body_i, body_j = body:getPos()
+          if body:getDialogue() then
+            local distance_to_player = TILE.dist(player_i, player_j,
+                                                 body_i, body_j)
+
+            if body ~= player and distance_to_player <= 1 then
+              local body_dialogue = self:getBodyDialogue(body, body_i, body_j,
+                                                         player_j)
+              table.insert(dialogue_boxes, body_dialogue)
+            else
+              local body_dialogue = self:resetBodyDialogue(body)
+              --Keeps drawing the dialogue while it exists
+              if body_dialogue then
+                table.insert(dialogue_boxes, body_dialogue)
+              end
+            end
+          end
         end
+
         local dropcount = #tile.drops
         local angle = math.pi*2/dropcount
         local phase = 3*math.pi/4
@@ -304,16 +379,17 @@ function SectorView:draw()
             if dropcount > 1 then
               offset = vec2(math.cos(alpha), -math.sin(alpha)) * radius
             end
+            local drop_id = _dropId(i+1, j+1, k)
             local spread_off = self.drop_offsets[_dropId(i+1, j+1, k)]
-            local dx, dy, t = 0, 0, 0
+            local dx, dy, z = 0, 0, 0
             if spread_off then
               dx = (spread_off.j - (j+1))*_TILE_W
               dy = (spread_off.i - (i+1))*_TILE_H
-              t = spread_off.t
+              z = spread_off.t
             end
             table.insert(draw_drops, {
-              drop, x + offset.x + (1-t)*dx, 0 + offset.y + (1-t)*dy,
-              2*_TILE_H*(0.25 - (t - 0.5)^2), oscilation
+              drop, x + offset.x + (1-z)*dx, 0 + offset.y + (1-z)*dy,
+              2*_TILE_H*(0.25 - (z - 0.5)^2), oscilation, drop_id
             })
           end
         end
@@ -355,23 +431,17 @@ function SectorView:draw()
     end
 
     -- Draw dem bodies
-    for _, bodyinfo in ipairs(draw_bodies) do
-      local body, x, y = unpack(bodyinfo)
-      local i,j = body:getPos()
-
-      --Draw only bodies if player is seeing them
-      if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
-
-        local body_sprite = self:getBodySprite(body)
+    for _, body in ipairs(draw_bodies) do
+      local body_view = self:getBodyView(body)
+      if self:isInsideFov(body:getPos()) then
         g.setColor(COLORS.NEUTRAL)
-        body_sprite:draw(x, y)
-
+        body_view:drawAtRow(i)
       end
     end
 
     -- Draw drop shadows
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, oscilation = unpack(drop)
+      local _, x, y, _, oscilation = unpack(drop)
       local decrease = 1 + math.abs(oscilation)/18
       g.setColor(0, 0, 0, 0.4)
       g.ellipse('fill', x + _TILE_W/2, y + _TILE_H/2, 16/decrease, 6/decrease,
@@ -380,34 +450,37 @@ function SectorView:draw()
 
     -- Draw drop sprites
     for _,drop in ipairs(draw_drops) do
-      local specname, x, y, z, oscilation = unpack(drop)
-      local offset = vec2(0,0)
-      local sprite = RES.loadTexture(DB.loadSpec('drop', specname).sprite)
-      local rx = x + _TILE_W/2 + offset.x
-      local ry = y - _TILE_H*.25 + offset.y - z + oscilation
-      local iw, ih = sprite:getDimensions()
+      local specname, x, y, z, oscilation, id = unpack(drop)
+      local offset = vec2(_TILE_W/2, 0)
+      local sprite = _loadDropSprite(self.drop_sprite_data, id, specname)
+      local rx = x + offset.x
+      local ry = y + offset.y - z + oscilation
       g.setColor(COLORS.NEUTRAL)
-      g.draw(sprite, rx, ry, 0, 1, 1, 32, 24)
-      g.draw(_sparkles, x + _TILE_W/2, y + _TILE_H/2-ih/2, 0, 1, 1, 0, 0)
+      sprite:draw(rx, ry)
+      g.draw(_sparkles, x + offset.x, y + offset.y, 0, 1, 1, 0, 0)
     end
-
 
     g.translate(0, _TILE_H)
   end
   g.pop()
 
-  -- Draw cooldown bars & HP
+  -- Draw energy bars & HP
   for _, body in ipairs(all_bodies) do
-    local i,j = body:getPos()
+    local body_view = self:getBodyView(body)
     --Draw only if player is seeing them
-    x, y = (j-0.5)*_TILE_W, (i-0.5)*_TILE_H
-    if not self.fov or (self.fov[i][j] and self.fov[i][j] ~= 0) then
-      SECTOR_LIFEBAR.draw(body, x, y)
+    local x, y = (body_view.position + vec2(_TILE_W, _TILE_H) / 2):unpack()
+    if self:isInsideFov(body:getPos()) then
       local actor = body:getActor() if actor then
         local is_controlled = (actor == sector:getRoute().getControlledActor())
-        SECTOR_COOLDOWNBAR.draw(actor, x, y, is_controlled)
+        SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)
       end
+      self.lifebar_batch:drawFor(body, x, y)
     end
+  end
+
+  --Draw dialogue_boxes
+  for _,box in ipairs(dialogue_boxes) do
+    box:draw()
   end
 
   -- name, above everything
@@ -468,22 +541,14 @@ function _isInCone(origin_i, origin_j, target_i, target_j, dir)
   local i = target_i - origin_i
   local j = target_j - origin_j
 
-  if     dir == "UP" then   --UP
+  if     dir == "UP" then
     return j >= i and j <= -i
-  elseif dir == "RIGHT" then   --RIGHT
+  elseif dir == "RIGHT" then
     return i >= -j and i <= j
-  elseif dir == "DOWN" then   --DOWN
+  elseif dir == "DOWN" then
     return j <= i and j >= -i
-  elseif dir == "LEFT" then     --LEFT
+  elseif dir == "LEFT" then
     return i <= -j and i >= j
-  elseif dir == "UPRIGHT" then   --UPRIGHT
-    return i <= 0 and j >= 0
-  elseif dir == "DOWNRIGHT" then   --DOWNRIGHT
-    return i >= 0 and j >= 0
-  elseif dir == "DOWNLEFT" then   --DOWNLEFT
-    return i >= 0 and j <= 0
-  elseif dir == "UPLEFT" then   --UPLEFT
-    return i <= 0 and j <= 0
   else
     return error(("Not valid direction for cone function: %s"):format(dir))
   end
@@ -528,8 +593,8 @@ function SectorView:moveCursor(di, dj)
     local pos = queue.pop()
 
     --Else add all other valid positions to the queue
-    for _,dir in ipairs(DIR) do
-      local i, j = unpack(DIR[dir])
+    for _,dir in ipairs(EXP_DIR) do
+      local i, j = unpack(EXP_DIR[dir])
       local target_pos = {pos[1] + i, pos[2] + j}
       --Check if position is inside sector
       if sector:isInside(unpack(target_pos))
@@ -539,7 +604,8 @@ function SectorView:moveCursor(di, dj)
          and _isInCone(self.cursor.i, self.cursor.j,
                        target_pos[1], target_pos[2], dirname)
          -- Check if position is within range
-         and self.cursor.range_checker(unpack(target_pos)) then
+         and self.cursor.range_checker(unpack(target_pos))
+      then
 
         -- if it's a valid target use it!
         if self.cursor.validator(unpack(target_pos)) then
@@ -552,7 +618,6 @@ function SectorView:moveCursor(di, dj)
         queue.push(target_pos)
       end
     end
-    pos = nil
   end
 
   if chosen then

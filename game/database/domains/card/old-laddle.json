@@ -1,0 +1,29 @@
+{
+  "attr":"COR",
+  "cost":3,
+  "desc":"A mass-produced weapon.",
+  "icon":"card-old-laddle",
+  "name":"Old Laddle",
+  "set":"weapon_common",
+  "type-description":"",
+  "widget":{
+    "charges":2,
+    "equipment":{
+      "active":{
+        "cards":[{
+            "card":"old-laddle-strike"
+          }]
+      },
+      "defensive":false
+    },
+    "operators":[],
+    "status-tags":[],
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false,
+    "auto_activation":false
+  },
+  "one_time":false
+}

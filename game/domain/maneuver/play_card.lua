@@ -1,5 +1,4 @@
 
-local ACTIONDEFS  = require 'domain.definitions.action'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local ABILITY     = require 'domain.ability'
 
@@ -24,45 +23,47 @@ end
 
 function PLAYCARD.exhaustionCost(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  if card:isArt() then
-    return card:getArtCost()
-  elseif card:isWidget() then
-    return ACTIONDEFS.PLAY_WIDGET_COST
-  end
-  return 0
+  return card:getCost()
 end
 
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  local valid = false
-  if card:isArt() then
-    valid = ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
-  elseif card:isWidget() then
-    valid = true
-  end
-  return valid
+  return actor:getFocus() >= card:getCost() and
+        (not card:isArt() or
+         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues))
 end
 
 function PLAYCARD.perform(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local body = actor:getBody()
-  actor:playCard(inputvalues.card_index)
 
+  coroutine.yield('report', {
+    type = 'body_acted',
+    body = body,
+  })
+
+  actor:spendFocus(card:getCost())
   if card:isArt() then
     coroutine.yield('report', {
-      type = 'body_acted',
-      body = body,
+      type = 'play_art_card',
+      actor = actor,
+      card_index = inputvalues.card_index
     })
-    actor:exhaust(card:getArtCost())
+    actor:playCard(inputvalues.card_index)
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
     body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
-    actor:exhaust(ACTIONDEFS.PLAY_WIDGET_COST)
     body:placeWidget(card)
+    coroutine.yield('report', {
+      type = 'play_widget_card',
+      actor = actor,
+      card_index = inputvalues.card_index
+    })
+    actor:playCard(inputvalues.card_index)
   end
 
+  actor:checkFocus()
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
 return PLAYCARD
-

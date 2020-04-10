@@ -1,0 +1,29 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":0,
+          "base":12,
+          "center":"=target_pos",
+          "mod":100,
+          "name":"damage_on_area",
+          "size":2,
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":2,
+          "has-floor":true,
+          "max-range":3,
+          "name":"choose_target",
+          "output":"target_pos",
+          "type":"input"
+        }]
+    }
+  },
+  "attr":"NONE",
+  "cost":1,
+  "icon":"card-plasma-bomb",
+  "name":"Plasma Bomb",
+  "one_time":true,
+  "set":"consumables_expert"
+}

@@ -1,8 +1,12 @@
-
-local INPUT = require 'input'
+local INPUT        = require 'input'
+local RES          = require 'resources'
 local DIRECTIONALS = require 'infra.dir'
-local DIR = require 'domain.definitions.dir'
-local COLORS = require 'domain.definitions.colors'
+local DIR          = require 'domain.definitions.dir'
+local COLORS       = require 'domain.definitions.colors'
+local PLAYSFX      = require 'helpers.playsfx'
+local vec2         = require 'cpml' .vec2
+local Class        = require "steaming.extra_libs.hump.class"
+local ELEMENT      = require "steaming.classes.primitives.element"
 
 local _TOTAL = 1
 local _TIME = .8
@@ -10,6 +14,39 @@ local _ENTER_SPEED = 8
 local _EPSILON = 0.01 -- 1%
 local _WIDTH = 64
 local _HEIGHT = 16
+local _PI = math.pi
+
+local function _newParticleSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.75)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(6)
+  particles:setSpeed(100)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(4)
+  particles:setEmissionRate(30)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
+  return particles
+end
+
+local function _newExplosionSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.5)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(8)
+  particles:setSpeed(512)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(4)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-512)
+  return particles
+end
+
 
 local _dt = love.timer.getDelta
 
@@ -25,19 +62,30 @@ local function _linear(from, to, time)
   return from + step
 end
 
-local function _render(enter, progress, x, y)
+local function _render(enter, progress, x, y, w, h, particles)
   local g = love.graphics
   local alpha = enter
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
   g.push()
-  g.translate(x - _WIDTH/2, y)
+  g.translate(x - w/2, y)
   g.setColor(cr/4, cg/4, cb/4, alpha)
-  g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
+  g.rectangle("fill", 0, 0, w, h)
   g.setColor(cr, cg, cb, alpha)
-  g.rectangle("fill", 0, 0, _WIDTH*(progress/_TOTAL), _HEIGHT)
+  g.rectangle("fill", 0, 0, w*(progress/_TOTAL), h)
+  g.setColor(1,1,1,alpha)
+  local offset = 10
+  g.draw(particles, w*(progress/_TOTAL) - offset, h/2)
   g.pop()
 end
 
+local function _renderExplosion(explosion, x, y, w, h)
+  local g = love.graphics
+  g.push()
+  g.translate(x - w/2, y)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(explosion, w, h/2)
+  g.pop()
+end
 
 local HoldBar = Class({
   __includes = ELEMENT
@@ -51,16 +99,42 @@ function HoldBar:init(hold_actions)
   self.enter = 0
   self.progress = 0
   self.hold_actions = hold_actions
-  self.timers = {}
+  self.pos = vec2()
+
+  self.width_scale = 1
+  self.height_scale = 1
+
+  self.particles = _newParticleSource()
+
+  self.explosion = _newExplosionSource()
+
+  self.is_playing = nil --If charge bar is playing sfx
+end
+
+function HoldBar:setPosition(pos)
+  self.pos = pos
+end
+
+function HoldBar:setScale(w, h)
+  self.width_scale = w
+  self.height_scale = h
+end
+
+function HoldBar:getWidth()
+  return _WIDTH * self.width_scale
+end
+
+function HoldBar:getHeight()
+  return _HEIGHT * self.height_scale
 end
 
 function HoldBar:lock()
   self.locked = true
 end
 
-function HoldBar:unlock()
+function HoldBar:unlock(dont_reset_progress)
   self.locked = false
-  self.progress = 0
+  self.progress = dont_reset_progress and self.progress or 0
 end
 
 function HoldBar:isLocked()
@@ -97,6 +171,9 @@ function HoldBar:update()
               or INPUT.isActionDown(action)
   end
 
+  self.explosion:update(_dt())
+  self.particles:update(_dt())
+
   -- enter fade in
   if self.locked or not is_down then
     self:fadeOut()
@@ -108,26 +185,54 @@ function HoldBar:update()
   if self.enter <= 0 then self.progress = 0 end
   if not self.locked then
     if is_down then
+      if not self.is_playing then
+        self.is_playing = PLAYSFX "holdbar-charge"
+        self.is_playing:seek(self.progress/(_TOTAL/_TIME))
+      end
       self:advance()
     else
+      if self.is_playing then
+        self.is_playing:stop()
+        self.is_playing = nil
+      end
       self:rewind()
     end
   end
 
+end
+
+function HoldBar:confirmed()
   -- check progress
   if not self.locked and self.progress >= _TOTAL then
-    self:removeTimer("advance")
+    --play sfx
+    if self.is_playing then
+      self.is_playing:stop()
+      self.is_playing = nil
+    end
+    PLAYSFX "holdbar-confirm"
+
+    self.explosion:emit(48)
+
     return true
   end
   return false
 end
 
 function HoldBar:draw(x, y)
+  if not x and not y then
+    x, y = self.pos:unpack()
+  end
+
+
+  local w, h = self:getWidth(), self:getHeight()
   -- render bar
   if self.enter > 0 and self.progress > 0 then
-    _render(self.enter, self.progress, x, y)
+    _render(self.enter, self.progress, x, y, w, h, self.particles)
   end
+
+  -- render explosion
+  _renderExplosion(self.explosion, x, y, w, h)
+
 end
 
 return HoldBar
-

@@ -1,5 +1,6 @@
 
-local DB = require 'database'
+local DB           = require 'database'
+local SFX          = require 'resources.sfx'
 local COMPOUND_RES = require 'lux.pack' 'resources'
 
 local RES = {}
@@ -22,8 +23,8 @@ local _initResource = {
   texture = function(path)
     return love.graphics.newImage(path)
   end,
-  sfx = function(path)
-    return love.audio.newSource(path, "static")
+  sfx = function(path, polyphony)
+    return SFX.new(path, polyphony)
   end,
   bgm = function(path)
     local src = love.audio.newSource(path, "stream")
@@ -42,7 +43,6 @@ function _loadResource(rtype, name, ...)
     local path = DB.loadResourcePath(rtype, name)
     res = _initResource[rtype](path, ...)
     _updateResource(rtype, name..sufix, res)
-    _rescache[rtype][name..sufix] = res
   end
   return res
 end
@@ -56,7 +56,8 @@ function RES.loadTexture(name)
 end
 
 function RES.loadSFX(name)
-  return _loadResource('sfx', name)
+  local polyphony = DB.loadResource('sfx', name).polyphony
+  return _loadResource('sfx', name, polyphony)
 end
 
 function RES.loadBGM(name)
@@ -76,4 +77,3 @@ function RES.loadTileSet(name)
 end
 
 return RES
-

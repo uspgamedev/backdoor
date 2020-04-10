@@ -1,17 +1,29 @@
 {
+  "appearance":"imp",
+  "description":"Lesser demons, mischievious little miscreations.\nThey are known for their trickster grin and their\naptitude with arcane spells. They are hella weak,\nthough: one strong blow and they are dead meat.",
+  "drops":[{
+      "droprate":70,
+      "droptype":"pack"
+    },{
+      "droprate":20,
+      "droptype":"pack"
+    },{
+      "droprate":10,
+      "droptype":"pack"
+    },{
+      "droprate":40,
+      "droptype":"food"
+    },{
+      "droprate":40,
+      "droptype":"food"
+    },{
+      "droprate":40,
+      "droptype":"food2"
+    }],
+  "efc":-2,
   "extends":"slime",
   "faction":"agressive",
-  "drops":[{
-      "droptype":"pack",
-      "droprate":70
-    },{
-      "droptype":"pack",
-      "droprate":20
-    }],
-  "res":-2,
-  "con":-2,
-  "appearance":"imp",
   "fin":-1,
   "name":"Imp",
-  "description":"Lesser demons, mischievious little miscreations.\nThey are known for their trickster grin and their\naptitude with arcane spells. They are hella weak,\nthough: one strong blow and they are dead meat."
+  "res":-2
 }

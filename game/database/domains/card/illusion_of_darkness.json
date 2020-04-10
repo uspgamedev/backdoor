@@ -1,33 +1,36 @@
 {
-  "attr":"ARC",
-  "icon":"card-illusion-of-darkness",
-  "one_time":false,
   "art":{
-    "cost":20,
     "art_ability":{
-      "inputs":[{
-          "output":"target_pos",
-          "max-range":6,
-          "type":"input",
-          "name":"choose_target",
-          "body-only":[]
-        },{
-          "type":"operator",
-          "pos":"=target_pos",
-          "name":"get_body_at",
-          "output":"target_body"
-        }],
       "effects":[{
-          "type":"effect",
           "body":"=target_body",
+          "card":"blind",
           "name":"place_widget",
-          "card":"blind"
+          "type":"effect"
+        }],
+      "inputs":[{
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
+          "max-range":6,
+          "name":"choose_target",
+          "output":"target_pos",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
         }]
     }
   },
+  "attr":"ARC",
+  "cost":1,
   "desc":"Goodnight sweet prince.",
-  "type-description":"",
-  "pp":3,
+  "icon":"card-illusion-of-darkness",
   "name":"Illusion of Darkness",
-  "set":"arcanist"
+  "pp":3,
+  "set":"control_advanced",
+  "type-description":"",
+  "one_time":false
 }

@@ -1,0 +1,25 @@
+{
+  "ani":1,
+  "arc":1,
+  "behavior":"player",
+  "cor":-2,
+  "description":"After years of effort and study, you have\nbecome proficient in the arcane arts passed down\nsince time immemorial. You strongly believe there\nis nothing the power of your magic cannot achieve,\nso long as you have the time to prepare.",
+  "extends":"sentient",
+  "initial_buffer":[{
+      "amount":4,
+      "card":"firebolt"
+    },{
+      "amount":4,
+      "card":"concentration"
+    },{
+      "amount":1,
+      "card":"arcane-burst"
+    },{
+      "amount":1,
+      "card":"chained-energy"
+    }],
+  "name":"Sage",
+  "signature":"bolting",
+  "traits":[],
+  "collection":false
+}

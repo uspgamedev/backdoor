@@ -188,7 +188,7 @@ return function ()
     graphics.printf("HP 28/032", 0, 0, length-8, "left")
     graphics.pop()
 
-    -- cooldown bar
+    -- energy bar
     graphics.translate(0, 32)
     graphics.push()
     graphics.setColor(COLORS.EMPTY)

@@ -1,0 +1,17 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "amount":3,
+          "name":"gain_focus",
+          "type":"effect"
+        }],
+      "inputs":[]
+    }
+  },
+  "attr":"ANI",
+  "cost":1,
+  "icon":"card-chained-surge",
+  "name":"Chained Surge",
+  "set":"support_expert"
+}

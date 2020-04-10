@@ -1,76 +1,22 @@
 {
   "attr":"COR",
-  "icon":"card-wrench",
-  "set":"gadgeteer",
+  "cost":5,
   "desc":"",
-  "type-description":"",
-  "one_time":false,
-  "pp":0,
+  "icon":"card-wrench",
   "name":"Wrench",
+  "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":false,
-    "activation":{
-      "cost":20,
-      "ability":{
-        "inputs":[{
-            "body-only":[],
-            "max-range":1,
-            "type":"input",
-            "name":"choose_target",
-            "output":"pos"
-          },{
-            "type":"operator",
-            "output":"cor",
-            "name":"get_attribute",
-            "which":"COR"
-          },{
-            "type":"operator",
-            "name":"self",
-            "output":"self"
-          },{
-            "type":"operator",
-            "name":"get_actor_body",
-            "output":"body",
-            "actor":"=self"
-          },{
-            "type":"operator",
-            "body":"=body",
-            "name":"get_body_pos",
-            "output":"center"
-          },{
-            "ignore-owner":true,
-            "body-type":"machine",
-            "pos":"=center",
-            "type":"operator",
-            "range":5,
-            "name":"count_nearby_bodies",
-            "output":"count"
-          },{
-            "op":"+",
-            "lhs":"=count",
-            "type":"operator",
-            "rhs":"=cor",
-            "name":"integer_binop",
-            "output":"base"
-          },{
-            "type":"operator",
-            "pos":"=pos",
-            "name":"get_body_at",
-            "output":"target"
-          }],
-        "effects":[{
-            "attr":"=base",
-            "target":"=target",
-            "base":12,
-            "type":"effect",
-            "name":"damage_on_target",
-            "sfx":false
-          }]
-      }
+    "charges":5,
+    "equipment":{
+      "active":{
+        "cards":[]
+      },
+      "defensive":false
     },
+    "operators":[],
     "status-tags":[],
-    "charges":0,
-    "placement":"weapon"
-  }
+    "trigger":"on_use"
+  },
+  "set":false,
+  "one_time":false
 }

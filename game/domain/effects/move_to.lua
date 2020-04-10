@@ -14,7 +14,8 @@ FX.schema = {
 }
 
 function FX.preview(_, fieldvalues)
-  return "Movement effect"
+  return ("Move %s to position %s"):format(fieldvalues['body'],
+                                           fieldvalues['pos'])
 end
 
 function FX.process (actor, fieldvalues)
@@ -51,4 +52,3 @@ function FX.process (actor, fieldvalues)
 end
 
 return FX
-

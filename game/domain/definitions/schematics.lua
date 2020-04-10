@@ -1,9 +1,10 @@
 
 return {
-  NAUGHT = " ",
-  FLOOR  = ".",
-  WALL   = "#",
-  EXIT   = ">",
-  ALTAR  = "&",
+  NAUGHT    = " ",
+  FLOOR     = ".",
+  WALL      = "#",
+  EXITUP    = "<",
+  EXITDOWN  = ">",
+  ALTAR     = "&",
 }
 

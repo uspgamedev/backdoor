@@ -1,72 +1,69 @@
 {
-  "fillings":[],
+  "altars":{
+    "max":2,
+    "min":0,
+    "threshold":7
+  },
+  "bootstrap":{
+    "h":56,
+    "mh":7,
+    "mw":9,
+    "tileset":"ruins",
+    "w":56
+  },
   "connections":{
     "loops":16
   },
+  "deadends":{
+    "amount":12
+  },
+  "drops":{
+    "drop-info":"",
+    "drops":[{
+        "droprate":4,
+        "droptype":"food"
+      },{
+        "droprate":0,
+        "droptype":"pack"
+      }]
+  },
   "encounters":{
     "max":10,
+    "min":5,
     "recipes":[{
-        "actorspec":"dumb",
-        "bodyspec":"slime",
-        "upgrade_power":100
-      },{
         "actorspec":"grinful",
         "bodyspec":"imp",
         "upgrade_power":120
       },{
-        "actorspec":"fiendish",
-        "bodyspec":"eye",
-        "upgrade_power":150
-      }],
-    "min":5
-  },
-  "drops":{
-    "drops":[{
-        "droptype":"food",
-        "droprate":4
-      },{
-        "droptype":"pack",
-        "droprate":1
+        "actorspec":"dumb",
+        "bodyspec":"stove",
+        "upgrade_power":100
       }]
-  },
-  "rooms":{
-    "minh":3,
-    "maxh":9,
-    "minw":3,
-    "tries":256,
-    "count":24,
-    "rmar":1,
-    "maxw":9
-  },
-  "holes":false,
-  "deadends":{
-    "amount":12
-  },
-  "altars":{
-    "max":6,
-    "min":2,
-    "threshold":1
-  },
-  "theme":false,
-  "maze":{
-    "double":false
-  },
-  "bootstrap":{
-    "w":56,
-    "mh":7,
-    "tileset":"ruins",
-    "h":56,
-    "mw":9
   },
   "exits":{
     "distance":5,
-    "threshold":2,
     "exits":[{
         "target_specname":"sector01"
       },{
         "target_specname":"sector02"
       },{
         "target_specname":"sector03"
-      }]
-  }
+      }],
+    "threshold":2
+  },
+  "fillings":[],
+  "maze":{
+    "double":false
+  },
+  "rooms":{
+    "count":24,
+    "maxh":9,
+    "maxw":9,
+    "minh":3,
+    "minw":3,
+    "rmar":1,
+    "tries":256
+  },
+  "holes":false,
+  "theme":false
 }

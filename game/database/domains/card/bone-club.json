@@ -1,0 +1,26 @@
+{
+  "attr":"COR",
+  "cost":3,
+  "icon":"card-bone-club",
+  "name":"Bone Club",
+  "one_time":true,
+  "set":"weapon_advanced",
+  "widget":{
+    "charges":1,
+    "equipment":{
+      "active":{
+        "cards":[{
+            "card":"bone-club-crush"
+          },{
+            "card":"bone-club-crush"
+          },{
+            "card":"bone-club-crush"
+          }]
+      }
+    },
+    "operators":[],
+    "status-tags":[],
+    "trigger":false,
+    "auto_activation":false
+  }
+}

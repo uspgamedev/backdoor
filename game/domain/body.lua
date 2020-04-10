@@ -1,13 +1,13 @@
 
-local RANDOM      = require 'common.random'
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
-local PLACEMENTS  = require 'domain.definitions.placements'
+local EQUIPMENTS  = require 'domain.definitions.equipments'
 local APT         = require 'domain.definitions.aptitude'
 local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
-
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
 local Card        = require 'domain.card'
 
 local _EMPTY = {}
@@ -24,11 +24,10 @@ function Body:init(specname)
 
   self.killer = false
   self.damage = 0
-  self.armor = 0
   self.widgets = {}
   self.equipped = {}
-  for placement in ipairs(PLACEMENTS) do
-    self.equipped[placement] = false
+  for equipment in ipairs(EQUIPMENTS) do
+    self.equipped[equipment] = false
   end
   self.sector_id = nil
 end
@@ -37,7 +36,6 @@ function Body:loadState(state)
   self:setId(state.id or self.id)
   self:setSubtype(self.spectype)
   self.damage = state.damage or self.damage
-  self.armor = state.armor or self.armor
   self.killer = state.killer or false
   self.attr_lv = {}
   self.sector_id = state.sector_id or self.sector_id
@@ -52,8 +50,8 @@ function Body:loadState(state)
   local equipped = self.equipped
   if state.equipped then
     equipped = {}
-    for _,placement in ipairs(PLACEMENTS) do
-      equipped[placement] = self.widgets[state.equipped[placement]]
+    for _,equipment in ipairs(EQUIPMENTS) do
+      equipped[equipment] = self.widgets[state.equipped[equipment]]
     end
   end
   self.equipped = equipped
@@ -64,15 +62,14 @@ function Body:saveState()
   state.id = self:getId()
   state.specname = self.specname
   state.damage = self.damage
-  state.armor = self.armor
   state.killer = self.killer
   state.sector_id = self.sector_id
   local equipped = {}
-  for _,placement in ipairs(PLACEMENTS) do
-    local equip = self:getEquipmentAt(placement)
+  for _,equipment in ipairs(EQUIPMENTS) do
+    local equip = self:getEquipmentAt(equipment)
     if equip then
       local index = self:findWidget(equip)
-      equipped[placement] = index
+      equipped[equipment] = index
     end
   end
   state.equipped = equipped
@@ -142,12 +139,12 @@ function Body:getAttribute(which)
   return self:getWithMod(which, base)
 end
 
-function Body:getDEF()
-  return self:getAttribute('DEF')
+function Body:getSKL()
+  return self:getAttribute('SKL')
 end
 
-function Body:getEFC()
-  return self:getAttribute('EFC')
+function Body:getSPD()
+  return self:getAttribute('SPD')
 end
 
 function Body:getVIT()
@@ -162,20 +159,24 @@ function Body:getFIN()
   return self:getAptitude('FIN')
 end
 
-function Body:getCON()
-  return self:getAptitude('CON')
+function Body:getEFC()
+  return self:getAptitude('EFC')
 end
 
-function Body:getArmorBonus()
-  return APT.ARMORBONUS(self:getDEF(), self:getRES())
+function Body:getSpeed()
+  return APT.SPEED(self:getSPD(), self:getFIN())
 end
 
-function Body:getConsumption()
-  return APT.STAMINA(self:getEFC(), self:getFIN())
+function Body:getSkill()
+  return APT.SKILL(self:getSKL(), self:getEFC())
 end
 
 function Body:getMaxHP()
-  return APT.HP(self:getVIT(), self:getCON())
+  return APT.HP(self:getVIT(), self:getRES())
+end
+
+function Body:getConsumption() -- luacheck: no self
+  return 1
 end
 
 --[[ Appearance methods ]]--
@@ -223,7 +224,7 @@ end
 
 function Body:equip(place, card)
   if not place then return end
-  -- check if placement is being used
+  -- check if equipment is being used
   -- if it is, then remove card from that slot
   if self:getEquipmentAt(place) then
     local index
@@ -233,7 +234,7 @@ function Body:equip(place, card)
         break
       end
     end
-    local card = self:removeWidget(index)
+    self:removeWidget(index)
   end
   -- equip new thing on index
   self.equipped[place] = card
@@ -250,12 +251,17 @@ end
 
 function Body:removeWidget(index)
   local card = self.widgets[index]
-  local placement = card:getWidgetPlacement()
+  local equipment = card:getWidgetPlacement()
   local owner = card:getOwner()
   self:triggerOneWidget(index, TRIGGERS.ON_LEAVE)
-  self:unequip(placement)
+  coroutine.yield('report', {
+    type = 'widget_removed',
+    body = self,
+    widget_card = card
+  })
+  self:unequip(equipment)
   table.remove(self.widgets, index)
-  if owner and not card:isOneTimeOnly() then
+  if owner and not card:isOneTimeOnly() and not card:isTemporary() then
     card:resetUsages()
     owner:addCardToBackbuffer(card)
   end
@@ -263,8 +269,8 @@ function Body:removeWidget(index)
 end
 
 function Body:placeWidget(card)
-  local placement = card:getWidgetPlacement()
-  self:equip(placement, card)
+  local equipment = card:getWidgetPlacement()
+  self:equip(equipment, card)
   table.insert(self.widgets, card)
   card:resetTicks()
   return self:triggerOneWidget(#self.widgets, TRIGGERS.ON_PLACE)
@@ -373,6 +379,11 @@ function Body:triggerOneWidget(index, trigger, inputs)
     local ability = triggered_ability.ability
     if ability then
       if ABILITY.checkInputs(ability, owner, inputs) then
+        coroutine.yield('report', {
+          type = 'activate_widget',
+          body = self,
+          widget = widget
+        })
         ABILITY.execute(ability, owner, inputs)
       end
     end
@@ -381,37 +392,32 @@ end
 
 --[[ Combat methods ]]--
 
-function Body:getArmor()
-  return self.armor
-end
-
-function Body:gainArmor(amount)
-  amount = math.max(0, amount) + self:getArmorBonus()
-  self.armor = self.armor + amount
-  return amount
-end
-
-function Body:removeAllArmor()
-  self.armor = 0
-end
-
 function Body:takeDamageFrom(amount, source)
-  local blocked = math.min(amount, self.armor)
-  self.armor = self.armor - blocked -- should never go negative
-  local dmg = math.max(0, amount - blocked)
-  self.damage = math.min(self:getMaxHP(), self.damage + dmg)
+  local def_eqp = self:getEquipmentAt('wearable')
+  if def_eqp then
+    local absorbed = math.min(amount, def_eqp:getCurrentWidgetCharges())
+    def_eqp:addUsages(absorbed)
+    amount = math.max(0, amount - absorbed)
+    if self:getActor() then
+      coroutine.yield('report', {
+        type = "absorb_damage",
+        actor = self:getActor(),
+        body = self,
+        amount = absorbed,
+        widget = def_eqp,
+      })
+      coroutine.yield('report', {
+        type = 'text_rise',
+        text_type = 'blocked-damage',
+        body = self,
+        amount = absorbed,
+      })
+    end
+  end
+  self.damage = math.min(self:getMaxHP(), self.damage + amount)
   self.killer = source:getId()
   self:triggerWidgets(TRIGGERS.ON_HIT)
-  return dmg
-  -- print damage formula info (uncomment for debugging)
-  --[[
-  local str = "%s is being attacked with %d damage!\n"
-              .. "> %s rolls %dd%d for %d defense points!\n"
-              .. "> %s takes %d in damage!\n"
-  local name = self:getSpec('name')
-  print(str:format(name, amount, name, self:getDEF(), self:getBaseDEF(),
-                   defroll, name, dmg))
-  --]]--
+  return { dmg = amount }
 end
 
 function Body:loseLifeFrom(amount, source)
@@ -434,5 +440,10 @@ function Body:getKiller()
   return self.killer
 end
 
-return Body
+--Dialogue methods
 
+function Body:getDialogue()
+  return self:getSpec('dialogue')
+end
+
+return Body

@@ -1,0 +1,23 @@
+{
+  "cards":[{
+      "drop":50,
+      "set":"weapon_common"
+    },{
+      "drop":5,
+      "set":"weapon_advanced"
+    },{
+      "drop":50,
+      "set":"strikes"
+    },{
+      "drop":5,
+      "set":"strikes_advanced"
+    },{
+      "drop":50,
+      "set":"armor_common"
+    },{
+      "drop":5,
+      "set":"armor_advanced"
+    }],
+  "image":"card-upgrade",
+  "name":"Stove Collection"
+}

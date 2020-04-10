@@ -1,31 +1,32 @@
 {
-  "attr":false,
-  "icon":false,
-  "set":false,
+  "cost":0,
   "desc":"",
+  "name":"Battery",
   "type-description":"",
   "widget":{
-    "operators":[],
-    "trigger":"on_cycle",
-    "charges":20,
-    "status-tags":[],
     "auto_activation":{
       "ability":{
         "effects":[{
-            "type":"effect",
+            "name":"destroy_body",
             "target":"=body_self",
-            "name":"destroy_body"
+            "type":"effect"
           }],
         "inputs":[{
-            "type":"input",
             "name":"body",
-            "output":"body_self"
+            "output":"body_self",
+            "type":"input"
           }]
       },
       "trigger":"on_done"
     },
-    "placement":false
+    "charges":20,
+    "operators":[],
+    "status-tags":[],
+    "trigger":"on_cycle",
+    "equipment":false
   },
-  "name":"Battery",
+  "attr":false,
+  "icon":false,
+  "set":false,
   "one_time":false
 }

@@ -1,53 +1,63 @@
 {
-  "attr":"ANI",
-  "icon":"card-stomp",
-  "one_time":false,
   "art":{
-    "cost":60,
     "art_ability":{
-      "inputs":[{
-          "aoe-hint":3,
-          "max-range":0,
-          "output":"self_pos",
-          "non-wall":false,
-          "type":"input",
-          "empty-tile":false,
-          "name":"choose_target",
-          "body-only":{
-            "body-type":false
-          }
-        },{
-          "type":"operator",
-          "output":"ani",
-          "name":"get_attribute",
-          "which":"ANI"
-        },{
-          "type":"operator",
-          "pos":"=self_pos",
-          "name":"get_body_at",
-          "output":"body"
-        }],
       "effects":[{
-          "center":"=self_pos",
-          "size":3,
           "card":"stunned",
-          "type":"effect",
+          "center":"=pos",
           "ignore_owner":true,
-          "name":"place_widget_on_area"
+          "name":"place_widget_on_area",
+          "size":3,
+          "type":"effect"
         },{
           "attr":"=ani",
-          "center":"=self_pos",
-          "size":3,
-          "type":"effect",
+          "base":4,
+          "center":"=pos",
           "ignore_owner":true,
+          "mod":20,
           "name":"damage_on_area",
-          "base":4
+          "size":3,
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":3,
+          "body-only":{
+            "body-type":false
+          },
+          "max-range":0,
+          "name":"choose_target",
+          "output":"self_pos",
+          "type":"input",
+          "non-wall":false,
+          "empty-tile":false
+        },{
+          "name":"get_attribute",
+          "output":"ani",
+          "type":"operator",
+          "which":"ANI"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "type":"operator"
+        },{
+          "body":"=self_body",
+          "name":"get_body_pos",
+          "output":"pos",
+          "type":"operator"
         }]
     }
   },
+  "attr":"ANI",
+  "cost":3,
   "desc":"",
-  "type-description":"",
-  "pp":0,
+  "icon":"card-stomp",
   "name":"Stomp",
-  "set":"brawler"
+  "pp":0,
+  "set":"control_expert",
+  "type-description":"",
+  "one_time":false
 }

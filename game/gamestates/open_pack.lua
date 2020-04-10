@@ -1,10 +1,10 @@
-
-local INPUT = require 'input'
+local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
-local PackView = require 'view.packlist'
-local CardView = require 'view.consumelist'
+local DEFS         = require 'domain.definitions'
+local PLAYSFX      = require 'helpers.playsfx'
+local PackView     = require 'view.packlist'
+local CardView     = require 'view.consumelist'
+local Draw         = require "draw"
 
 local state = {}
 
@@ -12,6 +12,7 @@ local _route
 local _card_list_view
 local _pack
 local _leave
+local _view
 local _status
 local _pack_index
 
@@ -39,7 +40,9 @@ local function _confirm()
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
+    _card_list_view:sendToBackbuffer(_view.backbuffer)
+    _view.actor:show()
   end
 end
 
@@ -57,27 +60,33 @@ local function _consumeCards(consumed)
   end
 end
 
-function state:enter(from, route, packlist)
+function state:enter(from, view, route, packlist)
+  _view = view
+  _view.action_hud.minimap:hide()
   _status = "choosing_pack"
   _route = route
   _pack = nil
   _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
   if #packlist > 0 then
-    _card_list_view:addElement("HUD")
+    _card_list_view:register("HUD")
   else
     _leave = true
   end
 end
 
 function state:leave()
+  if _card_list_view.getExpGained and _card_list_view:getExpGained() > 0 then
+    _view.actor:timedHide(1)
+  else
+    _view.actor:hide()
+  end
+  _view.action_hud.minimap:show()
   _leave = false
   _card_list_view:close()
   _card_list_view = nil
 end
 
 function state:update(dt)
-  if DEBUG then return end
-
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
     PLAYSFX 'back-menu'

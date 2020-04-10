@@ -1,4 +1,6 @@
 
+-- luacheck: globals love
+
 local WALL = {}
 
 local SCHEMATICS  = require 'domain.definitions.schematics'
@@ -9,15 +11,14 @@ local WallMesh    = require 'view.sector.mesh.wall'
 
 local _TILE_W = VIEWDEFS.TILE_W
 local _TILE_H = VIEWDEFS.TILE_H
-local _WALL_H = 80
-local _MARGIN_W = 12
-local _MARGIN_H = 8
+local _MARGIN_W = 0
+local _MARGIN_H = 0
 local _BORDER_W = 8
 local _BORDER_H = 6
 local _GRID_W = 24
 local _GRID_H = 18
 
-local _TOPLEFT = vec2(0,0)
+local _TOPLEFT = vec2(0,0) -- luacheck: no unused
 local _TOPRIGHT = vec2(_TILE_W, 0)
 local _BOTLEFT = vec2(0, _TILE_H)
 local _BOTRIGHT = vec2(_TILE_W, _TILE_H)
@@ -28,7 +29,6 @@ local _BORDER_COLOR  = {43/256, 100/256, 112/256, 1}
 local _TOP_COLOR  = {0.2, 0.2, 0.2, 0.6}
 
 local _W, _H
-local _MAX_VTX = 4096
 
 local _VTX_FORMAT = {
   {'VertexPosition', 'float', 2},
@@ -50,13 +50,7 @@ vec4 position(mat4 transform_projection, vec4 vertex_position) {
 ]]
 local _VTXSHADER
 
-local _mesh
 local _rowmeshes
-local _vertexcount = 0
-
-local function _wallidx(i, j)
-  return (i-1)*_W + j
-end
 
 local function _neighbors(sector, i, j)
   local neighbors = {}
@@ -100,13 +94,12 @@ local _CORNER_VER = _pack{ _rect(_MARGIN_W + _BORDER_W, _GRID_W, 0, _GRID_H) }
 local _CORNER_OUT = _pack{ vec2(_MARGIN_W + _BORDER_W, _GRID_H),
                            vec2(_GRID_W, _MARGIN_H + _BORDER_H),
                            vec2(_GRID_W, _GRID_H) }
-local _CORNER_INN = _pack{ vec2(0, _MARGIN_H + _BORDER_H), 
+local _CORNER_INN = _pack{ vec2(0, _MARGIN_H + _BORDER_H),
                            vec2(_MARGIN_W + _BORDER_W, 0), vec2(0, _GRID_H),
                            vec2(_GRID_W, 0), vec2(_GRID_W, _GRID_H) }
 local _CORNER_ALL = _pack{ _rect(0, _GRID_W, 0, _GRID_H) }
 
 function WALL.load(sector)
-  local count = 0
   _W, _H = sector:getDimensions()
   _rowmeshes = {}
   if not _VTXSHADER then _VTXSHADER = love.graphics.newShader(_VTXCODE) end
@@ -143,7 +136,7 @@ function WALL.load(sector)
         elseif _walled(neighbors, 1, 2) and _empty(neighbors, 2, 1) then
           -- straight up
           wall:addSide(nil, vec2(_MARGIN_W, 0), vec2(_MARGIN_W, _GRID_H),
-                            vec2(_BORDER_W, 0)) 
+                            vec2(_BORDER_W, 0))
           wall:addTop(_TOP_COLOR, _CORNER_VER())
         elseif _empty(neighbors, 2, 1) and _empty(neighbors, 1, 2) then
           -- outer corner
@@ -172,7 +165,7 @@ function WALL.load(sector)
           -- straight up
           wall:addSide(nil, vec2(_TILE_W - _MARGIN_W, 0),
                             vec2(_TILE_W - _MARGIN_W, _GRID_H),
-                            vec2(-_BORDER_W, 0)) 
+                            vec2(-_BORDER_W, 0))
           wall:addTop(_TOP_COLOR, _xform(_TOPRIGHT, -1, 1, _CORNER_VER()))
         elseif _empty(neighbors, 1, 2) and _empty(neighbors, 2, 3) then
           -- outer corner
@@ -204,7 +197,7 @@ function WALL.load(sector)
 
         -- middle
         do
-          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W, _GRID_H, 
+          wall:addTop(_TOP_COLOR, _rect(_GRID_W, _TILE_W - _GRID_W, _GRID_H,
                                         _TILE_H - _GRID_H))
         end
 
@@ -314,10 +307,7 @@ function WALL.load(sector)
       _rowmeshes[i] = false
     end
   end
-  _mesh = love.graphics.newMesh(_MAX_VTX, 'triangles', 'stream')
 end
-
-local _NULL_VTX = {0, 0, 0, 0, 0, 0, 0, 0}
 
 function WALL.drawRow(i, mask)
   local g = love.graphics

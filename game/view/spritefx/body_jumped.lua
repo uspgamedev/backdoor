@@ -11,7 +11,7 @@ function SPRITEFX.apply(sectorview, args)
   local offset = {i - i0, j - j0}
   local jump_offset = {0}
   local di, dj = unpack(offset)
-  local body_sprite = sectorview:getBodySprite(body)
+  local body_sprite = sectorview:getBodyView(body).sprite
   body_sprite:setDecorator(
     function (self, x, y, ...)
      local di, dj = unpack(offset)

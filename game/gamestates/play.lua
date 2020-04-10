@@ -1,16 +1,16 @@
-
 --MODULE FOR THE GAMESTATE: GAME--
 
-local INPUT       = require 'input'
-local GUI         = require 'debug.gui'
-local PROFILE     = require 'infra.profile'
-local PLAYSFX     = require 'helpers.playsfx'
+-- luacheck: globals SWITCHER GS MAIN_TIMER, no self
 
+local PLAYSFX     = require 'helpers.playsfx'
+local PROFILE     = require 'infra.profile'
+local RUNFLAGS    = require 'infra.runflags'
+
+local GameplayView = require 'view.gameplay'
 local Route       = require 'domain.route'
-local SectorView  = require 'view.sector'
-local HandView    = require 'view.hand'
-local ActorView   = require 'view.actor'
 local FadeView    = require 'view.fade'
+local Util        = require "steaming.util"
+local Draw        = require "draw"
 local SoundTrack  = require 'view.soundtrack'
 
 local Activity    = require 'common.activity'
@@ -26,123 +26,118 @@ local _player
 local _next_action
 
 local _view
-local _gui
 local _soundtrack
 
-local _switch_to
-local _alert
+--Forward functions declaration
+local _updateSoundtrack
 
 --LOCAL FUNCTION--
 
+local function _saveRoute()
+  PROFILE.saveRoute(_route.saveState())
+end
+
 local function _playTurns(...)
-  local request,extra = _route.playTurns(...)
+  local request, extra = _route.playTurns(...)
+
+  _updateSoundtrack()
 
   if request == "playerDead" then
-    SWITCHER.switch(GS.START_MENU)
+    _view.action_hud:destroy()
+    _view.actor:destroy()
+    _view.action_hud:disableTurn()
+    SWITCHER.push(GS.GAMEOVER, _player, _view)
+  elseif request == "playerWin" then
+    _route.win()
+    _view.action_hud:destroy()
+    _view.actor:destroy()
+    _view.action_hud:disableTurn()
+    SWITCHER.push(GS.WIN, _player, _view)
   elseif request == "userTurn" then
-    SWITCHER.push(GS.USER_TURN, _route, _view, _alert)
-    _alert = false
+    _saveRoute()
+    SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
+    _view.action_hud:disableTurn()
     _activity:changeSector(...)
   elseif request == "report" then
-    _view.sector:startVFX(extra)
-    _alert = _alert or (extra.type == 'text_rise')
-                    and (extra.body == _player:getBody())
-    SWITCHER.push(GS.ANIMATION, _view.sector)
+    local player = _route.getControlledActor()
+    if extra.actor ~= player then
+      _view.action_hud:disableTurn()
+    end
+    SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
 end
 
+local function _initFrontend()
+
+  _view:setup(_route)
+
+  -- GUI
+  if RUNFLAGS.DEVELOPMENT then
+    local gui = Util.findId('devmode-gui')
+    gui.sector_view = _view.sector
+  end
+
+end
+
 function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
-  local route_data = _route.saveState()
-  PROFILE.saveRoute(route_data)
-  fade_view:addElement("GUI")
+  _saveRoute()
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   SWITCHER.switch(GS.START_MENU)
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
 end
 
 function _activity:changeSector()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
   PLAYSFX 'change-sector'
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
-  self.yield()
+  self.wait()
   local change_sector_ok = _route.checkSector()
   assert(change_sector_ok, "Sector Change fuck up")
   _view.sector:sectorChanged()
-  _soundtrack.playTheme(_route.getCurrentSector():getTheme())
+  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
-  self.yield()
+  self.wait()
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
   return _playTurns()
 end
 
 function _activity:fadeInGUI()
   local fade_view = FadeView(FadeView.STATE_FADED)
-  fade_view:addElement("GUI")
+  fade_view:register("GUI")
   MAIN_TIMER:after(FadeView.FADE_TIME, self.resume)
-  self.yield()
+  self.wait()
   fade_view:fadeInAndThen(self.resume)
-  self.yield()
+  self.wait()
   fade_view:destroy()
 end
 
 --STATE FUNCTIONS--
 
-function state:init()
-  _alert = false
+function state:init() -- luacheck: no self
 end
 
-function state:enter(pre, route_data)
+function state:enter(_, route_data)
 
   -- load route
   _route = Route()
   _route.loadState(route_data)
 
-  -- View table
-  _view = {}
+  -- setup soundtrack
+  _soundtrack = SoundTrack:get()
+  _soundtrack:playTheme(_route.getCurrentSector():getTheme())
 
-  -- sector view
-  local sector = _route.getCurrentSector()
-
-  _view.sector = SectorView(_route)
-  _view.sector:addElement("L1", nil, "sector_view")
-  _view.sector:lookAt(_player)
-
-  -- hand view
-  _view.hand = HandView(_route)
-  _view.hand:addElement("HUD_BG", nil, "hand_view")
-  Signal.register(
-    "actor_draw",
-    function(actor, card)
-      _view.hand:addCard(actor,card)
-    end
-  )
-  Signal.register(
-    "actor_used_card",
-    function(actor, card_index)
-      _view.hand:removeCard(actor,card_index)
-    end
-  )
-
-  -- Actor view
-  _view.actor = ActorView(_route)
-  _view.actor:addElement("HUD_BG")
-
-  -- GUI
-  _gui = GUI(_view.sector)
-  _gui:addElement("GUI")
-
-  -- Sound Track
-  _soundtrack = SoundTrack()
-  _soundtrack.playTheme(sector:getTheme())
+  -- create general gameplay view
+  _view = GameplayView()
 
   -- start gamestate
   _playTurns()
@@ -150,54 +145,48 @@ function state:enter(pre, route_data)
   -- set player
   _player = _route.getControlledActor()
 
+  _initFrontend()
+
   _activity:fadeInGUI()
 
 end
 
 function state:leave()
 
+  _saveRoute()
   _route.destroyAll()
-  for _,view in pairs(_view) do
-    view:destroy()
+  _view:destroy()
+  if RUNFLAGS.DEVELOPMENT then
+    Util.findId('devmode-gui').sector_view = nil
   end
-  _gui:destroy()
-  _soundtrack.playTheme(nil)
+  _soundtrack:clearTheme()
   Util.destroyAll()
 
 end
 
-function state:update(dt)
-  if not DEBUG then
-
-    --FIXME:this doesn't need to happen every update (I think)
-    if _route.getControlledActor() or _player then
-      _view.sector:updateFov(_route.getControlledActor() or _player)
-    else
-      print("oops")
-    end
-
-    if INPUT.wasAnyPressed(0.5) then
-      _alert = true
-    end
-
-    if _next_action then
-      _playTurns(unpack(_next_action))
-    end
-    _view.sector:lookAt(_route.getControlledActor() or _player)
+function state:update(_)
+  --FIXME:this doesn't need to happen every update (I think)
+  if _route.getControlledActor() or _player then
+    _view.sector:updateFov(_route.getControlledActor() or _player)
+  else
+    return error("missing player")
   end
 
-  Util.destroyAll()
-
+  if _next_action then
+    _playTurns(unpack(_next_action))
+  end
+  _view.sector:lookAt(_route.getControlledActor() or _player)
 end
 
-function state:resume(state, args)
+function state:resume(from, args)
 
-  if state == GS.USER_TURN then
+  if from == GS.USER_TURN then
     if args == "SAVE_AND_QUIT" then return _activity:saveAndQuit() end
     _next_action = args.next_action
-  elseif state == GS.ANIMATION then
-    _alert = _alert or args
+  elseif from == GS.ANIMATION then
     _playTurns()
+  elseif from == GS.GAMEOVER or from == GS.WIN then
+    SWITCHER.switch(GS.START_MENU)
   end
 
 end
@@ -206,8 +195,20 @@ function state:draw()
   Draw.allTables()
 end
 
-function state:keypressed(key)
-  if key == 'f1' then DEBUG = true end
+--Local functions
+
+function _updateSoundtrack()
+  if _soundtrack then
+
+    --Check for danger
+    local hostile_bodies = _route.getControlledActor():getHostileBodies()
+    if #hostile_bodies > 0 then
+      _soundtrack:enableTrack("danger")
+    else
+      _soundtrack:disableTrack("danger")
+    end
+
+  end
 end
 
 --Return state functions

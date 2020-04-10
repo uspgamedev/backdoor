@@ -1,0 +1,11 @@
+{
+  "ability":{
+    "effects":[{
+        "name":"win",
+        "type":"effect"
+      }],
+    "inputs":[]
+  },
+  "name":"Vanth Fruit of Discipline",
+  "sprite":"vanth-fruit-discipline"
+}

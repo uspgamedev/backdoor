@@ -1,20 +1,23 @@
 {
-  "extends":false,
-  "faction":"agressive",
-  "drops":[{
-      "droptype":"pack",
-      "droprate":10
-    },{
-      "droptype":"food",
-      "droprate":80
-    },{
-      "droptype":"pack",
-      "droprate":10
-    }],
-  "res":-1,
-  "con":-2,
   "appearance":"slime",
+  "description":"Delicious when fried.",
+  "drops":[{
+      "droprate":20,
+      "droptype":"slime-pack"
+    },{
+      "droprate":99,
+      "droptype":"food"
+    },{
+      "droprate":20,
+      "droptype":"slime-pack"
+    },{
+      "droprate":20,
+      "droptype":"food2"
+    }],
+  "efc":-1,
+  "faction":"agressive",
   "fin":-2,
   "name":"Slime",
-  "description":"Delicious when fried."
+  "res":-1,
+  "extends":false
 }

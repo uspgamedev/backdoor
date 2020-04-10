@@ -1,12 +1,13 @@
 {
   "ani":-2,
-  "signature":"tackle",
+  "arc":-2,
   "behavior":"aggro",
   "cor":-2,
-  "arc":-2,
-  "collection":"anything",
-  "extends":false,
   "description":"Oh honey...",
+  "initial_buffer":[],
   "name":"Dumb",
-  "initial_buffer":[]
+  "signature":"tackle",
+  "traits":[],
+  "collection":false,
+  "extends":false
 }

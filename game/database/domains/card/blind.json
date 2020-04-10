@@ -1,20 +1,21 @@
 {
   "attr":"ANI",
-  "icon":false,
-  "set":false,
+  "cost":0,
   "desc":"",
+  "name":"Blind",
+  "one_time":true,
   "type-description":"",
   "widget":{
+    "charges":6,
     "operators":[{
         "attr":"FOV",
         "op":"-",
         "val":3
       }],
-    "trigger":"on_turn",
     "status-tags":[],
-    "charges":4,
-    "placement":false
+    "trigger":"on_turn",
+    "equipment":false
   },
-  "name":"Blind",
-  "one_time":true
+  "icon":false,
+  "set":false
 }

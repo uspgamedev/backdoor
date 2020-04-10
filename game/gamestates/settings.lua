@@ -5,6 +5,8 @@ local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
+local Draw         = require "draw"
+local SoundTrack   = require 'view.soundtrack'
 
 local state = {}
 
@@ -21,6 +23,7 @@ local _fieldcount
 local _original
 local _view
 local _save
+local _changes
 
 local function _changeField(field, offset)
   local low, high = unpack(_schema[field]["range"])
@@ -28,6 +31,7 @@ local function _changeField(field, offset)
   local value = (_changes[field] or _original[field]) + offset * step
   _changes[field] = min(high, max(low, value))
   PROFILE.setPreference(field, _changes[field])
+  SoundTrack.get():setVolumeToPreference()
 end
 
 function state:init()
@@ -41,7 +45,7 @@ function state:init()
   _selection = 1
 end
 
-function state:enter(from, ...)
+function state:enter(from)
   _selection = 1
   _original = {}
   for _,field in ipairs(_fields) do
@@ -50,7 +54,7 @@ function state:enter(from, ...)
   end
   _changes = setmetatable({}, { __index = original })
   _view = SettingsView(_fields)
-  _view:addElement("GUI")
+  _view:register("GUI")
 end
 
 function state:update(dt)
@@ -77,17 +81,18 @@ function state:update(dt)
     PLAYSFX 'ok-menu'
     _changeField(_fields[_selection], 1)
   end
+
 end
 
 function state:leave()
   -- when you leave, it will either save or restore the changes
   if _save then
     PROFILE.save()
-    PROFILE.init()
   else
-    for field, value in ipairs(_original) do
+    for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
+    SoundTrack.get():setVolumeToPreference()
   end
   _view:destroy()
 end
@@ -97,4 +102,3 @@ function state:draw()
 end
 
 return state
-

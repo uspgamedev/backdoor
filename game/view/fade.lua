@@ -1,3 +1,5 @@
+local Class   = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 local FadeView = Class{
   __includes = { ELEMENT }
@@ -54,4 +56,3 @@ function FadeView:draw()
 end
 
 return FadeView
-

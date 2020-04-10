@@ -3,7 +3,8 @@ local DB = require 'database'
 local RES = require 'resources'
 local FONT = require 'view.helpers.font'
 local COLORS = require 'domain.definitions.colors'
-
+local Class = require "steaming.extra_libs.hump.class"
+local ELEMENT = require "steaming.classes.primitives.element"
 
 --CONSTANTS--
 local _CONTEXTS = {

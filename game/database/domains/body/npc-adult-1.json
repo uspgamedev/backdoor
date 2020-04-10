@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Worried Adult]\nAre you well rested for the journey?\n\n[newpage wait:1.2]\n[header name:Worried Adult]\nRemember that to get a new hand of cards, [pause value:.25]and \nrestart your [color value:pp]Focus,[pause value:.25]\n[color value:regular] you need to \n[color value:blue]hold A.[color value:regular]\n\n[newpage wait:3.3]\n[header name:Worried Adult]\nHowever, that costs you [color value:pp][endl]\nPlay Points (PP).[color value:regular] [pause value:.8] You can check how much [color value:pp]PP[color value:regular] you have left at the bottom left,[pause value:.3] inside your buffer.\n\n[newpage wait:3.7]\n[header name:Worried Adult]\nYou can get some of my[endl][color value:pp]food\n[color value:regular] [style value:wave][sprite id:food/scale:.7][style value:none] if you need to \n replenish some...",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Adult 1",
+  "res":0
+}

@@ -1,16 +1,10 @@
 
 local INPUT = require 'input'
-local DIR = require 'domain.definitions.dir'
-
-local pi    = math.pi
-local abs   = math.abs
-local atan2 = math.atan2
 
 local DIRECTIONALS = {}
 
 local _DEADZONE = .5
 local _DEADZONE_SQR = _DEADZONE * _DEADZONE
-local _SIXTEENTH = math.pi / 8
 
 local _DIR_ENUM = {
   c  = false,
@@ -29,10 +23,6 @@ local _DIR_TRANSLATE = {
   RIGHT     = 'r',
   DOWN      = 'd',
   LEFT      = 'l',
-  UPLEFT    = 'lu',
-  UPRIGHT   = 'ru',
-  DOWNRIGHT = 'rd',
-  DOWNLEFT  = 'ld',
 }
 
 local _OCTANTS = {}
@@ -51,22 +41,6 @@ end
 
 function _OCTANTS.LEFT(x, y)
   return x/3 < y and y < -x/3
-end
-
-function _OCTANTS.UPLEFT(x, y)
-  return 3*x <= y and y <= x/3
-end
-
-function _OCTANTS.UPRIGHT(x, y)
-  return -3*x <= y and y <= -x/3
-end
-
-function _OCTANTS.DOWNRIGHT(x, y)
-  return x/3 <= y and y <= 3*x
-end
-
-function _OCTANTS.DOWNLEFT(x, y)
-  return -x/3 <= y and y <= -3*x
 end
 
 DIRECTIONALS.DEADZONE = _DEADZONE
@@ -123,32 +97,26 @@ function DIRECTIONALS.isDirectionDown(direction)
   return dir == hat or dir == axis or INPUT.isActionDown(direction)
 end
 
---Check the if any direction is triggered, including diagonals
+function DIRECTIONALS.getDirectionDown()
+  if DIRECTIONALS.isDirectionDown('UP') then
+    return 'UP'
+  elseif DIRECTIONALS.isDirectionDown('DOWN') then
+    return 'DOWN'
+  elseif DIRECTIONALS.isDirectionDown('LEFT') then
+    return 'LEFT'
+  elseif DIRECTIONALS.isDirectionDown('RIGHT') then
+    return 'RIGHT'
+  end
+
+  return nil
+end
+
+--Check the if any direction is triggered
 function DIRECTIONALS.hasDirectionTriggered()
-  if DIRECTIONALS.wasDirectionTriggered('UPLEFT') then
-    return 'UPLEFT'
-  elseif DIRECTIONALS.wasDirectionTriggered('UPRIGHT') then
-    return 'UPRIGHT'
-  elseif DIRECTIONALS.wasDirectionTriggered('DOWNLEFT') then
-    return 'DOWNLEFT'
-  elseif DIRECTIONALS.wasDirectionTriggered('DOWNRIGHT') then
-    return 'DOWNRIGHT'
-  elseif DIRECTIONALS.wasDirectionTriggered('UP') then
-     if DIRECTIONALS.wasDirectionTriggered('LEFT') then
-       return  'UPLEFT'
-     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-       return 'UPRIGHT'
-     else
-       return 'UP'
-     end
+  if DIRECTIONALS.wasDirectionTriggered('UP') then
+    return 'UP'
   elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-     if DIRECTIONALS.wasDirectionTriggered('LEFT') then
-       return 'DOWNLEFT'
-     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-       return 'DOWNRIGHT'
-     else
-       return 'DOWN'
-     end
+    return 'DOWN'
   elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
     return 'LEFT'
   elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then

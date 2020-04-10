@@ -1,0 +1,22 @@
+{
+  "attr":"ANI",
+  "cost":1,
+  "desc":"",
+  "icon":"card-concentration",
+  "name":"Concentration",
+  "set":"support_common",
+  "type-description":"",
+  "widget":{
+    "charges":2,
+    "operators":[{
+        "attr":"ARC",
+        "op":"+",
+        "val":2
+      }],
+    "status-tags":[],
+    "trigger":"on_turn",
+    "equipment":false
+  },
+  "art":false,
+  "one_time":false
+}

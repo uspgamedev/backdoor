@@ -1,0 +1,31 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":0,
+          "base":10,
+          "mod":100,
+          "name":"heal",
+          "target":"=self_body",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self_body",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"NONE",
+  "cost":1,
+  "icon":"card-greater-potion",
+  "name":"Greater Healing Potion",
+  "one_time":true,
+  "set":"consumables_advanced",
+  "temporary":true
+}

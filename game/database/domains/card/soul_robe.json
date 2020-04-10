@@ -1,25 +1,30 @@
 {
   "attr":"ANI",
-  "icon":"card-soul-robe",
-  "one_time":false,
+  "cost":3,
   "desc":"",
+  "icon":"card-soul-robe",
+  "name":"Soul Robe",
   "type-description":"",
   "widget":{
+    "charges":5,
+    "equipment":{
+      "defensive":{
+        "defense":0
+      },
+      "active":false
+    },
     "operators":[{
-        "op":"+",
         "attr":"ANI",
+        "op":"+",
         "val":2
       }],
-    "trigger":false,
     "status-tags":[],
     "trigger-condition":{
       "effects":[],
       "inputs":[]
     },
-    "charges":0,
-    "placement":"suit"
+    "trigger":false
   },
-  "pp":3,
-  "name":"Soul Robe",
-  "set":"arcanist"
+  "set":false,
+  "one_time":false
 }

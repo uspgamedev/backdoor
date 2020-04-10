@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[header name:Helpful Elder]\n[speed value:medium]Here is a [color value:blue]pack[color value:regular][sprite id:pack/scale:.7]for you,[pause value:.3] young one.\n\n[newpage wait:2]\n[header name:Helpful Elder]\n[speed value:medium]\nYou can look at your collected packs \n[color value:blue]with W,[color value:regular][pause value:.5] \nand open them if you [color value:blue]hold D.\n[color value:regular]\n\n[newpage wait:2.6]\n[header name:Helpful Elder]\n[speed value:medium]\nIts important to choose which cards to \n[color value:red]consume and gain experience,[pause value:.7][color value:regular] \nand which to[color value:blue] keep and add to \nyour buffer.[color value:regular]",
+  "drops":[],
+  "efc":0,
+  "extends":"npc-base",
+  "faction":"allied",
+  "fin":0,
+  "name":"Elder 1",
+  "res":0
+}

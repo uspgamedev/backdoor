@@ -1,0 +1,33 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "body":"=target_body",
+          "card":"stunned",
+          "name":"place_widget",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":1,
+          "body-only":{
+            "body-type":false
+          },
+          "max-range":1,
+          "name":"choose_target",
+          "output":"target_pos",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"target_body",
+          "pos":"=target_pos",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"ANI",
+  "cost":2,
+  "desc":"The best defense is a good offense.\nThe best offense is a good punch.",
+  "icon":"card-stunning-blow",
+  "name":"Stunning Blow",
+  "set":"control_common"
+}

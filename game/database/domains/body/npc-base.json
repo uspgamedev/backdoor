@@ -1,0 +1,11 @@
+{
+  "appearance":"corgi",
+  "dialogue":"[speed value:ultrafast]\n[opacity value:semi]NPC:\n[opacity value:regular] \nHello there!",
+  "drops":[],
+  "efc":2,
+  "faction":"allied",
+  "fin":2,
+  "name":"Basic NPC",
+  "res":2,
+  "extends":false
+}

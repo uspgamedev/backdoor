@@ -1,0 +1,47 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "attr":"=cor",
+          "base":6,
+          "center":"=self-pos",
+          "ignore_owner":true,
+          "mod":60,
+          "name":"damage_on_area",
+          "size":2,
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":2,
+          "max-range":0,
+          "name":"choose_target",
+          "output":"center",
+          "type":"input"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"self-body",
+          "type":"operator"
+        },{
+          "body":"=self-body",
+          "name":"get_body_pos",
+          "output":"self-pos",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"COR",
+  "cost":3,
+  "icon":"card-roundhouse-kick",
+  "name":"Roundhouse Kick",
+  "set":"strikes_common"
+}

@@ -1,4 +1,6 @@
 
+-- luacheck: no self
+
 local GameElement = require 'domain.gameelement'
 local DB          = require 'database'
 local Card        = require 'domain.card'
@@ -7,9 +9,10 @@ local ABILITY     = require 'domain.ability'
 local RANDOM      = require 'common.random'
 local DEFS        = require 'domain.definitions'
 
-local PLACEMENTS  = require 'domain.definitions.placements'
-local PACK        = require 'domain.pack'
-local Visibility  = require 'common.visibility'
+local ACTIONDEFS  = require 'domain.definitions.action'
+local VISIBILITY  = require 'common.visibility'
+local Util        = require "steaming.util"
+local Class       = require "steaming.extra_libs.hump.class"
 
 local math = require 'common.math'
 
@@ -26,7 +29,7 @@ function Actor:init(spec_name)
   self.behavior = require('domain.behaviors.' .. self:getSpec 'behavior')
 
   self.body_id = nil
-  self.cooldown = DEFS.ACTION.EXHAUSTION_UNIT
+  self.energy = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
   self.focus = 0
@@ -62,7 +65,7 @@ end
 function Actor:loadState(state)
   self:setId(state.id or self.id)
   self:setSubtype(self.spectype)
-  self.cooldown = state.cooldown or self.cooldown
+  self.energy = state.energy or self.energy
   self.body_id = state.body_id or self.body_id
   self.exp = state.exp or self.exp
   self.playpoints = state.playpoints or self.playpoints
@@ -102,7 +105,7 @@ function Actor:saveState()
   local state = {}
   state.id = self:getId()
   state.specname = self.specname
-  state.cooldown = self.cooldown
+  state.energy = self.energy
   state.body_id = self.body_id
   state.exp = self.exp
   state.playpoints = self.playpoints
@@ -149,8 +152,8 @@ function Actor:getExp()
   return self.exp
 end
 
-function Actor:getCooldown()
-  return self.cooldown
+function Actor:getEnergy()
+  return self.energy
 end
 
 function Actor:modifyExpBy(n)
@@ -219,7 +222,7 @@ function Actor:upgradeANI(n)
 end
 
 function Actor:getSPD()
-  return self:getWithMod('SPD', DEFS.ATTR.BASE_SPD)
+  return self:getWithMod('SPD', self:getBody():getSpeed())
 end
 
 --[[ Body methods ]]--
@@ -243,13 +246,11 @@ end
 --[[ Action methods ]]--
 
 function Actor:isWidget(slot)
-  return type(slot) == 'string'
-         and slot:match("^WIDGET/%d+$")
+  return type(slot) == 'string' and slot:match("^WIDGET/%d+$")
 end
 
 function Actor:isCard(slot)
-  return type(slot) == 'string'
-         and slot:match("^CARD/%d+$")
+  return type(slot) == 'string' and slot:match("^CARD/%d+$")
 end
 
 function Actor:getSignature()
@@ -306,6 +307,10 @@ function Actor:getBackBufferCard(i)
   return self.buffer[self:getBufferSize()+1+i]
 end
 
+function Actor:getBufferCard(i)
+  return self.buffer[i]
+end
+
 function Actor:removeBufferCard(i)
   assert(self.buffer[i] and self.buffer[i] ~= DEFS.DONE,
          "Invalid card index to remove")
@@ -322,7 +327,7 @@ end
 
 function Actor:countCardInBuffer(specname)
   local count = 0
-  for i,card in ipairs(self.buffer) do
+  for _,card in ipairs(self.buffer) do
     if card:getSpecName() == specname then
       count = count + 1
     end
@@ -354,10 +359,45 @@ function Actor:drawCard()
   if card == DEFS.DONE then
     RANDOM.shuffle(self.buffer)
     table.insert(self.buffer, DEFS.DONE)
+    coroutine.yield('report', {
+      type = "shuffle_buffers",
+      actor = self,
+    })
     card = table.remove(self.buffer, 1)
   end
-  table.insert(self.hand, card)
-  Signal.emit("actor_draw", self, card)
+  table.insert(self.hand, 1, card)
+  coroutine.yield('report', {
+    type = "draw_card",
+    actor = self,
+    card = card
+  })
+end
+
+function Actor:createEquipmentCards()
+  local active_eqp = self:getBody():getEquipmentAt('wieldable')
+  if active_eqp then
+    active_eqp:addUsages()
+    for _,card_spec in active_eqp:eachActiveEquipmentCards() do
+      local card = Card(card_spec.card)
+      card:setOwner(self)
+      table.insert(self.hand, 1, card)
+      coroutine.yield('report', {
+        type = "create_equipment_card",
+        actor = self,
+        card = card,
+        widget = active_eqp,
+      })
+    end
+  end
+end
+
+function Actor:getActionCardsCount()
+  local active_eqp = self:getBody():getEquipmentAt('wieldable')
+  if active_eqp then
+    return active_eqp:getActiveEquipmentCardCount()
+  else
+    return 0
+  end
 end
 
 function Actor:getHandCard(index)
@@ -365,6 +405,7 @@ function Actor:getHandCard(index)
 end
 
 function Actor:removeHandCard(index)
+  index = index or #self.hand
   assert(index >= 1 and index <= #self.hand)
   return table.remove(self.hand, index)
 end
@@ -373,7 +414,7 @@ function Actor:addCardToBackbuffer(card)
   table.insert(self.buffer, card)
 end
 
-function Actor:consumeCard(card)
+function Actor:consumeCard(card) -- luacheck: no unused
   --FIXME: add card rarity modifier!
   local cor, arc, ani = self:trainingDitribution()
   local xp = DEFS.CONSUME_EXP
@@ -408,12 +449,11 @@ function Actor:getPrizePackCount()
   return #self.prizes
 end
 
--- Visibility Methods --
+-- VISIBILITY Methods --
 
 function Actor:getVisibleBodies()
   local seen = {}
   local sector = self:getSector()
-  local w, h = sector:getDimensions()
 
   local range = self:getFovRange()
   local pi, pj = self:getPos()
@@ -461,16 +501,16 @@ end
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then
-    self.fov[sector:getId()] = Visibility.purgeFov(sector)
+    self.fov[sector:getId()] = VISIBILITY.purgeFov(sector)
   end
 end
 
 function Actor:resetFov(sector)
-  Visibility.resetFov(self:getFov(sector), sector)
+  VISIBILITY.resetFov(self:getFov(sector), sector)
 end
 
 function Actor:updateFov(sector)
-  Visibility.updateFov(self, sector)
+  VISIBILITY.updateFov(self, sector)
 end
 
 function Actor:getFov(sector)
@@ -507,51 +547,56 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.cooldown = math.max(0, self.cooldown - self:getSPD())
+  self.energy = self.energy + self:getSPD()
 end
 
 function Actor:resetFocus()
-  self.focus = DEFS.ACTION.FOCUS_DURATION
+  if self:isFocused() then
+    self:endFocus()
+  end
+  self.focus = DEFS.ACTION.MAX_FOCUS
 end
 
 function Actor:ready()
-  return self:getBody():isAlive() and self.cooldown <= 0
+  return self:getBody():isAlive() and self.energy >= ACTIONDEFS.MAX_ENERGY
 end
 
 function Actor:playCard(card_index)
-  local card = table.remove(self.hand, card_index)
+  local card = self:removeHandCard(card_index)
   local attr = card:getRelatedAttr()
   if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
     self.training[attr] = self.training[attr] + 1
   end
-  if not card:isOneTimeOnly() and not card:isWidget() then
+  if not card:isOneTimeOnly() and not card:isWidget() and not card:isTemporary() then
     self:addCardToBackbuffer(card)
   end
   return card
 end
 
-local function _removeEquipment(body, slot)
-  local equipment = body:getEquipmentAt(slot)
-  local widget_index = equipment and body:findWidget(equipment)
-  if widget_index then
-    body:removeWidget(widget_index)
+function Actor:discardHand()
+  while not self:isHandEmpty() do
+    local index = self:getHandSize()
+    local card = self:removeHandCard(index)
+    if not card:isTemporary() then
+      coroutine.yield('report', {
+        type = 'discard_card',
+        actor = self,
+        card_index = index
+      })
+      self:addCardToBackbuffer(card)
+    else
+      coroutine.yield('report', {
+        type = 'discard_temporary_card',
+        actor = self,
+        card_index = index
+      })
+    end
   end
 end
 
 function Actor:turn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
-  self.focus = math.max(0, self.focus - 1)
-  if self.focus == 0 then
-    while not self:isHandEmpty() do
-      local card = self:removeHandCard(1)
-      self:addCardToBackbuffer(card)
-    end
-    body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
-    _removeEquipment(body, 'weapon')
-    _removeEquipment(body, 'offhand')
-    body:removeAllArmor()
-  end
 end
 
 function Actor:makeAction()
@@ -572,7 +617,29 @@ function Actor:makeAction()
 end
 
 function Actor:exhaust(n)
-  self.cooldown = self.cooldown + n
+  self.energy = self.energy - n * DEFS.ACTION.EXHAUSTION_UNIT
+end
+
+function Actor:spendFocus(n)
+  self.focus = math.max(0, self.focus - n)
+end
+
+function Actor:gainFocus(n)
+  self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
+end
+
+function Actor:checkFocus()
+  if self.focus == 0 then
+    self:endFocus()
+  end
+end
+
+function Actor:endFocus()
+  local body = self:getBody()
+  self:discardHand()
+  self:exhaust(DEFS.ACTION.FOCUS_COST)
+  self.focus = 0
+  body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
 end
 
 function Actor:rewardPP(n)
@@ -581,6 +648,10 @@ end
 
 function Actor:spendPP(n)
   self.playpoints = math.max(self.playpoints - n, 0)
+  coroutine.yield('report', {
+    type = "change_pp",
+    actor = self,
+  })
 end
 
 function Actor:getPP()
@@ -589,7 +660,7 @@ end
 
 function Actor:getPowerLevel()
   local lvl = 0
-  for attr,value in pairs(self.upgrades) do
+  for _,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
   return lvl

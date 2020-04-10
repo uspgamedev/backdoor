@@ -11,7 +11,7 @@ DEPLOY_URL=$(DEPLOY_SITE)/$(DEPLOY_PATH)
 BIN_DIR_WIN32=$(BIN_DIR)/win32
 BIN_DIR_WIN32_PACKAGE=$(BIN_DIR_WIN32)/backdoor
 BIN_DIR_WIN32_DEPS=$(BIN_DIR_WIN32)/deps
-LOVE_WIN32=$(BIN_DIR_WIN32_DEPS)/love-11.1-win32.zip
+LOVE_WIN32=$(BIN_DIR_WIN32_DEPS)/love-11.3-win32.zip
 GAME_WIN32=$(BIN_DIR_WIN32)/backdoor-win32.zip
 
 BIN_DIR_LINUX64=$(BIN_DIR)/linux64
@@ -39,13 +39,13 @@ STEAMING_REPO=externals/STEAMING
 STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
 								 $(STEAMING_REPO)/clean_template/res_manager.lua \
 								 $(STEAMING_REPO)/clean_template/util.lua \
-								 $(STEAMING_REPO)/clean_template/classes \
+								 $(STEAMING_REPO)/clean_template/classes/ \
 								 $(STEAMING_REPO)/clean_template/extra_libs
 
 INPUT_LIB=$(LIBS_DIR)/input
 INPUT_REPO=externals/input
 
-IMGUI_LIB=imgui.so
+IMGUI_LIB=$(GAME_DIR)/imgui.so
 IMGUI_DLL=$(BIN_DIR_WIN32_DEPS)/imgui.dll
 LUAJIT_DLL=$(BIN_DIR_WIN32_DEPS)/lua51.dll
 IMGUI_REPO=externals/love-imgui
@@ -58,14 +58,17 @@ CPML_REPO=externals/cpml
 
 DKJSON_LIB=$(LIBS_DIR)/dkjson.lua
 
-DEPENDENCIES=$(LUX_LIB) $(STEAMING_LIB) $(IMGUI_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
+LIBS=$(LUX_LIB) $(STEAMING_LIB) $(CPML_LIB) $(DKJSON_LIB) $(INPUT_LIB)
+LIBS_ZIP=libs.zip
+
+DEPENDENCIES=$(LIBS) $(IMGUI_LIB)
 
 BUILD_TYPE=nightly
 
 ## MAIN TARGETS
 
 all: $(DEPENDENCIES)
-	love game $(FLAGS)
+	love game --development $(FLAGS)
 
 update:
 	cd $(LUX_REPO); git pull
@@ -150,7 +153,6 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 	cd $(BIN_DIR_LINUX64_IMG); tar -xf $(GAME_LINUX64_TEMPLATE_NAME)
 	cat $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/love $(GAME) > $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
 	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin/backdoor
-	cp $(IMGUI_LIB) $(BIN_DIR_LINUX64_IMG)/squashfs-root/usr/bin
 	chmod +x $(BIN_DIR_LINUX64_IMG)/squashfs-root/AppRun
 	cd $(BIN_DIR_LINUX64_IMG); ./$(APPIMG_TOOL_NAME) squashfs-root
 	mv $(BIN_DIR_LINUX64_IMG)/backdoor-x86_64.AppImage $(BIN_DIR_LINUX64)
@@ -160,7 +162,7 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 
 $(LOVE_WIN32): $(GAME)
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
-	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.1-win32.zip
+	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.3-win32.zip
 
 $(IMGUI_DLL):
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
@@ -172,7 +174,7 @@ $(LUAJIT_DLL):
 
 $(GAME_WIN32): $(GAME) $(IMGUI_DLL) $(LUAJIT_DLL) $(LOVE_WIN32)
 	unzip $(LOVE_WIN32) -d $(BIN_DIR_WIN32)
-	mv $(BIN_DIR_WIN32)/love-11.1.0-win32 $(BIN_DIR_WIN32_PACKAGE)
+	mv $(BIN_DIR_WIN32)/love-11.3-win32 $(BIN_DIR_WIN32_PACKAGE)
 	cp $(IMGUI_DLL) $(LUAJIT_DLL) $(BIN_DIR_WIN32_PACKAGE)
 	cat $(BIN_DIR_WIN32_PACKAGE)/love.exe $(GAME) > $(BIN_DIR_WIN32_PACKAGE)/backdoor.exe
 	rm $(BIN_DIR_WIN32_PACKAGE)/love.exe $(BIN_DIR_WIN32_PACKAGE)/lovec.exe
@@ -187,9 +189,14 @@ $(GAME_OSX_TEMPLATE):
 
 $(GAME_OSX): $(GAME) $(GAME_OSX_TEMPLATE)
 	cd $(BIN_DIR_OSX); unzip $(GAME_OSX_TEMPLATE_NAME)
-	cp $(GAME) $(IMGUI_LIB) $(GAME_OSX_APP)/Contents/Resources
+	cp $(GAME) $(GAME_OSX_APP)/Contents/Resources
 	zip -yr $(GAME_OSX) $(GAME_OSX_APP)
 	rm -rf $(GAME_OSX_TEMPLATE)
+
+## Libs
+
+$(LIBS_ZIP): $(LIBS)
+	zip -r $(LIBS_ZIP) $(LIBS)
 
 ## Deploy
 
@@ -205,6 +212,10 @@ linux: $(GAME_LINUX64)
 .PHONY: osx
 osx: $(GAME_OSX)
 
+.PHONY: deploy-libs
+deploy-libs: $(LIBS_ZIP)
+	scp $(LIBS_ZIP) kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/
+
 .PHONY: deploy
 deploy: $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX)
 	scp $(GAME) $(GAME_WIN32) $(GAME_LINUX64) $(GAME_OSX) kazuo@uspgamedev.org:/var/docker-www/static/downloads/projects/backdoor/$(BUILD_TYPE)/
@@ -219,4 +230,3 @@ clean:
 purge: clean
 	rm -rf externals/*
 	rm -rf bin/*
-

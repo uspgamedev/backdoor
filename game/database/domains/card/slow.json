@@ -1,0 +1,22 @@
+{
+  "attr":"NONE",
+  "cost":0,
+  "icon":"card-upgrade",
+  "name":"Slow",
+  "widget":{
+    "charges":0,
+    "operators":[{
+        "attr":"SPD",
+        "op":"-",
+        "val":4
+      }],
+    "status-tags":[],
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    },
+    "trigger":false,
+    "equipment":false
+  },
+  "set":false
+}

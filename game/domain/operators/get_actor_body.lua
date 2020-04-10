@@ -10,11 +10,13 @@ OP.schema = {
 
 OP.type = 'body'
 
-function OP.process(actor, fieldvalues)
-  return actor:getBody()
+function OP.process(_, fieldvalues)
+  return fieldvalues['actor']:getBody()
 end
 
-OP.preview = OP.process
+function OP.preview(_, fieldvalues)
+  return fieldvalues['actor']
+end
 
 return OP
 

@@ -1,9 +1,10 @@
 
-local INPUT = require 'input'
-local DIRECTIONALS = require 'infra.dir'
-local DEFS = require 'domain.definitions'
-local PLAYSFX = require 'helpers.playsfx'
+local INPUT          = require 'input'
+local DIRECTIONALS   = require 'infra.dir'
+local DEFS           = require 'domain.definitions'
+local PLAYSFX        = require 'helpers.playsfx'
 local PickWidgetView = require 'view.pickwidget'
+local Draw           = require "draw"
 
 local state = {}
 
@@ -43,28 +44,26 @@ function state:enter(from, actor, validator)
 
   if not _leave then
     _view = PickWidgetView(actor)
-    _view:addElement("HUD")
+    _view:register("HUD")
     _view:fadeIn()
   end
 end
 
 function state:update(dt)
-  if not DEBUG then
-    if _leave then
-      (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
-      SWITCHER.pop({})
-    else
-      if DIRECTIONALS.wasDirectionTriggered('UP') then
-        _prev()
-      elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-        _next()
-      elseif INPUT.wasActionPressed('CONFIRM') then
-        _confirm()
-      elseif INPUT.wasActionPressed('CANCEL') then
-        _cancel()
-      end
-      _view:setSelection(_selection)
+  if _leave then
+    (_view and _view.fadeOut or DEFS.NULL_METHOD)(_view)
+    SWITCHER.pop({})
+  else
+    if DIRECTIONALS.wasDirectionTriggered('UP') then
+      _prev()
+    elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
+      _next()
+    elseif INPUT.wasActionPressed('CONFIRM') then
+      _confirm()
+    elseif INPUT.wasActionPressed('CANCEL') then
+      _cancel()
     end
+    _view:setSelection(_selection)
   end
 end
 
@@ -73,4 +72,3 @@ function state:draw()
 end
 
 return state
-
