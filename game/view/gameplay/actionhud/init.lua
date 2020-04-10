@@ -12,9 +12,7 @@ local Minimap       = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
-local HoldBar       = require 'view.helpers.holdbar'
 local CardView      = require 'view.card'
-local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
 local ELEMENT       = require "steaming.classes.primitives.element"
@@ -70,6 +68,7 @@ function ActionHUD:init(route)
 
   -- HUD state (player turn or not)
   self.player_turn = false
+  self.player_focused = false
 
   -- Card info
   self.info_lag = false
@@ -77,14 +76,6 @@ function ActionHUD:init(route)
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
   self.focusbar:register("HUD")
-
-  -- Hold bar
-  local w,h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.holdbar = HoldBar{'SPECIAL'}
-  self.holdbar:setPosition(vec2(w,h)/2)
-  self.holdbar:lock()
-  self.holdbar:register("HUD")
-  self.justheld = false
 
   -- Long walk variables
   self.alert = false
@@ -94,7 +85,7 @@ function ActionHUD:init(route)
 end
 
 function ActionHUD:_loadDocks()
-  local player = assert(self.route.getControlledActor())
+  local player = assert(self.route.getPlayerActor())
   for _, widget in player:getBody():eachWidget() do
     local cardview = CardView(widget)
     local dock = self:getDockFor(widget)
@@ -121,16 +112,12 @@ function ActionHUD:activateAbility()
   self.handview:keepFocusedCard(true)
 end
 
-function ActionHUD:enableTurn(unlock_holdbar)
+function ActionHUD:enableTurn()
   self.player_turn = true
-  if unlock_holdbar and not self.justheld then
-    self.holdbar:unlock()
-  end
 end
 
 function ActionHUD:disableTurn()
   self.player_turn = false
-  self.holdbar:lock()
 end
 
 function ActionHUD:getHandView()
@@ -164,14 +151,6 @@ end
 
 function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
-end
-
-function ActionHUD:lockHoldbar()
-  self.holdbar:lock()
-end
-
-function ActionHUD:unlockHoldbar()
-  self.holdbar:unlock()
 end
 
 function ActionHUD:getDockFor(card)
@@ -240,8 +219,12 @@ end
 local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
 
 function ActionHUD:actionRequested()
+  if INPUT.wasActionPressed('SPECIAL') then
+    self.player_focused = not self.player_focused
+    return false
+  end
   local action_request
-  local player_focused = self.route.getControlledActor():isFocused()
+  local player_focused = self.player_focused
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if player_focused then
     if dir and _HAND_FOCUS_DIR[dir] then
@@ -290,19 +273,6 @@ function ActionHUD:actionRequested()
     end
   end
 
-  if self.justheld and self.player_turn
-                   and not INPUT.isActionDown('SPECIAL') then
-    self.holdbar:unlock()
-    self.justheld = false
-  end
-
-  if self.holdbar:confirmed() then
-    self.holdbar:reset()
-    self.holdbar:lock()
-    self.justheld = true
-    action_request = {DEFS.ACTION.DRAW_NEW_HAND}
-  end
-
   -- choose action
   if self.long_walk then
     if not action_request and LONG_WALK.continue(self) then
@@ -333,13 +303,6 @@ end
 
 function ActionHUD:update(dt)
   self.minimap:update(dt)
-  --Checks if player can draw a new hand
-  local player = self.route.getControlledActor()
-  if player:getPP() < player:getBody():getConsumption() and
-     not self.holdbar:isLocked()
-  then
-    self.holdbar:lock()
-  end
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
@@ -347,7 +310,7 @@ function ActionHUD:update(dt)
   end
 
   if self.player_turn then
-    if self.route.getControlledActor():isFocused() then
+    if self.player_focused then
       self.focusbar:show()
       self:enableCardInfo()
       if not self.handview:isActive() then
@@ -355,6 +318,7 @@ function ActionHUD:update(dt)
       end
     else
       self.focusbar:hide()
+      self:disableCardInfo()
       _disableHUDElements(self)
     end
   else

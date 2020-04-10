@@ -6,7 +6,10 @@
   "cor":-1,
   "description":"Spellcaster monster, evil by nature.",
   "extends":"strong",
-  "initial_buffer":[],
+  "initial_buffer":[{
+      "amount":10,
+      "card":"strike"
+    }],
   "name":"Grinning",
   "signature":"scratch",
   "traits":[]

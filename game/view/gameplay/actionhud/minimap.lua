@@ -1,4 +1,6 @@
 
+-- luacheck: globals love
+
 local Color      = require 'common.color'
 local Class      = require "steaming.extra_libs.hump.class"
 local ELEMENT    = require "steaming.classes.primitives.element"
@@ -46,7 +48,7 @@ function MINIMAP:init(route, x, y, width, height)
   self.alpha = 1
 
   self.route = route
-  self.actor = self.route:getControlledActor()
+  self.actor = self.route:getPlayerActor()
 
   self.font = FONT.get("Text", 20)
 end

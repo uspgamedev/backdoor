@@ -125,7 +125,7 @@ function HandView:update(dt)
 
   for i,card in ipairs(self.hand) do
     card:update(dt)
-    card:setFocus(i == self.focus_index)
+    card:setFocus(self.active and i == self.focus_index)
     if DRAW_TABLE['HUD_FX'][card]
        or (self.keep_focused_card and i == self.focus_index) then
       card:setAlpha(1)
@@ -191,6 +191,7 @@ function HandView:reset()
   self.hand = {}
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
+      print(debug.traceback())
       local cardview = CardView(card)
       self.hand[i] = cardview
       cardview:register('HUD_FX')

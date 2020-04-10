@@ -1,6 +1,7 @@
 
 local TRIGGERS    = require 'domain.definitions.triggers'
 local ABILITY     = require 'domain.ability'
+local ACTIONDEFS  = require 'domain.definitions.action'
 
 local PLAYCARD = {}
 
@@ -28,9 +29,8 @@ end
 
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  return actor:getFocus() >= card:getCost() and
-        (not card:isArt() or
-         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues))
+  return not card:isArt() or
+         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
 end
 
 function PLAYCARD.perform(actor, inputvalues)
@@ -42,7 +42,7 @@ function PLAYCARD.perform(actor, inputvalues)
     body = body,
   })
 
-  actor:spendFocus(card:getCost())
+  actor:exhaust(ACTIONDEFS.FOCUS_COST)
   if card:isArt() then
     coroutine.yield('report', {
       type = 'play_art_card',
@@ -62,7 +62,6 @@ function PLAYCARD.perform(actor, inputvalues)
     actor:playCard(inputvalues.card_index)
   end
 
-  actor:checkFocus()
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 

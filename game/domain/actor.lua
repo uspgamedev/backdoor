@@ -351,7 +351,6 @@ end
 
 --- Draw a card from actor's buffer
 function Actor:drawCard()
-  if #self.hand >= DEFS.HAND_LIMIT then return end
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
@@ -594,7 +593,13 @@ function Actor:discardHand()
   end
 end
 
-function Actor:turn()
+function Actor:beginTurn()
+  while self:getHandSize() < DEFS.HAND_LIMIT do
+    self:drawCard()
+  end
+end
+
+function Actor:endTurn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
 end

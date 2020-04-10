@@ -409,12 +409,11 @@ function _turnLoop(self)
     while not Util.tableEmpty(actors_queue) do
       local actor = table.remove(actors_queue)
 
-      if actor:ready() then
-        while actor:ready() do
-          actor:makeAction()
-          manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
-        end
-        actor:turn()
+      while actor:ready() do
+        actor:beginTurn()
+        actor:makeAction()
+        manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+        actor:endTurn()
       end
 
       if actor:isPlayer() and actor:getBody():getSector() ~= self then

@@ -201,14 +201,8 @@ _ACTION[DEFS.ACTION.END_FOCUS] = function()
 end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
-  local actor = _route.getControlledActor()
-  local card = actor:getHandCard(card_index)
-  if actor:getFocus() >= card:getCost() then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
-  else
-    PLAYSFX 'denied'
-  end
+  PLAYSFX 'ok-menu'
+  _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
 end
 
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
