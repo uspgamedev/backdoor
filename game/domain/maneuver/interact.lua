@@ -34,8 +34,7 @@ local function _seek(actor, inputvalues)
       inputvalues.interaction = 'CHANGE_SECTOR'
       inputvalues.sector = id
       inputvalues.pos = exit.target_pos
-    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR
-       and actor:isHandEmpty() then
+    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR then
       inputvalues.interaction = 'CONSUME_CARDS'
     end
   end
