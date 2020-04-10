@@ -25,7 +25,31 @@
     "drops":[{
         "droprate":7,
         "droptype":"pack"
-      }]
+      }],
+    "1":{
+      "droprate":100,
+      "droptype":"doggo-pack"
+    },
+    "2":{
+      "droprate":100,
+      "droptype":"doggo-pack"
+    },
+    "3":{
+      "droprate":50,
+      "droptype":"doggo-pack"
+    },
+    "4":{
+      "droprate":100,
+      "droptype":"food"
+    },
+    "5":{
+      "droprate":100,
+      "droptype":"food2"
+    },
+    "6":{
+      "droprate":50,
+      "droptype":"food2"
+    }
   },
   "efc":-1,
   "extends":"demihuman",
