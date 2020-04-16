@@ -1,5 +1,6 @@
 local DB = require 'database'
 local SCHEMATICS = require 'domain.definitions.schematics'
+local ACTIONDEFS = require 'domain.definitions.action'
 local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
@@ -407,7 +408,7 @@ function _turnLoop(self)
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
 
     while not Util.tableEmpty(actors_queue) do
-      local actor = table.remove(actors_queue)
+      local actor = table.remove(actors_queue, 1)
 
       while actor:ready() do
         actor:beginTurn()
@@ -423,6 +424,63 @@ function _turnLoop(self)
     end
 
   end
+end
+
+function Sector:previewTurns(n, filter)
+  if #self.actors <= 1 then
+    return {}
+  end
+  -- find pertinent actors and order
+  local actors = {}
+  local count = 0
+  local begin = #self.actors + 1
+  if #self.actors_queue > 0 then
+    local current = self.actors_queue[1]
+    for i, actor in ipairs(self.actors) do
+      if actor == current then
+        begin = i
+        break
+      end
+    end
+    for i = begin, #self.actors do
+      local actor = self.actors[i]
+      if filter(actor) then
+        count = count + 1
+        actors[count] = actor
+      end
+    end
+  end
+  for i = 1, begin - 1 do
+    local actor = self.actors[i]
+    if filter(actor) then
+      count = count + 1
+      actors[count] = actor
+    end
+  end
+  -- Calculate ticks to the next n turns of each actor
+  local ticks = {}
+  for i, actor in ipairs(actors) do
+    ticks[i] = {}
+    for k = 1, n do
+      local remaining = k*ACTIONDEFS.MAX_ENERGY - actor:getEnergy()
+      ticks[i][k] = math.max(0, math.floor(remaining / actor:getSPD()))
+    end
+  end
+  -- Preview turn order
+  local turns = {}
+  local i = 1
+  local round = -1
+  while i <= n do
+    for k, actor in ipairs(actors) do
+      if ticks[k][1] == round then
+        table.remove(ticks[k], 1)
+        turns[i] = actor
+        i = i + 1
+      end
+    end
+    round = round + 1
+  end
+  return turns
 end
 
 --- Plays turn coroutine.

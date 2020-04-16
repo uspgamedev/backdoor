@@ -12,6 +12,7 @@ local Minimap       = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
+local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
 local CardView      = require 'view.card'
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
@@ -66,6 +67,12 @@ function ActionHUD:init(route)
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
   self.minimap:register("HUD_BG", nil, "minimap")
 
+  -- Turn preview
+  self.turnpreview = TurnPreview(route.getPlayerActor(),
+                                 W - _MARGIN - TurnPreview.WIDTH,
+                                 2 * _MARGIN + size)
+  self.turnpreview:register("HUD_BG")
+
   -- HUD state (player turn or not)
   self.player_turn = false
   self.player_focused = false
@@ -114,6 +121,10 @@ end
 
 function ActionHUD:enableTurn()
   self.player_turn = true
+end
+
+function ActionHUD:refreshTurnPreview()
+  self.turnpreview:refresh()
 end
 
 function ActionHUD:disableTurn()
