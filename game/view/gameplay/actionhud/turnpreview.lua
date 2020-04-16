@@ -14,7 +14,6 @@ local TurnPreview = Class{
 local _MAX_TURNS = 6
 
 TurnPreview.WIDTH = 128
-TurnPreview.HEIGHT = 256
 
 function TurnPreview:init(player, x, y)
 
@@ -49,10 +48,11 @@ function TurnPreview:draw()
     g.push()
     g.translate(self.position:unpack())
     g.setColor(COLORS.DARKER)
-    g.rectangle('fill', 0, 0, self.WIDTH, self.HEIGHT)
+    local height = 12 + 24*_MAX_TURNS
+    g.rectangle('fill', 0, 0, self.WIDTH, height)
     g.setColor(COLORS.NEUTRAL)
     g.setLineWidth(2)
-    g.rectangle('line', 0, 0, self.WIDTH, self.HEIGHT)
+    g.rectangle('line', 0, 0, self.WIDTH, height)
     self.text_font:set()
     g.translate(8, 4)
     for i, actor in ipairs(self.turns) do

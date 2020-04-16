@@ -202,11 +202,13 @@ function _updateSoundtrack()
 
     --Check for danger
     local controlled_actor = _route.getControlledActor()
-    local hostile_bodies = controlled_actor:getHostileBodies()
-    if #hostile_bodies > 0 then
-      _soundtrack:enableTrack("danger")
-    else
-      _soundtrack:disableTrack("danger")
+    if controlled_actor then
+      local hostile_bodies = controlled_actor:getHostileBodies()
+      if #hostile_bodies > 0 then
+        _soundtrack:enableTrack("danger")
+      else
+        _soundtrack:disableTrack("danger")
+      end
     end
 
   end
