@@ -62,7 +62,8 @@ function state:update(dt)
     PLAYSFX 'ok-menu'
     _save = true
     SWITCHER.pop()
-  elseif INPUT.wasActionPressed("CANCEL") then
+  elseif INPUT.wasActionPressed("CANCEL")
+      or INPUT.wasActionPressed("PAUSE") then
     PLAYSFX 'back-menu'
     _save = false
     SWITCHER.pop()
