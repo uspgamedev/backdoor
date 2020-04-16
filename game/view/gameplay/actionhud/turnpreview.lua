@@ -5,18 +5,23 @@ local COLORS      = require 'domain.definitions.colors'
 local FONT        = require 'view.helpers.font'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
+local vec2        = require 'cpml' .vec2
 
 local TurnPreview = Class{
   __includes = { ELEMENT }
 }
 
-local _MAX_TURNS = 10
+local _MAX_TURNS = 6
 
-function TurnPreview:init(player)
+TurnPreview.WIDTH = 128
+TurnPreview.HEIGHT = 256
+
+function TurnPreview:init(player, x, y)
 
   ELEMENT.init(self)
 
   self.player = player
+  self.position = vec2(x, y)
 
   self.text_font = FONT.get("Text", 18)
   self.turns = nil
@@ -42,12 +47,12 @@ function TurnPreview:draw()
   if self.turns then
     local g = love.graphics
     g.push()
-    g.translate(32, 32)
+    g.translate(self.position:unpack())
     g.setColor(COLORS.DARKER)
-    g.rectangle('fill', 0, 0, 128, 256)
+    g.rectangle('fill', 0, 0, self.WIDTH, self.HEIGHT)
     g.setColor(COLORS.NEUTRAL)
     g.setLineWidth(2)
-    g.rectangle('line', 0, 0, 128, 256)
+    g.rectangle('line', 0, 0, self.WIDTH, self.HEIGHT)
     self.text_font:set()
     g.translate(8, 4)
     for i, actor in ipairs(self.turns) do

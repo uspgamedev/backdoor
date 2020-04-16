@@ -42,10 +42,6 @@ function ActionHUD:init(route)
 
   local W, _ = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
-  -- Turn preview
-  self.turnpreview = TurnPreview(route.getPlayerActor())
-  self.turnpreview:register("HUD_BG")
-
   -- Hand view
   self.handview = HandView(route)
   self.handview:register("HUD_BG", nil, "hand_view")
@@ -70,6 +66,12 @@ function ActionHUD:init(route)
   local size = 192
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
   self.minimap:register("HUD_BG", nil, "minimap")
+
+  -- Turn preview
+  self.turnpreview = TurnPreview(route.getPlayerActor(),
+                                 W - _MARGIN - TurnPreview.WIDTH,
+                                 2 * _MARGIN + size)
+  self.turnpreview:register("HUD_BG")
 
   -- HUD state (player turn or not)
   self.player_turn = false
