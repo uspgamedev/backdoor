@@ -15,8 +15,8 @@ local vec2 = require 'cpml' .vec2
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
-local _HAND_MARGIN = 20
-local _HAND_OFFSET = 160
+local _HAND_MARGIN = 25
+local _HAND_OFFSET = 165
 local _HAND_OFFSET_SPEED = 8
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }

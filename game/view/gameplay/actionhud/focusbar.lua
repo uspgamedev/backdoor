@@ -16,7 +16,6 @@ local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
-local _FOCUSBAR_OFFSET = -10
 local _HANDBAR_WIDTH = 492/8
 local _HANDBAR_HEIGHT = 12
 local _MARGIN_WIDTH = 60
@@ -48,7 +47,7 @@ function FocusBar:init(route, handview)
 
   _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
-  self.x, self.y = _WIDTH/2, _HEIGHT - _HANDBAR_HEIGHT - _MARGIN_HEIGHT - _PAD_HEIGHT - _FOCUSBAR_OFFSET
+  self.x, self.y = _WIDTH/2, _HEIGHT - _HANDBAR_HEIGHT - _MARGIN_HEIGHT - _PAD_HEIGHT
   self.route = route
   self.actor = nil
 
