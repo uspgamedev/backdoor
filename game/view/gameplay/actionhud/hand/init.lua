@@ -15,10 +15,11 @@ local vec2 = require 'cpml' .vec2
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
+local _HAND_MARGIN = 25
+local _HAND_OFFSET = 165
+local _HAND_OFFSET_SPEED = 8
 local _GAP = 20
 local _GAP_SCALE = { MIN = -0.5, MAX = 1 }
-local _BACKPANEL_OFFSET = 140
-local _BACKPANEL_OFFSET_SPEED = 600
 local _BACKPANEL_MARGIN = 20
 local _BACKPANEL_WIDTH = 512
 local _BACKPANEL_HEIGHT = 64
@@ -49,15 +50,14 @@ function HandView:init(route)
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
-  self.x, self.y = _WIDTH/2, _HEIGHT - VIEWDEFS.CARD_H
+  self.x, self.y = _WIDTH/2, _HEIGHT - VIEWDEFS.CARD_H - _HAND_MARGIN
   self.initial_y = self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MAX
   self.cardinfo = CardInfo(route)
   self.alpha = 1
-  self.hiding = false
   self.keep_focused_card = false
-
+  self.hand_off = _HAND_OFFSET
   self.backpanel_off = 0
 
   self:reset()
@@ -107,21 +107,13 @@ function HandView:positionForIndex(i)
   local gap = _GAP * self.gap_scale
   local step = VIEWDEFS.CARD_W + gap
   local width = size*VIEWDEFS.CARD_W + (size-1)*gap
-  local x, y = self.x - width/2, self.y
+  local x, y = self.x - width/2, self.y + self.hand_off
   local dx = (i-1)*step
   return x + dx, y - 50 + 0.2*_GAP
 end
 
-function HandView:hide()
-  self.hiding = true
-end
-
-function HandView:show()
-  self.hiding = false
-end
-
 function HandView:update(dt)
-  self:updateBackpanel(dt)
+  self:updateHandShow(dt)
 
   for i,card in ipairs(self.hand) do
     card:update(dt)
@@ -145,7 +137,7 @@ function HandView:draw()
   local size = #hand
   local gap = _GAP * self.gap_scale
   local width = (size*VIEWDEFS.CARD_W + (size-1)*gap)
-  local x, y = self.x - width/2, self.y
+  local x, y = self.x - width/2, self.y + self.hand_off
   local g = love.graphics
 
   -- draw action type
@@ -154,7 +146,7 @@ function HandView:draw()
   -- draw back panel
   g.setColor(COLORS.DARK)
   g.push()
-  g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2 + self.backpanel_off)
+  g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2 + self.hand_off)
   g.polygon('fill', _BACKPANEL_VTX)
   g.pop()
 
@@ -199,12 +191,13 @@ function HandView:reset()
 
 end
 
-function HandView:updateBackpanel(dt)
-  if self:cardCount() > 0 then
-    self.backpanel_off = math.max(self.backpanel_off - _BACKPANEL_OFFSET_SPEED*dt, 0)
+function HandView:updateHandShow(dt)
+  if self.active then
+    self.hand_off = self.hand_off + (0 - self.hand_off)*dt*_HAND_OFFSET_SPEED
+    if self.hand_off <= 1 then self.hand_off = 0 end
   else
-    self.backpanel_off = math.min(self.backpanel_off + _BACKPANEL_OFFSET_SPEED*dt,
-    _BACKPANEL_OFFSET)
+    self.hand_off = self.hand_off + (_HAND_OFFSET -self.hand_off)*dt*_HAND_OFFSET_SPEED
+    if _HAND_OFFSET - self.hand_off <= 1 then self.hand_off = _HAND_OFFSET end
   end
 end
 
