@@ -139,13 +139,13 @@ function state:enter(_, route_data)
   -- create general gameplay view
   _view = GameplayView()
 
+  _initFrontend()
+
   -- start gamestate
   _playTurns()
 
   -- set player
   _player = _route.getControlledActor()
-
-  _initFrontend()
 
   _activity:fadeInGUI()
 
@@ -201,7 +201,8 @@ function _updateSoundtrack()
   if _soundtrack then
 
     --Check for danger
-    local hostile_bodies = _route.getControlledActor():getHostileBodies()
+    local controlled_actor = _route.getControlledActor()
+    local hostile_bodies = controlled_actor:getHostileBodies()
     if #hostile_bodies > 0 then
       _soundtrack:enableTrack("danger")
     else

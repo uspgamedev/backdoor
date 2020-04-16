@@ -182,6 +182,8 @@ function Route:instance(obj) -- luacheck: no self
     local request, extra = _current_sector:playTurns(...)
     if request == 'userTurn' then
       _controlled_actor = extra
+    elseif request == 'report' and extra.actor == obj.getPlayerActor() then
+      _controlled_actor = extra.actor
     end
     return request, extra
   end

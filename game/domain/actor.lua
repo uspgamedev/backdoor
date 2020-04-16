@@ -349,28 +349,38 @@ function Actor:copyBuffer()
   return copy
 end
 
+function Actor:canDrawCard()
+  return self:getBufferSize() > 0 or self:getPP() > 0
+end
+
 --- Draw a card from actor's buffer
 function Actor:drawCard()
-  if #self.hand >= DEFS.HAND_LIMIT then return end
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
-  local card = table.remove(self.buffer, 1)
-  if card == DEFS.DONE then
-    RANDOM.shuffle(self.buffer)
-    table.insert(self.buffer, DEFS.DONE)
-    coroutine.yield('report', {
-      type = "shuffle_buffers",
-      actor = self,
-    })
-    card = table.remove(self.buffer, 1)
+  if self:createEquipmentCards() then
+    return
   end
-  table.insert(self.hand, 1, card)
-  coroutine.yield('report', {
-    type = "draw_card",
-    actor = self,
-    card = card
-  })
+
+  if self:canDrawCard() then
+    local card = table.remove(self.buffer, 1)
+    if card == DEFS.DONE then
+      RANDOM.shuffle(self.buffer)
+      table.insert(self.buffer, DEFS.DONE)
+      coroutine.yield('report', {
+        type = "shuffle_buffers",
+        actor = self,
+      })
+      self:spendPP(1)
+      card = table.remove(self.buffer, 1)
+    end
+    table.insert(self.hand, 1, card)
+    coroutine.yield('report', {
+      type = "draw_card",
+      actor = self,
+      card = card
+    })
+  end
 end
 
 function Actor:createEquipmentCards()
@@ -388,6 +398,7 @@ function Actor:createEquipmentCards()
         widget = active_eqp,
       })
     end
+    return true
   end
 end
 
@@ -573,28 +584,38 @@ function Actor:playCard(card_index)
   return card
 end
 
-function Actor:discardHand()
-  while not self:isHandEmpty() do
-    local index = self:getHandSize()
-    local card = self:removeHandCard(index)
-    if not card:isTemporary() then
-      coroutine.yield('report', {
-        type = 'discard_card',
-        actor = self,
-        card_index = index
-      })
-      self:addCardToBackbuffer(card)
-    else
-      coroutine.yield('report', {
-        type = 'discard_temporary_card',
-        actor = self,
-        card_index = index
-      })
-    end
+function Actor:discardCard(index)
+  local card = self:removeHandCard(index)
+  if not card:isTemporary() then
+    coroutine.yield('report', {
+      type = 'discard_card',
+      actor = self,
+      card_index = index
+    })
+    self:addCardToBackbuffer(card)
+  else
+    coroutine.yield('report', {
+      type = 'discard_temporary_card',
+      actor = self,
+      card_index = index
+    })
   end
 end
 
-function Actor:turn()
+function Actor:discardHand()
+  while not self:isHandEmpty() do
+    local index = self:getHandSize()
+    self:discardCard(index)
+  end
+end
+
+function Actor:beginTurn()
+  while self:getHandSize() < DEFS.HAND_LIMIT and self:canDrawCard() do
+    self:drawCard()
+  end
+end
+
+function Actor:endTurn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
 end

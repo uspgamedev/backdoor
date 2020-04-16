@@ -55,7 +55,7 @@ function BufferView.newFrontBufferView(route)
   bufview.side = 'front'
   bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
-  bufview.ppcounter:setPP(route.getControlledActor():getPP())
+  bufview.ppcounter:setPP(route.getPlayerActor():getPP())
   _calculatePosition(bufview)
   return bufview
 end

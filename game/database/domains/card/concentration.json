@@ -7,7 +7,7 @@
   "set":"support_common",
   "type-description":"",
   "widget":{
-    "charges":2,
+    "charges":5,
     "operators":[{
         "attr":"ARC",
         "op":"+",
