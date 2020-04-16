@@ -8,7 +8,6 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
-local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
 local INPUT         = require 'input'
@@ -180,15 +179,6 @@ end
 
 _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
-end
-
-_ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
-  if MANEUVERS['draw_new_hand'].validate(_route.getControlledActor(), {}) then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  else
-    PLAYSFX 'denied'
-  end
 end
 
 _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
