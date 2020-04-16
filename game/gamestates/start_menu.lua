@@ -2,6 +2,7 @@
 local DB              = require 'database'
 local MENU            = require 'infra.menu'
 local DIRECTIONALS    = require 'infra.dir'
+local RUNFLAGS        = require 'infra.runflags'
 local INPUT           = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE         = require 'infra.profile'
@@ -113,7 +114,7 @@ function state:update(dt)
     _menu_view:setItem("New route")
     _menu_view:setItem("Load route")
     _menu_view:setItem("Settings")
-    if DEV then
+    if RUNFLAGS.DEVELOPMENT then
       _menu_view:setItem("Controls")
     end
     _menu_view:setItem("Quit")
@@ -146,7 +147,7 @@ function state:update(dt)
       if MENU.item("Settings") then
         _activity:changeState('push', GS.SETTINGS, _soundtrack)
       end
-      if DEV and MENU.item("Controls") then
+      if RUNFLAGS.DEVELOPMENT and MENU.item("Controls") then
         CONFIGURE_INPUT(INPUT, INPUT.getMap())
       end
       if MENU.item("Quit") then

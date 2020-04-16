@@ -1,9 +1,10 @@
 
 -- luacheck: globals love DEV
 
-local FONT       = require 'view.helpers.font'
-local COLORS     = require 'domain.definitions.colors'
-local DEFS       = require 'domain.definitions'
+local RUNFLAGS    = require 'infra.runflags'
+local FONT        = require 'view.helpers.font'
+local COLORS      = require 'domain.definitions.colors'
+local DEFS        = require 'domain.definitions'
 
 local ACTOR_PANEL   = require 'view.actor.panel'
 local ACTOR_HEADER  = require 'view.actor.header'
@@ -72,7 +73,7 @@ function ActorView:draw()
   g.pop()
 
   -- only visible when holding button
-  if DEV then
+  if RUNFLAGS.DEVELOPMENT then
     local font = FONT.get("Text", 20)
     local fps_str = ("fps: %d"):format(love.timer.getFPS())
     font:set()
