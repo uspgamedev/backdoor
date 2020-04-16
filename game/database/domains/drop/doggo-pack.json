@@ -1,0 +1,15 @@
+{
+  "ability":{
+    "effects":[{
+        "collection":"doggo",
+        "name":"give_pack",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "name":"is_controlled_actor",
+        "type":"input"
+      }]
+  },
+  "name":"Doggo Pack",
+  "sprite":"pack"
+}

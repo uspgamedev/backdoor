@@ -3,16 +3,16 @@
   "description":"Floating demon, a hellish eye which stares\nits victims into shivers. A stink eye is not\nall it does, however: this fiend can cast powerful\narcane spells to strike down its foe.",
   "drops":[{
       "droprate":50,
-      "droptype":"pack"
+      "droptype":"eye-pack"
     },{
       "droprate":50,
-      "droptype":"pack"
+      "droptype":"eye-pack"
     },{
       "droprate":50,
-      "droptype":"pack"
+      "droptype":"eye-pack"
     },{
       "droprate":10,
-      "droptype":"food"
+      "droptype":"food2"
     }],
   "efc":-2,
   "extends":"imp",

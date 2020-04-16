@@ -1,0 +1,15 @@
+{
+  "ability":{
+    "effects":[{
+        "collection":"eye",
+        "name":"give_pack",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "name":"is_controlled_actor",
+        "type":"input"
+      }]
+  },
+  "name":"Eye Pack",
+  "sprite":"pack"
+}

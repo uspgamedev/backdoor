@@ -3,19 +3,19 @@
   "description":"Lesser demons, mischievious little miscreations.\nThey are known for their trickster grin and their\naptitude with arcane spells. They are hella weak,\nthough: one strong blow and they are dead meat.",
   "drops":[{
       "droprate":70,
-      "droptype":"pack"
+      "droptype":"imp-pack"
     },{
       "droprate":20,
-      "droptype":"pack"
+      "droptype":"imp-pack"
     },{
       "droprate":10,
-      "droptype":"pack"
+      "droptype":"imp-pack"
     },{
       "droprate":40,
       "droptype":"food"
     },{
       "droprate":40,
-      "droptype":"food"
+      "droptype":"food2"
     },{
       "droprate":40,
       "droptype":"food2"
