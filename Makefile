@@ -162,7 +162,7 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 
 $(LOVE_WIN32): $(GAME)
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
-	wget -O $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.3-win32.zip
+	curl -L -o $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.3-win32.zip
 
 $(IMGUI_DLL):
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
