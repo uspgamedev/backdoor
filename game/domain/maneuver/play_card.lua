@@ -29,8 +29,9 @@ end
 
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
-  return not card:isArt() or
-         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues)
+  return actor:getFocus() >= card:getCost() and
+        (not card:isArt() or
+         ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues))
 end
 
 function PLAYCARD.perform(actor, inputvalues)
@@ -42,6 +43,7 @@ function PLAYCARD.perform(actor, inputvalues)
     body = body,
   })
 
+  actor:spendFocus(card:getCost())
   actor:exhaust(ACTIONDEFS.FOCUS_COST)
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
   if card:isArt() then

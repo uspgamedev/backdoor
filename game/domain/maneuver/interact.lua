@@ -59,7 +59,7 @@ function INTERACT.exhaustionCost(_, _)
 end
 
 function INTERACT.validate(actor, inputvalues)
-  return not actor:isFocused() and not not _seek(actor, inputvalues)
+  return not not _seek(actor, inputvalues)
 end
 
 function INTERACT.perform(actor, inputvalues)

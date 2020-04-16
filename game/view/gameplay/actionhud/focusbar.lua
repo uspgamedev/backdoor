@@ -100,7 +100,7 @@ function FocusBar:draw()
 
   -- draw hand countdown
   local maxfocus = ACTIONDEFS.MAX_FOCUS
-  local focus = math.min(self.actor:getFocus(), maxfocus)
+  local focus = math.floor(math.min(self.actor:getFocus(), maxfocus))
   local font = FONT.get("Text", 18)
   font:set()
   g.push()
