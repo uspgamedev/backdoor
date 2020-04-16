@@ -20,8 +20,8 @@
   "drops":{
     "drop-info":"",
     "drops":[{
-        "droprate":4,
-        "droptype":"food"
+        "droprate":2,
+        "droptype":"food2"
       },{
         "droprate":0,
         "droptype":"pack"

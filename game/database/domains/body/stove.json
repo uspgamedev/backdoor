@@ -8,10 +8,10 @@
       "droprate":50,
       "droptype":"stove-pack"
     },{
-      "droprate":50,
+      "droprate":10,
       "droptype":"food"
     },{
-      "droprate":30,
+      "droprate":10,
       "droptype":"food2"
     }],
   "efc":0,
