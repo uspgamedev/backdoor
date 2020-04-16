@@ -16,7 +16,7 @@ function DISCARD_CARD.activatedAbility(_, _)
 end
 
 function DISCARD_CARD.exhaustionCost(_, _)
-  return ACTIONDEFS.DISCARD_COST
+  return ACTIONDEFS.HALF_EXHAUSTION
 end
 
 function DISCARD_CARD.validate(actor, inputvalues)
@@ -25,7 +25,7 @@ end
 
 function DISCARD_CARD.perform(actor, inputvalues)
   local index = inputvalues.card_index
-  actor:exhaust(ACTIONDEFS.DISCARD_COST)
+  actor:exhaust(ACTIONDEFS.HALF_EXHAUSTION)
   actor:discardCard(index)
 end
 

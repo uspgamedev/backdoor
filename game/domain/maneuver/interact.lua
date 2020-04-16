@@ -55,7 +55,7 @@ function INTERACT.activatedAbility(actor, inputvalues)
 end
 
 function INTERACT.exhaustionCost(_, _)
-  return ACTIONDEFS.MOVE_COST
+  return ACTIONDEFS.FULL_EXHAUSTION
 end
 
 function INTERACT.validate(actor, inputvalues)
@@ -65,7 +65,7 @@ end
 function INTERACT.perform(actor, inputvalues)
   _seek(actor, inputvalues)
   if inputvalues.interaction == 'CHANGE_SECTOR' then
-    actor:exhaust(ACTIONDEFS.MOVE_COST)
+    actor:exhaust(ACTIONDEFS.FULL_EXHAUSTION)
     local target_sector = Util.findId(inputvalues.sector)
     target_sector:putActor(actor, unpack(inputvalues.pos))
   elseif inputvalues.interaction == 'CONSUME_CARDS' then
