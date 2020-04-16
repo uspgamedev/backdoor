@@ -32,7 +32,7 @@ function Actor:init(spec_name)
   self.energy = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
-  self.focus = 0
+  self.focus = DEFS.ACTION.MAX_FOCUS
   self.upgrades = {
     COR = DEFS.ATTR.INITIAL_UPGRADE,
     ARC = DEFS.ATTR.INITIAL_UPGRADE,
@@ -281,10 +281,6 @@ end
 
 function Actor:getFocus()
   return self.focus
-end
-
-function Actor:isFocused()
-  return self.focus > 0
 end
 
 function Actor:getBufferSize()
@@ -559,13 +555,7 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
-end
-
-function Actor:resetFocus()
-  if self:isFocused() then
-    self:endFocus()
-  end
-  self.focus = DEFS.ACTION.MAX_FOCUS
+  self:gainFocus(ACTIONDEFS.FOCUS_PER_TICK)
 end
 
 function Actor:ready()
@@ -647,20 +637,6 @@ end
 
 function Actor:gainFocus(n)
   self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
-end
-
-function Actor:checkFocus()
-  if self.focus == 0 then
-    self:endFocus()
-  end
-end
-
-function Actor:endFocus()
-  local body = self:getBody()
-  self:discardHand()
-  self:exhaust(DEFS.ACTION.FOCUS_COST)
-  self.focus = 0
-  body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
 end
 
 function Actor:rewardPP(n)

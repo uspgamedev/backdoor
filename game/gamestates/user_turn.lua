@@ -191,18 +191,15 @@ _ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
   end
 end
 
-_ACTION[DEFS.ACTION.END_FOCUS] = function()
-  if MANEUVERS['end_focus'].validate(_route.getControlledActor(), {}) then
+_ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
+  local actor = _route.getControlledActor()
+  local card = actor:getHandCard(card_index)
+  if actor:getFocus() >= card:getCost() then
     PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.END_FOCUS)
+    _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
   else
     PLAYSFX 'denied'
   end
-end
-
-_ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
-  PLAYSFX 'ok-menu'
-  _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
 end
 
 _ACTION[DEFS.ACTION.DISCARD_CARD] = function(card_index)
