@@ -186,12 +186,11 @@ end
 
 function HandView:reset()
 
-  local controlled_actor = self.route.getControlledActor()
+  local controlled_actor = self.route.getPlayerActor()
 
   self.hand = {}
   if controlled_actor then
     for i,card in ipairs(controlled_actor:getHand()) do
-      print(debug.traceback())
       local cardview = CardView(card)
       self.hand[i] = cardview
       cardview:register('HUD_FX')
