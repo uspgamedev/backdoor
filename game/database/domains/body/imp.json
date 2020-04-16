@@ -11,13 +11,10 @@
       "droprate":10,
       "droptype":"imp-pack"
     },{
-      "droprate":40,
+      "droprate":20,
       "droptype":"food"
     },{
-      "droprate":40,
-      "droptype":"food2"
-    },{
-      "droprate":40,
+      "droprate":20,
       "droptype":"food2"
     }],
   "efc":-2,

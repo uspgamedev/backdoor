@@ -5,13 +5,13 @@
       "droprate":20,
       "droptype":"slime-pack"
     },{
-      "droprate":99,
+      "droprate":25,
       "droptype":"food"
     },{
       "droprate":20,
       "droptype":"slime-pack"
     },{
-      "droprate":20,
+      "droprate":25,
       "droptype":"food2"
     }],
   "efc":-1,
