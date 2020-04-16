@@ -1,6 +1,6 @@
 {
   "altars":{
-    "max":6,
+    "max":5,
     "min":4,
     "threshold":3
   },
