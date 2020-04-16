@@ -16,6 +16,7 @@ local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
 local _BG = COLORS.HUD_BG
+local _FOCUSBAR_OFFSET = -10
 local _HANDBAR_WIDTH = 492/8
 local _HANDBAR_HEIGHT = 12
 local _MARGIN_WIDTH = 60
@@ -47,7 +48,7 @@ function FocusBar:init(route, handview)
 
   _WIDTH, _HEIGHT = VIEWDEFS.VIEWPORT_DIMENSIONS()
 
-  self.x, self.y = _WIDTH/2, _HEIGHT - _HANDBAR_HEIGHT - _MARGIN_HEIGHT - _PAD_HEIGHT
+  self.x, self.y = _WIDTH/2, _HEIGHT - _HANDBAR_HEIGHT - _MARGIN_HEIGHT - _PAD_HEIGHT - _FOCUSBAR_OFFSET
   self.route = route
   self.actor = nil
 
@@ -57,40 +58,21 @@ function FocusBar:init(route, handview)
   self.emer_fx_speed = 3.5
   self.emer_fx_v = math.sin(self.emer_fx_alpha)
 
-  -- Hide
-  self.hidden = true
-  self.v_offset = 1
-
   self.handview = handview
 
   _font = _font or FONT.get(_F_NAME, _F_SIZE)
 
 end
 
-function FocusBar:show()
-  self.hidden = false
-end
-
-function FocusBar:hide()
-  self.hidden = true
-end
-
 function FocusBar:update(dt)
   local _OFF_SPD = 2.5
   self.actor = self.route.getControlledActor()
+
   --update emergency effect
   self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
   self.emer_fx_v = math.sin(self.emer_fx_alpha)
   while self.emer_fx_alpha >= self.emer_fx_max do
     self.emer_fx_alpha = self.emer_fx_alpha - self.emer_fx_max
-  end
-
-  if self.hidden then
-    self.v_offset = self.v_offset + (1 - self.v_offset) * dt * _OFF_SPD
-    if self.v_offset > 0.99 then self.v_offset = 1 end
-  else
-    self.v_offset = self.v_offset + (0 - self.v_offset) * dt * _OFF_SPD * 4
-    if self.v_offset < 0.01 then self.v_offset = 0 end
   end
 end
 
@@ -106,7 +88,6 @@ function FocusBar:draw()
   g.push()
   g.origin()
   g.translate(self.x - _HANDBAR_WIDTH/2, self.y)
-  g.translate(0, self.v_offset * 80)
 
   --Drawing background
   g.setColor(_BG)

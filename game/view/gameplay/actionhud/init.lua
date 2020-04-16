@@ -317,13 +317,11 @@ function ActionHUD:update(dt)
 
   if self.player_turn then
     if self.player_focused then
-      self.focusbar:show()
       self:enableCardInfo()
       if not self.handview:isActive() then
         self.handview:activate()
       end
     else
-      self.focusbar:hide()
       self:disableCardInfo()
       _disableHUDElements(self)
     end
