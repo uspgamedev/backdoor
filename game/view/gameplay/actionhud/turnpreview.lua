@@ -13,7 +13,7 @@ local TurnPreview = Class{
 
 local _MAX_TURNS = 6
 
-TurnPreview.WIDTH = 128
+TurnPreview.WIDTH = 160
 
 function TurnPreview:init(player, x, y)
 
@@ -64,7 +64,9 @@ function TurnPreview:draw()
       g.translate(0, (i - 1) * 24)
       local name = "player"
       if actor ~= self.player then
-        name = actor:getSpecName() .. " " .. actor:getBody():getSpecName()
+        name = ("%s %s %s"):format(actor:getSpecName(),
+                                   actor:getBody():getSpecName(),
+                                   actor:getId())
       end
       g.print(name, 0, 0)
       g.pop()
