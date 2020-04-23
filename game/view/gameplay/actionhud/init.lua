@@ -325,6 +325,7 @@ end
 
 function ActionHUD:update(dt)
   self.minimap:update(dt)
+  self.turnpreview:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
