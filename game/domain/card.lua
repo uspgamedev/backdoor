@@ -74,6 +74,10 @@ function Card:getCost()
   return self:getSpec('cost')
 end
 
+function Card:isHalfExhaustion()
+  return self:getSpec('half-exhaustion')
+end
+
 function Card:getExhaustion()
   if self:getSpec('half-exhaustion') then
     return ACTIONSDEFS.HALF_EXHAUSTION

@@ -2,6 +2,7 @@
   "attr":"ANI",
   "cost":1,
   "desc":"",
+  "half-exhaustion":true,
   "icon":"card-concentration",
   "name":"Concentration",
   "set":"support_common",
@@ -17,6 +18,6 @@
     "trigger":"on_turn",
     "equipment":false
   },
-  "art":false,
-  "one_time":false
+  "one_time":false,
+  "art":false
 }

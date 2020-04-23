@@ -68,7 +68,7 @@ function ActionHUD:init(route)
   self.minimap:register("HUD_BG", nil, "minimap")
 
   -- Turn preview
-  self.turnpreview = TurnPreview(route.getPlayerActor(),
+  self.turnpreview = TurnPreview(route.getPlayerActor(), self.handview,
                                  W - _MARGIN - TurnPreview.WIDTH,
                                  2 * _MARGIN + size)
   self.turnpreview:register("HUD_BG")

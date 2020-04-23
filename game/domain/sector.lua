@@ -426,7 +426,7 @@ function _turnLoop(self)
   end
 end
 
-function Sector:previewTurns(n, filter)
+function Sector:previewTurns(n, half_exhaustion, filter)
   if #self.actors <= 1 then
     return {}
   end
@@ -462,7 +462,13 @@ function Sector:previewTurns(n, filter)
   for i, actor in ipairs(actors) do
     ticks[i] = {}
     for k = 1, n do
-      local remaining = k*ACTIONDEFS.MAX_ENERGY - actor:getEnergy()
+      local exhaustion = ACTIONDEFS.FULL_EXHAUSTION
+      if i == count and half_exhaustion then
+        exhaustion = ACTIONDEFS.HALF_EXHAUSTION
+      end
+      local remaining = ((k - 1) * ACTIONDEFS.FULL_EXHAUSTION + exhaustion)
+                      * ACTIONDEFS.EXHAUSTION_UNIT
+                      - actor:getEnergy()
       ticks[i][k] = remaining / actor:getSPD()
     end
     -- Ignore if current active turn
