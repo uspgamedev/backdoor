@@ -235,10 +235,6 @@ end
 local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
 
 function ActionHUD:actionRequested()
-  if INPUT.wasActionPressed('SPECIAL') then
-    self.player_focused = not self.player_focused
-    return false
-  end
   local action_request
   local player_focused = self.player_focused
   local dir = DIRECTIONALS.hasDirectionTriggered()
@@ -275,6 +271,10 @@ function ActionHUD:actionRequested()
     else
       action_request = {DEFS.ACTION.IDLE}
     end
+  elseif INPUT.wasActionPressed('SPECIAL') then
+    self.player_focused = not self.player_focused
+    --self.long_walk = false
+    return false
   elseif INPUT.wasActionPressed('MENU') then
     if player_focused then
       local card_index = self.handview:getFocus()
