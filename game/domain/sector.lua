@@ -463,19 +463,23 @@ function Sector:previewTurns(n, filter)
     ticks[i] = {}
     for k = 1, n do
       local remaining = k*ACTIONDEFS.MAX_ENERGY - actor:getEnergy()
-      ticks[i][k] = math.max(0, math.floor(remaining / actor:getSPD()))
+      ticks[i][k] = remaining / actor:getSPD()
+    end
+    -- Ignore if current active turn
+    if i == count then
+      table.remove(ticks[i], 1)
     end
   end
   -- Preview turn order
   local turns = {}
   local i = 1
-  local round = -1
+  local round = 0
   while i <= n do
     for k, actor in ipairs(actors) do
-      if ticks[k][1] == round then
-        table.remove(ticks[k], 1)
+      if ticks[k][1] <= round then
         turns[i] = actor
         i = i + 1
+        table.remove(ticks[k], 1)
       end
     end
     round = round + 1
