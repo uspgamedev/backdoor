@@ -1,3 +1,4 @@
 {
-  "idle":"stove-idle"
+  "idle":"stove-idle",
+  "turn_icon":"turn-icon-stove"
 }

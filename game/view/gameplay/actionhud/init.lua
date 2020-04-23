@@ -64,13 +64,14 @@ function ActionHUD:init(route)
 
   -- Minimap
   local size = 192
+  local preview_margin = 10
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
   self.minimap:register("HUD_BG", nil, "minimap")
 
   -- Turn preview
   self.turnpreview = TurnPreview(route.getPlayerActor(), self.handview,
-                                 W - _MARGIN - TurnPreview.WIDTH,
-                                 2 * _MARGIN + size)
+                                 W - TurnPreview.WIDTH,
+                                 _MARGIN + size + preview_margin)
   self.turnpreview:register("HUD_BG")
 
   -- HUD state (player turn or not)
@@ -325,6 +326,7 @@ end
 
 function ActionHUD:update(dt)
   self.minimap:update(dt)
+  self.turnpreview:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
