@@ -486,8 +486,12 @@ function Actor:canSee(target)
   if sector ~= target_sector then
     return false
   end
-  local fov = self:getFov(sector)
   local i, j = target:getPos()
+  return self:canSeePosition(i, j)
+end
+
+function Actor:canSeePosition(i, j)
+  local fov = self:getFov(self:getSector())
   local visible = fov[i][j]
   return visible and visible > 0
 end
