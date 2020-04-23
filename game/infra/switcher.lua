@@ -1,6 +1,5 @@
 
 local Gamestate = require "steaming.extra_libs.hump.gamestate"
-local Queue     = require 'lux.common.Queue'
 local INPUT     = require 'input'
 
 local SWITCHER = {}
@@ -22,7 +21,7 @@ local _switched = false
 
 function SWITCHER.init()
   for _,handle in ipairs(_INPUT_HANDLES) do
-    love[handle] = function (...)
+    love[handle] = function (...) -- luacheck: globals love
       return Gamestate[handle](...)
     end
   end

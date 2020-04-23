@@ -16,6 +16,7 @@ return {
     options = DEFS.CARD_ATTRIBUTES },
   { id = 'cost', name = "Cost", type = 'range', min = 0,
       max = DEFS.ACTION.MAX_FOCUS },
+  { id = 'half-exhaustion', name = "Half exhaustion", type = 'boolean' },
   { id = 'type-description', type = 'description',
     info = "Cards can be either Arts or Widgets" },
   {

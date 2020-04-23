@@ -61,10 +61,15 @@ local function _playTurns(...)
     _activity:changeSector(...)
   elseif request == "report" then
     local player = _route.getControlledActor()
-    if extra.actor ~= player then
-      _view.action_hud:disableTurn()
+    local body = extra.body or (extra.actor and extra.actor:getBody())
+    if body and player:canSee(body) then
+      if extra.actor ~= player then
+        _view.action_hud:disableTurn()
+      end
+      SWITCHER.push(GS.ANIMATION, _route, _view, extra)
+    else
+      return _playTurns()
     end
-    SWITCHER.push(GS.ANIMATION, _route, _view, extra)
   end
   _next_action = nil
 end
@@ -139,13 +144,13 @@ function state:enter(_, route_data)
   -- create general gameplay view
   _view = GameplayView()
 
+  _initFrontend()
+
   -- start gamestate
   _playTurns()
 
   -- set player
   _player = _route.getControlledActor()
-
-  _initFrontend()
 
   _activity:fadeInGUI()
 
@@ -201,11 +206,14 @@ function _updateSoundtrack()
   if _soundtrack then
 
     --Check for danger
-    local hostile_bodies = _route.getControlledActor():getHostileBodies()
-    if #hostile_bodies > 0 then
-      _soundtrack:enableTrack("danger")
-    else
-      _soundtrack:disableTrack("danger")
+    local controlled_actor = _route.getControlledActor()
+    if controlled_actor then
+      local hostile_bodies = controlled_actor:getHostileBodies()
+      if #hostile_bodies > 0 then
+        _soundtrack:enableTrack("danger")
+      else
+        _soundtrack:disableTrack("danger")
+      end
     end
 
   end

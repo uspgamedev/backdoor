@@ -18,7 +18,6 @@ local DIALOGUEBOX = require 'view.dialoguebox'
 local SPRITEFX    = require 'lux.pack' 'view.spritefx'
 local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
-local Util        = require "steaming.util"
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 
@@ -159,19 +158,9 @@ function SectorView:startVFX(extra)
   if extra.type then
     local spritefx = SPRITEFX[extra.type]
     self.vfx = spritefx
-    MAIN_TIMER:script(function(wait)
-      local ann = Util.findId('announcement')
-      if ann:isLocked() then
-        while ann:isLocked() do wait(1) end
-        wait(0.2)
-      end
-      spritefx.apply(self, extra)
-      --Play SFX if any
-      if extra.sfx then
-        _playSFX(self.target, extra)
-      end
-    end)
-  elseif extra.sfx then
+    spritefx.apply(self, extra)
+  end
+  if extra.sfx then
     _playSFX(self.target, extra)
   end
 end

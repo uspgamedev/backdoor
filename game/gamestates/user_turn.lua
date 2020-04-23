@@ -8,7 +8,6 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
-local MANEUVERS     = require 'lux.pack' 'domain.maneuver'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
 local INPUT         = require 'input'
@@ -58,12 +57,14 @@ function state:enter(_, route, view)
 
   _view = view
   _view.action_hud:enableTurn(true)
+  _view.action_hud:refreshTurnPreview()
 
   _update_panel("isdown")
 
 end
 
 function state:leave()
+  _view.action_hud:disableTurnPreview()
 end
 
 function state:resume(_, args)
@@ -182,24 +183,6 @@ _ACTION[DEFS.ACTION.INTERACT] = function()
   _useAction(DEFS.ACTION.INTERACT)
 end
 
-_ACTION[DEFS.ACTION.DRAW_NEW_HAND] = function()
-  if MANEUVERS['draw_new_hand'].validate(_route.getControlledActor(), {}) then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.DRAW_NEW_HAND)
-  else
-    PLAYSFX 'denied'
-  end
-end
-
-_ACTION[DEFS.ACTION.END_FOCUS] = function()
-  if MANEUVERS['end_focus'].validate(_route.getControlledActor(), {}) then
-    PLAYSFX 'ok-menu'
-    _useAction(DEFS.ACTION.END_FOCUS)
-  else
-    PLAYSFX 'denied'
-  end
-end
-
 _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   local actor = _route.getControlledActor()
   local card = actor:getHandCard(card_index)
@@ -209,6 +192,11 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   else
     PLAYSFX 'denied'
   end
+end
+
+_ACTION[DEFS.ACTION.DISCARD_CARD] = function(card_index)
+  PLAYSFX 'ok-menu'
+  _useAction(DEFS.ACTION.DISCARD_CARD, { card_index = card_index })
 end
 
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()

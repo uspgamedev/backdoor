@@ -6,7 +6,11 @@
   "cor":-1,
   "description":"Stronger spellcaster monster, evil by nature.",
   "extends":"grinful",
-  "initial_buffer":[],
+  "initial_buffer":[{
+      "amount":10,
+      "card":"strike"
+    }],
   "name":"Fiendish",
-  "signature":"glare"
+  "signature":"glare",
+  "traits":[]
 }

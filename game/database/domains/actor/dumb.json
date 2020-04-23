@@ -4,7 +4,10 @@
   "behavior":"aggro",
   "cor":-2,
   "description":"Oh honey...",
-  "initial_buffer":[],
+  "initial_buffer":[{
+      "amount":10,
+      "card":"strike"
+    }],
   "name":"Dumb",
   "signature":"tackle",
   "traits":[],

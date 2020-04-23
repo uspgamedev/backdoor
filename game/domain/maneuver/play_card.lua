@@ -43,6 +43,8 @@ function PLAYCARD.perform(actor, inputvalues)
   })
 
   actor:spendFocus(card:getCost())
+  actor:exhaust(card:getExhaustion())
+  body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
   if card:isArt() then
     coroutine.yield('report', {
       type = 'play_art_card',
@@ -61,9 +63,6 @@ function PLAYCARD.perform(actor, inputvalues)
     })
     actor:playCard(inputvalues.card_index)
   end
-
-  actor:checkFocus()
-  body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
 end
 
 return PLAYCARD

@@ -29,7 +29,7 @@ function GameplayView:setup(route)
   self.backbuffer:register("HUD_BG", nil, "backbuffer_view")
 
   -- actor view
-  self.actor = ActorView(route:getControlledActor())
+  self.actor = ActorView(route:getPlayerActor())
 
   -- announcement box
   self.announcement = Announcement()

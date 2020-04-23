@@ -74,6 +74,18 @@ function Card:getCost()
   return self:getSpec('cost')
 end
 
+function Card:isHalfExhaustion()
+  return self:getSpec('half-exhaustion')
+end
+
+function Card:getExhaustion()
+  if self:getSpec('half-exhaustion') then
+    return ACTIONSDEFS.HALF_EXHAUSTION
+  else
+    return ACTIONSDEFS.FULL_EXHAUSTION
+  end
+end
+
 function Card:isArt()
   return not not self:getSpec('art')
 end
@@ -240,8 +252,8 @@ function Card:getEffect()
         local spec = DB.loadSpec('card', action.card)
         count[spec] = (count[spec] or 0) + 1
       end
-      for spec, n in pairs(count) do
-        effect = effect .. ("\n%dx %s: "):format(n, spec.name)
+      for spec, k in pairs(count) do
+        effect = effect .. ("\n%dx %s: "):format(k, spec.name)
                         .. ABILITY.preview(spec.art.art_ability,
                                            self:getOwner(), inputs)
                         .. "\n"

@@ -6,7 +6,11 @@
   "cor":2,
   "description":"The newbie's nightmares...",
   "extends":"strong",
-  "initial_buffer":[],
+  "initial_buffer":[{
+      "amount":10,
+      "card":"strike"
+    }],
   "name":"Newbie Killer",
-  "signature":"punch"
+  "signature":"punch",
+  "traits":[]
 }

@@ -12,9 +12,8 @@ local Minimap       = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
-local HoldBar       = require 'view.helpers.holdbar'
+local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
 local CardView      = require 'view.card'
-local vec2          = require 'cpml' .vec2
 local Util          = require "steaming.util"
 local Class         = require "steaming.extra_libs.hump.class"
 local ELEMENT       = require "steaming.classes.primitives.element"
@@ -65,11 +64,19 @@ function ActionHUD:init(route)
 
   -- Minimap
   local size = 192
+  local preview_margin = 10
   self.minimap = Minimap(route, W - _MARGIN - size, _MARGIN, size, size)
   self.minimap:register("HUD_BG", nil, "minimap")
 
+  -- Turn preview
+  self.turnpreview = TurnPreview(route.getPlayerActor(), self.handview,
+                                 W - TurnPreview.WIDTH,
+                                 _MARGIN + size + preview_margin)
+  self.turnpreview:register("HUD_BG")
+
   -- HUD state (player turn or not)
   self.player_turn = false
+  self.player_focused = false
 
   -- Card info
   self.info_lag = false
@@ -77,14 +84,6 @@ function ActionHUD:init(route)
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
   self.focusbar:register("HUD")
-
-  -- Hold bar
-  local w,h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  self.holdbar = HoldBar{'SPECIAL'}
-  self.holdbar:setPosition(vec2(w,h)/2)
-  self.holdbar:lock()
-  self.holdbar:register("HUD")
-  self.justheld = false
 
   -- Long walk variables
   self.alert = false
@@ -94,7 +93,7 @@ function ActionHUD:init(route)
 end
 
 function ActionHUD:_loadDocks()
-  local player = assert(self.route.getControlledActor())
+  local player = assert(self.route.getPlayerActor())
   for _, widget in player:getBody():eachWidget() do
     local cardview = CardView(widget)
     local dock = self:getDockFor(widget)
@@ -114,6 +113,7 @@ function ActionHUD:destroy()
   self.weardock:destroy()
   self.conddock:destroy()
   self.minimap:destroy()
+  self.turnpreview:destroy()
   ELEMENT.destroy(self)
 end
 
@@ -121,16 +121,20 @@ function ActionHUD:activateAbility()
   self.handview:keepFocusedCard(true)
 end
 
-function ActionHUD:enableTurn(unlock_holdbar)
+function ActionHUD:enableTurn()
   self.player_turn = true
-  if unlock_holdbar and not self.justheld then
-    self.holdbar:unlock()
-  end
+end
+
+function ActionHUD:refreshTurnPreview()
+  self.turnpreview:refresh()
+end
+
+function ActionHUD:disableTurnPreview()
+  self.turnpreview:disable()
 end
 
 function ActionHUD:disableTurn()
   self.player_turn = false
-  self.holdbar:lock()
 end
 
 function ActionHUD:getHandView()
@@ -164,14 +168,6 @@ end
 
 function ActionHUD:sendAlert(flag)
   self.alert = self.alert or flag
-end
-
-function ActionHUD:lockHoldbar()
-  self.holdbar:lock()
-end
-
-function ActionHUD:unlockHoldbar()
-  self.holdbar:unlock()
 end
 
 function ActionHUD:getDockFor(card)
@@ -241,7 +237,7 @@ local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
 
 function ActionHUD:actionRequested()
   local action_request
-  local player_focused = self.route.getControlledActor():isFocused()
+  local player_focused = self.player_focused
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if player_focused then
     if dir and _HAND_FOCUS_DIR[dir] then
@@ -271,12 +267,22 @@ function ActionHUD:actionRequested()
     end
   elseif INPUT.wasActionPressed('CANCEL') then
     if player_focused then
-      action_request = {DEFS.ACTION.END_FOCUS}
+      self.player_focused = false
+      return
     else
       action_request = {DEFS.ACTION.IDLE}
     end
+  elseif INPUT.wasActionPressed('SPECIAL') then
+    self.player_focused = not self.player_focused
+    --self.long_walk = false
+    return false
   elseif INPUT.wasActionPressed('MENU') then
-    if not player_focused then
+    if player_focused then
+      local card_index = self.handview:getFocus()
+      if card_index > 0 then
+        action_request = {DEFS.ACTION.DISCARD_CARD, card_index}
+      end
+    else
       action_request = {DEFS.ACTION.RECEIVE_PACK}
     end
   elseif INPUT.wasActionPressed('PAUSE') then
@@ -288,19 +294,6 @@ function ActionHUD:actionRequested()
           button:toggleShow()
       end
     end
-  end
-
-  if self.justheld and self.player_turn
-                   and not INPUT.isActionDown('SPECIAL') then
-    self.holdbar:unlock()
-    self.justheld = false
-  end
-
-  if self.holdbar:confirmed() then
-    self.holdbar:reset()
-    self.holdbar:lock()
-    self.justheld = true
-    action_request = {DEFS.ACTION.DRAW_NEW_HAND}
   end
 
   -- choose action
@@ -333,13 +326,7 @@ end
 
 function ActionHUD:update(dt)
   self.minimap:update(dt)
-  --Checks if player can draw a new hand
-  local player = self.route.getControlledActor()
-  if player:getPP() < player:getBody():getConsumption() and
-     not self.holdbar:isLocked()
-  then
-    self.holdbar:lock()
-  end
+  self.turnpreview:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
@@ -347,14 +334,13 @@ function ActionHUD:update(dt)
   end
 
   if self.player_turn then
-    if self.route.getControlledActor():isFocused() then
-      self.focusbar:show()
+    if self.player_focused then
       self:enableCardInfo()
       if not self.handview:isActive() then
         self.handview:activate()
       end
     else
-      self.focusbar:hide()
+      self:disableCardInfo()
       _disableHUDElements(self)
     end
   else

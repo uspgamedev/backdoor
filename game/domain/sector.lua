@@ -1,5 +1,6 @@
 local DB = require 'database'
 local SCHEMATICS = require 'domain.definitions.schematics'
+local ACTIONDEFS = require 'domain.definitions.action'
 local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
@@ -407,14 +408,13 @@ function _turnLoop(self)
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
 
     while not Util.tableEmpty(actors_queue) do
-      local actor = table.remove(actors_queue)
+      local actor = table.remove(actors_queue, 1)
 
-      if actor:ready() then
-        while actor:ready() do
-          actor:makeAction()
-          manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
-        end
-        actor:turn()
+      while actor:ready() do
+        actor:beginTurn()
+        actor:makeAction()
+        manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
+        actor:endTurn()
       end
 
       if actor:isPlayer() and actor:getBody():getSector() ~= self then
@@ -424,6 +424,76 @@ function _turnLoop(self)
     end
 
   end
+end
+
+function Sector:previewTurns(n, half_exhaustion, filter)
+  if #self.actors <= 1 then
+    return {}
+  end
+  -- find pertinent actors and order
+  local actors = {}
+  local count = 0
+  local begin = #self.actors + 1
+  if #self.actors_queue > 0 then
+    local current = self.actors_queue[1]
+    for i, actor in ipairs(self.actors) do
+      if actor == current then
+        begin = i
+        break
+      end
+    end
+    for i = begin, #self.actors do
+      local actor = self.actors[i]
+      if filter(actor) then
+        count = count + 1
+        actors[count] = actor
+      end
+    end
+  end
+  for i = 1, begin - 1 do
+    local actor = self.actors[i]
+    if filter(actor) then
+      count = count + 1
+      actors[count] = actor
+    end
+  end
+  -- Calculate ticks to the next n turns of each actor
+  local ticks = {}
+  for i, actor in ipairs(actors) do
+    ticks[i] = {}
+    for k = 1, n do
+      local exhaustion = ACTIONDEFS.FULL_EXHAUSTION
+      if i == count and half_exhaustion then
+        exhaustion = ACTIONDEFS.HALF_EXHAUSTION
+      end
+      local remaining = ((k - 1) * ACTIONDEFS.FULL_EXHAUSTION + exhaustion)
+                      * ACTIONDEFS.EXHAUSTION_UNIT
+                      - actor:getEnergy()
+      ticks[i][k] = remaining / actor:getSPD()
+    end
+    -- Ignore if current active turn
+    if i == count then
+      table.remove(ticks[i], 1)
+    end
+  end
+  -- Preview turn order
+  local turns = {}
+  local i = 1
+  local round = 0
+  while i <= n do
+    for k, actor in ipairs(actors) do
+      if ticks[k][1] <= round then
+        turns[i] = actor
+        i = i + 1
+        table.remove(ticks[k], 1)
+      end
+    end
+    round = round + 1
+  end
+  for k = n+1, #turns do
+    turns[k] = nil
+  end
+  return turns
 end
 
 --- Plays turn coroutine.

@@ -34,8 +34,7 @@ local function _seek(actor, inputvalues)
       inputvalues.interaction = 'CHANGE_SECTOR'
       inputvalues.sector = id
       inputvalues.pos = exit.target_pos
-    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR
-       and actor:isHandEmpty() then
+    elseif sector:getTile(i, j).type == SCHEMATICS.ALTAR then
       inputvalues.interaction = 'CONSUME_CARDS'
     end
   end
@@ -56,17 +55,17 @@ function INTERACT.activatedAbility(actor, inputvalues)
 end
 
 function INTERACT.exhaustionCost(_, _)
-  return ACTIONDEFS.MOVE_COST
+  return ACTIONDEFS.FULL_EXHAUSTION
 end
 
 function INTERACT.validate(actor, inputvalues)
-  return not actor:isFocused() and not not _seek(actor, inputvalues)
+  return not not _seek(actor, inputvalues)
 end
 
 function INTERACT.perform(actor, inputvalues)
   _seek(actor, inputvalues)
   if inputvalues.interaction == 'CHANGE_SECTOR' then
-    actor:exhaust(ACTIONDEFS.MOVE_COST)
+    actor:exhaust(ACTIONDEFS.FULL_EXHAUSTION)
     local target_sector = Util.findId(inputvalues.sector)
     target_sector:putActor(actor, unpack(inputvalues.pos))
   elseif inputvalues.interaction == 'CONSUME_CARDS' then

@@ -32,7 +32,7 @@ function Actor:init(spec_name)
   self.energy = DEFS.ACTION.EXHAUSTION_UNIT
 
   self.hand = {}
-  self.focus = 0
+  self.focus = DEFS.ACTION.MAX_FOCUS
   self.upgrades = {
     COR = DEFS.ATTR.INITIAL_UPGRADE,
     ARC = DEFS.ATTR.INITIAL_UPGRADE,
@@ -283,10 +283,6 @@ function Actor:getFocus()
   return self.focus
 end
 
-function Actor:isFocused()
-  return self.focus > 0
-end
-
 function Actor:getBufferSize()
   for i,card in ipairs(self.buffer) do
     if card == DEFS.DONE then
@@ -349,28 +345,38 @@ function Actor:copyBuffer()
   return copy
 end
 
+function Actor:canDrawCard()
+  return self:getBufferSize() > 0 or self:getPP() > 0
+end
+
 --- Draw a card from actor's buffer
 function Actor:drawCard()
-  if #self.hand >= DEFS.HAND_LIMIT then return end
   -- Empty buffer
   if self:isBufferEmpty() then return end
 
-  local card = table.remove(self.buffer, 1)
-  if card == DEFS.DONE then
-    RANDOM.shuffle(self.buffer)
-    table.insert(self.buffer, DEFS.DONE)
-    coroutine.yield('report', {
-      type = "shuffle_buffers",
-      actor = self,
-    })
-    card = table.remove(self.buffer, 1)
+  if self:createEquipmentCards() then
+    return
   end
-  table.insert(self.hand, 1, card)
-  coroutine.yield('report', {
-    type = "draw_card",
-    actor = self,
-    card = card
-  })
+
+  if self:canDrawCard() then
+    local card = table.remove(self.buffer, 1)
+    if card == DEFS.DONE then
+      RANDOM.shuffle(self.buffer)
+      table.insert(self.buffer, DEFS.DONE)
+      coroutine.yield('report', {
+        type = "shuffle_buffers",
+        actor = self,
+      })
+      self:spendPP(1)
+      card = table.remove(self.buffer, 1)
+    end
+    table.insert(self.hand, 1, card)
+    coroutine.yield('report', {
+      type = "draw_card",
+      actor = self,
+      card = card
+    })
+  end
 end
 
 function Actor:createEquipmentCards()
@@ -388,6 +394,7 @@ function Actor:createEquipmentCards()
         widget = active_eqp,
       })
     end
+    return true
   end
 end
 
@@ -479,8 +486,12 @@ function Actor:canSee(target)
   if sector ~= target_sector then
     return false
   end
-  local fov = self:getFov(sector)
   local i, j = target:getPos()
+  return self:canSeePosition(i, j)
+end
+
+function Actor:canSeePosition(i, j)
+  local fov = self:getFov(self:getSector())
   local visible = fov[i][j]
   return visible and visible > 0
 end
@@ -550,13 +561,6 @@ function Actor:tick()
   self.energy = self.energy + self:getSPD()
 end
 
-function Actor:resetFocus()
-  if self:isFocused() then
-    self:endFocus()
-  end
-  self.focus = DEFS.ACTION.MAX_FOCUS
-end
-
 function Actor:ready()
   return self:getBody():isAlive() and self.energy >= ACTIONDEFS.MAX_ENERGY
 end
@@ -573,28 +577,39 @@ function Actor:playCard(card_index)
   return card
 end
 
-function Actor:discardHand()
-  while not self:isHandEmpty() do
-    local index = self:getHandSize()
-    local card = self:removeHandCard(index)
-    if not card:isTemporary() then
-      coroutine.yield('report', {
-        type = 'discard_card',
-        actor = self,
-        card_index = index
-      })
-      self:addCardToBackbuffer(card)
-    else
-      coroutine.yield('report', {
-        type = 'discard_temporary_card',
-        actor = self,
-        card_index = index
-      })
-    end
+function Actor:discardCard(index)
+  local card = self:removeHandCard(index)
+  if not card:isTemporary() then
+    coroutine.yield('report', {
+      type = 'discard_card',
+      actor = self,
+      card_index = index
+    })
+    self:addCardToBackbuffer(card)
+  else
+    coroutine.yield('report', {
+      type = 'discard_temporary_card',
+      actor = self,
+      card_index = index
+    })
   end
 end
 
-function Actor:turn()
+function Actor:discardHand()
+  while not self:isHandEmpty() do
+    local index = self:getHandSize()
+    self:discardCard(index)
+  end
+end
+
+function Actor:beginTurn()
+  self:gainFocus(ACTIONDEFS.FOCUS_PER_TURN)
+  while self:getHandSize() < DEFS.HAND_LIMIT and self:canDrawCard() do
+    self:drawCard()
+  end
+end
+
+function Actor:endTurn()
   local body = self:getBody()
   body:triggerWidgets(DEFS.TRIGGERS.ON_TURN)
 end
@@ -626,20 +641,6 @@ end
 
 function Actor:gainFocus(n)
   self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
-end
-
-function Actor:checkFocus()
-  if self.focus == 0 then
-    self:endFocus()
-  end
-end
-
-function Actor:endFocus()
-  local body = self:getBody()
-  self:discardHand()
-  self:exhaust(DEFS.ACTION.FOCUS_COST)
-  self.focus = 0
-  body:triggerWidgets(DEFS.TRIGGERS.ON_FOCUS_END)
 end
 
 function Actor:rewardPP(n)
