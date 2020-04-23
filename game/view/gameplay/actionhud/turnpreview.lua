@@ -15,11 +15,12 @@ local _MAX_TURNS = 6
 
 TurnPreview.WIDTH = 160
 
-function TurnPreview:init(player, x, y)
+function TurnPreview:init(player, handview, x, y)
 
   ELEMENT.init(self)
 
   self.player = player
+  self.handview = handview
   self.position = vec2(x, y)
 
   self.text_font = FONT.get("Text", 18)
@@ -35,11 +36,14 @@ function TurnPreview:refresh()
   local seen = self.player:getVisibleBodies()
   local sector = self.player:getSector()
   if next(seen) then
-    local turns = sector:previewTurns(_MAX_TURNS, function (actor)
+    local turns_full = sector:previewTurns(_MAX_TURNS, false, function (actor)
       return actor == self.player or seen[actor:getBody():getId()]
     end)
-    if #turns > 0 then
-      self.turns = turns
+    local turns_halved = sector:previewTurns(_MAX_TURNS, true, function (actor)
+      return actor == self.player or seen[actor:getBody():getId()]
+    end)
+    if #turns_full > 0 and #turns_halved > 0 then
+      self.turns = { full = turns_full, halved = turns_halved }
     end
   else
     self.turns = nil
@@ -59,7 +63,8 @@ function TurnPreview:draw()
     g.rectangle('line', 0, 0, self.WIDTH, height)
     self.text_font:set()
     g.translate(8, 4)
-    for i, actor in ipairs(self.turns) do
+    local which = self:_is_halved() and 'halved' or 'full'
+    for i, actor in ipairs(self.turns[which]) do
       g.push()
       g.translate(0, (i - 1) * 24)
       local name = "player"
@@ -76,6 +81,12 @@ function TurnPreview:draw()
     end
     g.pop()
   end
+end
+
+function TurnPreview:_is_halved()
+  local focused_card = self.handview:getFocusedCard()
+  focused_card = focused_card and focused_card.card
+  return focused_card and focused_card:isHalfExhaustion()
 end
 
 return TurnPreview
