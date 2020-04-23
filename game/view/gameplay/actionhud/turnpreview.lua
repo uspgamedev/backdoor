@@ -70,6 +70,9 @@ function TurnPreview:draw()
       end
       g.print(name, 0, 0)
       g.pop()
+      if actor == self.player then
+        break
+      end
     end
     g.pop()
   end
