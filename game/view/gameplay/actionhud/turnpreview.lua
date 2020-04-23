@@ -1,11 +1,17 @@
 
 -- luacheck: globals love
-
+local DB          = require 'database'
+local RES         = require 'resources'
 local COLORS      = require 'domain.definitions.colors'
 local FONT        = require 'view.helpers.font'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 local vec2        = require 'cpml' .vec2
+
+local ICON_W = 64
+local ICON_H = 32
+local ICON_PAD = 2
+local ICON_MARGIN = 8
 
 local TurnPreview = Class{
   __includes = { ELEMENT }
@@ -13,7 +19,7 @@ local TurnPreview = Class{
 
 local _MAX_TURNS = 6
 
-TurnPreview.WIDTH = 160
+TurnPreview.WIDTH = 130
 
 function TurnPreview:init(player, handview, x, y)
 
@@ -23,6 +29,7 @@ function TurnPreview:init(player, handview, x, y)
   self.handview = handview
   self.position = vec2(x, y)
 
+  self.title_font = FONT.get("Text", 24)
   self.text_font = FONT.get("Text", 18)
   self.turns = nil
 
@@ -55,29 +62,29 @@ function TurnPreview:draw()
     local g = love.graphics
     g.push()
     g.translate(self.position:unpack())
-    g.setColor(COLORS.DARKER)
-    local height = 12 + 24*_MAX_TURNS
-    g.rectangle('fill', 0, 0, self.WIDTH, height)
+
+    self.title_font:set()
     g.setColor(COLORS.NEUTRAL)
-    g.setLineWidth(2)
-    g.rectangle('line', 0, 0, self.WIDTH, height)
-    self.text_font:set()
-    g.translate(8, 4)
+    g.print("next turns", 0, 0)
+    g.translate(0, 40)
+
     local which = self:_is_halved() and 'halved' or 'full'
+    local skip = 0
     for i, actor in ipairs(self.turns[which]) do
       g.push()
-      g.translate(0, (i - 1) * 24)
-      local name = "player"
-      if actor ~= self.player then
-        name = ("%s %s %s"):format(actor:getSpecName(),
-                                   actor:getBody():getSpecName(),
-                                   actor:getId())
-      end
-      g.print(name, 0, 0)
-      g.pop()
+      g.translate(0, (i - 1 + skip/2) * (ICON_H + ICON_MARGIN))
+
       if actor == self.player then
-        break
+        self:draw_separator()
+        g.translate(0, (ICON_H + ICON_MARGIN)/2)
+        self:draw_icon(actor)
+        skip = skip + 1
+      else
+        self:draw_icon(actor)
       end
+
+      g.pop()
+
     end
     g.pop()
   end
@@ -89,5 +96,36 @@ function TurnPreview:_is_halved()
   return focused_card and focused_card:isHalfExhaustion()
 end
 
-return TurnPreview
+function TurnPreview:draw_icon(actor)
+  local g = love.graphics
 
+  --Draw actor icon
+  g.setColor(COLORS.DARKER)
+  g.rectangle('fill', 0, 0, ICON_W + 2*ICON_PAD, ICON_H + 2*ICON_PAD)
+  g.setColor(COLORS.NEUTRAL)
+  g.setLineWidth(2)
+  g.rectangle('line', 0, 0, ICON_W + 2*ICON_PAD, ICON_H + 2*ICON_PAD)
+  local appearance = DB.loadSpec(
+    'appearance', actor:getBody():getAppearance()
+  )
+  local icon = RES.loadTexture(appearance.turn_icon)
+  g.draw(icon, ICON_PAD, ICON_PAD)
+
+  --Draw actor id
+  if actor ~= self.player then
+    self.text_font:set()
+    local margin = 5
+    local name = ("%s"):format(actor:getId())
+    local y = (ICON_H + 2*ICON_PAD)/2 - self.text_font:getHeight()/2
+    g.print(name, ICON_W + 2*ICON_PAD + margin, y)
+  end
+end
+
+function TurnPreview:draw_separator()
+  local g = love.graphics
+  g.setColor(COLORS.NEUTRAL)
+  self.text_font:set()
+  g.print("-----------", 0, -ICON_MARGIN)
+end
+
+return TurnPreview
