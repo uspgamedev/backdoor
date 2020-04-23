@@ -85,6 +85,38 @@ function love.load(arg)
   })
 end
 
+--local SAMPLES = 10
+--local profiling = {}
+--local last_state
+--
+--function updateProfiling(dt)
+--  local state = last_state
+--  last_state = SWITCHER.current()
+--  if not state then return end
+--  local name = "???"
+--  for k,v in pairs(GS) do
+--    if v == state then
+--      name = k
+--      break
+--    end
+--  end
+--  if dt > 0.2 then
+--    print("lag on state", name)
+--  end
+--  local sample = profiling[name] or { times = {} , n = 1 }
+--  sample.times[sample.n] = dt
+--  sample.n = (sample.n % SAMPLES) + 1
+--  profiling[name] = sample
+--end
+--
+--function average(sample)
+--  local sum = 0
+--  for _,time in ipairs(sample.times) do
+--    sum = sum + time
+--  end
+--  return sum / math.max(#sample.times, SAMPLES)
+--end
+
 function love.update(dt)
   MAIN_TIMER:update(dt)
   if INPUT.wasActionReleased('QUIT') then
@@ -97,6 +129,7 @@ function love.update(dt)
     SWITCHER.push(GS.DEVMODE)
   end
   SWITCHER.update(dt)
+  --updateProfiling(dt)
   INPUT.flush() -- must be called afterwards
   Util.updateSubtype(dt, 'task')
   Draw.update(dt)
@@ -106,6 +139,16 @@ end
 
 function love.draw()
   SWITCHER.draw()
+  --local g = love.graphics
+  --g.push()
+  --g.origin()
+  --g.setColor(1,1,1)
+  --local i = 0
+  --for name,sample in pairs(profiling) do
+  --  g.print(("%s: %.2f"):format(name, 1 / average(sample)), 32, 32+i*32)
+  --  i = i + 1
+  --end
+  --g.pop()
 end
 
 function love.quit()

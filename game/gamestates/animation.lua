@@ -1,4 +1,5 @@
 
+local SWITCHER = require 'infra.switcher'
 local INPUT = require 'input'
 local Util  = require "steaming.util"
 local Draw  = require "draw"
@@ -11,23 +12,19 @@ local state = {}
 local _animation_task
 local _view
 local _alert
-local _route
-local _report
 
 --[[ LOCAL FUNCTIONS ]]--
 
 --[[ STATE FUNCTIONS ]]--
 
-function state:init()
+function state:init() -- luacheck: no self
   -- dunno
 end
 
-function state:enter(_, route, view, report)
+function state:enter(_, route, view, report) -- luacheck: no self
 
   _view = view
   _alert = false
-  _route = route
-  _report = report
 
   local ok, animation = pcall(function () return ANIMATIONS[report.type] end)
   if ok then
@@ -42,14 +39,13 @@ function state:enter(_, route, view, report)
 
 end
 
-function state:leave()
+function state:leave() -- luacheck: no self
 
-  _report = nil
   Util.destroyAll()
 
 end
 
-function state:update(dt)
+function state:update(_) -- luacheck: no self
 
   if INPUT.wasAnyPressed(0.5) then
     _alert = true
@@ -63,7 +59,7 @@ function state:update(dt)
 
 end
 
-function state:draw()
+function state:draw() -- luacheck: no self
 
     Draw.allTables()
 
