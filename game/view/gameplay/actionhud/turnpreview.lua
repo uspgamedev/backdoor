@@ -20,7 +20,7 @@ local TurnPreview = Class{
 
 local _MAX_TURNS = 6
 
-TurnPreview.WIDTH = 130
+TurnPreview.WIDTH = 140
 
 function TurnPreview:init(player, handview, x, y)
 
@@ -76,7 +76,7 @@ function TurnPreview:draw()
 
     self.title_font:set()
     g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
-    g.print("next turns", 0, 0)
+    g.print("NEXT TURNS", 0, 0)
     g.translate(0, 40)
 
     local which = self:_is_halved() and 'halved' or 'full'
