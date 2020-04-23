@@ -112,6 +112,7 @@ function ActionHUD:destroy()
   self.weardock:destroy()
   self.conddock:destroy()
   self.minimap:destroy()
+  self.turnpreview:destroy()
   ELEMENT.destroy(self)
 end
 
@@ -125,6 +126,10 @@ end
 
 function ActionHUD:refreshTurnPreview()
   self.turnpreview:refresh()
+end
+
+function ActionHUD:disableTurnPreview()
+  self.turnpreview:disable()
 end
 
 function ActionHUD:disableTurn()

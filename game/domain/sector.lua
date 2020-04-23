@@ -480,6 +480,9 @@ function Sector:previewTurns(n, filter)
     end
     round = round + 1
   end
+  for k = n+1, #turns do
+    turns[k] = nil
+  end
   return turns
 end
 

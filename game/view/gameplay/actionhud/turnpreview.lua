@@ -27,6 +27,10 @@ function TurnPreview:init(player, x, y)
 
 end
 
+function TurnPreview:disable()
+  self.turns = nil
+end
+
 function TurnPreview:refresh()
   local seen = self.player:getVisibleBodies()
   local sector = self.player:getSector()

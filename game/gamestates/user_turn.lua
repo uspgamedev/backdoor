@@ -64,6 +64,7 @@ function state:enter(_, route, view)
 end
 
 function state:leave()
+  _view.action_hud:disableTurnPreview()
 end
 
 function state:resume(_, args)
