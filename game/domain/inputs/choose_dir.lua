@@ -12,7 +12,11 @@ INPUT.schema = {
 
 INPUT.type = 'dir'
 
-function INPUT.isValid(actor, fieldvalues, value)
+function INPUT.preview(_, _)
+  return "chosen direction"
+end
+
+function INPUT.isValid(_, _, value)
   for _,dir in ipairs(DIR) do
     dir = DIR[dir]
     if dir[1] == value[1] and dir[2] == value[2] then

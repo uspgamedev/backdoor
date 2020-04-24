@@ -7,7 +7,11 @@ INPUT.schema = {
 
 INPUT.type = 'pos'
 
-function INPUT.isValid(actor, fieldvalues, value)
+function INPUT.preview(_, _)
+  return "fixed position"
+end
+
+function INPUT.isValid(_, _, _)
   return true
 end
 
