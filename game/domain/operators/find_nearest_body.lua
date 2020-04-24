@@ -21,6 +21,12 @@ local function _checkFaction(actor, body, ignore)
   return not ignore or actor:getBody():getFaction() ~= body:getFaction()
 end
 
+function OP.preview(_, fieldvalues)
+  local pos = fieldvalues['pos']
+  local range = fieldvalues['range']
+  return ("nearest target within %d tiles of %s"):format(range, pos)
+end
+
 function OP.process(actor, fieldvalues)
   local sector = actor:getBody():getSector()
   local i, j = unpack(fieldvalues['pos'])
