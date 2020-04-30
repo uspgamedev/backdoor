@@ -58,6 +58,7 @@ function state:enter(_, route, view)
   _view = view
   _view.action_hud:enableTurn(true)
   _view.action_hud:refreshTurnPreview()
+  _view.sector:snapBodyViews()
 
   _update_panel("isdown")
 

@@ -20,6 +20,7 @@ local PLAYSFX     = require 'helpers.playsfx'
 local vec2        = require 'cpml'.vec2
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
+local Util        = require "steaming.util"
 
 local SECTOR_TILEMAP    = require 'view.sector.tilemap'
 local SECTOR_ENERGYBAR  = require 'view.sector.energybar'
@@ -226,6 +227,15 @@ end
 function SectorView:sectorChanged()
   self.sector_changed = true
   self.body_views = {}
+end
+
+function SectorView:snapBodyViews()
+  for id,bodyview in pairs(self.body_views) do
+    local body = Util.findId(id)
+    if body then
+      bodyview:setPosition(body:getPos())
+    end
+  end
 end
 
 function SectorView:draw()
