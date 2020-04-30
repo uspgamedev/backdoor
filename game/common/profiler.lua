@@ -32,8 +32,8 @@ function Profiler:update(dt)
       )
       self.output:write(warning)
       print(warning)
-      for _, slice in ipairs(self.slices) do
-        self.output:write(("%16s: %.3f\n"):format(slice.name, 1000*slice.span))
+      for mark, slice in pairs(self.slices) do
+        self.output:write(("%16s: %.3f\n"):format(mark, 1000*slice))
       end
     end
     local sample = self.profiling[name] or { times = {} , n = 1 }
@@ -46,17 +46,15 @@ end
 
 function Profiler:start()
   self.started_at = love.timer.getTime()
-  self.slices = { n = 0 }
+  self.slices = {}
 end
 
 function Profiler:mark(name)
   if not self.slices then return end
-  local n = self.slices.n + 1
   local t = love.timer.getTime()
   local dt = t - self.started_at
   self.started_at = t
-  self.slices[n] = { span = dt, name = name }
-  self.slices.n = n
+  self.slices[name] = (self.slices[name] or 0) + dt
 end
 
 local function average(sample)

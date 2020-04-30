@@ -4,6 +4,8 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 
 local TILE = require 'common.tile'
 
+local _cache
+
 --LOCAL FUNCTIONS DECLARATIONS--
 
 local updateOctant
@@ -15,7 +17,6 @@ local visibilityOfShadow
 local addProjection
 local transformOctant
 local projectTile
-local fullShadow
 local isInRange
 
 local VISIBILITY = {}
@@ -47,11 +48,31 @@ function VISIBILITY.resetFov(fov, sector)
 
 end
 
+function VISIBILITY.isCached(actor, sector)
+  if not _cache then
+    _cache = {}
+  end
+  local key = ("%s/%s"):format(sector:getId(), actor:getId())
+  local cached = _cache[key] or {}
+  local i, j = actor:getPos()
+  local range = actor:getFovRange()
+  if cached.i ~= i or cached.j ~= j or cached.range ~= range then
+    cached.i = i
+    cached.j = j
+    cached.range = range
+    return false
+  else
+    return true
+  end
+end
+
 --Update actors field of view based on his position in a given sector
 function VISIBILITY.updateFov(actor, sector)
-  VISIBILITY.resetFov(actor:getFov(sector), sector)
-  for octant = 1, 8 do
-    updateOctant(actor, sector, octant)
+  if not VISIBILITY.isCached(actor, sector) then
+    VISIBILITY.resetFov(actor:getFov(sector), sector)
+    for octant = 1, 8 do
+      updateOctant(actor, sector, octant)
+    end
   end
 end
 
@@ -61,25 +82,21 @@ end
 
 function updateOctant(actor, sector, octant)
   local line = newShadowLine()
-  local full_shadow = false
 
   --Actor current position
   local actor_i, actor_j = actor:getPos()
   local fov = actor:getFov(sector)
 
-  local row = 0
-  while true do
-
+  for row = 0, actor:getFovRange() do
     do
       local d_i, d_j = transformOctant(row, 0, octant)
       local pos = {actor_i + d_i, actor_j + d_j}
 
-      --Check if tile is inside sector
+      -- Check if tile is inside sector
       if not sector:isInside(pos[1],pos[2]) then break end
-      if row > actor:getFovRange() then
-        full_shadow = true
-      end
     end
+
+    local full_shadow = false
 
     for col = 0, row do
       local d_i, d_j = transformOctant(row, col, octant)
@@ -88,28 +105,26 @@ function updateOctant(actor, sector, octant)
       --Check if tile is inside sector
       if not sector:isInside(pos[1],pos[2]) then break end
 
-      if full_shadow then
-        if fov[pos[1]][pos[2]] then --Was seen once
-          fov[pos[1]][pos[2]] = 0 --Make it invisible
-        end
-      else
-        --Set visibility of tile
-        local projection = projectTile(row, col)
-        local visible = 1 - visibilityOfShadow(line, projection)
-        if isInRange(pos[1], pos[2], actor) and (fov[pos[1]][pos[2]] or visible == 1)  then
-          fov[pos[1]][pos[2]] = visible
-        end
+      --Set visibility of tile
+      local projection = projectTile(row, col)
+      local visible = 1 - visibilityOfShadow(line, projection)
+      if isInRange(pos[1], pos[2], actor) and (fov[pos[1]][pos[2]] or visible == 1)  then
+        fov[pos[1]][pos[2]] = visible
+      end
 
-        --Add any wall tiles to the shadow line
-        if visible == 1 and
-           sector.tiles[pos[1]][pos[2]] and
-           sector.tiles[pos[1]][pos[2]].type == SCHEMATICS.WALL then
-              addProjection(line, projection)
-              fullShadow = fullShadow or isShadowLineFull(line)
-        end
+      --Add any wall tiles to the shadow line
+      if visible == 1 and
+         sector.tiles[pos[1]][pos[2]] and
+         sector.tiles[pos[1]][pos[2]].type == SCHEMATICS.WALL then
+            addProjection(line, projection)
+            full_shadow = full_shadow or isShadowLineFull(line)
       end
     end
-    row = row + 1
+
+    -- Check if shadow is full and no other tiles behind it will be visible
+    if full_shadow then
+      break
+    end
   end
 end
 
@@ -163,9 +178,10 @@ end
 function addProjection(line, projection)
   local list = line.shadow_list
   local index = 1;
+  local n = #list
 
   --Figure out where to slot the new shadow in the list
-  while index <= #list do
+  while index <= n do
      --Stop when we hit the insertion point.
      if list[index].start >= projection.start then break end
      index = index + 1
