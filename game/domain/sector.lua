@@ -388,33 +388,24 @@ function Sector:spreadDrops(i, j, drops)
 end
 
 function _turnLoop(self)
-  local PF = require 'common.profiler'
   local actors_queue = self.actors_queue
   while true do
-
-    PF:mark("start turn loop")
 
     for body in pairs(self.bodies) do
       if type(body) == 'table' then
         body:tick()
       end
     end
-    PF:mark("body tick")
 
     --Initialize actor queue
     for _,actor in ipairs(self.actors) do
       actor:tick()
-      PF:mark("actor tick")
       actor:grabDrops(self:getTile(actor:getPos()))
-      PF:mark("actor grab drops")
       actor:updateFov(self)
-      PF:mark("actor update fov")
       table.insert(actors_queue, actor)
-      PF:mark("actor add to queue")
     end
 
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
-    PF:mark("queue update")
 
     while not Util.tableEmpty(actors_queue) do
       local actor = table.remove(actors_queue, 1)
@@ -431,7 +422,6 @@ function _turnLoop(self)
         break
       end
     end
-    PF:mark("actor actions")
 
   end
 end
