@@ -42,7 +42,7 @@ function BodyView:setPosition(i, j)
 end
 
 function BodyView:moveTo(i, j, t, curve)
-  curve = curve or 'out-cubic'
+  curve = curve or 'in-out-cubic'
   local deferred = Deferred:new{}
   local target = BodyView.tileToScreen(i, j)
   assert(not self:getTimer("move_to", MAIN_TIMER))

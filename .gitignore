@@ -3,6 +3,7 @@
 .*
 !.git*
 /lua51*
+/profiling
 savedir
 /log*
 import

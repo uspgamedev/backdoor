@@ -402,7 +402,7 @@ function _turnLoop(self)
       actor:tick()
       actor:grabDrops(self:getTile(actor:getPos()))
       actor:updateFov(self)
-      table.insert(actors_queue,actor)
+      table.insert(actors_queue, actor)
     end
 
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
