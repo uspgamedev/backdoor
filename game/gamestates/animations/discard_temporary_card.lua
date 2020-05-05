@@ -1,6 +1,5 @@
 
 local Dissolve      = require 'view.dissolvecard'
-local COLORS        = require 'domain.definitions.colors'
 local Util          = require "steaming.util"
 
 local ANIM = require 'common.activity' ()
