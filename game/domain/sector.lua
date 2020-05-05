@@ -461,7 +461,7 @@ function Sector:previewTurns(n, half_exhaustion, filter)
   local ticks = {}
   for i, actor in ipairs(actors) do
     ticks[i] = {}
-    for k = 1, n do
+    for k = 1, 2*n do
       local exhaustion = ACTIONDEFS.FULL_EXHAUSTION
       if i == count and half_exhaustion then
         exhaustion = ACTIONDEFS.HALF_EXHAUSTION
@@ -482,7 +482,7 @@ function Sector:previewTurns(n, half_exhaustion, filter)
   local round = 0
   while i <= n do
     for k, actor in ipairs(actors) do
-      if ticks[k][1] <= round then
+      if ticks[k][1] and ticks[k][1] <= round then
         turns[i] = actor
         i = i + 1
         table.remove(ticks[k], 1)

@@ -58,7 +58,8 @@ function BUILDER.build(route_id, player_info)
   data.next_id = idgenerator.getNextID()
   data.current_sector_id = first_sector.id
   data.player_name = player_info.name
-  data.player_id = first_sector.actors[1].id
+  local last = #first_sector.actors
+  data.player_id = first_sector.actors[last].id
   data.behaviors = { ai = {} }
   printf("Generated %s...", route_id)
   printf("GLOBAL RNG seed: %d", RANDOM.getSafeSeed())
