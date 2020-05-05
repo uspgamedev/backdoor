@@ -8,6 +8,7 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
+local PROFILE       = require 'infra.profile'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
 local INPUT         = require 'input'
@@ -27,7 +28,7 @@ local _save_and_quit
 local _ACTION = {}
 
 --[[ Local functions ]]--
-
+local _checkTutorial
 local _update_panel
 
 --[[ Task Functions ]]--
@@ -62,6 +63,7 @@ function state:enter(_, route, view)
 
   _update_panel("isdown")
 
+  _checkTutorial()
 end
 
 function state:leave()
@@ -250,6 +252,17 @@ function _update_panel(mode)
     error("Not a valid mode to update panel")
   end
 
+end
+
+function _checkTutorial()
+  --Check for time seeing enemy
+  local controlled_actor = _route.getControlledActor()
+  if controlled_actor then
+    local hostile_bodies = controlled_actor:getHostileBodies()
+    if #hostile_bodies > 0 and not PROFILE.getTutorial("open_hand") then
+      SWITCHER.switch(GS.TUTORIAL_HINT, "open_hand")
+    end
+  end
 end
 
 return state
