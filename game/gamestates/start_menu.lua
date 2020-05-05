@@ -4,6 +4,9 @@ local MENU            = require 'infra.menu'
 local DIRECTIONALS    = require 'infra.dir'
 local RUNFLAGS        = require 'infra.runflags'
 local INPUT           = require 'input'
+local COLORS          = require 'domain.definitions.colors'
+local VIEWDEFS        = require 'view.definitions'
+local FONT            = require 'view.helpers.font'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE         = require 'infra.profile'
 local PLAYSFX         = require 'helpers.playsfx'
@@ -22,6 +25,7 @@ local _menu_context
 local _locked
 local _activity = Activity()
 local _soundtrack
+local _font = FONT.get("Text", 16)
 
 -- LOCAL METHODS --
 
@@ -185,8 +189,21 @@ function state:update(dt)
   _menu_view:update(dt)
 end
 
+function state:draw_version()
+  local g = love.graphics
+
+  _font:set()
+  g.setColor(COLORS.NEUTRAL)
+  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  local text = "version ".. VERSION
+  local gap = 5
+  g.print(text, w - _font:getWidth(text) - gap, h - _font:getHeight())
+end
+
 function state:draw()
   Draw.allTables()
+
+  self:draw_version()
 end
 
 --Return state functions
