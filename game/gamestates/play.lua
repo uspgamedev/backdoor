@@ -60,7 +60,7 @@ local function _playTurns(...)
     _view.action_hud:disableTurn()
     _activity:changeSector(...)
   elseif request == "report" then
-    local player = _route.getControlledActor()
+    local player = _route.getPlayerActor()
     local body = extra.body or (extra.actor and extra.actor:getBody())
     if body and player:canSee(body) then
       if extra.actor ~= player then

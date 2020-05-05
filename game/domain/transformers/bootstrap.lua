@@ -6,8 +6,8 @@ local transformer = {}
 transformer.schema = {
   { id = 'w', name = "Width", type = 'integer', range = {1} },
   { id = 'h', name = "Height", type = 'integer', range = {1} },
-  { id = 'mw', name = "Horizontal Margin", type = 'integer', range = {1} },
-  { id = 'mh', name = "Vertical Margin", type = 'integer', range = {1} },
+  { id = 'mw', name = "Horizontal Margin", type = 'integer', range = {0} },
+  { id = 'mh', name = "Vertical Margin", type = 'integer', range = {0} },
 }
 
 function transformer.process(sectorinfo, params)

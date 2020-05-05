@@ -44,7 +44,7 @@ end
 
 function BUILDER._findFirstSector(sectors)
   for _,sector in ipairs(sectors) do
-    if sector.specname == "initial" then
+    if sector.specname == "tutorial" then
       return sector
     end
   end
