@@ -40,6 +40,7 @@ ROUTEMAP.initial_nodes = {
   --{ ZONES.K, SYMBOLS.e },
   --{ ZONES.L, SYMBOLS.e },
   --{ ZONES.M, SYMBOLS.e },
+  { ZONES.A, "tutorial" },
 }
 
 ROUTEMAP.initial_connections = {
@@ -53,6 +54,7 @@ ROUTEMAP.initial_connections = {
   {8, 9},
   {9, 10},
   {10, 11},
+  {12, 1},
 }
 
 --ROUTEMAP.initial_connections = {

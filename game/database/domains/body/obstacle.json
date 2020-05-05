@@ -1,0 +1,10 @@
+{
+  "appearance":"demobody",
+  "drops":[],
+  "efc":-2,
+  "faction":"agressive",
+  "fin":-2,
+  "name":"Obstacle",
+  "res":2,
+  "extends":false
+}
