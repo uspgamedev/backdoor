@@ -171,7 +171,7 @@ function PROFILE.setPreference(field, value)
 end
 
 function PROFILE.getTutorial(field, value)
-  local value = _metadata.preferences[field]
+  local value = _metadata.tutorial[field]
   if not value then
     value = DB.loadSetting("tutorial")[field]
   end
