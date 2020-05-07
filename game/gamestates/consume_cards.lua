@@ -1,7 +1,10 @@
 
+-- luacheck: no self
+
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
-local DEFS         = require 'domain.definitions'
+local PROFILE      = require 'infra.profile'
+local SWITCHER     = require 'infra.switcher'
 local PLAYSFX      = require 'helpers.playsfx'
 local CardView     = require 'view.consumelist'
 local Draw         = require "draw"
@@ -11,7 +14,6 @@ local state = {}
 local _actor
 local _card_list_view
 local _leave
-local _status
 local _view
 
 function state:init()
@@ -33,7 +35,7 @@ local function _cancel()
   _leave = true
 end
 
-function state:enter(from, view, actor, maxconsume)
+function state:enter(_, view, actor, maxconsume)
   _view = view
   _view.actor:show()
   _card_list_view = CardView({"CONFIRM"})
@@ -57,7 +59,12 @@ function state:leave()
   _card_list_view = nil
 end
 
-function state:update(dt)
+function state:update(_)
+  if not PROFILE.getTutorial("consume") then
+    local GS = require 'gamestates'
+    SWITCHER.push(GS.TUTORIAL_HINT, "consume")
+    return
+  end
   if _leave then
     PLAYSFX 'back-menu'
     SWITCHER.pop({})
