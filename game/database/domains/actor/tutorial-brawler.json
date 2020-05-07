@@ -1,0 +1,11 @@
+{
+  "behavior":"player",
+  "extends":"brawler",
+  "initial_buffer":[{
+      "amount":8,
+      "card":"strike"
+    }],
+  "traits":[],
+  "signature":false,
+  "collection":false
+}
