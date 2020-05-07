@@ -93,7 +93,7 @@ local HINTS = {
   },
   altar = {
     {
-      text = "TEXT",
+      text = "You can activate such altars to consume a few cards",
       region = {x = 0, y = 0, w = 0, h = 0},
       text_pos = {x = 440, y = 420}
     },
