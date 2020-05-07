@@ -12,7 +12,7 @@ local Draw     = require "draw"
 
 --[[ LOCAL VARIABLES ]]--
 
-local SPEED = 4
+local SPEED = 3
 local HINTS = {
   open_hand = {
     {
@@ -55,6 +55,40 @@ local HINTS = {
       text = "                  You got a pack!\nPress W to check your sealed packs",
       region = {x = 0, y = 0, w = 0, h = 0},
       text_pos = {x = 470, y = 360}
+    },
+  },
+  open_pack = {
+    {
+      text = "Here you can open your sealed pack by holding up",
+      region = {x = 300, y = 40, w = 490, h = 400},
+      text_pos = {x = 420, y = 450}
+    },
+  },
+  consume = {
+    {
+      text = "You can choose where every cards goes",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
+    },
+    {
+      text = "Cards you keep will go to your backbuffer",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
+    },
+    {
+      text = "Cards you consume will give you EXP",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
+    },
+    {
+      text = "How the EXP will distribute across your attributes\nwill depend on which card type you been using the most",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
+    },
+    {
+      text = "Hold F to confirm your selections",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
     },
   },
   altar = {

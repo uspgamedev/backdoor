@@ -5,6 +5,7 @@
   "pp": false,
   "get_pack": false,
   "open_pack": false,
+  "consume": false,
   "altar": false,
   "use_stairs": false,
 }

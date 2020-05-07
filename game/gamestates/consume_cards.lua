@@ -58,6 +58,9 @@ function state:leave()
 end
 
 function state:update(dt)
+  if not PROFILE.getTutorial("consume") then
+    SWITCHER.push(GS.TUTORIAL_HINT, "consume")
+  end
   if _leave then
     PLAYSFX 'back-menu'
     SWITCHER.pop({})

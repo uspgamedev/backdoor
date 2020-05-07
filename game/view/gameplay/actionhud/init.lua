@@ -72,7 +72,7 @@ function ActionHUD:init(route)
   self.turnpreview = TurnPreview(route.getPlayerActor(), self.handview,
                                  W - TurnPreview.WIDTH,
                                  _MARGIN + size + preview_margin)
-  self.turnpreview:register("HUD_BG")
+  self.turnpreview:register("HUD_BG_LOWER")
 
   -- HUD state (player turn or not)
   self.player_turn = false
