@@ -62,8 +62,6 @@ function state:enter(_, route, view)
   _view.sector:snapBodyViews()
 
   _update_panel("isdown")
-
-  _checkTutorial()
 end
 
 function state:leave()
@@ -83,6 +81,9 @@ function state:devmode()
 end
 
 function state:update(_)
+
+  if _checkTutorial() then return end
+
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
@@ -256,11 +257,18 @@ end
 
 function _checkTutorial()
   --Check for time seeing enemy
-  local controlled_actor = _route.getControlledActor()
-  if controlled_actor then
-    local hostile_bodies = controlled_actor:getHostileBodies()
-    if #hostile_bodies > 0 and not PROFILE.getTutorial("open_hand") then
-      SWITCHER.switch(GS.TUTORIAL_HINT, "open_hand")
+  if not PROFILE.getTutorial("open_hand") then
+    local player = _route.getPlayerActor()
+    if player then
+      local player_i, player_j = player:getPos()
+      local hostile_bodies = player:getHostileBodies()
+      for _,body in ipairs(hostile_bodies) do
+        local enemy_i, enemy_j = body:getPos()
+        if math.abs(player_i - enemy_i) + math.abs(player_j - enemy_j) <= 1 then
+          SWITCHER.push(GS.TUTORIAL_HINT, "open_hand")
+          return true
+        end
+      end
     end
   end
 end
