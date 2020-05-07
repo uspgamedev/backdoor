@@ -42,7 +42,7 @@ function state:enter(_, view, actor, maxconsume)
   local buffer = actor:copyBuffer()
   _actor = actor
   _card_list_view:open(buffer, maxconsume)
-  _card_list_view:register("HUD_MIDDLE")
+  _card_list_view:register("HUD")
   if #buffer == 0 then
     _leave = true
   end
