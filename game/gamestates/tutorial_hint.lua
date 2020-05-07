@@ -1,3 +1,6 @@
+
+-- luacheck: globals love, no self
+
 local state    = {}
 local Util     = require "steaming.util"
 local SWITCHER = require 'infra.switcher'
@@ -42,7 +45,7 @@ local HINTS = {
       text_pos = {x = 20, y = 520}
     },
     {
-      text = "      You'll need PP to reshuffle your backbuffer\ninto your buffer when you ran out of cards to draw",
+      text = "      You'll need PP to reshuffle your backbuffer\ninto your buffer when you run out of cards to draw",
       region = {{x = 1180, y = 560, w = 120, h = 180}, {x = 0, y = 560, w = 120, h = 180}},
       text_pos = {x = 440, y = 620}
     },
