@@ -6,6 +6,7 @@ local FONT         = require 'view.helpers.font'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
 local VIEWDEFS     = require 'view.definitions'
+local PROFILE      = require 'infra.profile'
 local Class        = require "steaming.extra_libs.hump.class"
 local ELEMENT      = require "steaming.classes.primitives.element"
 
@@ -90,6 +91,9 @@ function HandView:isActive()
 end
 
 function HandView:activate()
+  if not PROFILE.getTutorial("use_card") then
+    SWITCHER.push(GS.TUTORIAL_HINT, "use_card")
+  end
   self.active = true
   self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
 end

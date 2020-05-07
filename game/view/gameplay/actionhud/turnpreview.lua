@@ -18,7 +18,7 @@ local TurnPreview = Class{
   __includes = { ELEMENT }
 }
 
-local _MAX_TURNS = 6
+local _MAX_TURNS = 5
 
 TurnPreview.WIDTH = 140
 
