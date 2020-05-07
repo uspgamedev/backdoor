@@ -509,6 +509,28 @@ function Actor:getHostileBodies()
   return hostile_bodies
 end
 
+function Actor:getVisibleTilesIf(check)
+  local seen = {}
+  local n = 0
+  local sector = self:getSector()
+
+  local range = self:getFovRange()
+  local pi, pj = self:getPos()
+  for i = pi-range, pi+range do
+    for j = pj-range, pj+range do
+      if sector:isInside(i, j) then
+        local fov = self:getFov(sector)
+        local visible = fov and fov[i] and fov[i][j]
+        if visible and visible ~= 0 and check(sector, i, j) then
+          seen[n + 1] = {i, j, i = i, j = j}
+        end
+      end
+    end
+  end
+
+  return seen
+end
+
 function Actor:purgeFov(sector)
   local fov = self:getFov(sector)
   if not fov then

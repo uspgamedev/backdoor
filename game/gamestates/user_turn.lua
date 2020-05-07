@@ -11,6 +11,7 @@ local ABILITY       = require 'domain.ability'
 local PROFILE       = require 'infra.profile'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
+local SCHEMATICS    = require 'domain.definitions.schematics'
 local INPUT         = require 'input'
 local Draw          = require "draw"
 
@@ -268,6 +269,19 @@ function _checkTutorial()
           SWITCHER.push(GS.TUTORIAL_HINT, "open_hand")
           return true
         end
+      end
+    end
+  end
+  -- Check for first time seeing an altar
+  if not PROFILE.getTutorial("altar") then
+    local player = _route.getPlayerActor()
+    if player then
+      local altars = player:getVisibleTilesIf(function (sector, i, j)
+        return sector:getTile(i, j).type == SCHEMATICS.ALTAR
+      end)
+      if #altars > 0 then
+        SWITCHER.push(GS.TUTORIAL_HINT, "altar", altars[1])
+        return true
       end
     end
   end
