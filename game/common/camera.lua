@@ -1,5 +1,8 @@
 
+-- luacheck: globals love
+
 local math     = require 'common.math'
+local vec2     = require 'cpml' .vec2
 local Camera   = require "steaming.extra_libs.hump.camera"
 local VIEWDEFS = require 'view.definitions'
 
@@ -39,6 +42,13 @@ function CAM:isTileInFrame(i, j)
          and j <= cx + _HALF_W
          and i >= cy - _HALF_H
          and i <= cy + _HALF_H
+end
+
+function CAM:tileToScreen(i, j)
+  local cx, cy = self:position() -- start point
+  cx = math.floor(cx / _TILE_W - _HALF_W)
+  cy = math.floor(cy / _TILE_H - _HALF_H)
+  return vec2((j - cx) * _TILE_W, (i - cy) * _TILE_H)
 end
 
 function CAM:tilesInRange()
