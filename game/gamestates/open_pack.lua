@@ -1,5 +1,6 @@
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
+local PROFILE      = require 'infra.profile'
 local DEFS         = require 'domain.definitions'
 local PLAYSFX      = require 'helpers.playsfx'
 local PackView     = require 'view.packlist'
@@ -87,6 +88,9 @@ function state:leave()
 end
 
 function state:update(dt)
+  if not PROFILE.getTutorial("open_pack") then
+    SWITCHER.push(GS.TUTORIAL_HINT, "open_pack")
+  end
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
     PLAYSFX 'back-menu'
