@@ -277,7 +277,8 @@ function _checkTutorial()
     local player = _route.getPlayerActor()
     if player then
       local altars = player:getVisibleTilesIf(function (sector, i, j)
-        return sector:getTile(i, j).type == SCHEMATICS.ALTAR
+        local tile = sector:getTile(i, j)
+        return tile and tile.type == SCHEMATICS.ALTAR
       end)
       if #altars > 0 then
         SWITCHER.push(GS.TUTORIAL_HINT, "altar", altars[1])
