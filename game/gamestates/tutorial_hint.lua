@@ -4,6 +4,7 @@ local SWITCHER = require 'infra.switcher'
 local FONT     = require 'view.helpers.font'
 local COLORS   = require 'domain.definitions.colors'
 local VIEWDEFS = require 'view.definitions'
+local PROFILE  = require 'infra.profile'
 local Draw     = require "draw"
 
 --[[ LOCAL VARIABLES ]]--
@@ -46,6 +47,7 @@ local stencilFunc
 function state:enter(_, hint)
   _alpha = 0
   _leaving = false
+  PROFILE.setTutorial(hint, true)
   if not HINTS[hint] then
     error("Not a valid hint type: " .. tostring(hint))
   end
