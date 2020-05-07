@@ -6,7 +6,7 @@ local SYMBOLS = REGIONDEFS.SYMBOLS
 local ROUTEMAP = {}
 
 ROUTEMAP.initial_nodes = {
-  { ZONES.A, "initial" },
+  { ZONES.A, "outpost" },
   { ZONES.A, SYMBOLS.O },
   { ZONES.A, SYMBOLS.O },
   { ZONES.A, SYMBOLS.O },
