@@ -14,20 +14,25 @@ local HINTS = {
   open_hand = {
     {
       text = "To activate or deactivate your hand press A",
-      region = {x = 400, y = 690, w = 600, h = 200},
-      text_pos = {x = 400, y = 630}
+      region = {x = 400, y = 685, w = 600, h = 80},
+      text_pos = {x = 400, y = 640}
     }
   },
   use_card = {
     {
       text = "To use a card press F",
-      region = {x = 400, y = 550, w = 600, h = 200},
-      text_pos = {x = 400, y = 400}
+      region = {x = 350, y = 470, w = 550, h = 180},
+      text_pos = {x = 400, y = 450}
     },
     {
-      text = "Unless the card is consumable, it will go to your backbuffer after use",
-      region = {x = 600, y = 690, w = 600, h = 200},
-      text_pos = {x = 40, y = 80}
+      text = "You'll need focus to use most cards",
+      region = {x = 500, y = 650, w = 300, h = 200},
+      text_pos = {x = 400, y = 620}
+    },
+    {
+      text = "Unless the card is consumable\nit will go to your backbuffer after use",
+      region = {x = 1180, y = 560, w = 200, h = 180},
+      text_pos = {x = 900, y = 500}
     }
   }
 }
@@ -91,7 +96,7 @@ function state:draw()
   g.stencil(stencilFunc, "replace", 1)
   g.setStencilTest("less", 1)
   local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  g.setColor(0,0,0,.8*_alpha)
+  g.setColor(0,0,0,.95*_alpha)
   g.rectangle("fill", 0, 0, w, h)
   g.setStencilTest()
 
