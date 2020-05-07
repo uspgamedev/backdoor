@@ -1,0 +1,12 @@
+{
+  "ani":2,
+  "arc":-2,
+  "behavior":"idle",
+  "cor":2,
+  "initial_buffer":[],
+  "name":"Tutorial",
+  "traits":[],
+  "extends":false,
+  "signature":false,
+  "collection":false
+}

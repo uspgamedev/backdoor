@@ -1,8 +1,12 @@
+
+-- luacheck: globals love, no self
+
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB              = require 'database'
 local MENU            = require 'infra.menu'
 local DIRECTIONALS    = require 'infra.dir'
 local RUNFLAGS        = require 'infra.runflags'
+local SWITCHER        = require 'infra.switcher'
 local INPUT           = require 'input'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE         = require 'infra.profile'
@@ -17,6 +21,7 @@ local state = {}
 
 --LOCAL VARIABLES--
 
+local GS
 local _menu_view
 local _menu_context
 local _locked
@@ -64,6 +69,8 @@ end
 
 --STATE FUNCTIONS--
 function state:enter()
+  GS = require 'gamestates'
+
   _menu_context = "START_MENU"
 
   _menu_view = StartMenuView()

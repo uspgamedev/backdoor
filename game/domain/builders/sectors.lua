@@ -43,8 +43,13 @@ function BUILDER._connectNodes(route_map, sectors)
 end
 
 function BUILDER._findFirstSector(sectors)
+  local PROFILE = require 'infra.profile'
+  local name = "outpost"
+  if not PROFILE.getTutorial("finished_tutorial") then
+    name = "tutorial"
+  end
   for _,sector in ipairs(sectors) do
-    if sector.specname == "tutorial" then
+    if sector.specname == name then
       return sector
     end
   end

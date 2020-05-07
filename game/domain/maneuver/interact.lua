@@ -63,11 +63,15 @@ function INTERACT.validate(actor, inputvalues)
 end
 
 function INTERACT.perform(actor, inputvalues)
+  local PROFILE = require 'infra.profile'
   _seek(actor, inputvalues)
   if inputvalues.interaction == 'CHANGE_SECTOR' then
     actor:exhaust(ACTIONDEFS.FULL_EXHAUSTION)
     local target_sector = Util.findId(inputvalues.sector)
     target_sector:putActor(actor, unpack(inputvalues.pos))
+    if target_sector:getSpecName() == 'outpost' then
+      PROFILE.setTutorial("finished_tutorial", true)
+    end
   elseif inputvalues.interaction == 'CONSUME_CARDS' then
     ABILITY.execute(CONSUME_ABILITY, actor, inputvalues)
     actor:getSector():getTile(actor:getPos()).type = SCHEMATICS.FLOOR
