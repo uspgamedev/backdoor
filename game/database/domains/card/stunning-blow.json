@@ -12,6 +12,7 @@
           "body-only":{
             "body-type":false
           },
+          "dif-fact":true,
           "max-range":1,
           "name":"choose_target",
           "output":"target_pos",
