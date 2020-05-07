@@ -8,6 +8,7 @@ local FONT     = require 'view.helpers.font'
 local COLORS   = require 'domain.definitions.colors'
 local VIEWDEFS = require 'view.definitions'
 local PROFILE  = require 'infra.profile'
+local CAMERA   = require 'common.camera'
 local Draw     = require "draw"
 
 --[[ LOCAL VARIABLES ]]--
@@ -94,8 +95,15 @@ local HINTS = {
   altar = {
     {
       text = "You can activate such altars to consume a few cards",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      region = {x = 0, y = 0, w = 100, h = 100},
+      text_pos = {x = 410, y = 140}
+    },
+  },
+  use_stairs = {
+    {
+      text = "To interact with stairs or anything else, press D",
+      region = {x = 410, y = 400, w = 100, h = 100},
+      text_pos = {x = 410, y = 140}
     },
   },
 }
@@ -112,7 +120,7 @@ local stencilFunc
 
 --[[ STATE FUNCTIONS ]]--
 
-function state:enter(_, hint)
+function state:enter(_, hint, region_position)
   _alpha = 0
   _leaving = false
   PROFILE.setTutorial(hint, true)
@@ -120,6 +128,14 @@ function state:enter(_, hint)
     error("Not a valid hint type: " .. tostring(hint))
   end
   _cur_hint = 1
+
+  --Add specific region if given
+  if region_position then
+    local vec = CAMERA:tileToScreen(region_position.i, region_position.j)
+    HINTS[hint][_cur_hint].region.x = vec.x
+    HINTS[hint][_cur_hint].region.y = vec.y
+  end
+
   _hint_data = HINTS[hint]
 end
 
