@@ -21,19 +21,31 @@ local HINTS = {
   use_card = {
     {
       text = "To use a card press F",
-      region = {x = 350, y = 470, w = 550, h = 180},
-      text_pos = {x = 400, y = 450}
+      region = {x = 370, y = 450, w = 530, h = 200},
+      text_pos = {x = 150, y = 550}
     },
     {
       text = "You'll need focus to use most cards",
-      region = {x = 500, y = 650, w = 300, h = 200},
+      region = {x = 550, y = 650, w = 250, h = 200},
       text_pos = {x = 400, y = 620}
     },
     {
-      text = "Unless the card is consumable\nit will go to your backbuffer after use",
-      region = {x = 1180, y = 560, w = 200, h = 180},
+      text = "Unless the card is consumable,\nit will go to your backbuffer after use",
+      region = {x = 1180, y = 560, w = 120, h = 180},
       text_pos = {x = 900, y = 500}
     }
+  },
+  pp = {
+    {
+      text = "Food replenishes your \"Play Points\"\n(or PP)",
+      region = {x = 0, y = 550, w = 120, h = 180},
+      text_pos = {x = 10, y = 520}
+    },
+    {
+      text = "You'll need PP to reshuffle your backbuffer\ninto your buffer when you ran out of cards to draw",
+      region = {{x = 1180, y = 560, w = 120, h = 180}, {x = 0, y = 560, w = 120, h = 180}},
+      text_pos = {x = 440, y = 620}
+    },
   }
 }
 
@@ -114,7 +126,15 @@ end
 function stencilFunc()
     local g = love.graphics
     local r = _hint_data[_cur_hint].region
-    g.rectangle("fill", r.x, r.y, r.w, r.h)
+    --Multiple regions
+    if r[1] and type(r[1]) == "table" then
+      for _, region in ipairs(r) do
+        g.rectangle("fill", region.x, region.y, region.w, region.h)
+      end
+    --Only one region
+    else
+      g.rectangle("fill", r.x, r.y, r.w, r.h)
+    end
 end
 
 return state
