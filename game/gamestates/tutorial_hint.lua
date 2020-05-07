@@ -16,6 +16,18 @@ local HINTS = {
       region = {x = 400, y = 690, w = 600, h = 200},
       text_pos = {x = 400, y = 630}
     }
+  },
+  use_card = {
+    {
+      text = "To use a card press F",
+      region = {x = 400, y = 550, w = 600, h = 200},
+      text_pos = {x = 400, y = 400}
+    },
+    {
+      text = "Unless the card is consumable, it will go to your backbuffer after use",
+      region = {x = 600, y = 690, w = 600, h = 200},
+      text_pos = {x = 40, y = 80}
+    }
   }
 }
 
