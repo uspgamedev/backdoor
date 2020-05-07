@@ -67,28 +67,28 @@ local HINTS = {
   consume = {
     {
       text = "You can choose where every cards goes",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      region = {x = 200, y = 450, w = 600, h = 200},
+      text_pos = {x = 440, y = 400}
     },
     {
-      text = "Cards you keep will go to your backbuffer",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      text = "Cards you KEEP will go to your backbuffer",
+      region = {{x = 0, y = 450, w = 900, h = 300},{x = 0, y = 300, w = 300, h = 100}, {x = 700, y = 300, w = 250, h = 100}},
+      text_pos = {x = 315, y = 350}
     },
     {
-      text = "Cards you consume will give you EXP",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      text = "Cards you CONSUME will give you EXP",
+      region = {{x = 0, y = 0, w = 900, h = 250},{x = 0, y = 300, w = 300, h = 100}, {x = 700, y = 300, w = 250, h = 100}},
+      text_pos = {x = 315, y = 385}
     },
     {
-      text = "How the EXP will distribute across your attributes\nwill depend on which card type you been using the most",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      text = "     How the EXP will distribute across your attributes\nwill depend on which card type you been using the most",
+      region = {x = 950, y = 200, w = 340, h = 300},
+      text_pos = {x = 440, y = 410}
     },
     {
-      text = "Hold F to confirm your selections",
-      region = {x = 0, y = 0, w = 0, h = 0},
-      text_pos = {x = 440, y = 420}
+      text = "Hold D to confirm your selections",
+      region = {{x = 0, y = 300, w = 300, h = 100}, {x = 700, y = 300, w = 250, h = 100}},
+      text_pos = {x = 348, y = 368}
     },
   },
   altar = {

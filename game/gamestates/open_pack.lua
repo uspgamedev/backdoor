@@ -1,6 +1,7 @@
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
+local SWITCHER     = require 'infra.switcher'
 local DEFS         = require 'domain.definitions'
 local PLAYSFX      = require 'helpers.playsfx'
 local PackView     = require 'view.packlist'
@@ -44,6 +45,11 @@ local function _confirm()
     _card_list_view:register("HUD")
     _card_list_view:sendToBackbuffer(_view.backbuffer)
     _view.actor:show()
+    if not PROFILE.getTutorial("consume") then
+      local GS = require 'gamestates'
+      SWITCHER.push(GS.TUTORIAL_HINT, "consume")
+      return
+    end
   end
 end
 
