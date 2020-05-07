@@ -39,14 +39,28 @@ local HINTS = {
     {
       text = "Food replenishes your \"Play Points\"\n(or PP)",
       region = {x = 0, y = 550, w = 120, h = 180},
-      text_pos = {x = 10, y = 520}
+      text_pos = {x = 20, y = 520}
     },
     {
-      text = "You'll need PP to reshuffle your backbuffer\ninto your buffer when you ran out of cards to draw",
+      text = "      You'll need PP to reshuffle your backbuffer\ninto your buffer when you ran out of cards to draw",
       region = {{x = 1180, y = 560, w = 120, h = 180}, {x = 0, y = 560, w = 120, h = 180}},
       text_pos = {x = 440, y = 620}
     },
-  }
+  },
+  get_pack = {
+    {
+      text = "                  You got a pack!\nPress W to check your sealed packs",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 470, y = 360}
+    },
+  },
+  altar = {
+    {
+      text = "TEXT",
+      region = {x = 0, y = 0, w = 0, h = 0},
+      text_pos = {x = 440, y = 420}
+    },
+  },
 }
 
 local _font = FONT.get("Text", 25)
