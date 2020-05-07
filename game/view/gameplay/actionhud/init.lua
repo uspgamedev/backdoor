@@ -50,15 +50,15 @@ function ActionHUD:init(route)
 
   -- Wieldable dock
   self.wielddock = EquipmentDock(W/5 - EquipmentDock.getWidth()/2 - margin/2 + off)
-  self.wielddock:register("HUD")
+  self.wielddock:register("HUD_MIDDLE")
 
   -- Wearable dock
   self.weardock = EquipmentDock(W/5 + EquipmentDock.getWidth()/2 + margin/2 + off)
-  self.weardock:register("HUD")
+  self.weardock:register("HUD_MIDDLE")
 
   -- Conditions dock
   self.conddock = ConditionDock(4*W/5 + 15)
-  self.conddock:register("HUD")
+  self.conddock:register("HUD_MIDDLE")
 
   self:_loadDocks()
 
@@ -83,7 +83,7 @@ function ActionHUD:init(route)
 
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
-  self.focusbar:register("HUD")
+  self.focusbar:register("HUD_MIDDLE")
 
   -- Long walk variables
   self.alert = false
