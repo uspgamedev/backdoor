@@ -8,6 +8,7 @@ local Draw     = require "draw"
 
 --[[ LOCAL VARIABLES ]]--
 
+local SPEED = 4
 local HINTS = {
   open_hand = {
     {
@@ -21,6 +22,8 @@ local HINTS = {
 local _font = FONT.get("Text", 25)
 local _hint_data
 local _cur_hint
+local _alpha
+local _leaving
 
 --[[ LOCAL FUNCTIONS ]]--
 
@@ -29,6 +32,8 @@ local stencilFunc
 --[[ STATE FUNCTIONS ]]--
 
 function state:enter(_, hint)
+  _alpha = 0
+  _leaving = false
   if not HINTS[hint] then
     error("Not a valid hint type: " .. tostring(hint))
   end
@@ -37,18 +42,28 @@ function state:enter(_, hint)
 end
 
 function state:leave()
-
   Util.destroyAll()
 end
 
 function state:update(dt)
-
+  if not _leaving then
+    _alpha = math.min(_alpha + dt*SPEED, 1)
+  else
+    _alpha = math.max(_alpha - dt*SPEED, 0)
+    if _alpha <= 0 then
+      SWITCHER:pop()
+    end
+  end
 end
 
 function state:keypressed()
-  _cur_hint = _cur_hint + 1
-  if not _hint_data[_cur_hint] then
-    SWITCHER:pop()
+  if _leaving or _alpha < 1.0 then
+    return
+  end
+  if not _hint_data[_cur_hint + 1] then
+    _leaving = true
+  else
+    _cur_hint = _cur_hint + 1
   end
 end
 
@@ -57,21 +72,22 @@ function state:draw()
 
   local g = love.graphics
 
-  if _hint_data[_cur_hint] then
-    --Draw black filter
-    g.stencil(stencilFunc, "replace", 1)
-    g.setStencilTest("less", 1)
-    local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-    g.setColor(0,0,0,.7)
-    g.rectangle("fill", 0, 0, w, h)
-    g.setStencilTest()
 
-    --Draw text
-    g.setColor(COLORS.NEUTRAL)
-    _font:set()
-    local pos = _hint_data[_cur_hint].text_pos
-    g.print(_hint_data[_cur_hint].text, pos.x, pos.y - 30)
-  end
+  --Draw black filter
+  g.stencil(stencilFunc, "replace", 1)
+  g.setStencilTest("less", 1)
+  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  g.setColor(0,0,0,.8*_alpha)
+  g.rectangle("fill", 0, 0, w, h)
+  g.setStencilTest()
+
+  --Draw text
+  local c = COLORS.NEUTRAL
+  g.setColor(c[1], c[2], c[3], _alpha)
+  _font:set()
+  local pos = _hint_data[_cur_hint].text_pos
+  g.print(_hint_data[_cur_hint].text, pos.x, pos.y - 30)
+
 end
 
 --Local functions
