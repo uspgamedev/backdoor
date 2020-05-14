@@ -11,13 +11,10 @@ local Button = Class{
 function Button:init(x, y)
     CONTROLHINT.init(self, x, y)
 
-    self.image = RES.loadTexture("button-key-draw_hand")
+    self.image = RES.loadTexture("button-key-open_packs")
     self.image:setFilter("linear")
     self.text_font = FONT.get("Text", 20)
     self.text_font2 = FONT.get("Text", 16)
-
-    --How much PP it cost to buy a new hand
-    self.cost = "~"
 end
 
 function Button:setCost(v)
@@ -30,27 +27,15 @@ function Button:draw()
     g.setColor(1,1,1,self.alpha)
     g.draw(self.image, x, y, nil, scale)
 
-    --Draw "draw hand" text
-    local text = "draw hand"
-    local gap = 10
-    local text_y = y - 5
+    local text = "Open Packs"
+    local gap = 4
+    local text_y = y + self.image:getHeight()*scale/2 - self.text_font:getHeight()/2
     local text_x = x + self.image:getWidth()*scale + gap
     self.text_font:set()
     local c = COLORS.BLACK
     g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x + 2, text_y + 2)
     c = COLORS.NEUTRAL
-    g.setColor(c[1], c[2], c[3], self.alpha)
-    g.print(text, text_x, text_y)
-
-    --Draw cost of consumption
-    text_y = text_y + 22
-    text = "-"..self.cost.." PP"
-    self.text_font2:set()
-    c = COLORS.BLACK
-    g.setColor(c[1], c[2], c[3], self.alpha)
-    g.print(text, text_x + 1, text_y + 1)
-    c = COLORS.PP
     g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x, text_y)
 end

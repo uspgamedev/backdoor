@@ -10,6 +10,9 @@ local VIEWDEFS      = require 'view.definitions'
 local HandView      = require 'view.gameplay.actionhud.hand'
 local Minimap       = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
+local ConfirmHint   = require 'view.gameplay.actionhud.controlhints.confirm'
+local CancelHint    = require 'view.gameplay.actionhud.controlhints.cancel'
+local OpenPacksHint = require 'view.gameplay.actionhud.controlhints.openpacks'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
@@ -90,6 +93,14 @@ function ActionHUD:init(route)
   self.long_walk = false
   self.adjacency = {}
   ADJACENCY.unset(self.adjacency)
+
+  -- Control hints
+  self.cancel_hint = CancelHint(0, 0)
+  self.cancel_hint:register("HUD")
+  self.confirm_hint = ConfirmHint(100, 0)
+  self.confirm_hint:register("HUD")
+  self.open_packs_hint = OpenPacksHint(210, 0)
+  self.open_packs_hint:register("HUD")
 end
 
 function ActionHUD:_loadDocks()
@@ -114,6 +125,9 @@ function ActionHUD:destroy()
   self.conddock:destroy()
   self.minimap:destroy()
   self.turnpreview:destroy()
+  self.cancel_hint:destroy()
+  self.confirm_hint:destroy()
+  self.open_packs_hint:destroy()
   ELEMENT.destroy(self)
 end
 
@@ -327,6 +341,11 @@ end
 function ActionHUD:update(dt)
   self.minimap:update(dt)
   self.turnpreview:update(dt)
+
+  -- Control hints
+  self.cancel_hint:update(dt)
+  self.confirm_hint:update(dt)
+  self.open_packs_hint:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
