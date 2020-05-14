@@ -31,7 +31,7 @@ function Button:draw()
     g.draw(self.image, x, y, nil, scale)
 
     --Draw "draw hand" text
-    local text = "draw hand"
+    local text = "Draw Hand"
     local gap = 10
     local text_y = y + self.image:getHeight()*scale/2 - self.text_font:getHeight()/2
     local text_x = x + self.image:getWidth()*scale + gap
