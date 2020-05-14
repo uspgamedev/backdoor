@@ -1,6 +1,7 @@
 local vec2    = require 'cpml' .vec2
 local Class   = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
+local PROFILE = require 'infra.profile'
 
 local ControlHint = Class{
   __includes = { ELEMENT }
@@ -12,7 +13,7 @@ function ControlHint:init(x, y)
 
     self.pos = vec2(x, y)
 
-    self.show = true
+    self.show = PROFILE.getTutorial("finished_tutorial")
     self.alpha = 0
     self.show_speed = 5
 end
