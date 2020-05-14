@@ -290,6 +290,24 @@ function _checkTutorial()
       end
     end
   end
+  -- Check for first time seeing stairs
+  if not PROFILE.getTutorial("use_stairs") then
+    local player = _route.getPlayerActor()
+    if player then
+      local stairs_tiles = player:getVisibleTilesIf(function (sector, i, j)
+        local tile = sector:getTile(i, j)
+        return tile and tile.type == SCHEMATICS.EXITDOWN
+      end)
+      if #stairs_tiles > 0 then
+        local stairs_tile = stairs_tiles[1]
+        local player_i, player_j = player:getPos()
+        local relative_pos = { stairs_tile.i - player_i,
+                               stairs_tile.j - player_j }
+        SWITCHER.push(GS.TUTORIAL_HINT, "use_stairs", relative_pos)
+        return true
+      end
+    end
+  end
 end
 
 return state

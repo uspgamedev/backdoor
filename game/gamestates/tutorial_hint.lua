@@ -101,14 +101,14 @@ local HINTS = {
   altar = {
     {
       text = "You can activate such altars to consume a few cards",
-      region = {x = 0, y = 0, w = 100, h = 100},
+      region = {x = 0, y = 0, w = VIEWDEFS.TILE_W, h = VIEWDEFS.TILE_H},
       text_pos = {x = 410, y = 110}
     },
   },
   use_stairs = {
     {
       text = "To interact with stairs or anything else, press D",
-      region = {x = 410, y = 400, w = 100, h = 100},
+      region = {x = 410, y = 400, w = VIEWDEFS.TILE_W, h = VIEWDEFS.TILE_H},
       text_pos = {x = 410, y = 110}
     },
   },
@@ -142,8 +142,6 @@ function state:enter(_, hint, region_position)
     local vec = CAMERA:relativeTileToScreen(unpack(region_position))
     HINTS[hint][_cur_hint].region.x = vec.x
     HINTS[hint][_cur_hint].region.y = vec.y
-    HINTS[hint][_cur_hint].region.w = VIEWDEFS.TILE_W
-    HINTS[hint][_cur_hint].region.h = VIEWDEFS.TILE_H
   end
 
   --Set visible var to each hint
