@@ -25,7 +25,7 @@ function Button:setCost(v)
 end
 
 function Button:draw()
-    local g = love.graphics
+    local g = love.graphics -- luacheck: globals love
     local x, y, scale = self.pos.x, self.pos.y, .4
     g.setColor(1,1,1,self.alpha)
     g.draw(self.image, x, y, nil, scale)
@@ -40,17 +40,6 @@ function Button:draw()
     g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x + 2, text_y + 2)
     c = COLORS.NEUTRAL
-    g.setColor(c[1], c[2], c[3], self.alpha)
-    g.print(text, text_x, text_y)
-
-    --Draw cost of consumption
-    text_y = text_y + 22
-    text = "-"..self.cost.." PP"
-    self.text_font2:set()
-    c = COLORS.BLACK
-    g.setColor(c[1], c[2], c[3], self.alpha)
-    g.print(text, text_x + 1, text_y + 1)
-    c = COLORS.PP
     g.setColor(c[1], c[2], c[3], self.alpha)
     g.print(text, text_x, text_y)
 end

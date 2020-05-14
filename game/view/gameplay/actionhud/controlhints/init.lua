@@ -12,7 +12,7 @@ function ControlHint:init(x, y)
 
     self.pos = vec2(x, y)
 
-    self.show = false
+    self.show = true
     self.alpha = 0
     self.show_speed = 5
 end
