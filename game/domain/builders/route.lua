@@ -1,8 +1,12 @@
 
+-- luacheck: globals VERSION
+
 local RUNFLAGS        = require 'infra.runflags'
 local RANDOM          = require 'common.random'
+local DEFS            = require 'domain.definitions'
 local IDGenerator     = require 'common.idgenerator'
 local SECTORS_BUILDER = require 'domain.builders.sectors'
+local printf          = require 'lux.common' .printf
 
 local BUILDER = {}
 
@@ -59,7 +63,12 @@ function BUILDER.build(route_id, player_info)
   data.current_sector_id = first_sector.id
   data.player_name = player_info.name
   local last = #first_sector.actors
-  data.player_id = first_sector.actors[last].id
+  local player = first_sector.actors[last]
+  data.player_id = player.id
+  local PROFILE = require 'infra.profile'
+  if not PROFILE.getTutorial('finished_tutorial') then
+    player.playpoints = DEFS.MAX_PP - 1
+  end
   data.behaviors = { ai = {} }
   printf("Generated %s...", route_id)
   printf("GLOBAL RNG seed: %d", RANDOM.getSafeSeed())

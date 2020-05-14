@@ -681,6 +681,10 @@ function Actor:getPP()
   return self.playpoints
 end
 
+function Actor:setPP(n)
+  self.playpoints = math.max(0, math.min(DEFS.MAX_PP, n))
+end
+
 function Actor:getPowerLevel()
   local lvl = 0
   for _,value in pairs(self.upgrades) do
