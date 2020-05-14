@@ -1,4 +1,6 @@
 
+-- luacheck: globals MAIN_TIMER love
+
 local math    = require 'common.math'
 local HoldBar = require 'view.helpers.holdbar'
 local CARD    = require 'view.helpers.card'
@@ -18,15 +20,12 @@ local View = Class({
 -- CONSTS -----------------------------------
 local _EMPTY = {}
 local _ENTER_TIMER = "manage_card_list_enter"
-local _TEXT_TIMER = "manage_card_list_text"
-local _CONSUMED_TIMER = "consumed_card:"
 local _ENTER_SPEED = .2
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
 local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
-local _MAX_Y_OFFSET = 768
 local _PI = math.pi
 local _HOLDBAR_TEXT = "open pack"
 local _WIDTH, _HEIGHT
@@ -86,6 +85,14 @@ function View:isLocked()
   return self.holdbar:isLocked()
 end
 
+function View:lockHoldbar()
+  self.holdbar:lock()
+end
+
+function View:unlockHoldbar()
+  self.holdbar:unlock()
+end
+
 function View:getChosenPack()
   return self.pack_list[self.selection]
 end
@@ -140,7 +147,7 @@ function View:draw()
   g.pop()
 end
 
-function View:drawBG(g, enter)
+function View:drawBG(g, enter) -- luacheck: no self
   g.setColor(0, 0, 0, enter*0.95)
   g.rectangle("fill", 0, 0, _WIDTH, _HEIGHT)
 end
@@ -165,7 +172,6 @@ function View:drawPacks(g, enter)
   for i = 1, pack_list_size do
     g.push()
     local focus = selection == i
-    local dist = math.abs(selection-i)
     local offset = self.offsets[i] or 0
 
     -- smooth offset when consuming pack
@@ -243,9 +249,10 @@ function View:drawArrow(g, enter)
   g.pop()
 end
 
-function View:drawPackDesc(g, pack, enter)
+function View:drawPackDesc(g, pack, enter) -- luacheck: no unused
   g.push()
   g.translate(-1.5*_CW, _CH+_PD)
+  -- FIXME
   --CARD.drawInfo(card, 0, 0, 4*_CW, enter)
   g.pop()
 end
@@ -254,7 +261,7 @@ function View:usedHoldbar()
   return self.holdbar_activated
 end
 
-function View:drawHoldBar(g)
+function View:drawHoldBar()
   self.holdbar:update()
   if self.holdbar:confirmed() then
     self.holdbar_activated = true

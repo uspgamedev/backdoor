@@ -15,7 +15,7 @@ local CONTROL_FILENAME = "controls"
 local IO_THREAD_FILE = "infra/writingthread.lua"
 local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
 local CONTROL_PATH = SAVEDIR..CONTROL_FILENAME
-local METABASE = { next_id = 1, save_list = {}, preferences = {} }
+local METABASE = { next_id = 1, save_list = {}, preferences = {}, tutorial = {}, unlockables = {}, }
 
 -- HELPERS
 local filesystem = love.filesystem
@@ -170,6 +170,18 @@ function PROFILE.setPreference(field, value)
   _metadata.preferences[field] = value
 end
 
+function PROFILE.getTutorial(field, value)
+  local value = _metadata.tutorial[field]
+  if not value then
+    value = DB.loadSetting("tutorial")[field]
+  end
+  return value
+end
+
+function PROFILE.setTutorial(field, value)
+  _metadata.tutorial[field] = value
+end
+
 function PROFILE.save()
   _saveProfile()
 end
@@ -182,6 +194,5 @@ function PROFILE.quit()
   _savethread:wait()
   _savethread:release()
 end
-
 
 return PROFILE

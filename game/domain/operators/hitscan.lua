@@ -15,7 +15,8 @@ OP.type = 'pos'
 
 function OP.preview(_, fieldvalues)
   local range = fieldvalues['maxrange']
-  return ("%d tiles away"):format(range)
+  local pos = fieldvalues['pos']
+  return ("up to %d tiles away from %s"):format(range, pos)
 end
 
 function OP.process(actor, fieldvalues)

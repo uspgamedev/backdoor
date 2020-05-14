@@ -11,7 +11,13 @@ OP.schema = {
 
 OP.type = 'pos'
 
-function OP.process(actor, fieldvalues)
+function OP.preview(_, fieldvalues)
+  local pos = fieldvalues['pos']
+  local dir = fieldvalues['dir']
+  return ("position in the %s of %s"):format(dir, pos)
+end
+
+function OP.process(_, fieldvalues)
   local pos = fieldvalues['pos']
   local dir = fieldvalues['dir']
   return { pos[1]+dir[1], pos[2]+dir[2] }

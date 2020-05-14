@@ -8,8 +8,10 @@ local DEFS          = require 'domain.definitions'
 local DIR           = require 'domain.definitions.dir'
 local ACTION        = require 'domain.action'
 local ABILITY       = require 'domain.ability'
+local PROFILE       = require 'infra.profile'
 local PLAYSFX       = require 'helpers.playsfx'
 local ActionHUD     = require 'view.gameplay.actionhud'
+local SCHEMATICS    = require 'domain.definitions.schematics'
 local INPUT         = require 'input'
 local Draw          = require "draw"
 
@@ -27,7 +29,7 @@ local _save_and_quit
 local _ACTION = {}
 
 --[[ Local functions ]]--
-
+local _checkTutorial
 local _update_panel
 
 --[[ Task Functions ]]--
@@ -58,9 +60,9 @@ function state:enter(_, route, view)
   _view = view
   _view.action_hud:enableTurn(true)
   _view.action_hud:refreshTurnPreview()
+  _view.sector:snapBodyViews()
 
   _update_panel("isdown")
-
 end
 
 function state:leave()
@@ -80,6 +82,9 @@ function state:devmode()
 end
 
 function state:update(_)
+
+  if _checkTutorial() then return end
+
   if _save_and_quit then return SWITCHER.pop("SAVE_AND_QUIT") end
 
   _view.sector:lookAt(_route.getControlledActor())
@@ -249,6 +254,60 @@ function _update_panel(mode)
     error("Not a valid mode to update panel")
   end
 
+end
+
+function _checkTutorial()
+  --Check for time seeing enemy
+  if not PROFILE.getTutorial("open_hand") then
+    local player = _route.getPlayerActor()
+    if player then
+      local player_i, player_j = player:getPos()
+      local hostile_bodies = player:getHostileBodies()
+      for _,body in ipairs(hostile_bodies) do
+        local enemy_i, enemy_j = body:getPos()
+        if math.abs(player_i - enemy_i) + math.abs(player_j - enemy_j) <= 1 then
+          SWITCHER.push(GS.TUTORIAL_HINT, "open_hand")
+          return true
+        end
+      end
+    end
+  end
+  -- Check for first time seeing an altar
+  if not PROFILE.getTutorial("altar") then
+    local player = _route.getPlayerActor()
+    if player then
+      local altars = player:getVisibleTilesIf(function (sector, i, j)
+        local tile = sector:getTile(i, j)
+        return tile and tile.type == SCHEMATICS.ALTAR
+      end)
+      if #altars > 0 then
+        local altar_tile = altars[1]
+        local player_i, player_j = player:getPos()
+        local relative_pos = { altar_tile.i - player_i,
+                               altar_tile.j - player_j }
+        SWITCHER.push(GS.TUTORIAL_HINT, "altar", relative_pos)
+        return true
+      end
+    end
+  end
+  -- Check for first time seeing stairs
+  if not PROFILE.getTutorial("use_stairs") then
+    local player = _route.getPlayerActor()
+    if player then
+      local stairs_tiles = player:getVisibleTilesIf(function (sector, i, j)
+        local tile = sector:getTile(i, j)
+        return tile and tile.type == SCHEMATICS.EXITDOWN
+      end)
+      if #stairs_tiles > 0 then
+        local stairs_tile = stairs_tiles[1]
+        local player_i, player_j = player:getPos()
+        local relative_pos = { stairs_tile.i - player_i,
+                               stairs_tile.j - player_j }
+        SWITCHER.push(GS.TUTORIAL_HINT, "use_stairs", relative_pos)
+        return true
+      end
+    end
+  end
 end
 
 return state

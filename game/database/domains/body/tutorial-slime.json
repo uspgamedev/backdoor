@@ -1,0 +1,9 @@
+{
+  "appearance":"slime",
+  "drops":[],
+  "efc":2,
+  "extends":"slime",
+  "faction":"agressive",
+  "name":"Old Slime",
+  "res":-2
+}

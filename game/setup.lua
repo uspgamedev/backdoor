@@ -11,7 +11,7 @@ local setup = {}
 --Set game's global variables, random seed, window configuration and anything else needed
 function setup.config()
 
-    VERSION = "0.4.0"
+    VERSION = "0.4.1"
     DEV = true
 
     --RANDOM SEED--
@@ -30,14 +30,15 @@ function setup.config()
     --INITIALIZING TABLES--
     --Drawing Tables
     DRAW_TABLE = {
-        BG         = {}, --Background (bottom layer, first to draw)
-        L1         = {}, --Layer 1
-        L2         = {}, --Layer 2
-        HUD_BG     = {}, --HUD lower (drawn before HUD)
-        HUD_FX     = {}, --HUD layer for effects (e.g. laser)
-        HUD_MIDDLE = {}, --HUD layer for things between top and bottom HUD
-        HUD        = {}, --Top HUD layer
-        GUI        = {}, --Graphic User Interface (top layer, last to draw)
+        BG           = {}, --Background (bottom layer, first to draw)
+        L1           = {}, --Layer 1
+        L2           = {}, --Layer 2
+        HUD_BG_LOWER = {}, --HUD even lower (drawn before HUD_BG)
+        HUD_BG       = {}, --HUD lower (drawn before HUD)
+        HUD_FX       = {}, --HUD layer for effects (e.g. laser)
+        HUD_MIDDLE   = {}, --HUD layer for things between top and bottom HUD
+        HUD          = {}, --Top HUD layer
+        GUI          = {}, --Graphic User Interface (top layer, last to draw)
     }
     --Other Tables
     SUBTP_TABLE = {} --Table with tables for each subtype (for fast lookup)

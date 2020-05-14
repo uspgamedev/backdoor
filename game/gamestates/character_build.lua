@@ -1,6 +1,7 @@
 --MODULE FOR THE GAMESTATE: CHARACTER BUILDER--
 local DB             = require 'database'
 local INPUT          = require 'input'
+local PROFILE        = require 'infra.profile'
 local PLAYSFX        = require 'helpers.playsfx'
 local DIRECTIONALS   = require 'infra.dir'
 local CharaBuildView = require 'view.charabuild'
@@ -42,10 +43,19 @@ end
 
 function state:enter()
   _resetState()
-  _view = CharaBuildView()
-  _view:register("GUI", nil, "character_builder_view")
-  _view:open(_playerinfo)
-  _leave = false
+  if not PROFILE.getTutorial('finished_tutorial') then
+    _leave = true
+    SWITCHER.pop({
+      species    = "hearthborn",
+      background = "brawler",
+      confirm    = true,
+    })
+  else
+    _view = CharaBuildView()
+    _view:register("GUI", nil, "character_builder_view")
+    _view:open(_playerinfo)
+    _leave = false
+  end
 end
 
 function state:leave()
