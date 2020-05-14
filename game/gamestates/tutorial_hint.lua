@@ -150,13 +150,11 @@ function state:leave()
 end
 
 function state:update(dt)
-  if _bg_alpha >= 1.0 then
-    for i, hint in ipairs(_hint_data) do
-      if _cur_hint == i then
-        hint.visible = math.min(hint.visible + dt*HINT_SPEED, 1.0)
-      else
-        hint.visible = math.max(hint.visible - dt*HINT_SPEED, 0.0)
-      end
+  for i, hint in ipairs(_hint_data) do
+    if _cur_hint == i then
+      hint.visible = math.min(hint.visible + dt*HINT_SPEED, 1.0)
+    elseif _bg_alpha >= 1.0 then
+      hint.visible = math.max(hint.visible - dt*HINT_SPEED, 0.0)
     end
   end
   if not _leaving then
