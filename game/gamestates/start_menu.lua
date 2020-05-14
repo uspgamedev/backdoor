@@ -119,7 +119,9 @@ function state:update(dt)
 
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
-    _menu_view:setItem("Load route")
+    if PROFILE.getTutorial('finished_tutorial') then
+      _menu_view:setItem("Load route")
+    end
     _menu_view:setItem("Settings")
     if RUNFLAGS.DEVELOPMENT then
       _menu_view:setItem("Controls")
@@ -148,7 +150,7 @@ function state:update(dt)
         _locked = true
         _activity:changeState('push', GS.CHARACTER_BUILD)
       end
-      if MENU.item("Load route") then
+      if PROFILE.getTutorial('finished_tutorial') and MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Settings") then
