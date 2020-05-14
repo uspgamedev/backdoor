@@ -13,6 +13,8 @@ local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
 local ConfirmHint   = require 'view.gameplay.actionhud.controlhints.confirm'
 local CancelHint    = require 'view.gameplay.actionhud.controlhints.cancel'
 local OpenPacksHint = require 'view.gameplay.actionhud.controlhints.openpacks'
+local ShowStatsHint = require 'view.gameplay.actionhud.controlhints.showstats'
+local ToggleHintsHint = require 'view.gameplay.actionhud.controlhints.togglehints'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
@@ -95,12 +97,16 @@ function ActionHUD:init(route)
   ADJACENCY.unset(self.adjacency)
 
   -- Control hints
-  self.cancel_hint = CancelHint(8, 8)
+  self.cancel_hint = CancelHint(13, 8)
   self.cancel_hint:register("HUD")
-  self.confirm_hint = ConfirmHint(116, 8)
+  self.confirm_hint = ConfirmHint(108, 8)
   self.confirm_hint:register("HUD")
-  self.open_packs_hint = OpenPacksHint(234, 8)
+  self.open_packs_hint = OpenPacksHint(274, 8)
   self.open_packs_hint:register("HUD")
+  self.show_stats_hint = ShowStatsHint(497, 8)
+  self.show_stats_hint:register("HUD")
+  self.toggle_hints_hint = ToggleHintsHint(704, 8)
+  self.toggle_hints_hint:register("HUD")
 end
 
 function ActionHUD:_loadDocks()
@@ -128,6 +134,8 @@ function ActionHUD:destroy()
   self.cancel_hint:destroy()
   self.confirm_hint:destroy()
   self.open_packs_hint:destroy()
+  self.show_stats_hint:destroy()
+  self.toggle_hints_hint:destroy()
   ELEMENT.destroy(self)
 end
 
@@ -346,6 +354,8 @@ function ActionHUD:update(dt)
   self.cancel_hint:update(dt)
   self.confirm_hint:update(dt)
   self.open_packs_hint:update(dt)
+  self.show_stats_hint:update(dt)
+  self.toggle_hints_hint:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then

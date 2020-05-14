@@ -11,7 +11,7 @@ local Button = Class{
 function Button:init(x, y)
     CONTROLHINT.init(self, x, y)
 
-    self.image = RES.loadTexture("button-key-confirm")
+    self.image = RES.loadTexture("button-key-show_stats")
     self.image:setFilter("linear")
     self.text_font = FONT.get("Text", 20)
     self.text_font2 = FONT.get("Text", 16)
@@ -27,7 +27,7 @@ function Button:draw()
     g.setColor(1,1,1,self.alpha)
     g.draw(self.image, x, y, nil, scale)
 
-    local text = "Confirm/Interact"
+    local text = "(hold) Show Stats"
     local gap = 4
     local text_y = y + self.image:getHeight()*scale/2 - self.text_font:getHeight()/2
     local text_x = x + self.image:getWidth()*scale + gap
