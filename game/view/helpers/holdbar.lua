@@ -1,3 +1,6 @@
+
+-- luacheck: globals love
+
 local INPUT        = require 'input'
 local RES          = require 'resources'
 local DIRECTIONALS = require 'infra.dir'

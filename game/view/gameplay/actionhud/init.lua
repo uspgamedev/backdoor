@@ -10,6 +10,11 @@ local VIEWDEFS      = require 'view.definitions'
 local HandView      = require 'view.gameplay.actionhud.hand'
 local Minimap       = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
+local ConfirmHint   = require 'view.gameplay.actionhud.controlhints.confirm'
+local CancelHint    = require 'view.gameplay.actionhud.controlhints.cancel'
+local OpenPacksHint = require 'view.gameplay.actionhud.controlhints.openpacks'
+local ShowStatsHint = require 'view.gameplay.actionhud.controlhints.showstats'
+local ToggleHintsHint = require 'view.gameplay.actionhud.controlhints.togglehints'
 local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar      = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
@@ -72,7 +77,7 @@ function ActionHUD:init(route)
   self.turnpreview = TurnPreview(route.getPlayerActor(), self.handview,
                                  W - TurnPreview.WIDTH,
                                  _MARGIN + size + preview_margin)
-  self.turnpreview:register("HUD_BG")
+  self.turnpreview:register("HUD_BG_LOWER")
 
   -- HUD state (player turn or not)
   self.player_turn = false
@@ -83,13 +88,25 @@ function ActionHUD:init(route)
 
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
-  self.focusbar:register("HUD")
+  self.focusbar:register("HUD_MIDDLE")
 
   -- Long walk variables
   self.alert = false
   self.long_walk = false
   self.adjacency = {}
   ADJACENCY.unset(self.adjacency)
+
+  -- Control hints
+  self.cancel_hint = CancelHint(13, 8)
+  self.cancel_hint:register("HUD_MIDDLE")
+  self.confirm_hint = ConfirmHint(108, 8)
+  self.confirm_hint:register("HUD_MIDDLE")
+  self.open_packs_hint = OpenPacksHint(274, 8)
+  self.open_packs_hint:register("HUD_MIDDLE")
+  self.show_stats_hint = ShowStatsHint(497, 8)
+  self.show_stats_hint:register("HUD_MIDDLE")
+  self.toggle_hints_hint = ToggleHintsHint(704, 8)
+  self.toggle_hints_hint:register("HUD_MIDDLE")
 end
 
 function ActionHUD:_loadDocks()
@@ -114,6 +131,11 @@ function ActionHUD:destroy()
   self.conddock:destroy()
   self.minimap:destroy()
   self.turnpreview:destroy()
+  self.cancel_hint:destroy()
+  self.confirm_hint:destroy()
+  self.open_packs_hint:destroy()
+  self.show_stats_hint:destroy()
+  self.toggle_hints_hint:destroy()
   ELEMENT.destroy(self)
 end
 
@@ -327,6 +349,13 @@ end
 function ActionHUD:update(dt)
   self.minimap:update(dt)
   self.turnpreview:update(dt)
+
+  -- Control hints
+  self.cancel_hint:update(dt)
+  self.confirm_hint:update(dt)
+  self.open_packs_hint:update(dt)
+  self.show_stats_hint:update(dt)
+  self.toggle_hints_hint:update(dt)
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then

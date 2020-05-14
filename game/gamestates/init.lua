@@ -12,4 +12,3 @@ for _,filename in ipairs(fs.getDirectoryItems("gamestates")) do
 end
 
 return GAMESTATES
-

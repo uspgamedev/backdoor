@@ -1,10 +1,10 @@
 --DEPENDENCIES--
-local RES     = require 'resources'
-local FONT    = require 'view.helpers.font'
-local COLORS  = require 'domain.definitions.colors'
-local Queue   = require 'lux.common.Queue'
-local Class   = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+local RES       = require 'resources'
+local FONT      = require 'view.helpers.font'
+local COLORS    = require 'domain.definitions.colors'
+local Queue     = require 'lux.common.Queue'
+local Class     = require "steaming.extra_libs.hump.class"
+local ELEMENT   = require "steaming.classes.primitives.element"
 
 --CLASS VIEW--
 local StartMenuView = Class{
@@ -18,6 +18,8 @@ local _TILE_W, _TILE_H = 80, 80
 local _SCROLL_THRESHOLD = 6
 local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
+local _VERSION_FONT_SIZE = 16
+local _CONTROLS_FONT_SIZE = 24
 local _FADE_TIME = .5
 
 --Logo consts and variables
@@ -35,13 +37,15 @@ local _LOGO_TEXT_X, _LOGO_TEXT_Y = -20,120
 local _LOGO_ROTATION_SPEED = .05
 local _logo_rotation = 0
 
-local _menu_font, _title_font
+local _menu_font, _title_font, _version_font, _controls_font
 local _width, _height
 
 local function _initFontValues()
   local g = love.graphics
   _title_font = _title_font or FONT.get("Title", _TITLE_FONT_SIZE)
   _menu_font = _menu_font or FONT.get("Text", _MENU_FONT_SIZE)
+  _version_font = _version_font or FONT.get("Text", _VERSION_FONT_SIZE)
+  _controls_font = _controls_font or FONT.get("Text", _CONTROLS_FONT_SIZE)
   _width, _height = g.getDimensions()
 end
 
@@ -107,6 +111,29 @@ local function _renderOptions(g, q, selection, scrolltop)
   g.pop()
 end
 
+local function _renderControls(g)
+  g.push()
+  g.translate(-303, 676)
+
+  _controls_font:set()
+  g.setColor(COLORS.NEUTRAL)
+  local text = "D to confirm - S to cancel"
+  g.print(text, 0, 0)
+
+  g.pop()
+end
+
+local function _renderVersion(g)
+  local text = "version ".. VERSION
+  g.push()
+  g.translate(875, 690)
+
+  _version_font:set()
+  g.setColor(COLORS.NEUTRAL)
+  g.print(text, 0, 0)
+
+  g.pop()
+end
 
 function StartMenuView:init()
 
@@ -151,6 +178,8 @@ function StartMenuView:draw()
   _renderTitleLogo(g)
   _renderTitleText(g)
   _renderOptions(g, q, self.selection, self.scrolltop)
+  _renderControls(g)
+  _renderVersion(g)
 
   g.pop()
 

@@ -1,4 +1,6 @@
 
+-- luacheck: globals MAIN_TIMER love
+
 local math     = require 'common.math'
 local HoldBar  = require 'view.helpers.holdbar'
 local CARD     = require 'view.helpers.card'
@@ -26,12 +28,9 @@ local _ENTER_SPEED = .2
 local _CENTER_ALPHA_SPEED = 6
 local _MOVE_SMOOTH = 1/5
 local _EPSILON = 2e-5
-local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _H_MARGIN = 30
 local _V_MARGIN = 10
-local _ARRSIZE = 20
-local _PI = math.pi
 local _DESC_LINES = 4
 local _WAIT_TIME = 2
 local _DESC_SCROLL_SPEED = 20
@@ -162,6 +161,14 @@ function View:open(card_list, maxconsume)
   self:resetDescriptionScrolling()
 end
 
+function View:lockHoldbar()
+  self.holdbar:lock()
+end
+
+function View:unlockHoldbar()
+  self.holdbar:unlock()
+end
+
 function View:close()
   self.holdbar:lock()
   self.consume_log = _EMPTY
@@ -206,40 +213,45 @@ function View:startLeaving()
                   self, {backbuffer_show=1}, "in-quad")
   end
   for i = 1, #self.card_list do
-    self:addTimer("collect_card_"..i, MAIN_TIMER, "after",
-                  i*5/60 + .05,
-                  function()
-                    if not self.consumed[i] then
-                      if self.send_to_backbuffer then
-                        local backbuffer = self.backbuffer
-                        local finish = backbuffer:getTopCardPosition(i-1)
-                        local cardview = self.card_list[i]
-                        local offset = _BACKBUFFER_OFFSET - vec2((i-1)*(_CW+_PD) - math.round((_CW+_PD)*(self.move-1)),0)
-                        self:addTimer("slide_card_"..i, MAIN_TIMER, "tween", .5, cardview,
-                                      {position = finish + offset}, 'out-cubic')
-                        self:addTimer("wait_card_"..i, MAIN_TIMER, "after", .3,
-                                          function()
-                                            self:addTimer("add_fakecard_"..i, MAIN_TIMER, "after", .15,
-                                                          function()
-                                                            backbuffer:addFakeCard()
-                                                          end)
-                                            self:addTimer("fadeout_card_"..i, MAIN_TIMER, "tween", .3,
-                                                          cardview, {alpha = 0}, 'out-cubic',
-                                                          function() cardview:destroy() end)
-                                          end)
-                      else
-                        self:addTimer("getting_card_"..i, MAIN_TIMER,
-                                      "tween", .3, self.buffered_offset,
-                                      {[i] = _HEIGHT}, "in-back")
-                      end
-                    else
-                      Dissolve(self.card_list[i], .5)
-                    end
-                  end)
+    self:addTimer(
+      "collect_card_"..i, MAIN_TIMER, "after", i*5/60 + .05,
+      function()
+        if not self.consumed[i] then
+          if self.send_to_backbuffer then
+            local backbuffer = self.backbuffer
+            local finish = backbuffer:getTopCardPosition(i-1)
+            local cardview = self.card_list[i]
+            local offset = _BACKBUFFER_OFFSET - vec2((i-1)*(_CW+_PD)
+                         - math.round((_CW+_PD)*(self.move-1)),0)
+            self:addTimer("slide_card_"..i, MAIN_TIMER, "tween", .5,
+                          cardview, {position = finish + offset},
+                          'out-cubic')
+            self:addTimer(
+              "wait_card_"..i, MAIN_TIMER, "after", .3,
+               function()
+                 self:addTimer("add_fakecard_"..i, MAIN_TIMER, "after", .15,
+                               function()
+                                 backbuffer:addFakeCard()
+                               end)
+                 self:addTimer("fadeout_card_"..i, MAIN_TIMER, "tween", .3,
+                               cardview, {alpha = 0}, 'out-cubic',
+                               function() cardview:destroy() end)
+               end
+             )
+          else
+            self:addTimer("getting_card_"..i, MAIN_TIMER,
+                          "tween", .3, self.buffered_offset,
+                          {[i] = _HEIGHT}, "in-back")
+          end
+        else
+          Dissolve(self.card_list[i], .5)
+        end
+      end
+    )
   end
   local d = self.send_to_backbuffer and 1.2 or .75
-  self:addTimer("finish_collection", MAIN_TIMER, "after",
-                d, function()
+  self:addTimer("finish_collection", MAIN_TIMER, "after", d,
+                function()
                   if self.backbuffer then
                     self.backbuffer:resetFakeCards()
                   end
@@ -318,26 +330,33 @@ end
 function View:startDescriptionScrolling()
   self.show_bouncing_arrow = true
   self:addTimer("initial_wait", MAIN_TIMER, "after", _WAIT_TIME,
-      function()
-        local card = self.card_list[self.selection].card
-        local target_off = -CARD.getInfoHeight(CARD.getInfoLines(card, 2*_DESC_MAXW) - _DESC_LINES)
-        local d = math.abs(target_off/_DESC_SCROLL_SPEED)
-        self:addTimer("scrolling_desc", MAIN_TIMER, "tween", d, self,
-                     {desc_offset = target_off}, "in-linear",
+    function()
+      local card = self.card_list[self.selection].card
+      local target_off = -CARD.getInfoHeight(CARD.getInfoLines(card, 2*_DESC_MAXW) - _DESC_LINES)
+      local d = math.abs(target_off/_DESC_SCROLL_SPEED)
+      self:addTimer(
+        "scrolling_desc", MAIN_TIMER, "tween", d, self,
+        {desc_offset = target_off}, "in-linear",
+        function()
+          self.show_bouncing_arrow = false
+          self:addTimer(
+            "finish_wait", MAIN_TIMER, "after", _WAIT_TIME,
             function()
-              self.show_bouncing_arrow = false
-              self:addTimer("finish_wait", MAIN_TIMER, "after", _WAIT_TIME,
+              local dd = math.abs(target_off/(_DESC_SCROLL_SPEED*15))
+              self:addTimer(
+                "scroll_up", MAIN_TIMER, "tween", dd, self, {desc_offset = 0},
+                "out-quad",
                 function()
-                  local d = math.abs(target_off/(_DESC_SCROLL_SPEED*15))
-                  self:addTimer("scroll_up", MAIN_TIMER, "tween", d, self,
-                                {desc_offset = 0}, "out-quad",
-                        function()
-                            self.desc_offset = 0
-                            self:startDescriptionScrolling()
-                        end)
-                end)
-            end)
-      end)
+                    self.desc_offset = 0
+                    self:startDescriptionScrolling()
+                end
+              )
+            end
+          )
+        end
+      )
+    end
+  )
 end
 
 function View:update(dt)
@@ -482,7 +501,9 @@ function View:drawHUDInfo(g, owner, enter)
       local text = ("%d/%d"):format(self.consumed_count, self.maxconsume)
       _subtitlefont.set()
       local gap = 10
-      g.print(text, _H_MARGIN + _titlefont:getWidth(consume_text) + gap, _V_MARGIN + _titlefont:getHeight() - _subtitlefont:getHeight())
+      g.print(text, _H_MARGIN + _titlefont:getWidth(consume_text) + gap,
+                    _V_MARGIN + _titlefont:getHeight()
+                              - _subtitlefont:getHeight())
     end
 
 

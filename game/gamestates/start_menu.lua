@@ -1,12 +1,13 @@
+
+-- luacheck: globals love, no self
+
 --MODULE FOR THE GAMESTATE: MAIN MENU--
 local DB              = require 'database'
 local MENU            = require 'infra.menu'
 local DIRECTIONALS    = require 'infra.dir'
 local RUNFLAGS        = require 'infra.runflags'
+local SWITCHER        = require 'infra.switcher'
 local INPUT           = require 'input'
-local COLORS          = require 'domain.definitions.colors'
-local VIEWDEFS        = require 'view.definitions'
-local FONT            = require 'view.helpers.font'
 local CONFIGURE_INPUT = require 'input.configure'
 local PROFILE         = require 'infra.profile'
 local PLAYSFX         = require 'helpers.playsfx'
@@ -20,12 +21,12 @@ local state = {}
 
 --LOCAL VARIABLES--
 
+local GS
 local _menu_view
 local _menu_context
 local _locked
 local _activity = Activity()
 local _soundtrack
-local _font = FONT.get("Text", 16)
 
 -- LOCAL METHODS --
 
@@ -68,6 +69,8 @@ end
 
 --STATE FUNCTIONS--
 function state:enter()
+  GS = require 'gamestates'
+
   _menu_context = "START_MENU"
 
   _menu_view = StartMenuView()
@@ -116,7 +119,9 @@ function state:update(dt)
 
   if _menu_context == "START_MENU" then
     _menu_view:setItem("New route")
-    _menu_view:setItem("Load route")
+    if PROFILE.getTutorial('finished_tutorial') then
+      _menu_view:setItem("Load route")
+    end
     _menu_view:setItem("Settings")
     if RUNFLAGS.DEVELOPMENT then
       _menu_view:setItem("Controls")
@@ -145,7 +150,7 @@ function state:update(dt)
         _locked = true
         _activity:changeState('push', GS.CHARACTER_BUILD)
       end
-      if MENU.item("Load route") then
+      if PROFILE.getTutorial('finished_tutorial') and MENU.item("Load route") then
         _menu_context = "LOAD_LIST"
       end
       if MENU.item("Settings") then
@@ -189,21 +194,8 @@ function state:update(dt)
   _menu_view:update(dt)
 end
 
-function state:draw_version()
-  local g = love.graphics
-
-  _font:set()
-  g.setColor(COLORS.NEUTRAL)
-  local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
-  local text = "version ".. VERSION
-  local gap = 5
-  g.print(text, w - _font:getWidth(text) - gap, h - _font:getHeight())
-end
-
 function state:draw()
   Draw.allTables()
-
-  self:draw_version()
 end
 
 --Return state functions

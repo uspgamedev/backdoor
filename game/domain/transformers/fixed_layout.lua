@@ -69,8 +69,9 @@ function TRANSFORMER.process(sectorinfo, params)
       sectorinfo.grid.set(real_x, real_y, fill)
       if _EXIT[fill] then
         local exit = _findExitByDir(sectorinfo.exits, _EXIT[fill], checked)
-        assert(exit, 'no matching exit for tile')
-        exit.pos = { real_y, real_x }
+        if exit then
+          exit.pos = { real_y, real_x }
+        end
       end
     end
   end
