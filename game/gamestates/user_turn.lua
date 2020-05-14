@@ -281,7 +281,11 @@ function _checkTutorial()
         return tile and tile.type == SCHEMATICS.ALTAR
       end)
       if #altars > 0 then
-        SWITCHER.push(GS.TUTORIAL_HINT, "altar", altars[1])
+        local altar_tile = altars[1]
+        local player_i, player_j = player:getPos()
+        local relative_pos = { altar_tile.i - player_i,
+                               altar_tile.j - player_j }
+        SWITCHER.push(GS.TUTORIAL_HINT, "altar", relative_pos)
         return true
       end
     end

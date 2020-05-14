@@ -74,16 +74,21 @@ local HINTS = {
     },
     {
       text = "Cards you KEEP will go to your backbuffer",
-      region = {{x = 0, y = 450, w = 900, h = 300},{x = 0, y = 300, w = 300, h = 100}, {x = 700, y = 300, w = 250, h = 100}},
+      region = { {x = 0, y = 450, w = 900, h = 300},
+                 {x = 0, y = 300, w = 300, h = 100},
+                 {x = 700, y = 300, w = 250, h = 100} },
       text_pos = {x = 315, y = 320}
     },
     {
       text = "Cards you CONSUME will give you EXP",
-      region = {{x = 0, y = 0, w = 900, h = 250},{x = 0, y = 300, w = 300, h = 100}, {x = 700, y = 300, w = 250, h = 100}},
+      region = { {x = 0, y = 0, w = 900, h = 250},
+                 {x = 0, y = 300, w = 300, h = 100},
+                 {x = 700, y = 300, w = 250, h = 100} },
       text_pos = {x = 315, y = 355}
     },
     {
-      text = "     How the EXP will distribute across your attributes\nwill depend on which card type you been using the most",
+      text = "     How the EXP will distribute across your attributes\n"
+          .. "will depend on which card type you been using the most",
       region = {x = 950, y = 200, w = 340, h = 300},
       text_pos = {x = 440, y = 380}
     },
@@ -134,14 +139,16 @@ function state:enter(_, hint, region_position)
 
   --Add specific region if given
   if region_position then
-    local vec = CAMERA:tileToScreen(region_position.i, region_position.j)
-    _hint_data[_cur_hint].region.x = vec.x
-    _hint_data[_cur_hint].region.y = vec.y
+    local vec = CAMERA:relativeTileToScreen(unpack(region_position))
+    HINTS[hint][_cur_hint].region.x = vec.x
+    HINTS[hint][_cur_hint].region.y = vec.y
+    HINTS[hint][_cur_hint].region.w = VIEWDEFS.TILE_W
+    HINTS[hint][_cur_hint].region.h = VIEWDEFS.TILE_H
   end
 
   --Set visible var to each hint
-  for _, hint in ipairs(_hint_data) do
-    hint.visible = 0
+  for _, hint_data in ipairs(_hint_data) do
+    hint_data.visible = 0
   end
 end
 

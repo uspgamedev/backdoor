@@ -44,11 +44,12 @@ function CAM:isTileInFrame(i, j)
          and i <= cy + _HALF_H
 end
 
-function CAM:tileToScreen(i, j)
-  local cx, cy = self:position() -- start point
-  cx = math.floor(cx / _TILE_W - _HALF_W)
-  cy = math.floor(cy / _TILE_H - _HALF_H)
-  return vec2((j - cx) * _TILE_W, (i - cy) * _TILE_H)
+function CAM:relativeTileToScreen(i, j) -- luacheck: no self
+  j = _HALF_W + j - 1
+  i = _HALF_H + i - 1
+  local x = (j - 0.5) * _TILE_W
+  local y = (i - 0.5) * _TILE_H
+  return vec2(x, y)
 end
 
 function CAM:tilesInRange()
