@@ -48,6 +48,10 @@ function state:enter(_, view, actor, maxconsume)
   end
 end
 
+function state:resume()
+  _card_list_view:unlockHoldbar()
+end
+
 function state:leave()
   _leave = false
   if _card_list_view:getExpGained() > 0 then
@@ -62,6 +66,7 @@ end
 function state:update(_)
   if not PROFILE.getTutorial("consume") then
     local GS = require 'gamestates'
+    _card_list_view:lockHoldbar()
     SWITCHER.push(GS.TUTORIAL_HINT, "consume")
     return
   end

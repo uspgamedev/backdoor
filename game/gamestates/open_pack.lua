@@ -1,8 +1,10 @@
+
+-- luacheck: no self
+
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
 local SWITCHER     = require 'infra.switcher'
-local DEFS         = require 'domain.definitions'
 local PLAYSFX      = require 'helpers.playsfx'
 local PackView     = require 'view.packlist'
 local CardView     = require 'view.consumelist'
@@ -47,6 +49,7 @@ local function _confirm()
     _view.actor:show()
     if not PROFILE.getTutorial("consume") then
       local GS = require 'gamestates'
+      _card_list_view:lockHoldbar()
       SWITCHER.push(GS.TUTORIAL_HINT, "consume")
       return
     end
@@ -67,7 +70,7 @@ local function _consumeCards(consumed)
   end
 end
 
-function state:enter(from, view, route, packlist)
+function state:enter(_, view, route, packlist)
   _view = view
   _view.action_hud.minimap:hide()
   _status = "choosing_pack"
@@ -79,6 +82,10 @@ function state:enter(from, view, route, packlist)
   else
     _leave = true
   end
+end
+
+function state:resume()
+  _card_list_view:unlockHoldbar()
 end
 
 function state:leave()
@@ -93,9 +100,12 @@ function state:leave()
   _card_list_view = nil
 end
 
-function state:update(dt)
+function state:update(_)
   if not PROFILE.getTutorial("open_pack") then
+    local GS = require 'gamestates'
+    _card_list_view:lockHoldbar()
     SWITCHER.push(GS.TUTORIAL_HINT, "open_pack")
+    return
   end
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
