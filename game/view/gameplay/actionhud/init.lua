@@ -50,15 +50,15 @@ function ActionHUD:init(route)
 
   -- Wieldable dock
   self.wielddock = EquipmentDock(W/5 - EquipmentDock.getWidth()/2 - margin/2 + off)
-  self.wielddock:register("HUD_MIDDLE")
+  self.wielddock:register("HUD")
 
   -- Wearable dock
   self.weardock = EquipmentDock(W/5 + EquipmentDock.getWidth()/2 + margin/2 + off)
-  self.weardock:register("HUD_MIDDLE")
+  self.weardock:register("HUD")
 
   -- Conditions dock
   self.conddock = ConditionDock(4*W/5 + 15)
-  self.conddock:register("HUD_MIDDLE")
+  self.conddock:register("HUD_BG")
 
   self:_loadDocks()
 
