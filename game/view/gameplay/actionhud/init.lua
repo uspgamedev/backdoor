@@ -98,15 +98,15 @@ function ActionHUD:init(route)
 
   -- Control hints
   self.cancel_hint = CancelHint(13, 8)
-  self.cancel_hint:register("HUD")
+  self.cancel_hint:register("HUD_MIDDLE")
   self.confirm_hint = ConfirmHint(108, 8)
-  self.confirm_hint:register("HUD")
+  self.confirm_hint:register("HUD_MIDDLE")
   self.open_packs_hint = OpenPacksHint(274, 8)
-  self.open_packs_hint:register("HUD")
+  self.open_packs_hint:register("HUD_MIDDLE")
   self.show_stats_hint = ShowStatsHint(497, 8)
-  self.show_stats_hint:register("HUD")
+  self.show_stats_hint:register("HUD_MIDDLE")
   self.toggle_hints_hint = ToggleHintsHint(704, 8)
-  self.toggle_hints_hint:register("HUD")
+  self.toggle_hints_hint:register("HUD_MIDDLE")
 end
 
 function ActionHUD:_loadDocks()
