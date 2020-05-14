@@ -33,7 +33,7 @@ function Button:draw()
     --Draw "draw hand" text
     local text = "draw hand"
     local gap = 10
-    local text_y = y - 5
+    local text_y = y + self.image:getHeight()*scale/2 - self.text_font:getHeight()/2
     local text_x = x + self.image:getWidth()*scale + gap
     self.text_font:set()
     local c = COLORS.BLACK
