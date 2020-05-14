@@ -95,11 +95,11 @@ function ActionHUD:init(route)
   ADJACENCY.unset(self.adjacency)
 
   -- Control hints
-  self.cancel_hint = CancelHint(0, 0)
+  self.cancel_hint = CancelHint(8, 8)
   self.cancel_hint:register("HUD")
-  self.confirm_hint = ConfirmHint(100, 0)
+  self.confirm_hint = ConfirmHint(116, 8)
   self.confirm_hint:register("HUD")
-  self.open_packs_hint = OpenPacksHint(210, 0)
+  self.open_packs_hint = OpenPacksHint(234, 8)
   self.open_packs_hint:register("HUD")
 end
 
