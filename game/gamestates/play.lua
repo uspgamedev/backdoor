@@ -34,7 +34,9 @@ local _updateSoundtrack
 --LOCAL FUNCTION--
 
 local function _saveRoute()
-  PROFILE.saveRoute(_route.saveState())
+  if PROFILE.getTutorial("finished_tutorial") then
+    PROFILE.saveRoute(_route.saveState())
+  end
 end
 
 local function _playTurns(...)
