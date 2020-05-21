@@ -1,5 +1,4 @@
 
-local RANDOM        = require 'common.random'
 local DIR           = require 'domain.definitions.dir'
 local ACTIONDEFS    = require 'domain.definitions.action'
 local ACTION        = require 'domain.action'
@@ -103,9 +102,10 @@ local function _findInputs(actor, target, target_pos, input_values, plays)
           return _findInputs(actor, target, target_pos, input_values, plays)
         end
       elseif tactical_hint == 'helpful' or tactical_hint == 'healing' then
-        local dir_idx = RANDOM.generate(4)
-        input_values[input_spec.output] = DIR[DIR[dir_idx]]
-        return _findInputs(actor, target, target_pos, input_values, plays)
+        for _, dir in ipairs(DIR) do
+          input_values[input_spec.output] = DIR[dir]
+          _findInputs(actor, target, target_pos, input_values, plays)
+        end
       elseif tactical_hint == 'movement' then
         local dir = _nearestDir(actor, target_pos)
         input_values[input_spec.output] = dir
