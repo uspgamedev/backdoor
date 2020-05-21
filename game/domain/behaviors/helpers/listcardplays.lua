@@ -1,8 +1,9 @@
 
-local ACTIONDEFS  = require 'domain.definitions.action'
-local ACTION      = require 'domain.action'
+local DIR           = require 'domain.definitions.dir'
+local ACTIONDEFS    = require 'domain.definitions.action'
+local ACTION        = require 'domain.action'
 local CHOOSE_TARGET = require 'domain.inputs.choose_target'
-local TILE        = require 'common.tile'
+local TILE          = require 'common.tile'
 
 local _PLAY_CARD = ACTIONDEFS.PLAY_CARD
 
@@ -34,6 +35,37 @@ local function _nearestPos(from, to, range, sector)
   return nearest
 end
 
+local function _towardsTarget(actor, target_pos)
+  local i, j = actor:getPos()
+  for _,dir in ipairs(DIR) do
+    if dir == 'LEFT' and i == target_pos[1] and j > target_pos[2] then
+      return DIR[dir]
+    elseif dir == 'RIGHT' and i == target_pos[1] and j < target_pos[2] then
+      return DIR[dir]
+    elseif dir == 'UP' and j == target_pos[2] and i > target_pos[1] then
+      return DIR[dir]
+    elseif dir == 'DOWN' and j == target_pos[2] and i < target_pos[1] then
+      return DIR[dir]
+    end
+  end
+end
+
+local function _nearestDir(actor, target_pos)
+  local i, j = actor:getPos()
+  local di, dj = target_pos[1] - i, target_pos[2] - j
+  local max = -1
+  local nearest
+  for _,dir in ipairs(DIR) do
+    local vec = DIR[dir]
+    local align = vec[1] * di + vec[2] * dj
+    if align > max then
+      nearest = vec
+      max = align
+    end
+  end
+  return nearest
+end
+
 local function _findInputs(actor, target, target_pos, input_values, plays)
   local input_spec = ACTION.pendingInput(_PLAY_CARD, actor, input_values)
   if not input_spec then
@@ -59,6 +91,25 @@ local function _findInputs(actor, target, target_pos, input_values, plays)
           input_values[input_spec.output] = pos
           _findInputs(actor, target, target_pos, input_values, plays)
         end
+      end
+    elseif input_spec.name == 'choose_dir' then
+      local tactical_hint = input_spec['tactical-hint']
+      input_values.tactical_hint = tactical_hint
+      if tactical_hint == 'harmful' then
+        local dir = _towardsTarget(actor, target_pos)
+        if dir then
+          input_values[input_spec.output] = dir
+          return _findInputs(actor, target, target_pos, input_values, plays)
+        end
+      elseif tactical_hint == 'helpful' or tactical_hint == 'healing' then
+        for _, dir in ipairs(DIR) do
+          input_values[input_spec.output] = DIR[dir]
+          _findInputs(actor, target, target_pos, input_values, plays)
+        end
+      elseif tactical_hint == 'movement' then
+        local dir = _nearestDir(actor, target_pos)
+        input_values[input_spec.output] = dir
+        _findInputs(actor, target, target_pos, input_values, plays)
       end
     end
   end
