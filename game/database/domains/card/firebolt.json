@@ -18,6 +18,7 @@
           "max-range":4,
           "name":"choose_target",
           "output":"tgt",
+          "tactical-hint":"harmful",
           "type":"input",
           "empty-tile":false
         },{
