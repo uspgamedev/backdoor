@@ -17,9 +17,10 @@
           "max-range":0,
           "name":"choose_target",
           "output":"self_pos",
+          "tactical-hint":"harmful",
           "type":"input",
-          "non-wall":false,
-          "empty-tile":false
+          "empty-tile":false,
+          "non-wall":false
         },{
           "name":"get_body_at",
           "output":"self",

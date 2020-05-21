@@ -19,6 +19,7 @@
     },
     "operators":[],
     "status-tags":[],
+    "tactical-hint":"helpful",
     "trigger-condition":{
       "effects":[],
       "inputs":[]

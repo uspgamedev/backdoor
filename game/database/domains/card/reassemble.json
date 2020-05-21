@@ -18,10 +18,11 @@
           "max-range":4,
           "name":"choose_target",
           "output":"from",
+          "tactical-hint":"movement",
           "type":"input",
           "empty-tile":false,
-          "dif-fact":false,
-          "non-wall":false
+          "non-wall":false,
+          "dif-fact":false
         },{
           "aoe-hint":1,
           "empty-tile":true,
@@ -29,6 +30,7 @@
           "name":"choose_target",
           "non-wall":true,
           "output":"to",
+          "tactical-hint":"movement",
           "type":"input",
           "dif-fact":false
         },{

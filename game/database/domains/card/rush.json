@@ -24,6 +24,7 @@
           "name":"choose_dir",
           "output":"dir",
           "reach":6,
+          "tactical-hint":"harmful",
           "type":"input"
         },{
           "name":"self",

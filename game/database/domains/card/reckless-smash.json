@@ -24,9 +24,10 @@
           "max-range":1,
           "name":"choose_target",
           "output":"pos",
+          "tactical-hint":"harmful",
           "type":"input",
-          "non-wall":false,
-          "empty-tile":false
+          "empty-tile":false,
+          "non-wall":false
         },{
           "name":"get_attribute",
           "output":"cor",

@@ -19,6 +19,7 @@
           "max-range":0,
           "name":"choose_target",
           "output":"dummy",
+          "tactical-hint":"harmful",
           "type":"input"
         },{
           "name":"get_attribute",

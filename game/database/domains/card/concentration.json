@@ -15,9 +15,10 @@
         "val":2
       }],
     "status-tags":[],
+    "tactical-hint":"helpful",
     "trigger":"on_turn",
     "equipment":false
   },
-  "one_time":false,
-  "art":false
+  "art":false,
+  "one_time":false
 }

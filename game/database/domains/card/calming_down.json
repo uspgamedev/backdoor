@@ -39,6 +39,7 @@
     "status-tags":[{
         "tag":"stun"
       }],
+    "tactical-hint":"healing",
     "trigger":"on_cycle",
     "equipment":false
   },

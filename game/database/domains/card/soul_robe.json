@@ -19,6 +19,7 @@
         "val":2
       }],
     "status-tags":[],
+    "tactical-hint":"helpful",
     "trigger-condition":{
       "effects":[],
       "inputs":[]

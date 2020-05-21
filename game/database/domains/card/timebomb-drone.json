@@ -19,6 +19,7 @@
           "max-range":1,
           "name":"choose_target",
           "output":"pos",
+          "tactical-hint":"harmful",
           "type":"input",
           "non-wall":false
         }]

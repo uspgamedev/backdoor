@@ -14,6 +14,7 @@
           "max-range":1,
           "name":"choose_target",
           "output":"target",
+          "tactical-hint":"helpful",
           "type":"input"
         },{
           "name":"get_body_at",

@@ -13,13 +13,14 @@
         "val":6
       }],
     "status-tags":[],
+    "tactical-hint":"helpful",
     "trigger":"on_turn",
     "trigger-condition":{
       "effects":[],
       "inputs":[]
     },
-    "activation":false,
     "auto_activation":false,
+    "activation":false,
     "equipment":false
   },
   "set":false,
