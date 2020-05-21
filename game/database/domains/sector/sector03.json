@@ -27,11 +27,11 @@
     "max":12,
     "min":6,
     "recipes":[{
-        "actorspec":"fiendish",
+        "actorspec":"fiendish-eye",
         "bodyspec":"eye",
         "upgrade_power":150
       },{
-        "actorspec":"dumb",
+        "actorspec":"dumb-slime",
         "bodyspec":"slime",
         "upgrade_power":240
       }]
