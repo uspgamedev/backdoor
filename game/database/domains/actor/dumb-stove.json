@@ -8,21 +8,18 @@
       "amount":3,
       "card":"rage"
     },{
-      "amount":3,
+      "amount":4,
       "card":"rush"
     },{
-      "amount":2,
+      "amount":1,
       "card":"stomp"
     },{
-      "amount":5,
+      "amount":6,
       "card":"strike"
-    },{
-      "amount":1,
-      "card":"calming_down"
     }],
   "name":"Dumb Stove",
   "signature":"tackle",
   "traits":[],
-  "extends":false,
-  "collection":false
+  "collection":false,
+  "extends":false
 }
