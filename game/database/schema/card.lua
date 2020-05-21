@@ -31,6 +31,8 @@ return {
     id = 'widget', name = "Widget",
     type = 'section',
     schema = {
+      { id = 'tactical-hint', name = "Tactical importance", type = 'enum',
+        options = { 'harmful', 'helpful', 'movement', 'healing' } },
       { id = 'charges', name = "Charges", type = 'integer', range = {0}, },
       { id = 'trigger', name = "Spend Trigger", type = 'enum',
         options = DEFS.TRIGGERS },

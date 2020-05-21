@@ -7,6 +7,8 @@ INPUT.schema = {
   { id = 'reach', name = "Reach", type = 'value', match = 'integer',
     range = {1,99} },
   { id = 'body-block', name = "Stop on bodies", type = 'boolean' },
+  { id = 'tactical-hint', name = "Tactical importance", type = 'enum',
+    options = { 'harmful', 'helpful', 'movement', 'healing' } },
   { id = 'output', name = "Label", type = 'output' }
 }
 
