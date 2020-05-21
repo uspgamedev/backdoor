@@ -1,0 +1,25 @@
+{
+  "ani":-2,
+  "arc":-2,
+  "behavior":"aggro",
+  "cor":-2,
+  "description":"Weak slimey blob",
+  "initial_buffer":[{
+      "amount":6,
+      "card":"strike"
+    },{
+      "amount":4,
+      "card":"sidestep"
+    },{
+      "amount":2,
+      "card":"jump"
+    },{
+      "amount":1,
+      "card":"entangle"
+    }],
+  "name":"Dumb Slime",
+  "signature":"tackle",
+  "traits":[],
+  "extends":false,
+  "collection":false
+}

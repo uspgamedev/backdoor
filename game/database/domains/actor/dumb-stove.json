@@ -1,0 +1,28 @@
+{
+  "ani":-2,
+  "arc":-2,
+  "behavior":"aggro",
+  "cor":-2,
+  "description":"Careful with this hot head",
+  "initial_buffer":[{
+      "amount":3,
+      "card":"rage"
+    },{
+      "amount":3,
+      "card":"rush"
+    },{
+      "amount":2,
+      "card":"stomp"
+    },{
+      "amount":5,
+      "card":"strike"
+    },{
+      "amount":1,
+      "card":"calming_down"
+    }],
+  "name":"Dumb Stove",
+  "signature":"tackle",
+  "traits":[],
+  "extends":false,
+  "collection":false
+}
