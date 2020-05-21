@@ -1,4 +1,5 @@
 
+local RANDOM     = require 'common.random'
 local MANEUVERS  = require 'lux.pack' 'domain.maneuver'
 local ACTIONDEFS = require 'domain.definitions.action'
 local FindTarget = require 'domain.behaviors.helpers.findtarget'
@@ -51,8 +52,16 @@ return function (actor)
     -- ...if i have a target, then try to attack!
     if target then
       local plays = listCardPlays(actor, target, target_pos)
-      if MANEUVERS[_PLAY_CARD].validate(actor, plays[1]) then
-        return _PLAY_CARD, plays[1]
+      local n = #plays
+      while n > 0 do
+        local i = RANDOM.generate(n)
+        local play = plays[i]
+        if MANEUVERS[_PLAY_CARD].validate(actor, play) then
+          return _PLAY_CARD, play
+        else
+          table.remove(plays, i)
+          n = n - 1
+        end
       end
     end
     -- ...if i can't see or reach them, then at least chase it!
