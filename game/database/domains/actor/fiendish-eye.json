@@ -1,0 +1,37 @@
+{
+  "ani":-1,
+  "arc":2,
+  "behavior":"aggro",
+  "collection":"eye",
+  "cor":-1,
+  "description":"Stronger spellcaster monster, looking at your soul.",
+  "initial_buffer":[{
+      "amount":2,
+      "card":"fireball"
+    },{
+      "amount":7,
+      "card":"firebolt"
+    },{
+      "amount":2,
+      "card":"chained-energy"
+    },{
+      "amount":2,
+      "card":"chained-surge"
+    },{
+      "amount":1,
+      "card":"vial-of-essence"
+    },{
+      "amount":1,
+      "card":"spark_rod"
+    },{
+      "amount":2,
+      "card":"signet-of-inspiration"
+    },{
+      "amount":2,
+      "card":"stick_flame"
+    }],
+  "name":"Fiendish Eye",
+  "signature":"glare",
+  "traits":[],
+  "extends":false
+}

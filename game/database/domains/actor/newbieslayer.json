@@ -2,13 +2,25 @@
   "ani":1,
   "arc":1,
   "behavior":"aggro",
-  "collection":"anything",
+  "collection":"doggo",
   "cor":2,
   "description":"The newbie's nightmares...",
   "extends":"strong",
   "initial_buffer":[{
-      "amount":10,
-      "card":"strike"
+      "amount":5,
+      "card":"teleport"
+    },{
+      "amount":5,
+      "card":"trained-strike"
+    },{
+      "amount":2,
+      "card":"flurry-of-blows"
+    },{
+      "amount":2,
+      "card":"plated-shield"
+    },{
+      "amount":2,
+      "card":"stunning-blow"
     }],
   "name":"Newbie Killer",
   "signature":"punch",

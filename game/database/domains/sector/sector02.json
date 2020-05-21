@@ -31,13 +31,13 @@
     "max":10,
     "min":5,
     "recipes":[{
-        "actorspec":"grinful",
+        "actorspec":"grinful-imp",
         "bodyspec":"imp",
         "upgrade_power":120
       },{
         "actorspec":"dumb-stove",
         "bodyspec":"stove",
-        "upgrade_power":100
+        "upgrade_power":130
       }]
   },
   "exits":{
