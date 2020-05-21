@@ -11,6 +11,7 @@
         "val":3
       }],
     "status-tags":[],
+    "tactical-hint":"harmful",
     "trigger":"on_turn"
   },
   "set":false

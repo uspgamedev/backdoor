@@ -17,6 +17,7 @@
           "max-range":1,
           "name":"choose_target",
           "output":"target-pos",
+          "tactical-hint":"harmful",
           "type":"input"
         },{
           "name":"get_body_at",

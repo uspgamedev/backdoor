@@ -16,6 +16,7 @@
           "max-range":3,
           "name":"choose_target",
           "output":"target_pos",
+          "tactical-hint":"harmful",
           "type":"input"
         }]
     }

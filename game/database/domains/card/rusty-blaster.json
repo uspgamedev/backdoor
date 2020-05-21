@@ -22,6 +22,7 @@
     },
     "operators":[],
     "status-tags":[],
+    "tactical-hint":"helpful",
     "trigger":false
   },
   "set":false

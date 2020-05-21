@@ -17,6 +17,7 @@
           "name":"choose_target",
           "non-wall":true,
           "output":"target_pos",
+          "tactical-hint":"movement",
           "type":"input"
         },{
           "name":"self",

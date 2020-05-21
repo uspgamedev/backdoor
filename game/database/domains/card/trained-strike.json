@@ -19,9 +19,10 @@
           "max-range":1,
           "name":"choose_target",
           "output":"target_pos",
+          "tactical-hint":"harmful",
           "type":"input",
-          "empty-tile":false,
-          "non-wall":false
+          "non-wall":false,
+          "empty-tile":false
         },{
           "name":"self",
           "output":"self",
@@ -47,10 +48,10 @@
   "attr":"COR",
   "cost":2,
   "desc":"",
-  "icon":"card-dropkick",
   "name":"Trained Strike",
   "type-description":"",
-  "one_time":false,
+  "icon":false,
+  "set":false,
   "temporary":false,
-  "set":false
+  "one_time":false
 }
