@@ -19,9 +19,6 @@
     },{
       "droprate":50,
       "droptype":"heart"
-    },{
-      "droprate":50,
-      "droptype":"heart"
     }],
   "efc":-2,
   "extends":"slime",
