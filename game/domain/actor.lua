@@ -566,6 +566,7 @@ function Actor:grabDrops(tile)
   while i <= n do
     local dropname = drops[i]
     local dropspec = DB.loadSpec('drop', dropname)
+    inputvalues.self = self
     if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1

@@ -13,6 +13,12 @@
     },{
       "droprate":40,
       "droptype":"food2"
+    },{
+      "droprate":75,
+      "droptype":"heart"
+    },{
+      "droprate":25,
+      "droptype":"heart"
     }],
   "efc":-2,
   "extends":"imp",
