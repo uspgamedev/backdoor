@@ -27,7 +27,7 @@ function Button:draw()
     g.setColor(1,1,1,self.alpha)
     g.draw(self.image, x, y, nil, scale)
 
-    local text = "Cancel"
+    local text = "Cancel/Idle"
     local gap = 4
     local text_y = y + self.image:getHeight()*scale/2 - self.text_font:getHeight()/2
     local text_x = x + self.image:getWidth()*scale + gap
