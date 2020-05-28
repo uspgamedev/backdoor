@@ -9,14 +9,14 @@
       "amount":3,
       "card":"rage"
     },{
-      "amount":4,
-      "card":"rush"
-    },{
       "amount":1,
       "card":"stomp"
     },{
-      "amount":6,
+      "amount":7,
       "card":"strike"
+    },{
+      "amount":2,
+      "card":"rush"
     }],
   "name":"Dumb Stove",
   "signature":"tackle",

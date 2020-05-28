@@ -21,6 +21,9 @@
     },{
       "amount":2,
       "card":"stunning-blow"
+    },{
+      "amount":2,
+      "card":"greater-rush"
     }],
   "name":"Newbie Killer",
   "signature":"punch",
