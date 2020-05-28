@@ -52,17 +52,28 @@ function ActionHUD:init(route)
   self.handview:register("HUD_BG", nil, "hand_view")
 
   local margin, off = 20, 20
+  local player = route:getPlayerActor()
 
   -- Wieldable dock
   self.wielddock = EquipmentDock(W/5 - EquipmentDock.getWidth()/2 - margin/2 + off)
+  self.wielddock:updateDockPosition(player:getBody():getEquipmentAt('wieldable'))
   self.wielddock:register("HUD")
 
   -- Wearable dock
   self.weardock = EquipmentDock(W/5 + EquipmentDock.getWidth()/2 + margin/2 + off)
+  self.weardock:updateDockPosition(player:getBody():getEquipmentAt('wearable'))
   self.weardock:register("HUD")
 
   -- Conditions dock
   self.conddock = ConditionDock(4*W/5 + 15)
+  local count = player:getBody():getWidgetCount()
+  if player:getBody():getEquipmentAt('wearable') then
+    count = count - 1
+  end
+  if player:getBody():getEquipmentAt('wieldable') then
+    count = count - 1
+  end
+  self.conddock:updateConditionsPositions(count)
   self.conddock:register("HUD_BG")
 
   self:_loadDocks()
