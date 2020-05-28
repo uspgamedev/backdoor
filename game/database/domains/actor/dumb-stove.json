@@ -6,7 +6,7 @@
   "cor":-2,
   "description":"Careful with this hot head",
   "initial_buffer":[{
-      "amount":3,
+      "amount":1,
       "card":"rage"
     },{
       "amount":1,
@@ -15,7 +15,7 @@
       "amount":7,
       "card":"strike"
     },{
-      "amount":2,
+      "amount":3,
       "card":"rush"
     }],
   "name":"Dumb Stove",
