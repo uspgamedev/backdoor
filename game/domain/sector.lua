@@ -390,7 +390,7 @@ function Sector:spreadDrops(i, j, drops)
   coroutine.yield('report', {
     type = 'drop_spread',
     drops = new_drops,
-    origin = {i, j}
+    pos = {i, j}
   })
 
 end
