@@ -1,0 +1,28 @@
+{
+  "ability":{
+    "effects":[{
+        "attr":0,
+        "base":3,
+        "mod":100,
+        "name":"heal",
+        "target":"=self-body",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "name":"self",
+        "output":"self",
+        "type":"operator"
+      },{
+        "name":"hp_not_full",
+        "output":"label#0002",
+        "type":"input"
+      },{
+        "actor":"=self",
+        "name":"get_actor_body",
+        "output":"self-body",
+        "type":"operator"
+      }]
+  },
+  "name":"Haert",
+  "sprite":"heart"
+}

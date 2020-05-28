@@ -20,7 +20,7 @@ function ANIM:script(route, view, report)
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
     local backbuffer = view.backbuffer
-    _waitAndAnnounce(cardview, self.wait)
+    _waitAndAnnounce(cardview.card:getName(), self.wait)
     action_hud.handview:keepFocusedCard(false)
     action_hud.handview:removeCard(report.card_index)
     action_hud.handview.cardinfo:lockCard(cardview.card)
@@ -35,17 +35,20 @@ function ANIM:script(route, view, report)
     else
       _dissolve(cardview)
     end
+  else
+    local card = report.actor:getHandCard(report.card_index)
+    _waitAndAnnounce(card:getName(), self.wait)
   end
   delay:kill()
   return self
 end
 
-function _waitAndAnnounce(cardview, wait)
+function _waitAndAnnounce(text, wait)
   local ann = Util.findId('announcement')
   ann:lock()
   local deferred = ann:interrupt()
   if deferred then wait(deferred) end
-  ann:announce(cardview.card:getName())
+  ann:announce(text)
   ann:unlock()
 end
 

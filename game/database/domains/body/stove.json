@@ -13,6 +13,9 @@
     },{
       "droprate":10,
       "droptype":"food2"
+    },{
+      "droprate":75,
+      "droptype":"heart"
     }],
   "efc":0,
   "faction":"agressive",

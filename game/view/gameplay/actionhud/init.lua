@@ -52,17 +52,28 @@ function ActionHUD:init(route)
   self.handview:register("HUD_BG", nil, "hand_view")
 
   local margin, off = 20, 20
+  local player = route:getPlayerActor()
 
   -- Wieldable dock
   self.wielddock = EquipmentDock(W/5 - EquipmentDock.getWidth()/2 - margin/2 + off)
+  self.wielddock:updateDockPosition(player:getBody():getEquipmentAt('wieldable'))
   self.wielddock:register("HUD")
 
   -- Wearable dock
   self.weardock = EquipmentDock(W/5 + EquipmentDock.getWidth()/2 + margin/2 + off)
+  self.weardock:updateDockPosition(player:getBody():getEquipmentAt('wearable'))
   self.weardock:register("HUD")
 
   -- Conditions dock
   self.conddock = ConditionDock(4*W/5 + 15)
+  local count = player:getBody():getWidgetCount()
+  if player:getBody():getEquipmentAt('wearable') then
+    count = count - 1
+  end
+  if player:getBody():getEquipmentAt('wieldable') then
+    count = count - 1
+  end
+  self.conddock:updateConditionsPositions(count)
   self.conddock:register("HUD_BG")
 
   self:_loadDocks()
@@ -99,13 +110,13 @@ function ActionHUD:init(route)
   -- Control hints
   self.cancel_hint = CancelHint(13, 8)
   self.cancel_hint:register("HUD_MIDDLE")
-  self.confirm_hint = ConfirmHint(108, 8)
+  self.confirm_hint = ConfirmHint(138, 8)
   self.confirm_hint:register("HUD_MIDDLE")
-  self.open_packs_hint = OpenPacksHint(274, 8)
+  self.open_packs_hint = OpenPacksHint(304, 8)
   self.open_packs_hint:register("HUD_MIDDLE")
-  self.show_stats_hint = ShowStatsHint(497, 8)
+  self.show_stats_hint = ShowStatsHint(527, 8)
   self.show_stats_hint:register("HUD_MIDDLE")
-  self.toggle_hints_hint = ToggleHintsHint(704, 8)
+  self.toggle_hints_hint = ToggleHintsHint(734, 8)
   self.toggle_hints_hint:register("HUD_MIDDLE")
 end
 

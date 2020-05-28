@@ -1,0 +1,57 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "body":"=body",
+          "name":"move_to",
+          "pos":"=pos",
+          "type":"effect",
+          "vfx":"SLIDE",
+          "vfx-spd":1,
+          "sfx":false
+        },{
+          "attr":"=cor",
+          "base":4,
+          "center":"=pos",
+          "ignore_owner":true,
+          "mod":50,
+          "name":"damage_on_area",
+          "size":3,
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":3,
+          "empty-tile":true,
+          "max-range":4,
+          "name":"choose_target",
+          "non-wall":true,
+          "output":"pos",
+          "tactical-hint":"movement",
+          "type":"input"
+        },{
+          "name":"get_attribute",
+          "output":"cor",
+          "type":"operator",
+          "which":"COR"
+        },{
+          "name":"self",
+          "output":"self",
+          "type":"operator"
+        },{
+          "actor":"=self",
+          "name":"get_actor_body",
+          "output":"body",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"COR",
+  "cost":3,
+  "desc":"Take THAT gravity!",
+  "icon":"card-jump",
+  "name":"Greater Jump",
+  "pp":3,
+  "set":"maneuver_expert",
+  "type-description":"",
+  "one_time":false
+}

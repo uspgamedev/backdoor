@@ -20,6 +20,8 @@ INPUT.schema = {
   { id = 'has-floor', name = "Only positions with a floor", type = 'boolean' },
   { id = 'aoe-hint', name = "Size of previewed AoE", type = 'integer',
     range = {1} },
+  { id = 'tactical-hint', name = "Tactical importance", type = 'enum',
+    options = { 'harmful', 'helpful', 'movement', 'healing' } },
   { id = 'output', name = "Label", type = 'output' }
 }
 

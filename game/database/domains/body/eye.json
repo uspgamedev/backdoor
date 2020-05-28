@@ -13,6 +13,9 @@
     },{
       "droprate":40,
       "droptype":"food2"
+    },{
+      "droprate":50,
+      "droptype":"heart"
     }],
   "efc":-2,
   "extends":"imp",

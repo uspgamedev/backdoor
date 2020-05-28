@@ -43,6 +43,7 @@
     "charges":1,
     "operators":[],
     "status-tags":[],
+    "tactical-hint":"harmful",
     "trigger":"on_tick",
     "trigger-condition":{
       "effects":[],

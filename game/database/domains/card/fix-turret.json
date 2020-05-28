@@ -17,10 +17,11 @@
           "max-range":1,
           "name":"choose_target",
           "output":"tgt",
+          "tactical-hint":"helpful",
           "type":"input",
           "empty-tile":false,
-          "dif-fact":false,
-          "non-wall":false
+          "non-wall":false,
+          "dif-fact":false
         },{
           "name":"get_body_at",
           "output":"turret",

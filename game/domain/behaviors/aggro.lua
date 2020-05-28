@@ -1,12 +1,14 @@
 
+local RANDOM     = require 'common.random'
 local MANEUVERS  = require 'lux.pack' 'domain.maneuver'
 local ACTIONDEFS = require 'domain.definitions.action'
 local FindTarget = require 'domain.behaviors.helpers.findtarget'
 local FindPath   = require 'domain.behaviors.helpers.findpath'
+local listCardPlays = require 'domain.behaviors.helpers.listcardplays'
 local RandomWalk = require 'domain.behaviors.helpers.randomwalk'
 
-local _USE_SIGNATURE = ACTIONDEFS.USE_SIGNATURE
 local _MOVE          = ACTIONDEFS.MOVE
+local _PLAY_CARD     = ACTIONDEFS.PLAY_CARD
 
 return function (actor)
   local sector = actor:getSector()
@@ -48,14 +50,24 @@ return function (actor)
   -- if i have a position targetted
   if target_pos then
     -- ...if i have a target, then try to attack!
-    local inputs = { pos = target_pos }
-    if target and MANEUVERS[_USE_SIGNATURE].validate(actor, inputs) then
-      return _USE_SIGNATURE, inputs
+    if target then
+      local plays = listCardPlays(actor, target, target_pos)
+      local n = #plays
+      while n > 0 do
+        local i = RANDOM.generate(n)
+        local play = plays[i]
+        if MANEUVERS[_PLAY_CARD].validate(actor, play) then
+          return _PLAY_CARD, play
+        else
+          table.remove(plays, i)
+          n = n - 1
+        end
+      end
     end
     -- ...if i can't see or reach them, then at least chase it!
     local actor_pos = { actor:getPos() }
     local next_step = FindPath.getNextStep(actor_pos, target_pos, sector)
-    inputs.pos = next_step
+    local inputs = { pos = next_step }
     if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
       return _MOVE, inputs
     end

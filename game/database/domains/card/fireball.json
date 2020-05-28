@@ -17,6 +17,7 @@
           "name":"choose_target",
           "non-wall":true,
           "output":"target",
+          "tactical-hint":"harmful",
           "type":"input",
           "empty-tile":false
         },{

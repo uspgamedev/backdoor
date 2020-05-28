@@ -4,15 +4,14 @@
       "effects":[{
           "body":"=body",
           "name":"move_to",
-          "pos":"=pos",
+          "pos":"=target_pos",
           "type":"effect",
           "vfx":"SLIDE",
-          "vfx-spd":1,
           "sfx":false
         },{
           "attr":"=cor",
-          "base":4,
-          "center":"=pos",
+          "base":1,
+          "center":"=target_pos",
           "ignore_owner":true,
           "mod":50,
           "name":"damage_on_area",
@@ -25,7 +24,8 @@
           "max-range":4,
           "name":"choose_target",
           "non-wall":true,
-          "output":"pos",
+          "output":"target_pos",
+          "tactical-hint":"harmful",
           "type":"input"
         },{
           "name":"get_attribute",
@@ -45,12 +45,9 @@
     }
   },
   "attr":"COR",
-  "cost":3,
-  "desc":"Take THAT gravity!",
-  "icon":"card-jump",
+  "cost":2,
+  "desc":"Up up up!",
   "name":"Jump",
-  "pp":3,
-  "set":"maneuver_expert",
-  "type-description":"",
-  "one_time":false
+  "set":"armor_advanced",
+  "icon":false
 }

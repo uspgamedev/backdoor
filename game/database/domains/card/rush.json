@@ -11,19 +11,19 @@
           "sfx":false
         },{
           "attr":"=cor",
-          "base":1,
+          "base":0,
           "center":"=damage_pos",
-          "mod":100,
+          "mod":50,
           "name":"damage_on_area",
           "size":1,
-          "type":"effect",
-          "ignore_owner":false
+          "type":"effect"
         }],
       "inputs":[{
           "body-block":true,
           "name":"choose_dir",
           "output":"dir",
-          "reach":6,
+          "reach":5,
+          "tactical-hint":"harmful",
           "type":"input"
         },{
           "name":"self",
@@ -41,7 +41,7 @@
           "type":"operator"
         },{
           "dir":"=dir",
-          "maxrange":6,
+          "maxrange":5,
           "name":"hitscan",
           "output":"target_pos",
           "pos":"=origin",
@@ -62,11 +62,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "desc":"It's rush hour. And I'm not talking about kung-fu.",
+  "desc":"Excuse me sir, I've got somewhere to be right now",
   "icon":"card-rush",
   "name":"Rush",
-  "pp":10,
-  "set":"maneuver_advanced",
-  "type-description":"",
-  "one_time":false
+  "set":"maneuver_common"
 }

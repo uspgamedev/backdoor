@@ -7,7 +7,7 @@
   "extends":"sentient",
   "initial_buffer":[{
       "amount":1,
-      "card":"stunning-blow"
+      "card":"bloodthirst"
     },{
       "amount":1,
       "card":"old-laddle"

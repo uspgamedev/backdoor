@@ -1,0 +1,28 @@
+{
+  "ani":-1,
+  "arc":1,
+  "behavior":"aggro",
+  "collection":"imp",
+  "cor":-1,
+  "description":"Spellcaster monster, evil by nature.",
+  "initial_buffer":[{
+      "amount":7,
+      "card":"firebolt"
+    },{
+      "amount":1,
+      "card":"soul_robe"
+    },{
+      "amount":2,
+      "card":"concentration"
+    },{
+      "amount":1,
+      "card":"teleport"
+    },{
+      "amount":1,
+      "card":"illusion_of_darkness"
+    }],
+  "name":"Grinning Imp",
+  "signature":"scratch",
+  "traits":[],
+  "extends":false
+}

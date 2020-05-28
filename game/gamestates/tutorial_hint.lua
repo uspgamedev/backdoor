@@ -25,7 +25,7 @@ local HINTS = {
   },
   use_card = {
     {
-      text = "To use a card press F\nTo discard a card press W",
+      text = "To use a card press D\nTo discard a card press W",
       region = {x = 370, y = 450, w = 530, h = 200},
       text_pos = {x = 150, y = 500}
     },

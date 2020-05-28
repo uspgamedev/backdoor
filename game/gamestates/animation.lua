@@ -12,6 +12,7 @@ local state = {}
 
 local _animation_task
 local _was_food
+local _was_pack
 local _view
 local _alert
 
@@ -29,6 +30,9 @@ function state:enter(_, route, view, report) -- luacheck: no self
   _alert = false
 
   _was_food = (report.type == 'text_rise' and report.text_type == 'food')
+  _was_pack = (report.type == 'text_rise' and report.text_type == 'status'
+                                          and report.string == "+Pack")
+
   local ok, animation = pcall(function () return ANIMATIONS[report.type] end)
   if ok then
     _animation_task = animation:script(route, view, report)
@@ -73,6 +77,10 @@ function state:checkTutorial() -- luacheck: no self
   local GS = require 'gamestates'
   if not PROFILE.getTutorial("pp") and _was_food then
     SWITCHER.push(GS.TUTORIAL_HINT, "pp")
+    return true
+  end
+  if not PROFILE.getTutorial("get_pack") and _was_pack then
+    SWITCHER.push(GS.TUTORIAL_HINT, "get_pack")
     return true
   end
 end

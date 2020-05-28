@@ -6,11 +6,12 @@
   "one_time":true,
   "type-description":"",
   "widget":{
-    "charges":2,
+    "charges":4,
     "operators":[],
     "status-tags":[{
         "tag":"stun"
       }],
+    "tactical-hint":"harmful",
     "trigger":"on_turn",
     "equipment":false
   },

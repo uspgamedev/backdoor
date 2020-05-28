@@ -17,10 +17,11 @@
           "max-range":0,
           "name":"choose_target",
           "output":"body-pos",
+          "tactical-hint":"healing",
           "type":"input",
           "dif-fact":false,
-          "empty-tile":false,
-          "non-wall":false
+          "non-wall":false,
+          "empty-tile":false
         },{
           "name":"get_attribute",
           "output":"ANI",

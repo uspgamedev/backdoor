@@ -1,0 +1,10 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":1
+    }],
+  "offset":[16,16],
+  "quad_division":[1,1],
+  "texture":"drop-heart",
+  "loop":false
+}

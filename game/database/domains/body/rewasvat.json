@@ -4,20 +4,48 @@
   "drops":{
     "1":{
       "droprate":100,
-      "droptype":"pack"
+      "droptype":"doggo-pack"
     },
     "2":{
-      "droprate":10,
-      "droptype":"pack"
+      "droprate":100,
+      "droptype":"doggo-pack"
     },
     "3":{
-      "droprate":50,
+      "droprate":100,
+      "droptype":"heart"
+    },
+    "4":{
+      "droprate":100,
+      "droptype":"heart"
+    },
+    "5":{
+      "droprate":100,
       "droptype":"food"
     },
     "drops":[{
         "droprate":7,
         "droptype":"pack"
-      }]
+      }],
+    "1":{
+      "droprate":100,
+      "droptype":"doggo-pack"
+    },
+    "2":{
+      "droprate":50,
+      "droptype":"doggo-pack"
+    },
+    "3":{
+      "droprate":100,
+      "droptype":"food"
+    },
+    "4":{
+      "droprate":100,
+      "droptype":"heart"
+    },
+    "5":{
+      "droprate":100,
+      "droptype":"heart"
+    }
   },
   "efc":0,
   "extends":"corgi",
