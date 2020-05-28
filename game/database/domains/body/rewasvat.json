@@ -17,7 +17,27 @@
     "drops":[{
         "droprate":7,
         "droptype":"pack"
-      }]
+      }],
+    "1":{
+      "droprate":100,
+      "droptype":"doggo-pack"
+    },
+    "2":{
+      "droprate":100,
+      "droptype":"doggo-pack"
+    },
+    "3":{
+      "droprate":100,
+      "droptype":"heart"
+    },
+    "4":{
+      "droprate":100,
+      "droptype":"heart"
+    },
+    "5":{
+      "droprate":100,
+      "droptype":"food"
+    }
   },
   "efc":0,
   "extends":"corgi",
