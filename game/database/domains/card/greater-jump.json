@@ -16,11 +16,11 @@
           "ignore_owner":true,
           "mod":50,
           "name":"damage_on_area",
-          "size":2,
+          "size":3,
           "type":"effect"
         }],
       "inputs":[{
-          "aoe-hint":2,
+          "aoe-hint":3,
           "empty-tile":true,
           "max-range":4,
           "name":"choose_target",

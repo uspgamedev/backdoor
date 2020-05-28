@@ -12,12 +12,14 @@
           "attr":"=cor",
           "base":1,
           "center":"=target_pos",
+          "ignore_owner":true,
           "mod":50,
           "name":"damage_on_area",
+          "size":2,
           "type":"effect"
         }],
       "inputs":[{
-          "aoe-hint":1,
+          "aoe-hint":2,
           "empty-tile":true,
           "max-range":4,
           "name":"choose_target",
