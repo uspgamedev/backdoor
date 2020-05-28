@@ -12,6 +12,7 @@ return {
   "on_leave",
   "on_act",
   "on_focus_end",
+  "on_kill",
   ON_TICK = 'on_tick',
   ON_CYCLE = 'on_cycle',
   ON_TURN = 'on_turn',
@@ -24,6 +25,7 @@ return {
   ON_LEAVE = 'on_leave',
   ON_ACT = 'on_act',
   ON_FOCUS_END = 'on_focus_end',
+  ON_KILL = 'on_kill',
 }
 
 

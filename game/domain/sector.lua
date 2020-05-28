@@ -1,6 +1,7 @@
 local DB = require 'database'
 local SCHEMATICS = require 'domain.definitions.schematics'
 local ACTIONDEFS = require 'domain.definitions.action'
+local TRIGGERS = require 'domain.definitions.triggers'
 local RANDOM = require 'common.random'
 
 local Actor = require 'domain.actor'
@@ -251,6 +252,13 @@ function Sector:removeDeadBodies()
       local body = self:getBodyAt(i,j)
 
       if body and body:getHP() <= 0 then
+        -- Trigger kill
+        local killer_id = body:getKiller()
+        local killer = Util.findId(killer_id)
+        if killer then
+          killer:getBody():triggerWidgets(TRIGGERS.ON_KILL)
+        end
+        -- Generate drops
         local drops_table = {}
         local drops = body:getDrops()
         for _,drop in ipairs(drops) do
@@ -258,7 +266,7 @@ function Sector:removeDeadBodies()
             table.insert(drops_table, drop["droptype"])
           end
         end
-
+        -- Mark actor to remove
         local actor = self:removeBodyAt(i,j, body)
         if actor then
           table.insert(dead_actor_list, actor)
