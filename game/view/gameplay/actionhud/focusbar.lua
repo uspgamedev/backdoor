@@ -15,6 +15,7 @@ local RES         = require 'resources'
 local _WIDTH, _HEIGHT
 local _F_NAME = "Title" --Font name
 local _F_SIZE = 24 --Font size
+local _PI = math.pi
 local _BG = COLORS.HUD_BG
 local _HANDBAR_WIDTH = 492/8
 local _HANDBAR_HEIGHT = 12
@@ -23,6 +24,7 @@ local _MARGIN_HEIGHT = 16
 local _PAD_HEIGHT = 32
 local _SLOPE = _HANDBAR_HEIGHT + _MARGIN_HEIGHT
 local FADE_IN_SPEED = 2
+local FADE_OUT_SPEED = 5
 local _PANEL_VTX = {
   -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2,
   -_MARGIN_WIDTH + _SLOPE, -_MARGIN_HEIGHT / 2,
@@ -33,6 +35,11 @@ local _PANEL_VTX = {
 }
 
 local _font
+
+--Local functions
+
+local _newExplosionSource
+local _renderExplosion
 
 --FocusBar Class--
 
@@ -52,10 +59,19 @@ function FocusBar:init(route, handview)
   self.route = route
   self.actor = nil
 
+
+  --Var for creating/destroying focus
+  self.previous_focus = 0
   self.fade_in = {}
   for i = 1, ACTIONDEFS.MAX_FOCUS do
     self.fade_in[i] = 0
   end
+  self.explosions = {}
+  for i = 1, ACTIONDEFS.MAX_FOCUS do
+    self.explosions[i] = _newExplosionSource()
+  end
+
+
 
   --Emergency effect
   self.emer_fx_alpha = 0
@@ -70,17 +86,31 @@ function FocusBar:init(route, handview)
 end
 
 function FocusBar:update(dt)
+
+  for i = 1, ACTIONDEFS.MAX_FOCUS do
+    self.explosions[i]:update(dt)
+  end
+
   local _OFF_SPD = 2.5
   self.actor = self.route.getControlledActor()
 
   --update fade-in
   local maxfocus = ACTIONDEFS.MAX_FOCUS
   local focus = math.floor(math.min(self.actor:getFocus(), maxfocus))
+  if focus < self.previous_focus then
+    for i = focus + 1, self.previous_focus do
+      self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
+          function()
+            self.explosions[i]:emit(40)
+          end)
+    end
+  end
+  self.previous_focus = focus
   for i = 1, maxfocus do
     if i <= focus then
       self.fade_in[i] = math.min(self.fade_in[i] + FADE_IN_SPEED*dt, 1)
     else
-      self.fade_in[i] = math.max(self.fade_in[i] - FADE_IN_SPEED*dt, 0)
+      self.fade_in[i] = math.max(self.fade_in[i] - FADE_OUT_SPEED*dt, 0)
     end
   end
 
@@ -139,6 +169,9 @@ function FocusBar:draw()
       end
     end
 
+    --Draw explosions
+    _renderExplosion(self.explosions[i+1], 0, 0)
+
     g.pop()
   end
   g.pop()
@@ -148,6 +181,30 @@ function FocusBar:draw()
   g.setLineWidth(2)
   g.polygon('line', _PANEL_VTX)
 
+  g.pop()
+end
+
+function _newExplosionSource()
+  local pixel = RES.loadTexture('pixel')
+  local particles = love.graphics.newParticleSystem(pixel, 128)
+  particles:setParticleLifetime(.5)
+  particles:setSizeVariation(0)
+  particles:setLinearDamping(5)
+  particles:setSpeed(256)
+  particles:setSpread(2*_PI)
+  particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
+  particles:setSizes(3)
+  particles:setEmissionArea('ellipse', 0, 0, 0, false)
+  particles:setTangentialAcceleration(-256)
+  return particles
+end
+
+function _renderExplosion(explosion, x, y)
+  local g = love.graphics
+  g.push()
+  g.translate(x , y)
+  g.setColor(COLORS.NEUTRAL)
+  g.draw(explosion, 0, 0)
   g.pop()
 end
 
