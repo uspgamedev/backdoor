@@ -87,6 +87,20 @@ function BodyView:hit(dir)
   return deferred
 end
 
+function BodyView:act()
+  self.offset.x = - VIEWDEFS.TILE_W / 4.0
+  local deferred = Deferred:new{}
+  self:addTimer(
+    nil, MAIN_TIMER, 'tween', 0.1, self.offset, { x = VIEWDEFS.TILE_W / 4.0 },
+    'in-linear',
+    function() -- after tween
+      self.offset.x = 0
+      deferred:trigger()
+    end
+  )
+  return deferred
+end
+
 function BodyView:drawAtRow(row)
   if not self.invisible then
     local x = self.position.x + self.offset.x

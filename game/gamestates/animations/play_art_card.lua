@@ -17,10 +17,12 @@ local _dissolve
 function ANIM:script(route, view, report)
   local action_hud = view.action_hud
   local delay = TweenValue(0)
+  local bodyview = view.sector:getBodyView(report.actor:getBody())
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
     local backbuffer = view.backbuffer
     _waitAndAnnounce(cardview.card:getName(), self.wait)
+    self.wait(bodyview:act())
     action_hud.handview:keepFocusedCard(false)
     action_hud.handview:removeCard(report.card_index)
     action_hud.handview.cardinfo:lockCard(cardview.card)
@@ -39,6 +41,7 @@ function ANIM:script(route, view, report)
     view.sector:setTempTarget(report.actor)
     local card = report.actor:getHandCard(report.card_index)
     _waitAndAnnounce(card:getName(), self.wait)
+    self.wait(bodyview:act())
     self.wait(delay:set(1.5))
     view.sector:setTempTarget(nil)
   end
