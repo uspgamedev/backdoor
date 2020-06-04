@@ -57,6 +57,7 @@ function ANIM:script(route, view, report)
     self.wait()
     ann:unlock()
   else
+    view.sector:setTempTarget(report.actor)
     local card = report.actor:getHandCard(report.card_index)
     local ann = Util.findId('announcement')
     ann:lock()
@@ -64,6 +65,8 @@ function ANIM:script(route, view, report)
     if deferred then self.wait(deferred) end
     ann:announce(card:getName())
     ann:unlock()
+    self.wait(delay:set(1.5))
+    view.sector:setTempTarget(nil)
   end
   delay:kill()
   return self
