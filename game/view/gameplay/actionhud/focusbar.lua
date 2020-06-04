@@ -25,8 +25,8 @@ local _MARGIN_WIDTH = 60
 local _MARGIN_HEIGHT = 16
 local _PAD_HEIGHT = 32
 local _SLOPE = _HANDBAR_HEIGHT + _MARGIN_HEIGHT
-local FADE_IN_SPEED = 2
-local FADE_OUT_SPEED = 5
+local FADE_IN_SPEED = 5
+local FADE_OUT_SPEED = 6
 local _PANEL_VTX = {
   -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2,
   -_MARGIN_WIDTH + _SLOPE, -_MARGIN_HEIGHT / 2,
@@ -103,7 +103,7 @@ function FocusBar:update(dt)
     for i = focus + 1, self.previous_focus do
       self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
           function()
-            PLAYSFX('focus-used')
+            PLAYSFX('focus-used', .1)
             self.explosions[i]:emit(40)
           end)
     end
