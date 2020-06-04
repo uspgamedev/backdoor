@@ -1,9 +1,10 @@
 
--- luacheck: globals love
+-- luacheck: SWITCHER GS globals love
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
+local SWITCHER    = require 'infra.switcher'
 local ACTIONDEFS  = require 'domain.definitions.action'
 
 local math        = require 'common.math'
@@ -160,7 +161,10 @@ function FocusBar:draw()
     g.setColor(COLORS.FOCUS[1], COLORS.FOCUS[2], COLORS.FOCUS[3], self.fade_in[i+1])
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     local focused_card_view = self.handview:getFocusedCard()
-    if focused_card_view and self.handview:isActive() then
+    if focused_card_view and
+      (self.handview:isActive() or
+       SWITCHER.current() == GS.PICK_DIR or
+       SWITCHER.current() == GS.PICK_TARGET) then
       local cost = focused_card_view.card:getCost()
       local alpha = a * math.min(1, (focus-i))
       if cost <= focus and i >= focus - cost then
