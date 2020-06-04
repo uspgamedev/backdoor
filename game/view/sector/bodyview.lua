@@ -14,6 +14,8 @@ local BodyView = Class {
   __includes = { ELEMENT }
 }
 
+local BLINK = { true, false, true, false, true, false }
+
 function BodyView:init(body)
   ELEMENT.init(self)
   if body.getBody then
@@ -58,6 +60,30 @@ function BodyView:moveTo(i, j, t, curve)
   self:addTimer("move_to", MAIN_TIMER, "tween", t, self, { position = target },
                 curve, function () deferred:trigger()
                                    self:removeTimer('move_to', MAIN_TIMER) end)
+  return deferred
+end
+
+function BodyView:hit(dir)
+  local offset = dir * 24
+  offset = { x = offset.x, y = offset.y }
+  local deferred = Deferred:new{}
+  self:addTimer(
+    nil, MAIN_TIMER, 'tween', 0.1, self.offset, offset, 'in-cubic',
+    function() -- after tween
+      local count = 1
+      self:addTimer(
+        nil, MAIN_TIMER, 'every', 0.075,
+        function()
+          self.invisible = BLINK[count]
+          count = count + 1
+        end,
+        #BLINK
+      )
+      self:addTimer(nil, MAIN_TIMER, 'tween', 0.4, self.offset,
+                    { x = 0, y = 0}, 'out-cubic',
+                    function() deferred:trigger() end)
+    end
+  )
   return deferred
 end
 
