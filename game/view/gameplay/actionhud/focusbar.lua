@@ -22,6 +22,7 @@ local _MARGIN_WIDTH = 60
 local _MARGIN_HEIGHT = 16
 local _PAD_HEIGHT = 32
 local _SLOPE = _HANDBAR_HEIGHT + _MARGIN_HEIGHT
+local FADE_IN_SPEED = 2
 local _PANEL_VTX = {
   -_MARGIN_WIDTH, _HANDBAR_HEIGHT / 2,
   -_MARGIN_WIDTH + _SLOPE, -_MARGIN_HEIGHT / 2,
@@ -51,6 +52,11 @@ function FocusBar:init(route, handview)
   self.route = route
   self.actor = nil
 
+  self.fade_in = {}
+  for i = 1, ACTIONDEFS.MAX_FOCUS do
+    self.fade_in[i] = 0
+  end
+
   --Emergency effect
   self.emer_fx_alpha = 0
   self.emer_fx_max = math.pi
@@ -66,6 +72,17 @@ end
 function FocusBar:update(dt)
   local _OFF_SPD = 2.5
   self.actor = self.route.getControlledActor()
+
+  --update fade-in
+  local maxfocus = ACTIONDEFS.MAX_FOCUS
+  local focus = math.floor(math.min(self.actor:getFocus(), maxfocus))
+  for i = 1, maxfocus do
+    if i <= focus then
+      self.fade_in[i] = math.min(self.fade_in[i] + FADE_IN_SPEED*dt, 1)
+    else
+      self.fade_in[i] = math.max(self.fade_in[i] - FADE_IN_SPEED*dt, 0)
+    end
+  end
 
   --update emergency effect
   self.emer_fx_alpha = self.emer_fx_alpha + self.emer_fx_speed*dt
@@ -104,22 +121,24 @@ function FocusBar:draw()
   local iw, ih = focus_icon:getDimensions()
   for i=0,maxfocus-1 do
     g.push()
+    --Draw focus blank
     g.translate(i * handbar_gap, 0)
     g.setColor(COLORS.EMPTY)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
-    if i < focus then
-      g.setColor(COLORS.FOCUS)
-      g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
-      local focused_card_view = self.handview:getFocusedCard()
-      if focused_card_view then
-        local cost = focused_card_view.card:getCost()
-        local alpha = a * math.min(1, (focus-i))
-        if cost <= focus and i >= focus - cost then
-          g.setColor(red, gre, blu, alpha)
-          g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
-        end
+
+    --Draw the focus gem
+    g.setColor(COLORS.FOCUS[1], COLORS.FOCUS[2], COLORS.FOCUS[3], self.fade_in[i+1])
+    g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+    local focused_card_view = self.handview:getFocusedCard()
+    if focused_card_view then
+      local cost = focused_card_view.card:getCost()
+      local alpha = a * math.min(1, (focus-i))
+      if cost <= focus and i >= focus - cost then
+        g.setColor(red, gre, blu, alpha*self.fade_in[i+1])
+        g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
       end
     end
+
     g.pop()
   end
   g.pop()
