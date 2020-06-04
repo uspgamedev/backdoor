@@ -24,10 +24,15 @@ function BodyView:init(body)
   self.sprite = RES.loadSprite(idle_appearance)
   self.body = body
   self.position = BodyView.tileToScreen(i, j)
+  self.offset = vec2()
 end
 
 function BodyView.tileToScreen(i, j)
   return vec2((j - 1) * VIEWDEFS.TILE_W, (i - 1) * VIEWDEFS.TILE_H)
+end
+
+function BodyView:getPosition()
+  return self.position:clone()
 end
 
 function BodyView:getScreenPosition()
@@ -39,6 +44,10 @@ end
 
 function BodyView:setPosition(i, j)
   self.position = BodyView.tileToScreen(i, j)
+end
+
+function BodyView:setOffset(offset)
+  self.offset = offset
 end
 
 function BodyView:moveTo(i, j, t, curve)
@@ -53,9 +62,11 @@ function BodyView:moveTo(i, j, t, curve)
 end
 
 function BodyView:drawAtRow(row)
-  local x = self.position.x
-  local y = self.position.y - row * VIEWDEFS.TILE_H
-  self.sprite:draw(x, y)
+  if not self.invisible then
+    local x = self.position.x + self.offset.x
+    local y = self.position.y + self.offset.y - row * VIEWDEFS.TILE_H
+    self.sprite:draw(x, y)
+  end
 end
 
 return BodyView
