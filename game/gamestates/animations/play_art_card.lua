@@ -36,8 +36,11 @@ function ANIM:script(route, view, report)
       _dissolve(cardview)
     end
   else
+    view.sector:setTempTarget(report.actor)
     local card = report.actor:getHandCard(report.card_index)
     _waitAndAnnounce(card:getName(), self.wait)
+    self.wait(delay:set(1.5))
+    view.sector:setTempTarget(nil)
   end
   delay:kill()
   return self
