@@ -6,6 +6,7 @@ local COLORS      = require 'domain.definitions.colors'
 local VIEWDEFS    = require 'view.definitions'
 local SWITCHER    = require 'infra.switcher'
 local ACTIONDEFS  = require 'domain.definitions.action'
+local PLAYSFX     = require 'helpers.playsfx'
 
 local math        = require 'common.math'
 local Class       = require "steaming.extra_libs.hump.class"
@@ -102,6 +103,7 @@ function FocusBar:update(dt)
     for i = focus + 1, self.previous_focus do
       self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
           function()
+            PLAYSFX('focus-used')
             self.explosions[i]:emit(40)
           end)
     end
