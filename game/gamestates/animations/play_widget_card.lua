@@ -68,7 +68,7 @@ function ANIM:script(route, view, report)
     ann:announce(card:getName())
     ann:unlock()
     self.wait(bodyview:act())
-    self.wait(delay:set(1.5))
+    self.wait(delay:set(1.0))
     view.sector:setTempTarget(nil)
   end
   delay:kill()
