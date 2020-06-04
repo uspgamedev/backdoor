@@ -14,6 +14,8 @@ local BodyView = Class {
   __includes = { ELEMENT }
 }
 
+local BLINK = { true, false, true, false, true, false }
+
 function BodyView:init(body)
   ELEMENT.init(self)
   if body.getBody then
@@ -24,10 +26,15 @@ function BodyView:init(body)
   self.sprite = RES.loadSprite(idle_appearance)
   self.body = body
   self.position = BodyView.tileToScreen(i, j)
+  self.offset = vec2()
 end
 
 function BodyView.tileToScreen(i, j)
   return vec2((j - 1) * VIEWDEFS.TILE_W, (i - 1) * VIEWDEFS.TILE_H)
+end
+
+function BodyView:getPosition()
+  return self.position:clone()
 end
 
 function BodyView:getScreenPosition()
@@ -41,6 +48,10 @@ function BodyView:setPosition(i, j)
   self.position = BodyView.tileToScreen(i, j)
 end
 
+function BodyView:setOffset(offset)
+  self.offset = offset
+end
+
 function BodyView:moveTo(i, j, t, curve)
   curve = curve or 'in-out-cubic'
   local deferred = Deferred:new{}
@@ -52,10 +63,36 @@ function BodyView:moveTo(i, j, t, curve)
   return deferred
 end
 
+function BodyView:hit(dir)
+  local offset = dir * 24
+  offset = { x = offset.x, y = offset.y }
+  local deferred = Deferred:new{}
+  self:addTimer(
+    nil, MAIN_TIMER, 'tween', 0.1, self.offset, offset, 'in-cubic',
+    function() -- after tween
+      local count = 1
+      self:addTimer(
+        nil, MAIN_TIMER, 'every', 0.075,
+        function()
+          self.invisible = BLINK[count]
+          count = count + 1
+        end,
+        #BLINK
+      )
+      self:addTimer(nil, MAIN_TIMER, 'tween', 0.4, self.offset,
+                    { x = 0, y = 0}, 'out-cubic',
+                    function() deferred:trigger() end)
+    end
+  )
+  return deferred
+end
+
 function BodyView:drawAtRow(row)
-  local x = self.position.x
-  local y = self.position.y - row * VIEWDEFS.TILE_H
-  self.sprite:draw(x, y)
+  if not self.invisible then
+    local x = self.position.x + self.offset.x
+    local y = self.position.y + self.offset.y - row * VIEWDEFS.TILE_H
+    self.sprite:draw(x, y)
+  end
 end
 
 return BodyView

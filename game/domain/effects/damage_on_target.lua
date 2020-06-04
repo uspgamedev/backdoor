@@ -25,8 +25,8 @@ function FX.process (actor, fieldvalues)
   local result = fieldvalues.target:takeDamageFrom(amount, actor)
 
   coroutine.yield('report', {
-    type = 'text_rise',
-    text_type = 'damage',
+    type = 'take_damage',
+    source = actor,
     body = fieldvalues['target'],
     amount = result.dmg,
     sfx = fieldvalues.sfx,

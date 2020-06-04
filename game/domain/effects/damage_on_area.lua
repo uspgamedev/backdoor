@@ -42,9 +42,9 @@ function FX.process (actor, fieldvalues)
             TILE.dist(i,j,ci,cj) <= size - 1 then
           local result = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
-            type = 'text_rise',
+            type = 'take_damage',
+            source = actor,
             body = body,
-            text_type = 'damage',
             amount = result.dmg,
           })
         end
