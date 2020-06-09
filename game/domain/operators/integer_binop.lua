@@ -12,7 +12,7 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, fieldvalues)
+function OP.process(_, fieldvalues)
   if fieldvalues.op == "+" then
     return fieldvalues.lhs + fieldvalues.rhs
   elseif fieldvalues.op == "-" then
@@ -21,12 +21,19 @@ function OP.process(actor, fieldvalues)
     return fieldvalues.lhs * fieldvalues.rhs
   elseif fieldvalues.op == "/" then
     --Handle division by zero
-    assert(fieldvalues.rhs ~= 0, "Tried to divide by zero") 
+    assert(fieldvalues.rhs ~= 0, "Tried to divide by zero")
     return math.floor(fieldvalues.lhs / fieldvalues.rhs)
   end
 
 end
 
-OP.preview = OP.process
+function OP.preview(_, fieldvalues)
+  local lhs, rhs = fieldvalues['lhs'], fieldvalues['rhs']
+  if type(lhs) == 'number' and type(rhs) == 'number' then
+    return OP.process(_, fieldvalues)
+  else
+    return tostring(lhs) .. ' ' .. fieldvalues['op'] .. ' ' .. tostring(rhs)
+  end
+end
 
 return OP
