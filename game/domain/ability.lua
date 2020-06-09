@@ -16,6 +16,20 @@ end
 
 local ABILITY = {}
 
+function ABILITY.allOperationsAndEffects()
+  local t = {}
+  local n = 1
+  for _,option in DB.subschemaTypes('operators') do
+    t[n] = option
+    n = n + 1
+  end
+  for _,option in DB.subschemaTypes('effects') do
+    t[n] = option
+    n = n + 1
+  end
+  return t
+end
+
 function ABILITY.inputsOf(ability)
   return ipairs(ability.inputs)
 end
