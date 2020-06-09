@@ -13,8 +13,8 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
-  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
-  return ("Heal %s hit points for %s"):format(amount, fieldvalues['target'])
+  return ("Heal %d + %2d%% %s hit points for %s"):format(base, mod, attr,
+                                                         fieldvalues['target'])
 end
 
 function FX.process(_, fieldvalues)

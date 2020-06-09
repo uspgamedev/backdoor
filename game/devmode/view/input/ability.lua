@@ -1,4 +1,5 @@
 
+local ABILITY     = require 'domain.ability'
 local IMGUI       = require 'imgui'
 local DB          = require 'database'
 local IDGenerator = require 'common.idgenerator'
@@ -18,6 +19,23 @@ local _CMDTYPES = {
 local _idgen = IDGenerator()
 
 local AbilityEditor = class:new()
+
+local function _split(str, max_line_length)
+   local lines = {}
+   local line
+   str:gsub('(%s*)(%S+)',
+      function(spc, word)
+         if not line or #line + #spc + #word > max_line_length then
+            table.insert(lines, line)
+            line = word
+         else
+            line = line..spc..word
+         end
+      end
+   )
+   table.insert(lines, line)
+   return lines
+end
 
 function AbilityEditor:instance(obj, _elementspec, _fieldschema)
 
@@ -113,7 +131,17 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
         _commandList(gui, cmdtype)
       end
       _elementspec[_fieldschema.id] = _ability
-      IMGUI.Unindent(20)
+      IMGUI.Text("Preview")
+      IMGUI.Indent(20)
+      IMGUI.PushItemWidth(360)
+      local descr = ABILITY.preview(_ability, {}, {})
+      local text = ""
+      for _, line in ipairs(_split(descr, 40)) do
+        text = text .. line .. "\n"
+      end
+      IMGUI.InputTextMultiline("", text, 1024, 0, 0, { "ReadOnly" })
+      IMGUI.PopItemWidth()
+      IMGUI.Unindent(40)
     end
   end
 

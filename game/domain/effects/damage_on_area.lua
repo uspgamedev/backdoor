@@ -16,13 +16,13 @@ FX.schema = {
 
 function FX.preview (_, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
-  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
   local size = fieldvalues['size'] - 1
   if size > 0 then
-    return ("Deal %s damage on a %s-radius area around %s")
-           :format(amount, size, fieldvalues['center'])
+    return ("Deal %d + %2d%% %s damage on a %s-radius area around %s")
+           :format(base, mod, attr, size, fieldvalues['center'])
   else
-    return ("Deal %s damage at %s"):format(amount, fieldvalues['center'])
+    return ("Deal %d + %2d%% %s damage at %s"):format(base, mod, attr,
+                                                      fieldvalues['center'])
   end
 end
 
