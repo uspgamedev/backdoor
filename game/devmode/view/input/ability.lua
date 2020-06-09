@@ -53,7 +53,6 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
 
   local function _commandList(gui, cmdtype)
 
-    local result
     local cmdoptions = {}
     local cmdtypes = {}
 
