@@ -12,6 +12,9 @@ FX.schema = {
   { id = 'mod', name = "%Mod", type = 'integer', range = {1,10000},
     default = 100 },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
+  { id = 'sfx', name = "SFX", type = 'enum',
+    options = 'resources.sfx',
+    optional = true },
 }
 
 function FX.preview (_, fieldvalues)
@@ -46,6 +49,7 @@ function FX.process (actor, fieldvalues)
             source = actor,
             body = body,
             amount = result.dmg,
+            sfx = fieldvalues['sfx'],
           })
         end
       end

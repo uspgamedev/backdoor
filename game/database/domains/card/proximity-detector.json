@@ -18,6 +18,7 @@
             "center":"=pos",
             "mod":100,
             "name":"damage_on_area",
+            "sfx":"attack-hit",
             "size":2,
             "type":"effect",
             "ignore_owner":false

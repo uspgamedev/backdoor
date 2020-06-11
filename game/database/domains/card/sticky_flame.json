@@ -13,9 +13,9 @@
             "base":1,
             "mod":100,
             "name":"damage_on_target",
+            "sfx":"attack-hit",
             "target":"=body_self",
-            "type":"effect",
-            "sfx":false
+            "type":"effect"
           }],
         "inputs":[{
             "name":"body",
