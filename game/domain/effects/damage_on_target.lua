@@ -13,10 +13,12 @@ FX.schema = {
     optional = true },
 }
 
-function FX.preview (_, fieldvalues)
+function FX.preview (actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
-  return ("Deal %d + %2d%% %s damage to %s"):format(base, mod, attr,
-                                                    fieldvalues.target)
+  local attr_value = actor.getAttribute and actor:getAttribute(attr) or 3
+  local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
+  return ("Deal %d (%d + %2d%% %s) damage to %s")
+          :format(amount, base, mod, attr, fieldvalues.target)
 end
 
 function FX.process (actor, fieldvalues)

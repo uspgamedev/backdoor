@@ -17,15 +17,17 @@ FX.schema = {
     optional = true },
 }
 
-function FX.preview (_, fieldvalues)
+function FX.preview (actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
+  local attr_value = actor.getAttribute and actor:getAttribute(attr) or 3
+  local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
   local size = fieldvalues['size'] - 1
   if size > 0 then
-    return ("Deal %d + %2d%% %s damage on a %s-radius area around %s")
-           :format(base, mod, attr, size, fieldvalues['center'])
+    return ("Deal %d (%d + %2d%% %s) damage on a %s-radius area around %s")
+           :format(amount, base, mod, attr, size, fieldvalues['center'])
   else
-    return ("Deal %d + %2d%% %s damage at %s"):format(base, mod, attr,
-                                                      fieldvalues['center'])
+    return ("Deal %d (%d + %2d%% %s) damage at %s")
+           :format(amount, base, mod, attr, fieldvalues['center'])
   end
 end
 
