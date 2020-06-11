@@ -24,7 +24,8 @@ function Particles:init(args)
   self.particles:setColors(args.colors and unpack(args.colors) or unpack{COLORS.NEUTRAL, COLORS.TRANSP})
   self.particles:setSizes(args.sizes or 4)
   self.particles:setEmissionRate(args.emission_rate or 30)
-  self.particles:setEmissionArea(args.emission_area and unpack(args.emission_area) or unpack{'ellipse', 0, 0, 0, false})
+  local emission = args.emission_area  or {'ellipse', 0, 0, 0, false}
+  self.particles:setEmissionArea(unpack(emission))
   self.particles:setTangentialAcceleration(args.tangential_acceleration or -512)
   self.pos = args.position or vec2()
 
@@ -35,7 +36,6 @@ function Particles:init(args)
       function()
         self:destroy()
       end)
-  end
 end
 
 function Particles:update(dt)

@@ -13,10 +13,10 @@
       "card":"old-laddle"
     },{
       "amount":4,
-      "card":"sidestep"
+      "card":"heal"
     },{
       "amount":4,
-      "card":"strike"
+      "card":"heal"
     }],
   "name":"Brawler",
   "signature":"tackle",

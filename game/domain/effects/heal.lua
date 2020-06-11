@@ -25,12 +25,10 @@ function FX.process(_, fieldvalues)
   local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
   local effective_amount = target:heal(amount)
   coroutine.yield('report', {
-    type = 'text_rise',
-    text_type = 'heal',
+    type = 'heal',
     body = target,
     amount = effective_amount,
   })
 end
 
 return FX
-
