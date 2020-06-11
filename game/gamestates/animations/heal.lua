@@ -23,7 +23,17 @@ function ANIM:script(_, view, report)
     local x, y = bodyview:getScreenPosition():unpack()
     local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
     PARTICLES({
-      position = vec2(x + w/2, y + h/2 - VIEWDEFS.TILE_H/2)
+      position = vec2(x + w/2, y + h/2),
+      colors = {COLORS.TRANSP, COLORS.SUCCESS, COLORS.SUCCESS, COLORS.TRANSP},
+      emission_area = {"uniform", 20, 2, 0, false},
+      emmision_rate = 10,
+      number = 15,
+      max_number = 30,
+      sizes = 3,
+      lifetime = .9,
+      spread = 0,
+      direction = 3*math.pi/2,
+      duration = 1
     })
     if report.sfx then PLAYSFX(report.sfx) end
     RisingText(bodyview, heal_text, COLORS.SUCCESS):play()
