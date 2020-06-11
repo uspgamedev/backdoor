@@ -8,6 +8,7 @@ FX.schema = {
   { id = 'attr', name = "Scaling Factor", type = 'value', match = 'integer' },
   { id = 'mod', name = "%Mod", type = 'integer', default = 100,
     range = {1,10000} },
+  { id = 'projectile', name = "Is projectile?", type = 'boolean' },
   { id = 'sfx', name = "SFX", type = 'enum',
     options = 'resources.sfx',
     optional = true },
@@ -25,6 +26,14 @@ function FX.process (actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
   local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
   local result = fieldvalues.target:takeDamageFrom(amount, actor)
+
+  if fieldvalues['projectile'] then
+    coroutine.yield('report', {
+      type = 'projectile',
+      actor = actor,
+      target = { fieldvalues['target']:getPos() },
+    })
+  end
 
   coroutine.yield('report', {
     type = 'take_damage',

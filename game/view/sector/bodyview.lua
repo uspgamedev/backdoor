@@ -33,6 +33,10 @@ function BodyView.tileToScreen(i, j)
   return vec2((j - 1) * VIEWDEFS.TILE_W, (i - 1) * VIEWDEFS.TILE_H)
 end
 
+function BodyView.tileDiffToScreen(di, dj)
+  return vec2(dj * VIEWDEFS.TILE_W, di * VIEWDEFS.TILE_H)
+end
+
 function BodyView:getPosition()
   return self.position:clone()
 end

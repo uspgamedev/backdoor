@@ -12,6 +12,7 @@ FX.schema = {
   { id = 'mod', name = "%Mod", type = 'integer', range = {1,10000},
     default = 100 },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
+  { id = 'projectile', name = "Is projectile?", type = 'boolean' },
   { id = 'sfx', name = "SFX", type = 'enum',
     options = 'resources.sfx',
     optional = true },
@@ -40,6 +41,13 @@ function FX.process (actor, fieldvalues)
   local mod     = fieldvalues['mod']
   local ignore_owner = fieldvalues['ignore_owner']
   local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
+  if fieldvalues['projectile'] then
+    coroutine.yield('report', {
+      type = 'projectile',
+      actor = actor,
+      target = { ci, cj },
+    })
+  end
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
