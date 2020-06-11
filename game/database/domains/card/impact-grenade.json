@@ -7,8 +7,10 @@
           "center":"=target_pos",
           "mod":100,
           "name":"damage_on_area",
+          "projectile":true,
           "size":2,
-          "type":"effect"
+          "type":"effect",
+          "sfx":false
         }],
       "inputs":[{
           "aoe-hint":2,

@@ -6,6 +6,7 @@
           "base":0,
           "mod":50,
           "name":"damage_on_target",
+          "projectile":true,
           "sfx":"attack-hit",
           "target":"=body",
           "type":"effect"
