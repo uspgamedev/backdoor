@@ -1,6 +1,5 @@
 
 local IMGUI = require 'imgui'
-local DB = require 'database'
 local class = require 'lux.class'
 
 local setfenv = setfenv
@@ -9,14 +8,16 @@ local ipairs = ipairs
 local pairs = pairs
 local require = require
 local type = type
+local tostring = tostring
 
 local OutputEditor = class:new()
 
+-- luacheck: no self
 function OutputEditor:instance(obj, _elementspec, _fieldschema)
 
   setfenv(1, obj)
 
-  function input(gui)
+  function input(_) -- luacheck: no global
     IMGUI.PushID(_fieldschema.id)
     IMGUI.Text(_fieldschema.name)
     local value, changed = IMGUI.InputText("", _elementspec[_fieldschema.id]
@@ -27,7 +28,7 @@ function OutputEditor:instance(obj, _elementspec, _fieldschema)
     IMGUI.PopID()
   end
 
-  function __operator:call(gui)
+  function __operator:call(gui) -- luacheck: no global
     return obj.input(gui)
   end
 end
@@ -42,11 +43,11 @@ function ValueEditor:instance(obj, _elementspec, _fieldschema, _parent)
   local inputStr = require 'devmode.view.helpers.string'
 
   local function _appendRefs(from, to, match)
-    for k,item in pairs(from) do
+    for _,item in pairs(from) do
       if item == _elementspec then return false end
       local t = require(('domain.%ss.%s'):format(item.type, item.name)).type
       if not t or t == match then
-        table.insert(to, "=" .. item.output)
+        table.insert(to, "=" .. tostring(item.output))
       end
     end
     return true
@@ -55,6 +56,7 @@ function ValueEditor:instance(obj, _elementspec, _fieldschema, _parent)
   local function _getRefs()
     local refs = {}
     _appendRefs(_parent.inputs, refs, _fieldschema.match)
+    _appendRefs(_parent.effects, refs, _fieldschema.match)
     local idx = 0
     for i,ref in ipairs(refs) do
       if ref == _elementspec[_fieldschema.id] then
@@ -80,7 +82,7 @@ function ValueEditor:instance(obj, _elementspec, _fieldschema, _parent)
     _use_ref = false
   end
 
-  function input(gui)
+  function input(_) -- luacheck: no global
     IMGUI.PushID(_fieldschema.id)
     IMGUI.Text(_fieldschema.name)
     local changed
@@ -102,12 +104,12 @@ function ValueEditor:instance(obj, _elementspec, _fieldschema, _parent)
 
     if _fieldschema.match == 'integer' or _fieldschema.match == 'string' then
       IMGUI.SameLine()
-      _use_ref, changed = IMGUI.Checkbox("Ref##".._fieldschema.id, _use_ref)
+      _use_ref, _ = IMGUI.Checkbox("Ref##".._fieldschema.id, _use_ref)
     end
     IMGUI.PopID()
   end
 
-  function __operator:call(gui)
+  function __operator:call(gui) -- luacheck: no global
     return obj.input(gui)
   end
 end
