@@ -19,6 +19,7 @@
             "type":"effect"
           }],
         "inputs":[{
+            "description":"your position",
             "name":"pos",
             "output":"pos_self",
             "type":"input"
