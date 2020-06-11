@@ -67,7 +67,7 @@ local function _renderAttribute(actor, attrname, particles)
       offset = offset - step
       progress = 0
       particles:emit(48)
-      PLAYSFX('get-item')
+      PLAYSFX('get-item', .1)
       local start = 0
       local rand = RANDOM.safeGenerate
       while start <= 0.5 do
@@ -131,7 +131,7 @@ function ATTR.draw(g, actor, attrname)
     g.setColor(COLORS.EMPTY)
   end
   g.rectangle("fill", 0, 0, _barwidth, 16)
-  if not rise then 
+  if not rise then
     g.setColor(COLORS[attrname])
   end
   g.rectangle("fill", 0, 0, percent*_barwidth, 16)
@@ -142,4 +142,3 @@ function ATTR.draw(g, actor, attrname)
 end
 
 return ATTR
-

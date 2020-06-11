@@ -102,17 +102,17 @@ function state:update(dt)
 
   if not _locked then
     if INPUT.wasActionPressed('CONFIRM') then
-      PLAYSFX 'ok-menu'
+      PLAYSFX('ok-menu', .05)
       MENU.confirm()
     elseif INPUT.wasActionPressed('CANCEL') or
            INPUT.wasActionPressed('QUIT') then
-      PLAYSFX 'back-menu'
+      PLAYSFX('back-menu', .05)
       MENU.cancel()
     elseif DIRECTIONALS.wasDirectionTriggered('UP') then
-      PLAYSFX 'select-menu'
+      PLAYSFX('select-menu', .1)
       MENU.prev()
     elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-      PLAYSFX 'select-menu'
+      PLAYSFX('select-menu', .1)
       MENU.next()
     end
   end
@@ -172,7 +172,7 @@ function state:update(dt)
               local route_data = PROFILE.loadRoute(route_id)
               _activity:changeState('switch', GS.PLAY, route_data)
             else
-              PLAYSFX 'denied'
+              PLAYSFX('denied', .05)
             end
           end
         end

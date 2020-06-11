@@ -148,10 +148,10 @@ end
 
 local function _playSFX(target, extra)
   if not target or not target.fov or not extra.body then
-    PLAYSFX(extra.sfx)
+    PLAYSFX(extra.sfx, .03)
   else
     if target:canSee(extra.body) then
-      PLAYSFX(extra.sfx)
+      PLAYSFX(extra.sfx, .03)
     end
   end
 end

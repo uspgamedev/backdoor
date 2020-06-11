@@ -109,7 +109,7 @@ function state:update(_)
   end
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
-    PLAYSFX 'back-menu'
+    PLAYSFX('back-menu', .05)
     SWITCHER.pop({
       consumed = {},
       pack = nil,
@@ -117,7 +117,7 @@ function state:update(_)
     })
   elseif _status == "choosing_card" and
          (_leave or _card_list_view:isReadyToLeave()) then
-    PLAYSFX 'back-menu'
+    PLAYSFX('back-menu', .05)
     local consume_log = _card_list_view:getConsumeLog()
     _consumeCards(consume_log)
     SWITCHER.pop({
