@@ -6,9 +6,9 @@
           "base":6,
           "mod":30,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=target-body",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         }],
       "inputs":[{
           "aoe-hint":1,

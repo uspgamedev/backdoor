@@ -7,6 +7,7 @@
           "center":"=target_pos",
           "mod":100,
           "name":"damage_on_area",
+          "sfx":"attack-hit",
           "size":1,
           "type":"effect",
           "ignore_owner":false

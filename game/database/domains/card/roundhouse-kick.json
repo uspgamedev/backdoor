@@ -8,6 +8,7 @@
           "ignore_owner":true,
           "mod":60,
           "name":"damage_on_area",
+          "sfx":"attack-hit",
           "size":2,
           "type":"effect"
         }],

@@ -6,25 +6,25 @@
           "base":5,
           "mod":25,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=t1",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         },{
           "attr":"=cor",
           "base":5,
           "mod":25,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=t2",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         },{
           "attr":"=cor",
           "base":5,
           "mod":25,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=t3",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         }],
       "inputs":[{
           "body-only":{

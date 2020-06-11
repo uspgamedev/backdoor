@@ -6,9 +6,9 @@
           "base":7,
           "mod":20,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=target-body",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         }],
       "inputs":[{
           "body-only":{
