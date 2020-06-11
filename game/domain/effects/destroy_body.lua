@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.preview()
-  return "Destroy target body"
+  return "destroy target body"
 end
 
 function FX.process (actor, fieldvalues)

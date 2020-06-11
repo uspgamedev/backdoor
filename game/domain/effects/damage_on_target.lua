@@ -17,7 +17,7 @@ function FX.preview (actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
   local attr_value = actor.getAttribute and actor:getAttribute(attr) or 3
   local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
-  return ("Deal %d (%d + %2d%% %s) damage to %s")
+  return ("deal %d (%d + %2d%% %s) damage to %s")
           :format(amount, base, mod, attr, fieldvalues.target)
 end
 

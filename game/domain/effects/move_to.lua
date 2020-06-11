@@ -14,7 +14,7 @@ FX.schema = {
 }
 
 function FX.preview(_, fieldvalues)
-  return ("Move %s to position %s"):format(fieldvalues['body'],
+  return ("move %s to position %s"):format(fieldvalues['body'],
                                            fieldvalues['pos'])
 end
 

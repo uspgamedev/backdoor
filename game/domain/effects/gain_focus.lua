@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.preview(_, fieldvalues)
-  return ("Gain %s Focus"):format(fieldvalues['amount'])
+  return ("gain %s Focus"):format(fieldvalues['amount'])
 end
 
 function FX.process (actor, fieldvalues)
