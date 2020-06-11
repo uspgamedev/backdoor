@@ -75,27 +75,23 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
   return true, values
 end
 
-local function _matches(actor, name, static_ability, field_values, applied,
-                        values)
+local function _matches(actor, static_ability, field_values, applied)
   local ability = static_ability['replacement-ability']
-  if (not applied or not applied[ability]) and static_ability['op'] == name then
-    local ok, new_values = ABILITY.checkInputs(ability, actor, field_values)
-    if ok then
-      for k,v in pairs(new_values) do
-        values[k] = v
-      end
-      return ok
-    end
+  if (not applied or not applied[ability]) then
+    return ABILITY.checkInputs(ability, actor, field_values)
   end
   return false
 end
 
-local function _getMatchedAbilities(actor, name, field_values, applied, values)
+local function _getMatchedAbilities(actor, name, field_values, applied)
   for _, widget in actor:getBody():eachWidget() do
     for _, static_ability in widget:getStaticAbilities() do
-      if _matches(actor, name, static_ability, field_values, applied,
-                  values) then
-        return static_ability['replacement-ability']
+      if static_ability['op'] == name then
+        local ok, new_values = _matches(actor, static_ability, field_values,
+                                        applied)
+        if ok then
+          return static_ability['replacement-ability'], new_values
+        end
       end
     end
   end
@@ -136,12 +132,14 @@ function ABILITY.execute(ability, actor, inputvalues)
         -- Grab abilities that might have expanded this command
         local applied_abilities = applied[cmd]
         -- Check if any ability on the actor replaces the command
-        local expanded_ability = _getMatchedAbilities(actor, name,
-                                                      unrefd_field_values,
-                                                      applied_abilities,
-                                                      values)
+        local expanded_ability, new_values =
+          _getMatchedAbilities(actor, name, unrefd_field_values,
+                               applied_abilities)
         -- In which case, we expand its effects
         if expanded_ability then
+          for k, v in pairs(new_values) do
+            values[k] = v
+          end
           for i, expanded_cmd in ipairs(expanded_ability['effects']) do
             -- Insert in the front side of the deque
             table.insert(deque, i, expanded_cmd)
