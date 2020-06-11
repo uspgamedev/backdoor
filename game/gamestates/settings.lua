@@ -59,27 +59,27 @@ end
 
 function state:update(dt)
   if INPUT.wasActionPressed("CONFIRM") then
-    PLAYSFX 'ok-menu'
+    PLAYSFX('ok-menu', .05)
     _save = true
     SWITCHER.pop()
   elseif INPUT.wasActionPressed("CANCEL")
       or INPUT.wasActionPressed("PAUSE") then
-    PLAYSFX 'back-menu'
+    PLAYSFX('back-menu', .05)
     _save = false
     SWITCHER.pop()
   elseif DIRECTIONALS.wasDirectionTriggered("UP") then
-    PLAYSFX 'select-menu'
+    PLAYSFX('select-menu', .1)
     _selection = (_selection - 2 + _fieldcount) % _fieldcount + 1
     _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("DOWN") then
-    PLAYSFX 'select-menu'
+    PLAYSFX('select-menu', .1)
     _selection = (_selection % _fieldcount) + 1
     _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("LEFT") then
-    PLAYSFX 'ok-menu'
+    PLAYSFX('ok-menu', .05)
     _changeField(_fields[_selection], -1)
   elseif DIRECTIONALS.wasDirectionTriggered("RIGHT") then
-    PLAYSFX 'ok-menu'
+    PLAYSFX('ok-menu', .05)
     _changeField(_fields[_selection], 1)
   end
 

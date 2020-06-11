@@ -71,7 +71,7 @@ function state:update(_)
     return
   end
   if _leave then
-    PLAYSFX 'back-menu'
+    PLAYSFX('back-menu', .05)
     SWITCHER.pop({})
   elseif _card_list_view:isReadyToLeave() then
     local consume_log = _card_list_view:getConsumeLog()
