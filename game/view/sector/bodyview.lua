@@ -63,6 +63,31 @@ function BodyView:moveTo(i, j, t, curve)
   return deferred
 end
 
+function BodyView:offsetTo(target, t, tag)
+  local deferred = Deferred:new{}
+  assert(not self:getTimer(tag, MAIN_TIMER))
+  self:addTimer(
+    tag, MAIN_TIMER, "tween", t, self, { offset = target },
+    'in-out-cubic',
+    function ()
+      deferred:trigger()
+      self:removeTimer(tag, MAIN_TIMER)
+    end
+  )
+  return deferred
+end
+
+function BodyView:jump(t)
+  local _, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
+  local target = vec2(0, -h)
+  return self:offsetTo(target, t, 'jump')
+end
+
+function BodyView:fall(t)
+  local target = vec2(0, 0)
+  return self:offsetTo(target, t, 'fall')
+end
+
 function BodyView:hit(dir)
   local offset = dir * 24
   offset = { x = offset.x, y = offset.y }

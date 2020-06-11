@@ -7,7 +7,7 @@
           "pos":"=pos",
           "type":"effect",
           "vfx":"SLIDE",
-          "vfx-spd":1,
+          "vfx-spd":4,
           "sfx":false
         },{
           "attr":"=cor",
