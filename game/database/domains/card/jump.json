@@ -6,7 +6,8 @@
           "name":"move_to",
           "pos":"=target_pos",
           "type":"effect",
-          "vfx":"SLIDE",
+          "vfx":"JUMP",
+          "vfx-spd":4,
           "sfx":false
         },{
           "attr":"=cor",
