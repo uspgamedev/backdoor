@@ -97,9 +97,24 @@ local function _getMatchedAbilities(actor, name, field_values, applied)
   end
 end
 
+local function _joinAppliedAbilities(current_ability, previous_abilities)
+  local apply = {}
+  apply[current_ability] = true
+  for k, v in pairs(previous_abilities or {}) do
+    apply[k] = v
+  end
+  return apply
+end
+
 local _CMDLISTS = { 'inputs', 'effects' }
 local _CMDMAP = { operator = OP, effect = FX }
 
+-- TODO:
+--  + Multiple instances of an ability apply at most once
+--  + Expanded ability can only import integer and string values from matching
+--    command
+--  + Do something about ability previews
+--  + Implement queries?
 function ABILITY.execute(ability, actor, inputvalues)
   -- Register map of values computed by inputs, operators, and effects
   local values = {}
@@ -147,14 +162,8 @@ function ABILITY.execute(ability, actor, inputvalues)
             -- Insert in the front side of the deque
             table.insert(deque, i, expanded_cmd)
             -- Mark as applied to avoid endless recursion
-            local apply = {}
-            apply[expanded_ability] = true
-            if applied_abilities then
-              for k, v in pairs(applied_abilities) do
-                apply[k] = v
-              end
-            end
-            applied[expanded_cmd] = apply
+            applied[expanded_cmd] = _joinAppliedAbilities(expanded_ability,
+                                                          applied_abilities)
             redirect[expanded_cmd] = cmd['output']
           end
         -- If the command is not expanded, process it normally.
