@@ -108,6 +108,9 @@ function ABILITY.execute(ability, actor, inputvalues)
   --    if and only if
   --  cmd derived from an expansion of ability
   local applied = {}
+  -- Output redirection map, used to send expanded values into the
+  -- corresponding fields of the original command
+  local redirect = {}
   -- First iterate over input commands, then effect commands
   for _,cmdlist in ipairs(_CMDLISTS) do
     -- Use a deque to store commands so we can "expand" them when a replacement
@@ -145,14 +148,14 @@ function ABILITY.execute(ability, actor, inputvalues)
             table.insert(deque, i, expanded_cmd)
             -- Mark as applied to avoid endless recursion
             local apply = {}
-            apply[expanded_ability] = cmd['output'] or true
-            apply[true] = cmd['output'] or true
+            apply[expanded_ability] = true
             if applied_abilities then
               for k, v in pairs(applied_abilities) do
                 apply[k] = v
               end
             end
             applied[expanded_cmd] = apply
+            redirect[expanded_cmd] = cmd['output']
           end
         -- If the command is not expanded, process it normally.
         else
@@ -168,9 +171,9 @@ function ABILITY.execute(ability, actor, inputvalues)
         -- However, if that value has an output named "result" and this command
         -- came from an expanded ability, then the value is redirected to the
         -- output of the command that caused the expansion.
-        if cmd.output == 'result' and applied[cmd][true] then
-          local expanded_output = applied[cmd][true]
-          values[expanded_output] = value
+        if cmd.output == 'result' and redirect[cmd] then
+          local redirected_output = redirect[cmd]
+          values[redirected_output] = value
         else
           values[cmd.output] = value
         end
