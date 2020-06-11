@@ -35,6 +35,44 @@
     },
     "charges":12,
     "operators":[],
+    "static":[{
+        "op":"damage_on_target",
+        "replacement-ability":{
+          "effects":[{
+              "attr":"=attr",
+              "base":"=base+2",
+              "mod":"=mod",
+              "name":"damage_on_target",
+              "sfx":"attack-hit",
+              "target":"=target",
+              "type":"effect"
+            }],
+          "inputs":[{
+              "name":"integer",
+              "output":"base",
+              "type":"input"
+            },{
+              "name":"integer",
+              "output":"mod",
+              "type":"input"
+            },{
+              "name":"integer",
+              "output":"attr",
+              "type":"input"
+            },{
+              "name":"body",
+              "output":"target",
+              "type":"input"
+            },{
+              "lhs":"=base",
+              "name":"integer_binop",
+              "op":"+",
+              "output":"base+2",
+              "rhs":2,
+              "type":"operator"
+            }]
+        }
+      }],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":"on_turn"

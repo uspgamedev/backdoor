@@ -117,6 +117,10 @@ function Card:getWidgetTriggerCondition()
   return self:getSpec('widget')['trigger-condition']
 end
 
+function Card:getStaticAbilities()
+  return ipairs(self:getSpec('widget')['static'] or {})
+end
+
 function Card:getStaticOperators()
   return ipairs(self:getSpec('widget')['operators'] or {})
 end

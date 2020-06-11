@@ -9,6 +9,7 @@ FX.schema = {
   { id = 'sfx', name = "SFX", type = 'enum',
     options = 'resources.sfx',
     optional = true },
+  { id = 'output', name = "Label", type = 'output' }
 }
 
 function FX.preview (_, fieldvalues)

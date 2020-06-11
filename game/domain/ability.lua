@@ -57,8 +57,8 @@ end
 function ABILITY.checkInputs(ability, actor, inputvalues)
   local values = {}
   for _,cmd in ipairs(ability.inputs) do
+    local unrefd_field_values = _unrefFieldValues(cmd, values)
     if cmd.type == 'input' then
-      local unrefd_field_values = _unrefFieldValues(cmd, values)
       local inputspec = IN[cmd.name]
       if inputspec.isValid(actor, unrefd_field_values,
                            inputvalues[cmd.output]) then
@@ -68,33 +68,114 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
       else
         return false
       end
+    elseif cmd.type == 'operator' then
+      values[cmd.output] = OP[cmd.name].process(actor, unrefd_field_values)
     end
   end
-  return true
+  return true, values
+end
+
+local function _matches(actor, name, static_ability, field_values, applied,
+                        values)
+  local ability = static_ability['replacement-ability']
+  if (not applied or not applied[ability]) and static_ability['op'] == name then
+    local ok, new_values = ABILITY.checkInputs(ability, actor, field_values)
+    if ok then
+      for k,v in pairs(new_values) do
+        values[k] = v
+      end
+      return ok
+    end
+  end
+  return false
+end
+
+local function _getMatchedAbilities(actor, name, field_values, applied, values)
+  for _, widget in actor:getBody():eachWidget() do
+    for _, static_ability in widget:getStaticAbilities() do
+      if _matches(actor, name, static_ability, field_values, applied,
+                  values) then
+        return static_ability['replacement-ability']
+      end
+    end
+  end
 end
 
 local _CMDLISTS = { 'inputs', 'effects' }
+local _CMDMAP = { operator = OP, effect = FX }
 
 function ABILITY.execute(ability, actor, inputvalues)
+  -- Register map of values computed by inputs, operators, and effects
   local values = {}
+  -- Matrix of abilities already applied to commands:
+  --  applied[cmd][ability] == true
+  --    if and only if
+  --  cmd derived from an expansion of ability
+  local applied = {}
+  -- First iterate over input commands, then effect commands
   for _,cmdlist in ipairs(_CMDLISTS) do
+    -- Use a deque to store commands so we can "expand" them when a replacement
+    -- effect occurs
+    local deque = {}
     for _,cmd in ipairs(ability[cmdlist]) do
-      local value
+      table.insert(deque, cmd)
+    end
+    -- Keep executing until the deque finishes
+    while #deque > 0 do
+      local cmd = table.remove(deque, 1)
       local type, name = cmd.type, cmd.name
+      local value
+      -- Input commands just retrieve the value provided from elsewhere
+      -- (e.g. a target selected by the user)
       if type == 'input' then
         value = inputvalues[cmd.output]
-      else
+      -- Operator and effect commands can be replaced by static abilities
+      elseif type == 'operator' or type == 'effect' then
+        -- Map previous values to the command's input
         local unrefd_field_values = _unrefFieldValues(cmd, values)
-        if type == 'operator' then
-          value = OP[name].process(actor, unrefd_field_values)
-        elseif type == 'effect' then
-          value = FX[name].process(actor, unrefd_field_values)
+        -- Grab abilities that might have expanded this command
+        local applied_abilities = applied[cmd]
+        -- Check if any ability on the actor replaces the command
+        local expanded_ability = _getMatchedAbilities(actor, name,
+                                                      unrefd_field_values,
+                                                      applied_abilities,
+                                                      values)
+        -- In which case, we expand its effects
+        if expanded_ability then
+          for i, expanded_cmd in ipairs(expanded_ability['effects']) do
+            -- Insert in the front side of the deque
+            table.insert(deque, i, expanded_cmd)
+            -- Mark as applied to avoid endless recursion
+            local apply = {}
+            apply[expanded_ability] = cmd['output'] or true
+            apply[true] = cmd['output'] or true
+            if applied_abilities then
+              for k, v in pairs(applied_abilities) do
+                apply[k] = v
+              end
+            end
+            applied[expanded_cmd] = apply
+          end
+        -- If the command is not expanded, process it normally.
         else
-          return error("Invalid command type")
+          local process = _CMDMAP[type][name].process
+          value = process(actor, unrefd_field_values)
         end
+      else
+        return error("Invalid command type")
       end
+      -- The resulting value is stored in the register "values" if an output
+      -- is specified.
       if cmd.output then
-        values[cmd.output] = value
+        -- However, if that value has an output named "result" and this command
+        -- came from an expanded ability, then the value is redirected to the
+        -- output of the command that caused the expansion.
+        if cmd.output == 'result' and applied[cmd][true] then
+          local expanded_output = applied[cmd][true]
+          values[expanded_output] = value
+        else
+          values[cmd.output] = value
+        end
       end
     end
   end
