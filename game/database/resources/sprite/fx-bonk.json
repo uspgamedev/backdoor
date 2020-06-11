@@ -1,0 +1,21 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":50
+    },{
+      "quad_idx":2,
+      "time":50
+    },{
+      "quad_idx":3,
+      "time":50
+    },{
+      "quad_idx":4,
+      "time":50
+    },{
+      "quad_idx":5,
+      "time":50
+    }],
+  "offset":[40,40],
+  "quad_division":[5,1],
+  "texture":"fx-bonk"
+}

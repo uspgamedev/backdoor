@@ -1,13 +1,12 @@
 --DEPENDENCIES--
-local DB = require 'database'
 local Class = require "steaming.extra_libs.hump.class"
 local ELEMENT = require "steaming.classes.primitives.element"
 
 --?????--
 local floor = math.floor
 local min = math.min
-local delta = love.timer.getDelta
-local g = love.graphics
+local delta = love.timer.getDelta -- luacheck: globals love
+local g = love.graphics           -- luacheck: globals love
 
 
 --LOCAL VARS--
@@ -86,12 +85,12 @@ function Sprite:getDimensions()
 end
 
 function Sprite:getWidth()
-  local w, h = self:getDimensions()
+  local w, _ = self:getDimensions()
   return w
 end
 
 function Sprite:getHeight()
-  local w, h = self:getDimensions()
+  local _, h = self:getDimensions()
   return h
 end
 
@@ -115,6 +114,12 @@ end
 
 function Sprite:clearDecorator()
   self.decor = false
+end
+
+function Sprite:isAnimationFinished()
+  return not self.animation.loop
+     and self.frame == self.animation.framecount
+     and self.timecount >= self.animation.frames[self.frame].time
 end
 
 function Sprite:draw(...)
