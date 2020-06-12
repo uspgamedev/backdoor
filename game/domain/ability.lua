@@ -75,9 +75,14 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
   return true, values
 end
 
-local function _matches(actor, static_ability, field_values, applied)
-  local ability = static_ability['replacement-ability']
-  if (not applied or not applied[ability]) then
+local function _hashExpansion(match)
+  local hash = tostring(match.ability) .. tostring(match.source)
+  return hash
+end
+
+local function _matches(actor, match, field_values, applied)
+  local ability = match.ability
+  if (not applied or not applied[_hashExpansion(match)]) then
     return ABILITY.checkInputs(ability, actor, field_values)
   end
   return false
@@ -87,19 +92,22 @@ local function _getMatchedAbilities(actor, name, field_values, applied)
   for _, widget in actor:getBody():eachWidget() do
     for _, static_ability in widget:getStaticAbilities() do
       if static_ability['op'] == name then
-        local ok, new_values = _matches(actor, static_ability, field_values,
-                                        applied)
+        local match = {
+          ability = static_ability['replacement-ability'],
+          source = widget
+        }
+        local ok, new_values = _matches(actor, match, field_values, applied)
         if ok then
-          return static_ability['replacement-ability'], new_values
+          match.new_values = new_values
+          return match
         end
       end
     end
   end
 end
 
-local function _joinAppliedAbilities(current_ability, previous_abilities)
+local function _joinPreviousAbilities(previous_abilities)
   local apply = {}
-  apply[current_ability] = true
   for k, v in pairs(previous_abilities or {}) do
     apply[k] = v
   end
@@ -110,10 +118,8 @@ local _CMDLISTS = { 'inputs', 'effects' }
 local _CMDMAP = { operator = OP, effect = FX }
 
 -- TODO:
---  + Multiple instances of an ability apply at most once
 --  + Expanded ability can only import integer and string values from matching
 --    command
---  + Do something about ability previews
 --  + Implement queries?
 function ABILITY.execute(ability, actor, inputvalues)
   -- Register map of values computed by inputs, operators, and effects
@@ -150,20 +156,22 @@ function ABILITY.execute(ability, actor, inputvalues)
         -- Grab abilities that might have expanded this command
         local applied_abilities = applied[cmd]
         -- Check if any ability on the actor replaces the command
-        local expanded_ability, new_values =
-          _getMatchedAbilities(actor, name, unrefd_field_values,
-                               applied_abilities)
+        local match = _getMatchedAbilities(actor, name, unrefd_field_values,
+                                           applied_abilities)
         -- In which case, we expand its effects
-        if expanded_ability then
-          for k, v in pairs(new_values) do
+        if match then
+          local expanded_ability = match.ability
+          for k, v in pairs(match.new_values) do
             values[k] = v
           end
           for i, expanded_cmd in ipairs(expanded_ability['effects']) do
             -- Insert in the front side of the deque
             table.insert(deque, i, expanded_cmd)
             -- Mark as applied to avoid endless recursion
-            applied[expanded_cmd] = _joinAppliedAbilities(expanded_ability,
-                                                          applied_abilities)
+            local apply = _joinPreviousAbilities(applied_abilities)
+            apply[_hashExpansion(match)] = true
+            applied[expanded_cmd] = apply
+            -- Register redirected output
             redirect[expanded_cmd] = cmd['output']
           end
         -- If the command is not expanded, process it normally.
