@@ -22,7 +22,7 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('body', fieldvalues['bodyspec'])['name']
-  local str = ("Create %s"):format(name)
+  local str = ("create %s"):format(name)
   local widgets = fieldvalues['widgets']
   if widgets and #widgets > 0 then
     str = str .. " with "

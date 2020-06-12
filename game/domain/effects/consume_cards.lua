@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.preview(actor, fieldvalues)
-  return ("Consume up to %s cards"):format(fieldvalues['card_list'])
+  return ("consume up to %s cards"):format(fieldvalues['card_list'])
 end
 
 function FX.process (actor, fieldvalues)

@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.preview(actor, fieldvalues)
-  return ("Draw %s cards"):format(fieldvalues['amount'])
+  return ("draw %s cards"):format(fieldvalues['amount'])
 end
 
 function FX.process (actor, fieldvalues)

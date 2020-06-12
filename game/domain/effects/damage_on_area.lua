@@ -24,10 +24,10 @@ function FX.preview (actor, fieldvalues)
   local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
   local size = fieldvalues['size'] - 1
   if size > 0 then
-    return ("Deal %d (%d + %2d%% %s) damage on a %s-radius area around %s")
+    return ("deal %d (%d + %2d%% %s) damage on a %s-radius area around %s")
            :format(amount, base, mod, attr, size, fieldvalues['center'])
   else
-    return ("Deal %d (%d + %2d%% %s) damage at %s")
+    return ("deal %d (%d + %2d%% %s) damage at %s")
            :format(amount, base, mod, attr, fieldvalues['center'])
   end
 end

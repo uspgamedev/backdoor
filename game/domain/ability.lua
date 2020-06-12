@@ -4,12 +4,6 @@ local OP = require 'lux.pack' 'domain.operators'
 local IN = require 'lux.pack' 'domain.inputs'
 local DB = require 'database'
 
-local _CMDTYPES = {
-  effect = FX,
-  inputs = IN,
-  operators = OP
-}
-
 local function _unref(ref, values)
   if type(ref) == 'string' then
     local n = ref:match '=(.+)'
@@ -92,13 +86,12 @@ function ABILITY.execute(ability, actor, inputvalues)
   end
 end
 
-function _NOPREVIEW()
+local function _NOPREVIEW()
   return nil
 end
 
-function ABILITY.preview(ability, actor, inputvalues)
+function ABILITY.preview(ability, actor, inputvalues, capitalize)
   local values = {}
-  local prevs = {}
   for _,cmdlist in ipairs(_CMDLISTS) do
     for _,cmd in ipairs(ability[cmdlist]) do
       local prev, value
@@ -126,7 +119,12 @@ function ABILITY.preview(ability, actor, inputvalues)
       end
     end
   end
-  return table.concat(values, ". ") .. "."
+  local preview = table.concat(values, ". ") .. "."
+  if capitalize then
+    return preview:gsub("^(%w)", string.upper)
+  else
+    return preview
+  end
 end
 
 return ABILITY

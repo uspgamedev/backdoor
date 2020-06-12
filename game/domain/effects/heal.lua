@@ -15,7 +15,7 @@ function FX.preview(actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
   local attr_value = actor.getAttribute and actor:getAttribute(attr) or 3
   local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
-  return ("Heal %d (%d + %2d%% %s( hit points for %s")
+  return ("heal %d (%d + %2d%% %s) hit points for %s")
          :format(amount, base, mod, attr, fieldvalues['target'])
 end
 

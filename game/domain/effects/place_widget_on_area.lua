@@ -16,7 +16,7 @@ function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('card', fieldvalues['card'])['name']
   local size = fieldvalues['size'] - 1
   local center = fieldvalues['center']
-  return ("Cause %s on %s-radius area around %s"):format(name, size, center)
+  return ("cause %s on %s-radius area around %s"):format(name, size, center)
 end
 
 function FX.process (actor, fieldvalues)

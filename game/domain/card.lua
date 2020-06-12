@@ -1,5 +1,6 @@
 
 local ABILITY     = require 'domain.ability'
+local TRIGGERS    = require 'domain.definitions.triggers'
 local ACTIONSDEFS = require 'domain.definitions.action'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
@@ -214,7 +215,8 @@ function Card:getEffect()
   end
   if self:isArt() then
     effect = effect .. ("Art (%d focus)\n\n"):format(self:getCost())
-                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
+                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
+                                       inputs, true)
   elseif self:isWidget() then
     local place = self:getWidgetPlacement() if place then
       effect = effect .. _EPQ_TYPENAMES[place]
@@ -230,11 +232,6 @@ function Card:getEffect()
       )
     end
     effect = effect .. ")"
-    local auto = self:getWidgetTriggeredAbility() if auto then
-      local ability, trigger = auto.ability, auto.trigger
-      effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
-                      .. ABILITY.preview(ability, self:getOwner(), inputs)
-    end
     local ops, n = {}, 0
     for _,op in self:getStaticOperators() do
       n = n + 1
@@ -242,6 +239,11 @@ function Card:getEffect()
     end
     if n > 0 then
       effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
+    end
+    local auto = self:getWidgetTriggeredAbility() if auto then
+      local ability, trigger = auto.ability, TRIGGERS.WORDING[auto.trigger]
+      effect = effect .. ("\n\n%s, "):format(trigger)
+                      .. ABILITY.preview(ability, self:getOwner(), inputs)
     end
     -- TODO: describe created cards
     local equip = self:getSpec('widget').equipment
