@@ -249,7 +249,7 @@ function Card:getEffect()
       local ops, n = {}, 0
       for _,op in self:getStaticOperators() do
         n = n + 1
-        ops[n] = ("%s %s%d"):format(op.attr, op.op, op.val)
+        ops[n] = ("You get %s %s%d"):format(op.attr, op.op, op.val)
       end
       if n > 0 then
         effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
