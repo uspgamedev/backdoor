@@ -78,12 +78,6 @@ end
 local _CMDLISTS = { 'inputs', 'effects' }
 local _CMDMAP = { operator = OP, effect = FX }
 
--- TODO:
---  + Expanded ability can only import integer and string registers from matching
---    command
---  + Static abilities do not work on input checks or previews
---  + Implement queries?
-
 -- Every helper function used here is either const or mutates only the values
 -- it returns.
 local _hashAbility, _matches, _matchAbilities, _copySourceAbilities,
