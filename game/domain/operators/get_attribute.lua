@@ -17,7 +17,9 @@ function OP.process(actor, fieldvalues)
   return actor["get"..fieldvalues.which](actor)
 end
 
-OP.preview = OP.process
+function OP.preview(_, fieldvalues)
+  return fieldvalues['which']:upper()
+end
 
 return OP
 

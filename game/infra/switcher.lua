@@ -19,6 +19,10 @@ local _pushed = false
 local _popped = false
 local _switched = false
 
+function SWITCHER.current()
+  return Gamestate.current()
+end
+
 function SWITCHER.init()
   for _,handle in ipairs(_INPUT_HANDLES) do
     love[handle] = function (...) -- luacheck: globals love

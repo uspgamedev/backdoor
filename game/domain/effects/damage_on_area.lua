@@ -12,17 +12,23 @@ FX.schema = {
   { id = 'mod', name = "%Mod", type = 'integer', range = {1,10000},
     default = 100 },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
+  { id = 'projectile', name = "Is projectile?", type = 'boolean' },
+  { id = 'sfx', name = "SFX", type = 'enum',
+    options = 'resources.sfx',
+    optional = true },
 }
 
-function FX.preview (_, fieldvalues)
+function FX.preview (actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
-  local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
+  local attr_value = actor.getAttribute and actor:getAttribute(attr) or 3
+  local amount = ATTR.EFFECTIVE_POWER(base, attr_value, mod)
   local size = fieldvalues['size'] - 1
   if size > 0 then
-    return ("Deal %s damage on a %s-radius area around %s")
-           :format(amount, size, fieldvalues['center'])
+    return ("Deal %d (%d + %2d%% %s) damage on a %s-radius area around %s")
+           :format(amount, base, mod, attr, size, fieldvalues['center'])
   else
-    return ("Deal %s damage at %s"):format(amount, fieldvalues['center'])
+    return ("Deal %d (%d + %2d%% %s) damage at %s")
+           :format(amount, base, mod, attr, fieldvalues['center'])
   end
 end
 
@@ -35,6 +41,13 @@ function FX.process (actor, fieldvalues)
   local mod     = fieldvalues['mod']
   local ignore_owner = fieldvalues['ignore_owner']
   local amount = ATTR.EFFECTIVE_POWER(base, attr, mod)
+  if fieldvalues['projectile'] then
+    coroutine.yield('report', {
+      type = 'projectile',
+      actor = actor,
+      target = { ci, cj },
+    })
+  end
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
@@ -42,10 +55,11 @@ function FX.process (actor, fieldvalues)
             TILE.dist(i,j,ci,cj) <= size - 1 then
           local result = body:takeDamageFrom(amount, actor)
           coroutine.yield('report', {
-            type = 'text_rise',
+            type = 'take_damage',
+            source = actor,
             body = body,
-            text_type = 'damage',
             amount = result.dmg,
+            sfx = fieldvalues['sfx'],
           })
         end
       end

@@ -11,11 +11,14 @@ function ANIM:script(_, view, report)
   local sectorview = view.sector
   local bodyview = sectorview:getBodyView(body)
   if sectorview:isInsideFov(i, j) then
-    PLAYSFX('footstep', .15)
-    self.wait(bodyview:moveTo(i, j, 1/20/report.speed_factor, 'in-out-quad'))
+    PLAYSFX('footstep')
+    self.wait(bodyview:jump(1/report.speed_factor))
+    bodyview:setPosition(i, j)
+    self.wait(bodyview:fall(1/report.speed_factor))
   else
     bodyview:setPosition(i, j)
   end
 end
 
 return ANIM
+

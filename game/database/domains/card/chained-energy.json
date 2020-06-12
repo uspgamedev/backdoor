@@ -14,11 +14,13 @@
             "base":0,
             "mod":50,
             "name":"damage_on_target",
+            "projectile":true,
             "sfx":"attack-hit",
             "target":"=target",
             "type":"effect"
           }],
         "inputs":[{
+            "description":"your position",
             "name":"pos",
             "output":"pos_self",
             "type":"input"

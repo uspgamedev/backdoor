@@ -13,9 +13,8 @@ OP.schema = {
 
 OP.type = 'integer'
 
-function OP.process(actor, fieldvalues)
-  local body = actor:getBody()
-  return body["get"..fieldvalues.which](body)
+function OP.process(_, fieldvalues)
+  return fieldvalues['which']:upper()
 end
 
 OP.preview = OP.process

@@ -1,0 +1,25 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":50
+    },{
+      "quad_idx":2,
+      "time":50
+    },{
+      "quad_idx":3,
+      "time":50
+    },{
+      "quad_idx":4,
+      "time":50
+    },{
+      "quad_idx":3,
+      "time":50
+    },{
+      "quad_idx":2,
+      "time":50
+    }],
+  "loop":true,
+  "offset":[20,20],
+  "quad_division":[4,1],
+  "texture":"projectile-energy-sphere"
+}

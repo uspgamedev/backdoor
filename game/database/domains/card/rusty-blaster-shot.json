@@ -6,9 +6,10 @@
           "base":0,
           "mod":100,
           "name":"damage_on_target",
+          "projectile":true,
+          "sfx":"attack-hit",
           "target":"=target",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         }],
       "inputs":[{
           "aoe-hint":1,

@@ -32,7 +32,7 @@ end
 
 local function _cancel()
   _view:fadeOut()
-  PLAYSFX 'back-menu'
+  PLAYSFX('back-menu', .05)
   SWITCHER.pop({})
 end
 

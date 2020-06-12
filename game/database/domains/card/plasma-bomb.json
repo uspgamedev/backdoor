@@ -7,6 +7,8 @@
           "center":"=target_pos",
           "mod":100,
           "name":"damage_on_area",
+          "projectile":true,
+          "sfx":"attack-hit",
           "size":2,
           "type":"effect"
         }],

@@ -77,6 +77,7 @@ function SectorView:init(route)
   ELEMENT.init(self)
 
   self.target = nil
+  self.temp_target = nil
   self.cursor = nil
   self.ray = nil
   self.vfx = nil
@@ -147,10 +148,10 @@ end
 
 local function _playSFX(target, extra)
   if not target or not target.fov or not extra.body then
-    PLAYSFX(extra.sfx)
+    PLAYSFX(extra.sfx, .03)
   else
     if target:canSee(extra.body) then
-      PLAYSFX(extra.sfx)
+      PLAYSFX(extra.sfx, .03)
     end
   end
 end
@@ -229,6 +230,10 @@ function SectorView:sectorChanged()
   self.body_views = {}
 end
 
+function SectorView:setTempTarget(target)
+  self.temp_target = target
+end
+
 function SectorView:snapBodyViews()
   for id,bodyview in pairs(self.body_views) do
     local body = Util.findId(id)
@@ -244,7 +249,9 @@ function SectorView:draw()
   local sector = self.route.getCurrentSector()
   self:initSector(sector)
   if not self.sector then return end
-  if self.target then
+  if self.temp_target then
+    _moveCamera(self.temp_target, false)
+  elseif self.target then
     _moveCamera(self.target, self.sector_changed)
     self.sector_changed = false
   end

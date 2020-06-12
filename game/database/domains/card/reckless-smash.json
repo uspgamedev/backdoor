@@ -6,9 +6,9 @@
           "base":12,
           "mod":50,
           "name":"damage_on_target",
+          "sfx":"attack-hit",
           "target":"=target",
-          "type":"effect",
-          "sfx":false
+          "type":"effect"
         },{
           "name":"lose_life",
           "percentage":40,

@@ -37,11 +37,6 @@ function PLAYCARD.perform(actor, inputvalues)
   local card = _card(actor, inputvalues)
   local body = actor:getBody()
 
-  coroutine.yield('report', {
-    type = 'body_acted',
-    body = body,
-  })
-
   actor:spendFocus(card:getCost())
   actor:exhaust(card:getExhaustion())
   body:triggerWidgets(TRIGGERS.ON_PLAY, { card = card })
