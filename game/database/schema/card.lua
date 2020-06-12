@@ -48,6 +48,7 @@ return {
             type = 'ability',
             hint = "When the inputs are met, the operation\n" ..
                    "or effect are replaced by the effects here" },
+          { id = 'descr', name = "Rules Text", type = 'text' },
         }
       },
       {

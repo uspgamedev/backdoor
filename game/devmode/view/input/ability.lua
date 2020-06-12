@@ -1,4 +1,6 @@
 
+-- luacheck: no self
+
 local ABILITY     = require 'domain.ability'
 local IMGUI       = require 'imgui'
 local DB          = require 'database'
@@ -9,6 +11,7 @@ local table = table
 local ipairs = ipairs
 local require = require
 local setfenv = setfenv
+local pcall = pcall
 
 local _CMDTYPES = {
   'inputs', 'effects',
@@ -152,12 +155,15 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
       IMGUI.Text("Preview")
       IMGUI.Indent(20)
       IMGUI.PushItemWidth(360)
-      local descr = ABILITY.preview(_ability, {}, {})
+      local ok, descr = pcall(ABILITY.preview,_ability, {}, {})
+      if not ok then
+        descr = "Could not preview ability"
+      end
       local text = ""
       for _, line in ipairs(_split(descr, 40)) do
         text = text .. line .. "\n"
       end
-      IMGUI.InputTextMultiline("", text, 1024, 0, 0, { "ReadOnly" })
+      IMGUI.InputTextMultiline("", text, 1024, 0, 40, { "ReadOnly" })
       IMGUI.PopItemWidth()
       IMGUI.Unindent(40)
     end

@@ -36,6 +36,7 @@
     "charges":12,
     "operators":[],
     "static":[{
+        "descr":"Whenever you deal damage, you deal an\nadditional 2 damage.",
         "op":"damage_on_target",
         "replacement-ability":{
           "effects":[{
