@@ -36,12 +36,12 @@
     "charges":12,
     "operators":[],
     "static":[{
-        "descr":"Whenever you deal damage, you deal an\nadditional 2 damage.",
+        "descr":"Whenever you deal damage, you deal an\nadditional 1 damage for each other\ncreature within 3 tiles of you.",
         "op":"damage_on_target",
         "replacement-ability":{
           "effects":[{
               "attr":"=attr",
-              "base":"=base+2",
+              "base":"=base+x",
               "mod":"=mod",
               "name":"damage_on_target",
               "sfx":"attack-hit",
@@ -65,11 +65,33 @@
               "output":"target",
               "type":"input"
             },{
+              "name":"self",
+              "output":"self",
+              "type":"operator"
+            },{
+              "actor":"=self",
+              "name":"get_actor_body",
+              "output":"self_body",
+              "type":"operator"
+            },{
+              "body":"=self_body",
+              "name":"get_body_pos",
+              "output":"self_pos",
+              "type":"operator"
+            },{
+              "ignore-owner":true,
+              "name":"count_nearby_bodies",
+              "output":"count",
+              "pos":"=self_pos",
+              "range":3,
+              "type":"operator",
+              "body-type":false
+            },{
               "lhs":"=base",
               "name":"integer_binop",
               "op":"+",
-              "output":"base+2",
-              "rhs":2,
+              "output":"base+x",
+              "rhs":"=count",
               "type":"operator"
             }]
         }
