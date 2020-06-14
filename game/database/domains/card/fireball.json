@@ -2,7 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "amount":"=amount",
+          "value":"=amount",
           "center":"=target",
           "name":"damage_on_area",
           "projectile":true,

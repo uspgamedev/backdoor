@@ -10,7 +10,7 @@
           "vfx-spd":4,
           "sfx":false
         },{
-          "amount":"=amount",
+          "value":"=amount",
           "center":"=pos",
           "ignore_owner":true,
           "name":"damage_on_area",

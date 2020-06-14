@@ -2,19 +2,19 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "amount":"=amount",
+          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t1",
           "type":"effect"
         },{
-          "amount":"=amount",
+          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t2",
           "type":"effect"
         },{
-          "amount":"=amount",
+          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t3",

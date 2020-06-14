@@ -3,7 +3,7 @@ local FX = {}
 
 FX.schema = {
   { id = 'target', name = "Target", type = 'value', match = 'body' },
-  { id = 'amount', name = "Amount", type = 'value', match = 'integer',
+  { id = 'value', name = "value", type = 'value', match = 'integer',
     range = {0,100} },
   { id = 'projectile', name = "Is projectile?", type = 'boolean' },
   { id = 'sfx', name = "SFX", type = 'enum',
@@ -13,15 +13,15 @@ FX.schema = {
 }
 
 function FX.preview (_, fieldvalues)
-  local amount = fieldvalues['amount']
+  local value = fieldvalues['value']
   local target = fieldvalues['target']
-  return ("deal %s damage to %s"):format(amount, target)
+  return ("deal %s damage to %s"):format(value, target)
 end
 
 function FX.process (actor, fieldvalues)
-  local amount = fieldvalues['amount']
+  local value = fieldvalues['value']
   local target = fieldvalues['target']
-  local result = target:takeDamageFrom(amount, actor)
+  local result = target:takeDamageFrom(value, actor)
 
   if fieldvalues['projectile'] then
     coroutine.yield('report', {

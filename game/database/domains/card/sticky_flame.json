@@ -9,7 +9,7 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "amount":"=amount",
+            "value":"=amount",
             "name":"damage_on_target",
             "sfx":"attack-hit",
             "target":"=body_self",

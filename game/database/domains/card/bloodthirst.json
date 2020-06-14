@@ -8,9 +8,7 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "attr":"=ani",
-            "base":2,
-            "mod":50,
+            "value":"=amount",
             "name":"heal",
             "target":"=self-body",
             "type":"effect"
@@ -25,10 +23,12 @@
             "output":"self-body",
             "type":"operator"
           },{
-            "name":"get_attribute",
-            "output":"ani",
-            "type":"operator",
-            "which":"ANI"
+            "attr":"ANI",
+            "base":2,
+            "mod":50,
+            "name":"effective_power",
+            "output":"amount",
+            "type":"operator"
           }]
       },
       "trigger":"on_kill"
@@ -46,19 +46,12 @@
               "name":"damage_on_target",
               "sfx":"attack-hit",
               "target":"=target",
-              "type":"effect"
+              "type":"effect",
+              "value":"=base+x"
             }],
           "inputs":[{
               "name":"integer",
-              "output":"base",
-              "type":"input"
-            },{
-              "name":"integer",
-              "output":"mod",
-              "type":"input"
-            },{
-              "name":"integer",
-              "output":"attr",
+              "output":"value",
               "type":"input"
             },{
               "name":"body",
@@ -87,7 +80,7 @@
               "type":"operator",
               "body-type":false
             },{
-              "lhs":"=base",
+              "lhs":"=value",
               "name":"integer_binop",
               "op":"+",
               "output":"base+x",
