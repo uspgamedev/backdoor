@@ -20,6 +20,8 @@ local _idgen = IDGenerator()
 
 local AbilityEditor = class:new()
 
+-- luacheck: no self
+
 local function _split(str, max_line_length)
    local lines = {}
    local line
@@ -43,12 +45,35 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
 
   local _ability = _elementspec[_fieldschema.id] or
                    { inputs = {}, effects = {} }
-  local _selected = nil
   local _active = not (not _elementspec[_fieldschema.id] and
                            _fieldschema.optional)
 
-  local function _delete()
-    table.remove(_ability[_selected.cmdtype], _selected.idx)
+  local _cmd_editors = {}
+  local SPEC_EDITOR = require 'devmode.view.specification_editor'
+  for _,cmdtype in ipairs(_CMDTYPES) do
+    _cmd_editors[cmdtype] = {}
+  end
+
+  local function _bind_delete(cmdtype, i)
+    return function ()
+      table.remove(_ability[cmdtype], i)
+      for _, editor in ipairs(_cmd_editors[cmdtype]) do
+        editor.dirty = true
+      end
+    end
+  end
+
+  local function _editor_for(cmdtype, i)
+    local cmd = _ability[cmdtype][i]
+    local editor_list = _cmd_editors[cmdtype]
+    if not editor_list[i] or editor_list[i].dirty then
+      local _, _, renderer = SPEC_EDITOR(cmd, cmd.type .. 's/' .. cmd.name,
+                                         _CMDTYPES[cmdtype],
+                                         _bind_delete(cmdtype, i), nil,
+                                         _ability)
+      editor_list[i] = { render = renderer, dirty = false }
+    end
+    return editor_list[i]
   end
 
   local function _commandList(gui, cmdtype)
@@ -79,15 +104,9 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
         view = ("%2d: %s"):format(i, command.name)
       end
       IMGUI.PushID(("%s/%s:%d"):format(_ability, cmdtype, i))
-      if IMGUI.Selectable(view,
-                          _selected and _selected.cmdtype == cmdtype
-                                    and _selected.idx == i) then
-        _selected = _selected or {}
-        _selected.cmdtype = cmdtype
-        _selected.idx = i
-        gui:push('specification_editor', command,
-                 command.type .. 's/' .. command.name, _CMDTYPES[cmdtype],
-                 _delete, nil, _ability)
+      if IMGUI.TreeNodeEx(view, { "Framed" }) then
+        _editor_for(cmdtype, i).render(gui)
+        IMGUI.TreePop()
       end
       IMGUI.PopID()
     end
@@ -113,7 +132,7 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
     IMGUI.Unindent(20)
   end
 
-  function input(gui)
+  function input(gui) -- luacheck: no global
     if _fieldschema.optional then
       IMGUI.PushID(_fieldschema.id .. ".check")
       _active = IMGUI.Checkbox("", _active)
@@ -144,7 +163,7 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
     end
   end
 
-  function __operator:call(gui)
+  function __operator:call(gui) -- luacheck: no global
     return obj.input(gui)
   end
 
