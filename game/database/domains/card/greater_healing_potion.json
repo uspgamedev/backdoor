@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":0,
-          "base":10,
-          "mod":100,
+          "amount":10,
           "name":"heal",
           "target":"=self_body",
           "type":"effect"
@@ -27,5 +25,5 @@
   "name":"Greater Healing Potion",
   "one_time":true,
   "set":"consumables_advanced",
-  "temporary":true
+  "temporary":false
 }

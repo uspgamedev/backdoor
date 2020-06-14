@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=ANI",
-          "base":0,
-          "mod":100,
+          "amount":"=amount",
           "name":"heal",
           "target":"=self",
           "type":"effect"
@@ -23,10 +21,12 @@
           "non-wall":false,
           "empty-tile":false
         },{
-          "name":"get_attribute",
-          "output":"ANI",
-          "type":"operator",
-          "which":"ANI"
+          "attr":"ANI",
+          "base":0,
+          "mod":100,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"get_body_at",
           "output":"self",

@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":5,
-          "mod":40,
+          "amount":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
@@ -26,10 +24,12 @@
           "pos":"=target_pos",
           "type":"operator"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":5,
+          "mod":40,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },

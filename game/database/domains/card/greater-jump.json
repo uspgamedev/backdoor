@@ -10,11 +10,9 @@
           "vfx-spd":4,
           "sfx":false
         },{
-          "attr":"=cor",
-          "base":4,
+          "amount":"=amount",
           "center":"=pos",
           "ignore_owner":true,
-          "mod":50,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
@@ -30,10 +28,12 @@
           "tactical-hint":"movement",
           "type":"input"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":4,
+          "mod":50,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"self",
           "output":"self",
