@@ -1,4 +1,5 @@
 
+local ABILITY = require 'domain.ability'
 local DEFS = require 'domain.definitions'
 
 local _CARDS = 'domains.card'
@@ -38,6 +39,18 @@ return {
         options = DEFS.TRIGGERS },
       { id = 'trigger-condition', name = "Spend Trigger Condition",
         type = 'ability', optional = true },
+      {
+        id = 'static', name = "Static Abilities",
+        type = 'array', schema = {
+          { id = 'op', name = "Operation or Effect", type = 'enum',
+            options = ABILITY.allOperationsAndEffects() },
+          { id = 'replacement-ability', name = "Condition and Replacement",
+            type = 'ability',
+            hint = "When the inputs are met, the operation\n" ..
+                   "or effect are replaced by the effects here" },
+          { id = 'descr', name = "Rules Text", type = 'text' },
+        }
+      },
       {
         id = 'operators', name = "Static Attribute Operator",
         type = 'array', schema = {

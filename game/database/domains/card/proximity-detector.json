@@ -13,7 +13,7 @@
             "target":"=body_self",
             "type":"effect"
           },{
-            "amount":"=amount",
+            "value":"=amount",
             "center":"=pos",
             "name":"damage_on_area",
             "sfx":"attack-hit",

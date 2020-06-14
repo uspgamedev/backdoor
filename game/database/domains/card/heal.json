@@ -2,7 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "amount":"=amount",
+          "value":"=amount",
           "name":"heal",
           "target":"=self",
           "type":"effect"

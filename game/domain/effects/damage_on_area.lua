@@ -6,7 +6,7 @@ FX.schema = {
   { id = 'center', name = "Target position", type = 'value', match = 'pos' },
   { id = 'size', name = "Area Size", type = 'value', match = 'integer',
     range = {1} },
-  { id = 'amount', name = "Amount", type = 'value', match = 'integer',
+  { id = 'value', name = "value", type = 'value', match = 'integer',
     range = {0,100} },
   { id = 'ignore_owner', name = "Ignore Owner", type = 'boolean'},
   { id = 'projectile', name = "Is projectile?", type = 'boolean' },
@@ -16,14 +16,14 @@ FX.schema = {
 }
 
 function FX.preview (_, fieldvalues)
-  local amount = fieldvalues['amount']
+  local value = fieldvalues['value']
   local size = fieldvalues['size'] - 1
   local center = fieldvalues['center']
   if size > 0 then
     return ("deal %s damage on a %s-radius area around %s")
-           :format(amount, size, center)
+           :format(value, size, center)
   else
-    return ("deal %s damage at %s"):format(amount, center)
+    return ("deal %s damage at %s"):format(value, center)
   end
 end
 
@@ -32,7 +32,7 @@ function FX.process (actor, fieldvalues)
   local ci, cj  = unpack(fieldvalues['center'])
   local size    = fieldvalues['size']
   local ignore_owner = fieldvalues['ignore_owner']
-  local amount = fieldvalues['amount']
+  local value = fieldvalues['value']
   if fieldvalues['projectile'] then
     coroutine.yield('report', {
       type = 'projectile',
@@ -45,7 +45,7 @@ function FX.process (actor, fieldvalues)
       local body = sector:getBodyAt(i, j) if body then
         if (not ignore_owner or body ~= actor:getBody()) and
             TILE.dist(i,j,ci,cj) <= size - 1 then
-          local result = body:takeDamageFrom(amount, actor)
+          local result = body:takeDamageFrom(value, actor)
           coroutine.yield('report', {
             type = 'take_damage',
             source = actor,

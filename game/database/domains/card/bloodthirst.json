@@ -8,9 +8,7 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "attr":"=ani",
-            "base":2,
-            "mod":50,
+            "value":"=amount",
             "name":"heal",
             "target":"=self-body",
             "type":"effect"
@@ -25,16 +23,72 @@
             "output":"self-body",
             "type":"operator"
           },{
-            "name":"get_attribute",
-            "output":"ani",
-            "type":"operator",
-            "which":"ANI"
+            "attr":"ANI",
+            "base":2,
+            "mod":50,
+            "name":"effective_power",
+            "output":"amount",
+            "type":"operator"
           }]
       },
       "trigger":"on_kill"
     },
     "charges":12,
     "operators":[],
+    "static":[{
+        "descr":"Whenever you deal damage, you deal an\nadditional 1 damage for each other\ncreature within 3 tiles of you.",
+        "op":"damage_on_target",
+        "replacement-ability":{
+          "effects":[{
+              "attr":"=attr",
+              "base":"=base+x",
+              "mod":"=mod",
+              "name":"damage_on_target",
+              "sfx":"attack-hit",
+              "target":"=target",
+              "type":"effect",
+              "value":"=base+x"
+            }],
+          "inputs":[{
+              "name":"integer",
+              "output":"value",
+              "type":"input"
+            },{
+              "name":"body",
+              "output":"target",
+              "type":"input"
+            },{
+              "name":"self",
+              "output":"self",
+              "type":"operator"
+            },{
+              "actor":"=self",
+              "name":"get_actor_body",
+              "output":"self_body",
+              "type":"operator"
+            },{
+              "body":"=self_body",
+              "name":"get_body_pos",
+              "output":"self_pos",
+              "type":"operator"
+            },{
+              "ignore-owner":true,
+              "name":"count_nearby_bodies",
+              "output":"count",
+              "pos":"=self_pos",
+              "range":3,
+              "type":"operator",
+              "body-type":false
+            },{
+              "lhs":"=value",
+              "name":"integer_binop",
+              "op":"+",
+              "output":"base+x",
+              "rhs":"=count",
+              "type":"operator"
+            }]
+        }
+      }],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":"on_turn"

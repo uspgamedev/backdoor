@@ -10,7 +10,7 @@
           "vfx-spd":1,
           "sfx":false
         },{
-          "amount":"=amount",
+          "value":"=amount",
           "center":"=damage_pos",
           "name":"damage_on_area",
           "sfx":"attack-hit",

@@ -2,7 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "amount":"=amount",
+          "value":"=amount",
           "center":"=target-pos",
           "ignore_owner":true,
           "name":"damage_on_area",
