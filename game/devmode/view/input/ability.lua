@@ -104,7 +104,7 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
         view = ("%2d: %s"):format(i, command.name)
       end
       IMGUI.PushID(("%s/%s:%d"):format(_ability, cmdtype, i))
-      if IMGUI.TreeNode(view) then
+      if IMGUI.TreeNodeEx(view, { "Framed" }) then
         _editor_for(cmdtype, i).render(gui)
         IMGUI.TreePop()
       end
