@@ -2,10 +2,8 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":0,
-          "base":12,
+          "amount":12,
           "center":"=target_pos",
-          "mod":100,
           "name":"damage_on_area",
           "projectile":true,
           "sfx":"attack-hit",

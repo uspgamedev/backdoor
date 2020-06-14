@@ -10,9 +10,7 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "attr":"=ani",
-            "base":0,
-            "mod":50,
+            "amount":"=amount",
             "name":"damage_on_target",
             "projectile":true,
             "sfx":"attack-hit",
@@ -43,10 +41,12 @@
             "range":4,
             "type":"operator"
           },{
-            "name":"get_attribute",
-            "output":"ani",
-            "type":"operator",
-            "which":"ANI"
+            "attr":"ANI",
+            "base":0,
+            "mod":50,
+            "name":"effective_power",
+            "output":"amount",
+            "type":"operator"
           }]
       },
       "trigger":"on_play"

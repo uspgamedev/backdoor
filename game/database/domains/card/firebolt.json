@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=arc",
-          "base":0,
-          "mod":50,
+          "amount":"=amount",
           "name":"damage_on_target",
           "projectile":true,
           "sfx":"attack-hit",
@@ -28,10 +26,12 @@
           "pos":"=tgt",
           "type":"operator"
         },{
-          "name":"get_attribute",
-          "output":"arc",
-          "type":"operator",
-          "which":"ARC"
+          "attr":"ARC",
+          "base":0,
+          "mod":50,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },

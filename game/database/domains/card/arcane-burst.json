@@ -2,11 +2,9 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=arc",
-          "base":1,
+          "amount":"=amount",
           "center":"=self_pos",
           "ignore_owner":true,
-          "mod":80,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
@@ -23,11 +21,6 @@
           "tactical-hint":"harmful",
           "type":"input"
         },{
-          "name":"get_attribute",
-          "output":"arc",
-          "type":"operator",
-          "which":"ARC"
-        },{
           "name":"self",
           "output":"self",
           "type":"operator"
@@ -40,6 +33,13 @@
           "body":"=self_body",
           "name":"get_body_pos",
           "output":"self_pos",
+          "type":"operator"
+        },{
+          "attr":"ARC",
+          "base":1,
+          "mod":80,
+          "name":"effective_power",
+          "output":"amount",
           "type":"operator"
         }]
     }

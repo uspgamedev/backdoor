@@ -10,10 +10,8 @@
           "vfx-spd":1,
           "sfx":false
         },{
-          "attr":"=cor",
-          "base":0,
+          "amount":"=amount",
           "center":"=damage_pos",
-          "mod":50,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
@@ -54,10 +52,12 @@
           "pos":"=target_pos",
           "type":"operator"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":0,
+          "mod":50,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },

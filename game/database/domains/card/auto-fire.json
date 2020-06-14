@@ -9,10 +9,9 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "attr":"=cor",
-            "base":0,
-            "mod":100,
+            "amount":"=amount",
             "name":"damage_on_target",
+            "projectile":true,
             "sfx":"attack-hit",
             "target":"=target",
             "type":"effect"
@@ -40,10 +39,12 @@
             "range":3,
             "type":"operator"
           },{
-            "name":"get_attribute",
-            "output":"cor",
-            "type":"operator",
-            "which":"COR"
+            "attr":"COR",
+            "base":0,
+            "mod":100,
+            "name":"effective_power",
+            "output":"amount",
+            "type":"operator"
           }]
       },
       "trigger":"on_cycle"

@@ -2,10 +2,8 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=arc",
-          "base":0,
+          "amount":"=amount",
           "center":"=target",
-          "mod":150,
           "name":"damage_on_area",
           "projectile":true,
           "sfx":"attack-hit",
@@ -23,10 +21,12 @@
           "type":"input",
           "empty-tile":false
         },{
-          "name":"get_attribute",
-          "output":"arc",
-          "type":"operator",
-          "which":"ARC"
+          "attr":"ARC",
+          "base":0,
+          "mod":150,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },
