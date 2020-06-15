@@ -691,7 +691,7 @@ function Actor:getPowerLevel()
   for _,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
-  return lvl
+  return lvl / 100
 end
 
 return Actor
