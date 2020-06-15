@@ -1,4 +1,5 @@
 
+local ACTIONDEFS = require 'domain.definitions.action'
 local IMGUI = require 'imgui'
 
 return function (actor)
@@ -32,8 +33,12 @@ return function (actor)
     IMGUI.Text(("FIN: %d"):format(actor:getBody():getFIN()))
     IMGUI.Text(("RES: %d"):format(actor:getBody():getRES()))
     IMGUI.Separator()
-    IMGUI.Text(("Skill: %d"):format(actor:getBody():getSkill()))
-    IMGUI.Text(("Speed: %d"):format(actor:getBody():getSpeed()))
+    local focus_per_cycle = actor:getBody():getFocusRegen()
+                          * ACTIONDEFS.CYCLE_UNIT
+    IMGUI.Text(("Focus Regen: %.2f focus/cycle"):format(focus_per_cycle))
+    local turns_per_cycle = actor:getBody():getSpeed() / ACTIONDEFS.MAX_ENERGY
+                                                       * ACTIONDEFS.CYCLE_UNIT
+    IMGUI.Text(("Speed: %.2f turns/cycle"):format(turns_per_cycle))
   end
 
 end

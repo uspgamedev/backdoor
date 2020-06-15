@@ -280,7 +280,7 @@ function Actor:isHandFull()
 end
 
 function Actor:getFocus()
-  return self.focus
+  return math.floor(self.focus)
 end
 
 function Actor:getBufferSize()
@@ -582,6 +582,7 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
+  self:gainFocus(self:getBody():getFocusRegen())
 end
 
 function Actor:ready()
@@ -626,7 +627,6 @@ function Actor:discardHand()
 end
 
 function Actor:beginTurn()
-  self:gainFocus(ACTIONDEFS.FOCUS_PER_TURN)
   while self:getHandSize() < DEFS.HAND_LIMIT and self:canDrawCard() do
     self:drawCard()
   end

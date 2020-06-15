@@ -5,8 +5,8 @@ ATTR.BASE_SPD = 10
 ATTR.INITIAL_UPGRADE = 100
 
 ATTR.INFLUENCE = {
-  SKL = {'COR', 'ARC'},
-  SPD = {'ARC', 'ANI'},
+  SPD = {'COR', 'ARC'},
+  SKL = {'ARC', 'ANI'},
   VIT = {'ANI', 'COR'}
 }
 
