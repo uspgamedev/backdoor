@@ -56,7 +56,7 @@ function Card:getRelatedAttr()
 end
 
 function Card:getLevel()
-  return self:getSpec('level')
+  return self:getSpec('level') or 1
 end
 
 function Card:getOwner()
