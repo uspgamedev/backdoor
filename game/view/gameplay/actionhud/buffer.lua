@@ -124,7 +124,7 @@ function BufferView:getTopCardPosition(index_offset)
 end
 
 function BufferView:update(dt)
-  local actor = self.route.getControlledActor()
+  local actor = self.route.getPlayerActor()
   if self.side == 'front' then
     self.button:setCost(actor:getBody():getConsumption())
     self.button:update(dt)

@@ -347,7 +347,7 @@ function SectorView:draw()
         if body then
           table.insert(draw_bodies, body)
           table.insert(all_bodies, body)
-          local player = self.route.getControlledActor():getBody()
+          local player = self.route.getPlayerActor():getBody()
           local player_i, player_j = player:getPos()
           local body_i, body_j = body:getPos()
           if body:getDialogue() then

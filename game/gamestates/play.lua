@@ -175,8 +175,9 @@ end
 
 function state:update(_)
   --FIXME:this doesn't need to happen every update (I think)
-  if _route.getControlledActor() or _player then
-    _view.sector:updateFov(_route.getControlledActor() or _player)
+  _player = _player or _route.getControlledActor() or _route.getPlayerActor()
+  if _player then
+    _view.sector:updateFov(_player)
   else
     return error("missing player")
   end
@@ -184,7 +185,7 @@ function state:update(_)
   if _next_action then
     _playTurns(unpack(_next_action))
   end
-  _view.sector:lookAt(_route.getControlledActor() or _player)
+  _view.sector:lookAt(_player)
 end
 
 function state:resume(from, args)

@@ -1,5 +1,5 @@
 
--- luacheck: SWITCHER GS globals love
+-- luacheck: globals love SWITCHER GS MAIN_TIMER
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
@@ -93,8 +93,7 @@ function FocusBar:update(dt)
     self.explosions[i]:update(dt)
   end
 
-  local _OFF_SPD = 2.5
-  self.actor = self.route.getControlledActor()
+  self.actor = self.route.getPlayerActor()
 
   --update fade-in
   local maxfocus = ACTIONDEFS.MAX_FOCUS
