@@ -55,6 +55,10 @@ function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
 
+function Card:getLevel()
+  return self:getSpec('level')
+end
+
 function Card:getOwner()
   return Util.findId(self.owner_id)
 end

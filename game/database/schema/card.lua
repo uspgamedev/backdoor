@@ -15,6 +15,8 @@ return {
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.CARD_ATTRIBUTES },
+  { id = 'level', name = "Level", type = 'range', min = 1,
+      max = 10, default = 1 },
   { id = 'cost', name = "Cost", type = 'range', min = 0,
       max = DEFS.ACTION.MAX_FOCUS },
   { id = 'half-exhaustion', name = "Half exhaustion", type = 'boolean' },
