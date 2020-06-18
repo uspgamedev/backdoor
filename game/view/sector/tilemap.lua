@@ -26,16 +26,15 @@ local TILEMAP = {}
 
 local _sector
 local _tile_batch
-local _tile_offset
-local _tile_quads
+local _tileset
+local _variations
 local _fovmask
 local _tilemask
 
 function TILEMAP.init(sector, tileset)
   local texture = RES.loadTexture(tileset.texture)
   _tile_batch = love.graphics.newSpriteBatch(texture, 512, "stream")
-  _tile_offset = tileset.offsets
-  _tile_quads = tileset.quads
+  _tileset = tileset
   _sector = sector
   _fovmask = love.graphics.newCanvas(_VIEW_W * _TILE_W, _VIEW_H * _TILE_H)
   _FXSHADER = _FXSHADER or love.graphics.newShader(_FXCODE)
@@ -52,6 +51,14 @@ function TILEMAP.init(sector, tileset)
       end
     )
     _tilemask = love.graphics.newImage(data)
+  end
+  _variations = {}
+  local rng = love.math.newRandomGenerator(0) -- always same seed
+  for i = 1, #_sector.tiles do
+    _variations[i] = {}
+    for j = 1, #_sector.tiles[i] do
+      _variations[i][j] = rng:random()
+    end
   end
 end
 
@@ -120,6 +127,8 @@ function TILEMAP.drawAbyss(g)
   g.pop()
 end
 
+
+
 function TILEMAP.drawFloor(g)
   _tile_batch:clear()
   for i, j in CAM:tilesInRange() do
@@ -129,8 +138,18 @@ function TILEMAP.drawFloor(g)
       local tile_type = (tile.type == SCHEMATICS.WALL)
                         and SCHEMATICS.FLOOR or tile.type
       local x, y = j*_TILE_W, i*_TILE_H
-      _tile_batch:add(_tile_quads[tile_type], x, y,
-                  0, 1, 1, unpack(_tile_offset[tile.type]))
+      local variation = _variations[ti][tj]
+      local idx = 1
+      for _, threshold in ipairs(_tileset.weights[tile_type]) do
+        if variation < threshold then
+          break
+        else
+          idx = math.min(idx + 1, #_tileset.weights[tile_type])
+        end
+      end
+      local quad = _tileset.quads[tile_type][idx]
+      local offset = _tileset.offsets[tile_type][idx]
+      _tile_batch:add(quad, x, y, 0, 1, 1, unpack(offset))
     end
   end
 
