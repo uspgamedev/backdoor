@@ -21,7 +21,6 @@ end
 function FX.process (actor, fieldvalues)
   local value = fieldvalues['value']
   local target = fieldvalues['target']
-  local result = target:takeDamageFrom(value, actor)
 
   if fieldvalues['projectile'] then
     coroutine.yield('report', {
@@ -30,6 +29,8 @@ function FX.process (actor, fieldvalues)
       target = { target:getPos() },
     })
   end
+
+  local result = target:takeDamageFrom(value, actor)
 
   coroutine.yield('report', {
     type = 'take_damage',
