@@ -68,11 +68,11 @@ function state:update(dt)
     _save = false
     SWITCHER.pop()
   elseif DIRECTIONALS.wasDirectionTriggered("UP") then
-    PLAYSFX('select-menu', .1)
+    PLAYSFX('select-menu', .05)
     _selection = (_selection - 2 + _fieldcount) % _fieldcount + 1
     _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("DOWN") then
-    PLAYSFX('select-menu', .1)
+    PLAYSFX('select-menu', .05)
     _selection = (_selection % _fieldcount) + 1
     _view:setFocus(_selection)
   elseif DIRECTIONALS.wasDirectionTriggered("LEFT") then

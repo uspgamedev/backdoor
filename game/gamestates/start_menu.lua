@@ -109,10 +109,10 @@ function state:update(dt)
       PLAYSFX('back-menu', .05)
       MENU.cancel()
     elseif DIRECTIONALS.wasDirectionTriggered('UP') then
-      PLAYSFX('select-menu', .1)
+      PLAYSFX('select-menu', .05)
       MENU.prev()
     elseif DIRECTIONALS.wasDirectionTriggered('DOWN') then
-      PLAYSFX('select-menu', .1)
+      PLAYSFX('select-menu', .05)
       MENU.next()
     end
   end
