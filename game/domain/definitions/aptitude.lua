@@ -37,8 +37,8 @@ function APT.SPEED(spd, fin)
   return math.floor(10 + fin + spd/2)
 end
 
-function APT.SKILL(skl, efc)
-  return math.floor(skl + efc)
+function APT.FOCUS_REGEN(skl, efc)
+  return math.floor(3 + efc + skl)
 end
 
 return APT

@@ -167,8 +167,8 @@ function Body:getSpeed()
   return APT.SPEED(self:getSPD(), self:getFIN())
 end
 
-function Body:getSkill()
-  return APT.SKILL(self:getSKL(), self:getEFC())
+function Body:getFocusRegen()
+  return APT.FOCUS_REGEN(self:getSKL(), self:getEFC()) / 100
 end
 
 function Body:getMaxHP()
