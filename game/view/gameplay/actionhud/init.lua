@@ -1,27 +1,28 @@
 
 -- luacheck: globals MAIN_TIMER, no self
 
-local DIRECTIONALS  = require 'infra.dir'
-local LONG_WALK     = require 'view.helpers.long_walk'
-local ADJACENCY     = require 'view.helpers.adjacency'
-local INPUT         = require 'input'
-local DEFS          = require 'domain.definitions'
-local VIEWDEFS      = require 'view.definitions'
-local HandView      = require 'view.gameplay.actionhud.hand'
-local Minimap       = require 'view.gameplay.actionhud.minimap'
-local EquipmentDock = require 'view.gameplay.actionhud.equipmentdock'
-local ConfirmHint   = require 'view.gameplay.actionhud.controlhints.confirm'
-local CancelHint    = require 'view.gameplay.actionhud.controlhints.cancel'
-local OpenPacksHint = require 'view.gameplay.actionhud.controlhints.openpacks'
-local ShowStatsHint = require 'view.gameplay.actionhud.controlhints.showstats'
+local DIRECTIONALS    = require 'infra.dir'
+local LONG_WALK       = require 'view.helpers.long_walk'
+local ADJACENCY       = require 'view.helpers.adjacency'
+local INPUT           = require 'input'
+local DEFS            = require 'domain.definitions'
+local VIEWDEFS        = require 'view.definitions'
+local PLAYSFX         = require 'helpers.playsfx'
+local HandView        = require 'view.gameplay.actionhud.hand'
+local Minimap         = require 'view.gameplay.actionhud.minimap'
+local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
+local ConfirmHint     = require 'view.gameplay.actionhud.controlhints.confirm'
+local CancelHint      = require 'view.gameplay.actionhud.controlhints.cancel'
+local OpenPacksHint   = require 'view.gameplay.actionhud.controlhints.openpacks'
+local ShowStatsHint   = require 'view.gameplay.actionhud.controlhints.showstats'
 local ToggleHintsHint = require 'view.gameplay.actionhud.controlhints.togglehints'
-local ConditionDock = require 'view.gameplay.actionhud.conditiondock'
-local FocusBar      = require 'view.gameplay.actionhud.focusbar'
-local TurnPreview   = require 'view.gameplay.actionhud.turnpreview'
-local CardView      = require 'view.card'
-local Util          = require "steaming.util"
-local Class         = require "steaming.extra_libs.hump.class"
-local ELEMENT       = require "steaming.classes.primitives.element"
+local ConditionDock   = require 'view.gameplay.actionhud.conditiondock'
+local FocusBar        = require 'view.gameplay.actionhud.focusbar'
+local TurnPreview     = require 'view.gameplay.actionhud.turnpreview'
+local CardView        = require 'view.card'
+local Util            = require "steaming.util"
+local Class           = require "steaming.extra_libs.hump.class"
+local ELEMENT         = require "steaming.classes.primitives.element"
 
 local _INFO_LAG = 0.65 -- seconds
 local _MARGIN = 20
@@ -243,10 +244,12 @@ end
 function ActionHUD:removeWidgetCard(card)
   if self.weardock:getCard() and
      self.weardock:getCard().card == card then
+    PLAYSFX("wearable-unequip")
     return self.weardock:removeCard()
   end
   if self.wielddock:getCard() and
      self.wielddock:getCard().card == card then
+      PLAYSFX("wieldable-unequip")
       return self.wielddock:removeCard()
   end
   for i = 1, self.conddock:getConditionsCount() do

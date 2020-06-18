@@ -2,6 +2,7 @@
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local VIEWDEFS      = require 'view.definitions'
+local PLAYSFX       = require 'helpers.playsfx'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
@@ -49,6 +50,16 @@ function ANIM:script(route, view, report)
                                   cardview, {position = destination},
                                   'out-cubic',
                   function()
+                    if dock:getCardMode() == 'cond':
+                      --PLAYSFX('')
+                    elseif dock:getCardMode() == 'equip' then
+                      local placement = cardview.card:getWidgetPlacement()
+                      if placement == "wieldable" then
+                        PLAYSFX('wieldable-equip')
+                      elseif placement == "wearable" then
+                        PLAYSFX('wearable-equip')
+                      else
+                    end
                     dock:addCard(cardview)
                     self.resume()
                   end)
