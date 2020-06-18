@@ -220,12 +220,14 @@ function _copySourceAbilities(src_abilities)
 end
 
 local _OVERWRITE_MSG = [[
-register %s overwritten by expansion of ability from card %s on command %s!]]
+WARNING: register "%s" overwritten by expansion of ability
+         from card %s on command %s!]]
 
 function _importRegisters(registers, cmd, match)
   for k, v in pairs(match.new_values) do
-    assert(not registers[k],
-           _OVERWRITE_MSG:format(k, match.source:getName(), cmd.name))
+    if registers[k] then
+      print(_OVERWRITE_MSG:format(k, match.source:getName(), cmd.name))
+    end
     registers[k] = v
   end
   return registers
