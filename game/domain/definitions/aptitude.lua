@@ -29,8 +29,12 @@ function APT.ATTR_LEVEL(owner, which)
   return lv-1
 end
 
-function APT.HP(vit, res)
-  return math.floor((3 + res) * vit)
+function APT.BASE_HP(power_level, res)
+  return math.floor(power_level * (2 + res/2))
+end
+
+function APT.EXTRA_HP(vit)
+  return math.floor(vit)
 end
 
 function APT.SPEED(spd, fin)

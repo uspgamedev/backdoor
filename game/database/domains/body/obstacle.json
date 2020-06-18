@@ -5,6 +5,6 @@
   "faction":"agressive",
   "fin":-2,
   "name":"Obstacle",
-  "res":2,
+  "res":-1,
   "extends":false
 }
