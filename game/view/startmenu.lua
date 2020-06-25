@@ -1,3 +1,6 @@
+
+-- luacheck: globals love VERSION
+
 --DEPENDENCIES--
 local RES       = require 'resources'
 local FONT      = require 'view.helpers.font'
@@ -11,16 +14,14 @@ local StartMenuView = Class{
   __includes = { ELEMENT }
 }
 
-local _TITLE_TEXT = "backdoor"
 local _LH = 1.5
-local _TILE_W, _TILE_H = 80, 80
+local _TILE_W = 80
 
 local _SCROLL_THRESHOLD = 6
 local _TITLE_FONT_SIZE = 48
 local _MENU_FONT_SIZE = 24
 local _VERSION_FONT_SIZE = 16
 local _CONTROLS_FONT_SIZE = 24
-local _FADE_TIME = .5
 
 --Logo consts and variables
 local _LOGO_BG_PARTS = 11
@@ -59,8 +60,6 @@ local function _initLogo()
                                 _LOGO_BG_MAG_MIN
   end
   _LOGO_TEXT = RES.loadTexture('logo-text')
-  _LOGO_BG_WIDTH = _LOGO_BG[1]:getWidth()
-  _LOGO_BG_HEIGHT = _LOGO_BG[1]:getHeight()
 end
 
 local function _renderTitleLogo(g)
@@ -97,7 +96,7 @@ local function _renderOptions(g, q, selection, scrolltop)
   local count = 0
   while not q.isEmpty() do
     local item_text = q.pop()
-    local text_color = COLORS.BACKGROUND
+    local text_color = COLORS.NONE
     count = count + 1
     if count >= scrolltop and count < scrolltop + _SCROLL_THRESHOLD then
       if selection == count then
@@ -185,7 +184,7 @@ function StartMenuView:draw()
 
 end
 
-function StartMenuView:update(dt)
+function StartMenuView:update(dt) -- luacheck: no self
 
   _logo_rotation = (_logo_rotation + _LOGO_ROTATION_SPEED*dt)
   for i = 2, _LOGO_BG_PARTS do
