@@ -205,7 +205,11 @@ function CardView:draw()
     _title_font:set()
     local cardname = self.card:getName()
     local namewidth = _title_font:getWidth(cardname)
-    g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+    if self.card:getOwner() and self.card:getOwner():canPlayCard(self.card) then
+      g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+    else
+      g.setColor(COLORS.INVALID * Color:new{1,1,1,self.alpha})
+    end
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
              namewidth, "center")
