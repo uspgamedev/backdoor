@@ -1,4 +1,5 @@
 
+local ACTIONDEFS = require 'domain.definitions.action'
 local IMGUI = require 'imgui'
 
 return function (actor)
@@ -18,7 +19,7 @@ return function (actor)
     if changed then
       actor:getBody():setHP(newhp)
     end
-    IMGUI.Text(("PWRLVL: %d"):format(actor:getPowerLevel()))
+    IMGUI.Text(("PWRLVL: %.2f"):format(actor:getPowerLevel()))
     IMGUI.Separator()
     IMGUI.Text(("COR: %d"):format(actor:getCOR()))
     IMGUI.Text(("ARC: %d"):format(actor:getARC()))
@@ -32,8 +33,14 @@ return function (actor)
     IMGUI.Text(("FIN: %d"):format(actor:getBody():getFIN()))
     IMGUI.Text(("RES: %d"):format(actor:getBody():getRES()))
     IMGUI.Separator()
-    IMGUI.Text(("Skill: %d"):format(actor:getBody():getSkill()))
-    IMGUI.Text(("Speed: %d"):format(actor:getBody():getSpeed()))
+    local focus_per_cycle = actor:getBody():getFocusRegen()
+                          * ACTIONDEFS.CYCLE_UNIT
+    IMGUI.Text(("Focus Regen: %.2f focus/cycle"):format(focus_per_cycle))
+    local turns_per_cycle = actor:getBody():getSpeed() / ACTIONDEFS.MAX_ENERGY
+                                                       * ACTIONDEFS.CYCLE_UNIT
+    IMGUI.Text(("Speed: %.2f turns/cycle"):format(turns_per_cycle))
+    IMGUI.Text(("Base HP: %.2f"):format(actor:getBody():getBaseMaxHP()))
+    IMGUI.Text(("Extra HP: %+d%%"):format(actor:getBody():getExtraMaxHP() * 100))
   end
 
 end

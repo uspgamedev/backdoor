@@ -2,10 +2,8 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":0,
-          "base":5,
+          "value":5,
           "center":"=target_pos",
-          "mod":100,
           "name":"damage_on_area",
           "projectile":true,
           "size":2,
@@ -25,6 +23,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":4,
   "icon":"card-impact-grenade",
   "name":"Impact Grenade",
   "one_time":true,

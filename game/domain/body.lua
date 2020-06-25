@@ -167,12 +167,25 @@ function Body:getSpeed()
   return APT.SPEED(self:getSPD(), self:getFIN())
 end
 
-function Body:getSkill()
-  return APT.SKILL(self:getSKL(), self:getEFC())
+function Body:getFocusRegen()
+  return APT.FOCUS_REGEN(self:getSKL(), self:getEFC()) / 100
+end
+
+function Body:getBaseMaxHP()
+  local power_level = 3
+  local actor = self:getActor()
+  if actor then
+    power_level = actor:getPowerLevel()
+  end
+  return APT.BASE_HP(power_level, self:getRES())
+end
+
+function Body:getExtraMaxHP()
+  return APT.EXTRA_HP(self:getVIT()) / 10
 end
 
 function Body:getMaxHP()
-  return APT.HP(self:getVIT(), self:getRES())
+  return math.floor(self:getBaseMaxHP() * (1 + self:getExtraMaxHP()))
 end
 
 function Body:getConsumption() -- luacheck: no self

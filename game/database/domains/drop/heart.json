@@ -6,7 +6,8 @@
         "mod":100,
         "name":"heal",
         "target":"=self-body",
-        "type":"effect"
+        "type":"effect",
+        "value":3
       }],
     "inputs":[{
         "name":"self",

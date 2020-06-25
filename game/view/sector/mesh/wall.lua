@@ -1,5 +1,5 @@
 
-local VIEWDEFS    = require 'view.definitions'
+local COLORS      = require 'domain.definitions.colors'
 local vec3        = require 'cpml' .vec3
 
 local _WALL_H = 80
@@ -33,7 +33,7 @@ local function _appendFace(mesh, base)
     mesh.faces[n+i] = base + idx
   end
 end
-  
+
 local function _appendQuad(mesh, color, v1, v2, v3, v4)
   local base = mesh.count
   local pos = _tov3(mesh.pos)
@@ -59,6 +59,14 @@ function WallMesh:addSide(color, v1, v2, b1, b2)
   if b1 then
     _appendQuad(self, self.border_color, v1 + height + b1, v2 + height + b2,
                                          v1 + height, v2 + height)
+  end
+end
+
+function WallMesh:addBottom(v1, v2, v3, v4, extra, ...)
+  v1, v2, v3, v4 = _tov3(v1), _tov3(v2), _tov3(v3), _tov3(v4 or v3)
+  _appendQuad(self, COLORS.BLACK, v1, v2, v3, v4)
+  if extra then
+    return self:addBottom(v3, v4, extra, ...)
   end
 end
 

@@ -5,6 +5,7 @@ local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CardView     = require 'view.card'
 local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
+local PLAYSFX      = require 'helpers.playsfx'
 local VIEWDEFS     = require 'view.definitions'
 local PROFILE      = require 'infra.profile'
 local Class        = require "steaming.extra_libs.hump.class"
@@ -79,6 +80,7 @@ function HandView:getFocus()
 end
 
 function HandView:moveFocus(dir)
+  PLAYSFX('select-card', .06)
   if dir == "LEFT" then
     self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
   elseif dir == "RIGHT" then
@@ -94,11 +96,13 @@ function HandView:activate()
   if not PROFILE.getTutorial("use_card") then
     SWITCHER.push(GS.TUTORIAL_HINT, "use_card")
   end
+  PLAYSFX('open-hand')
   self.active = true
   self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
 end
 
 function HandView:deactivate()
+  PLAYSFX('close-hand')
   self.active = false
 end
 

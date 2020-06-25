@@ -10,11 +10,9 @@
           "vfx-spd":4,
           "sfx":false
         },{
-          "attr":"=cor",
-          "base":1,
+          "value":"=amount",
           "center":"=target_pos",
           "ignore_owner":true,
-          "mod":50,
           "name":"damage_on_area",
           "size":2,
           "type":"effect"
@@ -29,10 +27,12 @@
           "tactical-hint":"harmful",
           "type":"input"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":1,
+          "mod":50,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"self",
           "output":"self",
@@ -47,8 +47,9 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":6,
   "desc":"Up up up!",
   "name":"Jump",
-  "set":"armor_advanced",
+  "set":"maneuver_advanced",
   "icon":false
 }

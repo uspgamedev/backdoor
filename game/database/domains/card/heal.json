@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=ANI",
-          "base":0,
-          "mod":100,
+          "value":"=amount",
           "name":"heal",
           "target":"=self",
           "type":"effect"
@@ -23,10 +21,12 @@
           "non-wall":false,
           "empty-tile":false
         },{
-          "name":"get_attribute",
-          "output":"ANI",
-          "type":"operator",
-          "which":"ANI"
+          "attr":"ANI",
+          "base":0,
+          "mod":100,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"get_body_at",
           "output":"self",
@@ -37,10 +37,10 @@
   },
   "attr":"ANI",
   "cost":2,
+  "level":5,
   "desc":"",
   "icon":"card-heal",
   "name":"Heal",
-  "pp":3,
   "set":"support_advanced",
   "type-description":"",
   "one_time":false

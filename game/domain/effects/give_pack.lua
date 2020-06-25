@@ -7,7 +7,7 @@ FX.schema = {
 }
 
 function FX.preview()
-  return "Get card pack"
+  return "get card pack"
 end
 
 function FX.process (actor, fieldvalues)

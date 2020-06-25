@@ -9,11 +9,9 @@
           "size":3,
           "type":"effect"
         },{
-          "attr":"=ani",
-          "base":4,
+          "value":"=amount",
           "center":"=pos",
           "ignore_owner":true,
-          "mod":20,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
@@ -32,10 +30,12 @@
           "empty-tile":false,
           "non-wall":false
         },{
-          "name":"get_attribute",
-          "output":"ani",
-          "type":"operator",
-          "which":"ANI"
+          "attr":"ANI",
+          "base":4,
+          "mod":20,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"self",
           "output":"self",
@@ -55,6 +55,7 @@
   },
   "attr":"ANI",
   "cost":3,
+  "level":9,
   "desc":"",
   "icon":"card-stomp",
   "name":"Stomp",

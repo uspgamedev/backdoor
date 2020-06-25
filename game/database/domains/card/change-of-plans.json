@@ -11,6 +11,7 @@
   },
   "attr":"ARC",
   "cost":1,
+  "level":5,
   "desc":"Close your eyes and see beyond.",
   "icon":"card-change-of-plans",
   "name":"Change of Plans",

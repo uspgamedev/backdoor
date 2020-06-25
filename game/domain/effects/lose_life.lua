@@ -14,7 +14,7 @@ FX.schema = {
 -- can be for self-damaging attacks, as well as effects like poison
 
 function FX.preview(actor, fieldvalues)
-  local str = ("Lose %s%% hit points"):format(fieldvalues['percentage'])
+  local str = ("lose %s%% hit points"):format(fieldvalues['percentage'])
   if fieldvalues['stay_alive'] then
     str = str .. " (non-lethal)"
   end

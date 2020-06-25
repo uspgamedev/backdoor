@@ -11,6 +11,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":7,
   "icon":"card-vial-of-essence",
   "name":"Vial of Essence",
   "one_time":true,

@@ -2,10 +2,8 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=arc",
-          "base":0,
+          "value":"=amount",
           "center":"=target",
-          "mod":150,
           "name":"damage_on_area",
           "projectile":true,
           "sfx":"attack-hit",
@@ -23,15 +21,18 @@
           "type":"input",
           "empty-tile":false
         },{
-          "name":"get_attribute",
-          "output":"arc",
-          "type":"operator",
-          "which":"ARC"
+          "attr":"ARC",
+          "base":0,
+          "mod":150,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },
   "attr":"ARC",
   "cost":3,
+  "level":9,
   "desc":"Ages go by, and the fireball spell remains the\nbread and butter of arcane artists.",
   "icon":"card-fireball",
   "name":"Fireball",

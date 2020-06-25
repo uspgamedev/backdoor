@@ -279,8 +279,23 @@ function Actor:isHandFull()
   return #self.hand >= DEFS.HAND_LIMIT
 end
 
+function Actor:canPlayCard(card)
+  local attr = card:getRelatedAttr()
+  local level
+  if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
+    level = self:getAttribute(attr)
+  else
+    level = math.max(self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.COR),
+                     self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.ARC))
+    level = math.max(self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.ANI),
+                     level)
+  end
+  return level >= card:getLevel() and
+         self:getFocus() >= card:getCost()
+end
+
 function Actor:getFocus()
-  return self.focus
+  return math.floor(self.focus)
 end
 
 function Actor:getBufferSize()
@@ -570,9 +585,27 @@ function Actor:grabDrops(tile)
     if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1
-      coroutine.yield('report', {
-        sfx = 'get-item'
-      })
+
+      for _, effect in ipairs(dropspec.ability.effects) do
+        local name = effect.name
+        if name == "give_pack" then
+          coroutine.yield('report', {
+            sfx = 'get-pack'
+          })
+        elseif name == "reward_pp" then
+          coroutine.yield('report', {
+            sfx = 'get-pp'
+          })
+        elseif name == "heal" then
+          coroutine.yield('report', {
+            sfx = 'get-hp'
+          })
+        else
+          coroutine.yield('report', {
+            sfx = 'get-item'
+          })
+        end
+      end
       ABILITY.execute(dropspec.ability, self, inputvalues)
     else
       i = i+1
@@ -582,6 +615,7 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
+  self:gainFocus(self:getBody():getFocusRegen())
 end
 
 function Actor:ready()
@@ -626,7 +660,6 @@ function Actor:discardHand()
 end
 
 function Actor:beginTurn()
-  self:gainFocus(ACTIONDEFS.FOCUS_PER_TURN)
   while self:getHandSize() < DEFS.HAND_LIMIT and self:canDrawCard() do
     self:drawCard()
   end
@@ -691,7 +724,7 @@ function Actor:getPowerLevel()
   for _,value in pairs(self.upgrades) do
     lvl = value + lvl
   end
-  return lvl
+  return lvl / 100
 end
 
 return Actor

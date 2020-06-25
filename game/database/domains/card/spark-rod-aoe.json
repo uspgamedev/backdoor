@@ -2,11 +2,9 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":4,
+          "value":"=amount",
           "center":"=target-pos",
           "ignore_owner":true,
-          "mod":30,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
@@ -20,15 +18,18 @@
           "tactical-hint":"harmful",
           "type":"input"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":4,
+          "mod":30,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },
   "attr":"COR",
   "cost":3,
+  "level":10,
   "icon":"card-spark-rod-shockwave",
   "name":"Spark Blast",
   "temporary":true,

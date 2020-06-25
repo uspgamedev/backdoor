@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=vit",
-          "base":4,
-          "mod":100,
+          "value":4,
           "name":"heal",
           "target":"=self_body",
           "type":"effect"
@@ -18,21 +16,16 @@
           "name":"get_actor_body",
           "output":"self_body",
           "type":"operator"
-        },{
-          "name":"get_body_attribute",
-          "output":"vit",
-          "type":"operator",
-          "which":"VIT"
         }]
     }
   },
   "attr":"NONE",
   "cost":1,
+  "level":1,
   "desc":"Gulp. Down the hatch, foxy.",
   "icon":"card-potion",
   "name":"Healing Potion",
   "one_time":true,
-  "pp":4,
   "set":"consumables_common",
   "type-description":""
 }

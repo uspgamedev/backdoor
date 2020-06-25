@@ -1,5 +1,5 @@
 
--- luacheck: SWITCHER GS globals love
+-- luacheck: globals love SWITCHER GS MAIN_TIMER
 
 local FONT        = require 'view.helpers.font'
 local COLORS      = require 'domain.definitions.colors'
@@ -93,8 +93,7 @@ function FocusBar:update(dt)
     self.explosions[i]:update(dt)
   end
 
-  local _OFF_SPD = 2.5
-  self.actor = self.route.getControlledActor()
+  self.actor = self.route.getPlayerActor()
 
   --update fade-in
   local maxfocus = ACTIONDEFS.MAX_FOCUS
@@ -105,6 +104,14 @@ function FocusBar:update(dt)
           function()
             PLAYSFX('focus-used', .1)
             self.explosions[i]:emit(40)
+          end)
+    end
+  elseif focus > self.previous_focus then
+    for i = focus, self.previous_focus + 1, -1  do
+      self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
+          function()
+            PLAYSFX('focus-gain', .05)
+            self.explosions[i]:emit(20)
           end)
     end
   end
@@ -201,7 +208,6 @@ function _newExplosionSource()
   particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
   particles:setSizes(3)
   particles:setEmissionArea('ellipse', 0, 0, 0, false)
-  particles:setTangentialAcceleration(-256)
   return particles
 end
 

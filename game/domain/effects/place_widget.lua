@@ -12,7 +12,7 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('card', fieldvalues['card'])['name']
-  return ("Cause %s to %s"):format(name, fieldvalues['body'])
+  return ("cause %s to %s"):format(name, fieldvalues['body'])
 end
 
 function FX.process(actor, fieldvalues)
@@ -21,10 +21,9 @@ function FX.process(actor, fieldvalues)
   card:setOwner(actor)
   body:placeWidget(card)
   coroutine.yield('report', {
-    type = 'text_rise',
-    text_type = 'status',
+    type = 'place_widget_card',
     body = body,
-    string = card:getName(),
+    card = card,
     sfx = fieldvalues.sfx,
   })
 end

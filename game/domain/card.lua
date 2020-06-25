@@ -1,5 +1,6 @@
 
 local ABILITY     = require 'domain.ability'
+local TRIGGERS    = require 'domain.definitions.triggers'
 local ACTIONSDEFS = require 'domain.definitions.action'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
@@ -52,6 +53,10 @@ end
 
 function Card:getRelatedAttr()
   return self:getSpec('attr')
+end
+
+function Card:getLevel()
+  return self:getSpec('level') or 1
 end
 
 function Card:getOwner()
@@ -114,6 +119,10 @@ end
 
 function Card:getWidgetTriggerCondition()
   return self:getSpec('widget')['trigger-condition']
+end
+
+function Card:getStaticAbilities()
+  return ipairs(self:getSpec('widget')['static'] or {})
 end
 
 function Card:getStaticOperators()
@@ -207,41 +216,54 @@ local _EPQ_TYPENAMES = {
 function Card:getEffect()
   local effect = ""
   local inputs = { self = self:getOwner() }
+  effect = effect .. "Lv " .. self:getLevel() .. " "
   if self:isTemporary() then
     effect = effect .. "Temporary "
   elseif self:isOneTimeOnly() then
     effect = effect .. "Single-Use "
   end
   if self:isArt() then
-    effect = effect .. ("Art (%d focus)\n\n"):format(self:getCost())
-                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(), inputs)
+    effect = effect .. "Art\n\n"
+    effect = effect .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
+                                       inputs, true)
   elseif self:isWidget() then
     local place = self:getWidgetPlacement() if place then
       effect = effect .. _EPQ_TYPENAMES[place]
     else
       effect = effect .. "Condition"
     end
-    effect = effect .. (" (%d focus"):format(self:getCost())
     local charges = self:getWidgetCharges() if charges > 0 then
       local trigger = self:getWidgetTrigger()
-      effect = effect .. (", %d charges%s"):format(
+      effect = effect .. (" (%d charges%s)"):format(
         charges,
         trigger and "/" .. trigger or ""
       )
     end
-    effect = effect .. ")"
+    do -- static abilities
+      local abs, n = {}, 0
+      for _,ab in self:getStaticAbilities() do
+        n = n + 1
+        abs[n] = ab.descr ~= "" and ab.descr
+                                 or "Missing static ability description."
+      end
+      if n > 0 then
+        effect = effect .. "\n\n" .. table.concat(abs, "\n\n")
+      end
+    end
+    do -- static operators
+      local ops, n = {}, 0
+      for _,op in self:getStaticOperators() do
+        n = n + 1
+        ops[n] = ("You get %s %s%d"):format(op.attr, op.op, op.val)
+      end
+      if n > 0 then
+        effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
+      end
+    end
     local auto = self:getWidgetTriggeredAbility() if auto then
-      local ability, trigger = auto.ability, auto.trigger
-      effect = effect .. ("\n\nTrigger [%s]: "):format(trigger)
+      local ability, trigger = auto.ability, TRIGGERS.WORDING[auto.trigger]
+      effect = effect .. ("\n\n%s, "):format(trigger)
                       .. ABILITY.preview(ability, self:getOwner(), inputs)
-    end
-    local ops, n = {}, 0
-    for _,op in self:getStaticOperators() do
-      n = n + 1
-      ops[n] = ("%s %s%d"):format(op.attr, op.op, op.val)
-    end
-    if n > 0 then
-      effect = effect .. "\n\n" .. table.concat(ops, ", ") .. "."
     end
     -- TODO: describe created cards
     local equip = self:getSpec('widget').equipment

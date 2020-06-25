@@ -33,6 +33,7 @@
   },
   "attr":"ANI",
   "cost":2,
+  "level":3,
   "desc":"Ooops, excuse me!",
   "half-exhaustion":true,
   "icon":"card-sidestep",

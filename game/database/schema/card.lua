@@ -1,4 +1,5 @@
 
+local ABILITY = require 'domain.ability'
 local DEFS = require 'domain.definitions'
 
 local _CARDS = 'domains.card'
@@ -14,6 +15,8 @@ return {
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.CARD_ATTRIBUTES },
+  { id = 'level', name = "Level", type = 'range', min = 1,
+      max = 10, default = 1 },
   { id = 'cost', name = "Cost", type = 'range', min = 0,
       max = DEFS.ACTION.MAX_FOCUS },
   { id = 'half-exhaustion', name = "Half exhaustion", type = 'boolean' },
@@ -38,6 +41,18 @@ return {
         options = DEFS.TRIGGERS },
       { id = 'trigger-condition', name = "Spend Trigger Condition",
         type = 'ability', optional = true },
+      {
+        id = 'static', name = "Static Abilities",
+        type = 'array', schema = {
+          { id = 'op', name = "Operation or Effect", type = 'enum',
+            options = ABILITY.allOperationsAndEffects() },
+          { id = 'replacement-ability', name = "Condition and Replacement",
+            type = 'ability',
+            hint = "When the inputs are met, the operation\n" ..
+                   "or effect are replaced by the effects here" },
+          { id = 'descr', name = "Rules Text", type = 'text' },
+        }
+      },
       {
         id = 'operators', name = "Static Attribute Operator",
         type = 'array', schema = {

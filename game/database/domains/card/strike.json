@@ -2,9 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":2,
-          "mod":30,
+          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
@@ -24,10 +22,12 @@
           "non-wall":false,
           "empty-tile":false
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":2,
+          "mod":30,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"get_body_at",
           "output":"target_body",
@@ -38,6 +38,7 @@
   },
   "attr":"COR",
   "cost":1,
+  "level":3,
   "desc":"",
   "icon":"card-strike",
   "name":"Strike",

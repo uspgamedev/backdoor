@@ -2,11 +2,9 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "attr":"=cor",
-          "base":6,
+          "value":"=amount",
           "center":"=self-pos",
           "ignore_owner":true,
-          "mod":60,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":2,
@@ -20,10 +18,12 @@
           "tactical-hint":"harmful",
           "type":"input"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":6,
+          "mod":60,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         },{
           "name":"self",
           "output":"self",
@@ -43,6 +43,7 @@
   },
   "attr":"COR",
   "cost":3,
+  "level":4,
   "icon":"card-roundhouse-kick",
   "name":"Roundhouse Kick",
   "set":"strikes_common"

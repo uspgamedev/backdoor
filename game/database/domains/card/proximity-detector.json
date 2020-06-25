@@ -13,10 +13,8 @@
             "target":"=body_self",
             "type":"effect"
           },{
-            "attr":"=arc",
-            "base":0,
+            "value":"=amount",
             "center":"=pos",
-            "mod":100,
             "name":"damage_on_area",
             "sfx":"attack-hit",
             "size":2,
@@ -33,10 +31,12 @@
             "output":"pos",
             "type":"operator"
           },{
-            "name":"get_attribute",
-            "output":"arc",
-            "type":"operator",
-            "which":"ARC"
+            "attr":"ARC",
+            "base":0,
+            "mod":100,
+            "name":"effective_power",
+            "output":"amount",
+            "type":"operator"
           }]
       },
       "trigger":"on_done"

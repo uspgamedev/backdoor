@@ -59,6 +59,8 @@ end
 local function _cancel()
   if _status == "choosing_pack" then
     _leave = true
+  else
+    PLAYSFX('denied', .03)
   end
 end
 
@@ -127,14 +129,18 @@ function state:update(_)
     })
   else
     if _status == "choosing_pack" and _card_list_view:usedHoldbar() then
+      PLAYSFX 'open-pack'
       _confirm()
     elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
+      PLAYSFX('select-card', .05)
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
+      PLAYSFX('select-card', .05)
       _next()
     elseif _status == "choosing_card" and
            (DIRECTIONALS.wasDirectionTriggered('UP') or
             DIRECTIONALS.wasDirectionTriggered('DOWN')) then
+      PLAYSFX('toggle-card', .05)
       _toggle()
     elseif INPUT.wasActionPressed('CANCEL') then
       _cancel()

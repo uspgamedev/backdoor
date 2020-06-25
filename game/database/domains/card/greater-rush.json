@@ -10,10 +10,8 @@
           "vfx-spd":1,
           "sfx":false
         },{
-          "attr":"=cor",
-          "base":1,
+          "value":"=amount",
           "center":"=damage_pos",
-          "mod":100,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
@@ -55,19 +53,21 @@
           "pos":"=target_pos",
           "type":"operator"
         },{
-          "name":"get_attribute",
-          "output":"cor",
-          "type":"operator",
-          "which":"COR"
+          "attr":"COR",
+          "base":1,
+          "mod":100,
+          "name":"effective_power",
+          "output":"amount",
+          "type":"operator"
         }]
     }
   },
   "attr":"COR",
   "cost":2,
+  "level":6,
   "desc":"It's rush hour. And I'm not talking about kung-fu.",
   "icon":"card-rush",
   "name":"Greater Rush",
-  "pp":10,
   "set":"maneuver_advanced",
   "type-description":"",
   "one_time":false
