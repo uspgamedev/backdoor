@@ -2,6 +2,7 @@
 local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local VIEWDEFS      = require 'view.definitions'
+local PLAYSFX       = require 'helpers.playsfx'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
@@ -43,6 +44,16 @@ function ANIM:script(route, view, report)
         cardview:setMode(mode)
         cardview:addTimer("wait", MAIN_TIMER, "after", .1,
               function()
+                if dock:getCardMode() == 'cond' then
+                  PLAYSFX('condition-equip')
+                elseif dock:getCardMode() == 'equip' then
+                  local placement = cardview.card:getWidgetPlacement()
+                  if placement == "wieldable" then
+                    PLAYSFX('wieldable-equip')
+                  elseif placement == "wearable" then
+                    PLAYSFX('wearable-equip')
+                  end
+                end
                 action_hud.handview.cardinfo:lockCard()
                 action_hud:disableCardInfo()
                 cardview:addTimer("final_slide", MAIN_TIMER, "tween", .6,

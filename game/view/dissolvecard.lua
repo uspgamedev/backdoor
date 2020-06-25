@@ -26,9 +26,9 @@ function Dissolve:init(cardview, duration)
 
   self.deferred = function () end
 
-  --PLAYSFX 'dissolve' TODO add a sfx for this
   self:register('HUD_FX')
 
+  PLAYSFX 'dissolve'
   self:addTimer("start", MAIN_TIMER, "tween", duration, self,
   { offset = -_MAX_OFFSET }, 'in-quad',
   function () self:kill(); return self.deferred() end)

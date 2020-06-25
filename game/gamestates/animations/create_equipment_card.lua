@@ -2,6 +2,7 @@
 local TweenValue    = require 'view.helpers.tweenvalue'
 local CardView      = require 'view.card'
 local Util          = require "steaming.util"
+local PLAYSFX       = require 'helpers.playsfx'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
@@ -26,6 +27,7 @@ function ANIM:script(route, view, report)
     view.action_hud.handview:addCard(cardview)
     action_hud:disableCardInfo()
     cardview:setPosition(widgetview.position:unpack())
+    PLAYSFX("create-equipment")
     self.wait(delay:set(0.2))
     cardview:register("HUD_FX")
     _slideDown(widgetview, self)

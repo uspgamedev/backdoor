@@ -106,6 +106,14 @@ function FocusBar:update(dt)
             self.explosions[i]:emit(40)
           end)
     end
+  elseif focus > self.previous_focus then
+    for i = focus, self.previous_focus + 1, -1  do
+      self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
+          function()
+            PLAYSFX('focus-gain', .05)
+            self.explosions[i]:emit(20)
+          end)
+    end
   end
   self.previous_focus = focus
   for i = 1, maxfocus do
@@ -200,7 +208,6 @@ function _newExplosionSource()
   particles:setColors(COLORS.NEUTRAL, COLORS.TRANSP)
   particles:setSizes(3)
   particles:setEmissionArea('ellipse', 0, 0, 0, false)
-  particles:setTangentialAcceleration(-256)
   return particles
 end
 
