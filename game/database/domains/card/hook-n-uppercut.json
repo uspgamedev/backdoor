@@ -35,6 +35,7 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":6,
   "icon":"card-hook-n-uppercut",
   "name":"Hook and Uppercut",
   "set":"strikes_advanced"

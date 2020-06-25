@@ -279,6 +279,21 @@ function Actor:isHandFull()
   return #self.hand >= DEFS.HAND_LIMIT
 end
 
+function Actor:canPlayCard(card)
+  local attr = card:getRelatedAttr()
+  local level
+  if attr ~= DEFS.CARD_ATTRIBUTES.NONE then
+    level = self:getAttribute(attr)
+  else
+    level = math.max(self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.COR),
+                     self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.ARC))
+    level = math.max(self:getAttribute(DEFS.PRIMARY_ATTRIBUTES.ANI),
+                     level)
+  end
+  return level >= card:getLevel() and
+         self:getFocus() >= card:getCost()
+end
+
 function Actor:getFocus()
   return math.floor(self.focus)
 end

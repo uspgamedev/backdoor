@@ -63,6 +63,7 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":3,
   "desc":"Excuse me sir, I've got somewhere to be right now",
   "icon":"card-rush",
   "name":"Rush",

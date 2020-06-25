@@ -52,10 +52,10 @@
   },
   "attr":"COR",
   "cost":3,
+  "level":7,
   "desc":"They say 'no pain, no gain'.\nI'll give them what they want.",
   "icon":"card-reckless-smash",
   "name":"Reckless Smash",
-  "pp":0,
   "set":"strikes_advanced",
   "type-description":"",
   "one_time":false

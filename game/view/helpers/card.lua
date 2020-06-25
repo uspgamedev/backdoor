@@ -1,19 +1,13 @@
 
 local FONT = require 'view.helpers.font'
 local TEXTURE = require 'view.helpers.texture'
-local RES = require 'resources'
-local APT = require 'domain.definitions.aptitude'
 local COLORS = require 'domain.definitions.colors'
-local round = require 'common.math' .round
 
 --CARDVIEW PROPERTIES--
 
 local _title_font = FONT.get("TextBold", 20)
 local _text_font = FONT.get("Text", 20)
-local _info_font = FONT.get("Text", 18)
-local _card_font = FONT.get("Text", 12)
 local _card_base
-local _neutral_icon
 
 local CARD = {}
 
@@ -28,8 +22,11 @@ end
 --Draw the description of a card.
 function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
   alpha = alpha or 1
-  local g = love.graphics
+  local g = love.graphics -- luacheck: globals love
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
+  if not (card:getOwner() and card:getOwner():canPlayCard(card)) then
+    cr, cg, cb = unpack(COLORS.INVALID)
+  end
 
   g.push()
 

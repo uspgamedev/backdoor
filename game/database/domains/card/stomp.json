@@ -55,6 +55,7 @@
   },
   "attr":"ANI",
   "cost":3,
+  "level":9,
   "desc":"",
   "icon":"card-stomp",
   "name":"Stomp",

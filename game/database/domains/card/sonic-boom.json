@@ -55,6 +55,7 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":7,
   "icon":"card-sonic-boom",
   "name":"Sonic Boom",
   "set":"ranged_advanced"

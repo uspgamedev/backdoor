@@ -23,6 +23,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":8,
   "icon":"card-plasma-bomb",
   "name":"Plasma Bomb",
   "one_time":true,

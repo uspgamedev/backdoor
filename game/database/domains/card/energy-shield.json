@@ -4,6 +4,7 @@
   "icon":"card-energy-shield",
   "name":"Energy Shield",
   "set":"armor_advanced",
+  "level":5,
   "widget":{
     "charges":20,
     "equipment":{

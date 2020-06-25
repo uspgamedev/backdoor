@@ -31,10 +31,10 @@
   },
   "attr":"ARC",
   "cost":2,
+  "level":3,
   "desc":"Aaaaaaahhh... Savior of the Universe!",
   "icon":"card-flash",
   "name":"Flash",
-  "pp":0,
   "type-description":"",
   "set":false,
   "one_time":false

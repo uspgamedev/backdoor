@@ -43,6 +43,7 @@
   },
   "attr":"COR",
   "cost":1,
+  "level":3,
   "desc":"Voooosh",
   "icon":"card-dash",
   "name":"Dash",

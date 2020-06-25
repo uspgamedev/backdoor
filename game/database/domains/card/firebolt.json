@@ -36,11 +36,11 @@
     }
   },
   "attr":"ARC",
-  "cost":2,
+  "cost":1,
+  "level":3,
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "icon":"card-firebolt",
   "name":"Firebolt",
-  "pp":4,
   "set":"ranged_common",
   "type-description":"",
   "one_time":false

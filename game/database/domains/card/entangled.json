@@ -1,6 +1,7 @@
 {
   "attr":"ANI",
   "icon":"card-entangle",
+  "level":5,
   "name":"Entangled",
   "one_time":true,
   "widget":{

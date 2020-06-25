@@ -23,6 +23,7 @@ COLORS.HUD_BG = Color:new {12/256, 12/256, 12/256, 1}
 COLORS.EMPTY = Color:new {0.2, .15, 0.05, 1}
 COLORS.WARNING = Color:new {1, 0.8, 0.2, 1}
 COLORS.VALID = Color:new {0, 0.7, 1, 1}
+COLORS.INVALID = Color.fromInt {0x3b, 0x17, 0x25, 0xff}
 COLORS.NOTIFICATION = Color.fromInt {0xD9, 0x53, 0x4F, 0xff}
 COLORS.SUCCESS = Color.fromInt {0x33, 0xAA, 0x3F, 0xff}
 

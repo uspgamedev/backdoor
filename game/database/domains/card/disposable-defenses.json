@@ -1,6 +1,7 @@
 {
   "attr":"NONE",
   "cost":3,
+  "level":7,
   "icon":"card-disposable-defenses",
   "name":"Disposable Defenses",
   "one_time":true,

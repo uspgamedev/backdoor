@@ -1,6 +1,7 @@
 {
-  "attr":"NONE",
+  "attr":"COR",
   "cost":3,
+  "level":9,
   "icon":"card-plated-shield",
   "name":"Plated Shield",
   "set":"armor_expert",

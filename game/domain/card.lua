@@ -55,6 +55,10 @@ function Card:getRelatedAttr()
   return self:getSpec('attr')
 end
 
+function Card:getLevel()
+  return self:getSpec('level') or 1
+end
+
 function Card:getOwner()
   return Util.findId(self.owner_id)
 end
@@ -212,6 +216,7 @@ local _EPQ_TYPENAMES = {
 function Card:getEffect()
   local effect = ""
   local inputs = { self = self:getOwner() }
+  effect = effect .. "Lv " .. self:getLevel() .. " "
   if self:isTemporary() then
     effect = effect .. "Temporary "
   elseif self:isOneTimeOnly() then

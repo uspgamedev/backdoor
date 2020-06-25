@@ -37,6 +37,7 @@
   },
   "attr":"COR",
   "cost":1,
+  "level":6,
   "icon":"card-blaster",
   "name":"Blaster Shot",
   "temporary":true,

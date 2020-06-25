@@ -36,6 +36,7 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":10,
   "icon":"card-spark-rod-strike",
   "name":"Rod Strike",
   "temporary":true,

@@ -38,6 +38,7 @@
   },
   "attr":"COR",
   "cost":1,
+  "level":3,
   "desc":"",
   "icon":"card-strike",
   "name":"Strike",

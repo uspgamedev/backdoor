@@ -43,6 +43,7 @@
   },
   "attr":"COR",
   "cost":3,
+  "level":4,
   "icon":"card-roundhouse-kick",
   "name":"Roundhouse Kick",
   "set":"strikes_common"

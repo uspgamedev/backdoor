@@ -2,13 +2,13 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "center":"=self_pos",
           "ignore_owner":true,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":3,
@@ -48,6 +48,7 @@
   "cost":3,
   "exhaustion":"FULL",
   "icon":"card-arcane-burst",
+  "level":4,
   "name":"Arcane Burst",
   "set":"ranged_common"
 }

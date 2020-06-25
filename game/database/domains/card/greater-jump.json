@@ -51,7 +51,7 @@
   "desc":"Take THAT gravity!",
   "icon":"card-jump",
   "name":"Greater Jump",
-  "pp":3,
+  "level":9,
   "set":"maneuver_expert",
   "type-description":"",
   "one_time":false
