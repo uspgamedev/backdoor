@@ -21,10 +21,9 @@ function FX.process(actor, fieldvalues)
   card:setOwner(actor)
   body:placeWidget(card)
   coroutine.yield('report', {
-    type = 'text_rise',
-    text_type = 'status',
+    type = 'place_widget_card',
     body = body,
-    string = card:getName(),
+    card = card,
     sfx = fieldvalues.sfx,
   })
 end
