@@ -1,6 +1,7 @@
 -- luacheck: globals MAIN_TIMER
 
 local TweenValue    = require 'view.helpers.tweenvalue'
+local PLAYSFX       = require 'helpers.playsfx'
 
 local ANIM = require 'common.activity' ()
 
@@ -11,6 +12,7 @@ function ANIM:script(route, view, report)
     local frontbuffer = view.frontbuffer
     local backbuffer = view.backbuffer
     local d = .8
+    PLAYSFX 'shuffle'
     backbuffer:changeSide(d, frontbuffer, report.actor)
     self.wait(delay:set(d-.1))
   end
