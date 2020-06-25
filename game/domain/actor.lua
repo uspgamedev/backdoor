@@ -585,9 +585,27 @@ function Actor:grabDrops(tile)
     if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1
-      coroutine.yield('report', {
-        sfx = 'get-item'
-      })
+
+      for _, effect in ipairs(dropspec.ability.effects) do
+        local name = effect.name
+        if name == "give_pack" then
+          coroutine.yield('report', {
+            sfx = 'get-pack'
+          })
+        elseif name == "reward_pp" then
+          coroutine.yield('report', {
+            sfx = 'get-pp'
+          })
+        elseif name == "heal" then
+          coroutine.yield('report', {
+            sfx = 'get-hp'
+          })
+        else
+          coroutine.yield('report', {
+            sfx = 'get-item'
+          })
+        end
+      end
       ABILITY.execute(dropspec.ability, self, inputvalues)
     else
       i = i+1
