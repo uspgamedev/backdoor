@@ -48,7 +48,7 @@
   "cost":3,
   "exhaustion":"FULL",
   "icon":"card-arcane-burst",
-  "level":5,
+  "level":4,
   "name":"Arcane Burst",
   "set":"ranged_common"
 }

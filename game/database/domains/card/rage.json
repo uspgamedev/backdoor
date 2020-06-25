@@ -1,6 +1,7 @@
 {
   "attr":"ANI",
   "cost":2,
+  "level":5,
   "desc":"They say Rage is all the rage with the kids.",
   "icon":"card-rage",
   "name":"Rage",

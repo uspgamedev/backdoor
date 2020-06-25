@@ -30,7 +30,7 @@
   "desc":"Goodnight sweet prince.",
   "icon":"card-illusion-of-darkness",
   "name":"Illusion of Darkness",
-  "pp":3,
+  "level":7,
   "set":"control_advanced",
   "type-description":"",
   "one_time":false

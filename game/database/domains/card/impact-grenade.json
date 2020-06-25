@@ -23,6 +23,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":4,
   "icon":"card-impact-grenade",
   "name":"Impact Grenade",
   "one_time":true,

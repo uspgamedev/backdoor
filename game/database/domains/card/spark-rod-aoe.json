@@ -29,6 +29,7 @@
   },
   "attr":"COR",
   "cost":3,
+  "level":10,
   "icon":"card-spark-rod-shockwave",
   "name":"Spark Blast",
   "temporary":true,

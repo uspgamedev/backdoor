@@ -1,6 +1,7 @@
 {
   "attr":"COR",
   "cost":3,
+  "level":7,
   "icon":"card-lead-pipe",
   "name":"Lead Pipe",
   "set":"weapon_advanced",

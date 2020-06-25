@@ -1,6 +1,7 @@
 {
   "attr":"COR",
   "cost":3,
+  "level":10,
   "desc":"'Why just ~hit~ your enemies when you can also create an eletric explosion around them? Well, Tark Tech answers this dillema with the new Spark Rod 2000*!!\n\n*Spark Rod is not recommended for children' - old and controversial commercial from Tark Tech.",
   "icon":"card-spark-rod",
   "name":"Spark Rod 2000",

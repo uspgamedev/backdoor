@@ -1,6 +1,7 @@
 {
   "attr":"ANI",
   "cost":1,
+  "level":4,
   "desc":"",
   "icon":"card-chained-energy",
   "name":"Chained Energy",

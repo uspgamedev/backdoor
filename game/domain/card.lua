@@ -216,6 +216,7 @@ local _EPQ_TYPENAMES = {
 function Card:getEffect()
   local effect = ""
   local inputs = { self = self:getOwner() }
+  effect = effect .. "Lv " .. self:getLevel() .. " "
   if self:isTemporary() then
     effect = effect .. "Temporary "
   elseif self:isOneTimeOnly() then

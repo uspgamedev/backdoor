@@ -60,6 +60,7 @@
   },
   "attr":"COR",
   "cost":1,
+  "level":2,
   "desc":"Outta my way!",
   "icon":"card-push",
   "name":"Push",

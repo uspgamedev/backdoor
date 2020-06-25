@@ -35,6 +35,7 @@
   "attr":"COR",
   "cost":1,
   "icon":"card-bone-club",
+  "level":6,
   "name":"Bone Club Crush",
   "temporary":true,
   "set":false

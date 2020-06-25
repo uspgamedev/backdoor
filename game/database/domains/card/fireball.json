@@ -32,6 +32,7 @@
   },
   "attr":"ARC",
   "cost":3,
+  "level":9,
   "desc":"Ages go by, and the fireball spell remains the\nbread and butter of arcane artists.",
   "icon":"card-fireball",
   "name":"Fireball",

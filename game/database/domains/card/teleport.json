@@ -35,6 +35,7 @@
   },
   "attr":"ARC",
   "cost":2,
+  "level":7,
   "desc":"",
   "icon":"card-teleport",
   "name":"Teleport",

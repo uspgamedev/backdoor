@@ -11,6 +11,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":8,
   "icon":"card-miracle",
   "name":"Signet of Inspiration",
   "one_time":true,

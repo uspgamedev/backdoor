@@ -1,6 +1,7 @@
 {
   "attr":"ANI",
   "cost":1,
+  "level":3,
   "desc":"",
   "half-exhaustion":true,
   "icon":"card-concentration",

@@ -47,8 +47,9 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":6,
   "desc":"Up up up!",
   "name":"Jump",
-  "set":"armor_advanced",
+  "set":"maneuver_advanced",
   "icon":false
 }

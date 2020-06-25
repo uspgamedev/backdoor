@@ -35,6 +35,7 @@
   },
   "attr":"COR",
   "cost":3,
+  "level":4,
   "icon":"card-old-laddle-strike",
   "name":"Old Laddle Strike",
   "one_time":true,

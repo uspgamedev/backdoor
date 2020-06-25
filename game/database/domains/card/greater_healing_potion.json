@@ -21,6 +21,7 @@
   },
   "attr":"NONE",
   "cost":1,
+  "level":5,
   "icon":"card-greater-potion",
   "name":"Greater Healing Potion",
   "one_time":true,

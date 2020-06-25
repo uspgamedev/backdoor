@@ -1,6 +1,7 @@
 {
   "attr":"COR",
   "cost":3,
+  "level":6,
   "icon":"card-bone-club",
   "name":"Bone Club",
   "one_time":true,

@@ -244,7 +244,7 @@ function CardView:draw()
   g.translate(x, y)
   --Draw card info
   g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.info_alpha)
-  local type_str = self.card:getType()
+  local type_str = self.card:getType() .. " " .. self.card:getLevel()
   g.printf(type_str, pd, h - pd - _card_font:getHeight()/2, typewidth,
            "left")
   _info_font.set()
@@ -300,7 +300,7 @@ end
 function _draw_hexagon(mode, x, y, r)
   local v = vec2(r, 0)
   local points = {}
-  for i = 1, 6 do
+  for _ = 1, 6 do
     table.insert(points,x + v.x)
     table.insert(points,y + v.y)
     v = vec2.rotate(v, math.pi/3)

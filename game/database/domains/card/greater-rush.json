@@ -64,10 +64,10 @@
   },
   "attr":"COR",
   "cost":2,
+  "level":6,
   "desc":"It's rush hour. And I'm not talking about kung-fu.",
   "icon":"card-rush",
   "name":"Greater Rush",
-  "pp":10,
   "set":"maneuver_advanced",
   "type-description":"",
   "one_time":false
