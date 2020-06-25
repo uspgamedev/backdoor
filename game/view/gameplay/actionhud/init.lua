@@ -256,6 +256,7 @@ function ActionHUD:removeWidgetCard(card)
     local condition = self.conddock:getCard(i)
     if condition and
        condition.card == card then
+         PLAYSFX("condition-unequip")
         return self.conddock:removeCard(i)
     end
   end

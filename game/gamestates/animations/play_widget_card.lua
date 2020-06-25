@@ -45,7 +45,7 @@ function ANIM:script(route, view, report)
         cardview:addTimer("wait", MAIN_TIMER, "after", .1,
               function()
                 if dock:getCardMode() == 'cond' then
-                  --PLAYSFX('')
+                  PLAYSFX('condition-equip')
                 elseif dock:getCardMode() == 'equip' then
                   local placement = cardview.card:getWidgetPlacement()
                   if placement == "wieldable" then
