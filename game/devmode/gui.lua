@@ -63,6 +63,7 @@ function GUI:init()
   self.demo_window = false
 
   IMGUI.StyleColorsDark()
+  IMGUI.SetGlobalFontFromFileTTF("assets/font/PTMono-Regular.ttf", 18)
 
 end
 

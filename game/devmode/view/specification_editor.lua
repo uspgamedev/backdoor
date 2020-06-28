@@ -31,7 +31,7 @@ return function(elementspec, group_name, title, delete, rename, parent)
     end
   end
 
-  return title .. " Editor", 2, function(gui)
+  return title .. " Editor", 3, function(gui)
 
     -- meta actions
     local spec_meta = getmetatable(elementspec)
