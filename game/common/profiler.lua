@@ -1,6 +1,7 @@
 
 -- luacheck: globals love
 
+local RUNFLAGS    = require 'infra.runflags'
 local SWITCHER    = require 'infra.switcher'
 local Class       = require 'steaming.extra_libs.hump.class'
 
@@ -15,6 +16,7 @@ function Profiler:init()
 end
 
 function Profiler:update(dt)
+  if not RUNFLAGS.DEVELOPMENT then return end
   local GS = require 'gamestates'
   local state = self.last_state
   self.last_state = SWITCHER.current()
