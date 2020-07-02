@@ -222,6 +222,9 @@ function Card:getEffect()
   elseif self:isOneTimeOnly() then
     effect = effect .. "Single-Use "
   end
+  if self:isHalfExhaustion() then
+    effect = effect .. "Quick "
+  end
   if self:isArt() then
     effect = effect .. "Art\n\n"
     effect = effect .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
