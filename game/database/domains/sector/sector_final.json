@@ -33,10 +33,10 @@
   "encounters":{
     "max":14,
     "min":6,
+    "upgrade_power":800,
     "recipes":[{
         "actorspec":"newbieslayer",
-        "bodyspec":"rewasvat",
-        "upgrade_power":300
+        "bodyspec":"rewasvat"
       }]
   },
   "exits":{

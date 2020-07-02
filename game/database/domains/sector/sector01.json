@@ -30,14 +30,13 @@
   "encounters":{
     "max":16,
     "min":12,
+    "upgrade_power":70,
     "recipes":[{
         "actorspec":"dumb-slime",
-        "bodyspec":"slime",
-        "upgrade_power":100
+        "bodyspec":"slime"
       },{
         "actorspec":"dumb-stove",
-        "bodyspec":"stove",
-        "upgrade_power":120
+        "bodyspec":"stove"
       }]
   },
   "exits":{

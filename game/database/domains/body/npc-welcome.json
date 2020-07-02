@@ -19,7 +19,7 @@
         "droptype":"pack"
       }]
   },
-  "extends":"corgi",
+  "extends":"npc-base",
   "faction":"allied",
   "name":"Welcomer"
 }
