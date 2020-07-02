@@ -144,10 +144,6 @@ function Actor:getBasicCollection()
   return self:getSpec('collection')
 end
 
-function Actor:getSignatureAbilityName()
-  return self:getSpec('signature')
-end
-
 function Actor:getExp()
   return self.exp
 end
@@ -241,24 +237,6 @@ end
 
 function Actor:getSector()
   return self:getBody():getSector()
-end
-
---[[ Action methods ]]--
-
-function Actor:isWidget(slot)
-  return type(slot) == 'string' and slot:match("^WIDGET/%d+$")
-end
-
-function Actor:isCard(slot)
-  return type(slot) == 'string' and slot:match("^CARD/%d+$")
-end
-
-function Actor:getSignature()
-  return DB.loadSpec("action", self:getSignatureAbilityName())
-end
-
-function Actor:setAction(name, id)
-  self.actions[name] = id
 end
 
 --[[ Card methods ]]--

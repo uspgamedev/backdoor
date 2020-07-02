@@ -26,20 +26,21 @@ local AbilityEditor = class:new()
 -- luacheck: no self
 
 local function _split(str, max_line_length)
-   local lines = {}
-   local line
-   str:gsub('(%s*)(%S+)',
-      function(spc, word)
-         if not line or #line + #spc + #word > max_line_length then
-            table.insert(lines, line)
-            line = word
-         else
-            line = line..spc..word
-         end
+  local lines = {}
+  local line
+  str:gsub(
+    '(%s*)(%S+)',
+    function(spc, word)
+      if not line or #line + #spc + #word > max_line_length then
+        table.insert(lines, line)
+        line = word
+      else
+        line = line..spc..word
       end
-   )
-   table.insert(lines, line)
-   return lines
+    end
+  )
+  table.insert(lines, line)
+  return lines
 end
 
 function AbilityEditor:instance(obj, _elementspec, _fieldschema)

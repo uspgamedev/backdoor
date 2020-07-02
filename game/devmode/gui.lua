@@ -25,7 +25,6 @@ local DOMAINS = {
   card = "Card",
   cardset = "Card Set",
   collection = "Collection",
-  action = "Signature",
   drop = "Drop",
   faction = "Faction",
   theme = "Theme",
