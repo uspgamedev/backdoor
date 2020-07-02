@@ -6,6 +6,5 @@
   "initial_buffer":[],
   "name":"Tutorial",
   "traits":[],
-  "extends":false,
-  "collection":false
+  "extends":false
 }

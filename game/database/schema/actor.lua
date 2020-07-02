@@ -23,8 +23,6 @@ return {
   { id = 'cor', name = "COR Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'arc', name = "ARC Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'ani', name = "ANI Aptitude", type = 'range', min = -2, max = 2 },
-  { id = 'collection', name = "Drops", type = 'enum',
-    options = 'domains.collection' },
   { id = 'initial_buffer', name = "Buffer Card", type = 'array',
     schema = {
       { id = 'card', name = "Card", type = 'enum', options = "domains.card" },
