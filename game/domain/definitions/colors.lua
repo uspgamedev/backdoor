@@ -35,6 +35,7 @@ COLORS.ANI = Color.fromInt {0x14, 0xa0, 0x2e, 0xff}
 COLORS.NONE = Color.fromInt {0x6d, 0x75, 0x8d, 0xff}
 COLORS.PP = Color.fromInt {0x28, 0x5c, 0xc4, 255}
 COLORS.FOCUS = Color.fromInt {0xbc, 0x4a, 0x9b, 0xff}
+COLORS.HALF_EXHAUSTION = Color.fromInt {0x79, 0x3a, 0x80, 0xff}
 
 COLORS.FLASH_DRAW = Color.fromInt { 99, 252, 255, 255 }
 COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
@@ -42,4 +43,3 @@ COLORS.FLASH_DISCARD = Color.fromInt { 255, 135, 43, 255 }
 COLORS.FLASH_EQUIP = Color:new{ .1, .8, .1, 1 }
 
 return COLORS
-

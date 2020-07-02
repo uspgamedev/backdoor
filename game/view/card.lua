@@ -265,7 +265,8 @@ function CardView:draw()
   if self.half_exhaustion then
     local quick_icon = RES.loadTexture('quick-card-icon')
     quick_icon:setFilter("linear", "linear")
-    g.setColor(0xbc/255, 0x4a/255, 0x9b/255, self.alpha * self.info_alpha)
+    local c = COLORS.HALF_EXHAUSTION
+    g.setColor(c[1], c[2], c[3], self.alpha * self.info_alpha)
     g.push()
     g.translate(9, 5)
     local scale = .9
