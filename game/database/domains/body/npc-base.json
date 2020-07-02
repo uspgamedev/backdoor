@@ -1,5 +1,6 @@
 {
   "appearance":"corgi",
+  "basehp":4,
   "dialogue":"[speed value:ultrafast]\n[opacity value:semi]NPC:\n[opacity value:regular] \nHello there!",
   "drops":[],
   "efc":2,

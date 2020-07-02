@@ -2,8 +2,6 @@
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local EQUIPMENTS  = require 'domain.definitions.equipments'
-local APT         = require 'domain.definitions.aptitude'
-local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
 local Util        = require "steaming.util"
@@ -122,70 +120,16 @@ end
 
 --[[ Attribute getters ]]--
 
-function Body:getWithMod(which, value)
-  return math.max(1, self:applyStaticOperators(which, value))
-end
-
-function Body:getAptitude(which)
-  return self:getSpec(which:lower())
-end
-
-function Body:getAttribute(which)
-  local actor = self:getActor()
-  local inf   = ATTR.INFLUENCE[which]
-  local base  = actor and (2 * actor:getAttribute(inf[1]) +
-                           1 * actor:getAttribute(inf[2])) / 3
-                       or 1
-  return self:getWithMod(which, base)
-end
-
-function Body:getSKL()
-  return self:getAttribute('SKL')
-end
-
-function Body:getSPD()
-  return self:getAttribute('SPD')
-end
-
-function Body:getVIT()
-  return self:getAttribute('VIT')
-end
-
-function Body:getRES()
-  return self:getAptitude('RES')
-end
-
-function Body:getFIN()
-  return self:getAptitude('FIN')
-end
-
-function Body:getEFC()
-  return self:getAptitude('EFC')
-end
-
-function Body:getSpeed()
-  return APT.SPEED(self:getSPD(), self:getFIN())
-end
-
-function Body:getFocusRegen()
-  return APT.FOCUS_REGEN(self:getSKL(), self:getEFC()) / 100
-end
-
-function Body:getBaseMaxHP()
-  local power_level = 3
-  local actor = self:getActor()
-  if actor then
-    power_level = actor:getPowerLevel()
-  end
-  return APT.BASE_HP(power_level, self:getRES())
-end
-
-function Body:getExtraMaxHP()
-  return APT.EXTRA_HP(self:getVIT()) / 10
+function Body:getBaseHP()
+  return self:getSpec('basehp')
 end
 
 function Body:getMaxHP()
-  return math.floor(self:getBaseMaxHP() * (1 + self:getExtraMaxHP()))
+  local extra_hp = 1
+  local actor = self:getActor() if actor then
+    extra_hp = actor:getExtraHP()
+  end
+  return math.floor(self:getBaseHP() * extra_hp)
 end
 
 function Body:getConsumption() -- luacheck: no self

@@ -29,20 +29,23 @@ function APT.ATTR_LEVEL(owner, which)
   return lv-1
 end
 
-function APT.BASE_HP(power_level, res)
-  return math.floor(power_level * (2 + res/2))
+--- Extra HP provided by an actor's power level and vitality.
+--  Essentially, every power level increases max hp by 50% of base hp, and
+--  every 1 point in vitality further increases that by 10xVIT %.
+function APT.EXTRA_HP(power_level, vit)
+  return 0.5 * (1 + power_level) * (1 + vit / 10)
 end
 
-function APT.EXTRA_HP(vit)
-  return math.floor(vit)
+--- Effective speed provided by an actor's base speed.
+--  Every speed point grants +0.05 turns/cycle.
+function APT.SPEED(spd)
+  return math.floor(8 + spd/2)
 end
 
-function APT.SPEED(spd, fin)
-  return math.floor(10 + fin + spd/2)
-end
-
-function APT.FOCUS_REGEN(skl, efc)
-  return math.floor(3 + efc + skl)
+--- Focus regeneration rate provided by an actor's skill.
+--  Every skill point grants +0.2 focus/cycle.
+function APT.FOCUS_REGEN(skl)
+  return 0.02 * skl
 end
 
 return APT
