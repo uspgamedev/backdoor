@@ -132,10 +132,6 @@ function Body:getMaxHP()
   return math.floor(self:getBaseHP() * extra_hp)
 end
 
-function Body:getConsumption() -- luacheck: no self
-  return 1
-end
-
 --[[ Appearance methods ]]--
 
 function Body:getAppearance()
