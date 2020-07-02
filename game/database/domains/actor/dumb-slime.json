@@ -15,7 +15,6 @@
       "card":"jump"
     }],
   "name":"Dumb Slime",
-  "signature":"tackle",
   "traits":[],
   "collection":false,
   "extends":false
