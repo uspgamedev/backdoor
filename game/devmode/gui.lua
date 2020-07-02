@@ -16,7 +16,7 @@ local GUI = Class {
 
 local DOMAINS = {
   'body', 'actor', 'appearance', 'sector',
-  'card', 'cardset', 'collection', 'action',
+  'card', 'cardset', 'collection',
   'drop', 'faction', 'zone', 'theme',
   body = "Body Type",
   actor = "Actor Type",
