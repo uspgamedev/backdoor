@@ -62,9 +62,6 @@ function _placeBodiesAndActors(idgenerator, state, encounters)
   state.bodies = {}
   state.actors = {}
 
-  local zone_spec = DB.loadSpec('zone', state.zone)
-  local difficulty_multiplier = 1 + zone_spec['difficulty']
-
   for _,encounter in ipairs(encounters) do
     local actor_specname, body_specname = unpack(encounter.creature)
     local i, j = unpack(encounter.pos)
@@ -79,23 +76,8 @@ function _placeBodiesAndActors(idgenerator, state, encounters)
 
       local upgradexp = encounter.upgrade_power
       if upgradexp then
-        upgradexp = math.floor(upgradexp * difficulty_multiplier)
-        -- allocating exp
-        if upgradexp > 0 then
-          local total = 0
-          local aptitudes = {}
-          local actor_spec = DB.loadSpec('actor', actor_specname)
-          for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
-            aptitudes[attr] = actor_spec[attr:lower()] + 3 -- min of 1
-            total = total + aptitudes[attr]
-          end
-          local unit = upgradexp / total
-          for attr,priority in pairs(aptitudes) do
-            local award = math.floor(unit * priority)
-            if DEFS.PRIMARY_ATTRIBUTES[attr] then
-              actor_state.upgrades[attr] = DEFS.ATTR.INITIAL_UPGRADE + award
-            end
-          end
+        for _,attr in ipairs(DEFS.PRIMARY_ATTRIBUTES) do
+          actor_state.upgrades[attr] = DEFS.ATTR.INITIAL_UPGRADE + upgradexp
         end
       end
     end

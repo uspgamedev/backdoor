@@ -9,14 +9,14 @@ transformer.schema = {
     range = {1} },
   { id = 'max', name = "Maximum number of encounters", type = 'integer',
     range = {1} },
+  { id = 'upgrade_power', name = "Upgrade Power", type = 'integer',
+    range = {10,1000} },
   { id = 'recipes', name = "Encounter recipe", type = 'array',
     schema = {
       { id = 'actorspec', name = "Actor Specification", type = 'enum',
         options = 'domains.actor' },
       { id = 'bodyspec', name = "Body Specification", type = 'enum',
         options = 'domains.body' },
-      { id = 'upgrade_power', name = "Upgrade Power", type = 'integer',
-        range = {10,1000} },
     } }
 }
 
@@ -34,8 +34,8 @@ function transformer.process(sectorinfo, params)
   for _=1,total do
     local encounter = {}
     local recipe = recipes[RANDOM.generate(1,#recipes)]
-    local upgrade_power = math.floor(0.8 + 0.4*RANDOM.generate()
-                                     * recipe.upgrade_power)
+    local upgrade_power = math.floor((0.9 + 0.2 * RANDOM.generate())
+                                     * params.upgrade_power)
     encounter.upgrade_power = upgrade_power
     encounter.creature = { recipe.actorspec, recipe.bodyspec }
     local minj, maxj, mini, maxi = grid.getRange()
