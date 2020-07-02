@@ -11,5 +11,6 @@
       }]
   },
   "name":"Slime Pack",
+  "sfx":"get-pack",
   "sprite":"pack"
 }

@@ -13,5 +13,6 @@
       }]
   },
   "name":"Food",
+  "sfx":"get-pp",
   "sprite":"food"
 }

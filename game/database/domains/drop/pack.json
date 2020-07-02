@@ -11,5 +11,6 @@
       }]
   },
   "name":"Pack",
+  "sfx":"get-pack",
   "sprite":"pack"
 }

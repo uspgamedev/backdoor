@@ -11,5 +11,6 @@
       }]
   },
   "name":"Doggo Pack",
+  "sfx":"get-pack",
   "sprite":"pack"
 }
