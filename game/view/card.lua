@@ -60,6 +60,7 @@ function CardView:init(card)
   self.position = vec2()
   self.offset = vec2()
   self.raised = TweenValue(0, 'smooth', 5)
+  self.half_exhaustion = self.card:isHalfExhaustion()
 
   --Attributes related to different modes
   self.mode = _MODE.normal
@@ -259,6 +260,16 @@ function CardView:draw()
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
+    g.pop()
+  end
+  if self.half_exhaustion then
+    local quick_icon = RES.loadTexture('quick-card-icon')
+    quick_icon:setFilter("linear", "linear")
+    g.setColor(0xbc/255, 0x4a/255, 0x9b/255, self.alpha * self.info_alpha)
+    g.push()
+    g.translate(9, 5)
+    local scale = .9
+    g.draw(quick_icon, 0, 0, 0, scale, scale)
     g.pop()
   end
 
