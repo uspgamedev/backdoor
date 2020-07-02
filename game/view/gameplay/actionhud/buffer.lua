@@ -126,7 +126,7 @@ end
 function BufferView:update(dt)
   local actor = self.route.getPlayerActor()
   if self.side == 'front' then
-    self.button:setCost(actor:getBody():getConsumption())
+    self.button:setCost(1)
     self.button:update(dt)
     self.ppcounter:update(dt)
     self.amount = actor:getBufferSize()
