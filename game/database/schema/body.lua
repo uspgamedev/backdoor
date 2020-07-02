@@ -7,9 +7,7 @@ return {
     options = 'domains.appearance' },
   { id = 'faction', name = "Faction", type = "enum",
     options = 'domains.faction'},
-  { id = 'efc', name = "Efficency", type = "range", min = -2, max = 2 },
-  { id = 'fin', name = "Finesse", type = "range", min = -2, max = 2 },
-  { id = 'res', name = "Resistance", type = "range", min = -2, max = 2 },
+  { id = 'basehp', name = "Base HP", type = "integer", range = {1, 999} },
   { id = 'drops', name = 'Drops', type = 'array',
     schema = {
       { id = 'droptype', name = "Drop Type", type = 'enum',

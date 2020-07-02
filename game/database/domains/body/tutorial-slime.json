@@ -1,5 +1,6 @@
 {
   "appearance":"slime",
+  "basehp":2,
   "drops":[],
   "efc":2,
   "extends":"slime",

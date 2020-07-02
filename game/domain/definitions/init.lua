@@ -17,11 +17,6 @@ DEFS.ALL_ATTRIBUTES = {
   "COR", "ARC", "ANI",
   "FOV",
   "SKL", "SPD", "VIT",
-  "EFC", "FIN", "RES"
-}
-DEFS.BODY_ATTRIBUTES = {
-  "SKL", "SPD", "VIT",
-  "EFC", "FIN", "RES"
 }
 DEFS.CARD_ATTRIBUTES = {
   "COR", "ARC", "ANI", "NONE",

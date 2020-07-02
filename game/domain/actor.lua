@@ -167,11 +167,42 @@ function Actor:getAttrLevel(which)
 end
 
 function Actor:getWithMod(which, value)
-  return self:getBody():getWithMod(which, value)
+  return math.max(1, self:getBody():applyStaticOperators(which, value))
 end
 
 function Actor:getAttribute(which)
   return self:getWithMod(which, self:getAttrLevel(which))
+end
+
+function Actor:getSecondaryAttribute(which)
+  local inf   = DEFS.ATTR.INFLUENCE[which]
+  local base  = (2 * self:getAttribute(inf[1]) +
+                 1 * self:getAttribute(inf[2])) / 3
+  return self:getWithMod(which, base)
+end
+
+function Actor:getSKL()
+  return self:getSecondaryAttribute('SKL')
+end
+
+function Actor:getSPD()
+  return self:getSecondaryAttribute('SPD')
+end
+
+function Actor:getVIT()
+  return self:getSecondaryAttribute('VIT')
+end
+
+function Actor:getSpeed()
+  return DEFS.APT.SPEED(self:getSPD())
+end
+
+function Actor:getFocusRegen()
+  return DEFS.APT.FOCUS_REGEN(self:getSKL())
+end
+
+function Actor:getExtraHP()
+  return DEFS.APT.EXTRA_HP(self:getPowerLevel(), self:getVIT())
 end
 
 function Actor:getAttrUpgrade(which)
@@ -215,10 +246,6 @@ end
 
 function Actor:upgradeANI(n)
   self:upgradeAttr('ANI', n)
-end
-
-function Actor:getSPD()
-  return self:getWithMod('SPD', self:getBody():getSpeed())
 end
 
 --[[ Body methods ]]--
@@ -593,7 +620,7 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
-  self:gainFocus(self:getBody():getFocusRegen())
+  self:gainFocus(self:getFocusRegen())
 end
 
 function Actor:ready()
@@ -698,11 +725,7 @@ function Actor:setPP(n)
 end
 
 function Actor:getPowerLevel()
-  local lvl = 0
-  for _,value in pairs(self.upgrades) do
-    lvl = value + lvl
-  end
-  return lvl / 100
+  return DEFS.ATTR.POWER_LEVEL(self.upgrades)
 end
 
 return Actor
