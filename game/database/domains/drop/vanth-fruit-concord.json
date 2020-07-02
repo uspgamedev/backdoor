@@ -7,5 +7,6 @@
     "inputs":[]
   },
   "name":"Vanth Fruit of Concord",
+  "sfx":"get-item",
   "sprite":"vanth-fruit-concord"
 }
