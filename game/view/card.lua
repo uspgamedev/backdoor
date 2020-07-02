@@ -268,11 +268,12 @@ function CardView:draw()
     local c = COLORS.HALF_EXHAUSTION
     g.setColor(c[1], c[2], c[3], self.alpha * self.info_alpha)
     g.push()
-    g.translate(9, 5)
+    g.translate(pd, h - 31)
     local scale = .9
     g.draw(quick_icon, 0, 0, 0, scale, scale)
     g.pop()
   end
+
 
   --Draw charge counter for widgets
   if self.card:isWidget() then
