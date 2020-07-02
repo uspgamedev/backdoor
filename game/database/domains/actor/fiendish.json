@@ -2,7 +2,6 @@
   "ani":-1,
   "arc":2,
   "behavior":"aggro",
-  "collection":"anything",
   "cor":-1,
   "description":"Stronger spellcaster monster, evil by nature.",
   "extends":"grinful",

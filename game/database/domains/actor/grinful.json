@@ -2,7 +2,6 @@
   "ani":-1,
   "arc":1,
   "behavior":"aggro",
-  "collection":"anything",
   "cor":-1,
   "description":"Spellcaster monster, evil by nature.",
   "extends":"strong",
