@@ -129,6 +129,7 @@ function CardInfo:draw()
   self:drawIcon()
 
   -- Draw description
+  g.push()
   g.translate(0, _HEIGHT / 2)
 
   g.setColor(cr, cg, cb, alpha)
@@ -141,6 +142,19 @@ function CardInfo:draw()
 
   self.text_font.set()
   g.printf(desc, 0, 0, _WIDTH - _MW*2)
+
+  g.pop()
+
+  if self.card:isHalfExhaustion() then
+    g.push()
+    local c = COLORS.HALF_EXHAUSTION
+    g.setColor(c[1], c[2], c[3], alpha)
+    local quick_icon = RES.loadTexture("quick-card-icon")
+    local scale = 2
+    g.translate(0, 390)
+    g.draw(quick_icon, 0, 0, 0, scale, scale)
+    g.pop()
+  end
 
   g.pop()
 end
