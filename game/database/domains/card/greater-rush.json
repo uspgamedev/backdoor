@@ -40,6 +40,7 @@
           "output":"origin",
           "type":"operator"
         },{
+          "body-block":true,
           "dir":"=dir",
           "maxrange":6,
           "name":"hitscan",

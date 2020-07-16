@@ -11,12 +11,12 @@
           "vfx-spd":1
         }],
       "inputs":[{
-          "body-block":true,
           "name":"choose_dir",
           "output":"target_dir",
           "reach":5,
           "tactical-hint":"movement",
-          "type":"input"
+          "type":"input",
+          "body-block":false
         },{
           "name":"self",
           "output":"self",
