@@ -15,6 +15,17 @@ local BodyView = Class {
 }
 
 local BLINK = { true, false, true, false, true, false }
+local Outline = require 'view.helpers.outline'()
+local OUTLINE_DECOR = function(self, x, y)
+  local g = love.graphics
+  Outline:color(1, 1, 1)
+  local quad = self:updateAndGetCurrentQuadOfSprite(self)
+  local tex = self.texture
+  local ox, oy = self:getOffset()
+  Outline:predraw(3, text, quad)
+  g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
+  g.setShader()
+end
 
 function BodyView:init(body)
   ELEMENT.init(self)
@@ -130,13 +141,21 @@ function BodyView:act()
   return deferred
 end
 
-function BodyView:drawAtRow(row)
+function BodyView:drawAtRow(row, use_outline)
   if not self.invisible then
     local x = self.position.x + self.offset.x
     local y = self.position.y + self.offset.y - row * VIEWDEFS.TILE_H
+    if use_outline then
+      self.sprite:setDecorator(OUTLINE_DECOR)
+    else
+      self.sprite:setDecorator()
+    end
     self.sprite:draw(x, y)
   end
 end
 
-return BodyView
+function BodyView:getSprite()
+  return self.sprite
+end
 
+return BodyView

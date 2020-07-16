@@ -323,7 +323,12 @@ function ActionHUD:actionRequested()
       action_request = {DEFS.ACTION.RECEIVE_PACK}
     end
   elseif INPUT.wasActionPressed('PAUSE') then
-    action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
+    if player_focused then
+      self.player_focused = false
+      return false
+    else
+      action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
+    end
   elseif INPUT.wasActionPressed('HELP') then
     local control_hints = Util.findSubtype("control_hints")
     if control_hints then

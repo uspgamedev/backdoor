@@ -1,5 +1,6 @@
 {
   "appearance":"demobody",
+  "basehp":10,
   "drops":[],
   "efc":-2,
   "faction":"agressive",

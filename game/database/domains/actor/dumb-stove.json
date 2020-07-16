@@ -2,7 +2,6 @@
   "ani":-2,
   "arc":-2,
   "behavior":"aggro",
-  "collection":"stove",
   "cor":-2,
   "description":"Careful with this hot head",
   "initial_buffer":[{
@@ -19,7 +18,6 @@
       "card":"rush"
     }],
   "name":"Dumb Stove",
-  "signature":"tackle",
   "traits":[],
   "extends":false
 }

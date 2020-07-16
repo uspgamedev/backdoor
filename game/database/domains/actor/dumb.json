@@ -9,8 +9,6 @@
       "card":"strike"
     }],
   "name":"Dumb",
-  "signature":"tackle",
   "traits":[],
-  "collection":false,
   "extends":false
 }

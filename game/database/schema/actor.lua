@@ -1,4 +1,5 @@
 
+-- luacheck: globals love
 local behaviors = love.filesystem.getDirectoryItems("domain/behaviors/")
 do
   for i=1, #behaviors do
@@ -13,8 +14,6 @@ return {
   { id = 'description', name = "Description", type = 'text' },
   { id = 'behavior', name = "Behavior", type = 'enum',
     options = behaviors },
-  { id = 'signature', name = "Signature Ability", type = 'enum',
-    options = 'domains.action' },
   { id = 'traits', name = "Traits", type = 'array',
     schema = {
       { id = 'specname', name = "Trait", type = 'enum',
@@ -24,8 +23,6 @@ return {
   { id = 'cor', name = "COR Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'arc', name = "ARC Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'ani', name = "ANI Aptitude", type = 'range', min = -2, max = 2 },
-  { id = 'collection', name = "Drops", type = 'enum',
-    options = 'domains.collection' },
   { id = 'initial_buffer', name = "Buffer Card", type = 'array',
     schema = {
       { id = 'card', name = "Card", type = 'enum', options = "domains.card" },

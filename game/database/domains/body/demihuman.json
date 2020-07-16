@@ -1,6 +1,8 @@
 {
   "appearance":"hearthborn",
+  "basehp":6,
   "description":"Humanoid people in general.",
+  "drops":[],
   "efc":0,
   "faction":"allied",
   "fin":0,

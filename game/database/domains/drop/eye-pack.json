@@ -11,5 +11,6 @@
       }]
   },
   "name":"Eye Pack",
+  "sfx":"get-pack",
   "sprite":"pack"
 }

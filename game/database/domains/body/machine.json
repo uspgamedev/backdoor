@@ -1,6 +1,8 @@
 {
   "appearance":"demobody",
+  "basehp":1,
   "description":"Heavy Metal.",
+  "drops":[],
   "efc":0,
   "faction":"allied",
   "fin":0,

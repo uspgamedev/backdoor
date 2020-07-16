@@ -1,5 +1,6 @@
 {
   "appearance":"stove",
+  "basehp":6,
   "description":"",
   "drops":[{
       "droprate":50,

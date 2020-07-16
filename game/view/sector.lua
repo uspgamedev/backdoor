@@ -146,16 +146,6 @@ function SectorView:setDropOffset(i, j, k, offset)
   self.drop_offsets[_dropId(i, j, k)] = offset
 end
 
-local function _playSFX(target, extra)
-  if not target or not target.fov or not extra.body then
-    PLAYSFX(extra.sfx, .03)
-  else
-    if target:canSee(extra.body) then
-      PLAYSFX(extra.sfx, .03)
-    end
-  end
-end
-
 function SectorView:startVFX(extra)
   if extra.type then
     local spritefx = SPRITEFX[extra.type]
@@ -163,7 +153,7 @@ function SectorView:startVFX(extra)
     spritefx.apply(self, extra)
   end
   if extra.sfx then
-    _playSFX(self.target, extra)
+    PLAYSFX(extra.sfx)
   end
 end
 
@@ -441,7 +431,7 @@ function SectorView:draw()
       local body_view = self:getBodyView(body)
       if self:isInsideFov(body:getPos()) then
         g.setColor(COLORS.NEUTRAL)
-        body_view:drawAtRow(i)
+        body_view:drawAtRow(i, body:getActor() and body:getActor() == self.temp_target)
       end
     end
 

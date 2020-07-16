@@ -2,6 +2,7 @@
 -- luacheck: globals love MAIN_TIMER
 
 local vec2       = require 'cpml' .vec2
+local Color      = require 'common.color'
 local HintButton = require 'view.gameplay.actionhud.controlhints.newhand'
 local PPCounter  = require 'view.gameplay.actionhud.ppcounter'
 local TEXTURE    = require 'view.helpers.texture'
@@ -51,7 +52,7 @@ end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {.8, .8, .8, 1}
+  bufview.clr = Color.fromInt(0x14, 0x34, 0x64, 0xff)
   bufview.side = 'front'
   bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
@@ -62,7 +63,7 @@ end
 
 function BufferView.newBackBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {1, 0.5, 0.5, 1}
+  bufview.clr = Color.fromInt(0x73, 0x17, 0x2d, 0xff)
   bufview.side = 'back'
   _calculatePosition(bufview)
   return bufview
@@ -126,7 +127,7 @@ end
 function BufferView:update(dt)
   local actor = self.route.getPlayerActor()
   if self.side == 'front' then
-    self.button:setCost(actor:getBody():getConsumption())
+    self.button:setCost(1)
     self.button:update(dt)
     self.ppcounter:update(dt)
     self.amount = actor:getBufferSize()
@@ -181,9 +182,8 @@ function BufferView:draw()
   end
 
   --Draw buffer size
-  grd = _GRADIENT_FILTER
   self.font:set()
-  g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
+  g.setColor(1, 1, 1, 1)
   g.print(text, finish*self.card_w_offset + card_w/2 - text_w/2,
                 step*finish*self.card_h_offset + card_h/2 - text_h/2)
 

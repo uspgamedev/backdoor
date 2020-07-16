@@ -19,7 +19,5 @@
       "card":"chained-energy"
     }],
   "name":"Sage",
-  "signature":"bolting",
-  "traits":[],
-  "collection":false
+  "traits":[]
 }

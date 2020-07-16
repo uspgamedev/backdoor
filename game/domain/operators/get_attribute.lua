@@ -7,7 +7,7 @@ local OP = {}
 
 OP.schema = {
   { id = 'which', name = "Attribute", type = 'enum',
-    options = DEFS.PRIMARY_ATTRIBUTES },
+    options = DEFS.ALL_ATTRIBUTES },
   { id = 'output', name = "Label", type = 'output' }
 }
 

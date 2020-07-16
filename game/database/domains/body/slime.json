@@ -1,5 +1,6 @@
 {
   "appearance":"slime",
+  "basehp":4,
   "description":"Delicious when fried.",
   "drops":[{
       "droprate":20,

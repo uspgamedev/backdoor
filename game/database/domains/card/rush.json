@@ -10,12 +10,12 @@
           "vfx-spd":1,
           "sfx":false
         },{
-          "value":"=amount",
           "center":"=damage_pos",
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-block":true,
@@ -63,9 +63,9 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":3,
   "desc":"Excuse me sir, I've got somewhere to be right now",
   "icon":"card-rush",
+  "level":3,
   "name":"Rush",
   "set":"maneuver_common"
 }

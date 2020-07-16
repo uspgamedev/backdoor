@@ -4,7 +4,6 @@ local ACTION = {}
 ACTION.IDLE             = 'idle'
 ACTION.MOVE             = 'move'
 ACTION.INTERACT         = 'interact'
-ACTION.USE_SIGNATURE    = 'use_signature'
 ACTION.PLAY_CARD        = 'play_card'
 ACTION.DISCARD_CARD     = 'discard_card'
 ACTION.ACTIVATE_WIDGET  = 'activate_widget'

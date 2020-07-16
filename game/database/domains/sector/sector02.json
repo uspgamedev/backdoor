@@ -30,14 +30,13 @@
   "encounters":{
     "max":10,
     "min":5,
+    "upgrade_power":300,
     "recipes":[{
         "actorspec":"grinful-imp",
-        "bodyspec":"imp",
-        "upgrade_power":120
+        "bodyspec":"imp"
       },{
         "actorspec":"dumb-stove",
-        "bodyspec":"stove",
-        "upgrade_power":130
+        "bodyspec":"stove"
       }]
   },
   "exits":{

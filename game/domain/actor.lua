@@ -144,10 +144,6 @@ function Actor:getBasicCollection()
   return self:getSpec('collection')
 end
 
-function Actor:getSignatureAbilityName()
-  return self:getSpec('signature')
-end
-
 function Actor:getExp()
   return self.exp
 end
@@ -171,11 +167,42 @@ function Actor:getAttrLevel(which)
 end
 
 function Actor:getWithMod(which, value)
-  return self:getBody():getWithMod(which, value)
+  return math.max(1, self:getBody():applyStaticOperators(which, value))
 end
 
 function Actor:getAttribute(which)
   return self:getWithMod(which, self:getAttrLevel(which))
+end
+
+function Actor:getSecondaryAttribute(which)
+  local inf   = DEFS.ATTR.INFLUENCE[which]
+  local base  = (2 * self:getAttribute(inf[1]) +
+                 1 * self:getAttribute(inf[2])) / 3
+  return self:getWithMod(which, base)
+end
+
+function Actor:getSKL()
+  return self:getSecondaryAttribute('SKL')
+end
+
+function Actor:getSPD()
+  return self:getSecondaryAttribute('SPD')
+end
+
+function Actor:getVIT()
+  return self:getSecondaryAttribute('VIT')
+end
+
+function Actor:getSpeed()
+  return DEFS.APT.SPEED(self:getSPD())
+end
+
+function Actor:getFocusRegen()
+  return DEFS.APT.FOCUS_REGEN(self:getSKL())
+end
+
+function Actor:getExtraHP()
+  return DEFS.APT.EXTRA_HP(self:getPowerLevel(), self:getVIT())
 end
 
 function Actor:getAttrUpgrade(which)
@@ -221,10 +248,6 @@ function Actor:upgradeANI(n)
   self:upgradeAttr('ANI', n)
 end
 
-function Actor:getSPD()
-  return self:getWithMod('SPD', self:getBody():getSpeed())
-end
-
 --[[ Body methods ]]--
 
 function Actor:setBody(body_id)
@@ -241,24 +264,6 @@ end
 
 function Actor:getSector()
   return self:getBody():getSector()
-end
-
---[[ Action methods ]]--
-
-function Actor:isWidget(slot)
-  return type(slot) == 'string' and slot:match("^WIDGET/%d+$")
-end
-
-function Actor:isCard(slot)
-  return type(slot) == 'string' and slot:match("^CARD/%d+$")
-end
-
-function Actor:getSignature()
-  return DB.loadSpec("action", self:getSignatureAbilityName())
-end
-
-function Actor:setAction(name, id)
-  self.actions[name] = id
 end
 
 --[[ Card methods ]]--
@@ -585,27 +590,10 @@ function Actor:grabDrops(tile)
     if ABILITY.checkInputs(dropspec.ability, self, inputvalues) then
       table.remove(drops, i)
       n = n-1
-
-      for _, effect in ipairs(dropspec.ability.effects) do
-        local name = effect.name
-        if name == "give_pack" then
-          coroutine.yield('report', {
-            sfx = 'get-pack'
-          })
-        elseif name == "reward_pp" then
-          coroutine.yield('report', {
-            sfx = 'get-pp'
-          })
-        elseif name == "heal" then
-          coroutine.yield('report', {
-            sfx = 'get-hp'
-          })
-        else
-          coroutine.yield('report', {
-            sfx = 'get-item'
-          })
-        end
-      end
+      coroutine.yield('report', {
+        actor = self,
+        sfx = dropspec.sfx,
+      })
       ABILITY.execute(dropspec.ability, self, inputvalues)
     else
       i = i+1
@@ -615,7 +603,7 @@ end
 
 function Actor:tick()
   self.energy = self.energy + self:getSPD()
-  self:gainFocus(self:getBody():getFocusRegen())
+  self:gainFocus(self:getFocusRegen())
 end
 
 function Actor:ready()
@@ -720,11 +708,7 @@ function Actor:setPP(n)
 end
 
 function Actor:getPowerLevel()
-  local lvl = 0
-  for _,value in pairs(self.upgrades) do
-    lvl = value + lvl
-  end
-  return lvl / 100
+  return DEFS.ATTR.POWER_LEVEL(self.upgrades)
 end
 
 return Actor

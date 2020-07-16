@@ -16,7 +16,7 @@ local GUI = Class {
 
 local DOMAINS = {
   'body', 'actor', 'appearance', 'sector',
-  'card', 'cardset', 'collection', 'action',
+  'card', 'cardset', 'collection',
   'drop', 'faction', 'zone', 'theme',
   body = "Body Type",
   actor = "Actor Type",
@@ -25,7 +25,6 @@ local DOMAINS = {
   card = "Card",
   cardset = "Card Set",
   collection = "Collection",
-  action = "Signature",
   drop = "Drop",
   faction = "Faction",
   theme = "Theme",
@@ -63,6 +62,7 @@ function GUI:init()
   self.demo_window = false
 
   IMGUI.StyleColorsDark()
+  IMGUI.SetGlobalFontFromFileTTF("assets/font/PTMono-Regular.ttf", 18)
 
 end
 
@@ -130,9 +130,6 @@ function GUI:draw()
 
   if IMGUI.BeginMainMenuBar() then
     if IMGUI.BeginMenu("Route") then
-      if IMGUI.MenuItem("Actors") then
-        self:push('actors_menu')
-      end
       if IMGUI.MenuItem("Bodies") then
         self:push('bodies_menu')
       end

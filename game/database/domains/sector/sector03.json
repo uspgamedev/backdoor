@@ -26,14 +26,13 @@
   "encounters":{
     "max":12,
     "min":6,
+    "upgrade_power":500,
     "recipes":[{
         "actorspec":"fiendish-eye",
-        "bodyspec":"eye",
-        "upgrade_power":150
+        "bodyspec":"eye"
       },{
-        "actorspec":"dumb-slime",
-        "bodyspec":"slime",
-        "upgrade_power":240
+        "actorspec":"grinful-imp",
+        "bodyspec":"imp"
       }]
   },
   "exits":{

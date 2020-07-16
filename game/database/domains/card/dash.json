@@ -43,9 +43,9 @@
   },
   "attr":"COR",
   "cost":1,
-  "level":3,
   "desc":"Voooosh",
   "icon":"card-dash",
+  "level":3,
   "name":"Dash",
   "set":"maneuver_common"
 }

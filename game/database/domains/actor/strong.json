@@ -2,11 +2,9 @@
   "ani":0,
   "arc":0,
   "behavior":"aggro",
-  "collection":"anything",
   "cor":0,
   "description":"A strong sentient individual,\nwho explores the ruins to kill\nand savage unnaware adventurers.",
   "extends":"sentient",
   "initial_buffer":[],
-  "name":"Sentient",
-  "signature":"tackle"
+  "name":"Sentient"
 }

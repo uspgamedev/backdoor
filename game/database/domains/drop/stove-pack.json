@@ -11,5 +11,6 @@
       }]
   },
   "name":"Stove Pack",
+  "sfx":"get-pack",
   "sprite":"pack"
 }

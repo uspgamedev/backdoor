@@ -12,7 +12,7 @@ COLORS.HALF_VISIBLE = Color.fromInt {0x80, 0x80, 0x80, 0xff}
 COLORS.LIGHT_GRAY = Color:new {.7, .7, .7, 1}
 COLORS.GRAY = Color.fromInt {0x4a, 0x54, 0x62, 0xff}
 COLORS.DARK = Color.fromInt {0x1f, 0x1f, 0x1f, 0xff}
-COLORS.DARKER = Color.fromInt {12, 12, 12, 255}
+COLORS.DARKER = Color.fromInt {0x22, 0x1c, 0x1a, 0xff}
 COLORS.BACKGROUND = COLORS.BLACK
 COLORS.EXIT = Color.fromInt {0x77, 0xba, 0x99, 0xff}
 COLORS.FLOOR1 = Color.fromInt {25, 73, 95, 0xff}
@@ -33,8 +33,9 @@ COLORS.COR = Color.fromInt {0xf9, 0xa3, 0x1b, 0xff}
 COLORS.ARC = Color.fromInt {0x79, 0x3a, 0x80, 0xff}
 COLORS.ANI = Color.fromInt {0x14, 0xa0, 0x2e, 0xff}
 COLORS.NONE = Color.fromInt {0x6d, 0x75, 0x8d, 0xff}
-COLORS.PP = Color.fromInt {0x28, 0x5c, 0xc4, 255}
+COLORS.PP = Color.fromInt {0x24, 0x9f, 0xde, 255}
 COLORS.FOCUS = Color.fromInt {0xbc, 0x4a, 0x9b, 0xff}
+COLORS.HALF_EXHAUSTION = Color.fromInt {0x00, 0x00, 0x00, 0xff}
 
 COLORS.FLASH_DRAW = Color.fromInt { 99, 252, 255, 255 }
 COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
@@ -42,4 +43,3 @@ COLORS.FLASH_DISCARD = Color.fromInt { 255, 135, 43, 255 }
 COLORS.FLASH_EQUIP = Color:new{ .1, .8, .1, 1 }
 
 return COLORS
-
