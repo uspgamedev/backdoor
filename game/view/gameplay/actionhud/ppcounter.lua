@@ -26,17 +26,13 @@ function PPCounter:init()
 end
 
 function PPCounter:draw()
-  local g = love.graphics
-
-
-
-  g.setColor(COLORS.HALF_VISIBLE)
-  self:draw_bars()
+  local g = love.graphics -- luacheck: globals love
 
   local stencil = function()
-                    local start_angle = -math.pi/2 + math.pi/DEFS.MAX_PP
-                    love.graphics.arc("fill", 0, 0, _RADIUS, start_angle, self.angle + start_angle)
-                  end
+    local start_angle = -math.pi/2 + math.pi/DEFS.MAX_PP
+    g.arc("fill", 0, 0, _RADIUS, start_angle,
+                      self.angle + start_angle)
+  end
   g.stencil(stencil, "replace", 1)
   g.setStencilTest("equal", 1)
   g.setColor(COLORS.PP)
@@ -46,7 +42,7 @@ function PPCounter:draw()
 end
 
 function PPCounter:draw_bars()
-  local g = love.graphics
+  local g = love.graphics -- luacheck: globals love
   local v1 = vec2(0, -_RADIUS)
   local v2 = v1:rotate(math.pi/DEFS.MAX_PP)
   v2 = v2 - v1
@@ -61,7 +57,7 @@ function PPCounter:draw_bars()
 
   g.push()
   g.rotate(math.pi)
-  for i = 1, DEFS.MAX_PP do
+  for _ = 1, DEFS.MAX_PP do
     g.draw(self.texture, v3.x, v3.y, nil, scale_x, scale_y)
     g.rotate(2*math.pi/DEFS.MAX_PP)
   end
