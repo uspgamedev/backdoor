@@ -431,7 +431,7 @@ function SectorView:draw()
       local body_view = self:getBodyView(body)
       if self:isInsideFov(body:getPos()) then
         g.setColor(COLORS.NEUTRAL)
-        body_view:drawAtRow(i)
+        body_view:drawAtRow(i, body:getActor() == self.temp_target)
       end
     end
 
