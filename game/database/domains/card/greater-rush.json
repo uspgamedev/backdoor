@@ -10,12 +10,12 @@
           "vfx-spd":1,
           "sfx":false
         },{
-          "value":"=amount",
           "center":"=damage_pos",
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
           "type":"effect",
+          "value":"=amount",
           "ignore_owner":false
         }],
       "inputs":[{
@@ -64,9 +64,9 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":6,
   "desc":"It's rush hour. And I'm not talking about kung-fu.",
   "icon":"card-rush",
+  "level":6,
   "name":"Greater Rush",
   "set":"maneuver_advanced",
   "type-description":"",
