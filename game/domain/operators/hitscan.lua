@@ -22,14 +22,17 @@ function OP.preview(_, fieldvalues)
 end
 
 local function _positionBlocked(sector, pos, body_block)
-  return body_block and not sector:isValid(unpack(pos))
-                     or not sector:isWalkable(unpack(pos))
+  if body_block then
+    return not sector:isValid(unpack(pos))
+  else
+    return not sector:isWalkable(unpack(pos))
+  end
 end
 
 function OP.process(actor, fieldvalues)
   local sector = actor:getBody():getSector()
   local pos = {}
-  local last_stable_pos = {}
+  local last_valid_pos = { unpack(fieldvalues['pos']) } -- Clone it!
   local next_pos = { unpack(fieldvalues['pos']) } -- Clone it!
   local body_block = fieldvalues['body-block']
   local dir = fieldvalues['dir']
@@ -39,14 +42,14 @@ function OP.process(actor, fieldvalues)
     pos[1], pos[2] = unpack(next_pos)
     next_pos[1], next_pos[2] = pos[1]+dir[1], pos[2]+dir[2]
     if sector:isValid(unpack(pos)) then
-      last_stable_pos[1], last_stable_pos[2] = unpack(pos)
+      last_valid_pos[1], last_valid_pos[2] = pos[1], pos[2]
     end
     i = i + 1
   until i > maxrange or _positionBlocked(sector, next_pos, body_block)
   if body_block then
     return pos
   else
-    return last_stable_pos
+    return last_valid_pos
   end
 end
 
