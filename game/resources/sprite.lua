@@ -48,22 +48,6 @@ local function _newAnimationMeta(name, info, texture)
   return anim
 end
 
-local function _updateAndGetCurrentQuadOfSprite(sprite)
-  local animation = sprite.animation
-  local dt = floor(delta()*1000)
-  sprite.timecount = sprite.timecount + dt
-  while sprite.timecount >= animation.frames[sprite.frame].time do
-    sprite.timecount = sprite.timecount - animation.frames[sprite.frame].time
-    if animation.loop then
-      sprite.frame = sprite.frame % animation.framecount + 1
-    else
-      sprite.frame = min(sprite.frame + 1, animation.framecount)
-    end
-  end
-  return animation.frames[sprite.frame].quad
-end
-
-
 --SPRITE MODULE--
 local Sprite = Class({
   __includes = ELEMENT
@@ -77,6 +61,21 @@ function Sprite:init(texture, animation)
   self.decor = false
   self.timecount = 0
   self.sx, self.sy = 1, 1
+end
+
+function Sprite:updateAndGetCurrentQuadOfSprite()
+  local animation = self.animation
+  local dt = floor(delta()*1000)
+  self.timecount = self.timecount + dt
+  while self.timecount >= animation.frames[self.frame].time do
+    self.timecount = self.timecount - animation.frames[self.frame].time
+    if animation.loop then
+      self.frame = self.frame % animation.framecount + 1
+    else
+      self.frame = min(self.frame + 1, animation.framecount)
+    end
+  end
+  return animation.frames[self.frame].quad
 end
 
 function Sprite:getDimensions()
@@ -131,7 +130,7 @@ function Sprite:draw(...)
 end
 
 function Sprite:render(x, y)
-  local quad = _updateAndGetCurrentQuadOfSprite(self)
+  local quad = self:updateAndGetCurrentQuadOfSprite()
   local tex = self.texture
   local ox, oy = self:getOffset()
   g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
