@@ -1,5 +1,7 @@
+
+-- luacheck: no self, globals SWITCHER
+
 --MODULE FOR THE GAMESTATE: CHARACTER BUILDER--
-local DB             = require 'database'
 local INPUT          = require 'input'
 local PROFILE        = require 'infra.profile'
 local PLAYSFX        = require 'helpers.playsfx'
@@ -13,6 +15,7 @@ local state = {}
 --CONSTS--
 local _CONFIRM = 'CONFIRM'
 local _CANCEL  = 'CANCEL'
+local _PAUSE   = 'PAUSE'
 local _NEXT    = 'RIGHT'
 local _PREV    = 'LEFT'
 
@@ -20,7 +23,6 @@ local _PREV    = 'LEFT'
 
 local _playerinfo
 local _view
-local _menus
 local _leave
 
 --LOCAL FUNCTIONS--
@@ -61,7 +63,7 @@ end
 function state:leave()
 end
 
-function state:update(dt)
+function state:update(_)
 
   if _leave then return end
 
@@ -69,7 +71,7 @@ function state:update(dt)
   if INPUT.wasActionPressed(_CONFIRM) then
     PLAYSFX('ok-menu', .05)
     _view:confirm()
-  elseif INPUT.wasActionPressed(_CANCEL) then
+  elseif INPUT.wasActionPressed(_CANCEL) or INPUT.wasActionPressed(_PAUSE) then
     PLAYSFX('back-menu', .05)
     _view:cancel()
   elseif DIRECTIONALS.wasDirectionTriggered(_NEXT) then

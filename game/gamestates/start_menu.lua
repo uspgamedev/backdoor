@@ -105,7 +105,7 @@ function state:update(dt)
       PLAYSFX('ok-menu', .05)
       MENU.confirm()
     elseif INPUT.wasActionPressed('CANCEL') or
-           INPUT.wasActionPressed('QUIT') then
+           INPUT.wasActionPressed('PAUSE') then
       PLAYSFX('back-menu', .05)
       MENU.cancel()
     elseif DIRECTIONALS.wasDirectionTriggered('UP') then
