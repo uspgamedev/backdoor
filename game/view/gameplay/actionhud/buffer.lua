@@ -182,9 +182,8 @@ function BufferView:draw()
   end
 
   --Draw buffer size
-  grd = _GRADIENT_FILTER
   self.font:set()
-  g.setColor(self.clr[1]*grd, self.clr[2]*grd, self.clr[3]*grd, self.clr[4])
+  g.setColor(1, 1, 1, 1)
   g.print(text, finish*self.card_w_offset + card_w/2 - text_w/2,
                 step*finish*self.card_h_offset + card_h/2 - text_h/2)
 
