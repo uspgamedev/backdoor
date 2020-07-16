@@ -165,7 +165,7 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
       for _, line in ipairs(_split(descr, 40)) do
         text = text .. line .. "\n"
       end
-      IMGUI.InputTextMultiline("", text, 1024, 0, 40, { "ReadOnly" })
+      IMGUI.InputTextMultiline("", text, 1024, 512, 80, { "ReadOnly" })
       IMGUI.PopItemWidth()
       IMGUI.Unindent(40)
     end
