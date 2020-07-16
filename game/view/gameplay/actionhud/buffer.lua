@@ -2,6 +2,7 @@
 -- luacheck: globals love MAIN_TIMER
 
 local vec2       = require 'cpml' .vec2
+local Color      = require 'common.color'
 local HintButton = require 'view.gameplay.actionhud.controlhints.newhand'
 local PPCounter  = require 'view.gameplay.actionhud.ppcounter'
 local TEXTURE    = require 'view.helpers.texture'
@@ -51,7 +52,7 @@ end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {.8, .8, .8, 1}
+  bufview.clr = Color.fromInt(0x14, 0x34, 0x64, 0xff)
   bufview.side = 'front'
   bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
@@ -62,7 +63,7 @@ end
 
 function BufferView.newBackBufferView(route)
   local bufview = BufferView(route)
-  bufview.clr = {1, 0.5, 0.5, 1}
+  bufview.clr = Color.fromInt(0x73, 0x17, 0x2d, 0xff)
   bufview.side = 'back'
   _calculatePosition(bufview)
   return bufview

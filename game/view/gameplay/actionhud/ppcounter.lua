@@ -28,11 +28,6 @@ end
 function PPCounter:draw()
   local g = love.graphics -- luacheck: globals love
 
-
-
-  g.setColor(COLORS.DARK)
-  self:draw_bars()
-
   local stencil = function()
     local start_angle = -math.pi/2 + math.pi/DEFS.MAX_PP
     g.arc("fill", 0, 0, _RADIUS, start_angle,
