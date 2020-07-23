@@ -31,7 +31,7 @@ function CardInfo:init(route)
   local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
   self.route = route
   self.card = nil
-  self.position = vec2(w * 0.02, h * 0.07)
+  self.position = vec2(w * 0.02, h * 0.12)
   self.hide_desc = true
   self.title_font = FONT.get("TextBold", 24)
   self.text_font = FONT.get("Text", 18)
@@ -113,7 +113,7 @@ function CardInfo:draw()
 
   -- Draw card-shaped panel
   g.push()
-  local shadow = 8
+  local shadow = 6
   local attr_color = COLORS[self.card:getRelatedAttr()]
   g.translate(shadow, 2*shadow - offset)
   g.setColor(attr_color * Color:new{.4, .4, .4, alpha/2})
