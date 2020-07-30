@@ -12,6 +12,11 @@ local ControlHint = Class{
   __includes = { ELEMENT }
 }
 
+ControlHint.MODE = {
+  DEFAULT = "DEFAULT",
+  FOCUS = "FOCUS",
+}
+
 ControlHint.BUTTON = {
   ACTION_LEFT = 'action_left',
   ACTION_UP = 'action_up',
@@ -73,7 +78,7 @@ function ControlHint:update(dt)
 end
 
 function ControlHint:setMode(mode)
-  self.mode = mode
+  self.mode = assert(ControlHint.MODE[mode])
 end
 
 function ControlHint:toggleShow()

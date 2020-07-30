@@ -372,7 +372,8 @@ function ActionHUD:update(dt)
   local control_hints = Util.findSubtype("control_hints")
   if control_hints then
     for button in pairs(control_hints) do
-      button:setMode(self.player_focused and "FOCUS" or "DEFAULT")
+      button:setMode(self.player_focused and ControlHint.MODE.FOCUS
+                                          or ControlHint.MODE.DEFAULT)
     end
   end
 
