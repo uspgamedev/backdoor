@@ -11,11 +11,7 @@ local PLAYSFX         = require 'helpers.playsfx'
 local HandView        = require 'view.gameplay.actionhud.hand'
 local Minimap         = require 'view.gameplay.actionhud.minimap'
 local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
-local ConfirmHint     = require 'view.gameplay.actionhud.controlhints.confirm'
-local CancelHint      = require 'view.gameplay.actionhud.controlhints.cancel'
-local OpenPacksHint   = require 'view.gameplay.actionhud.controlhints.openpacks'
-local ShowStatsHint   = require 'view.gameplay.actionhud.controlhints.showstats'
-local ToggleHintsHint = require 'view.gameplay.actionhud.controlhints.togglehints'
+local ControlHint     = require 'view.gameplay.actionhud.controlhint'
 local ConditionDock   = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar        = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview     = require 'view.gameplay.actionhud.turnpreview'
@@ -109,15 +105,17 @@ function ActionHUD:init(route)
   ADJACENCY.unset(self.adjacency)
 
   -- Control hints
-  self.cancel_hint = CancelHint(13, 8)
-  self.cancel_hint:register("HUD_MIDDLE")
-  self.confirm_hint = ConfirmHint(138, 8)
-  self.confirm_hint:register("HUD_MIDDLE")
-  self.open_packs_hint = OpenPacksHint(304, 8)
+  self.hand_hint = ControlHint(240+13, 28, ControlHint.BUTTON.ACTION_LEFT)
+  self.hand_hint:register("HUD_MIDDLE")
+  self.open_packs_hint = ControlHint(240+138, 8, ControlHint.BUTTON.ACTION_UP)
   self.open_packs_hint:register("HUD_MIDDLE")
-  self.show_stats_hint = ShowStatsHint(527, 8)
+  self.cancel_hint = ControlHint(240+138, 48, ControlHint.BUTTON.ACTION_DOWN)
+  self.cancel_hint:register("HUD_MIDDLE")
+  self.confirm_hint = ControlHint(240+263, 28, ControlHint.BUTTON.ACTION_RIGHT)
+  self.confirm_hint:register("HUD_MIDDLE")
+  self.show_stats_hint = ControlHint(13, 8, ControlHint.BUTTON.SHOULDER_RIGHT)
   self.show_stats_hint:register("HUD_MIDDLE")
-  self.toggle_hints_hint = ToggleHintsHint(734, 8)
+  self.toggle_hints_hint = ControlHint(13, 48, ControlHint.BUTTON.SHOULDER_LEFT)
   self.toggle_hints_hint:register("HUD_MIDDLE")
 end
 
@@ -371,11 +369,13 @@ function ActionHUD:update(dt)
   self.turnpreview:update(dt)
 
   -- Control hints
-  self.cancel_hint:update(dt)
-  self.confirm_hint:update(dt)
-  self.open_packs_hint:update(dt)
-  self.show_stats_hint:update(dt)
-  self.toggle_hints_hint:update(dt)
+  local control_hints = Util.findSubtype("control_hints")
+  if control_hints then
+    for button in pairs(control_hints) do
+      button:setMode(self.player_focused and ControlHint.MODE.FOCUS
+                                          or ControlHint.MODE.DEFAULT)
+    end
+  end
 
   -- Input alerts long walk
   if INPUT.wasAnyPressed(0.5) then
