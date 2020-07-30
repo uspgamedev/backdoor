@@ -4,26 +4,61 @@ local RES     = require 'resources'
 local PROFILE = require 'infra.profile'
 local COLORS  = require 'domain.definitions.colors'
 
-local Class   = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+local Class   = require 'steaming.extra_libs.hump.class'
+local ELEMENT = require 'steaming.classes.primitives.element'
 local vec2    = require 'cpml' .vec2
 
 local ControlHint = Class{
   __includes = { ELEMENT }
 }
 
-function ControlHint:init(x, y, texture_name, hints)
+ControlHint.BUTTON = {
+  ACTION_LEFT = 'action_left',
+  ACTION_UP = 'action_up',
+  ACTION_RIGHT = 'action_right',
+  ACTION_DOWN = 'action_down',
+  SHOULDER_LEFT = 'shoulder_left',
+  SHOULDER_RIGHT = 'shoulder_right',
+  action_left = {
+    texture_name = 'button-key-action-left',
+    hints = { DEFAULT = "Open hand", FOCUS = "Close hand" }
+  },
+  action_up = {
+    texture_name = 'button-key-action-up',
+    hints = { DEFAULT = "See packs", FOCUS = "Discard" }
+  },
+  action_down = {
+    texture_name = 'button-key-action-down',
+    hints = { DEFAULT = "Wait", FOCUS = "Cancel" }
+  },
+  action_right = {
+    texture_name = 'button-key-action-right',
+    hints = { DEFAULT = "Interact", FOCUS = "Play card" }
+  },
+  shoulder_left = {
+    texture_name = 'button-key-shoulder-left',
+    hints = { DEFAULT = "Toggle hints", FOCUS = "Toggle hints" }
+  },
+  shoulder_right = {
+    texture_name = 'button-key-shoulder-right',
+    hints = { DEFAULT = "(hold) Show stats", FOCUS = "(hold) Show stats" }
+  },
+}
+
+function ControlHint:init(x, y, specname)
     ELEMENT.init(self)
     self:setSubtype("control_hints")
 
+    local spec = assert(ControlHint.BUTTON[specname], "Unknown button spec")
+
     self.pos = vec2(x, y)
-    self.hints = hints
+    self.hints = spec.hints
     self.mode = "DEFAULT"
 
     self.show = PROFILE.getTutorial("finished_tutorial")
     self.alpha = 0
     self.show_speed = 5
-    self.image = RES.loadTexture(texture_name)
+    self.image = RES.loadTexture(spec.texture_name)
     self.image:setFilter("linear")
     self.text_font = FONT.get("Text", 20)
     self.text_font2 = FONT.get("Text", 16)

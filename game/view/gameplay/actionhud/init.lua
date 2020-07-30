@@ -105,29 +105,17 @@ function ActionHUD:init(route)
   ADJACENCY.unset(self.adjacency)
 
   -- Control hints
-  self.hand_hint = ControlHint(240+13, 28, "button-key-draw_hand", {
-    DEFAULT = "Open hand", FOCUS = "Close hand"
-  })
+  self.hand_hint = ControlHint(240+13, 28, ControlHint.BUTTON.ACTION_LEFT)
   self.hand_hint:register("HUD_MIDDLE")
-  self.open_packs_hint = ControlHint(240+138, 8, "button-key-open_packs", {
-    DEFAULT = "See packs", FOCUS = "Discard"
-  })
+  self.open_packs_hint = ControlHint(240+138, 8, ControlHint.BUTTON.ACTION_UP)
   self.open_packs_hint:register("HUD_MIDDLE")
-  self.cancel_hint = ControlHint(240+138, 48, "button-key-cancel", {
-    DEFAULT = "Wait", FOCUS = "Cancel"
-  })
+  self.cancel_hint = ControlHint(240+138, 48, ControlHint.BUTTON.ACTION_DOWN)
   self.cancel_hint:register("HUD_MIDDLE")
-  self.confirm_hint = ControlHint(240+263, 28, "button-key-confirm", {
-    DEFAULT = "Interact", FOCUS = "Play card"
-  })
+  self.confirm_hint = ControlHint(240+263, 28, ControlHint.BUTTON.ACTION_RIGHT)
   self.confirm_hint:register("HUD_MIDDLE")
-  self.show_stats_hint = ControlHint(13, 8, "button-key-show_stats", {
-    DEFAULT = "(hold) Show stats", FOCUS = "(hold) Show stats"
-  })
+  self.show_stats_hint = ControlHint(13, 8, ControlHint.BUTTON.SHOULDER_RIGHT)
   self.show_stats_hint:register("HUD_MIDDLE")
-  self.toggle_hints_hint = ControlHint(13, 48, "button-key-toggle_hints", {
-    DEFAULT = "Toggle hints", FOCUS = "Toggle hints"
-  })
+  self.toggle_hints_hint = ControlHint(13, 48, ControlHint.BUTTON.SHOULDER_LEFT)
   self.toggle_hints_hint:register("HUD_MIDDLE")
 end
 
