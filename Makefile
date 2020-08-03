@@ -103,7 +103,7 @@ $(INPUT_LIB): $(INPUT_REPO)
 	cp -r $(INPUT_REPO) $(INPUT_LIB)
 
 $(INPUT_REPO):
-	git clone https://github.com/aki-cat/lit.git $(INPUT_REPO)
+	git clone https://github.com/aki-cat/lit.git -b backdoor $(INPUT_REPO)
 
 ## IMGUI
 
