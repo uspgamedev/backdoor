@@ -1,6 +1,7 @@
 *~
 .*.swp
 .*
+!.lua-format
 !.git*
 /lua51*
 /profiling
