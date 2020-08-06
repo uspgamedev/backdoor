@@ -26,14 +26,14 @@
   "encounters":{
     "max":12,
     "min":6,
-    "upgrade_power":500,
     "recipes":[{
         "actorspec":"fiendish-eye",
         "bodyspec":"eye"
       },{
         "actorspec":"grinful-imp",
         "bodyspec":"imp"
-      }]
+      }],
+    "upgrade_power":500
   },
   "exits":{
     "distance":5,
@@ -49,6 +49,14 @@
   "fillings":[],
   "maze":{
     "double":false
+  },
+  "props":{
+    "recipes":[{
+        "bodyspec":"crate",
+        "growth":40,
+        "max":20,
+        "min":15
+      }]
   },
   "rooms":{
     "count":24,
