@@ -371,9 +371,17 @@ function ActionHUD:update(dt)
   -- Control hints
   local control_hints = Util.findSubtype("control_hints")
   if control_hints then
+    local mode
+    if SWITCHER.current() == GS.PICK_DIR or
+       SWITCHER.current() == GS.PICK_TARGET then
+         mode = ControlHint.MODE.TARGET
+    elseif self.player_focused then
+         mode = ControlHint.MODE.FOCUS
+    else
+         mode = ControlHint.MODE.DEFAULT
+    end
     for button in pairs(control_hints) do
-      button:setMode(self.player_focused and ControlHint.MODE.FOCUS
-                                          or ControlHint.MODE.DEFAULT)
+        button:setMode(mode)
     end
   end
 
