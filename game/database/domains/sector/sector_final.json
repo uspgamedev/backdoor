@@ -33,11 +33,11 @@
   "encounters":{
     "max":14,
     "min":6,
-    "upgrade_power":800,
     "recipes":[{
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat"
-      }]
+      }],
+    "upgrade_power":800
   },
   "exits":{
     "distance":5,
@@ -49,6 +49,14 @@
   "fillings":[],
   "maze":{
     "double":false
+  },
+  "props":{
+    "recipes":[{
+        "bodyspec":"crate",
+        "growth":80,
+        "max":5,
+        "min":5
+      }]
   },
   "rooms":{
     "count":32,

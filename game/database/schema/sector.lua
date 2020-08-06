@@ -25,5 +25,7 @@ return  {
     schema = 'transformers.altars' },
   { id = 'encounters', name = "Encounter Settings", type = 'section',
     schema = 'transformers.encounters' },
+  { id = 'props', name = "Prop Settings", type = 'section',
+    schema = 'transformers.props' },
 }
 
