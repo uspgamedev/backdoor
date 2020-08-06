@@ -1,6 +1,6 @@
 {
   "appearance":"prop-crate",
-  "basehp":4,
+  "basehp":1,
   "drops":[{
       "droprate":50,
       "droptype":"food"
