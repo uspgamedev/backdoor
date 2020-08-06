@@ -257,12 +257,12 @@ function _update_panel(mode)
 end
 
 function _checkTutorial()
-  --Check for time seeing enemy
+  --Check for first time seeing a damageable target
   if not PROFILE.getTutorial("open_hand") then
     local player = _route.getPlayerActor()
     if player then
       local player_i, player_j = player:getPos()
-      local hostile_bodies = player:getHostileBodies()
+      local hostile_bodies = player:getBodiesInFactions({'aggressive', 'inert'})
       for _,body in ipairs(hostile_bodies) do
         local enemy_i, enemy_j = body:getPos()
         if math.abs(player_i - enemy_i) + math.abs(player_j - enemy_j) <= 1 then
