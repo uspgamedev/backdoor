@@ -15,6 +15,7 @@ local ControlHint = Class{
 ControlHint.MODE = {
   DEFAULT = "DEFAULT",
   FOCUS = "FOCUS",
+  TARGET = "TARGET",
 }
 
 ControlHint.BUTTON = {
@@ -26,27 +27,28 @@ ControlHint.BUTTON = {
   SHOULDER_RIGHT = 'shoulder_right',
   action_left = {
     texture_name = 'button-key-action-left',
-    hints = { DEFAULT = "Open hand", FOCUS = "Close hand" }
+    hints = { DEFAULT = "Open hand", FOCUS = "Close hand", TARGET = nil }
   },
   action_up = {
     texture_name = 'button-key-action-up',
-    hints = { DEFAULT = "See packs", FOCUS = "Discard" }
+    hints = { DEFAULT = "See packs", FOCUS = "Discard", TARGET = nil }
   },
   action_down = {
     texture_name = 'button-key-action-down',
-    hints = { DEFAULT = "Wait", FOCUS = "Cancel" }
+    hints = { DEFAULT = "Wait", FOCUS = "Cancel", TARGET = "Cancel" }
   },
   action_right = {
     texture_name = 'button-key-action-right',
-    hints = { DEFAULT = "Interact", FOCUS = "Play card" }
+    hints = { DEFAULT = "Interact", FOCUS = "Play card", TARGET = "Select" }
   },
   shoulder_left = {
     texture_name = 'button-key-shoulder-left',
-    hints = { DEFAULT = "Toggle hints", FOCUS = "Toggle hints" }
+    hints = { DEFAULT = "Toggle hints", FOCUS = "Toggle hints", TARGET = "Toggle hints" }
   },
   shoulder_right = {
     texture_name = 'button-key-shoulder-right',
-    hints = { DEFAULT = "(hold) Show stats", FOCUS = "(hold) Show stats" }
+    hints = { DEFAULT = "(hold) Show stats", FOCUS = "(hold) Show stats",
+              TARGET = "(hold) Show stats" }
   },
 }
 
