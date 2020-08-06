@@ -7,6 +7,7 @@ local FONT        = require 'view.helpers.font'
 local Class       = require "steaming.extra_libs.hump.class"
 local ELEMENT     = require "steaming.classes.primitives.element"
 local vec2        = require 'cpml' .vec2
+local Util        = require "steaming.util"
 
 local ICON_W = 64
 local ICON_H = 32
@@ -42,7 +43,16 @@ function TurnPreview:disable()
 end
 
 function TurnPreview:refresh()
+  --Get all non-inert bodies
   local seen = self.player:getVisibleBodies()
+  for body_id in pairs(seen) do
+    local body = Util.findId(body_id)
+    local faction = body:getFaction()
+    if faction == "inert" then
+      seen[body_id] = nil
+    end
+  end
+
   local sector = self.player:getSector()
   if next(seen) then
     local turns_full = sector:previewTurns(_MAX_TURNS, false, function (actor)
