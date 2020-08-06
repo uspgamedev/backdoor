@@ -4,7 +4,7 @@
   "drops":[],
   "efc":2,
   "extends":"slime",
-  "faction":"agressive",
+  "faction":"aggressive",
   "name":"Old Slime",
   "res":-2
 }

@@ -23,7 +23,7 @@
     }],
   "efc":-2,
   "extends":"slime",
-  "faction":"agressive",
+  "faction":"aggressive",
   "fin":-1,
   "name":"Imp",
   "res":-2

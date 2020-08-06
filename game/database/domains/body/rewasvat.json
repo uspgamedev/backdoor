@@ -29,7 +29,7 @@
   },
   "efc":0,
   "extends":"corgi",
-  "faction":"agressive",
+  "faction":"aggressive",
   "fin":0,
   "name":"Rewasvat",
   "res":0

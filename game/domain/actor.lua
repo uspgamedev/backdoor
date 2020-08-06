@@ -522,7 +522,8 @@ function Actor:getHostileBodies()
   local actor_body_faction = self:getBody():getFaction()
   for body_id in pairs(visible_bodies) do
     local body = Util.findId(body_id)
-    if body:getFaction() ~= actor_body_faction then
+    local faction = body:getFaction()
+    if faction ~= actor_body_faction and faction ~= "inert" then
       table.insert(hostile_bodies, body)
     end
   end

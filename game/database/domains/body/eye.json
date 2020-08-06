@@ -20,7 +20,7 @@
     }],
   "efc":-2,
   "extends":"imp",
-  "faction":"agressive",
+  "faction":"aggressive",
   "fin":0,
   "name":"Eye",
   "res":-2
