@@ -530,6 +530,21 @@ function Actor:getHostileBodies()
   return hostile_bodies
 end
 
+function Actor:getBodiesInFactions(factions)
+  local visible_bodies = self:getVisibleBodies()
+  local result = {}
+  for body_id in pairs(visible_bodies) do
+    local body = Util.findId(body_id)
+    local faction = body:getFaction()
+    for _, queried in ipairs(factions) do
+      if faction == queried then
+        table.insert(result, body)
+      end
+    end
+  end
+  return result
+end
+
 function Actor:getVisibleTilesIf(check)
   local seen = {}
   local n = 0
