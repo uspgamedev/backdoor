@@ -1,5 +1,5 @@
 
--- luacheck: globals MAIN_TIMER, no self
+-- luacheck: globals MAIN_TIMER GS SWITCHER, no self
 
 local DIRECTIONALS    = require 'infra.dir'
 local LONG_WALK       = require 'view.helpers.long_walk'
@@ -141,6 +141,7 @@ function ActionHUD:destroy()
   self.conddock:destroy()
   self.minimap:destroy()
   self.turnpreview:destroy()
+  self.hand_hint:destroy()
   self.cancel_hint:destroy()
   self.confirm_hint:destroy()
   self.open_packs_hint:destroy()
