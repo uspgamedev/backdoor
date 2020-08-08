@@ -47,7 +47,7 @@ return {
           { id = 'op', name = "Operation or Effect", type = 'enum',
             options = ABILITY.allOperationsAndEffects() },
           { id = 'replacement-ability', name = "Condition and Replacement",
-            type = 'ability',
+            type = 'ability', disable_effects = true,
             hint = "When the inputs are met, the operation\n" ..
                    "or effect are replaced by the effects here" },
           { id = 'descr', name = "Rules Text", type = 'text' },

@@ -1,18 +1,18 @@
 {
   "attr":"ANI",
-  "level":4,
   "cost":3,
   "icon":"card-bloodthirst",
+  "level":4,
   "name":"Bloodthirst",
   "set":"support_common",
   "widget":{
     "auto_activation":{
       "ability":{
         "effects":[{
-            "value":"=amount",
             "name":"heal",
             "target":"=self-body",
-            "type":"effect"
+            "type":"effect",
+            "value":"=amount"
           }],
         "inputs":[{
             "name":"self",
@@ -37,26 +37,20 @@
     "charges":12,
     "operators":[],
     "static":[{
-        "descr":"Whenever you deal damage, you deal an\nadditional 1 damage for each other\ncreature within 3 tiles of you.",
+        "descr":"Whenever you deal targeted damage,\nyou deal +1 damage for each other\ncreature within 3 tiles of you.",
         "op":"damage_on_target",
         "replacement-ability":{
           "effects":[{
-              "attr":"=attr",
-              "base":"=base+x",
-              "mod":"=mod",
-              "name":"damage_on_target",
-              "sfx":"attack-hit",
-              "target":"=target",
-              "type":"effect",
-              "value":"=base+x"
+              "lhs":"=value",
+              "name":"integer_binop",
+              "op":"+",
+              "output":"value",
+              "rhs":"=count",
+              "type":"operator"
             }],
           "inputs":[{
               "name":"integer",
               "output":"value",
-              "type":"input"
-            },{
-              "name":"body",
-              "output":"target",
               "type":"input"
             },{
               "name":"self",
@@ -80,13 +74,6 @@
               "range":3,
               "type":"operator",
               "body-type":false
-            },{
-              "lhs":"=value",
-              "name":"integer_binop",
-              "op":"+",
-              "output":"base+x",
-              "rhs":"=count",
-              "type":"operator"
             }]
         }
       }],
