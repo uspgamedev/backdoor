@@ -102,7 +102,7 @@ function FocusBar:update(dt)
     for i = focus + 1, self.previous_focus do
       self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
           function()
-            PLAYSFX('focus-used', .1)
+            PLAYSFX('focus-used')
             self.explosions[i]:emit(40)
           end)
     end
@@ -110,7 +110,7 @@ function FocusBar:update(dt)
     for i = focus, self.previous_focus + 1, -1  do
       self:addTimer(nil, MAIN_TIMER, "after", (i-1)*.05,
           function()
-            PLAYSFX('focus-gain', .05)
+            PLAYSFX('focus-gain')
             self.explosions[i]:emit(20)
           end)
     end

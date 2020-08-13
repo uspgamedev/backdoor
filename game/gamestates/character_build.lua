@@ -69,16 +69,16 @@ function state:update(_)
 
   -- if you confirm or cancel, all it does is change the current menu context
   if INPUT.wasActionPressed(_CONFIRM) then
-    PLAYSFX('ok-menu', .05)
+    PLAYSFX('ok-menu')
     _view:confirm()
   elseif INPUT.wasActionPressed(_CANCEL) or INPUT.wasActionPressed(_PAUSE) then
-    PLAYSFX('back-menu', .05)
+    PLAYSFX('back-menu')
     _view:cancel()
   elseif DIRECTIONALS.wasDirectionTriggered(_NEXT) then
-    PLAYSFX('select-menu', .05)
+    PLAYSFX('select-menu')
     _view:selectPrev()
   elseif DIRECTIONALS.wasDirectionTriggered(_PREV) then
-    PLAYSFX('select-menu', .05)
+    PLAYSFX('select-menu')
     _view:selectNext()
   end
 

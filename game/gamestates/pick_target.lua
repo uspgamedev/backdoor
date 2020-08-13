@@ -46,7 +46,7 @@ function state:enter(_, sector_view, target_opt)
     local args = {
       target_is_valid = false,
     }
-    PLAYSFX('back-menu', .05)
+    PLAYSFX('back-menu')
     SWITCHER.pop(args)
   end
 

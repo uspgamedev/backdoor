@@ -56,8 +56,10 @@ function RES.loadTexture(name)
 end
 
 function RES.loadSFX(name)
-  local polyphony = DB.loadResource('sfx', name).polyphony
-  return _loadResource('sfx', name, polyphony)
+  local resource = DB.loadResource('sfx', name)
+  local polyphony = resource.polyphony
+  local pitch_var = resource.pitch_var
+  return _loadResource('sfx', name, polyphony), pitch_var
 end
 
 function RES.loadBGM(name)

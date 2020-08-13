@@ -22,7 +22,7 @@ function ANIM:script(_, view, report)
     local x, y = bodyview:getScreenPosition():unpack()
     local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
     AnimationFX("fx-bonk", vec2(x + w/2, y + h/2 - VIEWDEFS.TILE_H/2))
-    if report.sfx then PLAYSFX(report.sfx, .1) end
+    if report.sfx then PLAYSFX(report.sfx) end
     RisingText(bodyview, damage_text, COLORS.NOTIFICATION):play()
     local source_pos = BodyView.tileToScreen(report.source:getPos())
     local push_dir = (bodyview:getPosition() - source_pos):normalize()
