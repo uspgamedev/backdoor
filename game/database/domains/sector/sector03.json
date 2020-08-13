@@ -53,9 +53,14 @@
   "props":{
     "recipes":[{
         "bodyspec":"crate",
-        "growth":40,
+        "growth":20,
         "max":20,
         "min":15
+      },{
+        "bodyspec":"rock",
+        "growth":40,
+        "max":16,
+        "min":12
       }]
   },
   "rooms":{
