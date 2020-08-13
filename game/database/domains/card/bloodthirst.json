@@ -9,12 +9,6 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "name":"heal",
-            "target":"=self-body",
-            "type":"effect",
-            "value":"=amount"
-          }],
-        "inputs":[{
             "name":"self",
             "output":"self",
             "type":"operator"
@@ -30,6 +24,21 @@
             "name":"effective_power",
             "output":"amount",
             "type":"operator"
+          },{
+            "name":"heal",
+            "target":"=self-body",
+            "type":"effect",
+            "value":"=amount"
+          }],
+        "inputs":[{
+            "name":"body",
+            "output":"killed_body",
+            "type":"input"
+          },{
+            "body":"=killed_body",
+            "faction":"aggressive",
+            "name":"is_in_faction",
+            "type":"input"
           }]
       },
       "trigger":"on_kill"
@@ -37,7 +46,7 @@
     "charges":12,
     "operators":[],
     "static":[{
-        "descr":"Whenever you deal targeted damage,\nyou deal +1 damage for each other\ncreature within 3 tiles of you.",
+        "descr":"Whenever you deal targeted damage,\nyou deal +1 damage for each other\nhostile creature within 3 tiles\nof you.",
         "op":"damage_on_target",
         "replacement-ability":{
           "effects":[{
@@ -67,6 +76,7 @@
               "output":"self_pos",
               "type":"operator"
             },{
+              "faction":"aggressive",
               "ignore-owner":true,
               "name":"count_nearby_bodies",
               "output":"count",
