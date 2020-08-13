@@ -48,7 +48,6 @@ function PLAYCARD.perform(actor, inputvalues)
     })
     actor:playCard(inputvalues.card_index)
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
-    body:triggerWidgets(TRIGGERS.ON_ACT)
   elseif card:isWidget() then
     body:placeWidget(card)
     coroutine.yield('report', {
