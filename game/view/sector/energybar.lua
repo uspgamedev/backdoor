@@ -7,7 +7,7 @@ local ACTIONDEFS = require 'domain.definitions.action'
 local ENERGY_BAR = {}
 
 local _BARSCALE = 5
-local _SMOOTH_FACTOR = 0.2
+local _SMOOTH_FACTOR = 0.05
 local _MAX_ENERGY = ACTIONDEFS.MAX_ENERGY
 
 local _barstates
@@ -24,11 +24,18 @@ function ENERGY_BAR.setEnergyPreview(value)
   _preview = (value or 0) * ACTIONDEFS.EXHAUSTION_UNIT
 end
 
+function ENERGY_BAR.reset(actor)
+  if actor then
+    _barstates[actor:getId()] = 0
+  end
+end
+
 function ENERGY_BAR.draw(actor, x, y, is_controlled)
   local g = love.graphics
   local energy = math.max(0, actor:getEnergy())
   local last = _barstates[actor:getId()] or 0
   local value = last + (energy - last)*_SMOOTH_FACTOR
+  value = math.min(value, _MAX_ENERGY)
   if math.abs(value) < 1 then
     value = 0
   end

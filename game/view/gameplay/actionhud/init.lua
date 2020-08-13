@@ -34,6 +34,8 @@ ActionHUD.INTERFACE_COMMANDS = {
   SAVE_QUIT = "SAVE_QUIT",
 }
 
+ActionHUD.ID = 'action-hud'
+
 --[[ Basic methods ]]--
 
 function ActionHUD:init(route)
@@ -185,6 +187,14 @@ end
 
 function ActionHUD:isHandActive()
   return self.handview:isActive()
+end
+
+function ActionHUD.getCurrent()
+  return Util.findId(ActionHUD.ID)
+end
+
+function ActionHUD:isPlayerFocused()
+  return self.player_focused
 end
 
 function ActionHUD:moveHandFocus(dir)

@@ -12,6 +12,7 @@ local COLORS      = require 'domain.definitions.colors'
 local DIR         = require 'domain.definitions.dir'
 local EXP_DIR     = require 'domain.definitions.expanded_dir'
 local FONT        = require 'view.helpers.font'
+local ActionHUD   = require 'view.gameplay.actionhud'
 local Queue       = require "lux.common.Queue"
 local VIEWDEFS    = require 'view.definitions'
 local DIALOGUEBOX = require 'view.dialoguebox'
@@ -461,16 +462,22 @@ function SectorView:draw()
   g.pop()
 
   -- Draw energy bars & HP
+  local focused = ActionHUD.getCurrent():isPlayerFocused()
+  local controlled = sector:getRoute().getControlledActor()
   for _, body in ipairs(all_bodies) do
     local body_view = self:getBodyView(body)
     --Draw only if player is seeing them
     local x, y = (body_view.position + vec2(_TILE_W, _TILE_H) / 2):unpack()
-    if self:isInsideFov(body:getPos()) then
+    if self:isInsideFov(body:getPos()) and (body:isDamaged() or focused or
+                                            body:getActor() == controlled) then
       local actor = body:getActor() if actor then
-        local is_controlled = (actor == sector:getRoute().getControlledActor())
+        local is_controlled = (actor == controlled)
         SECTOR_ENERGYBAR.draw(actor, x, y, is_controlled)
       end
       self.lifebar_batch:drawFor(body, x, y)
+    else
+      self.lifebar_batch:reset(body)
+      SECTOR_ENERGYBAR.reset(body:getActor())
     end
   end
 
