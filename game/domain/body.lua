@@ -165,6 +165,10 @@ function Body:isAlive()
   return not self:isDead()
 end
 
+function Body:isDamaged()
+  return self.damage > 0
+end
+
 function Body:setHP(hp)
   self.damage = math.max(0, math.min(self:getMaxHP() - hp, self:getMaxHP()))
 end
