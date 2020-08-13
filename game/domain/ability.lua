@@ -78,80 +78,71 @@ end
 local _CMDLISTS = { 'inputs', 'effects' }
 local _CMDMAP = { operator = OP, effect = FX }
 
--- Every helper function used here is either const or mutates only the values
--- it returns.
-local _hashAbility, _matches, _matchAbilities, _copySourceAbilities,
-      _importRegisters, _expandCommands, _redirectOutputs, _markSourceAbilities
+local function _matchStatic(actor, cmd_name)
+  local matches = {}
+  local n = 1
+  for _, widget in actor:getBody():eachWidget() do
+    for _, static_ability in widget:getStaticAbilities() do
+      if static_ability['op'] == cmd_name then
+        matches[n] = static_ability['replacement-ability']
+        n = n + 1
+      end
+    end
+  end
+  return ipairs(matches)
+end
+
+local function _applyStaticAbilities(actor, cmd_name, field_values)
+  for _, ability in _matchStatic(actor, cmd_name) do
+    if ABILITY.checkInputs(ability, actor, field_values) then
+      field_values = ABILITY.execute(ability, actor, field_values)
+    end
+  end
+  return field_values
+end
 
 --- Executes an ability from an actor using the provided input values.
 --
---  Might match static abilities, causing the expansion of commands. This
---  happens whenever a command has the name indicated by an static ability and
---  its parameter values satisfy the input of that static ability. In this
---  case, the command is substituted by the sequence of effect commands in the
---  static ability.
---
---  Expanded commands have two nuances. First, registers written to by the
---  input commands of the static ability are imported into the current ability,
---  but name clashes raise an error. Second, expanded commands with output
---  name "result" are redirected to the orignally substituted command's output.
-function ABILITY.execute(ability, actor, inputvalues)
-  local registers = {}
-  local src_abilities_of = {}
-  local redirected_output = {}
+--  Might match static abilities, which means other these other abilities will
+--  have a chance to alter the field values used to process a matched command.
+function ABILITY.execute(ability, actor, registers)
   for _,cmdlist in ipairs(_CMDLISTS) do
-    local cmd_stream = {}
-    for i,cmd in ipairs(ability[cmdlist]) do
-      cmd_stream[i] = cmd
-    end
-    while #cmd_stream > 0 do
-      local cmd = table.remove(cmd_stream, 1)
+    for _,cmd in ipairs(ability[cmdlist]) do
       local value
       if cmd.type == 'input' then
-        value = inputvalues[cmd.output]
+        value = registers[cmd.output]
       elseif _CMDMAP[cmd.type] then
-        local derefd_field_values = _derefFieldValues(cmd, registers)
-        local match = _matchAbilities(actor, cmd.name, derefd_field_values,
-                                      src_abilities_of[cmd])
-        if match then
-          registers = _importRegisters(registers, cmd, match)
-          cmd_stream = _expandCommands(cmd_stream, match)
-          redirected_output = _redirectOutputs(redirected_output, match, cmd)
-          src_abilities_of = _markSourceAbilities(src_abilities_of, match, cmd)
-        else
-          local process = _CMDMAP[cmd.type][cmd.name].process
-          value = process(actor, derefd_field_values)
-        end
+        local field_values = _derefFieldValues(cmd, registers)
+        field_values = _applyStaticAbilities(actor, cmd.name, field_values)
+        local process = _CMDMAP[cmd.type][cmd.name].process
+        value = process(actor, field_values)
       else
         return error("Invalid command type")
       end
       if cmd.output then
-        if cmd.output == 'result' and redirected_output[cmd] then
-          registers[redirected_output[cmd]] = value
-        else
-          registers[cmd.output] = value
-        end
+        registers[cmd.output] = value
       end
     end
   end
+  return registers
 end
 
 local function _NOPREVIEW()
   return nil
 end
 
-function ABILITY.preview(ability, actor, inputvalues, capitalize)
-  local registers = {}
+function ABILITY.preview(ability, actor, registers, capitalize)
   for _,cmdlist in ipairs(_CMDLISTS) do
     for _,cmd in ipairs(ability[cmdlist]) do
       local prev, value
       local type, name = cmd.type, cmd.name
-      local derefd_field_values = _derefFieldValues(cmd, registers)
+      local field_values = _derefFieldValues(cmd, registers)
       if type == 'input' then
         value = IN[name].preview or function()
-          return inputvalues[cmd.output]
+          return registers[cmd.output]
         end
       else
+        field_values = _applyStaticAbilities(actor, cmd.name, field_values)
         if type == 'operator' then
           value = OP[name].preview
         elseif type == 'effect' then
@@ -161,9 +152,9 @@ function ABILITY.preview(ability, actor, inputvalues, capitalize)
         end
       end
       if cmd.output and value then
-        registers[cmd.output] = value(actor, derefd_field_values)
+        registers[cmd.output] = value(actor, field_values)
       end
-      local text = (prev or _NOPREVIEW)(actor, derefd_field_values)
+      local text = (prev or _NOPREVIEW)(actor, field_values)
       if text then
         table.insert(registers, text)
       end
@@ -175,85 +166,6 @@ function ABILITY.preview(ability, actor, inputvalues, capitalize)
   else
     return preview
   end
-end
-
--- Helper functions from here on
-
-function _hashAbility(match)
-  local hash = tostring(match.ability) .. tostring(match.source)
-  return hash
-end
-
-function _matches(actor, match, field_values, src_abilities)
-  local ability = match.ability
-  if not (src_abilities and src_abilities[_hashAbility(match)]) then
-    return ABILITY.checkInputs(ability, actor, field_values)
-  end
-  return false
-end
-
-function _matchAbilities(actor, cmd_name, field_values, src_abilities)
-  for _, widget in actor:getBody():eachWidget() do
-    for _, static_ability in widget:getStaticAbilities() do
-      if static_ability['op'] == cmd_name then
-        local match = {
-          ability = static_ability['replacement-ability'],
-          source = widget
-        }
-        local ok, new_values = _matches(actor, match, field_values,
-                                        src_abilities)
-        if ok then
-          match.new_values = new_values
-          return match
-        end
-      end
-    end
-  end
-end
-
-function _copySourceAbilities(src_abilities)
-  local copy = {}
-  for k, v in pairs(src_abilities or {}) do
-    copy[k] = v
-  end
-  return copy
-end
-
-local _OVERWRITE_MSG = [[
-WARNING: register "%s" overwritten by expansion of ability
-         from card %s on command %s!]]
-
-function _importRegisters(registers, cmd, match)
-  for k, v in pairs(match.new_values) do
-    if registers[k] then
-      print(_OVERWRITE_MSG:format(k, match.source:getName(), cmd.name))
-    end
-    registers[k] = v
-  end
-  return registers
-end
-
-function _expandCommands(cmd_stream, match)
-  for i, expanded_cmd in ipairs(match.ability['effects']) do
-    table.insert(cmd_stream, i, expanded_cmd)
-  end
-  return cmd_stream
-end
-
-function _redirectOutputs(redirected_output, match, cmd)
-  for _, expanded_cmd in ipairs(match.ability['effects']) do
-    redirected_output[expanded_cmd] = cmd['output']
-  end
-  return redirected_output
-end
-
-function _markSourceAbilities(src_abilities_of, match, cmd)
-  for _, expanded_cmd in ipairs(match.ability['effects']) do
-    local src_abilities = _copySourceAbilities(src_abilities_of[cmd])
-    src_abilities[_hashAbility(match)] = true
-    src_abilities_of[expanded_cmd] = src_abilities
-  end
-  return src_abilities_of
 end
 
 return ABILITY
