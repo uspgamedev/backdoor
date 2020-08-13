@@ -10,12 +10,12 @@
           "vfx-spd":4,
           "sfx":false
         },{
-          "value":"=amount",
           "center":"=target_pos",
           "ignore_owner":true,
           "name":"damage_on_area",
           "size":2,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":2,
@@ -47,8 +47,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":6,
   "desc":"Up up up!",
+  "level":6,
   "name":"Jump",
   "set":"maneuver_advanced",
   "icon":false

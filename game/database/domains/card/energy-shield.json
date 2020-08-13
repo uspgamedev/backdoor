@@ -2,9 +2,9 @@
   "attr":"NONE",
   "cost":3,
   "icon":"card-energy-shield",
+  "level":5,
   "name":"Energy Shield",
   "set":"armor_advanced",
-  "level":5,
   "widget":{
     "charges":20,
     "equipment":{

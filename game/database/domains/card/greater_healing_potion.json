@@ -2,10 +2,10 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":10,
           "name":"heal",
           "target":"=self_body",
-          "type":"effect"
+          "type":"effect",
+          "value":10
         }],
       "inputs":[{
           "name":"self",
@@ -21,8 +21,8 @@
   },
   "attr":"NONE",
   "cost":1,
-  "level":5,
   "icon":"card-greater-potion",
+  "level":5,
   "name":"Greater Healing Potion",
   "one_time":true,
   "set":"consumables_advanced",

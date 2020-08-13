@@ -9,12 +9,12 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "value":"=amount",
             "center":"=pos",
             "name":"damage_on_area",
             "sfx":"attack-hit",
             "size":3,
             "type":"effect",
+            "value":"=amount",
             "ignore_owner":false
           },{
             "name":"destroy_body",

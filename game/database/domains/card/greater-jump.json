@@ -10,13 +10,13 @@
           "vfx-spd":4,
           "sfx":false
         },{
-          "value":"=amount",
           "center":"=pos",
           "ignore_owner":true,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":3,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":3,
@@ -50,8 +50,8 @@
   "cost":3,
   "desc":"Take THAT gravity!",
   "icon":"card-jump",
-  "name":"Greater Jump",
   "level":9,
+  "name":"Greater Jump",
   "set":"maneuver_expert",
   "type-description":"",
   "one_time":false

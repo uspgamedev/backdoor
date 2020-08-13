@@ -13,12 +13,12 @@
             "target":"=body_self",
             "type":"effect"
           },{
-            "value":"=amount",
             "center":"=pos",
             "name":"damage_on_area",
             "sfx":"attack-hit",
             "size":2,
             "type":"effect",
+            "value":"=amount",
             "ignore_owner":false
           }],
         "inputs":[{

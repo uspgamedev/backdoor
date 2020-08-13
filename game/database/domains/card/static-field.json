@@ -12,6 +12,7 @@
           "body-only":{
             "body-type":false
           },
+          "dif-fact":true,
           "max-range":2,
           "name":"choose_target",
           "output":"pos",
@@ -28,8 +29,8 @@
   "attr":"ARC",
   "cost":2,
   "desc":"Shocking!",
-  "level":4,
+  "icon":"card-static-field",
+  "level":6,
   "name":"Static Field",
-  "set":"control_advanced",
-  "icon":false
+  "set":"control_advanced"
 }

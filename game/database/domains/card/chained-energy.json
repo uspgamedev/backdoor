@@ -1,9 +1,9 @@
 {
   "attr":"ANI",
   "cost":1,
-  "level":4,
   "desc":"",
   "icon":"card-chained-energy",
+  "level":4,
   "name":"Chained Energy",
   "set":"support_common",
   "type-description":"",
@@ -11,12 +11,12 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "value":"=amount",
             "name":"damage_on_target",
             "projectile":true,
             "sfx":"attack-hit",
             "target":"=target",
-            "type":"effect"
+            "type":"effect",
+            "value":"=amount"
           }],
         "inputs":[{
             "description":"your position",

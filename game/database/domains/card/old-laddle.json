@@ -1,9 +1,9 @@
 {
   "attr":"COR",
   "cost":3,
-  "level":4,
   "desc":"A mass-produced weapon.",
   "icon":"card-old-laddle",
+  "level":4,
   "name":"Old Laddle",
   "set":"weapon_common",
   "type-description":"",

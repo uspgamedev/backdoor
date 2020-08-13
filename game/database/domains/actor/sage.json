@@ -7,7 +7,7 @@
   "extends":"sentient",
   "initial_buffer":[{
       "amount":4,
-      "card":"static-field"
+      "card":"firebolt"
     },{
       "amount":4,
       "card":"concentration"

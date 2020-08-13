@@ -1,8 +1,8 @@
 {
   "attr":"ARC",
   "cost":0,
-  "level":7,
   "desc":"Oh man, this is gonna blow...",
+  "level":7,
   "name":"Sticky Flame",
   "one_time":true,
   "type-description":"",
@@ -10,11 +10,11 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "value":"=amount",
             "name":"damage_on_target",
             "sfx":"attack-hit",
             "target":"=body_self",
-            "type":"effect"
+            "type":"effect",
+            "value":"=amount"
           }],
         "inputs":[{
             "name":"body",
