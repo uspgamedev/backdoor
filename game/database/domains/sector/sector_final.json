@@ -56,6 +56,11 @@
         "growth":80,
         "max":5,
         "min":5
+      },{
+        "bodyspec":"rock",
+        "growth":60,
+        "max":10,
+        "min":5
       }]
   },
   "rooms":{

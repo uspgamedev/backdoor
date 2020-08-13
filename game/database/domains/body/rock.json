@@ -1,0 +1,8 @@
+{
+  "appearance":"prop-rock",
+  "basehp":10,
+  "drops":[],
+  "faction":"inert",
+  "name":"Rock",
+  "extends":false
+}
