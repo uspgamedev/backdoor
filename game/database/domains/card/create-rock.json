@@ -1,0 +1,29 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "bodyspec":"rock",
+          "name":"make_body",
+          "pos":"=target-pos",
+          "type":"effect",
+          "widgets":[]
+        }],
+      "inputs":[{
+          "empty-tile":true,
+          "has-floor":true,
+          "max-range":4,
+          "name":"choose_target",
+          "output":"target-pos",
+          "tactical-hint":"helpful",
+          "type":"input"
+        }]
+    }
+  },
+  "attr":"ARC",
+  "cost":1,
+  "half-exhaustion":true,
+  "icon":"card-create-rock",
+  "level":4,
+  "name":"Create Rock",
+  "set":"control_common"
+}
