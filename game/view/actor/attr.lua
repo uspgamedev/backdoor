@@ -67,7 +67,7 @@ local function _renderAttribute(actor, attrname, particles)
       offset = offset - step
       progress = 0
       particles:emit(48)
-      PLAYSFX('get-item', .1)
+      PLAYSFX('get-item')
       local start = 0
       local rand = RANDOM.safeGenerate
       while start <= 0.5 do

@@ -75,7 +75,7 @@ function Attribute:process(dt)
       self.level = self.level + step
       self.percent = 0
       self.particles:emit(48)
-      PLAYSFX('get-item', .1)
+      PLAYSFX('get-item')
       self.rise = 0.5 -- this stops the update for that many seconds
     end
   end

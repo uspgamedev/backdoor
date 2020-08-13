@@ -60,7 +60,7 @@ local function _cancel()
   if _status == "choosing_pack" then
     _leave = true
   else
-    PLAYSFX('denied', .03)
+    PLAYSFX('denied')
   end
 end
 
@@ -111,7 +111,7 @@ function state:update(_)
   end
   if _status == "choosing_pack" and
      (_leave or _card_list_view:isPackListEmpty()) then
-    PLAYSFX('back-menu', .05)
+    PLAYSFX('back-menu')
     SWITCHER.pop({
       consumed = {},
       pack = nil,
@@ -119,7 +119,7 @@ function state:update(_)
     })
   elseif _status == "choosing_card" and
          (_leave or _card_list_view:isReadyToLeave()) then
-    PLAYSFX('back-menu', .05)
+    PLAYSFX('back-menu')
     local consume_log = _card_list_view:getConsumeLog()
     _consumeCards(consume_log)
     SWITCHER.pop({
@@ -132,15 +132,15 @@ function state:update(_)
       PLAYSFX 'open-pack'
       _confirm()
     elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
-      PLAYSFX('select-card', .05)
+      PLAYSFX('select-card')
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-      PLAYSFX('select-card', .05)
+      PLAYSFX('select-card')
       _next()
     elseif _status == "choosing_card" and
            (DIRECTIONALS.wasDirectionTriggered('UP') or
             DIRECTIONALS.wasDirectionTriggered('DOWN')) then
-      PLAYSFX('toggle-card', .05)
+      PLAYSFX('toggle-card')
       _toggle()
     elseif INPUT.wasActionPressed('CANCEL') then
       _cancel()

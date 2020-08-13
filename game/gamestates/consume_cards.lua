@@ -71,7 +71,7 @@ function state:update(_)
     return
   end
   if _leave then
-    PLAYSFX('back-menu', .05)
+    PLAYSFX('back-menu')
     SWITCHER.pop({})
   elseif _card_list_view:isReadyToLeave() then
     local consume_log = _card_list_view:getConsumeLog()
@@ -86,17 +86,17 @@ function state:update(_)
     })
   else
     if DIRECTIONALS.wasDirectionTriggered('LEFT') then
-      PLAYSFX('select-card', .05)
+      PLAYSFX('select-card')
       _prev()
     elseif DIRECTIONALS.wasDirectionTriggered('RIGHT') then
-      PLAYSFX('select-card', .05)
+      PLAYSFX('select-card')
       _next()
     elseif (DIRECTIONALS.wasDirectionTriggered('UP') or
             DIRECTIONALS.wasDirectionTriggered('DOWN')) then
-      PLAYSFX('toggle-card', .05)
+      PLAYSFX('toggle-card')
       _toggle()
     elseif INPUT.wasActionPressed('CANCEL') then
-      PLAYSFX('back-menu', .05)
+      PLAYSFX('back-menu')
       _cancel()
     end
   end
