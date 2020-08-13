@@ -21,7 +21,14 @@ local _interpolators = {
   end,
   smooth = function(speed)
     return function(value, target, dt)
-      return value + (target - value) * speed * dt
+      local new_value = value + (target - value) * speed * dt
+      if value < target then
+        return math.min(new_value, target)
+      elseif value > target then
+        return math.max(new_value, target)
+      else
+        return new_value
+      end
     end
   end
 }
@@ -30,6 +37,7 @@ function TweenValue:init(value, interpolator_name, ...)
   ELEMENT.init(self)
   self.value = value
   self.target = value
+  self.sign = 0
   self.interpolator = _interpolators[interpolator_name or 'linear'](...)
   self.deferred = false
   self:setSubtype('task')
