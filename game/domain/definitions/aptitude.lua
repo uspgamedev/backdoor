@@ -3,9 +3,7 @@ local APT = {}
 
 --- Calculate required upgrade points for a certain level given an aptitude.
 --  For the resulting tables run
---  ```bash
---  $ make FLAGS=--test=aptitude
---  ```
+--  ```bash $ make FLAGS=--test=aptitude ```
 function APT.REQUIRED_ATTR_UPGRADE(apt, lv)
   return math.ceil((15 - 3*apt) ^ (1 + lv/10))
 end
@@ -43,9 +41,9 @@ function APT.SPEED(spd)
 end
 
 --- Focus regeneration rate provided by an actor's skill.
---  Every skill point grants +0.2 focus/cycle.
+--  Every skill point grants +0.1 focus/cycle.
 function APT.FOCUS_REGEN(skl)
-  return 0.02 * skl
+  return 0.01 * skl
 end
 
 return APT

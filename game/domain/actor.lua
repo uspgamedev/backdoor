@@ -618,7 +618,7 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.energy = self.energy + self:getSPD()
+  self.energy = self.energy + self:getSpeed()
   self:gainFocus(self:getFocusRegen())
 end
 
@@ -700,6 +700,10 @@ function Actor:spendFocus(n)
 end
 
 function Actor:gainFocus(n)
+  if self:getSpecName() == 'sage' then
+    print('focus', self.focus, "+" .. tostring(n))
+    print('energy', self.energy)
+  end
   self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
 end
 
