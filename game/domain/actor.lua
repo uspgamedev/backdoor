@@ -700,10 +700,6 @@ function Actor:spendFocus(n)
 end
 
 function Actor:gainFocus(n)
-  if self:getSpecName() == 'sage' then
-    print('focus', self.focus, "+" .. tostring(n))
-    print('energy', self.energy)
-  end
   self.focus = math.min(self.focus + n, DEFS.ACTION.MAX_FOCUS)
 end
 
