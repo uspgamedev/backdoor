@@ -7,6 +7,8 @@ OP.schema = {
     range = {0} },
   { id = 'body-type', name = "Body Type", type = 'enum',
     options = 'domains.body' },
+  { id = 'faction', name = "Body Faction", type = 'enum',
+    options = 'domains.faction' },
   { id = 'ignore-owner', name = "Ignore Owner", type = 'boolean' },
   { id = 'output', name = "Label", type = 'output' }
 }
@@ -23,12 +25,14 @@ function OP.process(actor, fieldvalues)
   local range = fieldvalues['range']
   local specname = fieldvalues['body-type']
   local notowner = fieldvalues['ignore-owner']
+  local faction = fieldvalues['faction']
   local count = 0
   for di=i-range,i+range do
     for dj=j-range,j+range do
       if di ~= i or dj ~= j then
         local body = sector:getBodyAt(di, dj)
         if body and body:isSpec(specname)
+                and (faction and body:getFaction() == faction)
                 and _checkOwner(actor, body, notowner) then
           count = count + 1
         end
