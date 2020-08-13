@@ -1,9 +1,9 @@
 {
   "attr":"ANI",
   "cost":3,
-  "level":5,
   "desc":"",
   "icon":"card-soul-robe",
+  "level":5,
   "name":"Soul Robe",
   "type-description":"",
   "widget":{

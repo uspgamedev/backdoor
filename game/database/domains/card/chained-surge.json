@@ -11,8 +11,8 @@
   },
   "attr":"ANI",
   "cost":1,
-  "level":8,
   "icon":"card-chained-surge",
+  "level":8,
   "name":"Chained Surge",
   "set":"support_expert"
 }

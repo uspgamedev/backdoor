@@ -2,10 +2,10 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"heal",
           "target":"=self",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":1,
@@ -18,8 +18,8 @@
           "tactical-hint":"healing",
           "type":"input",
           "dif-fact":false,
-          "non-wall":false,
-          "empty-tile":false
+          "empty-tile":false,
+          "non-wall":false
         },{
           "attr":"ANI",
           "base":0,
@@ -37,9 +37,9 @@
   },
   "attr":"ANI",
   "cost":2,
-  "level":5,
   "desc":"",
   "icon":"card-heal",
+  "level":5,
   "name":"Heal",
   "set":"support_advanced",
   "type-description":"",

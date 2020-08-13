@@ -33,10 +33,10 @@
   },
   "attr":"ANI",
   "cost":2,
-  "level":3,
   "desc":"Ooops, excuse me!",
   "half-exhaustion":true,
   "icon":"card-sidestep",
+  "level":3,
   "name":"Side-step",
   "set":"maneuver_common",
   "temporary":false

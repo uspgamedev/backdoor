@@ -2,12 +2,12 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "center":"=target_pos",
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
           "type":"effect",
+          "value":"=amount",
           "ignore_owner":false
         }],
       "inputs":[{

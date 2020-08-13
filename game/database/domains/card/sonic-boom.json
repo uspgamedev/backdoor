@@ -2,12 +2,12 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "center":"=damage_pos",
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":1,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-block":true,
@@ -55,8 +55,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":7,
   "icon":"card-sonic-boom",
+  "level":7,
   "name":"Sonic Boom",
   "set":"ranged_advanced"
 }

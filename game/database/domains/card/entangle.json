@@ -27,8 +27,8 @@
   },
   "attr":"ANI",
   "cost":1,
-  "level":5,
   "icon":"card-entangle",
+  "level":5,
   "name":"Entangle",
   "set":"maneuver_advanced"
 }

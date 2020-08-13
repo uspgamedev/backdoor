@@ -1,8 +1,8 @@
 {
   "attr":"COR",
   "cost":3,
-  "level":6,
   "icon":"card-bone-club",
+  "level":6,
   "name":"Bone Club",
   "one_time":true,
   "set":"weapon_advanced",

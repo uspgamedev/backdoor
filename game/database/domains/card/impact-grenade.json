@@ -2,12 +2,12 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":5,
           "center":"=target_pos",
           "name":"damage_on_area",
           "projectile":true,
           "size":2,
           "type":"effect",
+          "value":5,
           "sfx":false
         }],
       "inputs":[{
@@ -23,8 +23,8 @@
   },
   "attr":"NONE",
   "cost":1,
-  "level":4,
   "icon":"card-impact-grenade",
+  "level":4,
   "name":"Impact Grenade",
   "one_time":true,
   "set":"consumables_common"

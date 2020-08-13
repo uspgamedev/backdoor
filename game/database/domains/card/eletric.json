@@ -1,20 +1,21 @@
 {
-  "attr":"COR",
-  "cost":0,
-  "desc":"",
-  "name":"Auto-Fire",
+  "attr":"ARC",
+  "cost":1,
+  "desc":"Eletric Boogaloo",
+  "icon":"card-eletric",
+  "level":1,
+  "name":"Eletric",
   "one_time":true,
-  "type-description":"",
   "widget":{
     "auto_activation":{
       "ability":{
         "effects":[{
             "name":"damage_on_target",
-            "projectile":true,
-            "sfx":"attack-hit",
-            "target":"=target",
+            "output":"output",
+            "sfx":"shock",
+            "target":"=body",
             "type":"effect",
-            "value":"=amount"
+            "value":"=damage"
           }],
         "inputs":[{
             "name":"pos",
@@ -23,39 +24,40 @@
           },{
             "count":1,
             "ignore-owner":true,
-            "ignore-same-faction":true,
             "name":"has_nearby_bodies",
-            "output":"count",
+            "output":"n-bodies",
             "pos":"=pos_self",
-            "range":3,
+            "range":4,
             "type":"input",
             "body-type":false
           },{
             "ignore-owner":true,
-            "ignore-same-faction":true,
             "name":"find_nearest_body",
-            "output":"target",
+            "output":"body",
             "pos":"=pos_self",
-            "range":3,
+            "range":4,
             "type":"operator"
           },{
-            "attr":"COR",
+            "attr":"ARC",
             "base":0,
-            "mod":100,
+            "mod":50,
             "name":"effective_power",
-            "output":"amount",
+            "output":"damage",
             "type":"operator"
           }]
       },
       "trigger":"on_cycle"
     },
-    "charges":0,
+    "charges":10,
     "operators":[],
+    "static":[],
     "status-tags":[],
-    "tactical-hint":false,
-    "trigger":false,
-    "equipment":false
+    "tactical-hint":"helpful",
+    "trigger":"on_cycle",
+    "trigger-condition":{
+      "effects":[],
+      "inputs":[]
+    }
   },
-  "icon":false,
   "set":false
 }

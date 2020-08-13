@@ -2,23 +2,23 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t1",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         },{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t2",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         },{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=t3",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-only":{
@@ -77,8 +77,8 @@
   },
   "attr":"COR",
   "cost":3,
-  "level":8,
   "icon":"card-flurry-of-blows",
+  "level":8,
   "name":"Flurry of Blows",
   "set":"strikes_expert"
 }

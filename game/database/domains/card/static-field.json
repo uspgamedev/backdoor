@@ -2,8 +2,8 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "body":"=target_body",
-          "card":"stunned",
+          "body":"=body",
+          "card":"eletric",
           "name":"place_widget",
           "type":"effect"
         }],
@@ -13,24 +13,24 @@
             "body-type":false
           },
           "dif-fact":true,
-          "max-range":1,
+          "max-range":2,
           "name":"choose_target",
-          "output":"target_pos",
-          "tactical-hint":"harmful",
+          "output":"pos",
+          "tactical-hint":"helpful",
           "type":"input"
         },{
           "name":"get_body_at",
-          "output":"target_body",
-          "pos":"=target_pos",
+          "output":"body",
+          "pos":"=pos",
           "type":"operator"
         }]
     }
   },
-  "attr":"ANI",
+  "attr":"ARC",
   "cost":2,
-  "desc":"The best defense is a good offense.\nThe best offense is a good punch.",
-  "icon":"card-stunning-blow",
-  "level":4,
-  "name":"Stunning Blow",
-  "set":"control_common"
+  "desc":"Shocking!",
+  "icon":"card-static-field",
+  "level":6,
+  "name":"Static Field",
+  "set":"control_advanced"
 }
