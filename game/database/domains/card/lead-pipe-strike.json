@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-only":{
@@ -35,8 +35,8 @@
   },
   "attr":"COR",
   "cost":3,
-  "level":7,
   "icon":"card-lead-pipe",
+  "level":7,
   "name":"Lead Pipe Strike",
   "temporary":true,
   "set":false

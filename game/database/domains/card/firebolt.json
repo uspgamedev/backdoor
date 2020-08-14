@@ -2,12 +2,12 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "projectile":true,
           "sfx":"attack-hit",
           "target":"=body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-only":{
@@ -37,9 +37,9 @@
   },
   "attr":"ARC",
   "cost":1,
-  "level":3,
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "icon":"card-firebolt",
+  "level":3,
   "name":"Firebolt",
   "set":"ranged_common",
   "type-description":"",

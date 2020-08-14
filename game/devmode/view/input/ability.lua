@@ -88,9 +88,11 @@ function AbilityEditor:instance(obj, _elementspec, _fieldschema)
     local list = _ability[cmdtype] or {}
     _ability[cmdtype] = list
 
-    for _,option in DB.subschemaTypes(cmdtype) do
-      table.insert(cmdoptions, option)
-      table.insert(cmdtypes, cmdtype:sub(1,-2))
+    if cmdtype ~= 'effects' or not _fieldschema.disable_effects then
+      for _,option in DB.subschemaTypes(cmdtype) do
+        table.insert(cmdoptions, option)
+        table.insert(cmdtypes, cmdtype:sub(1,-2))
+      end
     end
 
     for _,option in DB.subschemaTypes('operators') do

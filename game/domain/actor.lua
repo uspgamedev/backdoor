@@ -522,11 +522,27 @@ function Actor:getHostileBodies()
   local actor_body_faction = self:getBody():getFaction()
   for body_id in pairs(visible_bodies) do
     local body = Util.findId(body_id)
-    if body:getFaction() ~= actor_body_faction then
+    local faction = body:getFaction()
+    if faction ~= actor_body_faction and faction ~= "inert" then
       table.insert(hostile_bodies, body)
     end
   end
   return hostile_bodies
+end
+
+function Actor:getBodiesInFactions(factions)
+  local visible_bodies = self:getVisibleBodies()
+  local result = {}
+  for body_id in pairs(visible_bodies) do
+    local body = Util.findId(body_id)
+    local faction = body:getFaction()
+    for _, queried in ipairs(factions) do
+      if faction == queried then
+        table.insert(result, body)
+      end
+    end
+  end
+  return result
 end
 
 function Actor:getVisibleTilesIf(check)
@@ -602,7 +618,7 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.energy = self.energy + self:getSPD()
+  self.energy = self.energy + self:getSpeed()
   self:gainFocus(self:getFocusRegen())
 end
 

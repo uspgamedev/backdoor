@@ -1,9 +1,9 @@
 {
   "attr":"ANI",
   "cost":5,
-  "level":8,
   "desc":"'Gotta go fast!' - A mutated spiked beast motto.",
   "icon":"card-haste",
+  "level":8,
   "name":"Haste",
   "type-description":"",
   "widget":{

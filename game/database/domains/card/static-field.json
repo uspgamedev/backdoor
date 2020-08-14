@@ -1,0 +1,36 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "body":"=body",
+          "card":"eletric",
+          "name":"place_widget",
+          "type":"effect"
+        }],
+      "inputs":[{
+          "aoe-hint":1,
+          "body-only":{
+            "body-type":false
+          },
+          "dif-fact":true,
+          "max-range":2,
+          "name":"choose_target",
+          "output":"pos",
+          "tactical-hint":"helpful",
+          "type":"input"
+        },{
+          "name":"get_body_at",
+          "output":"body",
+          "pos":"=pos",
+          "type":"operator"
+        }]
+    }
+  },
+  "attr":"ARC",
+  "cost":2,
+  "desc":"Shocking!",
+  "icon":"card-static-field",
+  "level":6,
+  "name":"Static Field",
+  "set":"control_advanced"
+}

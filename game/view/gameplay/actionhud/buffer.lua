@@ -3,7 +3,6 @@
 
 local vec2       = require 'cpml' .vec2
 local Color      = require 'common.color'
-local HintButton = require 'view.gameplay.actionhud.controlhints.newhand'
 local PPCounter  = require 'view.gameplay.actionhud.ppcounter'
 local TEXTURE    = require 'view.helpers.texture'
 local FONT       = require 'view.helpers.font'
@@ -45,16 +44,12 @@ function BufferView:init(route)
   self.format = nil
   self.ppcounter = nil
 
-  -- hint button
-  self.button = nil
-
 end
 
 function BufferView.newFrontBufferView(route)
   local bufview = BufferView(route)
   bufview.clr = Color.fromInt(0x14, 0x34, 0x64, 0xff)
   bufview.side = 'front'
-  bufview.button = HintButton(-5, -45)
   bufview.ppcounter = PPCounter()
   bufview.ppcounter:setPP(route.getPlayerActor():getPP())
   _calculatePosition(bufview)
@@ -127,8 +122,6 @@ end
 function BufferView:update(dt)
   local actor = self.route.getPlayerActor()
   if self.side == 'front' then
-    self.button:setCost(1)
-    self.button:update(dt)
     self.ppcounter:update(dt)
     self.amount = actor:getBufferSize()
   elseif self.side == 'back' then
@@ -145,8 +138,6 @@ function BufferView:draw()
 
   local finish, step
   if self.side == "front" then
-    --Draw button above front buffer
-    self.button:draw()
 
     finish, step = math.min(self.fake_amount or self.amount, _MAX_CARDS) - 1, 1
   elseif self.side == "back" then

@@ -212,7 +212,7 @@ function HoldBar:confirmed()
       self.is_playing:stop()
       self.is_playing = nil
     end
-    PLAYSFX("holdbar-confirm", .05)
+    PLAYSFX("holdbar-confirm")
 
     self.explosion:emit(48)
 

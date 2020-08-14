@@ -10,7 +10,7 @@ function FindTarget.getTarget(actor)
   local i, j = actor:getPos()
   for body_id in pairs(visible_bodies) do
     local opponent = Util.findId(body_id)
-    if opponent and opponent:getFaction() ~= actor:getBody():getFaction() then
+    if opponent and opponent:getFaction() == 'allied' then
       local k, l = opponent:getPos()
       local d = TILE.dist(i, j, k, l)
       if not target or not dist or d < dist then

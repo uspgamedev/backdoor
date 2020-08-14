@@ -2,12 +2,12 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "projectile":true,
           "sfx":"attack-hit",
           "target":"=target",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":1,
@@ -37,8 +37,8 @@
   },
   "attr":"COR",
   "cost":1,
-  "level":6,
   "icon":"card-blaster",
+  "level":6,
   "name":"Blaster Shot",
   "temporary":true,
   "set":false

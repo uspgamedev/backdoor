@@ -2,13 +2,13 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "center":"=target",
           "name":"damage_on_area",
           "projectile":true,
           "sfx":"attack-hit",
           "size":3,
           "type":"effect",
+          "value":"=amount",
           "ignore_owner":false
         }],
       "inputs":[{
@@ -32,9 +32,9 @@
   },
   "attr":"ARC",
   "cost":3,
-  "level":9,
   "desc":"Ages go by, and the fireball spell remains the\nbread and butter of arcane artists.",
   "icon":"card-fireball",
+  "level":9,
   "name":"Fireball",
   "pp":0,
   "set":"ranged_expert",

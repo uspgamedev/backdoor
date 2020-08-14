@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target-body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-only":{
@@ -35,8 +35,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":6,
   "icon":"card-hook-n-uppercut",
+  "level":6,
   "name":"Hook and Uppercut",
   "set":"strikes_advanced"
 }

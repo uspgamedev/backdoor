@@ -28,9 +28,9 @@
   },
   "attr":"ANI",
   "cost":2,
-  "level":4,
   "desc":"The best defense is a good offense.\nThe best offense is a good punch.",
   "icon":"card-stunning-blow",
+  "level":4,
   "name":"Stunning Blow",
   "set":"control_common"
 }

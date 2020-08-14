@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         },{
           "name":"lose_life",
           "percentage":40,
@@ -52,9 +52,9 @@
   },
   "attr":"COR",
   "cost":3,
-  "level":7,
   "desc":"They say 'no pain, no gain'.\nI'll give them what they want.",
   "icon":"card-reckless-smash",
+  "level":7,
   "name":"Reckless Smash",
   "set":"strikes_advanced",
   "type-description":"",

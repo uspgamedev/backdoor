@@ -1,8 +1,8 @@
 {
   "attr":"NONE",
   "cost":3,
-  "level":4,
   "icon":"card-hide-vest",
+  "level":4,
   "name":"Hide Vest",
   "set":"armor_common",
   "widget":{

@@ -2,10 +2,10 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":4,
           "name":"heal",
           "target":"=self_body",
-          "type":"effect"
+          "type":"effect",
+          "value":4
         }],
       "inputs":[{
           "name":"self",
@@ -21,9 +21,9 @@
   },
   "attr":"NONE",
   "cost":1,
-  "level":1,
   "desc":"Gulp. Down the hatch, foxy.",
   "icon":"card-potion",
+  "level":1,
   "name":"Healing Potion",
   "one_time":true,
   "set":"consumables_common",

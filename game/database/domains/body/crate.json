@@ -1,0 +1,17 @@
+{
+  "appearance":"prop-crate",
+  "basehp":1,
+  "drops":[{
+      "droprate":50,
+      "droptype":"food"
+    },{
+      "droprate":50,
+      "droptype":"food2"
+    },{
+      "droprate":10,
+      "droptype":"pack"
+    }],
+  "faction":"inert",
+  "name":"Crate",
+  "extends":false
+}

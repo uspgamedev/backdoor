@@ -256,7 +256,8 @@ function Sector:removeDeadBodies()
         local killer_id = body:getKiller()
         local killer = Util.findId(killer_id)
         if killer then
-          killer:getBody():triggerWidgets(TRIGGERS.ON_KILL)
+          local inputs = { killed_body = body }
+          killer:getBody():triggerWidgets(TRIGGERS.ON_KILL, inputs)
         end
         -- Generate drops
         local drops_table = {}

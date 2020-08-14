@@ -12,20 +12,20 @@ return function(elementspec, group_name, title, delete, rename, parent)
     table.insert(inputs, INPUT(elementspec, fieldschema, parent))
   end
 
-  local function _meta_buttons(gui, spec_meta)
+  local function _meta_buttons(gui, spec_meta, id)
     if spec_meta and spec_meta.is_leaf then
-      if IMGUI.Button("Save##1") then
+      if IMGUI.Button("Save##"..id) then
         DB.save(elementspec)
       end
       IMGUI.SameLine()
     end
     if rename then
-      if IMGUI.Button("Rename##1") then
+      if IMGUI.Button("Rename##"..id) then
         gui:push('name_input', title, rename)
       end
       IMGUI.SameLine()
     end
-    if IMGUI.Button("Delete##1") then
+    if IMGUI.Button("Delete##"..id) then
       delete()
       return true
     end
@@ -35,7 +35,7 @@ return function(elementspec, group_name, title, delete, rename, parent)
 
     -- meta actions
     local spec_meta = getmetatable(elementspec)
-    if _meta_buttons(gui, spec_meta) then return true end
+    if _meta_buttons(gui, spec_meta, 1) then return true end
     IMGUI.Spacing()
     IMGUI.Separator()
     IMGUI.Spacing()
@@ -63,7 +63,7 @@ return function(elementspec, group_name, title, delete, rename, parent)
     IMGUI.Spacing()
     IMGUI.Separator()
     IMGUI.Spacing()
-    if _meta_buttons(gui, spec_meta) then return true end
+    if _meta_buttons(gui, spec_meta, 2) then return true end
   end
 
 end

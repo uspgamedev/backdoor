@@ -43,9 +43,9 @@ function APT.SPEED(spd)
 end
 
 --- Focus regeneration rate provided by an actor's skill.
---  Every skill point grants +0.2 focus/cycle.
+--  Every skill point grants +0.1 focus/cycle.
 function APT.FOCUS_REGEN(skl)
-  return 0.02 * skl
+  return 0.01 * skl
 end
 
 return APT

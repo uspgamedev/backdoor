@@ -6,12 +6,16 @@ local COLORS = require 'domain.definitions.colors'
 local Text   = require 'view.helpers.text'
 local Class  = require "steaming.extra_libs.hump.class"
 
-local _SMOOTH_FACTOR = 0.2
+local _SMOOTH_FACTOR = 0.05
 
 local LifebarBatch = Class()
 
 function LifebarBatch:init()
   self.lifestates = {}
+end
+
+function LifebarBatch:reset(body)
+  self.lifestates[body:getId()] = 0
 end
 
 function LifebarBatch:drawFor(body, x, y)
@@ -21,6 +25,7 @@ function LifebarBatch:drawFor(body, x, y)
   local hp = body:getHP()
   local max_hp = body:getMaxHP()
   current = current + (hp - current) * _SMOOTH_FACTOR
+  current = math.min(current, max_hp)
   if math.abs(hp - current) < 1 then
     current = hp
   end
@@ -29,7 +34,8 @@ function LifebarBatch:drawFor(body, x, y)
   local start = pi/2 - 3*pi/36
   local length = -2*pi/3
   local hppercent = current / max_hp
-  local hsvcol = { 0 + 100*hppercent, 240, 200 - 50*hppercent, 1 }
+  local real_hppercent = hp / max_hp
+  local hsvcol = { 0 + 100*real_hppercent, 240, 200 - 50*real_hppercent, 1 }
   local color = Color.fromHSV(unpack(hsvcol))
   local cr, cg, cb = color:unpack()
   g.push()

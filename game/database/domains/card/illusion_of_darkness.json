@@ -29,8 +29,8 @@
   "cost":1,
   "desc":"Goodnight sweet prince.",
   "icon":"card-illusion-of-darkness",
-  "name":"Illusion of Darkness",
   "level":7,
+  "name":"Illusion of Darkness",
   "set":"control_advanced",
   "type-description":"",
   "one_time":false

@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target-body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":1,
@@ -36,8 +36,8 @@
   },
   "attr":"COR",
   "cost":2,
-  "level":10,
   "icon":"card-spark-rod-strike",
+  "level":10,
   "name":"Rod Strike",
   "temporary":true,
   "set":false

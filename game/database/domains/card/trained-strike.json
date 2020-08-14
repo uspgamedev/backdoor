@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":1,
@@ -19,8 +19,8 @@
           "output":"target_pos",
           "tactical-hint":"harmful",
           "type":"input",
-          "non-wall":false,
-          "empty-tile":false
+          "empty-tile":false,
+          "non-wall":false
         },{
           "name":"self",
           "output":"self",
@@ -51,7 +51,7 @@
   "name":"Trained Strike",
   "type-description":"",
   "icon":false,
-  "set":false,
+  "one_time":false,
   "temporary":false,
-  "one_time":false
+  "set":false
 }

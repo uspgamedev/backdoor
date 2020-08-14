@@ -11,8 +11,8 @@
   },
   "attr":"NONE",
   "cost":1,
-  "level":8,
   "icon":"card-miracle",
+  "level":8,
   "name":"Signet of Inspiration",
   "one_time":true,
   "set":"consumables_expert"

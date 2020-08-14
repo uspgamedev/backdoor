@@ -46,7 +46,7 @@ function ValueEditor:instance(obj, _elementspec, _fieldschema, _parent)
     for _,item in pairs(from) do
       if item == _elementspec then return false end
       local t = require(('domain.%ss.%s'):format(item.type, item.name)).type
-      if not t or t == match then
+      if not t or not match or t == match then
         table.insert(to, "=" .. tostring(item.output))
       end
     end

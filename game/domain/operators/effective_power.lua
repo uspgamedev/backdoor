@@ -4,6 +4,7 @@
 
 local DEFS = require 'domain.definitions'
 local ATTR = require 'domain.definitions.attribute'
+local Formula = require 'common.formula'
 
 local OP = {}
 
@@ -26,11 +27,11 @@ end
 
 function OP.preview(actor, fieldvalues)
   local base, attr, mod = fieldvalues.base, fieldvalues.attr, fieldvalues.mod
-  local amount = ""
+  local amount
   if actor.id then -- is it a valid actor?
-    amount = ("%d "):format(OP.process(actor, fieldvalues))
+    amount = OP.process(actor, fieldvalues)
   end
-  return ("%s(%d + %2d%% %s)"):format(amount, base, mod, attr)
+  return Formula(amount, ("%d + %2d%% %s"):format(base, mod, attr))
 end
 
 return OP

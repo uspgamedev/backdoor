@@ -9,5 +9,6 @@ end
 
 return {
   { id = 'filename', name = "Filename", type = 'enum', options = files },
-  { id = 'polyphony', name = "Polyphony", type = 'integer', range = {1} }
+  { id = 'polyphony', name = "Polyphony", type = 'integer', range = {1} },
+  { id = 'pitch_var', name = "Pitch Variation", type = 'float', range = {0,3} }
 }

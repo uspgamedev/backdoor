@@ -1,0 +1,9 @@
+{
+  "animation":[{
+      "quad_idx":1,
+      "time":1
+    }],
+  "offset":[0,30],
+  "quad_division":[1,1],
+  "texture":"prop-crate"
+}

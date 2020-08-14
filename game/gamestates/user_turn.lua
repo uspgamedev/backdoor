@@ -179,7 +179,7 @@ _ACTION[DEFS.ACTION.MOVE] = function (dir)
   if current_sector:isValid(i,j) then
     _useAction(DEFS.ACTION.MOVE, { pos = {i,j} })
   else
-    PLAYSFX('denied', .05)
+    PLAYSFX('denied')
   end
 end
 
@@ -192,34 +192,34 @@ _ACTION[DEFS.ACTION.PLAY_CARD] = function(card_index)
   local actor = _route.getControlledActor()
   local card = actor:getHandCard(card_index)
   if actor:canPlayCard(card) then
-    PLAYSFX('ok-menu', .05)
+    PLAYSFX('ok-menu')
     _useAction(DEFS.ACTION.PLAY_CARD, { card_index = card_index })
   else
-    PLAYSFX('denied', .05)
+    PLAYSFX('denied')
   end
 end
 
 _ACTION[DEFS.ACTION.DISCARD_CARD] = function(card_index)
-  PLAYSFX('ok-menu', .05)
+  PLAYSFX('ok-menu')
   _useAction(DEFS.ACTION.DISCARD_CARD, { card_index = card_index })
 end
 
 _ACTION[DEFS.ACTION.CONSUME_CARDS] = function()
   local actor = _route.getControlledActor()
   if actor:getBackBufferSize() > 0 then
-    PLAYSFX('ok-menu', .05)
+    PLAYSFX('ok-menu')
     _view.action_hud:disableTurn()
     SWITCHER.push(GS.MANAGE_BUFFER, actor)
     coroutine.yield(_task)
   else
-    PLAYSFX('denied', .05)
+    PLAYSFX('denied')
   end
 end
 
 _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
   local actor = _route.getControlledActor()
   if actor:getPrizePackCount() > 0 then
-    PLAYSFX('ok-menu', .05)
+    PLAYSFX('ok-menu')
     _view.action_hud:disableTurn()
     SWITCHER.push(GS.OPEN_PACK, _view, _route, actor:getPrizePacks())
     local args = coroutine.yield(_task)
@@ -228,7 +228,7 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
   else
-    PLAYSFX('denied', .05)
+    PLAYSFX('denied')
   end
 end
 
@@ -257,12 +257,12 @@ function _update_panel(mode)
 end
 
 function _checkTutorial()
-  --Check for time seeing enemy
+  --Check for first time seeing a damageable target
   if not PROFILE.getTutorial("open_hand") then
     local player = _route.getPlayerActor()
     if player then
       local player_i, player_j = player:getPos()
-      local hostile_bodies = player:getHostileBodies()
+      local hostile_bodies = player:getBodiesInFactions({'aggressive', 'inert'})
       for _,body in ipairs(hostile_bodies) do
         local enemy_i, enemy_j = body:getPos()
         if math.abs(player_i - enemy_i) + math.abs(player_j - enemy_j) <= 1 then

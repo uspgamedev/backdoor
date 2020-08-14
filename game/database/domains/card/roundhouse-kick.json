@@ -2,13 +2,13 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "center":"=self-pos",
           "ignore_owner":true,
           "name":"damage_on_area",
           "sfx":"attack-hit",
           "size":2,
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "aoe-hint":2,
@@ -43,8 +43,8 @@
   },
   "attr":"COR",
   "cost":3,
-  "level":4,
   "icon":"card-roundhouse-kick",
+  "level":4,
   "name":"Roundhouse Kick",
   "set":"strikes_common"
 }

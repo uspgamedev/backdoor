@@ -7,10 +7,6 @@ FX.schema = {
   { id = 'bodyspec', name = "Body Type", type = 'enum',
     options = 'domains.body' },
   { id = 'pos', name = "Position", type = 'value', match = 'pos' },
-  { id = 'vit', name = "VIT upgrades", type = 'value', match = 'integer',
-    range = {0} },
-  { id = 'def', name = "DEF upgrades", type = 'value', match = 'integer',
-    range = {0} },
   {
     id = 'widgets', name = "Starting Widget", type = 'array',
     schema = {
@@ -22,7 +18,7 @@ FX.schema = {
 
 function FX.preview(_, fieldvalues)
   local name = DB.loadSpec('body', fieldvalues['bodyspec'])['name']
-  local str = ("create %s"):format(name)
+  local str = ("create %s at position %s"):format(name, fieldvalues['pos'])
   local widgets = fieldvalues['widgets']
   if widgets and #widgets > 0 then
     str = str .. " with "

@@ -2,13 +2,13 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":12,
           "center":"=target_pos",
           "name":"damage_on_area",
           "projectile":true,
           "sfx":"attack-hit",
           "size":2,
-          "type":"effect"
+          "type":"effect",
+          "value":12
         }],
       "inputs":[{
           "aoe-hint":2,
@@ -23,8 +23,8 @@
   },
   "attr":"NONE",
   "cost":1,
-  "level":8,
   "icon":"card-plasma-bomb",
+  "level":8,
   "name":"Plasma Bomb",
   "one_time":true,
   "set":"consumables_expert"

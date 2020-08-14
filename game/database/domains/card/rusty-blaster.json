@@ -1,9 +1,9 @@
 {
   "attr":"COR",
   "cost":5,
-  "level":6,
   "desc":"An old but reliable arcane blaster.",
   "icon":"card-blaster",
+  "level":6,
   "name":"Rusty Blaster",
   "one_time":true,
   "type-description":"",

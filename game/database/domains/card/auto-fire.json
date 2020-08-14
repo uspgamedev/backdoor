@@ -9,12 +9,12 @@
     "auto_activation":{
       "ability":{
         "effects":[{
-            "value":"=amount",
             "name":"damage_on_target",
             "projectile":true,
             "sfx":"attack-hit",
             "target":"=target",
-            "type":"effect"
+            "type":"effect",
+            "value":"=amount"
           }],
         "inputs":[{
             "name":"pos",

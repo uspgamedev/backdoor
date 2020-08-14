@@ -1,8 +1,8 @@
 {
   "attr":"NONE",
   "cost":3,
-  "level":7,
   "icon":"card-disposable-defenses",
+  "level":7,
   "name":"Disposable Defenses",
   "one_time":true,
   "set":"armor_advanced",

@@ -2,11 +2,11 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "value":"=amount",
           "name":"damage_on_target",
           "sfx":"attack-hit",
           "target":"=target_body",
-          "type":"effect"
+          "type":"effect",
+          "value":"=amount"
         }],
       "inputs":[{
           "body-only":{
@@ -35,8 +35,8 @@
   },
   "attr":"COR",
   "cost":3,
-  "level":4,
   "icon":"card-old-laddle-strike",
+  "level":4,
   "name":"Old Laddle Strike",
   "one_time":true,
   "temporary":true,
