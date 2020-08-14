@@ -618,7 +618,7 @@ function Actor:grabDrops(tile)
 end
 
 function Actor:tick()
-  self.energy = self.energy + self:getSPD()
+  self.energy = self.energy + self:getSpeed()
   self:gainFocus(self:getFocusRegen())
 end
 
