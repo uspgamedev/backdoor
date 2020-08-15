@@ -462,7 +462,8 @@ function SectorView:draw()
   g.pop()
 
   -- Draw energy bars & HP
-  local focused = ActionHUD.getCurrent():isPlayerFocused()
+  local action_hud = ActionHUD.getCurrent()
+  local focused = action_hud and action_hud:isPlayerFocused()
   local controlled = sector:getRoute().getControlledActor()
   for _, body in ipairs(all_bodies) do
     local body_view = self:getBodyView(body)
