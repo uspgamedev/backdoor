@@ -32,7 +32,7 @@
     }
   },
   "attr":"ANI",
-  "cost":2,
+  "cost":1,
   "desc":"Ooops, excuse me!",
   "half-exhaustion":true,
   "icon":"card-sidestep",
