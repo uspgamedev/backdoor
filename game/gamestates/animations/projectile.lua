@@ -21,35 +21,30 @@ function ANIM:script(_, view, report)
     local sx, sy = sourceview:getScreenPosition():unpack()
     local dir = BodyView.tileDiffToScreen(ti - si, tj - sj)
     local tx, ty = sx + dir.x, sy + dir.y
-    local source_pos = vec2(sx + w/2, sy + h/2 - VIEWDEFS.TILE_H * .75)
-    local target_pos = vec2(tx + w/2, ty + h/2 - VIEWDEFS.TILE_H * .75)
+    local source_pos = vec2(sx + w/2, sy + h/2 - VIEWDEFS.TILE_H * .5)
+    local target_pos = vec2(tx + w/2, ty + h/2 - VIEWDEFS.TILE_H * .5)
     local projectile = AnimationFX("projectile-energy-sphere", source_pos)
     if RANDOM.safeGenerate() > 0.5 then
       dir.x, dir.y = -dir.y, dir.x
     else
       dir.x, dir.y = dir.y, -dir.x
     end
+    local tween = { t = 0 }
+    local arc = dir:normalize() * VIEWDEFS.TILE_H * 3
+    local duration = 0.4
     projectile:addTimer(
-      "prepare", MAIN_TIMER, "tween", 0.4, projectile,
-      { position = source_pos + dir:normalize() * VIEWDEFS.TILE_H },
-      'out-cubic',
+      "parameter", MAIN_TIMER, "tween", duration, tween, { t = 1 }, 'in-cubic',
       function ()
         self.resume()
       end
     )
-    self.wait()
     projectile:addTimer(
-      "aim", MAIN_TIMER, "after", 0.2,
+      "move", MAIN_TIMER, "during", duration,
       function ()
-        self.resume()
-      end
-    )
-    self.wait()
-    projectile:addTimer(
-      "shoot", MAIN_TIMER, "tween", 0.2, projectile,
-      { position = target_pos }, 'in-cubic',
-      function ()
-        self.resume()
+        local t = tween.t
+        projectile.position = source_pos * (1 - t)
+                            + target_pos * t
+                            + arc * t * (1 - t)
       end
     )
     self.wait()
