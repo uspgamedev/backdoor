@@ -45,7 +45,7 @@ end
 --- Focus regeneration rate provided by an actor's skill.
 --  Every skill point grants +0.1 focus/cycle.
 function APT.FOCUS_REGEN(skl)
-  return 0.01 * skl
+  return 0.05 + 0.01 * skl
 end
 
 return APT
