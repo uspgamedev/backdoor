@@ -88,7 +88,7 @@ local HINTS = {
     },
     {
       text = "     How the EXP will distribute across your attributes\n"
-          .. "will depend on which card type you been using the most",
+          .. "depends on which card types you currently carry",
       region = {x = 950, y = 200, w = 340, h = 300},
       text_pos = {x = 440, y = 380}
     },

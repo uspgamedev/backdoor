@@ -509,7 +509,7 @@ function View:drawHUDInfo(g, owner, enter)
 
     --Draw distribution
     if owner then
-      local cor, arc, ani = owner:trainingDitribution()
+      local cor, arc, ani = owner:trainingDistribution()
       local cor_t = ("%.1f%%"):format(cor*100)
       local arc_t = ("%.1f%%"):format(arc*100)
       local ani_t = ("%.1f%%"):format(ani*100)
