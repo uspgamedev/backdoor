@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "body":"=body",
-          "card":"eletric",
+          "cardspec":"eletric",
           "name":"place_widget",
           "type":"effect"
         }],

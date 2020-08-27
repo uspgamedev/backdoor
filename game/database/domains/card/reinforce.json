@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "body":"=machine",
-          "card":"reinforced-surface",
+          "cardspec":"reinforced-surface",
           "name":"place_widget",
           "type":"effect"
         }],

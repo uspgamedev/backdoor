@@ -25,7 +25,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":7,
+          "base":5,
           "mod":30,
           "name":"effective_power",
           "output":"amount",
@@ -34,9 +34,10 @@
     }
   },
   "attr":"COR",
-  "cost":3,
+  "cost":2,
   "icon":"card-lead-pipe",
   "level":7,
+  "mod":"half",
   "name":"Lead Pipe Strike",
   "temporary":true,
   "set":false

@@ -1,6 +1,6 @@
 {
   "attr":"ANI",
-  "cost":2,
+  "cost":1,
   "desc":"They say Rage is all the rage with the kids.",
   "icon":"card-rage",
   "level":5,
@@ -18,10 +18,12 @@
         "op":"-",
         "val":2
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":"on_turn",
     "equipment":false
   },
+  "mod":false,
   "one_time":false
 }

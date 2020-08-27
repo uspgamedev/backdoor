@@ -2,6 +2,7 @@
 local ABILITY     = require 'domain.ability'
 local TRIGGERS    = require 'domain.definitions.triggers'
 local ACTIONSDEFS = require 'domain.definitions.action'
+local ATTR        = require 'domain.definitions.attribute'
 local DB          = require 'database'
 local GameElement = require 'domain.gameelement'
 local Util        = require "steaming.util"
@@ -53,6 +54,10 @@ end
 
 function Card:getRelatedAttr()
   return self:getSpec('attr')
+end
+
+function Card:getMod()
+  return self:getSpec('mod')
 end
 
 function Card:getLevel()
@@ -215,8 +220,8 @@ local _EPQ_TYPENAMES = {
 
 function Card:getEffect()
   local effect = ""
-  local inputs = { self = self:getOwner() }
-  effect = effect .. "Lv " .. self:getLevel() .. " "
+  local inputs = { self = self:getOwner(), card = self }
+  effect = effect .. "Level " .. self:getLevel() .. " "
   if self:isTemporary() then
     effect = effect .. "Temporary "
   elseif self:isOneTimeOnly() then
@@ -226,9 +231,7 @@ function Card:getEffect()
     effect = effect .. "Quick "
   end
   if self:isArt() then
-    effect = effect .. "Art\n\n"
-    effect = effect .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
-                                       inputs, true)
+    effect = effect .. "Art"
   elseif self:isWidget() then
     local place = self:getWidgetPlacement() if place then
       effect = effect .. _EPQ_TYPENAMES[place]
@@ -242,6 +245,16 @@ function Card:getEffect()
         trigger and "/" .. trigger or ""
       )
     end
+  end
+  effect = effect .. "\n\n"
+  if self:getMod() then
+    effect = effect .. "Power " .. ATTR.MOD_DESCRIPTION[self:getMod()]
+                    .. ATTR.NAME[self:getRelatedAttr()] .. " level\n\n"
+  end
+  if self:isArt() then
+    effect = effect .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
+                                       inputs, true)
+  elseif self:isWidget() then
     do -- static abilities
       local abs, n = {}, 0
       for _,ab in self:getStaticAbilities() do
@@ -271,17 +284,14 @@ function Card:getEffect()
     -- TODO: describe created cards
     local equip = self:getSpec('widget').equipment
     if equip and equip.active then
-      effect = effect .. "\n"
-      local count = {}
       for _, action in ipairs(equip.active.cards) do
-        local spec = DB.loadSpec('card', action.card)
-        count[spec] = (count[spec] or 0) + 1
-      end
-      for spec, k in pairs(count) do
-        effect = effect .. ("\n%dx %s: "):format(k, spec.name)
+        local specname = action.card
+        local spec = DB.loadSpec('card', specname)
+        inputs.card = Card(specname)
+        effect = effect .. spec.name .. ": "
                         .. ABILITY.preview(spec.art.art_ability,
                                            self:getOwner(), inputs)
-                        .. "\n"
+                        .. "\n\n"
       end
     --  local ability, cost = activation.ability, activation.cost
     --  effect = effect .. ("\n\nActivate [%d exhaustion]: "):format(cost)

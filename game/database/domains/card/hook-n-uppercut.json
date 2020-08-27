@@ -25,7 +25,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":6,
+          "base":5,
           "mod":40,
           "name":"effective_power",
           "output":"amount",
@@ -37,6 +37,7 @@
   "cost":2,
   "icon":"card-hook-n-uppercut",
   "level":6,
+  "mod":"half",
   "name":"Hook and Uppercut",
   "set":"strikes_advanced"
 }

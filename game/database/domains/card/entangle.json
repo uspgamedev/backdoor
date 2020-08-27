@@ -3,7 +3,7 @@
     "art_ability":{
       "effects":[{
           "body":"=target-body",
-          "card":"entangled",
+          "cardspec":"entangled",
           "name":"place_widget",
           "type":"effect"
         }],

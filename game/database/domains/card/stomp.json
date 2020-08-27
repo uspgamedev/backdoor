@@ -2,7 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "card":"stunned",
+          "cardspec":"stunned",
           "center":"=pos",
           "ignore_owner":true,
           "name":"place_widget_on_area",
@@ -31,7 +31,7 @@
           "non-wall":false
         },{
           "attr":"ANI",
-          "base":4,
+          "base":2,
           "mod":20,
           "name":"effective_power",
           "output":"amount",
@@ -58,6 +58,7 @@
   "desc":"",
   "icon":"card-stomp",
   "level":9,
+  "mod":"half",
   "name":"Stomp",
   "pp":0,
   "set":"control_expert",

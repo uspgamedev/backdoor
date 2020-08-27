@@ -28,7 +28,7 @@
           "type":"input"
         },{
           "attr":"COR",
-          "base":1,
+          "base":2,
           "mod":50,
           "name":"effective_power",
           "output":"amount",
@@ -49,6 +49,7 @@
   "cost":2,
   "desc":"Up up up!",
   "level":6,
+  "mod":"half",
   "name":"Jump",
   "set":"maneuver_advanced",
   "icon":false

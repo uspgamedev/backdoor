@@ -13,6 +13,7 @@
         "op":"+",
         "val":3
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":"on_turn",
@@ -20,5 +21,6 @@
       "effects":[],
       "inputs":[]
     }
-  }
+  },
+  "mod":false
 }

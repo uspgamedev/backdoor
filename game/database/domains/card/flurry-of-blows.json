@@ -67,7 +67,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":5,
+          "base":2,
           "mod":25,
           "name":"effective_power",
           "output":"amount",
@@ -79,6 +79,7 @@
   "cost":3,
   "icon":"card-flurry-of-blows",
   "level":8,
+  "mod":"half",
   "name":"Flurry of Blows",
   "set":"strikes_expert"
 }
