@@ -182,7 +182,7 @@ function View:drawPacks(g, enter)
     g.translate(0, self.y_offset[i])
     local packbg = RES.loadTexture("pack")
 
-    local shiny = focus and 1.1 or 1
+    local shiny = focus and 1.2 or 1
 
     --shadow
     g.setColor(0, 0, 0, 200/255)
@@ -192,7 +192,8 @@ function View:drawPacks(g, enter)
     local br, bg, bb
     assert(COLORS["PACK_"..collection.pack_color], "Not a valid pack color: "..collection.pack_color)
     br, bg, bb = unpack(COLORS["PACK_"..collection.pack_color])
-    g.setColor(br*shiny/255, bg*shiny/255, bb*shiny/255)
+
+    g.setColor(br*shiny, bg*shiny, bb*shiny)
     g.draw(packbg, 0, 0)
 
     --draw icon
@@ -206,7 +207,7 @@ function View:drawPacks(g, enter)
       assert(false, "Not a valid icon_color: "..collection.icon_color)
     end
 
-    g.setColor(br/255, bg/255, bb/255)
+    g.setColor(br, bg, bb)
     g.draw(icon,15,55, nil, .5)
     g.pop()
   end

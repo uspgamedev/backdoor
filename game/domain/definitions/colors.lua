@@ -42,13 +42,13 @@ COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
 COLORS.FLASH_DISCARD = Color.fromInt { 255, 135, 43, 255 }
 COLORS.FLASH_EQUIP = Color:new{ .1, .8, .1, 1 }
 
-COLORS.PACK_RED = Color:new{0xdf, 0x3e, 0x23}
-COLORS.PACK_YELLOW = Color:new{0xff, 0xfc, 0x40}
-COLORS.PACK_ORANGE = Color:new{0xff, 0xd5, 0x41}
-COLORS.PACK_PURPLE = Color:new{0x40, 0x33, 0x53}
-COLORS.PACK_BLUE   = Color:new{0x84, 0x9b, 0xe4}
-COLORS.PACK_GREEN  = Color:new{0x59, 0xc1, 0x35}
-COLORS.PACK_GREY   = Color:new{0xda, 0xe0, 0xea}
-COLORS.PACK_WHITE  = Color:new{0xff, 0xff, 0xff}
+COLORS.PACK_RED = Color.fromInt {0xdf, 0x3e, 0x23}
+COLORS.PACK_YELLOW = Color.fromInt {0xff, 0xfc, 0x40}
+COLORS.PACK_ORANGE = Color.fromInt {0xff, 0xd5, 0x41}
+COLORS.PACK_PURPLE = Color.fromInt {0x40, 0x33, 0x53}
+COLORS.PACK_BLUE   = Color.fromInt {0x84, 0x9b, 0xe4}
+COLORS.PACK_GREEN  = Color.fromInt {0x59, 0xc1, 0x35}
+COLORS.PACK_GREY   = Color.fromInt {0xda, 0xe0, 0xea}
+COLORS.PACK_WHITE  = Color.fromInt {0xff, 0xff, 0xff}
 
 return COLORS
