@@ -192,7 +192,7 @@ function View:drawPacks(g, enter)
     local br, bg, bb
     assert(COLORS["PACK_"..collection.pack_color], "Not a valid pack color: "..collection.pack_color)
     br, bg, bb = unpack(COLORS["PACK_"..collection.pack_color])
-    g.setColor(br*shiny, bg*shiny, bb*shiny)
+    g.setColor(br*shiny/255, bg*shiny/255, bb*shiny/255)
     g.draw(packbg, 0, 0)
 
     --draw icon
@@ -206,7 +206,7 @@ function View:drawPacks(g, enter)
       assert(false, "Not a valid icon_color: "..collection.icon_color)
     end
 
-    g.setColor(br, bg, bb)
+    g.setColor(br/255, bg/255, bb/255)
     g.draw(icon,15,55, nil, .5)
     g.pop()
   end

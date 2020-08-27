@@ -97,6 +97,8 @@ function love.update(dt)
     local current = SWITCHER.current()
     if current.devmode then current:devmode() end
     SWITCHER.push(GS.DEVMODE)
+  elseif INPUT.wasActionPressed('FLUSH') then
+    io.flush()
   end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
