@@ -21,6 +21,9 @@
       "drop":15,
       "set":"control_expert"
     }],
+  "color":"PURPLE",
+  "icon_color":"white",
   "image":"card-upgrade",
-  "name":"Imp Collection"
+  "name":"Imp Collection",
+  "pack_color":"PURPLE"
 }

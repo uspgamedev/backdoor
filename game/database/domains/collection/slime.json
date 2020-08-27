@@ -18,6 +18,9 @@
       "drop":10,
       "set":"consumables_advanced"
     }],
+  "color":"GREEN",
+  "icon_color":"black",
   "image":"card-upgrade",
-  "name":"Slime Collection"
+  "name":"Slime Collection",
+  "pack_color":"GREEN"
 }

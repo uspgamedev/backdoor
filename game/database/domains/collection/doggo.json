@@ -12,6 +12,9 @@
       "drop":25,
       "set":"support_advanced"
     }],
+  "color":"ORANGE",
+  "icon_color":"black",
   "image":"card-upgrade",
-  "name":"Doggo Collection"
+  "name":"Doggo Collection",
+  "pack_color":"ORANGE"
 }

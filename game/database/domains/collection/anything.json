@@ -24,7 +24,10 @@
       "drop":50,
       "set":"weapon"
     }],
+  "color":"WHITE",
   "description":"",
+  "icon_color":"black",
   "image":"card-upgrade",
-  "name":"Anything"
+  "name":"Anything",
+  "pack_color":"WHITE"
 }

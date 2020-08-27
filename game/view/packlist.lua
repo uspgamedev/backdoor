@@ -171,6 +171,7 @@ function View:drawPacks(g, enter)
   -- draw each pack
   for i = 1, pack_list_size do
     g.push()
+    local collection = DB.loadSpec("collection", pack_list[selection])
     local focus = selection == i
     local offset = self.offsets[i] or 0
 
@@ -181,23 +182,30 @@ function View:drawPacks(g, enter)
     g.translate(0, self.y_offset[i])
     local packbg = RES.loadTexture("pack")
 
-    local shiny = 1/255
-    if focus then
-      shiny = 1.5/255
-    end
+    local shiny = focus and 1.1 or 1
 
     --shadow
     g.setColor(0, 0, 0, 200/255)
     g.draw(packbg, 5, 5)
 
     --pack
-    g.setColor(85*shiny, 178*shiny, 127*shiny)
+    local br, bg, bb
+    assert(COLORS["PACK_"..collection.pack_color], "Not a valid pack color: "..collection.pack_color)
+    br, bg, bb = unpack(COLORS["PACK_"..collection.pack_color])
+    g.setColor(br*shiny, bg*shiny, bb*shiny)
     g.draw(packbg, 0, 0)
 
     --draw icon
-    local collection = DB.loadSpec("collection", pack_list[selection])
     local icon = RES.loadTexture(collection.image)
-    local br, bg, bb = unpack(COLORS.DARK)
+
+    if collection.icon_color == "white" then
+      br, bg, bb = unpack(COLORS.NEUTRAL)
+    elseif collection.icon_color == "black" then
+      br, bg, bb = unpack(COLORS.DARK)
+    else
+      assert(false, "Not a valid icon_color: "..collection.icon_color)
+    end
+
     g.setColor(br, bg, bb)
     g.draw(icon,15,55, nil, .5)
     g.pop()
