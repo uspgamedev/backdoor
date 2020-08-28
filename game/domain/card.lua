@@ -246,13 +246,13 @@ function Card:getEffect()
       )
     end
   end
-  effect = effect .. "\n\n"
   if self:getMod() then
-    effect = effect .. "Power " .. ATTR.MOD_DESCRIPTION[self:getMod()]
-                    .. ATTR.NAME[self:getRelatedAttr()] .. " level\n\n"
+    effect = effect .. "\n\nPower " .. ATTR.MOD_DESCRIPTION[self:getMod()]
+                    .. ATTR.NAME[self:getRelatedAttr()] .. " level"
   end
   if self:isArt() then
-    effect = effect .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
+    effect = effect .. "\n\n"
+                    .. ABILITY.preview(self:getArtAbility(), self:getOwner(),
                                        inputs, true)
   elseif self:isWidget() then
     do -- static abilities
