@@ -212,9 +212,11 @@ function View:startLeaving()
     self:addTimer(_TEXT_TIMER, MAIN_TIMER, "tween", .25,
                   self, {backbuffer_show=1}, "in-quad")
   end
+  local base_delay = .05
+  local per_card_delay = 5/60
   for i = 1, #self.card_list do
     self:addTimer(
-      "collect_card_"..i, MAIN_TIMER, "after", i*5/60 + .05,
+      "collect_card_"..i, MAIN_TIMER, "after", base_delay + i*per_card_delay,
       function()
         if not self.consumed[i] then
           if self.send_to_backbuffer then
@@ -249,7 +251,8 @@ function View:startLeaving()
       end
     )
   end
-  local d = self.send_to_backbuffer and 1.2 or .75
+  local total_delay = base_delay + (#self.card_list + 1) * per_card_delay
+  local d = total_delay + (self.send_to_backbuffer and 1.2 or .75)
   self:addTimer("finish_collection", MAIN_TIMER, "after", d,
                 function()
                   if self.backbuffer then
