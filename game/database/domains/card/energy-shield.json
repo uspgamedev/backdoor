@@ -1,4 +1,5 @@
 {
+  "attr":"NONE",
   "cost":1,
   "icon":"card-energy-shield",
   "level":5,
@@ -15,6 +16,5 @@
     "tactical-hint":"helpful",
     "trigger":false
   },
-  "attr":false,
   "mod":false
 }
