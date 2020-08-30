@@ -4,7 +4,7 @@ BIN_DIR=bin
 LIBS_DIR=$(GAME_DIR)/libs
 GAME=$(BIN_DIR)/backdoor.love
 
-DEPLOY_SITE=https://uspgamedev.org
+DEPLOY_SITE=https://usp.game.dev.br
 DEPLOY_PATH=downloads/projects/backdoor
 DEPLOY_URL=$(DEPLOY_SITE)/$(DEPLOY_PATH)
 
@@ -162,7 +162,7 @@ $(GAME_LINUX64): $(GAME) $(GAME_LINUX64_TEMPLATE) $(APPIMG_TOOL)
 
 $(LOVE_WIN32): $(GAME)
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
-	curl -L -o $(LOVE_WIN32) https://bitbucket.org/rude/love/downloads/love-11.3-win32.zip
+	curl -L -o $(LOVE_WIN32) https://github.com/love2d/love/releases/download/11.3/love-11.3-win32.zip
 
 $(IMGUI_DLL):
 	mkdir -p $(BIN_DIR_WIN32_DEPS)
