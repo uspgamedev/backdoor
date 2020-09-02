@@ -1,6 +1,7 @@
 
 local ABILITY = require 'domain.ability'
 local DEFS = require 'domain.definitions'
+local ATTR = require 'domain.definitions.attribute'
 
 local _CARDS = 'domains.card'
 
@@ -15,6 +16,8 @@ return {
   { id = 'desc', name = "Description", type = 'text' },
   { id = 'attr', name = "Type (attr)", type = 'enum',
     options = DEFS.CARD_ATTRIBUTES },
+  { id = 'mod', name = "Modifier", type = 'enum',
+    options = ATTR.MOD },
   { id = 'level', name = "Level", type = 'range', min = 1,
       max = 10, default = 1 },
   { id = 'cost', name = "Cost", type = 'range', min = 0,

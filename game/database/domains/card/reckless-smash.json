@@ -28,7 +28,7 @@
           "non-wall":false
         },{
           "attr":"COR",
-          "base":12,
+          "base":2,
           "mod":50,
           "name":"effective_power",
           "output":"amount",
@@ -55,6 +55,7 @@
   "desc":"They say 'no pain, no gain'.\nI'll give them what they want.",
   "icon":"card-reckless-smash",
   "level":7,
+  "mod":"double",
   "name":"Reckless Smash",
   "set":"strikes_advanced",
   "type-description":"",

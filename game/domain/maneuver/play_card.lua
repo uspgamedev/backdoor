@@ -28,6 +28,7 @@ end
 
 function PLAYCARD.validate(actor, inputvalues)
   local card = _card(actor, inputvalues)
+  inputvalues.card = card
   return actor:canPlayCard(card) and
         (not card:isArt() or
          ABILITY.checkInputs(card:getArtAbility(), actor, inputvalues))
@@ -47,6 +48,7 @@ function PLAYCARD.perform(actor, inputvalues)
       card_index = inputvalues.card_index
     })
     actor:playCard(inputvalues.card_index)
+    inputvalues.card = card
     ABILITY.execute(card:getArtAbility(), actor, inputvalues)
   elseif card:isWidget() then
     body:placeWidget(card)

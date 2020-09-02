@@ -20,9 +20,11 @@
       }
     },
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":false,
     "auto_activation":false
-  }
+  },
+  "mod":false
 }

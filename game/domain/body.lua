@@ -323,6 +323,7 @@ function Body:triggerOneWidget(index, trigger, inputs)
   inputs = inputs or {}
   inputs.widget_self = widget
   inputs.body_self = self
+  inputs.card = widget
   inputs.pos_self = {self:getPos()}
   if widget:getWidgetTrigger() == trigger then
     local condition = widget:getWidgetTriggerCondition()

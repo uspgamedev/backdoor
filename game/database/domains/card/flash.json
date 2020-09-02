@@ -2,7 +2,7 @@
   "art":{
     "art_ability":{
       "effects":[{
-          "card":"stunned",
+          "cardspec":"stunned",
           "center":"=self_pos",
           "ignore_owner":true,
           "name":"place_widget_on_area",

@@ -14,5 +14,6 @@
   "icon":"card-chained-surge",
   "level":8,
   "name":"Chained Surge",
-  "set":"support_expert"
+  "set":"support_expert",
+  "mod":false
 }

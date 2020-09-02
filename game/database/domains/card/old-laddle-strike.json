@@ -25,7 +25,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":5,
+          "base":4,
           "mod":40,
           "name":"effective_power",
           "output":"amount",
@@ -34,9 +34,10 @@
     }
   },
   "attr":"COR",
-  "cost":3,
+  "cost":2,
   "icon":"card-old-laddle-strike",
   "level":4,
+  "mod":"half",
   "name":"Old Laddle Strike",
   "one_time":true,
   "temporary":true,

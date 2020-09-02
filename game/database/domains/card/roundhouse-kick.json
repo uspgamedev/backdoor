@@ -19,7 +19,7 @@
           "type":"input"
         },{
           "attr":"COR",
-          "base":6,
+          "base":3,
           "mod":60,
           "name":"effective_power",
           "output":"amount",
@@ -42,9 +42,10 @@
     }
   },
   "attr":"COR",
-  "cost":3,
+  "cost":2,
   "icon":"card-roundhouse-kick",
   "level":4,
+  "mod":"half",
   "name":"Roundhouse Kick",
   "set":"strikes_common"
 }

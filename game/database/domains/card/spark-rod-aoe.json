@@ -19,7 +19,7 @@
           "type":"input"
         },{
           "attr":"COR",
-          "base":4,
+          "base":6,
           "mod":30,
           "name":"effective_power",
           "output":"amount",
@@ -31,6 +31,7 @@
   "cost":3,
   "icon":"card-spark-rod-shockwave",
   "level":10,
+  "mod":"half",
   "name":"Spark Blast",
   "temporary":true,
   "set":false

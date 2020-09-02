@@ -1,6 +1,6 @@
 {
   "attr":"ANI",
-  "cost":3,
+  "cost":5,
   "desc":"",
   "icon":"card-soul-robe",
   "level":5,
@@ -19,6 +19,7 @@
         "op":"+",
         "val":2
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger-condition":{
@@ -27,6 +28,7 @@
     },
     "trigger":false
   },
+  "mod":false,
   "set":false,
   "one_time":false
 }
