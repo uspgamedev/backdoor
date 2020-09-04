@@ -18,6 +18,9 @@
       "drop":5,
       "set":"armor_advanced"
     }],
-  "image":"card-upgrade",
-  "name":"Stove Collection"
+  "color":"GREY",
+  "icon_color":"white",
+  "image":"pack-stove",
+  "name":"Stove Collection",
+  "pack_color":"GREY"
 }

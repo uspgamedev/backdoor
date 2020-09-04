@@ -21,6 +21,9 @@
       "drop":15,
       "set":"consumables_expert"
     }],
-  "image":"card-upgrade",
-  "name":"Eye Collection"
+  "color":"RED",
+  "icon_color":"black",
+  "image":"pack-eye",
+  "name":"Eye Collection",
+  "pack_color":"RED"
 }

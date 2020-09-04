@@ -11,6 +11,7 @@
     "QUIT":["f8"],
     "PAUSE":["escape"],
     "DEVMODE":["f1"],
+    "FLUSH":["f7"],
     "HELP":["lshift"],
     "STATUS":["tab"]
   },
