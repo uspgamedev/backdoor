@@ -37,7 +37,7 @@
         "actorspec":"dumb-stove",
         "bodyspec":"stove"
       }],
-    "upgrade_power":300
+    "upgrade_power":200
   },
   "exits":{
     "distance":5,

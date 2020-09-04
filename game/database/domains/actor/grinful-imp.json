@@ -5,11 +5,8 @@
   "cor":-1,
   "description":"Spellcaster monster, evil by nature.",
   "initial_buffer":[{
-      "amount":7,
+      "amount":6,
       "card":"firebolt"
-    },{
-      "amount":1,
-      "card":"soul_robe"
     },{
       "amount":2,
       "card":"concentration"
