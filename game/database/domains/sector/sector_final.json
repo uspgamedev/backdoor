@@ -37,7 +37,7 @@
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat"
       }],
-    "upgrade_power":800
+    "upgrade_power":600
   },
   "exits":{
     "distance":5,

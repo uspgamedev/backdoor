@@ -5,10 +5,10 @@
   "cor":-2,
   "description":"Weak slimey blob",
   "initial_buffer":[{
-      "amount":6,
+      "amount":7,
       "card":"strike"
     },{
-      "amount":4,
+      "amount":2,
       "card":"sidestep"
     },{
       "amount":1,
