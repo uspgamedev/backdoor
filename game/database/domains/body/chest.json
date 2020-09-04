@@ -1,0 +1,17 @@
+{
+  "appearance":"prop-chest",
+  "basehp":10,
+  "drops":[{
+      "droprate":100,
+      "droptype":"pack"
+    },{
+      "droprate":50,
+      "droptype":"pack"
+    },{
+      "droprate":50,
+      "droptype":"pack"
+    }],
+  "faction":"inert",
+  "name":"Chest",
+  "extends":false
+}

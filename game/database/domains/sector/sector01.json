@@ -65,6 +65,11 @@
         "growth":20,
         "max":16,
         "min":12
+      },{
+        "bodyspec":"chest",
+        "growth":0,
+        "max":5,
+        "min":1
       }]
   },
   "rooms":{
