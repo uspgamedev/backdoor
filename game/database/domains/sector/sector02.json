@@ -17,16 +17,6 @@
   "deadends":{
     "amount":12
   },
-  "drops":{
-    "drop-info":"",
-    "drops":[{
-        "droprate":2,
-        "droptype":"food2"
-      },{
-        "droprate":0,
-        "droptype":"pack"
-      }]
-  },
   "encounters":{
     "max":10,
     "min":5,
@@ -81,6 +71,7 @@
     "rmar":1,
     "tries":256
   },
+  "drops":false,
   "holes":false,
   "theme":false
 }
