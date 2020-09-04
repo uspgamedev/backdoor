@@ -171,7 +171,7 @@ function View:drawPacks(g, enter)
   -- draw each pack
   for i = 1, pack_list_size do
     g.push()
-    local collection = DB.loadSpec("collection", pack_list[selection])
+    local collection = DB.loadSpec("collection", pack_list[i])
     local focus = selection == i
     local offset = self.offsets[i] or 0
 
