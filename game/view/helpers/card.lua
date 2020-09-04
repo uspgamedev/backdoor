@@ -25,7 +25,7 @@ function CARD.drawInfo(card, x, y, width, alpha, player_actor, no_desc)
   local g = love.graphics -- luacheck: globals love
   local cr, cg, cb = unpack(COLORS.NEUTRAL)
   if not (card:getOwner() and card:getOwner():canPlayCard(card)) then
-    cr, cg, cb = unpack(COLORS.INVALID)
+    cr, cg, cb = unpack(COLORS.UNPLAYABLE)
   end
 
   g.push()

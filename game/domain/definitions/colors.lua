@@ -36,6 +36,7 @@ COLORS.NONE = Color.fromInt {0x6d, 0x75, 0x8d, 0xff}
 COLORS.PP = Color.fromInt {0x24, 0x9f, 0xde, 255}
 COLORS.FOCUS = Color.fromInt {0xbc, 0x4a, 0x9b, 0xff}
 COLORS.HALF_EXHAUSTION = Color.fromInt {0x00, 0x00, 0x00, 0xff}
+COLORS.UNPLAYABLE = Color.fromInt {0xb4, 0x20, 0x2a, 0xff}
 
 COLORS.FLASH_DRAW = Color.fromInt { 99, 252, 255, 255 }
 COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
