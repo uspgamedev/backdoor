@@ -606,6 +606,7 @@ end
 --[[ Turn methods ]]--
 
 function Actor:grabDrops(tile)
+  if not tile then return end
   local drops = tile.drops
   local inputvalues = {}
   local n = #drops
@@ -686,6 +687,7 @@ function Actor:endTurn()
 end
 
 function Actor:makeAction()
+  self:updateFov(self:getBody():getSector())
   local success = false
   repeat
     local action_slot, params
@@ -698,7 +700,6 @@ function Actor:makeAction()
       success = ACTION.execute(action_slot, self, params)
     end
   until success
-  self:updateFov(self:getBody():getSector())
   return true
 end
 
