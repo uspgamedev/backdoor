@@ -228,9 +228,6 @@ end
 function SectorView:snapBodyViews()
   for id,bodyview in pairs(self.body_views) do
     local body = Util.findId(id)
-    if body and not self.sector then
-      print(body.specname, body:getId())
-    end
     if body and self.sector:getBodyPos(body) then
       bodyview:setPosition(body:getPos())
     end
