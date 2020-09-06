@@ -34,12 +34,18 @@ local _updateSoundtrack
 --LOCAL FUNCTION--
 
 local function _saveRoute()
+  PROFILE.saveRoute(_route.saveState())
+end
+
+local function _persistRoute()
   if PROFILE.getTutorial("finished_tutorial") then
-    PROFILE.saveRoute(_route.saveState())
+    _saveRoute()
+    PROFILE.persistRoute()
   end
 end
 
 local function _playTurns(...)
+
   local request, extra = _route.playTurns(...)
 
   _updateSoundtrack()
@@ -92,7 +98,7 @@ end
 
 function _activity:saveAndQuit()
   local fade_view = FadeView(FadeView.STATE_UNFADED)
-  _saveRoute()
+  _persistRoute()
   fade_view:register("GUI")
   fade_view:fadeOutAndThen(self.resume)
   self.wait()
@@ -162,7 +168,7 @@ end
 
 function state:leave()
 
-  _saveRoute()
+  _persistRoute()
   _route.destroyAll()
   _view:destroy()
   if RUNFLAGS.DEVELOPMENT then
