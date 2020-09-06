@@ -1,4 +1,6 @@
 
+-- luacheck: globals love VERSION
+
 local JSON         = require 'dkjson'
 local INPUT        = require 'input'
 
@@ -28,6 +30,7 @@ local _savethread
 local _channel
 local _confirm
 local _compress
+local _last_route_state
 
 local function _decompress(str) --> str
   if not _compress then return str end
@@ -131,15 +134,19 @@ function PROFILE.loadRoute(route_id)
 end
 
 function PROFILE.saveRoute(route_data)
+  _last_route_state = route_data
+end
+
+function PROFILE.persistRoute()
   -- add save to profile list
-  _metadata.save_list[route_data.id] = {
-    player_name = route_data.player_name,
-    player_dead = route_data.player_dead,
-    player_won  = route_data.player_won,
+  _metadata.save_list[_last_route_state.id] = {
+    player_name = _last_route_state.player_name,
+    player_dead = _last_route_state.player_dead,
+    player_won  = _last_route_state.player_won,
   }
   _channel:push({
-    filepath = SAVEDIR .. route_data.id,
-    data = route_data,
+    filepath = SAVEDIR .. _last_route_state.id,
+    data = _last_route_state,
     compress = _compress,
   })
   return _saveProfile()
@@ -170,7 +177,7 @@ function PROFILE.setPreference(field, value)
   _metadata.preferences[field] = value
 end
 
-function PROFILE.getTutorial(field, value)
+function PROFILE.getTutorial(field)
   local value = _metadata.tutorial[field]
   if not value then
     value = DB.loadSetting("tutorial")[field]

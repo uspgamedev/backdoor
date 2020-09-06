@@ -90,6 +90,7 @@ function love.update(dt)
   PROFILER:update(dt)
   MAIN_TIMER:update(dt)
   if INPUT.wasActionReleased('QUIT') then
+    PROFILE.persistRoute()
     love.event.quit()
   elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG
                                            and RUNFLAGS.DEVELOPMENT then
