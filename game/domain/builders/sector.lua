@@ -48,8 +48,10 @@ function _placeTiles(state, grid, drops)
       local tile_type = grid.get(j, i)
       if tile_type and tile_type ~= SCHEMATICS.NAUGHT then
         tile = { type = tile_type, drops = {} }
-        for _,drop in ipairs(drops[i][j]) do
-          table.insert(tile.drops, drop)
+        if drops then
+          for _,drop in ipairs(drops[i][j]) do
+            table.insert(tile.drops, drop)
+          end
         end
       end
       state.tiles[i][j] = tile
