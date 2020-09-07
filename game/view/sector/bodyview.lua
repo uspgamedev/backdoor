@@ -17,12 +17,12 @@ local BodyView = Class {
 local BLINK = { true, false, true, false, true, false }
 local Outline = require 'view.helpers.outline'()
 local OUTLINE_DECOR = function(self, x, y)
-  local g = love.graphics
+  local g = love.graphics -- luacheck: globals love
   Outline:color(1, 1, 1)
   local quad = self:updateAndGetCurrentQuadOfSprite(self)
   local tex = self.texture
   local ox, oy = self:getOffset()
-  Outline:predraw(3, text, quad)
+  Outline:predraw(3, nil, quad)
   g.draw(tex, quad, x, y, 0, self.sx, self.sy, ox, oy)
   g.setShader()
 end
@@ -54,7 +54,7 @@ end
 
 function BodyView:getScreenPosition()
   local route = self.body:getSector():getRoute()
-  local controlled_actor = route.getControlledActor()
+  local controlled_actor = route.getPlayerActor()
   local camera_pos = BodyView.tileToScreen(controlled_actor:getBody():getPos())
   return self.position - camera_pos
 end

@@ -11,7 +11,7 @@ local ANIM = require 'common.activity' ()
 
 function ANIM:script(route, view, report)
   local action_hud = view.action_hud
-  if report.body == route.getControlledActor():getBody() then
+  if report.body == route.getPlayerActor():getBody() then
     local cardview = CardView(report.card)
     local w, h = VIEWDEFS.VIEWPORT_DIMENSIONS()
     cardview:register("HUD_FX")
