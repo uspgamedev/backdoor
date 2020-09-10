@@ -1,5 +1,4 @@
 
-local Card = require 'domain.card'
 local DB = require 'database'
 
 local FX = {}
@@ -16,9 +15,9 @@ function FX.preview(_, fieldvalues)
 end
 
 function FX.process(actor, fieldvalues)
-  local card = Card(fieldvalues['cardspec'])
+  local route = actor:getSector():getRoute()
+  local card = route.makeCard(fieldvalues['cardspec'], actor:getId())
   local body = fieldvalues['body']
-  card:setOwner(actor)
   body:placeWidget(card)
   coroutine.yield('report', {
     type = 'place_widget_card',
