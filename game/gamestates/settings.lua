@@ -1,8 +1,11 @@
 
+-- luacheck: no self
+
 local DB           = require 'database'
 local INPUT        = require 'input'
 local DIRECTIONALS = require 'infra.dir'
 local PROFILE      = require 'infra.profile'
+local SWITCHER     = require 'infra.switcher'
 local PLAYSFX      = require 'helpers.playsfx'
 local SettingsView = require 'view.settings'
 local Draw         = require "draw"
@@ -45,19 +48,19 @@ function state:init()
   _selection = 1
 end
 
-function state:enter(from)
+function state:enter(_)
   _selection = 1
   _original = {}
   for _,field in ipairs(_fields) do
     _original[field] = PROFILE.getPreference(field) or _schema[field].default
     PROFILE.setPreference(field, _original[field])
   end
-  _changes = setmetatable({}, { __index = original })
+  _changes = setmetatable({}, { __index = _original })
   _view = SettingsView(_fields)
   _view:register("GUI")
 end
 
-function state:update(dt)
+function state:update(_)
   if INPUT.wasActionPressed("CONFIRM") then
     PLAYSFX('ok-menu')
     _save = true

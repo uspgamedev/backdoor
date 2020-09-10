@@ -27,20 +27,28 @@ local _next_action
 
 local _view
 local _soundtrack
+local _autosave_count
 
 --Forward functions declaration
 local _updateSoundtrack
 
 --LOCAL FUNCTION--
 
-local function _saveRoute()
-  PROFILE.saveRoute(_route.saveState())
-end
-
 local function _persistRoute()
   if PROFILE.getTutorial("finished_tutorial") then
-    _saveRoute()
+    PROFILE.saveRoute(_route.saveState())
     PROFILE.persistRoute()
+  end
+end
+
+local function _autosaveRoute()
+  local autosave_freq = PROFILE.getPreference(PROFILE.PREFERENCE.AUTOSAVE)
+  _autosave_count = _autosave_count + autosave_freq
+  if _autosave_count >= PROFILE.MAX_AUTOSAVE then
+    _persistRoute()
+    _autosave_count = _autosave_count - PROFILE.MAX_AUTOSAVE
+  else
+    PROFILE.saveRoute(_route.saveState())
   end
 end
 
@@ -62,7 +70,7 @@ local function _playTurns(...)
     _view.action_hud:disableTurn()
     SWITCHER.push(GS.WIN, _player, _view)
   elseif request == "userTurn" then
-    _saveRoute()
+    _autosaveRoute()
     SWITCHER.push(GS.USER_TURN, _route, _view)
   elseif request == "changeSector" then
     _view.action_hud:disableTurn()
@@ -139,6 +147,7 @@ end
 --STATE FUNCTIONS--
 
 function state:init() -- luacheck: no self
+  _autosave_count = 0
 end
 
 function state:enter(_, route_data)

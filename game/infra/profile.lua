@@ -32,6 +32,14 @@ local _confirm
 local _compress
 local _last_route_state
 
+PROFILE.PREFERENCE = {
+  AUTOSAVE = 'autosave-frequency',
+  BGM_VOLUME = 'bgm-volume',
+  SFX_VOLUME = 'sfx-volume'
+}
+
+PROFILE.MAX_AUTOSAVE = 100
+
 local function _decompress(str) --> str
   if not _compress then return str end
   return assert(ZIP.decompress(str, "lz4"))
@@ -138,6 +146,7 @@ function PROFILE.saveRoute(route_data)
 end
 
 function PROFILE.persistRoute()
+  if not _last_route_state then return end
   -- add save to profile list
   _metadata.save_list[_last_route_state.id] = {
     player_name = _last_route_state.player_name,
