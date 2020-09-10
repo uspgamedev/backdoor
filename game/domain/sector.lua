@@ -235,6 +235,11 @@ function Sector:removeBodyAt(i, j, body)
   self.bodies[i][j] = false
   self.bodies[body] = nil
   body:kill()
+  for other_body in pairs(Util.findSubtype('body')) do
+    other_body:removeWidgetsIf(
+      function (widget) return widget:getOwner():getBody() == body end
+    )
+  end
 
   return removed_actor
 

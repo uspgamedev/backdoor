@@ -221,8 +221,24 @@ function Body:removeWidget(index)
   if owner and not card:isOneTimeOnly() and not card:isTemporary() then
     card:resetUsages()
     owner:addCardToBackbuffer(card)
+  else
+    card:kill()
   end
   return card
+end
+
+function Body:removeWidgetsIf(predicate)
+  local n = 0
+  local removed = {}
+  for i, widget in ipairs(self.widgets) do
+    if predicate(widget) then
+      n = n + 1
+      removed[n] = i
+    end
+  end
+  for k = n, 1, -1 do
+    self:removeWidget(removed[k])
+  end
 end
 
 function Body:placeWidget(card)

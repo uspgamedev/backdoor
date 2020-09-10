@@ -1,6 +1,5 @@
 
 local DB = require 'database'
-local Card = require 'domain.card'
 local FX = {}
 
 FX.schema = {
@@ -25,12 +24,12 @@ function FX.process (actor, fieldvalues)
   local size          = fieldvalues['size']
   local cardspec      = fieldvalues['cardspec']
   local ignore_owner  = fieldvalues['ignore_owner']
+  local route         = sector:getRoute()
   for i=ci-size+1,ci+size-1 do
     for j=cj-size+1,cj+size-1 do
       local body = sector:getBodyAt(i, j) if body then
         if not ignore_owner or body ~= actor:getBody() then
-          local card = Card(cardspec)
-          card:setOwner(actor)
+          local card = route.makeCard(cardspec, actor:getId())
           body:placeWidget(card)
           coroutine.yield('report', {
             type = 'place_widget_card',
