@@ -1,10 +1,12 @@
 --CHARACTER BUILDER VIEW--
-local DB = require 'database'
-local RES = require 'resources'
-local FONT = require 'view.helpers.font'
-local COLORS = require 'domain.definitions.colors'
-local Class = require "steaming.extra_libs.hump.class"
-local ELEMENT = require "steaming.classes.primitives.element"
+local DB       = require 'database'
+local RES      = require 'resources'
+local FONT     = require 'view.helpers.font'
+local Card     = require 'domain.card'
+local Class    = require "steaming.extra_libs.hump.class"
+local COLORS   = require 'domain.definitions.colors'
+local ELEMENT  = require "steaming.classes.primitives.element"
+local CardView = require 'view.card'
 
 --CONSTANTS--
 local _CONTEXTS = {
@@ -35,6 +37,7 @@ local _HEIGHT
 local _header_font
 local _content_font
 local _info_font
+local _card_amount_font
 local _menu_values
 
 
@@ -62,6 +65,7 @@ local function _initValues()
   _header_font  = FONT.get("Text", 32)
   _content_font = FONT.get("Text", 24)
   _info_font = FONT.get("Text", 28)
+  _card_amount_font = FONT.get("Text", 22)
 end
 
 local function _getSpec(field, specname)
@@ -77,6 +81,7 @@ function View:init()
   self.arrow = 0
   self.leave = false
   self.sprite = false
+  self.buffer_preview = false
 
   _initValues()
 end
@@ -100,20 +105,23 @@ function View:reset()
   self.context = 1
   self.selection = 1
   self.sprite = false
+  self.buffer_preview = false
 end
 
 function View:selectPrev()
   local context = _PLAYER_FIELDS[self.context]
   local menu_size = #_menu_values[context]
   self.selection = (self.selection + menu_size - 2) % menu_size + 1
-  if self.context == 1 then self.sprite = false end
+  if self.context == 1 then self.sprite = false
+  elseif self.context == 2 then self.buffer_preview = false end
 end
 
 function View:selectNext()
   local context = _PLAYER_FIELDS[self.context]
   local menu_size = #_menu_values[context]
   self.selection = self.selection % menu_size + 1
-  if self.context == 1 then self.sprite = false end
+  if self.context == 1 then self.sprite = false
+  elseif self.context == 2 then self.buffer_preview = false end
 end
 
 function View:confirm()
@@ -175,7 +183,8 @@ function View:drawSpecies(g, player_info)
   --Draw species base HP
   g.translate(_WIDTH/9, _HEIGHT/3)
   _info_font:set()
-  local text = {COLORS.NEUTRAL, "BASE HP: ", COLORS.NOTIFICATION, _getSpec('species', species)['basehp']}
+  local text = {{COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter}, "BASE HP: ",
+                 {COLORS.NOTIFICATION[1], COLORS.NOTIFICATION[2], COLORS.NOTIFICATION[3], enter}, _getSpec('species', species)['basehp']}
   g.print(text, 0, 0)
   g.pop()
 end
@@ -186,25 +195,47 @@ function View:drawBackgroundInfo(g, player_info)
     local bg_spec = _getSpec('background', background)
     g.push()
     _info_font:set()
-    g.translate(_WIDTH/9, _HEIGHT/3 + 40)
+    g.translate(_WIDTH/9, _HEIGHT/3 + 60)
 
     --Aptitudes
     g.print("APTITUDES:", 0, 0)
     g.translate(0, 40)
     g.push()
-    g.print({COLORS.COR, "COR: ", COLORS.COR, bg_spec.cor}, 0, 0)
+    local c = COLORS.COR
+    g.setColor(c[1], c[2], c[3], enter)
+    g.print("COR: ".. bg_spec.cor, 0, 0)
     g.translate(100, 0)
-    g.print({COLORS.ARC, "ARC: ", COLORS.ARC, bg_spec.arc}, 0, 0)
+    c = COLORS.ARC
+    g.setColor(c[1], c[2], c[3], enter)
+    g.print("ARC: "..bg_spec.arc, 0, 0)
     g.translate(100, 0)
-    g.print({COLORS.ANI, "ANI: ", COLORS.ANI, bg_spec.ani}, 0, 0)
+    c = COLORS.ANI
+    g.setColor(c[1], c[2], c[3], enter)
+    g.print("ANI: "..bg_spec.ani, 0, 0)
     g.pop()
 
     --Buffer
-    g.translate(0, 60)
-    g.setColor(COLORS.NEUTRAL)
+    g.translate(0, 100)
+    c = COLORS.NEUTRAL
+    g.setColor(c[1], c[2], c[3], enter)
     g.print("INITIAL BUFFER:", 0, 0)
     g.translate(0, 60)
-    for 
+    if not self.buffer_preview then
+      self.buffer_preview = {}
+      for _, card_info in ipairs(bg_spec.initial_buffer) do
+        table.insert(self.buffer_preview, CardView(Card(card_info.card)))
+      end
+    end
+    g.push()
+    for i, card in ipairs(self.buffer_preview) do
+      card:draw()
+      c = COLORS.NEUTRAL
+      g.setColor(c[1], c[2], c[3], enter)
+      _card_amount_font:set()
+      g.print("x" .. bg_spec.initial_buffer[i].amount, 80, 100)
+      g.translate(120, 0)
+    end
+    g.pop()
     g.pop()
   end
 end

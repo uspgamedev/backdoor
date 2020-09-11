@@ -1,6 +1,5 @@
 
 local TweenValue    = require 'view.helpers.tweenvalue'
-local CardView      = require 'view.card'
 local Util          = require "steaming.util"
 local vec2          = require 'cpml' .vec2
 
