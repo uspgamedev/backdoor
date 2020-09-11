@@ -34,6 +34,7 @@ local _HEIGHT
 --LOCALS--
 local _header_font
 local _content_font
+local _info_font
 local _menu_values
 
 
@@ -60,6 +61,7 @@ local function _initValues()
   _WIDTH, _HEIGHT = g.getDimensions()
   _header_font  = FONT.get("Text", 32)
   _content_font = FONT.get("Text", 24)
+  _info_font = FONT.get("Text", 28)
 end
 
 local function _getSpec(field, specname)
@@ -149,6 +151,7 @@ function View:draw()
   self:drawSaved(g, player_info)
   self:drawContext(g)
   self:drawSpecies(g, player_info)
+  self:drawBackgroundInfo(g, player_info)
   if self.context > #_CONTEXTS then return end
   self:drawSelection(g, context, selection)
 
@@ -157,6 +160,8 @@ end
 function View:drawSpecies(g, player_info)
   g.push()
   g.translate(_WIDTH/2, _HEIGHT/2)
+
+  --Draw species sprite
   local species = player_info.species or _menu_values.species[self.selection]
   if not self.sprite and species then
     local appearance_specname = _getSpec('species', species)['appearance']
@@ -164,13 +169,50 @@ function View:drawSpecies(g, player_info)
     self.sprite = RES.loadSprite(appearance.idle)
   end
   if self.sprite then self.sprite:draw(-40, 0) end
+
   g.pop()
+  g.push()
+  --Draw species base HP
+  g.translate(_WIDTH/9, _HEIGHT/3)
+  _info_font:set()
+  local text = {COLORS.NEUTRAL, "BASE HP: ", COLORS.NOTIFICATION, _getSpec('species', species)['basehp']}
+  g.print(text, 0, 0)
+  g.pop()
+end
+
+function View:drawBackgroundInfo(g, player_info)
+  if self.context > 1 then
+    local background = player_info.background or _menu_values.background[self.selection]
+    local bg_spec = _getSpec('background', background)
+    g.push()
+    _info_font:set()
+    g.translate(_WIDTH/9, _HEIGHT/3 + 40)
+
+    --Aptitudes
+    g.print("APTITUDES:", 0, 0)
+    g.translate(0, 40)
+    g.push()
+    g.print({COLORS.COR, "COR: ", COLORS.COR, bg_spec.cor}, 0, 0)
+    g.translate(100, 0)
+    g.print({COLORS.ARC, "ARC: ", COLORS.ARC, bg_spec.arc}, 0, 0)
+    g.translate(100, 0)
+    g.print({COLORS.ANI, "ANI: ", COLORS.ANI, bg_spec.ani}, 0, 0)
+    g.pop()
+
+    --Buffer
+    g.translate(0, 60)
+    g.setColor(COLORS.NEUTRAL)
+    g.print("INITIAL BUFFER:", 0, 0)
+    g.translate(0, 60)
+    for 
+    g.pop()
+  end
 end
 
 function View:drawSelection(g, context, selection)
   g.push()
   g.translate(_WIDTH/2, _HEIGHT/2 + _header_font:getHeight())
-
+  g.setColor(1, 1, 1, enter)
   local text = _menu_values[context][selection]
   local spec
   if type(text):match('boolean') then text = text and "Yes" or "No"
@@ -227,7 +269,7 @@ function View:drawSaved(g, player_info)
   _header_font:setLineHeight(1)
   _header_font:set()
   g.push()
-  g.translate(_WIDTH/3-80, _HEIGHT/2 - 2*_header_font:getHeight() + 40)
+  g.translate(_WIDTH/9, _HEIGHT/3 - 2*_header_font:getHeight())
   g.setColor(0x38/255, 0xe4/255, 1, self.enter)
   for i = 1, self.context - 1 do
     local field = _PLAYER_FIELDS[i]
