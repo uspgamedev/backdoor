@@ -186,7 +186,8 @@ function CardView:getPoint()
                        - vec2(0,self.raised:get())
 end
 
-function CardView:draw()
+function CardView:draw(alpha)
+  alpha = alpha or 1
   --Draw card background
   local x,y = self.position:unpack()
   y = y - self.raised:get()
@@ -207,9 +208,9 @@ function CardView:draw()
     local cardname = self.card:getName()
     local namewidth = _title_font:getWidth(cardname)
     if self.card:getOwner() and self.card:getOwner():canPlayCard(self.card) then
-      g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha})
+      g.setColor(COLORS.NEUTRAL * Color:new{1,1,1,self.alpha * alpha})
     else
-      g.setColor(COLORS.INVALID * Color:new{1,1,1,self.alpha})
+      g.setColor(COLORS.INVALID * Color:new{1,1,1,self.alpha * alpha})
     end
     g.printf(cardname, x + round((w - namewidth)/2),
              round(y-pd-_title_font:getHeight()),
@@ -219,7 +220,7 @@ function CardView:draw()
   _card_font.set()
 
   --shadow
-  g.setColor(0, 0, 0, self.alpha)
+  g.setColor(0, 0, 0, self.alpha * alpha)
   self.sprite:draw(x+2, y+2, 0, self.mode_scale.x, self.mode_scale.y,
                    (self.mode_scale.x-1)*self.sprite:getWidth()/2,
                    (self.mode_scale.y-1)*self.sprite:getHeight()/2)
@@ -229,7 +230,7 @@ function CardView:draw()
   cr = cr + shine
   cg = cg + shine
   cb = cb + shine
-  g.setColor(cr, cg, cb, self.alpha)
+  g.setColor(cr, cg, cb, self.alpha * alpha)
   self.sprite:draw(x, y, 0, self.mode_scale.x, self.mode_scale.y,
                    (self.mode_scale.x-1)*self.sprite:getWidth()/2,
                    (self.mode_scale.y-1)*self.sprite:getHeight()/2)
@@ -238,7 +239,7 @@ function CardView:draw()
   local br, bg, bb = unpack(COLORS.DARK)
   local icon_texture = TEXTURE.get(self.card:getIconTexture() or 'icon-none')
   local tw, th = icon_texture:getDimensions()
-  g.setColor(br, bg, bb, self.alpha)
+  g.setColor(br, bg, bb, self.alpha * alpha)
   g.push()
   g.translate(self.icon_offset.x, self.icon_offset.y)
   icon_texture:setFilter('linear', 'linear')
@@ -248,7 +249,7 @@ function CardView:draw()
   g.push()
   g.translate(x, y)
   --Draw card info
-  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.info_alpha)
+  g.setColor(0x20/255, 0x20/255, 0x20/255, self.alpha*self.info_alpha*alpha)
   local type_str = self.card:getType() .. " " .. self.card:getLevel()
   g.printf(type_str, pd, h - pd - _card_font:getHeight()/2, typewidth,
            "left")
@@ -256,7 +257,7 @@ function CardView:draw()
   local focus_icon = RES.loadTexture('focus-icon')
   local iw, ih = focus_icon:getDimensions()
   for i = 1, self.card:getCost() do
-    g.setColor(br, bg, bb, self.alpha * self.info_alpha)
+    g.setColor(br, bg, bb, self.alpha * self.info_alpha * alpha)
     g.push()
     g.translate(w - pd - (i - 1) * (pd - 2), pd)
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
@@ -266,7 +267,7 @@ function CardView:draw()
     local quick_icon = RES.loadTexture('quick-card-icon')
     quick_icon:setFilter("linear", "linear")
     local c = COLORS.HALF_EXHAUSTION
-    g.setColor(c[1], c[2], c[3], self.alpha * self.info_alpha)
+    g.setColor(c[1], c[2], c[3], self.alpha * self.info_alpha * alpha)
     g.push()
     g.translate(pd, h - 31)
     local scale = .9
@@ -281,15 +282,15 @@ function CardView:draw()
     local y = _widget_charge_pos.y + self.charge_offset.y
     local font = _widget_charge_font
     --Print background
-    g.setColor(0, 0, 0, self.alpha)
+    g.setColor(0, 0, 0, self.alpha * alpha)
     _draw_hexagon("fill", x, y, _widget_charge_radius)
-    g.setColor(cr, cg, cb, self.alpha)
+    g.setColor(cr, cg, cb, self.alpha * alpha)
     g.setLineWidth(_widget_charge_linew)
     _draw_hexagon("line", x, y, _widget_charge_radius)
 
     --Print charges
     font.set()
-    g.setColor(cr, cg, cb, self.alpha)
+    g.setColor(cr, cg, cb, self.alpha * alpha)
     local charges = self.card:getCurrentWidgetCharges()
     g.print(charges, x - font:getWidth(charges)/2,
                      y - font:getHeight()/2)
@@ -299,7 +300,7 @@ function CardView:draw()
 
   if self.add > 0 then
     g.setColor(self.flashcolor[1], self.flashcolor[2], self.flashcolor[3],
-               self.add)
+               self.add * alpha)
     self.sprite:draw(x, y, 0, self.mode_scale.x, self.mode_scale.y,
                      (self.mode_scale.x-1)*self.sprite:getWidth()/2,
                      (self.mode_scale.y-1)*self.sprite:getHeight()/2)

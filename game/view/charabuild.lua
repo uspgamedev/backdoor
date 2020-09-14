@@ -132,9 +132,9 @@ function View:confirm()
 end
 
 function View:cancel()
+  self.context = self.context - 1
   local context = _PLAYER_FIELDS[self.context]
   self.player_info[context] = false
-  self.context = self.context - 1
   if self.context < 1 then
     self.leave = true
     self.context = 1
@@ -158,14 +158,14 @@ function View:draw()
 
   self:drawSaved(g, player_info)
   self:drawContext(g)
-  self:drawSpecies(g, player_info)
-  self:drawBackgroundInfo(g, player_info)
+  self:drawSpecies(g, player_info, enter)
+  self:drawBackgroundInfo(g, player_info, enter)
   if self.context > #_CONTEXTS then return end
   self:drawSelection(g, context, selection)
 
 end
 
-function View:drawSpecies(g, player_info)
+function View:drawSpecies(g, player_info, enter)
   g.push()
   g.translate(_WIDTH/2, _HEIGHT/2)
 
@@ -189,7 +189,7 @@ function View:drawSpecies(g, player_info)
   g.pop()
 end
 
-function View:drawBackgroundInfo(g, player_info)
+function View:drawBackgroundInfo(g, player_info, enter)
   if self.context > 1 then
     local background = player_info.background or _menu_values.background[self.selection]
     local bg_spec = _getSpec('background', background)
@@ -228,7 +228,7 @@ function View:drawBackgroundInfo(g, player_info)
     end
     g.push()
     for i, card in ipairs(self.buffer_preview) do
-      card:draw()
+      card:draw(enter)
       c = COLORS.NEUTRAL
       g.setColor(c[1], c[2], c[3], enter)
       _card_amount_font:set()
