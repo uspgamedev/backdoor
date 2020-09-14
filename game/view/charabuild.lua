@@ -80,6 +80,7 @@ function View:init()
   self.enter = 0
   self.context = 1
   self.selection = 1
+  self.saved_selections = {}
   self.arrow = 0
   self.leave = false
   self.sprite = false
@@ -129,6 +130,7 @@ end
 function View:confirm()
   local context = _PLAYER_FIELDS[self.context]
   self.player_info[context] = _menu_values[context][self.selection]
+  self.saved_selections[context] = self.selection
   self.context = self.context + 1
   self.selection = 1
 end
@@ -141,7 +143,7 @@ function View:cancel()
     self.leave = true
     self.context = 1
   end
-  self.selection = 1
+  self.selection = self.saved_selections[context] or 1
 end
 
 function View:getContext()
