@@ -137,12 +137,14 @@ end
 
 function View:cancel()
   self.context = self.context - 1
-  local context = _PLAYER_FIELDS[self.context]
-  self.player_info[context] = false
   if self.context < 1 then
     self.leave = true
     self.context = 1
+  elseif self.context == 1 then
+    self.buffer_preview = false
   end
+  local context = _PLAYER_FIELDS[self.context]
+  self.player_info[context] = false
   self.selection = self.saved_selections[context] or 1
 end
 
