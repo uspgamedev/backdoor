@@ -1,3 +1,6 @@
+
+-- luacheck: globals love MAIN_TIMER
+
 --CHARACTER BUILDER VIEW--
 local DB       = require 'database'
 local RES      = require 'resources'
@@ -28,7 +31,6 @@ local _SPECS = {
 
 local _FADE_TIME = .4
 local _PD = 16
-local _LH = 1.5
 local _WIDTH
 local _HEIGHT
 
@@ -183,8 +185,12 @@ function View:drawSpecies(g, player_info, enter)
   --Draw species base HP
   g.translate(_WIDTH/9, _HEIGHT/3)
   _info_font:set()
-  local text = {{COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter}, "BASE HP: ",
-                 {COLORS.NOTIFICATION[1], COLORS.NOTIFICATION[2], COLORS.NOTIFICATION[3], enter}, _getSpec('species', species)['basehp']}
+  local text = {
+    {COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter},
+    "BASE HP: ",
+    {COLORS.NOTIFICATION[1], COLORS.NOTIFICATION[2], COLORS.NOTIFICATION[3], enter},
+    _getSpec('species', species)['basehp']
+  }
   g.print(text, 0, 0)
   g.pop()
 end
@@ -243,7 +249,7 @@ end
 function View:drawSelection(g, context, selection)
   g.push()
   g.translate(_WIDTH/2, _HEIGHT/2 + _header_font:getHeight())
-  g.setColor(1, 1, 1, enter)
+  g.setColor(1, 1, 1, self.enter)
   local text = _menu_values[context][selection]
   local spec
   if type(text):match('boolean') then text = text and "Yes" or "No"
