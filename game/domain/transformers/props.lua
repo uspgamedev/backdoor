@@ -18,7 +18,7 @@ transformer.schema = {
     } }
 }
 
-local MAX_TRIES = 10
+local MAX_TRIES = 20
 
 local function _hash(i,j)
   return ("%s:%s"):format(i,j)

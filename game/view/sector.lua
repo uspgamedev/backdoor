@@ -172,7 +172,38 @@ function SectorView:isInsideFov(i, j)
 end
 
 function SectorView:setRayDir(dir, body_block, reach)
-  self.ray = dir and { dir = dir, body_block = body_block, reach = reach }
+  local rays = {}
+  if dir and self.target then
+    local sector = self.route.getCurrentSector()
+    for i=1,sector.h do
+      rays[i] = {}
+      for j=1,sector.w do
+        rays[i][j] = false
+      end
+    end
+
+    local i, j = self.target:getPos()
+    local check
+    if body_block then
+      check = sector.isValid
+    else
+      check = sector.isWalkable
+    end
+    local count = 0
+    repeat
+      rays[i][j] = true
+      i = i + dir[1]
+      j = j + dir[2]
+      count = count + 1
+    until not check(sector, i, j) or not self.fov[i][j]
+                                  or count > reach
+    if body_block and sector:getBodyAt(i, j) and count <= reach then
+      rays[i][j] = true
+    end
+    self.ray = rays
+  else
+    self.ray = nil
+  end
 end
 
 function SectorView:getBodyView(body)
@@ -263,50 +294,20 @@ function SectorView:draw()
   SECTOR_TILEMAP.drawAbyss(g)
   SECTOR_TILEMAP.drawFloor(g)
 
-  -- setting up rays
-  local rays = {}
-  for i=1,sector.h do
-    rays[i] = {}
-    for j=1,sector.w do
-      rays[i][j] = false
-    end
-  end
-
-  if self.ray and self.target then
-    local dir = self.ray.dir
-    local i, j = self.target:getPos()
-    local check
-    if self.ray.body_block then
-      check = sector.isValid
-    else
-      check = sector.isWalkable
-    end
-    local count = 0
-    repeat
-      rays[i][j] = true
-      i = i + dir[1]
-      j = j + dir[2]
-      count = count + 1
-    until not check(sector, i, j) or not self.fov[i][j]
-                                  or count > self.ray.reach
-    if self.ray.body_block and sector:getBodyAt(i, j)
-                           and count <= self.ray.reach then
-      rays[i][j] = true
-    end
-  end
-
   -- draw tall things
   g.push()
   local all_bodies = {}
   local dialogue_boxes = {}
   local named
-  for i = 0, sector.h-1 do
+  local camrange_bounds = CAM:getRangeBounds()
+  g.translate(0, camrange_bounds.top * _TILE_H)
+  for i = camrange_bounds.top, camrange_bounds.bottom do
     local draw_bodies = {}
     local draw_drops = {}
     local highlights = {}
-    for j = 0, sector.w-1 do
-      local tile = sector.tiles[i+1][j+1]
-      if CAM:isTileInFrame(i, j) and tile then
+    for j = camrange_bounds.left, camrange_bounds.right do
+      if sector:isInside(i+1, j+1) and sector.tiles[i+1][j+1] then
+        local tile = sector.tiles[i+1][j+1]
         -- Add tiles to spritebatch
         local body = sector.bodies[i+1][j+1]
         local x = j*_TILE_W
@@ -331,7 +332,7 @@ function SectorView:draw()
                                          Color.fromInt {200, 100, 100, 100} })
             end
           end
-        elseif self.ray and rays[i+1][j+1] then
+        elseif self.ray and self.ray[i+1][j+1] then
           table.insert(highlights, { x, 0, _TILE_W, _TILE_H,
                                      Color.fromInt {200, 100, 100, 100} })
         end

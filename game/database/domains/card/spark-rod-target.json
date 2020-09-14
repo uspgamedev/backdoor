@@ -26,7 +26,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":6,
+          "base":8,
           "mod":30,
           "name":"effective_power",
           "output":"amount",
@@ -38,6 +38,7 @@
   "cost":2,
   "icon":"card-spark-rod-strike",
   "level":10,
+  "mod":"half",
   "name":"Rod Strike",
   "temporary":true,
   "set":false

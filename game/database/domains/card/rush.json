@@ -63,10 +63,11 @@
     }
   },
   "attr":"COR",
-  "cost":2,
+  "cost":3,
   "desc":"Excuse me sir, I've got somewhere to be right now",
   "icon":"card-rush",
   "level":3,
+  "mod":"full",
   "name":"Rush",
   "set":"maneuver_common"
 }

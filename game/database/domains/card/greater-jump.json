@@ -51,6 +51,7 @@
   "desc":"Take THAT gravity!",
   "icon":"card-jump",
   "level":9,
+  "mod":"half",
   "name":"Greater Jump",
   "set":"maneuver_expert",
   "type-description":"",

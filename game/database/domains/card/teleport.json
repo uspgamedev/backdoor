@@ -34,7 +34,7 @@
     }
   },
   "attr":"ARC",
-  "cost":2,
+  "cost":1,
   "desc":"",
   "icon":"card-teleport",
   "level":7,
@@ -42,5 +42,6 @@
   "pp":4,
   "set":"maneuver_advanced",
   "type-description":"",
+  "mod":false,
   "one_time":false
 }

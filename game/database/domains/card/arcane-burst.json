@@ -36,8 +36,8 @@
           "type":"operator"
         },{
           "attr":"ARC",
-          "base":1,
-          "mod":80,
+          "base":2,
+          "mod":"half",
           "name":"effective_power",
           "output":"amount",
           "type":"operator"
@@ -49,6 +49,7 @@
   "exhaustion":"FULL",
   "icon":"card-arcane-burst",
   "level":4,
+  "mod":"half",
   "name":"Arcane Burst",
   "set":"ranged_common"
 }

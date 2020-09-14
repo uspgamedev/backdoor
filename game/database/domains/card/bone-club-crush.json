@@ -24,7 +24,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":7,
+          "base":2,
           "mod":20,
           "name":"effective_power",
           "output":"amount",
@@ -33,9 +33,10 @@
     }
   },
   "attr":"COR",
-  "cost":1,
+  "cost":2,
   "icon":"card-bone-club",
   "level":6,
+  "mod":"full",
   "name":"Bone Club Crush",
   "temporary":true,
   "set":false

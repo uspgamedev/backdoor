@@ -7,13 +7,15 @@
   "one_time":true,
   "set":"armor_advanced",
   "widget":{
-    "charges":30,
+    "charges":10,
     "equipment":{
       "defensive":true
     },
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":false
-  }
+  },
+  "mod":false
 }

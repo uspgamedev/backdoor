@@ -23,7 +23,7 @@ function GameElement:getId()
   return self.id
 end
 
-function GameElement:loadState(state)
+function GameElement:loadState(state) -- luacheck: no unused
 end
 
 function GameElement:saveState()

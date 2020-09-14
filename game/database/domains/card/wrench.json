@@ -14,10 +14,12 @@
       "defensive":false
     },
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
-    "trigger":"on_use"
+    "trigger":false
   },
   "set":false,
+  "mod":false,
   "one_time":false
 }

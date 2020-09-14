@@ -17,12 +17,6 @@
   "deadends":{
     "amount":48
   },
-  "drops":{
-    "drops":[{
-        "droprate":1,
-        "droptype":"food"
-      }]
-  },
   "encounters":{
     "max":12,
     "min":6,
@@ -33,7 +27,7 @@
         "actorspec":"grinful-imp",
         "bodyspec":"imp"
       }],
-    "upgrade_power":500
+    "upgrade_power":400
   },
   "exits":{
     "distance":5,
@@ -61,6 +55,11 @@
         "growth":40,
         "max":16,
         "min":12
+      },{
+        "bodyspec":"chest",
+        "growth":0,
+        "max":5,
+        "min":5
       }]
   },
   "rooms":{
@@ -72,5 +71,6 @@
     "rmar":1,
     "tries":256
   },
+  "drops":false,
   "theme":false
 }

@@ -17,12 +17,12 @@
           "output":"body-pos",
           "tactical-hint":"healing",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
-          "non-wall":false
+          "non-wall":false,
+          "dif-fact":false
         },{
           "attr":"ANI",
-          "base":0,
+          "base":3,
           "mod":100,
           "name":"effective_power",
           "output":"amount",
@@ -40,6 +40,7 @@
   "desc":"",
   "icon":"card-heal",
   "level":5,
+  "mod":"full",
   "name":"Heal",
   "set":"support_advanced",
   "type-description":"",

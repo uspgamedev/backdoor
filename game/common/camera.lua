@@ -52,6 +52,16 @@ function CAM:relativeTileToScreen(i, j) -- luacheck: no self
   return vec2(x, y)
 end
 
+function CAM:getRangeBounds()
+  local cx, cy = self:position() -- start point
+  local rx, ry
+  cx = math.floor(cx / _TILE_W - _HALF_W)
+  cy = math.floor(cy / _TILE_H - _HALF_H)
+  rx = math.ceil(cx + 2 * _HALF_W)
+  ry = math.ceil(cy + 2 * _HALF_H)
+  return { left = cx, right = rx, top = cy, bottom = ry }
+end
+
 function CAM:tilesInRange()
   local cx, cy = self:position() -- start point
   local rx, ry

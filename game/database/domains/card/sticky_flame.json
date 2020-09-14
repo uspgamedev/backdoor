@@ -3,6 +3,7 @@
   "cost":0,
   "desc":"Oh man, this is gonna blow...",
   "level":7,
+  "mod":"double",
   "name":"Sticky Flame",
   "one_time":true,
   "type-description":"",
@@ -22,7 +23,7 @@
             "type":"input"
           },{
             "attr":"ARC",
-            "base":1,
+            "base":3,
             "mod":100,
             "name":"effective_power",
             "output":"amount",
@@ -33,6 +34,7 @@
     },
     "charges":4,
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"harmful",
     "trigger":"on_turn",

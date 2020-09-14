@@ -4,6 +4,7 @@
   "desc":"Eletric Boogaloo",
   "icon":"card-eletric",
   "level":1,
+  "mod":"half",
   "name":"Eletric",
   "one_time":true,
   "widget":{

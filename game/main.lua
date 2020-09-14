@@ -90,6 +90,7 @@ function love.update(dt)
   PROFILER:update(dt)
   MAIN_TIMER:update(dt)
   if INPUT.wasActionReleased('QUIT') then
+    PROFILE.persistRoute()
     love.event.quit()
   elseif INPUT.wasActionPressed('DEVMODE') and not DEBUG
                                            and RUNFLAGS.DEVELOPMENT then
@@ -97,6 +98,8 @@ function love.update(dt)
     local current = SWITCHER.current()
     if current.devmode then current:devmode() end
     SWITCHER.push(GS.DEVMODE)
+  elseif INPUT.wasActionPressed('FLUSH') then
+    io.flush()
   end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards

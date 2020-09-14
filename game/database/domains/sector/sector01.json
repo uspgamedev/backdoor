@@ -17,16 +17,6 @@
   "deadends":{
     "amount":128
   },
-  "drops":{
-    "drop-info":"",
-    "drops":[{
-        "droprate":1,
-        "droptype":"food"
-      },{
-        "droprate":1,
-        "droptype":"food2"
-      }]
-  },
   "encounters":{
     "max":16,
     "min":12,
@@ -65,6 +55,11 @@
         "growth":20,
         "max":16,
         "min":12
+      },{
+        "bodyspec":"chest",
+        "growth":0,
+        "max":5,
+        "min":5
       }]
   },
   "rooms":{
@@ -76,6 +71,7 @@
     "rmar":1,
     "tries":256
   },
+  "drops":false,
   "holes":false,
   "theme":false
 }

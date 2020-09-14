@@ -15,5 +15,6 @@
   "level":8,
   "name":"Signet of Inspiration",
   "one_time":true,
-  "set":"consumables_expert"
+  "set":"consumables_expert",
+  "mod":false
 }

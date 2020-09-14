@@ -213,10 +213,21 @@ function Actor:updateAttr(which)
   self.attr_lv[which] = DEFS.APT.ATTR_LEVEL(self, which)
 end
 
-function Actor:trainingDitribution()
-  local cor, arc, ani = self.training.COR, self.training.ARC, self.training.ANI
-  local total = 1.0 * (cor + arc + ani)
-  return cor/total, arc/total, ani/total
+function Actor:trainingDistribution()
+  local count = { NONE = 0, COR = 1, ARC = 1, ANI = 1 }
+  for _, card in ipairs(self.hand) do
+    local attr = card:getRelatedAttr()
+    count[attr] = count[attr] + 1
+  end
+  for _, card in ipairs(self.buffer) do
+    if card ~= DEFS.DONE then
+      local attr = card:getRelatedAttr()
+      count[attr] = count[attr] + 1
+    end
+  end
+  local total = 1.0 * (count.COR + count.ARC + count.ANI)
+  return (count.COR)/total, (count.ARC)/total,
+         (count.ANI)/total
 end
 
 function Actor:upgradeAttr(which, amount)
@@ -443,7 +454,7 @@ end
 
 function Actor:consumeCard(card) -- luacheck: no unused
   --FIXME: add card rarity modifier!
-  local cor, arc, ani = self:trainingDitribution()
+  local cor, arc, ani = self:trainingDistribution()
   local xp = DEFS.CONSUME_EXP
   local round = math.round
   self:upgradeCOR(round(cor*xp))
@@ -595,6 +606,7 @@ end
 --[[ Turn methods ]]--
 
 function Actor:grabDrops(tile)
+  if not tile then return end
   local drops = tile.drops
   local inputvalues = {}
   local n = #drops
@@ -675,6 +687,7 @@ function Actor:endTurn()
 end
 
 function Actor:makeAction()
+  self:updateFov(self:getBody():getSector())
   local success = false
   repeat
     local action_slot, params
@@ -687,7 +700,6 @@ function Actor:makeAction()
       success = ACTION.execute(action_slot, self, params)
     end
   until success
-  self:updateFov(self:getBody():getSector())
   return true
 end
 

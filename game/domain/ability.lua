@@ -58,6 +58,7 @@ function ABILITY.checkInputs(ability, actor, inputvalues)
   local registers = {}
   for _,cmd in ipairs(ability.inputs) do
     local derefd_field_values = _derefFieldValues(cmd, registers)
+    derefd_field_values.card = inputvalues.card
     if cmd.type == 'input' then
       local inputspec = IN[cmd.name]
       if inputspec.isValid(actor, derefd_field_values,
@@ -113,6 +114,7 @@ function ABILITY.execute(ability, actor, registers)
         value = registers[cmd.output]
       elseif _CMDMAP[cmd.type] then
         local field_values = _derefFieldValues(cmd, registers)
+        field_values.card = registers.card
         field_values = _applyStaticAbilities(actor, cmd.name, field_values)
         local process = _CMDMAP[cmd.type][cmd.name].process
         value = process(actor, field_values)
@@ -137,6 +139,7 @@ function ABILITY.preview(ability, actor, registers, capitalize)
       local prev, value
       local type, name = cmd.type, cmd.name
       local field_values = _derefFieldValues(cmd, registers)
+      field_values.card = registers.card
       if type == 'input' then
         value = IN[name].preview or function()
           return registers[cmd.output]

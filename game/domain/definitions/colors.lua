@@ -36,10 +36,20 @@ COLORS.NONE = Color.fromInt {0x6d, 0x75, 0x8d, 0xff}
 COLORS.PP = Color.fromInt {0x24, 0x9f, 0xde, 255}
 COLORS.FOCUS = Color.fromInt {0xbc, 0x4a, 0x9b, 0xff}
 COLORS.HALF_EXHAUSTION = Color.fromInt {0x00, 0x00, 0x00, 0xff}
+COLORS.UNPLAYABLE = Color.fromInt {0xb4, 0x20, 0x2a, 0xff}
 
 COLORS.FLASH_DRAW = Color.fromInt { 99, 252, 255, 255 }
 COLORS.FLASH_ANNOUNCE = Color:new{ 1, 1, 1, 1 }
 COLORS.FLASH_DISCARD = Color.fromInt { 255, 135, 43, 255 }
 COLORS.FLASH_EQUIP = Color:new{ .1, .8, .1, 1 }
+
+COLORS.PACK_RED = Color.fromInt {0xdf, 0x3e, 0x23}
+COLORS.PACK_YELLOW = Color.fromInt {0xff, 0xfc, 0x40}
+COLORS.PACK_ORANGE = Color.fromInt {0xff, 0xd5, 0x41}
+COLORS.PACK_PURPLE = Color.fromInt {0x40, 0x33, 0x53}
+COLORS.PACK_BLUE   = Color.fromInt {0x84, 0x9b, 0xe4}
+COLORS.PACK_GREEN  = Color.fromInt {0x59, 0xc1, 0x35}
+COLORS.PACK_GREY   = Color.fromInt {0xda, 0xe0, 0xea}
+COLORS.PACK_WHITE  = Color.fromInt {0xff, 0xff, 0xff}
 
 return COLORS

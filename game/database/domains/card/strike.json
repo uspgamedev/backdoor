@@ -23,7 +23,7 @@
           "non-wall":false
         },{
           "attr":"COR",
-          "base":2,
+          "base":1,
           "mod":30,
           "name":"effective_power",
           "output":"amount",
@@ -41,9 +41,10 @@
   "desc":"",
   "icon":"card-strike",
   "level":3,
+  "mod":"half",
   "name":"Strike",
   "set":"strikes_common",
   "type-description":"",
-  "one_time":false,
-  "temporary":false
+  "temporary":false,
+  "one_time":false
 }

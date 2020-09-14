@@ -1,12 +1,12 @@
 {
   "attr":"COR",
-  "cost":3,
+  "cost":1,
   "icon":"card-plated-shield",
   "level":9,
   "name":"Plated Shield",
   "set":"armor_expert",
   "widget":{
-    "charges":30,
+    "charges":10,
     "equipment":{
       "defensive":true
     },
@@ -15,8 +15,10 @@
         "op":"-",
         "val":3
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":false
-  }
+  },
+  "mod":false
 }

@@ -17,16 +17,6 @@
   "deadends":{
     "amount":12
   },
-  "drops":{
-    "drop-info":"",
-    "drops":[{
-        "droprate":2,
-        "droptype":"food2"
-      },{
-        "droprate":0,
-        "droptype":"pack"
-      }]
-  },
   "encounters":{
     "max":10,
     "min":5,
@@ -37,7 +27,7 @@
         "actorspec":"dumb-stove",
         "bodyspec":"stove"
       }],
-    "upgrade_power":300
+    "upgrade_power":200
   },
   "exits":{
     "distance":5,
@@ -65,6 +55,11 @@
         "growth":20,
         "max":16,
         "min":12
+      },{
+        "bodyspec":"chest",
+        "growth":0,
+        "max":5,
+        "min":5
       }]
   },
   "rooms":{
@@ -76,6 +71,7 @@
     "rmar":1,
     "tries":256
   },
+  "drops":false,
   "holes":false,
   "theme":false
 }

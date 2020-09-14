@@ -9,11 +9,25 @@
   "set":"support_common",
   "type-description":"",
   "widget":{
-    "charges":5,
-    "operators":[{
-        "attr":"ARC",
-        "op":"+",
-        "val":2
+    "charges":3,
+    "operators":[],
+    "static":[{
+        "descr":"Increase single-target damage by 2.",
+        "op":"damage_on_target",
+        "replacement-ability":{
+          "effects":[{
+              "arg1":"=value",
+              "code":"return arg1 + 2",
+              "name":"script",
+              "output":"value",
+              "type":"operator"
+            }],
+          "inputs":[{
+              "name":"integer",
+              "output":"value",
+              "type":"input"
+            }]
+        }
       }],
     "status-tags":[],
     "tactical-hint":"helpful",

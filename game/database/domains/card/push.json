@@ -20,9 +20,9 @@
           "output":"target_pos",
           "tactical-hint":"harmful",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
-          "non-wall":false
+          "non-wall":false,
+          "dif-fact":false
         },{
           "name":"self",
           "output":"self",
@@ -66,5 +66,6 @@
   "name":"Push",
   "set":"control_common",
   "type-description":"",
+  "mod":false,
   "one_time":false
 }

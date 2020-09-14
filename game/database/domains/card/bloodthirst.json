@@ -1,8 +1,9 @@
 {
   "attr":"ANI",
-  "cost":3,
+  "cost":2,
   "icon":"card-bloodthirst",
   "level":4,
+  "mod":"full",
   "name":"Bloodthirst",
   "set":"support_common",
   "widget":{
@@ -18,9 +19,7 @@
             "output":"self-body",
             "type":"operator"
           },{
-            "attr":"ANI",
-            "base":2,
-            "mod":50,
+            "base":0,
             "name":"effective_power",
             "output":"amount",
             "type":"operator"

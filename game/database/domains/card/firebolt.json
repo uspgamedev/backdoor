@@ -28,7 +28,7 @@
         },{
           "attr":"ARC",
           "base":0,
-          "mod":50,
+          "mod":"½",
           "name":"effective_power",
           "output":"amount",
           "type":"operator"
@@ -40,6 +40,7 @@
   "desc":"'Ouch that hurts! - Imp with his face on fire.",
   "icon":"card-firebolt",
   "level":3,
+  "mod":"half",
   "name":"Firebolt",
   "set":"ranged_common",
   "type-description":"",

@@ -235,6 +235,11 @@ function Sector:removeBodyAt(i, j, body)
   self.bodies[i][j] = false
   self.bodies[body] = nil
   body:kill()
+  for other_body in pairs(Util.findSubtype('body')) do
+    other_body:removeWidgetsIf(
+      function (widget) return widget:getOwner():getBody() == body end
+    )
+  end
 
   return removed_actor
 
@@ -305,7 +310,10 @@ function Sector:removeActor(removed_actor)
 end
 
 function Sector:getBodyPos(body)
-  return unpack(self.bodies[body])
+  local pos = self.bodies[body]
+  if pos then
+    return unpack(pos)
+  end
 end
 
 function Sector:iterateActors()
@@ -408,10 +416,11 @@ function _turnLoop(self)
 
     --Initialize actor queue
     for _,actor in ipairs(self.actors) do
-      actor:tick()
-      actor:grabDrops(self:getTile(actor:getPos()))
-      actor:updateFov(self)
-      table.insert(actors_queue, actor)
+      if actor:getPos() then
+        actor:tick()
+        actor:grabDrops(self:getTile(actor:getPos()))
+        table.insert(actors_queue, actor)
+      end
     end
 
     manageDeadBodiesAndUpdateActorsQueue(self, actors_queue)
@@ -513,6 +522,7 @@ function Sector:playTurns(...)
   if not ok then
     return error(debug.traceback(self.turnLoop, err))
   else
+    self.route.getPlayerActor():updateFov(self)
     return unpack(result, 2)
   end
 end

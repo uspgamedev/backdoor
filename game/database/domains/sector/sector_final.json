@@ -37,7 +37,7 @@
         "actorspec":"newbieslayer",
         "bodyspec":"rewasvat"
       }],
-    "upgrade_power":800
+    "upgrade_power":600
   },
   "exits":{
     "distance":5,
@@ -61,6 +61,11 @@
         "growth":60,
         "max":10,
         "min":5
+      },{
+        "bodyspec":"chest",
+        "growth":0,
+        "max":10,
+        "min":10
       }]
   },
   "rooms":{

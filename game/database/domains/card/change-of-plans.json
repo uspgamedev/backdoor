@@ -17,5 +17,6 @@
   "name":"Change of Plans",
   "set":"support_advanced",
   "type-description":"",
+  "mod":false,
   "one_time":false
 }
