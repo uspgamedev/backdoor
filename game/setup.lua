@@ -11,7 +11,7 @@ local setup = {}
 --Set game's global variables, random seed, window configuration and anything else needed
 function setup.config()
 
-    VERSION = "0.7.0"
+    VERSION = "0.9.0"
     DEV = true
 
     --RANDOM SEED--
