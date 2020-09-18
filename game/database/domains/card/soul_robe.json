@@ -11,7 +11,6 @@
     "equipment":{
       "defensive":{
         "block_val":1,
-        "defense":0
       },
       "active":false
     },

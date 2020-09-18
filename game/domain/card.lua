@@ -196,8 +196,8 @@ function Card:eachActiveEquipmentCards()
   return ipairs(self:getSpec('widget').equipment.active.cards)
 end
 
-function Card:getEquipmentDefense()
-  return self:getSpec('widget').equipment.defensive.defense
+function Card:getEquipmentBlockValue()
+  return self:getSpec('widget').equipment.defensive.block_val
 end
 
 function Card:resetTicks()
