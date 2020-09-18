@@ -22,8 +22,8 @@ local _icon_offset_speed = 80
 local _info_alpha_speed = 5
 local _mode_scale_speed = 3
 local _charge_offset_speed = 200
-local _widget_charge_pos = vec2(7, 4)
-local _widget_charge_radius = 13
+local _widget_charge_pos = vec2(6, 1)
+local _widget_charge_radius = 11
 local _widget_charge_linew = 3
 
 --Local functions
