@@ -51,7 +51,7 @@
   "name":"Trained Strike",
   "type-description":"",
   "icon":false,
-  "one_time":false,
+  "set":false,
   "temporary":false,
-  "set":false
+  "one_time":false
 }

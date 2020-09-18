@@ -4,6 +4,7 @@
   "desc":"",
   "icon":"card-power-suit",
   "name":"Impact Vest",
+  "one_time":true,
   "type-description":"",
   "widget":{
     "charges":4,
@@ -14,10 +15,11 @@
       "active":false
     },
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":false
   },
   "set":false,
-  "one_time":false
+  "mod":false
 }

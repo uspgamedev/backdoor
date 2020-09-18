@@ -21,8 +21,8 @@
           "tactical-hint":"harmful",
           "type":"input",
           "empty-tile":false,
-          "non-wall":false,
-          "dif-fact":false
+          "dif-fact":false,
+          "non-wall":false
         },{
           "name":"self",
           "output":"self",

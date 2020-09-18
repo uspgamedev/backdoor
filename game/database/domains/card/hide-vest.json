@@ -4,6 +4,7 @@
   "icon":"card-hide-vest",
   "level":4,
   "name":"Hide Vest",
+  "one_time":true,
   "set":"armor_common",
   "widget":{
     "charges":8,

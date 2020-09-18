@@ -18,8 +18,8 @@
           "tactical-hint":"healing",
           "type":"input",
           "empty-tile":false,
-          "non-wall":false,
-          "dif-fact":false
+          "dif-fact":false,
+          "non-wall":false
         },{
           "attr":"ANI",
           "base":3,
