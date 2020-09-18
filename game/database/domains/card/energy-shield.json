@@ -4,12 +4,13 @@
   "icon":"card-energy-shield",
   "level":5,
   "name":"Energy Shield",
-  "one_time":true,
   "set":"armor_advanced",
   "widget":{
     "charges":6,
     "equipment":{
-      "defensive":true
+      "defensive":{
+        "block_val":2
+      }
     },
     "operators":[],
     "static":[],
@@ -17,5 +18,6 @@
     "tactical-hint":"helpful",
     "trigger":false
   },
-  "mod":false
+  "mod":false,
+  "one_time":false
 }

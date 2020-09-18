@@ -9,7 +9,9 @@
   "widget":{
     "charges":10,
     "equipment":{
-      "defensive":true
+      "defensive":{
+        "block_val":6
+      }
     },
     "operators":[],
     "static":[],

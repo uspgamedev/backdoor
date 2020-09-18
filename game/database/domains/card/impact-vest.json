@@ -7,9 +7,10 @@
   "one_time":true,
   "type-description":"",
   "widget":{
-    "charges":4,
+    "charges":5,
     "equipment":{
       "defensive":{
+        "block_val":2,
         "defense":1
       },
       "active":false
@@ -20,6 +21,6 @@
     "tactical-hint":"helpful",
     "trigger":false
   },
-  "set":false,
-  "mod":false
+  "mod":false,
+  "set":false
 }

@@ -10,6 +10,7 @@
     "charges":5,
     "equipment":{
       "defensive":{
+        "block_val":5,
         "defense":3
       },
       "active":false
