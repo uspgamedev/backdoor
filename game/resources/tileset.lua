@@ -20,10 +20,11 @@ local function _initTileset(info, texture)
       weights[tile] = {}
       for i, data in ipairs(alternates) do
         local dim = data.quad
+        local weight = data.weight or 1
         quads[tile][i] = g.newQuad(dim[1], dim[2], dim[3], dim[4], w, h)
         offsets[tile][i] = { dim[5], dim[6] }
-        raw_weights[i] = data.weight
-        total_weight = total_weight + data.weight
+        raw_weights[i] = weight
+        total_weight = total_weight + weight
       end
       local acc = 0
       for i, weight in ipairs(raw_weights) do
