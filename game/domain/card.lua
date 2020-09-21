@@ -248,7 +248,7 @@ function Card:getEffect()
         charges,
         trigger and "/" .. trigger or ""
       )
-      if self:isDefensiveEquipment() then
+      if self:isEquipment() and self:isDefensiveEquipment() then
         effect = effect .. ("\n\nCan block %d damage per hit."):format(
           self:getEquipmentBlockValue()
         )
