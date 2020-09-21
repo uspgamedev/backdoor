@@ -25,10 +25,14 @@ local _charge_offset_speed = 200
 local _widget_charge_pos = vec2(6, 1)
 local _widget_charge_radius = 11
 local _widget_charge_linew = 3
+local _shield_pos = vec2(6, 1)
+local _shield_size = 18
+local _shield_linew = 3
 
 --Local functions
 
 local _draw_hexagon
+local _draw_shield
 
 local _MODE = {
     normal = "normal",
@@ -294,6 +298,25 @@ function CardView:draw(alpha)
     local charges = self.card:getCurrentWidgetCharges()
     g.print(charges, x - font:getWidth(charges)/2,
                      y - font:getHeight()/2)
+
+    --Draw block value for defensive equipments
+    if self.card:isEquipment() and self.card:isDefensiveEquipment() then
+      --Print background
+      x = _shield_pos.x
+      y = _shield_pos.y
+      g.setColor(0, 0, 0, self.alpha * (1.0 - self.info_alpha) * alpha)
+      _draw_shield("fill", x, y, _shield_size)
+      g.setColor(cr/2, cg/2, cb/2, self.alpha * (1.0 - self.info_alpha) * alpha)
+      g.setLineWidth(_shield_linew)
+      _draw_shield("line", x, y, _shield_size)
+
+      --Print charges
+      font.set()
+      g.setColor(cr, cg, cb, self.alpha * (1.0 - self.info_alpha) * alpha)
+      local charges = self.card:getEquipmentBlockValue()
+      g.print(charges, x - font:getWidth(charges)/2,
+                       y - font:getHeight()/2 + _shield_size/6 - _shield_linew/2)
+    end
   end
 
   g.pop()
@@ -323,6 +346,35 @@ function _draw_hexagon(mode, x, y, r)
     table.insert(points,y + v.y)
     v = vec2.rotate(v, math.pi/3)
   end
+  love.graphics.polygon(mode, points)
+end
+
+function _draw_shield(mode, x, y, size)
+  local v = vec2(x, y)
+  local points = {}
+  --Top left
+  v.x = v.x - size/2
+  v.y = v.y - size/2
+  table.insert(points,v.x)
+  table.insert(points,v.y)
+  --Top right
+  v.x = v.x + size
+  table.insert(points,v.x)
+  table.insert(points,v.y)
+  --Bottom right
+  v.y = v.y + size
+  table.insert(points,v.x)
+  table.insert(points,v.y)
+  --Bottom middle
+  v.y = v.y + size/3
+  v.x = v.x - size/2
+  table.insert(points,v.x)
+  table.insert(points,v.y)
+  --Bottom left
+  v.y = v.y - size/3
+  v.x = v.x - size/2
+  table.insert(points,v.x)
+  table.insert(points,v.y)
   love.graphics.polygon(mode, points)
 end
 
