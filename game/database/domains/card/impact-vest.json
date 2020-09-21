@@ -4,20 +4,22 @@
   "desc":"",
   "icon":"card-power-suit",
   "name":"Impact Vest",
+  "one_time":true,
   "type-description":"",
   "widget":{
-    "charges":4,
+    "charges":5,
     "equipment":{
       "defensive":{
-        "defense":1
+        "block_val":2
       },
       "active":false
     },
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"helpful",
     "trigger":false
   },
-  "set":false,
-  "one_time":false
+  "mod":false,
+  "set":false
 }
