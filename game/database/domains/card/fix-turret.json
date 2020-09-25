@@ -19,8 +19,8 @@
           "output":"tgt",
           "tactical-hint":"helpful",
           "type":"input",
-          "dif-fact":false,
           "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false
         },{
           "name":"get_body_at",

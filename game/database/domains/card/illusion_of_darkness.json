@@ -33,5 +33,6 @@
   "name":"Illusion of Darkness",
   "set":"control_advanced",
   "type-description":"",
+  "mod":false,
   "one_time":false
 }

@@ -17,9 +17,9 @@
           "output":"body-pos",
           "tactical-hint":"healing",
           "type":"input",
-          "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false,
-          "empty-tile":false
+          "dif-fact":false
         },{
           "attr":"ANI",
           "base":3,

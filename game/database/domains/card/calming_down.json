@@ -36,6 +36,7 @@
     },
     "charges":6,
     "operators":[],
+    "static":[],
     "status-tags":[{
         "tag":"stun"
       }],
@@ -44,5 +45,6 @@
     "equipment":false
   },
   "set":false,
+  "mod":false,
   "one_time":false
 }
