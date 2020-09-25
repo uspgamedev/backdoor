@@ -54,7 +54,7 @@
           "type":"operator"
         },{
           "attr":"COR",
-          "base":0,
+          "base":1,
           "mod":50,
           "name":"effective_power",
           "output":"amount",
@@ -66,8 +66,8 @@
   "cost":3,
   "desc":"Excuse me sir, I've got somewhere to be right now",
   "icon":"card-rush",
-  "level":3,
-  "mod":"full",
+  "level":4,
+  "mod":"half",
   "name":"Rush",
   "set":"maneuver_common"
 }
