@@ -24,7 +24,7 @@
         "actorspec":"grinful-imp",
         "bodyspec":"imp"
       },{
-        "actorspec":"dumb-stove",
+        "actorspec":"stove",
         "bodyspec":"stove"
       }],
     "upgrade_power":200
