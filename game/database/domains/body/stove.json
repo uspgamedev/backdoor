@@ -15,7 +15,7 @@
       "droprate":10,
       "droptype":"food2"
     },{
-      "droprate":75,
+      "droprate":30,
       "droptype":"heart"
     }],
   "efc":0,

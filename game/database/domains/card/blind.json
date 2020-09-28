@@ -12,11 +12,13 @@
         "op":"-",
         "val":3
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"harmful",
     "trigger":"on_turn",
     "equipment":false
   },
   "icon":false,
+  "mod":false,
   "set":false
 }

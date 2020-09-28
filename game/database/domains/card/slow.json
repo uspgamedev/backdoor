@@ -10,6 +10,7 @@
         "op":"-",
         "val":4
       }],
+    "static":[],
     "status-tags":[],
     "tactical-hint":"harmful",
     "trigger-condition":{
@@ -19,5 +20,6 @@
     "trigger":false,
     "equipment":false
   },
+  "mod":false,
   "set":false
 }

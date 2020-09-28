@@ -1,7 +1,7 @@
 {
   "ability":{
     "effects":[{
-        "collection":"imp",
+        "collection":"advanced-expert",
         "name":"give_pack",
         "type":"effect"
       }],
@@ -10,7 +10,7 @@
         "type":"input"
       }]
   },
-  "name":"Imp Pack",
+  "name":"Advanced-Expert Pack",
   "sfx":"get-pack",
   "sprite":"pack"
 }

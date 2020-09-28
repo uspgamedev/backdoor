@@ -62,10 +62,10 @@
         "max":10,
         "min":5
       },{
-        "bodyspec":"chest",
+        "bodyspec":"expert-chest",
         "growth":0,
-        "max":10,
-        "min":10
+        "max":3,
+        "min":3
       }]
   },
   "rooms":{

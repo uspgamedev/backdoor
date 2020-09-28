@@ -1,0 +1,17 @@
+{
+  "appearance":"prop-chest",
+  "basehp":7,
+  "drops":[{
+      "droprate":100,
+      "droptype":"advanced-pack"
+    },{
+      "droprate":50,
+      "droptype":"advanced-pack"
+    },{
+      "droprate":25,
+      "droptype":"advanced-pack"
+    }],
+  "faction":"inert",
+  "name":"Advanced Chest",
+  "extends":false
+}

@@ -21,12 +21,15 @@
     },
     "charges":20,
     "operators":[],
+    "static":[],
     "status-tags":[],
     "trigger":"on_cycle",
+    "tactical-hint":false,
     "equipment":false
   },
   "attr":false,
   "icon":false,
   "set":false,
+  "mod":false,
   "one_time":false
 }

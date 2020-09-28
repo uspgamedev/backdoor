@@ -19,7 +19,7 @@ return {
   { id = 'mod', name = "Modifier", type = 'enum',
     options = ATTR.MOD },
   { id = 'level', name = "Level", type = 'range', min = 1,
-      max = 10, default = 1 },
+      max = 15, default = 1 },
   { id = 'cost', name = "Cost", type = 'range', min = 0,
       max = DEFS.ACTION.MAX_FOCUS },
   { id = 'half-exhaustion', name = "Half exhaustion", type = 'boolean' },

@@ -1,0 +1,14 @@
+{
+  "appearance":"prop-chest",
+  "basehp":15,
+  "drops":[{
+      "droprate":100,
+      "droptype":"expert-pack"
+    },{
+      "droprate":10,
+      "droptype":"expert-pack"
+    }],
+  "faction":"inert",
+  "name":"Expert Chest",
+  "extends":false
+}

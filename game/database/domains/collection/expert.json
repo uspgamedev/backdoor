@@ -1,0 +1,32 @@
+{
+  "cards":[{
+      "drop":50,
+      "set":"armor_expert"
+    },{
+      "drop":100,
+      "set":"consumables_expert"
+    },{
+      "drop":50,
+      "set":"control_expert"
+    },{
+      "drop":50,
+      "set":"maneuver_expert"
+    },{
+      "drop":50,
+      "set":"ranged_expert"
+    },{
+      "drop":50,
+      "set":"strikes_expert"
+    },{
+      "drop":50,
+      "set":"support_expert"
+    },{
+      "drop":50,
+      "set":"weapon_expert"
+    }],
+  "description":"Expert cards only",
+  "icon_color":"black",
+  "image":"card-upgrade",
+  "name":"Expert",
+  "pack_color":"WHITE"
+}

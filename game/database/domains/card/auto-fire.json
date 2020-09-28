@@ -51,11 +51,13 @@
     },
     "charges":0,
     "operators":[],
+    "static":[],
     "status-tags":[],
     "tactical-hint":false,
     "trigger":false,
     "equipment":false
   },
   "icon":false,
+  "mod":false,
   "set":false
 }

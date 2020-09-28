@@ -24,8 +24,9 @@
   "attr":"NONE",
   "cost":1,
   "icon":"card-impact-grenade",
-  "level":4,
+  "level":3,
   "name":"Impact Grenade",
   "one_time":true,
-  "set":"consumables_common"
+  "set":"consumables_common",
+  "mod":false
 }

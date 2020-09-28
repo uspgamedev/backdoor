@@ -5,15 +5,19 @@
   "cor":-2,
   "description":"Careful with this hot head",
   "initial_buffer":[{
-      "amount":7,
+      "amount":1,
+      "card":"rage"
+    },{
+      "amount":1,
+      "card":"stomp"
+    },{
+      "amount":6,
       "card":"strike"
     },{
       "amount":3,
       "card":"rush"
     }],
-  "name":"Dumb Stove",
-  "traits":[{
-      "specname":"slow"
-    }],
+  "name":"Stove",
+  "traits":[],
   "extends":false
 }

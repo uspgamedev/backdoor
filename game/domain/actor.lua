@@ -518,6 +518,9 @@ function Actor:canSee(target)
     return false
   end
   local i, j = target:getPos()
+  if not i or not j then
+    return false
+  end
   return self:canSeePosition(i, j)
 end
 

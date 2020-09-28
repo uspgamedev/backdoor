@@ -10,6 +10,9 @@
     },{
       "droprate":10,
       "droptype":"pack"
+    },{
+      "droprate":5,
+      "droptype":"heart"
     }],
   "faction":"inert",
   "name":"Crate",

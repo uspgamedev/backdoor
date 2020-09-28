@@ -3,8 +3,9 @@
     "art_ability":{
       "effects":[{
           "name":"damage_on_target",
+          "projectile":true,
           "sfx":"attack-hit",
-          "target":"=target-body",
+          "target":"=body",
           "type":"effect",
           "value":"=amount"
         }],
@@ -13,31 +14,35 @@
             "body-type":false
           },
           "dif-fact":true,
-          "max-range":1,
+          "max-range":4,
           "name":"choose_target",
-          "output":"target-pos",
+          "output":"tgt",
           "tactical-hint":"harmful",
-          "type":"input"
+          "type":"input",
+          "empty-tile":false
         },{
           "name":"get_body_at",
-          "output":"target-body",
-          "pos":"=target-pos",
+          "output":"body",
+          "pos":"=tgt",
           "type":"operator"
         },{
-          "attr":"COR",
-          "base":5,
-          "mod":40,
+          "attr":"ARC",
+          "base":4,
+          "mod":"½",
           "name":"effective_power",
           "output":"amount",
           "type":"operator"
         }]
     }
   },
-  "attr":"COR",
+  "attr":"ARC",
   "cost":2,
-  "icon":"card-hook-n-uppercut",
-  "level":7,
-  "mod":"half",
-  "name":"Hook and Uppercut",
-  "set":"strikes_advanced"
+  "desc":"",
+  "icon":"card-firebolt",
+  "level":13,
+  "mod":"full",
+  "name":"Ultimate Firebolt",
+  "set":"ranged_expert",
+  "type-description":"",
+  "one_time":false
 }
