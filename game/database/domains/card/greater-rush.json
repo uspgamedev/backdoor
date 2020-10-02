@@ -67,7 +67,7 @@
   "cost":3,
   "desc":"It's rush hour. And I'm not talking about kung-fu.",
   "icon":"card-rush",
-  "level":6,
+  "level":9,
   "mod":"double",
   "name":"Greater Rush",
   "set":"maneuver_advanced",

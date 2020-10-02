@@ -3,7 +3,7 @@
   "cost":2,
   "icon":"card-bloodthirst",
   "level":4,
-  "mod":"full",
+  "mod":"half",
   "name":"Bloodthirst",
   "set":"support_common",
   "widget":{

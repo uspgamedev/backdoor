@@ -7,10 +7,10 @@
   "name":"Soul Robe",
   "type-description":"",
   "widget":{
-    "charges":5,
+    "charges":3,
     "equipment":{
       "defensive":{
-        "defense":0
+        "block_val":1
       },
       "active":false
     },

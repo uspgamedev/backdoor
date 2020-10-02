@@ -1,0 +1,17 @@
+{
+  "appearance":"prop-chest",
+  "basehp":5,
+  "drops":[{
+      "droprate":100,
+      "droptype":"common-pack"
+    },{
+      "droprate":50,
+      "droptype":"common-pack"
+    },{
+      "droprate":50,
+      "droptype":"common-pack"
+    }],
+  "faction":"inert",
+  "name":"Common Chest",
+  "extends":false
+}

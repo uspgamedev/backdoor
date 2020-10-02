@@ -369,7 +369,9 @@ end
 function Body:takeDamageFrom(amount, source)
   local def_eqp = self:getEquipmentAt('wearable')
   if def_eqp then
-    local absorbed = math.min(amount, def_eqp:getCurrentWidgetCharges())
+    local block_value = math.min(def_eqp:getCurrentWidgetCharges(),
+                            def_eqp:getEquipmentBlockValue())
+    local absorbed = math.min(amount, block_value)
     def_eqp:addUsages(absorbed)
     amount = math.max(0, amount - absorbed)
     if self:getActor() then

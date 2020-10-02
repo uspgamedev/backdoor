@@ -1,0 +1,23 @@
+{
+  "ani":-1,
+  "arc":-2,
+  "behavior":"aggro",
+  "cor":-2,
+  "description":"Careful with this hot head",
+  "initial_buffer":[{
+      "amount":1,
+      "card":"rage"
+    },{
+      "amount":1,
+      "card":"stomp"
+    },{
+      "amount":6,
+      "card":"strike"
+    },{
+      "amount":3,
+      "card":"rush"
+    }],
+  "name":"Stove",
+  "traits":[],
+  "extends":false
+}

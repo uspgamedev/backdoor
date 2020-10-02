@@ -6,9 +6,11 @@
   "name":"Plated Shield",
   "set":"armor_expert",
   "widget":{
-    "charges":10,
+    "charges":8,
     "equipment":{
-      "defensive":true
+      "defensive":{
+        "block_val":4
+      }
     },
     "operators":[{
         "attr":"SPD",

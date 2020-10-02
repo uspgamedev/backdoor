@@ -24,7 +24,7 @@
         "actorspec":"grinful-imp",
         "bodyspec":"imp"
       },{
-        "actorspec":"dumb-stove",
+        "actorspec":"stove",
         "bodyspec":"stove"
       }],
     "upgrade_power":200
@@ -56,10 +56,10 @@
         "max":16,
         "min":12
       },{
-        "bodyspec":"chest",
+        "bodyspec":"advanced-chest",
         "growth":0,
         "max":5,
-        "min":5
+        "min":4
       }]
   },
   "rooms":{

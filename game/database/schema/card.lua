@@ -19,7 +19,7 @@ return {
   { id = 'mod', name = "Modifier", type = 'enum',
     options = ATTR.MOD },
   { id = 'level', name = "Level", type = 'range', min = 1,
-      max = 10, default = 1 },
+      max = 15, default = 1 },
   { id = 'cost', name = "Cost", type = 'range', min = 0,
       max = DEFS.ACTION.MAX_FOCUS },
   { id = 'half-exhaustion', name = "Half exhaustion", type = 'boolean' },
@@ -84,13 +84,17 @@ return {
       },
       {
         id = 'equipment', name = "Equipment", type = 'section',
-        schema = { { id = 'active', name = "Active", type = 'section',
-                     schema = { { id = 'cards', name = "Action Card",
-                                  type = 'array',
-                                  schema = { { id = 'card', name = 'Card',
-                                               type = 'enum',
-                                               options = _CARDS } } } } },
-                   { id = 'defensive', name = "Defensive", type = 'boolean' } }
+        schema = {
+             { id = 'active', name = "Active", type = 'section',
+                       schema = { { id = 'cards', name = "Action Card",
+                                    type = 'array',
+                                    schema = { { id = 'card', name = 'Card',
+                                                 type = 'enum',
+                                                 options = _CARDS } } } } },
+             { id = 'defensive', name = "Defensive", type = 'section',
+               schema = { { id = 'block_val', name = "Block Value",
+                            type = 'integer', range = {0} } } }
+        }
       }
     }
   }

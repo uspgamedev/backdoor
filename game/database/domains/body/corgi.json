@@ -30,7 +30,11 @@
     "drops":[{
         "droprate":7,
         "droptype":"pack"
-      }]
+      }],
+    "1":{
+      "droprate":75,
+      "droptype":"heart"
+    }
   },
   "efc":-1,
   "extends":"demihuman",

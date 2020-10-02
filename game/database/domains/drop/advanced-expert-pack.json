@@ -1,0 +1,16 @@
+{
+  "ability":{
+    "effects":[{
+        "collection":"advanced-expert",
+        "name":"give_pack",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "name":"is_controlled_actor",
+        "type":"input"
+      }]
+  },
+  "name":"Advanced-Expert Pack",
+  "sfx":"get-pack",
+  "sprite":"pack"
+}

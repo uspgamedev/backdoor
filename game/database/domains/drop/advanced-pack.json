@@ -1,0 +1,16 @@
+{
+  "ability":{
+    "effects":[{
+        "collection":"advanced",
+        "name":"give_pack",
+        "type":"effect"
+      }],
+    "inputs":[{
+        "name":"is_controlled_actor",
+        "type":"input"
+      }]
+  },
+  "name":"Advanced Pack",
+  "sfx":"get-pack",
+  "sprite":"pack"
+}
