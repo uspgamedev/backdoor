@@ -1,0 +1,7 @@
+{
+  "multitrack":{
+    "danger":"ruins-danger",
+    "default":"ruins-default"
+  },
+  "tileset":"cave"
+}
