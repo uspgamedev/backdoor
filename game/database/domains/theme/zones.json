@@ -4,6 +4,6 @@
     "default":"ruins-default",
     "focused":"ruins-focused"
   },
-  "tileset":"ruins",
+  "tileset":"cave",
   "singletrack":false
 }
