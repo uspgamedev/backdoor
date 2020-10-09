@@ -94,7 +94,7 @@ end
 
 function HandView:activate()
   if not PROFILE.getTutorial("use_card") then
-    SWITCHER.push(GS.TUTORIAL_HINT, "use_card")
+    SWITCHER.push(GS.TUTORIAL_HINT, "use_card") -- luacheck: globals SWITCHER GS
   end
   PLAYSFX('open-hand')
   self.active = true
@@ -134,7 +134,7 @@ function HandView:update(dt)
     end
     local pos = vec2(card:getPosition())
     local target = vec2(self:positionForIndex(i))
-    local diff = (target - pos) * 10 * dt
+    local diff = (target - pos) * math.min(1.0, 10 * dt)
     card:setPosition((pos + diff):unpack())
   end
   self.cardinfo:update(dt)
