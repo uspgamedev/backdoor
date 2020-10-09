@@ -33,6 +33,7 @@ local _CW, _CH
 
 -- LOCAL VARS
 local _font
+local _controls_font
 
 -- LOCAL METHODS ----------------------------
 local function _initGraphicValues()
@@ -40,6 +41,7 @@ local function _initGraphicValues()
   _WIDTH, _HEIGHT = g.getDimensions()
 
   _font = FONT.get("TextBold", 20)
+  _controls_font = FONT.get("Text", 25)
   _CW = CARD.getWidth() + 20
   _CH = CARD.getHeight() + 20
 end
@@ -54,6 +56,18 @@ local function _prev_circular(i, len, n)
   return _prev_circular((i - 2) % len + 1, len, n - 1)
 end
 
+local function _renderControls(g, alpha)
+  g.push()
+  g.translate(15, 676)
+
+  _controls_font:set()
+  local c = COLORS.NEUTRAL
+  g.setColor(c[1], c[2], c[3], alpha)
+  local text = "hold D to open - S to cancel"
+  g.print(text, 0, 0)
+
+  g.pop()
+end
 -- PUBLIC METHODS ---------------------------
 function View:init(hold_actions, packlist)
   ELEMENT.init(self)
@@ -142,6 +156,7 @@ function View:draw()
   if enter > 0 then
     self:drawBG(g, enter)
     self:drawPacks(g, enter)
+    _renderControls(g, enter)
   end
 
   g.pop()
@@ -277,6 +292,5 @@ function View:drawHoldBar()
   end
   self.holdbar:draw(0, 0)
 end
-
 
 return View
