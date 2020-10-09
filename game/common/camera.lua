@@ -11,9 +11,18 @@ local _TILE_H = VIEWDEFS.TILE_H
 local _HALF_W = VIEWDEFS.HALF_W
 local _HALF_H = VIEWDEFS.HALF_H
 
+local function custom_damped_smoother(stiffness)
+	assert(type(stiffness) == "number", "Invalid parameter: stiffness = "..tostring(stiffness))
+	return function(dx,dy, s)
+		local dts = love.timer.getDelta() * (s or stiffness)
+    dts = math.min(dts, 1.0)
+		return dx*dts, dy*dts
+	end
+end
+
 local CAM = Camera(love.graphics.getWidth() / 2,
                    love.graphics.getHeight() / 2,
-                   1, 0, Camera.smooth.damped(5))
+                   1, 0, custom_damped_smoother(5))
 
 function CAM:attach(x, y, w, h, noclip)
   local g = love.graphics
