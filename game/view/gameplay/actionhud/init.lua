@@ -15,10 +15,13 @@ local ControlHint     = require 'view.gameplay.actionhud.controlhint'
 local ConditionDock   = require 'view.gameplay.actionhud.conditiondock'
 local FocusBar        = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview     = require 'view.gameplay.actionhud.turnpreview'
+local InfoPanel       = require 'view.gameplay.actionhud.infopanel'
 local CardView        = require 'view.card'
 local Util            = require "steaming.util"
 local Class           = require "steaming.extra_libs.hump.class"
 local ELEMENT         = require "steaming.classes.primitives.element"
+
+local vec2            = require 'cpml' .vec2
 
 local _INFO_LAG = 0.65 -- seconds
 local _MARGIN = 20
@@ -95,6 +98,10 @@ function ActionHUD:init(route)
 
   -- Card info
   self.info_lag = false
+
+  -- Info Panel
+  self.infopanel = InfoPanel(vec2(256, 256))
+  self.infopanel:register('HUD_MIDDLE')
 
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
