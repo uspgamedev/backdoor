@@ -99,10 +99,6 @@ function ActionHUD:init(route)
   -- Card info
   self.info_lag = false
 
-  -- Info Panel
-  self.infopanel = InfoPanel(vec2(256, 256))
-  self.infopanel:register('HUD_MIDDLE')
-
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
   self.focusbar:register("HUD_MIDDLE")
@@ -112,6 +108,10 @@ function ActionHUD:init(route)
   self.long_walk = false
   self.adjacency = {}
   ADJACENCY.unset(self.adjacency)
+
+  -- Info Panel
+  self.infopanel = InfoPanel(vec2(16, 256))
+  self.infopanel:register('HUD_MIDDLE')
 
   -- Control hints
   self.hand_hint = ControlHint(240+13, 28, ControlHint.BUTTON.ACTION_LEFT)
