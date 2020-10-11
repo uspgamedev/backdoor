@@ -43,7 +43,7 @@ Should be enough to download, setup, and run the game.
 
 After cloning the repository, download these archives into the project folder:
 
-1. [Patched LÖVE 11.3 for windows x86](https://uspgamedev.org/downloads/projects/backdoor/love-11.3-win32-patched.zip)
+1. [Patched LÖVE 11.3 for windows x86](https://usp.game.dev.br/downloads/projects/backdoor/love-11.3.0-win32-patched.zip)
 2. [Game libraries](https://uspgamedev.org/downloads/projects/backdoor/libs.zip)
 
 Then, do the following:
