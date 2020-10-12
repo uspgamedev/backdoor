@@ -163,7 +163,7 @@ function HandView:draw()
     local card = hand[i]
     if not card then return end
     self.cardinfo:setCard(card.card)
-    self.cardinfo:draw()
+    --self.cardinfo:draw()
   end
 end
 
