@@ -110,7 +110,7 @@ function ActionHUD:init(route)
   ADJACENCY.unset(self.adjacency)
 
   -- Info Panel
-  self.infopanel = InfoPanel(vec2(16, 256))
+  self.infopanel = InfoPanel(vec2(16, 100), self.handview)
   self.infopanel:register('HUD_MIDDLE')
 
   -- Control hints
@@ -185,6 +185,7 @@ end
 
 function ActionHUD:disableCardInfo()
   self.handview.cardinfo:hide()
+  self.infopanel:hide()
   self.info_lag = false
 end
 
@@ -429,6 +430,10 @@ function ActionHUD:update(dt)
     if self.info_lag >= _INFO_LAG
        and not self.handview.cardinfo:isVisible() then
       self.handview.cardinfo:show()
+    end
+    if self.info_lag >= _INFO_LAG
+       and not self.infopanel:isVisible() then
+      self.infopanel:show()
     end
   end
 
