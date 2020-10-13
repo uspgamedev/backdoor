@@ -49,10 +49,6 @@ function Color.__sub(a, b)
   return Color.__add(a, -1*b)
 end
 
-function Color:withAlpha(a)
-  return Color:new{ self[1], self[2], self[3], a }
-end
-
 function Color:__tostring()
   return string.format("Color(%03d, %03d, %03d, %03d)",
                        math.round(self[1] * 255),
