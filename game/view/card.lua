@@ -271,7 +271,7 @@ function CardView:draw(alpha)
     local quick_icon = RES.loadTexture('quick-card-icon')
     quick_icon:setFilter("linear", "linear")
     local c = COLORS.HALF_EXHAUSTION
-    g.setColor(c[1], c[2], c[3], self.alpha * self.info_alpha * alpha)
+    g.setColor(c:withAlpha(self.alpha * self.info_alpha * alpha))
     g.push()
     g.translate(pd, h - 31)
     local scale = .9

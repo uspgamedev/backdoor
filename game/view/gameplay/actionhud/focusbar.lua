@@ -167,7 +167,7 @@ function FocusBar:draw()
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
 
     --Draw the focus gem
-    g.setColor(COLORS.FOCUS[1], COLORS.FOCUS[2], COLORS.FOCUS[3], self.fade_in[i+1])
+    g.setColor(COLORS.FOCUS:withAlpha(self.fade_in[i+1]))
     g.draw(focus_icon, 0, 0, 0, 1, 1, iw/2, ih/2)
     local focused_card_view = self.handview:getFocusedCard()
     if focused_card_view and

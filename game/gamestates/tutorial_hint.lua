@@ -199,7 +199,7 @@ function state:draw()
   --Draw text
   local c = COLORS.NEUTRAL
   for _, hint in ipairs(_hint_data) do
-    g.setColor(c[1], c[2], c[3], hint.visible)
+    g.setColor(c:withAlpha(hint.visible))
     _font:set()
     local pos = hint.text_pos
     g.print(hint.text, pos.x, pos.y)

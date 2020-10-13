@@ -85,7 +85,7 @@ function TurnPreview:draw()
     g.translate(self.position:unpack())
 
     self.title_font:set()
-    g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
+    g.setColor(COLORS.NEUTRAL:withAlpha(self.alpha))
     g.print("NEXT TURNS", 0, 0)
     g.translate(0, 40)
 
@@ -121,9 +121,9 @@ function TurnPreview:draw_icon(actor)
   local g = love.graphics
 
   --Draw actor icon
-  g.setColor(COLORS.DARKER[1], COLORS.DARKER[2], COLORS.DARKER[3], self.alpha)
+  g.setColor(COLORS.DARKER:withAlpha(self.alpha))
   g.rectangle('fill', 0, 0, ICON_W + 2*ICON_PAD, ICON_H + 2*ICON_PAD)
-  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
+  g.setColor(COLORS.NEUTRAL:withAlpha(self.alpha))
   g.setLineWidth(2)
   g.rectangle('line', 0, 0, ICON_W + 2*ICON_PAD, ICON_H + 2*ICON_PAD)
   local appearance = DB.loadSpec(
@@ -144,7 +144,7 @@ end
 
 function TurnPreview:draw_separator()
   local g = love.graphics
-  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], self.alpha)
+  g.setColor(COLORS.NEUTRAL:withAlpha(self.alpha))
   self.text_font:set()
   g.print("-----------", 0, -ICON_MARGIN)
 end
