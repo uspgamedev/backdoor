@@ -68,7 +68,7 @@ function SettingsView:draw()
 
     -- field name
     local c = is_focused and COLORS.NEUTRAL or COLORS.HALF_VISIBLE
-    g.setColor(c[1], c[2], c[3], self.alpha)
+    g.setColor(c:withAlpha(self.alpha))
     g.print(field:gsub("[-]", " "):upper(), 0, -font_height)
     g.translate(0, font_height)
 
@@ -78,12 +78,12 @@ function SettingsView:draw()
     -- trail
     g.setLineWidth(lw)
     c = is_focused and COLORS.EMPTY or COLORS.DARKER
-    g.setColor(c[1], c[2], c[3], self.alpha)
+    g.setColor(c:withAlpha(self.alpha))
     g.line(0, 0, width, 0)
 
     -- value progression
     c = is_focused and COLORS.NEUTRAL or COLORS.HALF_VISIBLE
-    g.setColor(c[1], c[2], c[3], self.alpha)
+    g.setColor(c:withAlpha(self.alpha))
     g.line(0, 0, percentage * width, 0)
     g.ellipse("fill", percentage * width, 0, height, height)
 
@@ -99,7 +99,7 @@ function _renderControls(g, alpha)
 
   _controls_font:set()
   local c = COLORS.NEUTRAL
-  g.setColor(c[1], c[2], c[3], alpha)
+  g.setColor(c:withAlpha(alpha))
   local text = "D to apply changes - S to cancel"
   g.print(text, 0, 0)
 

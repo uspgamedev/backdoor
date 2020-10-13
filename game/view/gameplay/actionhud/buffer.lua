@@ -147,7 +147,7 @@ function BufferView:draw()
   end
 
   --Draw buffer "background"
-  g.setColor(self.clr[1], self.clr[2], self.clr[3], self.clr[4]*_BACKGROUND_ALPHA)
+  g.setColor(self.clr:withAlpha(self.clr[4]*_BACKGROUND_ALPHA))
   self.sprite:draw(0, 0)
 
   g.translate(self.offset.x, self.offset.y)

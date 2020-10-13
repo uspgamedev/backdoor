@@ -148,7 +148,7 @@ function CardInfo:draw()
   if self.card:isHalfExhaustion() then
     g.push()
     local c = COLORS.HALF_EXHAUSTION
-    g.setColor(c[1], c[2], c[3], alpha)
+    g.setColor(c:withAlpha(self.alpha))
     local quick_icon = RES.loadTexture("quick-card-icon")
     local scale = 2
     g.translate(0, 390)

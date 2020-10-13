@@ -101,10 +101,10 @@ function ControlHint:draw()
     local text_x = x + self.image:getWidth()*scale + gap
     self.text_font:set()
     local c = COLORS.BLACK
-    g.setColor(c[1], c[2], c[3], self.alpha)
+    g.setColor(c:withAlpha(self.alpha))
     g.print(text, text_x + 2, text_y + 2)
     c = COLORS.NEUTRAL
-    g.setColor(c[1], c[2], c[3], self.alpha)
+    g.setColor(c:withAlpha(self.alpha))
     g.print(text, text_x, text_y)
   end
 end

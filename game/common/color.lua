@@ -63,6 +63,10 @@ function Color:unpack()
   return self[1], self[2], self[3], self[4]
 end
 
+function Color:withAlpha(x)
+  return Color:new({self[1], self[2], self[3], x})
+end
+
 --- Converts HSV to RGB. (input and output range: 0 - 255)
 --  From: https://love2d.org/wiki/HSV_color
 function Color.fromHSV(h, s, v, a)

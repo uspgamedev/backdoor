@@ -459,7 +459,7 @@ function View:drawCardDesc(g, card, enter)
   g.setLineWidth(2)
 
   --Draw lines besides description
-  g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
+  g.setColor(COLORS.NEUTRAL:withAlpha(enter))
   g.line(-0.45*_WIDTH, 0, -_DESC_MAXW - _PD, 0)
   g.line(_DESC_MAXW + _PD, 0, 0.45*_WIDTH, 0)
 
@@ -493,7 +493,7 @@ end
 function View:drawHUDInfo(g, owner, enter)
 
     --Draw keep side
-    g.setColor(COLORS.NEUTRAL[1], COLORS.NEUTRAL[2], COLORS.NEUTRAL[3], enter)
+    g.setColor(COLORS.NEUTRAL:withAlpha(enter))
     _titlefont.set()
     g.print("Keep", _H_MARGIN, _HEIGHT - _V_MARGIN - _titlefont:getHeight())
 
@@ -517,11 +517,11 @@ function View:drawHUDInfo(g, owner, enter)
       local arc_t = ("%.1f%%"):format(arc*100)
       local ani_t = ("%.1f%%"):format(ani*100)
       _font.set()
-      g.setColor(COLORS.COR[1], COLORS.COR[2], COLORS.COR[3], enter*enter*enter)
+      g.setColor(COLORS.COR:withAlpha(enter*enter*enter))
       g.print(cor_t, _WIDTH + 57, _HEIGHT - 308)
-      g.setColor(COLORS.ARC[1], COLORS.ARC[2], COLORS.ARC[3], enter*enter*enter)
+      g.setColor(COLORS.ARC:withAlpha(enter*enter*enter))
       g.print(arc_t, _WIDTH + 133, _HEIGHT - 308)
-      g.setColor(COLORS.ANI[1], COLORS.ANI[2], COLORS.ANI[3], enter*enter*enter)
+      g.setColor(COLORS.ANI:withAlpha(enter*enter*enter))
       g.print(ani_t, _WIDTH + 209, _HEIGHT - 308)
     end
 
