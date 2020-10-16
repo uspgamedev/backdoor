@@ -1,4 +1,6 @@
 
+-- luacheck: globals MAIN_TIMER
+
 local TweenValue    = require 'view.helpers.tweenvalue'
 local CardView      = require 'view.card'
 local Util          = require "steaming.util"
@@ -25,7 +27,6 @@ function ANIM:script(route, view, report)
     local cardview = CardView(report.card)
     cardview:register("HUD")
     view.action_hud.handview:addCard(cardview)
-    action_hud:disableCardInfo()
     cardview:setPosition(widgetview.position:unpack())
     PLAYSFX("create-equipment")
     self.wait(delay:set(0.2))

@@ -3,6 +3,7 @@ local Util          = require "steaming.util"
 local TweenValue    = require 'view.helpers.tweenvalue'
 local VIEWDEFS      = require 'view.definitions'
 local Dissolve      = require 'view.dissolvecard'
+local Deferred      = require 'common.deferred'
 local vec2          = require 'cpml' .vec2
 
 local ANIM = require 'common.activity' ()
@@ -25,18 +26,19 @@ function ANIM:script(route, view, report)
     self.wait(bodyview:act())
     action_hud.handview:keepFocusedCard(false)
     action_hud.handview:removeCard(report.card_index)
-    action_hud.handview.cardinfo:lockCard(cardview.card)
+    action_hud.infopanel:lockCard(cardview.card)
     cardview:setAlpha(1)
     cardview:setFocus(false)
     cardview:register("HUD_FX")
     _slideRight(cardview, backbuffer, self)
-    action_hud.handview.cardinfo:lockCard()
-    action_hud:disableCardInfo()
+    local deferred
     if not cardview.temporary and not cardview.card:isOneTimeOnly() then
-      _slideDown(cardview, backbuffer)
+      deferred = _slideDown(cardview, backbuffer)
     else
-      _dissolve(cardview)
+      deferred = _dissolve(cardview)
     end
+    self.wait(deferred)
+    action_hud.infopanel:lockCard()
   else
     view.sector:setTempTarget(report.actor)
     local card = report.actor:getHandCard(report.card_index)
@@ -71,22 +73,38 @@ function _slideRight(cardview, backbuffer, task)
 end
 
 function _slideDown(cardview, backbuffer)
-    cardview:addTimer("slide_down", MAIN_TIMER, "tween", .5, cardview,
-                      { position = backbuffer:getTopCardPosition() },
-                      'out-cubic')
-    cardview:addTimer("wait", MAIN_TIMER, "after", .3,
-                      function ()
-                        cardview:addTimer("fadeout", MAIN_TIMER, "tween", .3,
-                                          cardview, {alpha = 0}, 'out-cubic',
-                                          function() cardview:kill() end)
-                      end)
+  local deferred = Deferred:new()
+  cardview:addTimer(
+    "slide_down", MAIN_TIMER, "tween", .5, cardview,
+    { position = backbuffer:getTopCardPosition() },
+    'out-cubic'
+  )
+  cardview:addTimer(
+    "wait", MAIN_TIMER, "after", .3,
+    function ()
+      cardview:addTimer(
+        "fadeout", MAIN_TIMER, "tween", .3,
+        cardview, {alpha = 0}, 'out-cubic',
+        function()
+          cardview:kill()
+          deferred:trigger()
+        end
+      )
+    end
+  )
+  return deferred
 end
 
 function _dissolve(cardview)
+  local deferred = Deferred:new()
   local delay = TweenValue(0)
-  delay:set(1.6):andThen(function () cardview:kill() end)
+  delay:set(1.6):andThen(function ()
+    cardview:kill()
+    deferred:trigger()
+  end)
   Dissolve(cardview, 1.5)
   delay:kill()
+  return deferred
 end
 
 return ANIM
