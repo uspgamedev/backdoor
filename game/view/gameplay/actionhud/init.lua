@@ -192,8 +192,18 @@ function ActionHUD:isPlayerFocused()
 end
 
 function ActionHUD:moveHandFocus(dir)
-  self.handview:moveFocus(dir)
-  self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
+  local wield_focused = self.wielddock:isFocused()
+  local wear_focused = self.weardock:isFocused()
+  if not wield_focused and not wear_focused then
+    if self.handview:moveFocus(dir) then
+      self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
+    elseif dir == 'LEFT' and self.wielddock:getCard() then
+      local wield_view = self.wielddock:getCard()
+      self.handview:unfocus()
+      wield_view:setFocus(true)
+      self.infopanel:setTextFromCard(wield_view.card)
+    end
+  end
 end
 
 function ActionHUD:sendAlert(flag)
