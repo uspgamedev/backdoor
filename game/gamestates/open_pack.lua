@@ -78,7 +78,7 @@ function state:enter(_, view, route, packlist)
   _status = "choosing_pack"
   _route = route
   _pack = nil
-  _card_list_view = PackView({"UP", "CONFIRM"}, packlist)
+  _card_list_view = PackView({"UP", "CONFIRM"}, {"DOWN"}, packlist)
   if #packlist > 0 then
     _card_list_view:register("HUD")
   else
