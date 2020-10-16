@@ -4,7 +4,6 @@
 local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CardView     = require 'view.card'
-local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
 local PLAYSFX      = require 'helpers.playsfx'
 local VIEWDEFS     = require 'view.definitions'
 local PROFILE      = require 'infra.profile'
@@ -56,7 +55,6 @@ function HandView:init(route)
   self.initial_y = self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MAX
-  self.cardinfo = CardInfo(route)
   self.alpha = 1
   self.keep_focused_card = false
   self.hand_off = _HAND_OFFSET
@@ -137,7 +135,6 @@ function HandView:update(dt)
     local diff = (target - pos) * math.min(1.0, 10 * dt)
     card:setPosition((pos + diff):unpack())
   end
-  self.cardinfo:update(dt)
 end
 
 function HandView:draw()
@@ -157,14 +154,6 @@ function HandView:draw()
   g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2 + self.hand_off)
   g.polygon('fill', _BACKPANEL_VTX)
   g.pop()
-
-  if self.cardinfo:isVisible() then
-    local i = self.focus_index
-    local card = hand[i]
-    if not card then return end
-    self.cardinfo:setCard(card.card)
-    --self.cardinfo:draw()
-  end
 end
 
 function HandView:addCard(card_view)

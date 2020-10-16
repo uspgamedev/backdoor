@@ -179,15 +179,6 @@ function ActionHUD:getHandView()
   return self.handview
 end
 
-function ActionHUD:disableCardInfo()
-  self.handview.cardinfo:hide()
-  return self.infopanel:hide()
-end
-
-function ActionHUD:enableCardInfo()
-  self.infopanel:show()
-end
-
 function ActionHUD:isHandActive()
   return self.handview:isActive()
 end
@@ -366,7 +357,6 @@ end
 --[[ Update ]]--
 
 local function _disableHUDElements(self)
-  --self:disableCardInfo()
   if self.handview:isActive() then
     self.handview:deactivate()
   end
