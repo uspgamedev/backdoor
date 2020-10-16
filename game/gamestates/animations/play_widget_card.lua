@@ -16,7 +16,7 @@ function ANIM:script(route, view, report)
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
     action_hud.handview:removeCard(report.card_index)
-    action_hud.handview.cardinfo:lockCard(cardview.card)
+    action_hud.infopanel:lockCard(cardview.card)
     cardview:setAlpha(1)
     cardview:setFocus(false)
     local ann = Util.findId('announcement')
@@ -54,8 +54,6 @@ function ANIM:script(route, view, report)
                     PLAYSFX('wearable-equip')
                   end
                 end
-                action_hud.handview.cardinfo:lockCard()
-                action_hud:disableCardInfo()
                 cardview:addTimer("final_slide", MAIN_TIMER, "tween", .6,
                                   cardview, {position = destination},
                                   'out-cubic',
@@ -68,6 +66,7 @@ function ANIM:script(route, view, report)
 
 
     self.wait()
+    action_hud.infopanel:lockCard()
     ann:unlock()
   else
     view.sector:setTempTarget(report.actor)

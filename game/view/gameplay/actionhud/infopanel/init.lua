@@ -1,6 +1,7 @@
 
 local FONT        = require 'view.helpers.font'
 local VIEW_COLORS = require 'view.definitions.colors'
+local Deferred    = require 'common.deferred'
 
 local Class     = require "steaming.extra_libs.hump.class"
 local ELEMENT   = require "steaming.classes.primitives.element"
@@ -47,20 +48,27 @@ function InfoPanel:init(position, handview)
   self.modulate = VIEW_COLORS.IDENTITY:clone()
   self.modulate[4] = 0.0
 
+  self.locked_card = nil
+
 end
 
 function InfoPanel:setText(text)
   text = text:gsub("([^\n])[\n]([^\n])", "%1 %2")
-  --text = text:gsub("\n\n", "\n")
   self.text = text
+end
+
+function InfoPanel:lockCard(card)
+  self.locked_card = card
 end
 
 function InfoPanel:hide()
   local timer = MAIN_TIMER -- luacheck: globals MAIN_TIMER
   local duration = self.modulate[4] / 2
+  local deferred = Deferred:new()
   self:removeTimer(_TWEEN)
   self:addTimer(_TWEEN, timer, 'tween', duration, self.modulate,
-                { [4] = 0 }, 'out-linear')
+                { [4] = 0 }, 'out-linear', function() deferred:trigger() end)
+  return deferred
 end
 
 function InfoPanel:show()
@@ -78,13 +86,19 @@ end
 function InfoPanel:update(_)
   self.invisible = self.modulate[4] <= 0
   self.modulate[4] = math.min(math.max(self.modulate[4], 0), 1)
-  if self.handview:isActive() then
-    local player = self.handview.route.getPlayerActor()
+  local player = self.handview.route.getPlayerActor()
+  local title = ""
+  local text = ""
+  if self.locked_card then
+    text = self.locked_card:getEffect(player)
+    title = self.locked_card:getName()
+  elseif self.handview:isActive() and self.handview:getFocusedCard() then
     local card = self.handview:getFocusedCard().card
-    local text = card:getEffect(player)
-    self.title = card:getName()
-    self:setText(text)
+    text = card:getEffect(player)
+    title = card:getName()
   end
+  self.title = title
+  self:setText(text)
 end
 
 function InfoPanel:draw()

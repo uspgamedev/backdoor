@@ -18,7 +18,6 @@ function ANIM:script(route, view, report)
     cardview:register("HUD")
     PLAYSFX("draw-card")
     cardview:setPosition(frontbuffer:getTopCardPosition():unpack())
-    action_hud:disableCardInfo()
     self.wait(delay:set(0.2))
     cardview:setDrawTable("HUD_FX")
   end

@@ -23,7 +23,6 @@ local ELEMENT         = require "steaming.classes.primitives.element"
 
 local vec2            = require 'cpml' .vec2
 
-local _INFO_LAG = 0.65 -- seconds
 local _MARGIN = 20
 
 local ActionHUD = Class{
@@ -95,9 +94,6 @@ function ActionHUD:init(route)
   -- HUD state (player turn or not)
   self.player_turn = false
   self.player_focused = false
-
-  -- Card info
-  self.info_lag = false
 
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
@@ -185,12 +181,11 @@ end
 
 function ActionHUD:disableCardInfo()
   self.handview.cardinfo:hide()
-  self.infopanel:hide()
-  self.info_lag = false
+  return self.infopanel:hide()
 end
 
 function ActionHUD:enableCardInfo()
-  self.info_lag = self.info_lag or 0
+  self.infopanel:show()
 end
 
 function ActionHUD:isHandActive()
@@ -207,14 +202,6 @@ end
 
 function ActionHUD:moveHandFocus(dir)
   self.handview:moveFocus(dir)
-  self:resetCardInfoLag()
-end
-
-function ActionHUD:resetCardInfoLag()
-  if self.info_lag then
-    self.info_lag = 0
-    self.handview.cardinfo:hide()
-  end
 end
 
 function ActionHUD:sendAlert(flag)
@@ -322,13 +309,18 @@ function ActionHUD:actionRequested()
   elseif INPUT.wasActionPressed('CANCEL') then
     if player_focused then
       self.player_focused = false
+      self.infopanel:hide()
       return
     else
       action_request = {DEFS.ACTION.IDLE}
     end
   elseif INPUT.wasActionPressed('SPECIAL') then
     self.player_focused = not self.player_focused
-    --self.long_walk = false
+    if self.player_focused then
+      self.infopanel:show()
+    else
+      self.infopanel:hide()
+    end
     return false
   elseif INPUT.wasActionPressed('MENU') then
     if player_focused then
@@ -365,9 +357,6 @@ function ActionHUD:actionRequested()
   end
 
   if action_request then
-    if action_request[1] ~= DEFS.ACTION.PLAY_CARD then
-      self:resetCardInfoLag()
-    end
     return unpack(action_request)
   end
 
@@ -411,30 +400,14 @@ function ActionHUD:update(dt)
 
   if self.player_turn then
     if self.player_focused then
-      self:enableCardInfo()
       if not self.handview:isActive() then
         self.handview:activate()
       end
     else
-      self:disableCardInfo()
       _disableHUDElements(self)
     end
   else
     _disableHUDElements(self)
-  end
-
-  -- If card info is enabled
-  if self.info_lag then
-    self.info_lag = math.min(_INFO_LAG, self.info_lag + dt)
-
-    if self.info_lag >= _INFO_LAG
-       and not self.handview.cardinfo:isVisible() then
-      self.handview.cardinfo:show()
-    end
-    if self.info_lag >= _INFO_LAG
-       and not self.infopanel:isVisible() then
-      self.infopanel:show()
-    end
   end
 
 end
