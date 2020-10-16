@@ -90,6 +90,10 @@ function CardView:setFocus(flag)
   self.focused = flag
 end
 
+function CardView:isFocused()
+  return self.focused
+end
+
 function CardView:setMode(mode)
   assert(_MODE[mode], "Not a valid mode for cardview")
   self.mode = _MODE[mode]
@@ -282,40 +286,40 @@ function CardView:draw(alpha)
 
   --Draw charge counter for widgets
   if self.card:isWidget() then
-    local x = _widget_charge_pos.x + self.charge_offset.x
-    local y = _widget_charge_pos.y + self.charge_offset.y
+    local cx = _widget_charge_pos.x + self.charge_offset.x
+    local cy = _widget_charge_pos.y + self.charge_offset.y
     local font = _widget_charge_font
     --Print background
     g.setColor(0, 0, 0, self.alpha * alpha)
-    _draw_hexagon("fill", x, y, _widget_charge_radius)
+    _draw_hexagon("fill", cx, cy, _widget_charge_radius)
     g.setColor(cr, cg, cb, self.alpha * alpha)
     g.setLineWidth(_widget_charge_linew)
-    _draw_hexagon("line", x, y, _widget_charge_radius)
+    _draw_hexagon("line", cx, cy, _widget_charge_radius)
 
     --Print charges
     font.set()
     g.setColor(cr, cg, cb, self.alpha * alpha)
     local charges = self.card:getCurrentWidgetCharges()
-    g.print(charges, x - font:getWidth(charges)/2,
-                     y - font:getHeight()/2)
+    g.print(charges, cx - font:getWidth(charges)/2,
+                     cy - font:getHeight()/2)
 
     --Draw block value for defensive equipments
     if self.card:isEquipment() and self.card:isDefensiveEquipment() then
       --Print background
-      x = _shield_pos.x
-      y = _shield_pos.y
+      cx = _shield_pos.x
+      cy = _shield_pos.y
       g.setColor(0, 0, 0, self.alpha * (1.0 - self.info_alpha) * alpha)
-      _draw_shield("fill", x, y, _shield_size)
+      _draw_shield("fill", cx, cy, _shield_size)
       g.setColor(cr/2, cg/2, cb/2, self.alpha * (1.0 - self.info_alpha) * alpha)
       g.setLineWidth(_shield_linew)
-      _draw_shield("line", x, y, _shield_size)
+      _draw_shield("line", cx, cy, _shield_size)
 
       --Print charges
       font.set()
       g.setColor(cr, cg, cb, self.alpha * (1.0 - self.info_alpha) * alpha)
-      local charges = self.card:getEquipmentBlockValue()
-      g.print(charges, x - font:getWidth(charges)/2,
-                       y - font:getHeight()/2 + _shield_size/6 - _shield_linew/2)
+      local block = self.card:getEquipmentBlockValue()
+      g.print(block, cx - font:getWidth(charges)/2,
+                     cy - font:getHeight()/2 + _shield_size/6 - _shield_linew/2)
     end
   end
 

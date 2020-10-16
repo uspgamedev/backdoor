@@ -1,5 +1,5 @@
 
--- luacheck: globals love
+-- luacheck: globals love MAIN_TIMER
 
 local VIEWDEFS  = require 'view.definitions'
 local COLORS    = require 'domain.definitions.colors'
@@ -55,11 +55,14 @@ end
 
 function EquipmentDock:addCard(cardview)
   self.cardview = cardview
-
 end
 
 function EquipmentDock:getCard()
   return self.cardview
+end
+
+function EquipmentDock:isFocused()
+  return self.cardview and self.cardview:isFocused()
 end
 
 function EquipmentDock:removeCard()

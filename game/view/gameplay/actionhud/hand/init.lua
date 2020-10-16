@@ -78,12 +78,29 @@ function HandView:getFocus()
 end
 
 function HandView:moveFocus(dir)
-  PLAYSFX('select-card')
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
+    if self.focus_index == 1 then
+      return false
+    else
+      self.focus_index = self.focus_index - 1
+    end
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % (#self.hand) + 1
+    if self.focus_index == #self.hand then
+      return false
+    else
+      self.focus_index = self.focus_index + 1
+    end
   end
+  PLAYSFX('select-card')
+  return true
+end
+
+function HandView:unfocus()
+  self.focus_index = nil
+end
+
+function HandView:focus(index)
+  self.focus_index = index
 end
 
 function HandView:isActive()
