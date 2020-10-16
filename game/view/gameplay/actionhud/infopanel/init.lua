@@ -1,7 +1,6 @@
 
 local FONT        = require 'view.helpers.font'
 local VIEW_COLORS = require 'view.definitions.colors'
-local Deferred    = require 'common.deferred'
 
 local Class     = require "steaming.extra_libs.hump.class"
 local ELEMENT   = require "steaming.classes.primitives.element"
@@ -16,8 +15,7 @@ local _HEIGHT = 440
 local _CORNER = 24
 local _HPAD = 16
 local _VPAD = 8
-
-local _TWEEN = 'infopanel_tween'
+local _ALPHA_SPEED = 4
 
 local _BODY_SHAPE = {
   0, _HEADER_HEIGHT,
@@ -47,6 +45,7 @@ function InfoPanel:init(position, handview)
   self.text = "> This is a test"
   self.modulate = VIEW_COLORS.IDENTITY:clone()
   self.modulate[4] = 0.0
+  self.target_alpha = 0.0
 
   self.locked_card = nil
 
@@ -62,30 +61,26 @@ function InfoPanel:lockCard(card)
 end
 
 function InfoPanel:hide()
-  local timer = MAIN_TIMER -- luacheck: globals MAIN_TIMER
-  local duration = self.modulate[4] / 2
-  local deferred = Deferred:new()
-  self:removeTimer(_TWEEN)
-  self:addTimer(_TWEEN, timer, 'tween', duration, self.modulate,
-                { [4] = 0 }, 'out-linear', function() deferred:trigger() end)
-  return deferred
+  self.target_alpha = 0.0
 end
 
 function InfoPanel:show()
-  local timer = MAIN_TIMER -- luacheck: globals MAIN_TIMER
-  local duration = math.max(0, 1.0 - self.modulate[4]) / 2
-  self:removeTimer(_TWEEN)
-  self:addTimer(_TWEEN, timer, 'tween', duration, self.modulate,
-                { [4] = 1 }, 'out-linear')
+  self.target_alpha = 1.0
 end
 
 function InfoPanel:isVisible()
   return not self.invisible
 end
 
-function InfoPanel:update(_)
+function InfoPanel:update(dt)
+  if self.target_alpha > self.modulate[4] then
+    self.modulate[4] = math.min(self.target_alpha,
+                                self.modulate[4] + _ALPHA_SPEED * dt)
+  elseif self.target_alpha < self.modulate[4] then
+    self.modulate[4] = math.max(self.target_alpha,
+                                self.modulate[4] - _ALPHA_SPEED * dt)
+  end
   self.invisible = self.modulate[4] <= 0
-  self.modulate[4] = math.min(math.max(self.modulate[4], 0), 1)
   local player = self.handview.route.getPlayerActor()
   local title = ""
   local text = ""
