@@ -51,9 +51,19 @@ function InfoPanel:init(position, handview)
 
 end
 
-function InfoPanel:setText(text)
+function InfoPanel:setText(title, text)
   text = text:gsub("([^\n])[\n]([^\n])", "%1 %2")
   self.text = text
+  self.title = title
+end
+
+function InfoPanel:setTextFromCard(card)
+  if card then
+    local player = self.handview.route.getPlayerActor()
+    local title = card:getName()
+    local text = card:getEffect(player)
+    self:setText(title, text)
+  end
 end
 
 function InfoPanel:lockCard(card)
@@ -81,19 +91,9 @@ function InfoPanel:update(dt)
                                 self.modulate[4] - _ALPHA_SPEED * dt)
   end
   self.invisible = self.modulate[4] <= 0
-  local player = self.handview.route.getPlayerActor()
-  local title = ""
-  local text = ""
   if self.locked_card then
-    text = self.locked_card:getEffect(player)
-    title = self.locked_card:getName()
-  elseif self.handview:isActive() and self.handview:getFocusedCard() then
-    local card = self.handview:getFocusedCard().card
-    text = card:getEffect(player)
-    title = card:getName()
+    self:setTextFromCard(self.locked_card)
   end
-  self.title = title
-  self:setText(text)
 end
 
 function InfoPanel:draw()

@@ -193,6 +193,7 @@ end
 
 function ActionHUD:moveHandFocus(dir)
   self.handview:moveFocus(dir)
+  self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
 end
 
 function ActionHUD:sendAlert(flag)
@@ -392,6 +393,7 @@ function ActionHUD:update(dt)
     if self.player_focused then
       if not self.handview:isActive() then
         self.handview:activate()
+        self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
       end
     else
       _disableHUDElements(self)
