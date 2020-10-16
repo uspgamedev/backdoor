@@ -297,7 +297,7 @@ function Card:getEffect()
         local specname = action.card
         local spec = DB.loadSpec('card', specname)
         inputs.card = Card(specname)
-        effect = effect .. spec.name .. ": "
+        effect = effect .. "\n\n" .. spec.name .. ": "
                         .. ABILITY.preview(spec.art.art_ability,
                                            self:getOwner(), inputs)
                         .. "\n\n"
