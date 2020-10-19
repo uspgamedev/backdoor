@@ -51,6 +51,7 @@ function HandView:init(route)
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
+  self.focused = false
   self.x, self.y = _WIDTH/2, _HEIGHT - VIEWDEFS.CARD_H - _HAND_MARGIN
   self.initial_y = self.y
   self.route = route
@@ -77,38 +78,43 @@ function HandView:getFocus()
   return self.focus_index
 end
 
+function HandView:isFocused()
+  return self.focused
+end
+
 function HandView:moveFocus(dir)
+  if not self.focused then self:focus() end
   if dir == "LEFT" then
     if self.focus_index == 1 then
       return false
     else
       self.focus_index = self.focus_index - 1
+      PLAYSFX('select-card')
     end
   elseif dir == "RIGHT" then
     if self.focus_index == #self.hand then
       return false
     else
       self.focus_index = self.focus_index + 1
+      PLAYSFX('select-card')
     end
   end
-  PLAYSFX('select-card')
   return true
 end
 
-function HandView:isFocused()
-  return not not self.focus_index
-end
-
 function HandView:unfocus()
-  self.focus_index = nil
+  self.focused = false
 end
 
 function HandView:focus(dir)
-  if dir == 'LEFT' then
-   self.focus_index = #self.hand
- else
-   self.focus_index = 1
- end
+  self.focused = true
+  if not self.focus_index then
+    if dir == 'LEFT' then
+      self.focus_index = #self.hand
+    else
+      self.focus_index = 1
+    end
+  end
 end
 
 function HandView:isActive()
@@ -150,7 +156,7 @@ function HandView:update(dt)
 
   for i,card in ipairs(self.hand) do
     card:update(dt)
-    card:setFocus(self.active and i == self.focus_index)
+    card:setFocus(self.active and self.focused and i == self.focus_index)
     if DRAW_TABLE['HUD_FX'][card]
        or (self.keep_focused_card and i == self.focus_index) then
       card:setAlpha(1)

@@ -69,10 +69,6 @@ function EquipmentDock:hasCard()
   return not not self.cardview
 end
 
-function EquipmentDock:isFocused()
-  return self.cardview and self.cardview:isFocused()
-end
-
 function EquipmentDock:focus()
   if self.cardview then
     self.cardview:setFocus(true)
@@ -86,6 +82,7 @@ function EquipmentDock:unfocus()
 end
 
 function EquipmentDock:moveFocus(_) -- luacheck: no self
+  self:focus()
   return false
 end
 
