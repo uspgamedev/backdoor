@@ -83,14 +83,17 @@ function ActionHUD:init(route)
     LEFT = {
       [self.handview] = self.weardock,
       [self.weardock] = self.wielddock,
+      [self.conddock] = self.handview,
     },
     RIGHT = {
       [self.weardock] = self.handview,
       [self.wielddock] = self.weardock,
+      [self.handview] = self.conddock,
     },
     NONE = {
       [self.weardock] = self.handview,
       [self.wielddock] = self.weardock,
+      [self.conddock] = self.handview,
     }
   }
 
