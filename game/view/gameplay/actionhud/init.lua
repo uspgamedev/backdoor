@@ -214,6 +214,7 @@ end
 function ActionHUD:moveFocus(dir)
   if self.current_focus:moveFocus(dir) then
     self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
+    PLAYSFX('select-card')
   else
     local next_focused = self.current_focus
     repeat
@@ -223,6 +224,7 @@ function ActionHUD:moveFocus(dir)
         self.current_focus = next_focused
         next_focused:focus(dir)
         self.infopanel:setTextFromCard(next_focused:getFocusedCard().card)
+        PLAYSFX('select-card')
         break
       end
     until not next_focused
