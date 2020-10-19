@@ -27,7 +27,8 @@ local _SIN_INTERVAL = 1/2^5
 local _PD = 40
 local _ARRSIZE = 20
 local _PI = math.pi
-local _HOLDBAR_TEXT = "open pack"
+local _HOLDBAR_TEXT1 = "open pack"
+local _HOLDBAR_TEXT2 = "open all packs"
 local _WIDTH, _HEIGHT
 local _CW, _CH
 
@@ -63,13 +64,13 @@ local function _renderControls(g, alpha)
   _controls_font:set()
   local c = COLORS.NEUTRAL
   g.setColor(c[1], c[2], c[3], alpha)
-  local text = "hold D to open - S to cancel"
+  local text = "S to cancel"
   g.print(text, 0, 0)
 
   g.pop()
 end
 -- PUBLIC METHODS ---------------------------
-function View:init(hold_actions, packlist)
+function View:init(hold_actions_single, hold_actions_all, packlist)
   ELEMENT.init(self)
 
   self.enter = 0
@@ -84,9 +85,15 @@ function View:init(hold_actions, packlist)
   self.offsets = {}
   self.pack_list = packlist
 
-  self.holdbar = HoldBar(hold_actions)
-  self.holdbar:unlock()
-  self.holdbar_activated = false
+  self.holdbar_single = HoldBar(hold_actions_single)
+  self.holdbar_single:unlock()
+  self.holdbar_single_activated = false
+
+  if #self.pack_list > 1 then
+    self.holdbar_all = HoldBar(hold_actions_all)
+    self.holdbar_all:unlock()
+    self.holdbar_all_activated = false
+  end
 
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
@@ -96,23 +103,40 @@ function View:init(hold_actions, packlist)
 end
 
 function View:isLocked()
-  return self.holdbar:isLocked()
+  if #self.pack_list > 1 then
+    return self.holdbar_single:isLocked() or self.holdbar_all:isLocked()
+  else
+    return self.holdbar_single:isLocked()
+  end
 end
 
 function View:lockHoldbar()
-  self.holdbar:lock()
+  self.holdbar_single:lock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:lock()
+  end
 end
 
 function View:unlockHoldbar()
-  self.holdbar:unlock()
+  self.holdbar_single:unlock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:unlock()
+  end
 end
 
 function View:getChosenPack()
   return self.pack_list[self.selection]
 end
 
+function View:getAllPacks()
+  return self.pack_list
+end
+
 function View:close()
-  self.holdbar:lock()
+  self.holdbar_single:lock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:lock()
+  end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
@@ -126,14 +150,20 @@ function View:selectPrev(n)
   if self:isLocked() then return end
   n = n or 1
   self.selection = _prev_circular(self.selection, #self.pack_list, n)
-  self.holdbar:reset()
+  self.holdbar_single:reset()
+  if #self.pack_list > 1 then
+    self.holdbar_all:reset()
+  end
 end
 
 function View:selectNext(n)
   if self:isLocked() then return end
   n = n or 1
   self.selection = _next_circular(self.selection, #self.pack_list, n)
-  self.holdbar:reset()
+  self.holdbar_single:reset()
+  if #self.pack_list > 1 then
+    self.holdbar_all:reset()
+  end
 end
 
 function View:setSelection(n)
@@ -234,7 +264,7 @@ function View:drawPacks(g, enter)
               math.round(3*_HEIGHT/7-_CH/2))
   enter = self.text
   if enter > 0 then
-    self:drawArrow(g, enter)
+    self:drawArrows(g, enter)
     if pack_list[selection] then
       self:drawPackDesc(g, pack_list[selection], enter)
     end
@@ -243,8 +273,7 @@ function View:drawPacks(g, enter)
   g.pop()
 end
 
-function View:drawArrow(g, enter)
-  local text_width = _font:getWidth(_HOLDBAR_TEXT)
+function View:drawArrows(g, enter)
   local lh = 1.25
   local text_height
   local senoid
@@ -261,14 +290,32 @@ function View:drawArrow(g, enter)
   text_height = _font:getHeight()*lh
 
   g.translate(0, -_PD - text_height*2.5)
-  self:drawHoldBar(g)
 
+  g.push()
+  --Up info
+  self:drawHoldBar("single")
+  local text_width = _font:getWidth(_HOLDBAR_TEXT1)
   g.translate(0, text_height*.5)
   g.setColor(1, 1, 1, enter)
-  g.printf(_HOLDBAR_TEXT, -text_width/2, 0, text_width, "center")
+  g.printf(_HOLDBAR_TEXT1, -text_width/2, 0, text_width, "center")
 
-  g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE - senoid)
+  g.translate(-_ARRSIZE/2, _PD + text_height - _ARRSIZE/2 - senoid)
   g.polygon("fill", 0, 0, _ARRSIZE/2, -_ARRSIZE, _ARRSIZE, 0)
+  g.pop()
+
+  if #self.pack_list > 1 then
+    --Down info
+    text_width = _font:getWidth(_HOLDBAR_TEXT2)
+    g.translate(0, _CH + _PD + text_height*5)
+    g.setColor(1, 1, 1, enter)
+    g.printf(_HOLDBAR_TEXT2, -text_width/2, 0, text_width, "center")
+
+    g.translate(-_ARRSIZE/2, -text_height*1.5 + _ARRSIZE + senoid)
+    g.polygon("fill", 0, 0, _ARRSIZE/2, _ARRSIZE, _ARRSIZE, 0)
+
+    g.translate(_ARRSIZE/2, _ARRSIZE + text_height*1.5 - senoid)
+    self:drawHoldBar("all")
+  end
 
   g.pop()
 end
@@ -282,15 +329,29 @@ function View:drawPackDesc(g, pack, enter) -- luacheck: no unused
 end
 
 function View:usedHoldbar()
-  return self.holdbar_activated
+  if self.holdbar_single_activated then
+    return true, "single"
+  elseif #self.pack_list > 1 and self.holdbar_all_activated then
+    return true, "all"
+  else
+    return false
+  end
 end
 
-function View:drawHoldBar()
-  self.holdbar:update()
-  if self.holdbar:confirmed() then
-    self.holdbar_activated = true
+function View:drawHoldBar(type)
+  local holdbar
+  if type == "single" then
+    holdbar = self.holdbar_single
+  elseif type == "all" then
+    holdbar = self.holdbar_all
+  else
+    error("Not a valid holdbar type: "..type)
   end
-  self.holdbar:draw(0, 0)
+  holdbar:update()
+  if holdbar:confirmed() then
+    self["holdbar_"..type.."_activated"] = true
+  end
+  holdbar:draw(0, 0)
 end
 
 return View
