@@ -483,6 +483,10 @@ function Actor:removePrizePack(index)
   if self.prizes[index] then table.remove(self.prizes,index) end
 end
 
+function Actor:removeAllPacks()
+  self.prizes = {}
+end
+
 function Actor:getPrizePackCount()
   return #self.prizes
 end

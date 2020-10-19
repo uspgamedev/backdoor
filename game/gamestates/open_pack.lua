@@ -35,12 +35,24 @@ local function _toggle()
   _card_list_view:toggleSelected()
 end
 
-local function _confirm()
+local function _confirm(which)
   if _status == "choosing_pack" then
     _status = "choosing_card"
-    local collection = _card_list_view:getChosenPack()
-    _pack = _route.makePack(collection, _route.getControlledActor())
-    _pack_index = _card_list_view:getSelection()
+    if which == "single" then
+      local collection = _card_list_view:getChosenPack()
+      _pack = _route.makePack(collection, _route.getControlledActor())
+      _pack_index = _card_list_view:getSelection()
+    elseif which == "all" then
+      _pack = {}
+      for _,collection in ipairs(_card_list_view:getAllPacks()) do
+        for _,card in ipairs(_route.makePack(collection, _route.getControlledActor())) do
+          table.insert(_pack, card)
+        end
+      end
+      _pack_index = "all"
+    else
+      error("Not a valid mode for opening packs: "..which)
+    end
     _card_list_view:close()
     _card_list_view = CardView({"CONFIRM"})
     _card_list_view:open(_pack)
@@ -128,9 +140,13 @@ function state:update(_)
       pack_index = _pack_index
     })
   else
-    if _status == "choosing_pack" and _card_list_view:usedHoldbar() then
+    local result, which
+    if _status == "choosing_pack" then
+      result, which = _card_list_view:usedHoldbar()
+    end
+    if result then
       PLAYSFX 'open-pack'
-      _confirm()
+      _confirm(which)
     elseif DIRECTIONALS.wasDirectionTriggered('LEFT') then
       PLAYSFX('select-card')
       _prev()

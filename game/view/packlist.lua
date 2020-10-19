@@ -118,6 +118,10 @@ function View:getChosenPack()
   return self.pack_list[self.selection]
 end
 
+function View:getAllPacks()
+  return self.pack_list
+end
+
 function View:close()
   self.holdbar_single:lock()
   self.holdbar_all:lock()
@@ -323,7 +327,7 @@ function View:drawHoldBar(type)
   elseif type == "all" then
     holdbar = self.holdbar_all
   else
-    error("Not a valid holdbar type:", type)
+    error("Not a valid holdbar type: "..type)
   end
   holdbar:update()
   if holdbar:confirmed() then
