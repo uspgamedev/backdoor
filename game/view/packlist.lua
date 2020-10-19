@@ -89,9 +89,11 @@ function View:init(hold_actions_single, hold_actions_all, packlist)
   self.holdbar_single:unlock()
   self.holdbar_single_activated = false
 
-  self.holdbar_all = HoldBar(hold_actions_all)
-  self.holdbar_all:unlock()
-  self.holdbar_all_activated = false
+  if #self.pack_list > 1 then
+    self.holdbar_all = HoldBar(hold_actions_all)
+    self.holdbar_all:unlock()
+    self.holdbar_all_activated = false
+  end
 
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
@@ -101,17 +103,25 @@ function View:init(hold_actions_single, hold_actions_all, packlist)
 end
 
 function View:isLocked()
-  return self.holdbar_single:isLocked() or self.holdbar_all:isLocked()
+  if #self.pack_list > 1 then
+    return self.holdbar_single:isLocked() or self.holdbar_all:isLocked()
+  else
+    return self.holdbar_single:isLocked()
+  end
 end
 
 function View:lockHoldbar()
   self.holdbar_single:lock()
-  self.holdbar_all:lock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:lock()
+  end
 end
 
 function View:unlockHoldbar()
   self.holdbar_single:unlock()
-  self.holdbar_all:unlock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:unlock()
+  end
 end
 
 function View:getChosenPack()
@@ -124,7 +134,9 @@ end
 
 function View:close()
   self.holdbar_single:lock()
-  self.holdbar_all:lock()
+  if #self.pack_list > 1 then
+    self.holdbar_all:lock()
+  end
   self:removeTimer(_ENTER_TIMER, MAIN_TIMER)
   self:addTimer(_ENTER_TIMER, MAIN_TIMER, "tween",
                 _ENTER_SPEED, self, { enter=0, text=0 }, "out-quad",
@@ -139,7 +151,9 @@ function View:selectPrev(n)
   n = n or 1
   self.selection = _prev_circular(self.selection, #self.pack_list, n)
   self.holdbar_single:reset()
-  self.holdbar_all:reset()
+  if #self.pack_list > 1 then
+    self.holdbar_all:reset()
+  end
 end
 
 function View:selectNext(n)
@@ -147,7 +161,9 @@ function View:selectNext(n)
   n = n or 1
   self.selection = _next_circular(self.selection, #self.pack_list, n)
   self.holdbar_single:reset()
-  self.holdbar_all:reset()
+  if #self.pack_list > 1 then
+    self.holdbar_all:reset()
+  end
 end
 
 function View:setSelection(n)
@@ -287,17 +303,19 @@ function View:drawArrows(g, enter)
   g.polygon("fill", 0, 0, _ARRSIZE/2, -_ARRSIZE, _ARRSIZE, 0)
   g.pop()
 
-  --Down info
-  text_width = _font:getWidth(_HOLDBAR_TEXT2)
-  g.translate(0, _CH + _PD + text_height*5)
-  g.setColor(1, 1, 1, enter)
-  g.printf(_HOLDBAR_TEXT2, -text_width/2, 0, text_width, "center")
+  if #self.pack_list > 1 then
+    --Down info
+    text_width = _font:getWidth(_HOLDBAR_TEXT2)
+    g.translate(0, _CH + _PD + text_height*5)
+    g.setColor(1, 1, 1, enter)
+    g.printf(_HOLDBAR_TEXT2, -text_width/2, 0, text_width, "center")
 
-  g.translate(-_ARRSIZE/2, -text_height*1.5 + _ARRSIZE + senoid)
-  g.polygon("fill", 0, 0, _ARRSIZE/2, _ARRSIZE, _ARRSIZE, 0)
+    g.translate(-_ARRSIZE/2, -text_height*1.5 + _ARRSIZE + senoid)
+    g.polygon("fill", 0, 0, _ARRSIZE/2, _ARRSIZE, _ARRSIZE, 0)
 
-  g.translate(_ARRSIZE/2, _ARRSIZE + text_height*1.5 - senoid)
-  self:drawHoldBar("all")
+    g.translate(_ARRSIZE/2, _ARRSIZE + text_height*1.5 - senoid)
+    self:drawHoldBar("all")
+  end
 
   g.pop()
 end
@@ -313,7 +331,7 @@ end
 function View:usedHoldbar()
   if self.holdbar_single_activated then
     return true, "single"
-  elseif self.holdbar_all_activated then
+  elseif #self.pack_list > 1 and self.holdbar_all_activated then
     return true, "all"
   else
     return false
