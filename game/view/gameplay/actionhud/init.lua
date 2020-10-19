@@ -87,6 +87,10 @@ function ActionHUD:init(route)
     RIGHT = {
       [self.weardock] = self.handview,
       [self.wielddock] = self.weardock,
+    },
+    NONE = {
+      [self.weardock] = self.handview,
+      [self.wielddock] = self.weardock,
     }
   }
 
@@ -271,8 +275,8 @@ function ActionHUD:removeWidgetCard(card)
   end
   if self.wielddock:getCard() and
      self.wielddock:getCard().card == card then
-      PLAYSFX("wieldable-unequip")
-      return self.wielddock:removeCard()
+    PLAYSFX("wieldable-unequip")
+    return self.wielddock:removeCard()
   end
   for i = 1, self.conddock:getConditionsCount() do
     local condition = self.conddock:getCard(i)
@@ -316,7 +320,7 @@ function ActionHUD:actionRequested()
   end
 
   if INPUT.wasActionPressed('CONFIRM') then
-    if player_focused then
+    if player_focused and self.handview:isFocused() then
       local card_index = self.handview:getFocus()
       if card_index > 0 then
         action_request = {DEFS.ACTION.PLAY_CARD, card_index}
@@ -341,9 +345,9 @@ function ActionHUD:actionRequested()
     end
     return false
   elseif INPUT.wasActionPressed('MENU') then
-    if player_focused then
+    if player_focused and self.handview:isFocused() then
       local card_index = self.handview:getFocus()
-      if card_index > 0 then
+      if card_index and card_index > 0 then
         action_request = {DEFS.ACTION.DISCARD_CARD, card_index}
       end
     else
@@ -386,6 +390,7 @@ end
 local function _disableHUDElements(self)
   if self.handview:isActive() then
     self.handview:deactivate()
+    self.current_focus:unfocus()
   end
 end
 
@@ -419,6 +424,7 @@ function ActionHUD:update(dt)
     if self.player_focused then
       if not self.handview:isActive() then
         self.handview:activate()
+        self.current_focus:moveFocus('NONE')
         self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
       end
     else
