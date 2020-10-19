@@ -95,12 +95,20 @@ function HandView:moveFocus(dir)
   return true
 end
 
+function HandView:isFocused()
+  return not not self.focus_index
+end
+
 function HandView:unfocus()
   self.focus_index = nil
 end
 
-function HandView:focus(index)
-  self.focus_index = index
+function HandView:focus(dir)
+  if dir == 'LEFT' then
+   self.focus_index = #self.hand
+ else
+   self.focus_index = 1
+ end
 end
 
 function HandView:isActive()
@@ -113,7 +121,9 @@ function HandView:activate()
   end
   PLAYSFX('open-hand')
   self.active = true
-  self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
+  if self.focus_index then
+    self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
+  end
 end
 
 function HandView:deactivate()
@@ -184,6 +194,10 @@ end
 
 function HandView:cardCount()
   return #self.hand
+end
+
+function HandView:hasCard()
+  return self:cardCount() > 0
 end
 
 function HandView:getFocusedCard()

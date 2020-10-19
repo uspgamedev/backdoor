@@ -79,6 +79,19 @@ function ActionHUD:init(route)
 
   self:_loadDocks()
 
+  self.focus_hint = {
+    LEFT = {
+      [self.handview] = self.weardock,
+      [self.weardock] = self.wielddock,
+    },
+    RIGHT = {
+      [self.weardock] = self.handview,
+      [self.wielddock] = self.weardock,
+    }
+  }
+
+  self.current_focus = self.handview
+
   -- Minimap
   local size = 192
   local preview_margin = 10
@@ -191,18 +204,21 @@ function ActionHUD:isPlayerFocused()
   return self.player_focused
 end
 
-function ActionHUD:moveHandFocus(dir)
-  local wield_focused = self.wielddock:isFocused()
-  local wear_focused = self.weardock:isFocused()
-  if not wield_focused and not wear_focused then
-    if self.handview:moveFocus(dir) then
-      self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
-    elseif dir == 'LEFT' and self.wielddock:getCard() then
-      local wield_view = self.wielddock:getCard()
-      self.handview:unfocus()
-      wield_view:setFocus(true)
-      self.infopanel:setTextFromCard(wield_view.card)
-    end
+function ActionHUD:moveFocus(dir)
+  if self.current_focus:moveFocus(dir) then
+    self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
+  else
+    local next_focused = self.current_focus
+    repeat
+      next_focused = self.focus_hint[dir][next_focused]
+      if next_focused and next_focused:hasCard() then
+        self.current_focus:unfocus()
+        self.current_focus = next_focused
+        next_focused:focus(dir)
+        self.infopanel:setTextFromCard(next_focused:getFocusedCard().card)
+        break
+      end
+    until not next_focused
   end
 end
 
@@ -284,7 +300,7 @@ function ActionHUD:actionRequested()
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if player_focused then
     if dir and _HAND_FOCUS_DIR[dir] then
-      self:moveHandFocus(dir)
+      self:moveFocus(dir)
     end
   else
     if LONG_WALK.isAllowed(self) then
@@ -403,7 +419,7 @@ function ActionHUD:update(dt)
     if self.player_focused then
       if not self.handview:isActive() then
         self.handview:activate()
-        self.infopanel:setTextFromCard(self.handview:getFocusedCard().card)
+        self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
       end
     else
       _disableHUDElements(self)
