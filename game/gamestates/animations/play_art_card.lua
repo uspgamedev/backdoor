@@ -98,12 +98,12 @@ end
 function _dissolve(cardview)
   local deferred = Deferred:new()
   local delay = TweenValue(0)
-  delay:set(1.6):andThen(function ()
+  delay:set(0.4):andThen(function ()
     cardview:kill()
     deferred:trigger()
+    delay:kill()
   end)
   Dissolve(cardview, 1.5)
-  delay:kill()
   return deferred
 end
 
