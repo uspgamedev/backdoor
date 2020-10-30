@@ -90,14 +90,17 @@ function HandView:moveFocus(dir)
     else
       self.focus_index = self.focus_index - 1
     end
+    return true
   elseif dir == "RIGHT" then
     if self.focus_index == #self.hand then
       return false
     else
       self.focus_index = self.focus_index + 1
     end
+    return true
+  else
+    return false
   end
-  return true
 end
 
 function HandView:unfocus()
@@ -200,12 +203,16 @@ function HandView:cardCount()
   return #self.hand
 end
 
-function HandView:hasCard()
+function HandView:hasElements()
   return self:cardCount() > 0
 end
 
 function HandView:getFocusedCard()
   return self.hand[self.focus_index]
+end
+
+function HandView:getFocusedElement()
+  return self:getFocusedCard().card
 end
 
 function HandView:reset()

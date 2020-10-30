@@ -58,11 +58,16 @@ function InfoPanel:setText(title, text)
 end
 
 function InfoPanel:setTextFrom(element)
-  if element and element:is('card') then
-    local player = self.handview.route.getPlayerActor()
-    local title = element:getName()
-    local text = element:getEffect(player)
-    self:setText(title, text)
+  if element then
+    if element:is('card') then
+      local player = self.handview.route.getPlayerActor()
+      local title = element:getName()
+      local text = element:getEffect(player)
+      self:setText(title, text)
+    elseif element:is('body') then
+      local title = element:getName()
+      self:setText(title, "")
+    end
   end
 end
 

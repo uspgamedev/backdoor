@@ -50,12 +50,16 @@ function ConditionDock:unfocus()
   self.focused = false
 end
 
-function ConditionDock:hasCard()
+function ConditionDock:hasElements()
   return #self.cardviews > 0
 end
 
 function ConditionDock:getFocusedCard()
   return self.cardviews[self.focus_index]
+end
+
+function ConditionDock:getFocusedElement()
+  return self:getFocusedCard().card
 end
 
 function ConditionDock:moveFocus(dir)

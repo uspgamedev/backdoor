@@ -10,9 +10,10 @@ local VIEWDEFS        = require 'view.definitions'
 local PLAYSFX         = require 'helpers.playsfx'
 local HandView        = require 'view.gameplay.actionhud.hand'
 local Minimap         = require 'view.gameplay.actionhud.minimap'
-local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
+local BodyInspector   = require 'view.gameplay.actionhud.bodyinspector'
 local ControlHint     = require 'view.gameplay.actionhud.controlhint'
 local ConditionDock   = require 'view.gameplay.actionhud.conditiondock'
+local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
 local FocusBar        = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview     = require 'view.gameplay.actionhud.turnpreview'
 local InfoPanel       = require 'view.gameplay.actionhud.infopanel'
@@ -77,12 +78,17 @@ function ActionHUD:init(route)
   self.conddock:updateConditionsPositions(count)
   self.conddock:register("HUD_BG")
 
+  -- Body inspector
+  self.body_inspector = BodyInspector(self.route)
+  self.body_inspector:register("HUD_BG")
+
   self:_loadDocks()
 
   self.focus_hint = {
     [self.handview] = {
       LEFT = self.weardock,
       RIGHT = self.conddock,
+      UP = self.body_inspector,
     },
     [self.weardock] = {
       LEFT = self.wielddock,
@@ -95,6 +101,10 @@ function ActionHUD:init(route)
     },
     [self.conddock] = {
       LEFT = self.handview,
+      NONE = self.handview,
+    },
+    [self.body_inspector] = {
+      DOWN = self.handview,
       NONE = self.handview,
     }
   }
@@ -215,17 +225,17 @@ end
 
 function ActionHUD:moveFocus(dir)
   if self.current_focus:moveFocus(dir) then
-    self.infopanel:setTextFrom(self.current_focus:getFocusedCard().card)
+    self.infopanel:setTextFrom(self.current_focus:getFocusedElement())
     PLAYSFX('select-card')
   else
     local next_focused = self.current_focus
     repeat
       next_focused = self.focus_hint[next_focused][dir]
-      if next_focused and next_focused:hasCard() then
+      if next_focused and next_focused:hasElements() then
         self.current_focus:unfocus()
         self.current_focus = next_focused
         next_focused:focus(dir)
-        self.infopanel:setTextFrom(next_focused:getFocusedCard().card)
+        self.infopanel:setTextFrom(next_focused:getFocusedElement())
         PLAYSFX('select-card')
         break
       end
@@ -303,14 +313,12 @@ function ActionHUD:wasAnyPressed()
   return INPUT.wasAnyPressed()
 end
 
-local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
-
 function ActionHUD:actionRequested()
   local action_request
   local player_focused = self.player_focused
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if player_focused then
-    if dir and _HAND_FOCUS_DIR[dir] then
+    if dir then
       self:moveFocus(dir)
     end
   else
@@ -432,7 +440,7 @@ function ActionHUD:update(dt)
       if not self.handview:isActive() then
         self.handview:activate()
         self.current_focus:moveFocus('NONE')
-        self.infopanel:setTextFrom(self.current_focus:getFocusedCard().card)
+        self.infopanel:setTextFrom(self.current_focus:getFocusedElement())
       end
     else
       _disableHUDElements(self)
