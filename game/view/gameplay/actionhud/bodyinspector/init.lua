@@ -10,13 +10,13 @@ local BodyInspector = Class {
 function BodyInspector:init(route)
   ELEMENT.init(self)
   self.route = route
-  self.focus_index_index = nil
-  self.focus_indexed = false
+  self.focus_index = nil
+  self.focused = false
   self.bodies = { n = 0 }
 end
 
 function BodyInspector:focus(dir)
-  self.focus_indexed = true
+  self.focused = true
   if not self.focus_index then
     if dir == 'DOWN' then
       self.focus_index = 1
@@ -27,12 +27,12 @@ function BodyInspector:focus(dir)
 end
 
 function BodyInspector:unfocus()
-  self.focus_indexed = false
+  self.focused = false
   self.focus_index = nil
 end
 
 function BodyInspector:moveFocus(dir)
-  if not self.focus_indexed then self.focus_index() end
+  if not self.focused then self:focus() end
   if dir == 'UP' then
     if self.focus_index == 1 then
       return false
@@ -57,15 +57,24 @@ function BodyInspector:getFocusedElement()
   return self.bodies[self.focus_index]
 end
 
+local function _less(body1, body2)
+  local i1, j1 = body1:getPos()
+  local i2, j2 = body2:getPos()
+  return i1 < i2 or j1 < j2
+end
+
 function BodyInspector:update(_)
   self.bodies = { n = 0 }
   for id in pairs(self.route.getPlayerActor():getVisibleBodies()) do
     self.bodies.n = self.bodies.n + 1
     self.bodies[self.bodies.n] = Util.findId(id)
   end
+  table.sort(self.bodies, _less)
   if self.focus_index then
     self.focus_index = math.max(1, math.min(self.bodies.n, self.focus_index))
   end
+  local sectorview = Util.findId('sector_view')
+  sectorview:setTempTarget(self.focused and self:getFocusedElement())
 end
 
 function BodyInspector:draw()
