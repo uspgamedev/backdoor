@@ -85,9 +85,9 @@ function EquipmentDock:unfocus()
   end
 end
 
-function EquipmentDock:moveFocus(_) -- luacheck: no self
+function EquipmentDock:moveFocus(dir) -- luacheck: no self
   self:focus()
-  return false
+  return dir == 'NONE'
 end
 
 function EquipmentDock:removeCard()

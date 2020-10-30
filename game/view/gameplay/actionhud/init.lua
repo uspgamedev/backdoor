@@ -89,7 +89,6 @@ function ActionHUD:init(route)
       LEFT = self.weardock,
       RIGHT = self.conddock,
       UP = self.body_inspector,
-      DOWN = self.body_inspector,
     },
     [self.weardock] = {
       LEFT = self.wielddock,
@@ -105,7 +104,6 @@ function ActionHUD:init(route)
       NONE = self.handview,
     },
     [self.body_inspector] = {
-      UP = self.handview,
       DOWN = self.handview,
       NONE = self.handview,
     }
@@ -228,7 +226,7 @@ end
 function ActionHUD:moveFocus(dir)
   if self.current_focus:moveFocus(dir) then
     self.infopanel:setTextFrom(self.current_focus:getFocusedElement())
-    PLAYSFX('select-card')
+    if dir ~= 'NONE' then PLAYSFX('select-card') end
   else
     local next_focused = self.current_focus
     repeat
@@ -238,7 +236,7 @@ function ActionHUD:moveFocus(dir)
         self.current_focus = next_focused
         next_focused:focus(dir)
         self.infopanel:setTextFrom(next_focused:getFocusedElement())
-        PLAYSFX('select-card')
+        if dir ~= 'NONE' then PLAYSFX('select-card') end
         break
       end
     until not next_focused
@@ -441,8 +439,7 @@ function ActionHUD:update(dt)
     if self.player_focused then
       if not self.handview:isActive() then
         self.handview:activate()
-        self.current_focus:moveFocus('NONE')
-        self.infopanel:setTextFrom(self.current_focus:getFocusedElement())
+        self:moveFocus('NONE')
       end
     else
       _disableHUDElements(self)
