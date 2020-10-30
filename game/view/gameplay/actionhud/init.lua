@@ -89,6 +89,7 @@ function ActionHUD:init(route)
       LEFT = self.weardock,
       RIGHT = self.conddock,
       UP = self.body_inspector,
+      DOWN = self.body_inspector,
     },
     [self.weardock] = {
       LEFT = self.wielddock,
@@ -104,6 +105,7 @@ function ActionHUD:init(route)
       NONE = self.handview,
     },
     [self.body_inspector] = {
+      UP = self.handview,
       DOWN = self.handview,
       NONE = self.handview,
     }
