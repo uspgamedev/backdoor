@@ -215,7 +215,7 @@ end
 
 function ActionHUD:moveFocus(dir)
   if self.current_focus:moveFocus(dir) then
-    self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
+    self.infopanel:setTextFrom(self.current_focus:getFocusedCard().card)
     PLAYSFX('select-card')
   else
     local next_focused = self.current_focus
@@ -225,7 +225,7 @@ function ActionHUD:moveFocus(dir)
         self.current_focus:unfocus()
         self.current_focus = next_focused
         next_focused:focus(dir)
-        self.infopanel:setTextFromCard(next_focused:getFocusedCard().card)
+        self.infopanel:setTextFrom(next_focused:getFocusedCard().card)
         PLAYSFX('select-card')
         break
       end
@@ -432,7 +432,7 @@ function ActionHUD:update(dt)
       if not self.handview:isActive() then
         self.handview:activate()
         self.current_focus:moveFocus('NONE')
-        self.infopanel:setTextFromCard(self.current_focus:getFocusedCard().card)
+        self.infopanel:setTextFrom(self.current_focus:getFocusedCard().card)
       end
     else
       _disableHUDElements(self)
