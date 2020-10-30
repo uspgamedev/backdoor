@@ -16,7 +16,7 @@ function ANIM:script(route, view, report)
   if report.actor == route:getControlledActor() then
     local cardview = action_hud.handview.hand[report.card_index]
     action_hud.handview:removeCard(report.card_index)
-    action_hud.infopanel:lockCard(cardview.card)
+    action_hud.infopanel:lockElement(cardview.card)
     cardview:setAlpha(1)
     cardview:setFocus(false)
     local ann = Util.findId('announcement')
@@ -66,7 +66,7 @@ function ANIM:script(route, view, report)
 
 
     self.wait()
-    action_hud.infopanel:lockCard()
+    action_hud.infopanel:lockElement()
     ann:unlock()
   else
     view.sector:setTempTarget(report.actor)

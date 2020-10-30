@@ -124,11 +124,11 @@ local function _useAction(action_slot, params)
       _view.action_hud:disableTurn()
       if params.card_index then
         local card = controlled_actor:getHandCard(params.card_index)
-        _view.action_hud.infopanel:lockCard(card)
+        _view.action_hud.infopanel:lockElement(card)
       end
       SWITCHER.push(GS.PICK_DIR, _view.sector, param)
       local dir = coroutine.yield(_task)
-      _view.action_hud.infopanel:lockCard()
+      _view.action_hud.infopanel:lockElement()
       if dir then
         params[param.output] = dir
       else
@@ -138,7 +138,7 @@ local function _useAction(action_slot, params)
       _view.action_hud:disableTurn()
       if params.card_index then
         local card = controlled_actor:getHandCard(params.card_index)
-        _view.action_hud.infopanel:lockCard(card)
+        _view.action_hud.infopanel:lockElement(card)
       end
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
@@ -157,7 +157,7 @@ local function _useAction(action_slot, params)
         }
       )
       local args = coroutine.yield(_task)
-      _view.action_hud.infopanel:lockCard()
+      _view.action_hud.infopanel:lockElement()
       if args.target_is_valid then
         params[param.output] = args.pos
       else

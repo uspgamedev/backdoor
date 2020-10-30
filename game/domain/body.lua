@@ -100,6 +100,10 @@ function Body:isSpec(specname)
   return ok
 end
 
+function Body:getName()
+  return self:getSpec('name')
+end
+
 --[[ Sector-related methods ]]--
 
 function Body:setSector(sector_id)

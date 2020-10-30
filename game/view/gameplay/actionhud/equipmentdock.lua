@@ -65,7 +65,11 @@ function EquipmentDock:getFocusedCard()
   return self.cardview
 end
 
-function EquipmentDock:hasCard()
+function EquipmentDock:getFocusedElement()
+  return self.cardview.card
+end
+
+function EquipmentDock:hasElements()
   return not not self.cardview
 end
 
