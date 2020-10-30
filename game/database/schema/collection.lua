@@ -11,7 +11,7 @@ return {
     schema = {
       { id = 'set', name = "Card Set", type = 'enum',
         options = 'domains.cardset' },
-      { id = 'drop', name = "Drop Rate", type = 'integer',
+      { id = 'drop', name = "Drop Weight", type = 'integer',
         range = {1, 100} },
     }
   }
