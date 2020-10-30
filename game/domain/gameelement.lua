@@ -32,6 +32,10 @@ function GameElement:saveState()
   return state
 end
 
+function GameElement:is(spectype)
+  return self.spectype == spectype
+end
+
 function GameElement:getSpecName()
   return self.specname
 end

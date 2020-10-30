@@ -47,7 +47,7 @@ function InfoPanel:init(position, handview)
   self.modulate[4] = 0.0
   self.target_alpha = 0.0
 
-  self.locked_card = nil
+  self.locked = nil
 
 end
 
@@ -57,17 +57,17 @@ function InfoPanel:setText(title, text)
   self.title = title
 end
 
-function InfoPanel:setTextFromCard(card)
-  if card then
+function InfoPanel:setTextFrom(element)
+  if element and element:is('card') then
     local player = self.handview.route.getPlayerActor()
-    local title = card:getName()
-    local text = card:getEffect(player)
+    local title = element:getName()
+    local text = element:getEffect(player)
     self:setText(title, text)
   end
 end
 
-function InfoPanel:lockCard(card)
-  self.locked_card = card
+function InfoPanel:lockElement(element)
+  self.locked = element
 end
 
 function InfoPanel:hide()
@@ -91,8 +91,8 @@ function InfoPanel:update(dt)
                                 self.modulate[4] - _ALPHA_SPEED * dt)
   end
   self.invisible = self.modulate[4] <= 0
-  if self.locked_card then
-    self:setTextFromCard(self.locked_card)
+  if self.locked then
+    self:setTextFrom(self.locked)
   end
 end
 
