@@ -1,6 +1,7 @@
 
 local FONT        = require 'view.helpers.font'
 local VIEW_COLORS = require 'view.definitions.colors'
+local DB          = require 'database'
 
 local Class     = require "steaming.extra_libs.hump.class"
 local ELEMENT   = require "steaming.classes.primitives.element"
@@ -66,7 +67,25 @@ function InfoPanel:setTextFrom(element)
       self:setText(title, text)
     elseif element:is('body') then
       local title = element:getName()
-      self:setText(title, "")
+      local text = ""
+      text = text .. "HP " .. element:getHP() .. "/" .. element:getMaxHP()
+      text = text .. "\n\n"
+      text = text .. "Threat: " .. element:getFaction()
+      text = text .. "\n\n"
+      text = text .. "Drops: "
+      local comma = false
+      for drop in pairs(element:getDropSet()) do
+        if not comma then
+          comma = true
+        else
+          text = text .. ", "
+        end
+        local name = DB.loadSpec('drop', drop)['name']
+        text = text .. name
+      end
+      text = text .. "\n\n"
+      text = text .. element:getDescription()
+      self:setText(title, text)
     end
   end
 end

@@ -142,6 +142,10 @@ function Body:getAppearance()
   return self:getSpec('appearance')
 end
 
+function Body:getDescription()
+  return self:getSpec('description') or ""
+end
+
 --[[ Faction methods ]]--
 
 function Body:getFaction()
@@ -154,6 +158,13 @@ function Body:getDrops()
   return self:getSpec('drops') or {}
 end
 
+function Body:getDropSet()
+  local set = {}
+  for _, drop in ipairs(self:getDrops()) do
+    set[drop.droptype] = true
+  end
+  return set
+end
 
 --[[ HP methods ]]--
 
