@@ -80,20 +80,22 @@ function ActionHUD:init(route)
   self:_loadDocks()
 
   self.focus_hint = {
-    LEFT = {
-      [self.handview] = self.weardock,
-      [self.weardock] = self.wielddock,
-      [self.conddock] = self.handview,
+    [self.handview] = {
+      LEFT = self.weardock,
+      RIGHT = self.conddock,
     },
-    RIGHT = {
-      [self.weardock] = self.handview,
-      [self.wielddock] = self.weardock,
-      [self.handview] = self.conddock,
+    [self.weardock] = {
+      LEFT = self.wielddock,
+      RIGHT = self.handview,
+      NONE = self.handview,
     },
-    NONE = {
-      [self.weardock] = self.handview,
-      [self.wielddock] = self.weardock,
-      [self.conddock] = self.handview,
+    [self.wielddock] = {
+      RIGHT = self.weardock,
+      NONE = self.weardock,
+    },
+    [self.conddock] = {
+      LEFT = self.handview,
+      NONE = self.handview,
     }
   }
 
@@ -218,7 +220,7 @@ function ActionHUD:moveFocus(dir)
   else
     local next_focused = self.current_focus
     repeat
-      next_focused = self.focus_hint[dir][next_focused]
+      next_focused = self.focus_hint[next_focused][dir]
       if next_focused and next_focused:hasCard() then
         self.current_focus:unfocus()
         self.current_focus = next_focused
