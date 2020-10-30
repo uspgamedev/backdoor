@@ -12,7 +12,7 @@
         "type":"input"
       }]
   },
-  "name":"Food2",
+  "name":"Cheese",
   "sfx":"get-pp",
   "sprite":"cheese"
 }
