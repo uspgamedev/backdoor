@@ -73,7 +73,9 @@ function BodyInspector:update(_)
     self.focus_index = math.min(self.bodies.n, self.focus_index)
   end
   local sectorview = Util.findId('sector_view')
-  sectorview:setTempTarget(self.focused and self:getFocusedElement())
+  if sectorview then
+    sectorview:setTempTarget(self.focused and self:getFocusedElement())
+  end
 end
 
 function BodyInspector:draw()
