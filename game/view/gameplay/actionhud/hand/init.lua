@@ -90,17 +90,16 @@ function HandView:moveFocus(dir)
     else
       self.focus_index = self.focus_index - 1
     end
-    return true
   elseif dir == "RIGHT" then
     if self.focus_index == #self.hand then
       return false
     else
       self.focus_index = self.focus_index + 1
     end
-    return true
-  else
+  elseif dir == 'UP' or dir == 'DOWN' then
     return false
   end
+  return true
 end
 
 function HandView:unfocus()
