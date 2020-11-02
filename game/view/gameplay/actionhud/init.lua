@@ -371,6 +371,7 @@ function ActionHUD:actionRequested()
   elseif INPUT.wasActionPressed('PAUSE') then
     if player_focused then
       self.player_focused = false
+      self.infopanel:hide()
       return false
     else
       action_request = {ActionHUD.INTERFACE_COMMANDS.SAVE_QUIT}
