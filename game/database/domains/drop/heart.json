@@ -24,7 +24,7 @@
         "type":"operator"
       }]
   },
-  "name":"Haert",
+  "name":"Life",
   "sfx":"get-hp",
   "sprite":"heart"
 }

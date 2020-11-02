@@ -4,7 +4,6 @@
 local COLORS       = require 'domain.definitions.colors'
 local FONT         = require 'view.helpers.font'
 local CardView     = require 'view.card'
-local CardInfo     = require 'view.gameplay.actionhud.hand.cardinfo'
 local PLAYSFX      = require 'helpers.playsfx'
 local VIEWDEFS     = require 'view.definitions'
 local PROFILE      = require 'infra.profile'
@@ -52,11 +51,11 @@ function HandView:init(route)
 
   self.active = false
   self.focus_index = -1 --What card is focused. -1 if none
+  self.focused = false
   self.x, self.y = _WIDTH/2, _HEIGHT - VIEWDEFS.CARD_H - _HAND_MARGIN
   self.initial_y = self.y
   self.route = route
   self.gap_scale = _GAP_SCALE.MAX
-  self.cardinfo = CardInfo(route)
   self.alpha = 1
   self.keep_focused_card = false
   self.hand_off = _HAND_OFFSET
@@ -79,12 +78,42 @@ function HandView:getFocus()
   return self.focus_index
 end
 
+function HandView:isFocused()
+  return self.focused
+end
+
 function HandView:moveFocus(dir)
-  PLAYSFX('select-card')
+  if not self.focused then self:focus() end
   if dir == "LEFT" then
-    self.focus_index = (self.focus_index - 2) % (#self.hand) + 1
+    if self.focus_index == 1 then
+      return false
+    else
+      self.focus_index = self.focus_index - 1
+    end
   elseif dir == "RIGHT" then
-    self.focus_index = self.focus_index % (#self.hand) + 1
+    if self.focus_index == #self.hand then
+      return false
+    else
+      self.focus_index = self.focus_index + 1
+    end
+  elseif dir == 'UP' or dir == 'DOWN' then
+    return false
+  end
+  return true
+end
+
+function HandView:unfocus()
+  self.focused = false
+end
+
+function HandView:focus(dir)
+  self.focused = true
+  if not self.focus_index then
+    if dir == 'LEFT' then
+      self.focus_index = #self.hand
+    else
+      self.focus_index = 1
+    end
   end
 end
 
@@ -94,11 +123,13 @@ end
 
 function HandView:activate()
   if not PROFILE.getTutorial("use_card") then
-    SWITCHER.push(GS.TUTORIAL_HINT, "use_card")
+    SWITCHER.push(GS.TUTORIAL_HINT, "use_card") -- luacheck: globals SWITCHER GS
   end
   PLAYSFX('open-hand')
   self.active = true
-  self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
+  if self.focus_index then
+    self.focus_index = math.max(1, math.min(#self.hand, self.focus_index))
+  end
 end
 
 function HandView:deactivate()
@@ -125,7 +156,7 @@ function HandView:update(dt)
 
   for i,card in ipairs(self.hand) do
     card:update(dt)
-    card:setFocus(self.active and i == self.focus_index)
+    card:setFocus(self.active and self.focused and i == self.focus_index)
     if DRAW_TABLE['HUD_FX'][card]
        or (self.keep_focused_card and i == self.focus_index) then
       card:setAlpha(1)
@@ -134,10 +165,9 @@ function HandView:update(dt)
     end
     local pos = vec2(card:getPosition())
     local target = vec2(self:positionForIndex(i))
-    local diff = (target - pos) * 10 * dt
+    local diff = (target - pos) * math.min(1.0, 10 * dt)
     card:setPosition((pos + diff):unpack())
   end
-  self.cardinfo:update(dt)
 end
 
 function HandView:draw()
@@ -157,14 +187,6 @@ function HandView:draw()
   g.translate(x + width / 2, y + _BACKPANEL_HEIGHT / 2 + self.hand_off)
   g.polygon('fill', _BACKPANEL_VTX)
   g.pop()
-
-  if self.cardinfo:isVisible() then
-    local i = self.focus_index
-    local card = hand[i]
-    if not card then return end
-    self.cardinfo:setCard(card.card)
-    self.cardinfo:draw()
-  end
 end
 
 function HandView:addCard(card_view)
@@ -180,8 +202,16 @@ function HandView:cardCount()
   return #self.hand
 end
 
+function HandView:hasElements()
+  return self:cardCount() > 0
+end
+
 function HandView:getFocusedCard()
   return self.hand[self.focus_index]
+end
+
+function HandView:getFocusedElement()
+  return self:getFocusedCard().card
 end
 
 function HandView:reset()

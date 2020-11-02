@@ -18,6 +18,8 @@ VIEWDEFS.CARD_H = 120
 VIEWDEFS.CARD_COND_SCALE_X = .64
 VIEWDEFS.CARD_COND_SCALE_Y = .40
 
+VIEWDEFS.COLORS = require 'view.definitions.colors'
+
 function VIEWDEFS.VIEWPORT_DIMENSIONS()
   local W,H = love.graphics.getDimensions()
   W = W * VIEWDEFS.VIEWPORT_WIDTH_SCALE

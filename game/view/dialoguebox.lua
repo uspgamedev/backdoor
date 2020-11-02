@@ -320,7 +320,7 @@ function DialogueBox:draw()
 
         if c.type == "character" then
           local color = COLORS[c.color]
-          g.setColor(color[1], color[2], color[3], c.opacity * c.enter)
+          g.setColor(color:withAlpha(c.opacity * c.enter))
           c.font:set()
           g.print(c.object, c.x + ox, c.y + oy)
         elseif c.type == "image" then

@@ -1,5 +1,5 @@
 
--- luacheck: globals love
+-- luacheck: globals love MAIN_TIMER
 
 local VIEWDEFS  = require 'view.definitions'
 local COLORS    = require 'domain.definitions.colors'
@@ -24,6 +24,8 @@ function ConditionDock:init(x)
   self.cardviews = {}
   self.pos = vec2(x, h - _HEIGHT/2)
   self.top = _HEIGHT/2
+  self.focused = false
+  self.focus_index = nil
 end
 
 function ConditionDock:destroy()
@@ -33,8 +35,49 @@ function ConditionDock:destroy()
   ELEMENT.destroy(self)
 end
 
-function ConditionDock:getWidth()
+function ConditionDock:getWidth() -- luacheck: no self
   return 2 * (_MW+_PW) + (_MAX_COND_PER_LINE - 1) * _SLOT_OFFSET
+end
+
+function ConditionDock:focus()
+  self.focused = true
+  if not self.focus_index then
+    self.focus_index = 1
+  end
+end
+
+function ConditionDock:unfocus()
+  self.focused = false
+end
+
+function ConditionDock:hasElements()
+  return #self.cardviews > 0
+end
+
+function ConditionDock:getFocusedCard()
+  return self.cardviews[self.focus_index]
+end
+
+function ConditionDock:getFocusedElement()
+  return self:getFocusedCard().card
+end
+
+function ConditionDock:moveFocus(dir)
+  if not self.focused then self:focus() end
+  if dir == "LEFT" then
+    if self.focus_index == 1 then
+      return false
+    else
+      self.focus_index = self.focus_index - 1
+    end
+  elseif dir == "RIGHT" then
+    if self.focus_index == #self.cardviews then
+      return false
+    else
+      self.focus_index = self.focus_index + 1
+    end
+  end
+  return true
 end
 
 function ConditionDock:getConditionsCount()
@@ -110,6 +153,13 @@ function ConditionDock:updateConditionsPositions(number_slots)
     )
   end
 
+end
+
+function ConditionDock:update(_)
+  local focused_card = self:getFocusedCard()
+  for _, cardview in ipairs(self.cardviews) do
+    cardview:setFocus(self.focused and cardview == focused_card)
+  end
 end
 
 function ConditionDock:draw()

@@ -122,8 +122,13 @@ local function _useAction(action_slot, params)
     _view.action_hud:activateAbility()
     if param.name == 'choose_dir' then
       _view.action_hud:disableTurn()
+      if params.card_index then
+        local card = controlled_actor:getHandCard(params.card_index)
+        _view.action_hud.infopanel:lockElement(card)
+      end
       SWITCHER.push(GS.PICK_DIR, _view.sector, param)
       local dir = coroutine.yield(_task)
+      _view.action_hud.infopanel:lockElement()
       if dir then
         params[param.output] = dir
       else
@@ -131,6 +136,10 @@ local function _useAction(action_slot, params)
       end
     elseif param.name == 'choose_target' then
       _view.action_hud:disableTurn()
+      if params.card_index then
+        local card = controlled_actor:getHandCard(params.card_index)
+        _view.action_hud.infopanel:lockElement(card)
+      end
       SWITCHER.push(
         GS.PICK_TARGET, _view.sector,
         {
@@ -148,6 +157,7 @@ local function _useAction(action_slot, params)
         }
       )
       local args = coroutine.yield(_task)
+      _view.action_hud.infopanel:lockElement()
       if args.target_is_valid then
         params[param.output] = args.pos
       else
@@ -224,7 +234,11 @@ _ACTION[DEFS.ACTION.RECEIVE_PACK] = function()
     SWITCHER.push(GS.OPEN_PACK, _view, _route, actor:getPrizePacks())
     local args = coroutine.yield(_task)
     if args.pack == nil then return end
-    _route.getControlledActor():removePrizePack(args.pack_index)
+    if args.pack_index == "all" then
+      _route.getControlledActor():removeAllPacks()
+    else
+      _route.getControlledActor():removePrizePack(args.pack_index)
+    end
     _useAction(DEFS.ACTION.RECEIVE_PACK,
                { consumed = args.consumed, pack = args.pack })
   else

@@ -212,22 +212,22 @@ function View:drawBackgroundInfo(g, player_info, enter)
     g.translate(0, 40)
     g.push()
     local c = COLORS.COR
-    g.setColor(c[1], c[2], c[3], enter)
+    g.setColor(c:withAlpha(enter))
     g.print("COR: ".. bg_spec.cor, 0, 0)
     g.translate(100, 0)
     c = COLORS.ARC
-    g.setColor(c[1], c[2], c[3], enter)
+    g.setColor(c:withAlpha(enter))
     g.print("ARC: "..bg_spec.arc, 0, 0)
     g.translate(100, 0)
     c = COLORS.ANI
-    g.setColor(c[1], c[2], c[3], enter)
+    g.setColor(c:withAlpha(enter))
     g.print("ANI: "..bg_spec.ani, 0, 0)
     g.pop()
 
     --Buffer
     g.translate(0, 100)
     c = COLORS.NEUTRAL
-    g.setColor(c[1], c[2], c[3], enter)
+    g.setColor(c:withAlpha(enter))
     g.print("INITIAL BUFFER:", 0, 0)
     g.translate(0, 60)
     if not self.buffer_preview then
@@ -240,7 +240,7 @@ function View:drawBackgroundInfo(g, player_info, enter)
     for i, card in ipairs(self.buffer_preview) do
       card:draw(enter)
       c = COLORS.NEUTRAL
-      g.setColor(c[1], c[2], c[3], enter)
+      g.setColor(c:withAlpha(enter))
       _card_amount_font:set()
       g.print("x" .. bg_spec.initial_buffer[i].amount, 80, 100)
       g.translate(120, 0)

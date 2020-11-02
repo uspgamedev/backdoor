@@ -1,6 +1,5 @@
 
 local math = require 'common.math'
-local vec3 = require 'cpml'.vec3
 
 local Color = require 'lux.prototype' :new { __type = 'color' }
 
@@ -12,7 +11,6 @@ end
 function Color:__init()
   for i = 1, 4 do
     local ccode = self[i]
-    local ccode_type = type(ccode)
     self[i] = ccode or 1
     assert(type(ccode == 'number'), "Cannot create color using non-number value!")
   end
@@ -63,6 +61,10 @@ function Color:unpack()
   return self[1], self[2], self[3], self[4]
 end
 
+function Color:withAlpha(x)
+  return Color:new({self[1], self[2], self[3], x})
+end
+
 --- Converts HSV to RGB. (input and output range: 0 - 255)
 --  From: https://love2d.org/wiki/HSV_color
 function Color.fromHSV(h, s, v, a)
@@ -70,7 +72,7 @@ function Color.fromHSV(h, s, v, a)
   h, s, v = h/256*6, s/255, v/255
   local c = v*s
   local x = (1-math.abs((h%2)-1))*c
-  local m,r,g,b = (v-c), 0,0,0
+  local m,r,g,b = (v-c)
   if h < 1     then r,g,b = c,x,0
   elseif h < 2 then r,g,b = x,c,0
   elseif h < 3 then r,g,b = 0,c,x

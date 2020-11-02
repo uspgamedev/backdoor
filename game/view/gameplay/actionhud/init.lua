@@ -10,17 +10,20 @@ local VIEWDEFS        = require 'view.definitions'
 local PLAYSFX         = require 'helpers.playsfx'
 local HandView        = require 'view.gameplay.actionhud.hand'
 local Minimap         = require 'view.gameplay.actionhud.minimap'
-local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
+local BodyInspector   = require 'view.gameplay.actionhud.bodyinspector'
 local ControlHint     = require 'view.gameplay.actionhud.controlhint'
 local ConditionDock   = require 'view.gameplay.actionhud.conditiondock'
+local EquipmentDock   = require 'view.gameplay.actionhud.equipmentdock'
 local FocusBar        = require 'view.gameplay.actionhud.focusbar'
 local TurnPreview     = require 'view.gameplay.actionhud.turnpreview'
+local InfoPanel       = require 'view.gameplay.actionhud.infopanel'
 local CardView        = require 'view.card'
 local Util            = require "steaming.util"
 local Class           = require "steaming.extra_libs.hump.class"
 local ELEMENT         = require "steaming.classes.primitives.element"
 
-local _INFO_LAG = 0.65 -- seconds
+local vec2            = require 'cpml' .vec2
+
 local _MARGIN = 20
 
 local ActionHUD = Class{
@@ -75,7 +78,38 @@ function ActionHUD:init(route)
   self.conddock:updateConditionsPositions(count)
   self.conddock:register("HUD_BG")
 
+  -- Body inspector
+  self.body_inspector = BodyInspector(self.route)
+  self.body_inspector:register("HUD_BG")
+
   self:_loadDocks()
+
+  self.focus_hint = {
+    [self.handview] = {
+      LEFT = self.weardock,
+      RIGHT = self.conddock,
+      UP = self.body_inspector,
+    },
+    [self.weardock] = {
+      LEFT = self.wielddock,
+      RIGHT = self.handview,
+      NONE = self.handview,
+    },
+    [self.wielddock] = {
+      RIGHT = self.weardock,
+      NONE = self.weardock,
+    },
+    [self.conddock] = {
+      LEFT = self.handview,
+      NONE = self.handview,
+    },
+    [self.body_inspector] = {
+      DOWN = self.handview,
+      NONE = self.handview,
+    }
+  }
+
+  self.current_focus = self.handview
 
   -- Minimap
   local size = 192
@@ -93,9 +127,6 @@ function ActionHUD:init(route)
   self.player_turn = false
   self.player_focused = false
 
-  -- Card info
-  self.info_lag = false
-
   -- Focus bar
   self.focusbar = FocusBar(route, self.handview)
   self.focusbar:register("HUD_MIDDLE")
@@ -105,6 +136,10 @@ function ActionHUD:init(route)
   self.long_walk = false
   self.adjacency = {}
   ADJACENCY.unset(self.adjacency)
+
+  -- Info Panel
+  self.infopanel = InfoPanel(vec2(16, 100), self.handview)
+  self.infopanel:register('HUD_MIDDLE')
 
   -- Control hints
   self.hand_hint = ControlHint(240+13, 28, ControlHint.BUTTON.ACTION_LEFT)
@@ -176,15 +211,6 @@ function ActionHUD:getHandView()
   return self.handview
 end
 
-function ActionHUD:disableCardInfo()
-  self.handview.cardinfo:hide()
-  self.info_lag = false
-end
-
-function ActionHUD:enableCardInfo()
-  self.info_lag = self.info_lag or 0
-end
-
 function ActionHUD:isHandActive()
   return self.handview:isActive()
 end
@@ -197,15 +223,23 @@ function ActionHUD:isPlayerFocused()
   return self.player_focused
 end
 
-function ActionHUD:moveHandFocus(dir)
-  self.handview:moveFocus(dir)
-  self:resetCardInfoLag()
-end
-
-function ActionHUD:resetCardInfoLag()
-  if self.info_lag then
-    self.info_lag = 0
-    self.handview.cardinfo:hide()
+function ActionHUD:moveFocus(dir)
+  if self.current_focus:moveFocus(dir) then
+    self.infopanel:setTextFrom(self.current_focus:getFocusedElement())
+    if dir ~= 'NONE' then PLAYSFX('select-card') end
+  else
+    local next_focused = self.current_focus
+    repeat
+      next_focused = self.focus_hint[next_focused][dir]
+      if next_focused and next_focused:hasElements() then
+        self.current_focus:unfocus()
+        self.current_focus = next_focused
+        next_focused:focus(dir)
+        self.infopanel:setTextFrom(next_focused:getFocusedElement())
+        if dir ~= 'NONE' then PLAYSFX('select-card') end
+        break
+      end
+    until not next_focused
   end
 end
 
@@ -258,8 +292,8 @@ function ActionHUD:removeWidgetCard(card)
   end
   if self.wielddock:getCard() and
      self.wielddock:getCard().card == card then
-      PLAYSFX("wieldable-unequip")
-      return self.wielddock:removeCard()
+    PLAYSFX("wieldable-unequip")
+    return self.wielddock:removeCard()
   end
   for i = 1, self.conddock:getConditionsCount() do
     local condition = self.conddock:getCard(i)
@@ -279,15 +313,13 @@ function ActionHUD:wasAnyPressed()
   return INPUT.wasAnyPressed()
 end
 
-local _HAND_FOCUS_DIR = { LEFT = true, RIGHT = true }
-
 function ActionHUD:actionRequested()
   local action_request
   local player_focused = self.player_focused
   local dir = DIRECTIONALS.hasDirectionTriggered()
   if player_focused then
-    if dir and _HAND_FOCUS_DIR[dir] then
-      self:moveHandFocus(dir)
+    if dir then
+      self:moveFocus(dir)
     end
   else
     if LONG_WALK.isAllowed(self) then
@@ -303,7 +335,7 @@ function ActionHUD:actionRequested()
   end
 
   if INPUT.wasActionPressed('CONFIRM') then
-    if player_focused then
+    if player_focused and self.handview:isFocused() then
       local card_index = self.handview:getFocus()
       if card_index > 0 then
         action_request = {DEFS.ACTION.PLAY_CARD, card_index}
@@ -314,18 +346,23 @@ function ActionHUD:actionRequested()
   elseif INPUT.wasActionPressed('CANCEL') then
     if player_focused then
       self.player_focused = false
+      self.infopanel:hide()
       return
     else
       action_request = {DEFS.ACTION.IDLE}
     end
   elseif INPUT.wasActionPressed('SPECIAL') then
     self.player_focused = not self.player_focused
-    --self.long_walk = false
+    if self.player_focused then
+      self.infopanel:show()
+    else
+      self.infopanel:hide()
+    end
     return false
   elseif INPUT.wasActionPressed('MENU') then
-    if player_focused then
+    if player_focused and self.handview:isFocused() then
       local card_index = self.handview:getFocus()
-      if card_index > 0 then
+      if card_index and card_index > 0 then
         action_request = {DEFS.ACTION.DISCARD_CARD, card_index}
       end
     else
@@ -357,9 +394,6 @@ function ActionHUD:actionRequested()
   end
 
   if action_request then
-    if action_request[1] ~= DEFS.ACTION.PLAY_CARD then
-      self:resetCardInfoLag()
-    end
     return unpack(action_request)
   end
 
@@ -369,9 +403,9 @@ end
 --[[ Update ]]--
 
 local function _disableHUDElements(self)
-  --self:disableCardInfo()
   if self.handview:isActive() then
     self.handview:deactivate()
+    self.current_focus:unfocus()
   end
 end
 
@@ -403,26 +437,15 @@ function ActionHUD:update(dt)
 
   if self.player_turn then
     if self.player_focused then
-      self:enableCardInfo()
       if not self.handview:isActive() then
         self.handview:activate()
+        self:moveFocus('NONE')
       end
     else
-      self:disableCardInfo()
       _disableHUDElements(self)
     end
   else
     _disableHUDElements(self)
-  end
-
-  -- If card info is enabled
-  if self.info_lag then
-    self.info_lag = math.min(_INFO_LAG, self.info_lag + dt)
-
-    if self.info_lag >= _INFO_LAG
-       and not self.handview.cardinfo:isVisible() then
-      self.handview.cardinfo:show()
-    end
   end
 
 end
