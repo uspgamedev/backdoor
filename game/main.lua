@@ -67,6 +67,12 @@ function love.load(arg)
   -- initializes save & load system
   PROFILE.init()
 
+  -- sets proper window mode
+  local fullscreen = PROFILE.getPreference("fullscreen") == "fullscreen"
+  if love.window.getFullscreen() ~= fullscreen then
+    love.window.setFullscreen(fullscreen)
+  end
+
   -- initializes soundtrack singleton
   SOUNDTRACK = SoundTrack.new()
 
