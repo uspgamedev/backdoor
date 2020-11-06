@@ -1,17 +1,25 @@
 {
   "bgm-volume": {
+    "type": "slider",
     "default": 100,
     "range": [0, 100],
     "step": 10
   },
   "sfx-volume": {
+    "type": "slider",
     "default": 100,
     "range": [0, 100],
     "step": 10
   },
   "autosave-frequency": {
+    "type": "slider",
     "default": 100,
     "range": [0, 100],
     "step": 5
+  },
+  "fullscreen": {
+    "type": "enum",
+    "default": "fullscreen",
+    "options": ["fullscreen", "windowed"],
   }
 }
