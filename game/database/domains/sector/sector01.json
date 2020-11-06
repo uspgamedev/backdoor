@@ -12,7 +12,7 @@
     "w":48
   },
   "connections":{
-    "loops":24
+    "loops":0
   },
   "deadends":{
     "amount":128

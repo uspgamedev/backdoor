@@ -12,10 +12,7 @@
     "w":56
   },
   "connections":{
-    "loops":16
-  },
-  "deadends":{
-    "amount":12
+    "loops":10
   },
   "encounters":{
     "max":10,
@@ -40,9 +37,12 @@
       }],
     "threshold":2
   },
-  "fillings":[],
-  "maze":{
-    "double":false
+  "holes":{
+    "count":500,
+    "iter":4,
+    "threshold":4,
+    "tiletype":"FLOOR",
+    "window":1
   },
   "props":{
     "recipes":[{
@@ -62,16 +62,10 @@
         "min":4
       }]
   },
-  "rooms":{
-    "count":24,
-    "maxh":9,
-    "maxw":9,
-    "minh":3,
-    "minw":3,
-    "rmar":1,
-    "tries":256
-  },
+  "fillings":false,
   "drops":false,
-  "holes":false,
+  "maze":false,
+  "rooms":false,
+  "deadends":false,
   "theme":false
 }

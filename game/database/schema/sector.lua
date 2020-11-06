@@ -5,6 +5,8 @@ return  {
     schema = 'transformers.bootstrap', required = true },
   { id = 'fixed_layout', name = "Fixed Layout Settings", type = 'section',
     schema = 'transformers.fixed_layout' },
+  { id = 'caves', name = "Cave Settings", type = 'section',
+    schema = 'transformers.caves' },
   { id = 'holes', name = "Holes Settings", type = 'section',
     schema = 'transformers.holes' },
   { id = 'rooms', name = "Room Settings", type = 'section',
