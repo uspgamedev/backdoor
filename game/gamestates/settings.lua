@@ -32,7 +32,7 @@ local function _applyPreferences()
   --Sound
   SoundTrack.get():setVolumeToPreference()
   --Fullscreen
-  local fullscreen = _changes["fullscreen"] == "fullscreen"
+  local fullscreen = PROFILE.getPreference("fullscreen") == "fullscreen"
   if love.window.getFullscreen() ~= fullscreen then
     love.window.setFullscreen(fullscreen)
   end
@@ -120,7 +120,7 @@ function state:leave()
     for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
-    SoundTrack.get():setVolumeToPreference()
+    _applyPreferences()
   end
   _view:destroy()
 end
