@@ -28,13 +28,37 @@ local _view
 local _save
 local _changes
 
-local function _changeField(field, offset)
-  local low, high = unpack(_schema[field]["range"])
-  local step = _schema[field]["step"]
-  local value = (_changes[field] or _original[field]) + offset * step
-  _changes[field] = min(high, max(low, value))
-  PROFILE.setPreference(field, _changes[field])
+local function _applyPreferences()
+  --Sound
   SoundTrack.get():setVolumeToPreference()
+  --Fullscreen
+  local fullscreen = PROFILE.getPreference("fullscreen") == "fullscreen"
+  if love.window.getFullscreen() ~= fullscreen then
+    love.window.setFullscreen(fullscreen)
+  end
+end
+
+local function _changeField(field, offset)
+  if _schema[field].type == "slider" then
+    local low, high = unpack(_schema[field]["range"])
+    local step = _schema[field]["step"]
+    local value = (_changes[field] or _original[field]) + offset * step
+    _changes[field] = min(high, max(low, value))
+  elseif _schema[field].type == "enum" then
+    local size =  #_schema[field]["options"]
+    local mode = (_changes[field] or _original[field])
+    local index = nil
+    for i = 1, #_schema[field]["options"] do
+      if _schema[field]["options"][i] == mode then index = i; break end
+    end
+    assert(index, "Current mode "..tostring(mode).." is not a valid option for preference "..field)
+    local value = (index + offset - 1)%(size) + 1
+    _changes[field] = _schema[field].options[value]
+  else
+    error("Not a valid settings type: ".. tostring(_schema[field].type))
+  end
+  PROFILE.setPreference(field, _changes[field])
+  _applyPreferences()
 end
 
 function state:init()
@@ -96,7 +120,7 @@ function state:leave()
     for field, value in pairs(_original) do
       PROFILE.setPreference(field, value)
     end
-    SoundTrack.get():setVolumeToPreference()
+    _applyPreferences()
   end
   _view:destroy()
 end
