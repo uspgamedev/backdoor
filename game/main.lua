@@ -100,6 +100,8 @@ function love.update(dt)
     SWITCHER.push(GS.DEVMODE)
   elseif INPUT.wasActionPressed('FLUSH') then
     io.flush()
+  elseif INPUT.wasActionPressed('FULLSCREEN') then
+    love.window.setFullscreen(not love.window.getFullscreen())
   end
   SWITCHER.update(dt)
   INPUT.flush() -- must be called afterwards
