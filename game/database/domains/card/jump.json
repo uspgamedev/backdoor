@@ -20,6 +20,7 @@
       "inputs":[{
           "aoe-hint":2,
           "empty-tile":true,
+          "has-floor":true,
           "max-range":4,
           "name":"choose_target",
           "non-wall":true,
@@ -48,9 +49,9 @@
   "attr":"COR",
   "cost":2,
   "desc":"Up up up!",
+  "icon":"card-jump",
   "level":6,
   "mod":"half",
   "name":"Jump",
-  "set":"maneuver_advanced",
-  "icon":false
+  "set":"maneuver_advanced"
 }
