@@ -40,14 +40,16 @@ function TRANSFORMER.process(sectorinfo, params)
     local erase_tile = SCHEMATICS[pattern['erase']]
     for _ = 1, pattern['iter'] do
       for x, y, _ in from_grid.iterate() do
-        to_grid.set(x, y, erase_tile)
-        for _, check in ipairs(pattern['checks']) do
-          local radius = check['radius']
-          local threshold = check['threshold']
-          local count = TRANSFORMER.count(from_grid, x, y, fill_tile, radius)
-          if TRANSFORMER.CMP[check['comp_op']](count, threshold) then
-            to_grid.set(x, y, fill_tile)
-            break
+        if from_grid.isInsideMargins(x, y) then
+          to_grid.set(x, y, erase_tile)
+          for _, check in ipairs(pattern['checks']) do
+            local radius = check['radius']
+            local threshold = check['threshold']
+            local count = TRANSFORMER.count(from_grid, x, y, fill_tile, radius)
+            if TRANSFORMER.CMP[check['comp_op']](count, threshold) then
+              to_grid.set(x, y, fill_tile)
+              break
+            end
           end
         end
       end
@@ -55,7 +57,6 @@ function TRANSFORMER.process(sectorinfo, params)
     end
   end
 
-  print(to_grid)
   sectorinfo.grid = to_grid
   return sectorinfo
 end

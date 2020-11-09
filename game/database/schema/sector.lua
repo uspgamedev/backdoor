@@ -17,6 +17,8 @@ return  {
     schema = 'transformers.maze' },
   { id = 'connections', name = "Connection Settings", type = 'section',
     schema = 'transformers.connections' },
+  { id = 'remove_disconnected', name = "Disconnection Removal Settings",
+    type = 'section', schema = 'transformers.remove_disconnected' },
   { id = 'deadends', name = "Deadend Settings", type = 'section',
     schema = 'transformers.deadends' },
   { id = 'fillings', name = "Fillings Settings", type = 'section',

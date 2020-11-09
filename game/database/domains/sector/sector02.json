@@ -17,7 +17,7 @@
           }],
         "erase":"FLOOR",
         "fill":"WALL",
-        "iter":4,
+        "iter":6,
         "tiletype":"WALL"
       },{
         "checks":[{
@@ -27,7 +27,7 @@
           }],
         "erase":"FLOOR",
         "fill":"WALL",
-        "iter":3
+        "iter":5
       }]
   },
   "bootstrap":{
@@ -84,11 +84,12 @@
     "chance":40,
     "tiletype":"WALL"
   },
+  "remove_disconnected":[],
   "fillings":false,
   "connections":false,
   "drops":false,
-  "holes":false,
   "rooms":false,
+  "holes":false,
   "maze":false,
   "theme":false,
   "deadends":false

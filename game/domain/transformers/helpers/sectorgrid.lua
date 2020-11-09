@@ -24,8 +24,20 @@ function SectorGrid:instance(obj, w, h, mw, mh, tiles)
     end
   end
 
+  function obj.getWidth()
+    return _w
+  end
+
+  function obj.getHeight()
+    return _h
+  end
+
   function obj.getDim()
     return _w, _h
+  end
+
+  function obj.getSize()
+    return _w * _h
   end
 
   function obj.getRange()

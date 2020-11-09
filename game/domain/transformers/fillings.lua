@@ -5,14 +5,14 @@ local transformer = {}
 
 transformer.schema = {}
 
-function transformer.process(sectorinfo, params)
+function transformer.process(sectorinfo, _)
   local sectorgrid = sectorinfo.grid
   local potentials, n
 
   local function _findPotentials(tile_type)
     potentials = potentials or {}
     n = 0
-    for x, y, tile in sectorgrid.iterate() do
+    for x, y, _ in sectorgrid.iterate() do
       if sectorgrid.isInsideMargins(x, y)
         and sectorgrid.get(x, y) == tile_type then
         local count = 0
