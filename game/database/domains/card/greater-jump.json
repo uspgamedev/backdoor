@@ -21,6 +21,7 @@
       "inputs":[{
           "aoe-hint":3,
           "empty-tile":true,
+          "has-floor":true,
           "max-range":4,
           "name":"choose_target",
           "non-wall":true,
