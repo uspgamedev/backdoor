@@ -5,10 +5,11 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 
 local SectorGrid = require 'lux.class' :new{}
 
-function SectorGrid:instance(obj, w, h, mw, mh)
+function SectorGrid:instance(obj, w, h, mw, mh, tiles)
   local _w, _h = w, h
   local _mw, _mh = mw, mh
   local _grid = {}
+  tiles = tiles or {}
 
   -- fill sector
   for i = 1, h do
@@ -16,9 +17,9 @@ function SectorGrid:instance(obj, w, h, mw, mh)
     for j = 1, w do
       if (j > mw and j <= w - mw) and
          (i > mh and i <= h - mh) then
-        _grid[i][j] = SCHEMATICS.WALL
+        _grid[i][j] = SCHEMATICS[tiles.fill or 'WALL']
       else
-        _grid[i][j] = SCHEMATICS.NAUGHT
+        _grid[i][j] = SCHEMATICS[tiles.margin or 'NAUGHT']
       end
     end
   end

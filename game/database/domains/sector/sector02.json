@@ -4,15 +4,40 @@
     "min":3,
     "threshold":3
   },
+  "automata":{
+    "patterns":[{
+        "checks":[{
+            "comp_op":"GREATER_OR_EQ",
+            "radius":1,
+            "threshold":5
+          },{
+            "comp_op":"LESS_OR_EQ",
+            "radius":2,
+            "threshold":2
+          }],
+        "erase":"FLOOR",
+        "fill":"WALL",
+        "iter":4,
+        "tiletype":"WALL"
+      },{
+        "checks":[{
+            "comp_op":"GREATER_OR_EQ",
+            "radius":1,
+            "threshold":5
+          }],
+        "erase":"FLOOR",
+        "fill":"WALL",
+        "iter":3
+      }]
+  },
   "bootstrap":{
+    "fill_tile":"FLOOR",
     "h":56,
+    "margin_tile":"WALL",
     "mh":7,
     "mw":9,
     "tileset":"ruins",
     "w":56
-  },
-  "connections":{
-    "loops":10
   },
   "encounters":{
     "max":10,
@@ -37,13 +62,6 @@
       }],
     "threshold":2
   },
-  "holes":{
-    "count":500,
-    "iter":4,
-    "threshold":4,
-    "tiletype":"FLOOR",
-    "window":1
-  },
   "props":{
     "recipes":[{
         "bodyspec":"crate",
@@ -62,10 +80,16 @@
         "min":4
       }]
   },
+  "random_fill":{
+    "chance":40,
+    "tiletype":"WALL"
+  },
   "fillings":false,
+  "connections":false,
   "drops":false,
-  "maze":false,
+  "holes":false,
   "rooms":false,
-  "deadends":false,
-  "theme":false
+  "maze":false,
+  "theme":false,
+  "deadends":false
 }
