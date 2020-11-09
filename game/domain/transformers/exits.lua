@@ -70,7 +70,9 @@ function TRANSFORMER.process(sectorinfo, params)
       local i, j
       repeat
         local COUNT = #possible_exits
-        if COUNT == 1 then
+        if COUNT <= 0 then
+          return error("Not enough possible exits. Invalid sector.")
+        elseif COUNT == 1 then
           -- if there is only one last possible exit, check it:
           i, j = unpack(possible_exits[1])
           -- if it's not a good position, tough luck, break it up

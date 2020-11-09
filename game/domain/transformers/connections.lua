@@ -2,7 +2,6 @@
 -- dependencies
 local SCHEMATICS = require 'domain.definitions.schematics'
 local RANDOM     = require 'common.random'
-local Rectangle  = require 'common.rect'
 local UnionFind  = require 'common.unionfind'
 local Vector2    = require 'cpml.modules.vec2'
 
@@ -42,8 +41,6 @@ function transformer.process(sectorinfo, params)
 
   local function connectTwoRegions(r1, r2, p)
     local union = UnionFind(getId(p.x, p.y))
-    local id1 = r1.getElement()
-    local id2 = r2.getElement()
     union = UnionFind:unite(union, r1)
     union = UnionFind:unite(union, r2)
     _flooded[union.getElement()] = union
@@ -55,7 +52,7 @@ function transformer.process(sectorinfo, params)
     local insert = table.insert
     local neighbours = {}
     local pos = Vector2(x, y)
-    for i, dir in ipairs(_cardinals) do
+    for _, dir in ipairs(_cardinals) do
       local p = pos + dir
       if _sectorgrid.get(p.x, p.y) == FLOOR then
         insert(neighbours, p)
@@ -117,7 +114,7 @@ function transformer.process(sectorinfo, params)
   local function countRegions()
     local counted = {}
     local count = 0
-    for id, region in pairs(_flooded) do
+    for _, region in pairs(_flooded) do
       local k = region.find()
       if not counted[k] then
         count = count + 1
