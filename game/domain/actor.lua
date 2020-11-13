@@ -52,7 +52,7 @@ function Actor:init(spec_name)
   self.playpoints = DEFS.MAX_PP
 
   self.fov = {}
-  self.fov_range = 4
+  self.fov_range = self:getSpec('fov_range')
 
   self.buffer = {}
   self.prizes = {}

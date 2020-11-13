@@ -22,8 +22,10 @@ return function (actor)
   -- initialize guarding position, if hadn't one before, as the position
   -- this actor starts on
   if not guarding_pos then
-    guarding_pos = actor:getPos()
+    guarding_pos = { actor:getPos() }
     ai.guarding_pos = guarding_pos
+    print("New guard pos", unpack(guarding_pos))
+    io.flush()
   end
 
   -- if i don't have a target or it is dead, i'll look for one
@@ -32,8 +34,10 @@ return function (actor)
   end
 
   if target then
+    print("have target!")
     -- if i have a target, can i see it?
     if actor:canSee(target) then
+      print("can see him!")
       -- if so, lock on to it
       target_pos = { target:getPos() }
     else
@@ -46,6 +50,7 @@ return function (actor)
     local i, j = actor:getPos()
     local k, l = unpack(target_pos)
     if i == k and l == j then
+      print("reached target pos!")
       -- if so, then i lost them completely
       target_pos = false
     end
@@ -72,25 +77,37 @@ return function (actor)
         end
       end
     end
+    print("trying to chase!")
     -- ...if i can't see or reach them, then at least chase it!
     local actor_pos = { actor:getPos() }
     local next_step = FindPath.getNextStep(actor_pos, target_pos, sector)
     local inputs = { pos = next_step }
     if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
+      print("chasing")
       return _MOVE, inputs
     end
   end
 
+  print("can chase/fight anything")
   -- i don't have targets or any clue to my last target's position...
-  -- ... time to return to guarding position
-  local actor_pos = { actor:getPos() }
-  local next_step = FindPath.getNextStep(actor_pos, guarding_pos, sector)
-  local inputs = { pos = next_step }
-  if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
-    return _MOVE, inputs
+  -- ... time to return to guarding position if it isn't there yet
+  target_pos = false
+  local i, j = actor:getPos()
+  local k, l = unpack(guarding_pos)
+  if i ~= k or l ~= j then
+    print("returnin to guard")
+    print(i,j,k,l)
+    io.flush()
+    local actor_pos = { actor:getPos() }
+    local next_step = FindPath.getNextStep(actor_pos, guarding_pos, sector)
+    local inputs = { pos = next_step }
+    if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
+      print("lets go")
+      return _MOVE, inputs
+    end
   end
 
-
+  print("idling")
   -- if here, its back at the guarding position without threats in sight
   -- so it will idle
   return 'IDLE', {}

@@ -5,6 +5,7 @@
   "cor":2,
   "description":"The newbie's nightmares...",
   "extends":"strong",
+  "fov_range":4,
   "initial_buffer":[{
       "amount":5,
       "card":"teleport"

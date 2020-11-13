@@ -3,6 +3,7 @@
   "arc":-2,
   "behavior":"idle",
   "cor":2,
+  "fov_range":4,
   "initial_buffer":[],
   "name":"Tutorial",
   "traits":[],

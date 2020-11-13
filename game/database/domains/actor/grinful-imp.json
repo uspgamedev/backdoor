@@ -4,6 +4,7 @@
   "behavior":"aggro",
   "cor":-1,
   "description":"Spellcaster monster, evil by nature.",
+  "fov_range":4,
   "initial_buffer":[{
       "amount":6,
       "card":"firebolt"

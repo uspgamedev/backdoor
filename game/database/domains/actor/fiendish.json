@@ -5,6 +5,7 @@
   "cor":-1,
   "description":"Stronger spellcaster monster, evil by nature.",
   "extends":"grinful",
+  "fov_range":4,
   "initial_buffer":[{
       "amount":10,
       "card":"strike"

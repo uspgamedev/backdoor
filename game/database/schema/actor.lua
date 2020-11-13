@@ -23,6 +23,7 @@ return {
   { id = 'cor', name = "COR Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'arc', name = "ARC Aptitude", type = 'range', min = -2, max = 2 },
   { id = 'ani', name = "ANI Aptitude", type = 'range', min = -2, max = 2 },
+  { id = 'fov_range', name = "FOV Range", type = 'range', min = 1, max = 8, default = 4 },
   { id = 'initial_buffer', name = "Buffer Card", type = 'array',
     schema = {
       { id = 'card', name = "Card", type = 'enum', options = "domains.card" },
