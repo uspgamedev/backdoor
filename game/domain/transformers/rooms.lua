@@ -48,7 +48,6 @@ function transformer.process(sectorinfo, params)
   end
 
   local function isRoomIntersecting(room)
-    local try = 0
     local N = #_rooms
     local cpos = room.getPos()
     local cdim = room.getDim()
@@ -70,7 +69,7 @@ function transformer.process(sectorinfo, params)
 
   local function generateRooms ()
     local insert = table.insert
-    for i = 1, _count do
+    for _ = 1, _count do
       local room = (function ()
         local room
         repeat

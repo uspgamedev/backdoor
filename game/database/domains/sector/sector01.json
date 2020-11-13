@@ -5,7 +5,9 @@
     "threshold":3
   },
   "bootstrap":{
+    "fill_tile":"WALL",
     "h":48,
+    "margin_tile":"WALL",
     "mh":7,
     "mw":9,
     "tileset":"demo",
