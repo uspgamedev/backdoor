@@ -2,14 +2,13 @@
 local Behaviors = require 'lux.class' :new{}
 local Util      = require "steaming.util"
 
-function Behaviors:instance(obj)
+function Behaviors:instance(obj) -- luacheck: no self
 
   local _ai = {}
 
   function obj.load(state)
-    local actor_ai_state = state.ai
     local ai = {}
-    for actor_id, actor_ai_state in pairs(_ai) do
+    for actor_id, actor_ai_state in pairs(state) do
       local actor_ai = {}
       local target_id = actor_ai_state.target
       actor_ai.target = target_id and Util.findId(target_id)
