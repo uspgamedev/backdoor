@@ -21,7 +21,7 @@ function transformer.process(sectorinfo, params)
   local max_x, max_y = w - min_x, h - min_y
 
   do
-    for n = 1, params.count do
+    for _ = 1, params.count do
       local x, y
       repeat
         x = RANDOM.generate(min_x, max_x)
@@ -34,7 +34,7 @@ function transformer.process(sectorinfo, params)
 
   -- iterations
   do
-    for n = 1, params.iter do
+    for _ = 1, params.iter do
       for x, y, tile in from_grid.iterate() do
         local count = 0
         for _,dir in ipairs(DIR) do

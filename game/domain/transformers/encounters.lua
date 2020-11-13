@@ -27,7 +27,7 @@ end
 function transformer.process(sectorinfo, params)
   local grid = sectorinfo.grid
   local recipes = params.recipes
-  local encounters = {}
+  local encounters = sectorinfo.encounters or {}
   local total = RANDOM.generate(params.min, params.max)
   local used = {}
 

@@ -62,7 +62,7 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
 
   _elementspec[_fieldschema.id] = _tilemap
 
-  function input(_)
+  function input(_) -- luacheck: globals input
     IMGUI.PushID(_fieldschema.id)
     IMGUI.Text(_fieldschema.name)
     IMGUI.Indent(20)
@@ -119,7 +119,7 @@ function TileMapEditor:instance(obj, _elementspec, _fieldschema)
     IMGUI.PopID()
   end
 
-  function __operator:call(gui)
+  function __operator:call(gui) -- luacheck: globals __operator
     return obj.input(gui)
   end
 end
