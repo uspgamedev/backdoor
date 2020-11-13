@@ -3,6 +3,7 @@ local IMGUI = require 'imgui'
 local INPUT = {}
 package.loaded['devmode.view.input'] = INPUT
 
+-- luacheck: globals love
 for _,file in ipairs(love.filesystem.getDirectoryItems "devmode/view/input") do
   if file:match "^.+%.lua$" then
     file = file:gsub("%.lua", "")
@@ -14,8 +15,8 @@ for _,file in ipairs(love.filesystem.getDirectoryItems "devmode/view/input") do
   end
 end
 
-local function _invalid(spec, field)
-  return function (gui)
+local function _invalid(spec, field) -- luacheck: no unused
+  return function (gui) -- luacheck: no unused
     IMGUI.PushStyleColor("Text", 0.8, 0.6, 0, 1)
     IMGUI.Text(("Unknown field type: %s"):format(field.type))
     IMGUI.PopStyleColor(1)
@@ -24,7 +25,7 @@ end
 
 local meta = {}
 
-function meta:__call(elementspec, fieldschema, ...)
+function meta:__call(elementspec, fieldschema, ...) -- luacheck: no self
   return (INPUT[fieldschema.type] or _invalid)(elementspec, fieldschema, ...)
       or _invalid()
 end

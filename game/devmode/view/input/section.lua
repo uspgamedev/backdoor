@@ -1,17 +1,16 @@
 
 local IMGUI = require 'imgui'
 local INPUT = require 'devmode.view.input'
-local DB    = require 'database'
 local class = require 'lux.class'
 
 local setfenv = setfenv
-local table = table
 local ipairs = ipairs
 local type = type
 local require = require
 
 local SectionEditor = class:new()
 
+-- luacheck: no self
 function SectionEditor:instance(obj, _elementspec, _fieldschema, _parent)
 
   setfenv(1, obj)
@@ -36,7 +35,7 @@ function SectionEditor:instance(obj, _elementspec, _fieldschema, _parent)
     }
   end
 
-  function input(gui)
+  function obj.input(gui)
     local element = _elementspec[_fieldschema.id]
     local enabled
     enabled = IMGUI.Checkbox(_fieldschema.name, not not element)
@@ -48,7 +47,7 @@ function SectionEditor:instance(obj, _elementspec, _fieldschema, _parent)
     end
     if element then
       IMGUI.Indent(20)
-      for i, subfield_schema in ipairs(_subschema) do
+      for i, _ in ipairs(_subschema) do
         IMGUI.PushID(_subfield_inputs[i].id)
         _subfield_inputs[i].input(element)(gui)
         IMGUI.PopID()
@@ -58,7 +57,7 @@ function SectionEditor:instance(obj, _elementspec, _fieldschema, _parent)
     _elementspec[_fieldschema.id] = element
   end
 
-  function __operator:call(gui)
+  function obj.__operator:call(gui)
     return obj.input(gui)
   end
 end

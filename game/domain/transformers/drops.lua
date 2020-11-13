@@ -24,7 +24,7 @@ transformer.schema = {
 function transformer.process(sectorinfo, params)
   local grid = sectorinfo.grid
 
-  local drops = {}
+  local drops = sectorinfo.drops or {}
   for _,dropspec in ipairs(params.drops) do
     local droprate = dropspec.droprate
     local droptype = dropspec.droptype
