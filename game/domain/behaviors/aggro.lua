@@ -76,4 +76,3 @@ return function (actor)
   -- i don't have targets or any clue to my last target's position
   return RandomWalk.execute(actor)
 end
-

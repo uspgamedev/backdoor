@@ -1,7 +1,7 @@
 {
   "ani":-2,
   "arc":-2,
-  "behavior":"aggro",
+  "behavior":"stationary",
   "cor":-2,
   "description":"Weak slimey blob",
   "fov_range":1,
