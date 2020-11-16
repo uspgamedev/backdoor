@@ -89,7 +89,7 @@ return function (actor)
   local k, l = unpack(guarding_pos)
   if i ~= k or l ~= j then
     local actor_pos = { actor:getPos() }
-    local next_step = FindPath.getNextStep(actor_pos, guarding_pos, sector)
+    local next_step = FindPath.getNextStep(actor_pos, guarding_pos, sector, true)
     local inputs = { pos = next_step }
     if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
       return _MOVE, inputs

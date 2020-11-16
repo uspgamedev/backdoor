@@ -1,10 +1,10 @@
 {
   "ani":-2,
   "arc":-2,
-  "behavior":"stationary",
+  "behavior":"aggro",
   "cor":-2,
   "description":"Weak slimey blob",
-  "fov_range":1,
+  "fov_range":3,
   "initial_buffer":[{
       "amount":7,
       "card":"strike"

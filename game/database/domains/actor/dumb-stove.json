@@ -1,10 +1,10 @@
 {
   "ani":-1,
   "arc":-2,
-  "behavior":"guarding",
+  "behavior":"aggro",
   "cor":-2,
   "description":"Careful with this hot head",
-  "fov_range":2,
+  "fov_range":3,
   "initial_buffer":[{
       "amount":7,
       "card":"strike"
