@@ -5,6 +5,8 @@ local SCHEMATICS = require 'domain.definitions.schematics'
 local PALETTE = { SCHEMATICS.NAUGHT, SCHEMATICS.FLOOR, SCHEMATICS.WALL,
                   SCHEMATICS.ALTAR }
 
+local NUM_PALETTE = { ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' }
+
 local TRANSFORMER = {}
 
 TRANSFORMER.schema = {
@@ -13,27 +15,43 @@ TRANSFORMER.schema = {
   {
     id = 'template-list', name = "Template", type = 'array',
     schema = {
-      { id = 'template-map', name = 'Map', type = 'tilemap',
+      { id = 'tile-map', name = 'Tiles', type = 'tilemap',
         minwidth = 5, minheight = 5, maxwidth = 15, maxheight = 15,
         palette = PALETTE },
       {
-        id = 'encounters', name = "Encounters", type = 'array',
+        id = 'drops', name = "Drops", type = 'section',
         schema = {
-          { id = 'pos', name = "Position", type = 'vector', size = 2,
-          range = { 1, 15, } },
-          { id = 'body-specname', name = "Body Specification", type = 'enum',
-          options = 'domains.body' },
-          { id = 'actor-specname', name = "Actor Specification", type = 'enum',
-          options = 'domains.actor', optional = true },
+          { id = 'drops-offset', name = "Offset", type = 'vector', size = 2,
+            range = { 0, 15, } },
+          { id = 'drops-map', name = 'Positions', type = 'tilemap',
+            minwidth = 2, minheight = 2, maxwidth = 15, maxheight = 15,
+            palette = NUM_PALETTE },
+          {
+            id = 'drops-specs', name = "Specs", type = 'array',
+            schema = {
+              { id = 'drop-specname', name = "Drop Specification",
+                type = 'enum', options = 'domains.drop' },
+            }
+          }
         }
       },
       {
-        id = 'drops', name = "Drops", type = 'array',
+        id = 'encounters', name = "Objects and Creatures", type = 'section',
         schema = {
-          { id = 'pos', name = "Position", type = 'vector', size = 2,
-          range = { 1, 15, } },
-          { id = 'drop-specname', name = "Drop Specification", type = 'enum',
-          options = 'domains.drop' },
+          { id = 'encounter-offset', name = "Offset", type = 'vector', size = 2,
+            range = { 0, 15, } },
+          { id = 'encounter-map', name = 'Positions', type = 'tilemap',
+            minwidth = 2, minheight = 2, maxwidth = 15, maxheight = 15,
+            palette = NUM_PALETTE },
+          {
+            id = 'encounter-specs', name = "Specs", type = 'array',
+            schema = {
+              { id = 'body-specname', name = "Body Specification",
+                type = 'enum', options = 'domains.body' },
+              { id = 'actor-specname', name = "Actor Specification",
+                type = 'enum', options = 'domains.actor', optional = true },
+            }
+          }
         }
       },
     }
@@ -48,14 +66,13 @@ function TRANSFORMER.process(sectorinfo, params)
   end
 
   local count = 0
-  local spots = {}
   for _ = 1, amount do
     if #templates == 0 then break end
     local found_spot = false
     repeat
       local template_idx = RANDOM.generate(#templates)
       local template = table.remove(templates, template_idx)
-      local map = template['template-map']
+      local map = template['tile-map']
       local w, h = map['width'], map['height']
       for x, y, _ in sectorinfo.grid.iterate() do
         if TRANSFORMER.isEmptySpot(sectorinfo.grid, x, y, w, h) then
@@ -65,19 +82,12 @@ function TRANSFORMER.process(sectorinfo, params)
       end
       if found_spot then
         count = count + 1
-        spots[count] = found_spot
         TRANSFORMER.fillTiles(sectorinfo.grid, found_spot, map)
         TRANSFORMER.placeDrops(sectorinfo, found_spot, template['drops'])
         TRANSFORMER.placeEncounters(sectorinfo, found_spot,
                                     template['encounters'])
       end
     until found_spot or #templates == 0
-  end
-
-  print(sectorinfo.grid)
-  print(("Placed %d templates"):format(count))
-  for _, spot in ipairs(spots) do
-    print(">", spot.x, spot.y)
   end
 
   return sectorinfo
@@ -107,31 +117,51 @@ function TRANSFORMER.fillTiles(grid, offset, map)
   end
 end
 
-function TRANSFORMER.placeDrops(info, offset, drop_specs)
+function TRANSFORMER.placeDrops(info, offset, drops_template)
+  if not drops_template then return end
   local drops = info.drops or {}
   for j, i, _ in info.grid.iterate() do
       drops[i] = drops[i] or {}
-      drops[i][j] = {}
+      drops[i][j] = drops[i][j] or {}
   end
-  for _, drop_spec in ipairs(drop_specs) do
-    local pos = drop_spec['pos']
-    local x, y = offset.x + pos[1] - 1, offset.y + pos[2] - 1
-    table.insert(drops[y][x], drop_spec['drop-specname'])
+  local ox = offset.x + drops_template['drops-offset'][1]
+  local oy = offset.y + drops_template['drops-offset'][2]
+  local map = drops_template['drops-map']
+  local specs = drops_template['drops-specs']
+  for dy = 0, map.height - 1 do
+    for dx = 0, map.width - 1 do
+      local x, y = ox + dx, oy + dy
+      local raw = map.data[1 + dy * map.width + dx]
+      local spec = specs[tonumber(NUM_PALETTE[raw])]
+      if spec then
+        table.insert(drops[y][x], spec['drop-specname'])
+      end
+    end
   end
   info.drops = drops
 end
 
-function TRANSFORMER.placeEncounters(info, offset, encounter_specs)
+function TRANSFORMER.placeEncounters(info, offset, encounters_template)
+  if not encounters_template then return end
   local encounters = info.encounters or {}
-  for _, encounter_spec in ipairs(encounter_specs) do
-    local pos = encounter_spec['pos']
-    local x, y = offset.x + pos[1] - 1, offset.y + pos[2] - 1
-    local encounter = {
-      creature = { encounter_spec['actor-specname'],
-                   encounter_spec['body-specname'] },
-      pos = { y, x } -- EXPECTS [i,j], see sector builder
-    }
-    table.insert(encounters, encounter)
+  local ox = offset.x + encounters_template['encounter-offset'][1]
+  local oy = offset.y + encounters_template['encounter-offset'][2]
+  local map = encounters_template['encounter-map']
+  local specs = encounters_template['encounter-specs']
+  for dy = 0, map.height - 1 do
+    for dx = 0, map.width - 1 do
+      local x, y = ox + dx, oy + dy
+      local raw = map.data[1 + dy * map.width + dx]
+      local spec = specs[tonumber(NUM_PALETTE[raw])]
+      if spec then
+        local encounter = {
+          creature = { spec['actor-specname'],
+                       spec['body-specname'] },
+          pos = { y, x } -- EXPECTS [i,j], see sector builder
+        }
+        table.insert(encounters, encounter)
+      end
+    end
   end
   info.encounters = encounters
 end
