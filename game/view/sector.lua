@@ -63,9 +63,11 @@ local function _loadDropSprite(sprite_data, id, specname)
   local data = sprite_data[id]
 
   if not data or data.specname ~= specname then
+    local spec = DB.loadSpec('drop', specname)
+    assert(spec, "drop spec not found: " .. specname)
     data = {
       specname = specname,
-      sprite = RES.loadSprite(DB.loadSpec('drop', specname).sprite)
+      sprite = RES.loadSprite(spec.sprite)
     }
     sprite_data[id] = data
   end

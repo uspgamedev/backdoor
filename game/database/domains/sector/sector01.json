@@ -79,85 +79,51 @@
     "max-amount":3,
     "min-amount":2,
     "template-list":[{
-        "drops":[{
-            "drop-specname":"heart",
-            "pos":[3,3]
-          },{
-            "drop-specname":"heart",
-            "pos":[5,3]
-          },{
-            "drop-specname":"heart",
-            "pos":[3,5]
-          },{
-            "drop-specname":"heart",
-            "pos":[5,5]
-          }],
-        "encounters":[{
-            "body-specname":"common-chest",
-            "pos":[4,4],
-            "actor-specname":false
-          }],
-        "template-map":{
+        "drops":{
+          "drops-map":{
+            "data":[1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1],
+            "height":5,
+            "width":5
+          },
+          "drops-offset":[1,1],
+          "drops-specs":[{
+              "drop-specname":"heart"
+            }]
+        },
+        "encounters":{
+          "encounter-map":{
+            "data":[1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1],
+            "height":5,
+            "width":5
+          },
+          "encounter-offset":[1,1],
+          "encounter-specs":[{
+              "body-specname":"common-chest",
+              "actor-specname":false
+            }]
+        },
+        "tile-map":{
           "data":[2,2,2,2,2,2,2,2,1,1,1,1,1,2,2,1,2,2,2,1,2,2,1,2,2,2,1,2,2,1,2,2,2,1,2,2,1,1,1,1,1,2,2,2,2,2,2,2,2],
           "height":7,
           "width":7
         }
       },{
-        "drops":[],
-        "encounters":[{
-            "body-specname":"common-chest",
-            "pos":[2,3],
-            "actor-specname":false
-          },{
-            "body-specname":"common-chest",
-            "pos":[3,2],
-            "actor-specname":false
-          },{
-            "body-specname":"common-chest",
-            "pos":[4,3],
-            "actor-specname":false
-          },{
-            "body-specname":"common-chest",
-            "pos":[3,4],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[3,1],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[2,2],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[4,2],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[1,3],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[3,3],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[5,3],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[2,4],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[4,4],
-            "actor-specname":false
-          },{
-            "body-specname":"rock",
-            "pos":[3,5],
-            "actor-specname":false
-          }],
-        "template-map":{
+        "encounters":{
+          "encounter-map":{
+            "data":[1,1,2,1,1,1,2,3,2,1,2,3,2,3,2,1,2,3,2,1,1,1,2,1,1],
+            "height":5,
+            "width":5
+          },
+          "encounter-offset":[0,0],
+          "encounter-specs":[{
+              "body-specname":"rock",
+              "actor-specname":false
+            },{
+              "body-specname":"common-chest",
+              "actor-specname":false
+            }]
+        },
+        "tile-map":{
           "data":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
           "height":5,
           "width":5
