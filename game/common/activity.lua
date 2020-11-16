@@ -16,7 +16,6 @@ local coroutine = coroutine
 local debug     = debug
 local error     = error
 local table     = table
-local type      = type
 local setfenv   = setfenv
 
 function Task:instance (obj, func, ...)
