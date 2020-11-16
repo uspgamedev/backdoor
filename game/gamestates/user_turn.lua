@@ -36,8 +36,12 @@ local _update_panel
 
 local function _resumeTask(...)
   if _task then
-    local _
-    _, _task = assert(coroutine.resume(_task, ...))
+    local ok, result = coroutine.resume(_task, ...)
+    if ok then
+      _task = result
+    else
+      error(debug.traceback(_task, result))
+    end
   end
 end
 
