@@ -48,6 +48,7 @@ function TRANSFORMER.process(sectorinfo, params)
   end
 
   local count = 0
+  local spots = {}
   for _ = 1, amount do
     if #templates == 0 then break end
     local found_spot = false
@@ -64,6 +65,7 @@ function TRANSFORMER.process(sectorinfo, params)
       end
       if found_spot then
         count = count + 1
+        spots[count] = found_spot
         TRANSFORMER.fillTiles(sectorinfo.grid, found_spot, map)
         TRANSFORMER.placeDrops(sectorinfo, found_spot, template['drops'])
         TRANSFORMER.placeEncounters(sectorinfo, found_spot,
@@ -72,7 +74,11 @@ function TRANSFORMER.process(sectorinfo, params)
     until found_spot or #templates == 0
   end
 
+  print(sectorinfo.grid)
   print(("Placed %d templates"):format(count))
+  for _, spot in ipairs(spots) do
+    print(">", spot.x, spot.y)
+  end
 
   return sectorinfo
 end
@@ -80,7 +86,9 @@ end
 function TRANSFORMER.isEmptySpot(grid, x, y, w, h)
   for dy = 0, h - 1 do
     for dx = 0, w - 1 do
-      if grid.get(x + dx, y + dy) ~= SCHEMATICS.FLOOR then
+      local sx, sy = x + dx, y + dy
+      if not grid.isInsideMargins(sx, sy)
+          or grid.get(sx, sy) ~= SCHEMATICS.FLOOR then
         return false
       end
     end
@@ -89,10 +97,9 @@ function TRANSFORMER.isEmptySpot(grid, x, y, w, h)
 end
 
 function TRANSFORMER.fillTiles(grid, offset, map)
-  local mw, mh = grid.getMargins()
   for y = 0, map.height - 1 do
     for x = 0, map.width - 1 do
-      local real_x, real_y = mw + offset.x + x, mh + offset.y + y
+      local real_x, real_y = offset.x + x, offset.y + y
       local raw = map.data[1 + y * map.width + x]
       local fill = PALETTE[raw]
       grid.set(real_x, real_y, fill)
@@ -101,7 +108,6 @@ function TRANSFORMER.fillTiles(grid, offset, map)
 end
 
 function TRANSFORMER.placeDrops(info, offset, drop_specs)
-  local mw, mh = info.grid.getMargins()
   local drops = info.drops or {}
   for j, i, _ in info.grid.iterate() do
       drops[i] = drops[i] or {}
@@ -109,18 +115,17 @@ function TRANSFORMER.placeDrops(info, offset, drop_specs)
   end
   for _, drop_spec in ipairs(drop_specs) do
     local pos = drop_spec['pos']
-    local x, y = mw + offset.x + pos[1] - 1, mh + offset.y + pos[2] - 1
+    local x, y = offset.x + pos[1] - 1, offset.y + pos[2] - 1
     table.insert(drops[y][x], drop_spec['drop-specname'])
   end
   info.drops = drops
 end
 
 function TRANSFORMER.placeEncounters(info, offset, encounter_specs)
-  local mw, mh = info.grid.getMargins()
   local encounters = info.encounters or {}
   for _, encounter_spec in ipairs(encounter_specs) do
     local pos = encounter_spec['pos']
-    local x, y = mw + offset.x + pos[1] - 1, mh + offset.y + pos[2] - 1
+    local x, y = offset.x + pos[1] - 1, offset.y + pos[2] - 1
     local encounter = {
       creature = { encounter_spec['actor-specname'],
                    encounter_spec['body-specname'] },
