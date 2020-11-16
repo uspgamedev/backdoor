@@ -4,6 +4,7 @@
   "behavior":"aggro",
   "cor":-1,
   "description":"Stronger spellcaster monster, looking at your soul.",
+  "fov_range":4,
   "initial_buffer":[{
       "amount":2,
       "card":"fireball"

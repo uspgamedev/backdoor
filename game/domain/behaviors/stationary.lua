@@ -74,5 +74,5 @@ return function (actor)
   end
 
   -- i don't have targets or any clue to my last target's position
-  return RandomWalk.execute(actor)
+  return 'IDLE', {}
 end

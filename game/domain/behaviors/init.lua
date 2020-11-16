@@ -13,6 +13,7 @@ function Behaviors:instance(obj) -- luacheck: no self
       local target_id = actor_ai_state.target
       actor_ai.target = target_id and Util.findId(target_id)
       actor_ai.target_pos = actor_ai_state.target_pos
+      actor_ai.guarding_pos = actor_ai_state.guarding_pos
       ai[actor_id] = actor_ai
     end
     _ai = ai
@@ -26,6 +27,7 @@ function Behaviors:instance(obj) -- luacheck: no self
       local target = actor_ai.target
       actor_ai_state.target = target and target:getId()
       actor_ai_state.target_pos = actor_ai.target_pos
+      actor_ai_state.guarding_pos = actor_ai.guarding_pos
       ai_states[actor_id] = actor_ai_state
     end
     state.ai = ai_states
@@ -36,6 +38,7 @@ function Behaviors:instance(obj) -- luacheck: no self
     local actor_ai = {
       target = false,
       target_pos = false,
+      guarding_pos = false,
     }
     _ai[actor:getId()] = actor_ai
     return actor_ai

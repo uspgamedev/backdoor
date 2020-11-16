@@ -17,6 +17,14 @@ return function (actor)
 
   local target = ai.target
   local target_pos = ai.target_pos
+  local guarding_pos = ai.guarding_pos
+
+  -- initialize guarding position, if hadn't one before, as the position
+  -- this actor starts on
+  if not guarding_pos then
+    guarding_pos = { actor:getPos() }
+    ai.guarding_pos = guarding_pos
+  end
 
   -- if i don't have a target or it is dead, i'll look for one
   if not target or target:isDead() then
@@ -47,7 +55,7 @@ return function (actor)
   ai.target = target
   ai.target_pos = target_pos
 
-  -- if i have a position targetted
+  -- if i have a position targeted
   if target_pos then
     -- ...if i have a target, then try to attack!
     if target then
@@ -73,6 +81,21 @@ return function (actor)
     end
   end
 
-  -- i don't have targets or any clue to my last target's position
-  return RandomWalk.execute(actor)
+  -- i don't have targets or any clue to my last target's position...
+  -- ... time to return to guarding position if it isn't there yet
+  target_pos = false
+  ai.target_pos = target_pos
+  local i, j = actor:getPos()
+  local k, l = unpack(guarding_pos)
+  if i ~= k or l ~= j then
+    local actor_pos = { actor:getPos() }
+    local next_step = FindPath.getNextStep(actor_pos, guarding_pos, sector, true)
+    local inputs = { pos = next_step }
+    if next_step and MANEUVERS[_MOVE].validate(actor, inputs) then
+      return _MOVE, inputs
+    end
+  end
+  -- if here, its back at the guarding position without threats in sight
+  -- so it will idle
+  return 'IDLE', {}
 end

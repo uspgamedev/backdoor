@@ -20,9 +20,9 @@
           "output":"target_pos",
           "tactical-hint":"harmful",
           "type":"input",
-          "empty-tile":false,
+          "dif-fact":false,
           "non-wall":false,
-          "dif-fact":false
+          "empty-tile":false
         },{
           "name":"self",
           "output":"self",

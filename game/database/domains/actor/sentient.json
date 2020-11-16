@@ -4,7 +4,9 @@
   "behavior":"player",
   "cor":0,
   "description":"",
+  "fov_range":4,
   "initial_buffer":[],
   "name":"Sentient",
+  "traits":[],
   "extends":false
 }

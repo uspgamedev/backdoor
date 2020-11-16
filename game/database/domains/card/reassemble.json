@@ -20,8 +20,8 @@
           "output":"from",
           "tactical-hint":"movement",
           "type":"input",
-          "empty-tile":false,
           "dif-fact":false,
+          "empty-tile":false,
           "non-wall":false
         },{
           "aoe-hint":1,

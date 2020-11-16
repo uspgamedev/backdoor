@@ -4,6 +4,7 @@
   "behavior":"aggro",
   "cor":-2,
   "description":"Weak slimey blob",
+  "fov_range":3,
   "initial_buffer":[{
       "amount":7,
       "card":"strike"

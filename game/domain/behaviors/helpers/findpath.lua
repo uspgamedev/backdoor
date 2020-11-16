@@ -29,7 +29,8 @@ end
 
 local FindPath = {}
 
-function FindPath.getNextStep(start, goal, sector)
+function FindPath.getNextStep(start, goal, sector, reach_goal)
+  reach_goal = reach_goal or false
   local frontier = Heap:new()
   local came_from = {}
   local cost_so_far = {}
@@ -47,7 +48,7 @@ function FindPath.getNextStep(start, goal, sector)
     local current, rank = frontier:getNext()
 
     -- if you found your goal, quit loop
-    if _heuristic(goal, current) == 1 then
+    if _heuristic(goal, current) == (reach_goal and 0 or 1) then
       found = true
       goal = current
       break
@@ -90,4 +91,3 @@ function FindPath.getNextStep(start, goal, sector)
 end
 
 return FindPath
-
