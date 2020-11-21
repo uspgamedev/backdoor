@@ -39,7 +39,7 @@ STEAMING_REPO=externals/STEAMING
 STEAMING_MODULES=$(STEAMING_REPO)/clean_template/font.lua \
 								 $(STEAMING_REPO)/clean_template/res_manager.lua \
 								 $(STEAMING_REPO)/clean_template/util.lua \
-								 $(STEAMING_REPO)/clean_template/classes/ \
+								 $(STEAMING_REPO)/clean_template/classes \
 								 $(STEAMING_REPO)/clean_template/extra_libs
 
 INPUT_LIB=$(LIBS_DIR)/input
