@@ -19,7 +19,7 @@
   },
   "fullscreen": {
     "type": "enum",
-    "default": "fullscreen",
-    "options": ["fullscreen", "windowed"],
+    "default": "windowed",
+    "options": ["fullscreen", "windowed"]
   }
 }
