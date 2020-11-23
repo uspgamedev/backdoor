@@ -188,8 +188,7 @@ end
 --- Puts body at position (i.j), removing it from where it was before, wherever
 --  that is!
 function Sector:putBody(body, i, j)
-  assert(self:isValid(i,j),
-    ("Invalid position (%d,%d):"):format(i,j))
+  assert(self:isValid(i, j))
   -- Remove body from where it was vefore
   local oldsector = body:getSector() or self
   local oldbodies = oldsector.bodies
@@ -343,7 +342,16 @@ function Sector:isWalkable(i, j)
 end
 
 function Sector:isValid(i, j)
-  return self:isWalkable(i, j) and not self.bodies[i][j]
+  if not self:isWalkable(i, j) then
+    return false, ("unwalkable position (%d,%d)"):format(i,j)
+  elseif self.bodies[i][j] then
+    return false, ("blocked position (%d,%d) by %s"):format(
+      i, j,
+      self.bodies[i][j] and self.bodies[i][j]:getSpecName()
+    )
+  else
+    return true
+  end
 end
 
 function Sector:randomValidTile()

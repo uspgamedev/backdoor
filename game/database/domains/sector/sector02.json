@@ -85,12 +85,104 @@
     "tiletype":"WALL"
   },
   "remove_disconnected":[],
+  "templates":{
+    "max-amount":10,
+    "min-amount":8,
+    "template-list":[{
+        "drops":{
+          "drops-map":{
+            "data":[1,2,1,2,2,2,1,1,1],
+            "height":3,
+            "width":3
+          },
+          "drops-offset":[2,2],
+          "drops-specs":[{
+              "drop-amount":1,
+              "drop-specname":"advanced-pack"
+            }]
+        },
+        "tile-map":{
+          "data":[2,2,2,2,2,2,2,2,2,3,3,3,2,2,2,3,3,2,3,3,2,2,3,2,2,2,3,2,2,3,3,1,3,3,2,2,2,3,1,3,2,2,2,2,2,2,2,2,2],
+          "height":7,
+          "width":7
+        }
+      },{
+        "tile-map":{
+          "data":[2,2,2,2,2,2,3,2,3,2,2,2,2,2,2,2,3,2,3,2,2,2,2,2,2],
+          "height":5,
+          "width":5
+        }
+      },{
+        "encounters":{
+          "encounter-map":{
+            "data":[2,2,2,2],
+            "height":2,
+            "width":2
+          },
+          "encounter-offset":[1,1],
+          "encounter-specs":[{
+              "body-specname":"rock",
+              "actor-specname":false
+            }]
+        },
+        "tile-map":{
+          "data":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+          "height":4,
+          "width":4
+        }
+      },{
+        "encounters":{
+          "encounter-map":{
+            "data":[1,1,1,1,1,1,1,1,2],
+            "height":3,
+            "width":3
+          },
+          "encounter-offset":[0,0],
+          "encounter-specs":[{
+              "actor-specname":"fiendish-eye",
+              "body-specname":"eye"
+            }]
+        },
+        "tile-map":{
+          "data":[2,2,2,2,2,2,1,1,1,2,2,1,2,1,2,2,1,1,1,2,2,2,2,2,2],
+          "height":5,
+          "width":5
+        }
+      },{
+        "drops":{
+          "drops-map":{
+            "data":[2,1,1,2],
+            "height":2,
+            "width":2
+          },
+          "drops-offset":[2,2],
+          "drops-specs":[{
+              "drop-amount":4,
+              "drop-specname":"advanced-pack"
+            }]
+        },
+        "encounters":{
+          "encounter-map":{
+            "data":[2,2,2,2,2,1,3,2,2,3,1,2,2,2,2,2],
+            "height":4,
+            "width":4
+          },
+          "encounter-offset":[1,1],
+          "encounter-specs":[]
+        },
+        "tile-map":{
+          "data":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+          "height":6,
+          "width":6
+        }
+      }]
+  },
+  "holes":false,
+  "maze":false,
+  "theme":false,
   "fillings":false,
   "connections":false,
   "drops":false,
   "rooms":false,
-  "holes":false,
-  "maze":false,
-  "theme":false,
   "deadends":false
 }

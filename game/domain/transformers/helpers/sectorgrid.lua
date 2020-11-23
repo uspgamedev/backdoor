@@ -90,7 +90,12 @@ function SectorGrid:instance(obj, w, h, mw, mh, tiles)
 
   function obj.__operator:tostring()
     local s = ""
+    for x = 1, _w do
+      s = s .. ("%2d"):format(x)
+    end
+    s = s .. "\n"
     for y = 1, _h do
+      s = s .. ("%2d"):format(y)
       for x = 1, _w do
         s = s .. " " .. obj.get(x, y)
       end

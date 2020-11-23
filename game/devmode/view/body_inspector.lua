@@ -1,6 +1,7 @@
 
 local ACTIONDEFS = require 'domain.definitions.action'
 local IMGUI = require 'imgui'
+local Card = require 'domain.card'
 
 return function (body)
 
@@ -37,6 +38,12 @@ return function (body)
       IMGUI.Text(("Title: %s"):format(actor:getTitle()))
       IMGUI.Separator()
       IMGUI.Text(("PWRLVL: %.2f"):format(actor:getPowerLevel()))
+      if IMGUI.Button("Consume 10 cards") then
+        local card = Card('fireball')
+        for _ = 1, 10 do
+          actor:consumeCard(card)
+        end
+      end
       IMGUI.Separator()
       IMGUI.Text(("COR: %d"):format(actor:getCOR()))
       IMGUI.Text(("ARC: %d"):format(actor:getARC()))
