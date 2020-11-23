@@ -1,7 +1,6 @@
 
 local IMGUI = require 'imgui'
 local DB = require 'database'
-local DEFS = require 'domain.definitions'
 
 
 local function add(list, specname)

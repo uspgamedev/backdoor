@@ -1,0 +1,34 @@
+{
+  "art":{
+    "art_ability":{
+      "effects":[{
+          "center":"=target_pos",
+          "ignore_owner":true,
+          "name":"damage_on_area",
+          "projectile":true,
+          "sfx":"attack-hit",
+          "size":4,
+          "type":"effect",
+          "value":99
+        }],
+      "inputs":[{
+          "aoe-hint":4,
+          "max-range":6,
+          "name":"choose_target",
+          "non-wall":true,
+          "output":"target_pos",
+          "tactical-hint":"harmful",
+          "type":"input"
+        }]
+    }
+  },
+  "attr":"ARC",
+  "cost":0,
+  "desc":"How did you get this!?1?",
+  "half-exhaustion":true,
+  "icon":"card-fireball",
+  "level":1,
+  "mod":"double",
+  "name":"Apocalypse",
+  "set":false
+}

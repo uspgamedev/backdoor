@@ -5,14 +5,12 @@
     "threshold":3
   },
   "bootstrap":{
-    "fill_tile":"WALL",
     "h":48,
     "margin_tile":"WALL",
     "mh":7,
     "mw":9,
     "tileset":"demo",
     "w":48,
-    "margin_tile":false,
     "fill_tile":false
   },
   "connections":{
@@ -76,8 +74,8 @@
     "tries":256
   },
   "templates":{
-    "max-amount":3,
-    "min-amount":2,
+    "max-amount":10,
+    "min-amount":6,
     "template-list":[{
         "drops":{
           "drops-map":{
@@ -110,11 +108,11 @@
       },{
         "encounters":{
           "encounter-map":{
-            "data":[1,1,2,1,1,1,2,3,2,1,2,3,2,3,2,1,2,3,2,1,1,1,2,1,1],
-            "height":5,
-            "width":5
+            "data":[2,2,2,2,3,2,2,2,2],
+            "height":3,
+            "width":3
           },
-          "encounter-offset":[0,0],
+          "encounter-offset":[1,1],
           "encounter-specs":[{
               "body-specname":"rock",
               "actor-specname":false
@@ -127,6 +125,24 @@
           "data":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
           "height":5,
           "width":5
+        }
+      },{
+        "tile-map":{
+          "data":[1,2,1,2,1,2,2,2,2,2,1,2,1,2,1,2,2,2,2,2,1,2,1,2,1],
+          "height":5,
+          "width":5
+        }
+      },{
+        "tile-map":{
+          "data":[2,2,2,2,2,1,1,2,2,1,1,2,2,2,2,2],
+          "height":4,
+          "width":4
+        }
+      },{
+        "tile-map":{
+          "data":[1,2,2,2],
+          "height":2,
+          "width":2
         }
       }]
   },

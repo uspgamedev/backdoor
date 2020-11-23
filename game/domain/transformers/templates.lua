@@ -16,7 +16,7 @@ TRANSFORMER.schema = {
     id = 'template-list', name = "Template", type = 'array',
     schema = {
       { id = 'tile-map', name = 'Tiles', type = 'tilemap',
-        minwidth = 5, minheight = 5, maxwidth = 15, maxheight = 15,
+        minwidth = 2, minheight = 2, maxwidth = 15, maxheight = 15,
         palette = PALETTE },
       {
         id = 'drops', name = "Drops", type = 'section',
@@ -31,6 +31,8 @@ TRANSFORMER.schema = {
             schema = {
               { id = 'drop-specname', name = "Drop Specification",
                 type = 'enum', options = 'domains.drop' },
+              { id = 'drop-amount', name = "Amount",
+                type = 'integer', range = {1,6} },
             }
           }
         }
@@ -61,13 +63,14 @@ TRANSFORMER.schema = {
 function TRANSFORMER.process(sectorinfo, params)
   local amount = RANDOM.generate(params['min-amount'], params['max-amount'])
   local templates = {}
-  for i, v in ipairs(params['template-list']) do
-    templates[i] = v
-  end
 
   local count = 0
   for _ = 1, amount do
-    if #templates == 0 then break end
+    if #templates == 0 then
+      for i, v in ipairs(params['template-list']) do
+        templates[i] = v
+      end
+    end
     local found_spot = false
     repeat
       local template_idx = RANDOM.generate(#templates)
@@ -75,7 +78,7 @@ function TRANSFORMER.process(sectorinfo, params)
       local map = template['tile-map']
       local w, h = map['width'], map['height']
       for x, y, _ in sectorinfo.grid.iterate() do
-        if TRANSFORMER.isEmptySpot(sectorinfo.grid, x, y, w, h) then
+        if TRANSFORMER.isEmptySpot(sectorinfo, x, y, w, h) then
           found_spot = { x = x, y = y }
           break
         end
@@ -93,12 +96,24 @@ function TRANSFORMER.process(sectorinfo, params)
   return sectorinfo
 end
 
-function TRANSFORMER.isEmptySpot(grid, x, y, w, h)
+function TRANSFORMER.hasAnyEncountersAt(encounters, x, y)
+  if encounters then
+    for _, encounter in ipairs(encounters) do
+      if encounter.pos[1] == y and encounter.pos[2] == x then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function TRANSFORMER.isEmptySpot(info, x, y, w, h)
   for dy = 0, h - 1 do
     for dx = 0, w - 1 do
       local sx, sy = x + dx, y + dy
-      if not grid.isInsideMargins(sx, sy)
-          or grid.get(sx, sy) ~= SCHEMATICS.FLOOR then
+      if not info.grid.isInsideMargins(sx, sy)
+          or info.grid.get(sx, sy) ~= SCHEMATICS.FLOOR
+          or TRANSFORMER.hasAnyEncountersAt(info.encounters, sx, sy) then
         return false
       end
     end
@@ -134,7 +149,9 @@ function TRANSFORMER.placeDrops(info, offset, drops_template)
       local raw = map.data[1 + dy * map.width + dx]
       local spec = specs[tonumber(NUM_PALETTE[raw])]
       if spec then
-        table.insert(drops[y][x], spec['drop-specname'])
+        for _ = 1, spec['drop-amount'] or 1 do
+          table.insert(drops[y][x], spec['drop-specname'])
+        end
       end
     end
   end

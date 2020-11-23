@@ -2,9 +2,9 @@
 local RANDOM      = require 'common.random'
 local SCHEMATICS  = require 'domain.definitions.schematics'
 
-local transformer = {}
+local TRANSFORMER = {}
 
-transformer.schema = {
+TRANSFORMER.schema = {
   { id = 'min', name = "Minimum number of encounters", type = 'integer',
     range = {1} },
   { id = 'max', name = "Maximum number of encounters", type = 'integer',
@@ -24,7 +24,7 @@ local function _hash(i,j)
   return ("%s:%s"):format(i,j)
 end
 
-function transformer.process(sectorinfo, params)
+function TRANSFORMER.process(sectorinfo, params)
   local grid = sectorinfo.grid
   local recipes = params.recipes
   local encounters = sectorinfo.encounters or {}
@@ -44,6 +44,7 @@ function transformer.process(sectorinfo, params)
       i = RANDOM.generate(mini, maxi)
       j = RANDOM.generate(minj, maxj)
     until grid.get(j,i) == SCHEMATICS.FLOOR and not used[_hash(i,j)]
+      and not TRANSFORMER.hasAnyEncountersAt(encounters, i, j)
     encounter.pos = {i,j}
     used[_hash(i,j)] = true
     table.insert(encounters, encounter)
@@ -52,5 +53,16 @@ function transformer.process(sectorinfo, params)
   return sectorinfo
 end
 
-return transformer
+function TRANSFORMER.hasAnyEncountersAt(encounters, i, j)
+  if encounters then
+    for _, encounter in ipairs(encounters) do
+      if encounter.pos[1] == i and encounter.pos[2] == j then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+return TRANSFORMER
 
