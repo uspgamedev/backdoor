@@ -168,7 +168,13 @@
             "width":4
           },
           "encounter-offset":[1,1],
-          "encounter-specs":[]
+          "encounter-specs":[{
+              "body-specname":"rock",
+              "actor-specname":false
+            },{
+              "actor-specname":"grinful-imp",
+              "body-specname":"imp"
+            }]
         },
         "tile-map":{
           "data":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
