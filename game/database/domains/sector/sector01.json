@@ -144,6 +144,27 @@
           "height":5,
           "width":5
         }
+      },{
+        "encounters":{
+          "encounter-map":{
+            "data":[1,1,1,2,3,2,1,1,1],
+            "height":3,
+            "width":3
+          },
+          "encounter-offset":[1,1],
+          "encounter-specs":[{
+              "body-specname":"common-chest",
+              "actor-specname":false
+            },{
+              "actor-specname":"dumb-stove-guard",
+              "body-specname":"stove"
+            }]
+        },
+        "tile-map":{
+          "data":[2,2,2,2,2,2,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+          "height":5,
+          "width":5
+        }
       }]
   },
   "drops":false,

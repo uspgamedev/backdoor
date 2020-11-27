@@ -1,0 +1,15 @@
+{
+  "ani":1,
+  "behavior":"guarding",
+  "cor":1,
+  "extends":"dumb-stove",
+  "initial_buffer":[{
+      "amount":8,
+      "card":"strike"
+    },{
+      "amount":2,
+      "card":"rush"
+    }],
+  "name":"Guardian",
+  "traits":[]
+}

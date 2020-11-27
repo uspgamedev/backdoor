@@ -1,0 +1,13 @@
+{
+  "behavior":"stationary",
+  "extends":"fiendish-eye",
+  "fov_range":3,
+  "initial_buffer":[{
+      "amount":4,
+      "card":"chained-energy"
+    },{
+      "amount":6,
+      "card":"firebolt"
+    }],
+  "traits":[]
+}

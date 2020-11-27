@@ -139,7 +139,7 @@
           },
           "encounter-offset":[0,0],
           "encounter-specs":[{
-              "actor-specname":"fiendish-eye",
+              "actor-specname":"fiendish-eye-still",
               "body-specname":"eye"
             }]
         },
