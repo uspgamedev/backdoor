@@ -1,4 +1,4 @@
---MODULE FOR CONFIGURING STUFF--
+--Default conf file
 
 function love.conf(t)
     t.identity = "backdoor"             -- The name of the save directory (string)
@@ -17,7 +17,7 @@ function love.conf(t)
     t.window.minwidth = 1                  -- Minimum window width if the window is resizable (number)
     t.window.minheight = 1                 -- Minimum window height if the window is resizable (number)
     t.window.fullscreen = false            -- Enable fullscreen (boolean)
-    t.window.fullscreentype = "exclusive"    -- Choose between "desktop" fullscreen or "exclusive" fullscreen mode (string)
+    t.window.fullscreentype = "exclusive"  -- Choose between "desktop" fullscreen or "exclusive" fullscreen mode (string)
     t.window.vsync = true                  -- Enable vertical sync (boolean)
     t.window.msaa = 0                      -- The number of samples to use with multi-sampled antialiasing (number)
     t.window.display = 1                   -- Index of the monitor to show the window in (number)

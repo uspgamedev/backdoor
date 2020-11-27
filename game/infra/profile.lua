@@ -17,6 +17,7 @@ local CONTROL_FILENAME = "controls"
 local IO_THREAD_FILE = "infra/writingthread.lua"
 local PROFILE_PATH = SAVEDIR..PROFILE_FILENAME
 local CONTROL_PATH = SAVEDIR..CONTROL_FILENAME
+local CONF_PATH = "conf.lua"
 local METABASE = { next_id = 1, save_list = {}, preferences = {}, tutorial = {}, unlockables = {}, }
 
 -- HELPERS
@@ -106,6 +107,41 @@ local function _loadProfile()
     -- protection against version update (SHALLOW COPY ONLY)
     _metadata[field] = _metadata[field] or default
   end
+end
+
+local function _updateConf()
+  print("Updating conf file...")
+  --If first time, will create a new conf file on save directory
+  if not filesystem.getInfo(CONF_PATH, 'file') then
+    print("No internal conf file found. Creating new conf file...")
+
+    local default_conf_data, err = love.filesystem.read("data", "conf.lua")
+    assert(default_conf_data, "Error while trying to open default conf.lua file. Error message:\n"..tostring(err))
+
+    local file = assert(filesystem.newFile(CONF_PATH, "w"), "Couldn't create new conf.file")
+    local success, message = file:write(default_conf_data:clone())
+    assert(success, "Error while writing to new conf file; Error message:\n"..tostring(message))
+    file:close()
+    print("Created new conf file!")
+  end
+
+  local file_data = ""
+  local i = 1
+  for line in love.filesystem.lines(CONF_PATH) do
+    if i == 1 then
+      file_data = file_data .. "--Internal conf file" .. "\r\n"
+    else
+      if line:find("fullscreen =") then
+        local fullscreen = "= " ..tostring(PROFILE.getPreference("fullscreen") == "fullscreen")
+        line = line:gsub("= (%w+)", fullscreen)
+      end
+      file_data = file_data .. line .. "\r\n"
+    end
+    i = i + 1
+  end
+  local success, message = love.filesystem.write(CONF_PATH, file_data)
+  assert(success, "Error while writing to conf file. Error message:\n"..tostring(message))
+  print("Updated conf file!")
 end
 
 -- METHODS --
@@ -205,6 +241,7 @@ end
 function PROFILE.quit()
   _saveInput()
   _saveProfile()
+  _updateConf()
   -- politely ask for writing thread to die
   _channel:push({die = true})
   _savethread:wait()
