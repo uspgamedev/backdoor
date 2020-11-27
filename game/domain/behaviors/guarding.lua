@@ -5,7 +5,6 @@ local ACTIONDEFS = require 'domain.definitions.action'
 local FindTarget = require 'domain.behaviors.helpers.findtarget'
 local FindPath   = require 'domain.behaviors.helpers.findpath'
 local listCardPlays = require 'domain.behaviors.helpers.listcardplays'
-local RandomWalk = require 'domain.behaviors.helpers.randomwalk'
 
 local _MOVE          = ACTIONDEFS.MOVE
 local _PLAY_CARD     = ACTIONDEFS.PLAY_CARD
@@ -97,5 +96,5 @@ return function (actor)
   end
   -- if here, its back at the guarding position without threats in sight
   -- so it will idle
-  return 'IDLE', {}
+  return ACTIONDEFS.IDLE, {}
 end
