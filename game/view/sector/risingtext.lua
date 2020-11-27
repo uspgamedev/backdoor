@@ -31,7 +31,7 @@ function RisingText:play()
     "out-cubic",
     function()
       self:addTimer(
-        nil, _MAIN_TIMER, "after", 0.8,
+        nil, _MAIN_TIMER, "after", 0.2,
         function ()
           deferred:trigger()
           self:kill()
