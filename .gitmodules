@@ -1,0 +1,15 @@
+[submodule "externals/STEAMING"]
+	path = externals/STEAMING
+	url = https://github.com/uspgamedev/STEAMING.git
+[submodule "externals/luxproject"]
+	path = externals/luxproject
+	url = https://github.com/Kazuo256/luxproject.git
+[submodule "externals/input"]
+	path = externals/input
+	url = https://github.com/aki-cat/lit.git
+[submodule "externals/love-imgui"]
+	path = externals/love-imgui
+	url = https://github.com/kazuo256/love-imgui.git
+[submodule "externals/cpml"]
+	path = externals/cpml
+	url = https://github.com/excessive/cpml.git

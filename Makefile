@@ -71,9 +71,12 @@ all: $(DEPENDENCIES)
 	love game --development $(FLAGS)
 
 update:
-	cd $(LUX_REPO); git pull
-	cd $(STEAMING_REPO); git pull
-	cd $(INPUT_REPO); git pull
+	cd $(STEAMING_REPO); git fetch && git reset --hard origin/master
+	cd $(CPML_REPO); git fetch && git reset --hard origin/master
+	cd $(IMGUI_REPO); git fetch && git reset --hard origin/master
+	cd $(INPUT_REPO); git fetch && git reset --hard origin/backdoor
+	cd $(LUX_REPO); git fetch && git reset --hard origin/dev
+	git status externals
 
 $(GAME): $(DEPENDENCIES)
 	mkdir -p $(BIN_DIR)
@@ -82,28 +85,22 @@ $(GAME): $(DEPENDENCIES)
 
 ## LUX
 
-$(LUX_LIB): $(LUX_REPO)
+$(LUX_LIB):
+	git submodule update --init $(LUX_REPO)
 	cp -r $(LUX_REPO)/lib/lux $(LUX_LIB)
-
-$(LUX_REPO):
-	git clone https://github.com/Kazuo256/luxproject.git $(LUX_REPO)
 
 ## STEAMING
 
-$(STEAMING_LIB): $(STEAMING_REPO)
+$(STEAMING_LIB):
+	git submodule update --init $(STEAMING_REPO)
 	mkdir $(STEAMING_LIB)
 	cp -r $(STEAMING_MODULES) $(STEAMING_LIB)
 
-$(STEAMING_REPO):
-	git clone https://github.com/uspgamedev/STEAMING.git $(STEAMING_REPO)
-
 ## INPUT
 
-$(INPUT_LIB): $(INPUT_REPO)
+$(INPUT_LIB):
+	git submodule update --init $(INPUT_REPO)
 	cp -r $(INPUT_REPO) $(INPUT_LIB)
-
-$(INPUT_REPO):
-	git clone https://github.com/aki-cat/lit.git -b backdoor $(INPUT_REPO)
 
 ## IMGUI
 
@@ -116,21 +113,17 @@ $(IMGUI_BINARY): $(IMGUI_BUILD_MAKEFILE)
 $(IMGUI_BUILD_MAKEFILE): $(IMGUI_BUILD_DIR)
 	cd $(IMGUI_BUILD_DIR) && cmake ..
 
-$(IMGUI_BUILD_DIR): $(IMGUI_REPO)
+$(IMGUI_BUILD_DIR):
+	git submodule update --init $(IMGUI_REPO)
 	mkdir -p $(IMGUI_BUILD_DIR)
-
-$(IMGUI_REPO):
-	git clone https://github.com/kazuo256/love-imgui.git $(IMGUI_REPO)
 
 ## CPML
 
-$(CPML_LIB): $(CPML_REPO)
+$(CPML_LIB):
+	git submodule update --init $(CPML_REPO)
 	mkdir $(CPML_LIB)
 	cp -r $(CPML_REPO)/modules $(CPML_LIB)
 	cp -r $(CPML_REPO)/init.lua $(CPML_LIB)
-
-$(CPML_REPO):
-	git clone https://github.com/excessive/cpml.git $(CPML_REPO)
 
 ## DKJSON
 
